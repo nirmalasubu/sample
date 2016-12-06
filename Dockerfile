@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:latest
+#FROM microsoft/dotnet:latest
 
 COPY . /app
 
