@@ -6,6 +6,8 @@ WORKDIR /app
 
 RUN ["dotnet", "restore"]
 
+RUN ["dotnet", "restore"]
+
 RUN ["dotnet", "build"]
 
 EXPOSE 5000/tcp
