@@ -4,8 +4,6 @@ COPY . /app
 
 WORKDIR /app
 
-dotnet -v 1>/dev/null 2>/dev/null
-
 RUN ["dotnet", "restore"]
 
 RUN ["dotnet", "build"]
