@@ -1,0 +1,17 @@
+machine:
+  pre:
+    # install newer docker
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+
+    # install newer docker-compose
+    - sudo pip install docker-compose
+    
+  services:
+    - docker
+    
+test:
+  override:
+    - docker info
+    - docker build -t odtapi .
+    - docker run --name odtapicontainer -p 5000:5000 odtapi && sleep 10
+    - curl --retry 10 --retry-delay 5 -v http://localhost:5000/api/values
