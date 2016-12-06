@@ -1,7 +1,7 @@
 machine:
   pre:
     # install newer docker
-    - curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.10.0-circleci'
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.10.0-circleci'
     - echo 'DOCKER_OPTS="-s btrfs -D"' | sudo tee /etc/default/docker
     - echo 'env container=yes' | sudo tee -a /etc/init/docker.conf
 
