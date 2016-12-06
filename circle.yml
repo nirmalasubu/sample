@@ -3,7 +3,7 @@ machine:
     - tar --help
     # install newer docker
     #- sudo ls /usr/bin/docker
-    #- sudo curl https://get.docker.com/builds/Linux/x86_64/docker-1.11.0.tgz | tar -xvz - -C /usr/bin/docker
+    - sudo curl https://get.docker.com/builds/Linux/x86_64/docker-1.11.0.tgz | tar -x - -C /usr/bin/docker
     #- sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.10.0-circleci'
     #- sudo curl -L -o /user/bin/temp https://get.docker.com/builds/Linux/x86_64/docker-1.11.0.tgz
     #- echo 'DOCKER_OPTS="-s btrfs -D"' | sudo tee /etc/default/docker
