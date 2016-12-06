@@ -4,7 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ["dotnet", "restore"]
+RUN bash dotnet.sh restore
 
 RUN ["dotnet", "build"]
 
