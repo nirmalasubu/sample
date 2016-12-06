@@ -1,0 +1,13 @@
+﻿version: "1"
+shipments:
+  odtpocharbor:    
+    env: dev
+    barge: digital-sandbox
+    containers:
+      - odtpocharbor    
+    replicas: 1
+    group: sead
+    property: turner
+    project: odtpocharbor
+    product: odtpocharbor
+    environment: {} 

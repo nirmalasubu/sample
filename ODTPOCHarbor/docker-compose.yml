@@ -1,0 +1,10 @@
+﻿version: '2'
+
+services:
+  odtpocharbor:
+    image: registry.services.dmtio.net/odtpocharbor:v1.0.0
+    ports:
+      - "5000:5000"
+    environment:
+        HEALTHCHECK: /api/values
+        PORT: "5000"
