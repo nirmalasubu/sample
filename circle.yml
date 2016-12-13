@@ -43,7 +43,7 @@ test:
     - sudo docker info
     - sudo docker version
 
-    - sudo source props; sudo docker build -t "${IMAGE}" .
+    - sudo source props; sudo docker build --rm=false -t "${IMAGE}" .
     - sudo source props; sudo docker push "${IMAGE}"
     - sudo ource props; sudo docker run -it --env-file props quay.io/turner/harbor-deploy catalog
 
