@@ -24,10 +24,10 @@ machine:
     - docker
 
 
-  dependencies:
-    override:
+dependencies:
+  override:
        
-     # use harbor-deploy to get image tag (version) from package.json (or TURNER_METADATA)
+    # use harbor-deploy to get image tag (version) from package.json (or TURNER_METADATA)
     - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${SHIPMENT_NAME}" \
