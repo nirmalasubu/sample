@@ -10,7 +10,7 @@ machine:
     #- echo 'DOCKER_OPTS="-s btrfs -D"' | sudo tee /etc/default/docker
     #- echo 'env container=yes' | sudo tee -a /etc/init/docker.conf
     
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.9.0
 
     # install newer docker-compose
     #- sudo pip install docker-compose
@@ -43,9 +43,9 @@ test:
     - sudo docker info
     - sudo docker version
 
-    - source props; sudo docker build -t "${IMAGE}" .
-    - source props; docker push "${IMAGE}"
-    - source props; docker run -it --env-file props quay.io/turner/harbor-deploy catalog
+    - sudo source props; sudo docker build -t "${IMAGE}" .
+    - sudo source props; sudo docker push "${IMAGE}"
+    - sudo ource props; sudo docker run -it --env-file props quay.io/turner/harbor-deploy catalog
 
     #- sudo docker build --rm=false -t odtapi .
     #- sudo docker run -d --name odtapicontainer -p 5000:5000 odtapi; sleep 10
