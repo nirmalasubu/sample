@@ -32,6 +32,8 @@ dependencies:
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${SHIPMENT_NAME}" \
           -t "${SHIPMENT_BUILD_TOKEN}" \
+          -b "${CIRCLE_BRANCH}" \
+          -n "${CIRCLE_BUILD_NUM}" \
           -e "${SHIPMENT_ENV}" > props;
 
     - cat props
