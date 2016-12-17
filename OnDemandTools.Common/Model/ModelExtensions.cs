@@ -1,0 +1,48 @@
+﻿using System.Linq;
+using AutoMapper;
+using System;
+using System.Text.RegularExpressions;
+
+namespace OnDemandTools.Common.Model
+{
+    //TODO moved this from web down to DAL. Refactor as needed
+    public static class ModelExtensions
+    {
+        public static B ToBusinessModel<D, B>(this D dataModel)
+        {
+            return Mapper.Map<B>(dataModel);
+        }
+
+        public static D ToDataModel<B, D>(this B businessModel)
+        {
+            return Mapper.Map<D>(businessModel);
+        }
+
+       
+
+        private static string RemoveDomain(string userName)
+        {
+            return Regex.Replace(userName, ".*\\\\(.*)", "$1", RegexOptions.None);
+        }
+
+        public static void UpdateCreatedBy(this IModel model)
+        {
+            model.CreatedBy = GetCurrentUser();
+            model.CreatedDateTime = DateTime.UtcNow;
+        }
+
+        public static void UpdateModifiedBy(this IModel model)
+        {
+            model.ModifiedBy = GetCurrentUser();
+            model.ModifiedDateTime = DateTime.UtcNow;
+        }
+
+        public static string GetCurrentUser()
+        {
+            //TODO Add a way to retrieve users
+            return "";
+        }
+
+
+    }
+}
