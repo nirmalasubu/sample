@@ -25,11 +25,17 @@ namespace OnDemandTools.API
 
         public APIBootstrapper()
         {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(RootPathProvider.GetRootPath())
-                            .AddJsonFile("appsettings.json")
-                            .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            //var builder = new ConfigurationBuilder()
+            //                .SetBasePath(RootPathProvider.GetRootPath())
+            //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            //                //.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+            //                .AddEnvironmentVariables();
+            //Configuration = builder.Build();
+        }
+
+        public APIBootstrapper(IConfigurationRoot conf)
+        {
+            Configuration = conf;
         }
 
 
