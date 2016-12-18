@@ -1,4 +1,6 @@
-﻿using OnDemandTools.DAL.Modules.AiringId.Model;
+﻿
+
+using OnDemandTools.Business.Modules.AiringId.Model;
 
 namespace OnDemandTools.Business.Modules.AiringId
 {

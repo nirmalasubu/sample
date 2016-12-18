@@ -18,13 +18,8 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
         public CurrentAiringId Save(CurrentAiringId currentAiringId)
         {
             var collection = _database.GetCollection<CurrentAiringId>("CurrentAiringId");
-
-            //TODO add user identity later
-            //currentAiringId.ModifiedBy = WindowsIdentity.GetCurrent() == null ? "NA" : WindowsIdentity.GetCurrent().Name;
-            currentAiringId.ModifiedDateTime = DateTime.UtcNow;
-            
+            currentAiringId.ModifiedDateTime = DateTime.UtcNow;            
             collection.Save(currentAiringId);
-
             return currentAiringId;
         }
     }

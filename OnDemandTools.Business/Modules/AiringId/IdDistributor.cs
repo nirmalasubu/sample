@@ -1,5 +1,7 @@
-﻿using OnDemandTools.DAL.Modules.AiringId;
+﻿using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.AiringId;
 using OnDemandTools.DAL.Modules.AiringId.Model;
+using BLModel = OnDemandTools.Business.Modules.AiringId.Model;
 using System;
 
 namespace OnDemandTools.Business.Modules.AiringId
@@ -21,28 +23,26 @@ namespace OnDemandTools.Business.Modules.AiringId
             _command = command;
         }
 
-        public CurrentAiringId Distribute(string prefix)
+        public BLModel.CurrentAiringId Distribute(string prefix)
         {
-            //TODO 
-            return null;
 
-            //lock (Door)
-            //{
-            //    var lastAiringId = _query.Get(prefix);
+            lock (Door)
+            {
+                var lastAiringId = _query.Get(prefix).ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>();
 
-            //    var nextAiringId = lastAiringId.SequenceNumber > 0
-            //        ? _creator.Create(lastAiringId.Prefix, lastAiringId.SequenceNumber)
-            //        : _creator.Create(lastAiringId.Prefix);
+                var nextAiringId = lastAiringId.SequenceNumber > 0
+                    ? _creator.Create(lastAiringId.Prefix, lastAiringId.SequenceNumber)
+                    : _creator.Create(lastAiringId.Prefix);
 
-            //    nextAiringId.Id = Convert.ToString(lastAiringId.Id);
+                nextAiringId.Id = Convert.ToString(lastAiringId.Id);
+                nextAiringId.BillingNumber = lastAiringId.BillingNumber;
+                nextAiringId.BillingNumber.Increment();
 
-            //    nextAiringId.BillingNumber = lastAiringId.BillingNumber;
-            //    nextAiringId.BillingNumber.Increment();
-
-            //    _command.Save(nextAiringId);
-
-            //    return nextAiringId;    
-            //}
+                return
+                    (_command.Save(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>())
+                    .ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>());
+           
+            }
         }
     }
 }

@@ -18,7 +18,12 @@ namespace OnDemandTools.Common.Model
             return Mapper.Map<D>(businessModel);
         }
 
-       
+        public static V ToViewModel<B, V>(this B businessModel)
+        {
+            return Mapper.Map<V>(businessModel);
+        }
+
+
 
         private static string RemoveDomain(string userName)
         {
@@ -27,21 +32,16 @@ namespace OnDemandTools.Common.Model
 
         public static void UpdateCreatedBy(this IModel model)
         {
-            model.CreatedBy = GetCurrentUser();
+            model.CreatedBy = model.CreatedBy;
             model.CreatedDateTime = DateTime.UtcNow;
         }
 
         public static void UpdateModifiedBy(this IModel model)
         {
-            model.ModifiedBy = GetCurrentUser();
+            model.ModifiedBy = model.CreatedBy;
             model.ModifiedDateTime = DateTime.UtcNow;
         }
 
-        public static string GetCurrentUser()
-        {
-            //TODO Add a way to retrieve users
-            return "";
-        }
 
 
     }

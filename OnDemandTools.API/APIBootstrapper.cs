@@ -8,10 +8,9 @@ using OnDemandTools.Utilities.Resolvers;
 using System;
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User;
-using OnDemandTools.Business.Modules.User.Model;
-using AutoMapper;
 using OOnDemandTools.Utilities.EntityMapping;
 using System.Security.Claims;
+using OnDemandTools.API.Helpers.MappingRules;
 
 namespace OnDemandTools.API
 {
@@ -36,7 +35,7 @@ namespace OnDemandTools.API
 
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
+        {            
             container.Register<IConfiguration>(Configuration);
             DependencyResolver.RegisterResolver(new TinyIOCResolver(container)).RegisterImplmentation();
         }
@@ -49,9 +48,10 @@ namespace OnDemandTools.API
             //container.Register<ILogic, Logic>();
             base.ApplicationStartup(container, pipelines);
 
-            // Define mapping rules
-            var profiles = new List<Profile>();           
-            MappingBootstrapper.Map(profiles);
+            // Initialize mapping rules
+            AutoMapperAPIConfiguration.Configure();
+            AutoMapperDomainConfiguration.Configure();
+            
         }
 
 
@@ -77,7 +77,7 @@ namespace OnDemandTools.API
                     }
 
                     // Add user information 
-                    ctx.Items.Add(new KeyValuePair<string, object>("user", user));
+                    ctx.Items.Add(new KeyValuePair<string, object>("user", user.Identity));
                     return user;
                 }
                 
@@ -102,6 +102,7 @@ namespace OnDemandTools.API
             StatelessAuthentication.Enable(pipelines, configuration);
         }
 
+       
 
     }
 

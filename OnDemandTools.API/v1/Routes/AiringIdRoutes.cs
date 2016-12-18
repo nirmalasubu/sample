@@ -4,32 +4,31 @@ using OnDemandTools.Business.Modules.AiringId;
 using OnDemandTools.Business.Modules.AiringId.Model;
 using OnDemandTools.Common.Model;
 using OnDemandTools.API.v1.Models;
+using OnDemandTools.API.Helpers;
+using System.Net.Http;
 
 namespace OnDemandTools.API.v1.Routes
 {
     public class AiringIdRoutes : NancyModule
     {
-        public AiringIdRoutes(IAiringIdCreator creator)
+        public AiringIdRoutes(IAiringIdCreator creator, IIdDistributor distributor)
            : base("v1")
-        {
-            //TODO activate this later
+        {         
             this.RequiresAuthentication();
 
-            //Get("/airingId/generate/{prefix}", _ =>
-            //{
-            //    this.RequiresClaims(c => c.Type == "get");
+            Get("/airingId/generate/{prefix}", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
 
-            //    return distributor.Distribute((string)_.prefix)
-            //            .ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
-            //});
+                return distributor.Distribute((string)_.prefix)
+                        .ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
+            });
 
             Post("/airingId/{prefix}", _ =>
            {
-               this.RequiresClaims(c => c.Type == "get");
-               //CurrentAiringId airingId = creator.Create((string)_.prefix);
-               //creator.Save(airingId);
-               //return airingId.ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
-               return null;
+               this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+               CurrentAiringId airingId = creator.Create((string)_.prefix);               
+               return creator.Save(airingId, Context.User()).ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();              
            });
         }
     }

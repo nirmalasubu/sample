@@ -32,6 +32,7 @@
     "NLog.Extensions.Logging": "1.0.0-rtm-alpha5",
     "OnDemandTools.Business": "1.0.0-*",
     "OnDemandTools.Common": "1.0.0-*",
+    "OnDemandTools.Utilities": "1.0.0-*",
     "System.Runtime.Loader": "4.0.0"
   }
 }

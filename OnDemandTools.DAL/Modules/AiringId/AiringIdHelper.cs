@@ -27,7 +27,6 @@ namespace OnDemandTools.DAL.Modules.AiringId
 
     public interface IGetLastAiringIdQuery
     {
-        CurrentAiringId Get(string prefix);
-        void Set(CurrentAiringId ca);
+        CurrentAiringId Get(string prefix);       
     }
 }

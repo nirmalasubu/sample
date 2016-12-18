@@ -30,16 +30,9 @@ namespace OnDemandTools.Business.Modules.User
 
         public ClaimsPrincipal GetBy(Guid apiKey)
         {
-            BLModel.UserIdentity user = apiUserQuery.GetBy(apiKey).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();
-            //user.AddClaim(new Claim("get", "get"));
-            ClaimsPrincipal c = new ClaimsPrincipal(user);
-
-            //BLModel.kk gc = new BLModel.kk();
-            //gc.AddClaim(new Claim("get", "get"));
-            //ClaimsPrincipal ccc = new ClaimsPrincipal(gc);
-
-            //return ccc;
-            return c;
+            BLModel.UserIdentity user = apiUserQuery.GetBy(apiKey).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();            
+            ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
+            return (userClaim);
         }
 
         public BLModel.UserIdentity GetById(string id)

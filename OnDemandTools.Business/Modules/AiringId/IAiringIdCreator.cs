@@ -1,4 +1,5 @@
 ﻿using OnDemandTools.Business.Modules.AiringId.Model;
+using OnDemandTools.Business.Modules.User.Model;
 
 namespace OnDemandTools.Business.Modules.AiringId
 {
@@ -7,6 +8,6 @@ namespace OnDemandTools.Business.Modules.AiringId
         CurrentAiringId Create(string prefix);
         CurrentAiringId Create(string prefix, int previousFiveDigitNumber);
 
-        CurrentAiringId Save(CurrentAiringId currentAiringId);
+        CurrentAiringId Save(CurrentAiringId currentAiringId, UserIdentity user);
     }
 }

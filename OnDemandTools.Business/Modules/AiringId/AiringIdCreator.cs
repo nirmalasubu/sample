@@ -5,6 +5,8 @@ using DLModel = OnDemandTools.DAL.Modules.AiringId.Model;
 using OnDemandTools.DAL.Modules.AiringId.Commands;
 using OnDemandTools.DAL.Modules.AiringId;
 using OnDemandTools.Business.Modules.AiringId.Model;
+using OnDemandTools.Common.Model;
+using OnDemandTools.Business.Modules.User.Model;
 
 namespace OnDemandTools.Business.Modules.AiringId
 {
@@ -12,7 +14,6 @@ namespace OnDemandTools.Business.Modules.AiringId
     {
         IAiringIdSaveCommand airingPerist;
 
-        #region "Private Methods"
 
         private CurrentAiringId BuildAringId(string prefix, int fiveDigitNumber)
         {
@@ -38,9 +39,8 @@ namespace OnDemandTools.Business.Modules.AiringId
                 ? 1
                 : ++previousFiveDigitNumber;
         }
-        #endregion
 
-        #region "Public Methods"
+
         public AiringIdCreator(IAiringIdSaveCommand airingIdHelper)
         {
             airingPerist = airingIdHelper;
@@ -67,11 +67,18 @@ namespace OnDemandTools.Business.Modules.AiringId
             return BuildAringId(prefix, nextFiveDigitNumber);
         }
 
-        public CurrentAiringId Save(CurrentAiringId currentAiringId)
+        public CurrentAiringId Save(CurrentAiringId currentAiringId, UserIdentity user)
         {
-            throw new Exception("");
+            currentAiringId.CreatedBy = user.Name;
+            currentAiringId.ModifiedBy = user.Name;
+
+            return
+            (airingPerist
+                .Save(currentAiringId.ToDataModel<CurrentAiringId, DLModel.CurrentAiringId>())
+                .ToBusinessModel<DLModel.CurrentAiringId, CurrentAiringId>());
+
         }
-        #endregion
+    
 
     }
 }
