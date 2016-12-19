@@ -8,7 +8,7 @@ namespace OnDemandTools.API.v1.Routes
 {
     public class Index: NancyModule       
     {
-        public Index() : base("v1")
+        public Index()
         {
             Get("/", _ =>
             {
