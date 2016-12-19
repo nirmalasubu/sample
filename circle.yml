@@ -1,7 +1,7 @@
 general:
   branches:
     only:
-      - dev # list of branches to build
+      - dev # list of branch to build
       
 machine:
   pre:  
