@@ -37,16 +37,16 @@ test:
   override:
     - source dev; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
 
-    - sudo docker images
-    - sudo docker ps -a
+    #- sudo docker images
+    #- sudo docker ps -a
     - source dev; sudo docker run -d --name odtapicontainer -p 5000:5000 "${IMAGE}"; sleep 10
-    - sudo docker ps -a
+    #- sudo docker ps -a
     - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/v1/healthcheck
 
-#deployment:
-#  CD:
-#    branch: dev
-#    commands:
+deployment:
+  CD:
+    branch: dev
+    commands:
     
-      #- source dev; sudo docker push "${IMAGE}"
-      #- source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true    
+      - source dev; sudo docker push "${IMAGE}"
+      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true    
