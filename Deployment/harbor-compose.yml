@@ -2,7 +2,7 @@ version: "1"
 shipments:
   odt:    
     env: dev
-    barge: digital-sandbox
+    barge: ent-prod
     containers:
       - odtapi   
     replicas: 1

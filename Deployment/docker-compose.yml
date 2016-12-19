@@ -2,7 +2,7 @@ version: '2'
 
 services:
   odtapi:
-    image: registry.services.dmtio.net/odtapi:0.1-dev.1
+    image: quay.io/turner/odt:0.0.1-dev.63
     ports:
       - "5000:5000"
     environment:
