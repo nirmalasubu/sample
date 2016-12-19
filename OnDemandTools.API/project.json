@@ -20,7 +20,6 @@
     }
   },
   "dependencies": {
-    "AutoMapper": "5.2.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
@@ -28,11 +27,7 @@
     "Microsoft.Extensions.DependencyModel": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-    "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5",
-    "OnDemandTools.Business": "1.0.0-*",
-    "OnDemandTools.Common": "1.0.0-*",
-    "OnDemandTools.Utilities": "1.0.0-*",
+    "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",  
     "System.Runtime.Loader": "4.0.0"
   }
 }

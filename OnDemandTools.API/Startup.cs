@@ -6,7 +6,6 @@ namespace OnDemandTools.API
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Nancy.Owin;
-    using NLog.Extensions.Logging;
 
     /// <summary>
     /// Defining start up configuration
@@ -25,20 +24,12 @@ namespace OnDemandTools.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(env.ContentRootPath)
-                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                            .AddEnvironmentVariables();
-            Configuration = builder.Build();
-
-            // Add Nlog to pipeline. Configuration will be read from nlog.config
-            loggerFactory.AddNLog();
+           
+          
 
             // Specify request pipeline--strictly Nancy middleware
-            app.UseOwin(x => x.UseNancy(
-                    opt => opt.Bootstrapper = new APIBootstrapper(Configuration)
-                ));
+            app.UseOwin(x => x.UseNancy()
+                );
         }
 
     }
