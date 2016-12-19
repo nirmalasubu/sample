@@ -14,6 +14,11 @@ namespace OnDemandTools.API.v1.Routes
             {
                 return Response.AsFile("Content/index.html", "text/html");
             });
+
+            Get("/healthcheck", _ =>
+            {
+                return Response.AsJson("Healthy", HttpStatusCode.OK);
+            });
         }
     }
 }
