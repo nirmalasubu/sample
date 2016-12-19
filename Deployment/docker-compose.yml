@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  odtapi:
+    image: registry.services.dmtio.net/odtapi:0.1-dev.1
+    ports:
+      - "5000:5000"
+    environment:
+        HEALTHCHECK: /v1/healthcheck
+        PORT: "5000"

@@ -1,0 +1,14 @@
+version: "1"
+shipments:
+  odt:    
+    env: dev
+    barge: digital-sandbox
+    containers:
+      - odtapi   
+    replicas: 1
+    group: sead
+    property: turner
+    project: odt
+    product: odt
+    environment:
+        ASPNETCORE_ENVIRONMENT: development
