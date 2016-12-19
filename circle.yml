@@ -1,0 +1,39 @@
+general:
+  branches:
+    only:
+      - master # list of branches to build
+      
+machine:
+  pre:  
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.9.0 
+
+  services:
+    - docker
+
+
+dependencies:
+  override:
+       
+    # use harbor-deploy to get image tag (version) from package.json (or TURNER_METADATA)
+    - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
+    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+          -s "${SHIPMENT_NAME}" \
+          -t "${SHIPMENT_BUILD_TOKEN_DEV}" \
+          -e "${SHIPMENT_ENVIRONMENT}" \
+          -b "${CIRCLE_BRANCH}" \
+          -n "${CIRCLE_BUILD_NUM}" > props;
+
+    - cat props
+
+test:
+  override:
+    - source props; sudo docker build --rm=false -t "${IMAGE}" .
+    
+
+deployment:
+  CD:
+    branch: rc
+    commands:
+    
+      - source props; sudo docker push "${IMAGE}"
+      - source props; sudo docker run -it --env-file props quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true    
