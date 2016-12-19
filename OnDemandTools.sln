@@ -27,6 +27,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Utilities", "OnDemandTools.Utilities\OnDemandTools.Utilities.xproj", "{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{B7729E98-FA40-4CF2-B78B-BA2AEEC960BD}"
+	ProjectSection(SolutionItems) = preProject
+		circle.yml = circle.yml
+		Deployment\docker-compose.yml = Deployment\docker-compose.yml
+		Deployment\harbor-compose.yml = Deployment\harbor-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
