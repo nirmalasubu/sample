@@ -35,7 +35,7 @@ dependencies:
 
 test:
   override:
-    - source dev; sudo docker build --rm=false -t "${IMAGE}" .
+    - source dev; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
     
 
 deployment:
