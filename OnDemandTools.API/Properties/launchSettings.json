@@ -2,6 +2,8 @@
   "profiles": {
     "OnDemandTools.API": {
       "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/v1/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

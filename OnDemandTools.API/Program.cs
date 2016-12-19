@@ -15,8 +15,7 @@ namespace OnDemandTools.API
             // Host the service
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://0.0.0.0:5000")
+                .UseContentRoot(Directory.GetCurrentDirectory())                
                 .UseStartup<Startup>()
                 .Build();
 
