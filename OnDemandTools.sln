@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.API", "OnDemandTools.API\OnDemandTools.API.xproj", "{3450E107-90BA-496B-9710-9DE3BC9BB174}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnDemandTools.API", "OnDemandTools.API", "{78524FE9-DC3E-437E-9230-CB54BE28D906}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{78524FE9-DC3E-437E-9230-CB54BE28D906}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
