@@ -36,7 +36,9 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
     "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.AspNetCore.Owin": "1.1.0"
+    "Microsoft.AspNetCore.Owin": "1.1.0",
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5"
+
   },
 
   "runtimeOptions": {

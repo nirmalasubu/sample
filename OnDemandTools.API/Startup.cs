@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy.Owin;
+using NLog.Extensions.Logging;
 
 namespace OnDemandTools.API
 {
@@ -44,7 +45,7 @@ namespace OnDemandTools.API
            
 
             // Add Nlog to pipeline. Configuration will be read from nlog.config
-            //loggerFactory.AddNLog();
+            loggerFactory.AddNLog();
 
             // Specify request pipeline--strictly Nancy middleware
             app.UseOwin(x => x.UseNancy());
