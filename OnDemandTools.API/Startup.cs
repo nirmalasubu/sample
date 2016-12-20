@@ -48,7 +48,7 @@ namespace OnDemandTools.API
             loggerFactory.AddNLog();
 
             // Specify request pipeline--strictly Nancy middleware
-            app.UseOwin(x => x.UseNancy());
+            app.UseOwin(x => x.UseNancy(opt=>opt.Bootstrapper = new APIBootstrapper(Configuration)));
         }
 
     }
