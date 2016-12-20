@@ -2,26 +2,32 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "dependencies": {
-        "Microsoft.AspNetCore.Hosting": "1.0.0",
-        "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
-        "Microsoft.AspNetCore.Owin": "1.0.0",
-        "Nancy": "2.0.0-barneyrubble",
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.1.0"
-        }
-      }
+    "netcoreapp1.1": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
     }
   },
+
+
   "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    },
     "AutoMapper": "5.2.0",
+    "Nancy": "2.0.0-barneyrubble",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
@@ -29,7 +35,31 @@
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
     "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha5"
-   
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Microsoft.AspNetCore.Owin": "1.1.0"
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "**/*.cshtml",
+      "appsettings.json",
+      "web.config"
+    ]
+  },
+
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  },
+
+  "tooling": {
+    "defaultNamespace": "OnDemandTools.API"
   }
+
 }
