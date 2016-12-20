@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{FB285BFC-83D7-427B-9703-95F5B59758ED}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{3B8D019C-AC64-4016-8D48-57230E39C7AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E0DC2EF7-4F72-432A-8ED9-66BF567D36AD}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.API", "OnDemandTools.API\OnDemandTools.API.xproj", "{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{B7729E98-FA40-4CF2-B78B-BA2AEEC960BD}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,21 +14,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 		Deployment\harbor-compose.yml = Deployment\harbor-compose.yml
 	EndProjectSection
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.API", "OnDemandTools.API\OnDemandTools.API.xproj", "{3450E107-90BA-496B-9710-9DE3BC9BB174}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnDemandTools.API", "OnDemandTools.API", "{78524FE9-DC3E-437E-9230-CB54BE28D906}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3450E107-90BA-496B-9710-9DE3BC9BB174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3450E107-90BA-496B-9710-9DE3BC9BB174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3450E107-90BA-496B-9710-9DE3BC9BB174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3450E107-90BA-496B-9710-9DE3BC9BB174}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{74681CF3-20D9-4463-ABDC-6BC74EBB9F6F} = {FB285BFC-83D7-427B-9703-95F5B59758ED}
+		{3450E107-90BA-496B-9710-9DE3BC9BB174} = {78524FE9-DC3E-437E-9230-CB54BE28D906}
 	EndGlobalSection
 EndGlobal
