@@ -11,6 +11,7 @@ using OnDemandTools.Business.Modules.User;
 using OOnDemandTools.Utilities.EntityMapping;
 using System.Security.Claims;
 using OnDemandTools.API.Helpers.MappingRules;
+using OnDemandTools.API.v1.Models;
 
 namespace OnDemandTools.API
 {
@@ -25,12 +26,7 @@ namespace OnDemandTools.API
 
         public APIBootstrapper()
         {
-            //var builder = new ConfigurationBuilder()
-            //                .SetBasePath(RootPathProvider.GetRootPath())
-            //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            //                //.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-            //                .AddEnvironmentVariables();
-            //Configuration = builder.Build();
+           
         }
 
         public APIBootstrapper(IConfigurationRoot conf)
@@ -98,18 +94,14 @@ namespace OnDemandTools.API
             {
 
                 Logger.Error(ex);
-
-                return ex;
-                // TODO: Add ErrorResponse
-                //return ErrorResponse.FromException(ex);
+                return ErrorResponse.FromException(ex);
+                       
             });
 
             pipelines.OnError = er;
             StatelessAuthentication.Enable(pipelines, configuration);
         }
-
        
-
     }
 
 

@@ -40,8 +40,10 @@
     "NLog.Extensions.Logging": "1.0.0-rtm-alpha5",
     "OnDemandTools.Business": "1.0.0-*",
     "OnDemandTools.Common": "1.0.0-*",
-    "OnDemandTools.Utilities": "1.0.0-*"
-
+    "OnDemandTools.Utilities": "1.0.0-*",
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Microsoft.Extensions.Logging.Debug": "1.1.0",
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0"
   },
 
   "runtimeOptions": {

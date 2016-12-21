@@ -21,6 +21,7 @@ namespace OnDemandTools.API
     {
         public IConfigurationRoot Configuration { get; }
 
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -42,11 +43,10 @@ namespace OnDemandTools.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-           
-
             // Add Nlog to pipeline. Configuration will be read from nlog.config
             loggerFactory.AddNLog();
-
+             
+             
             // Specify request pipeline--strictly Nancy middleware
             app.UseOwin(x => x.UseNancy(opt=>opt.Bootstrapper = new APIBootstrapper(Configuration)));
         }

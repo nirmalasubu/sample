@@ -18,22 +18,34 @@ namespace OnDemandTools.API
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
-        {            
+        {
+            try
+            {
+                // Set default environment to development unless indicated in environment variable
+                var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "Development" } };
 
-            var config = new ConfigurationBuilder()
+
+                var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(defaults)
                 .AddCommandLine(args)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
-            var host = new WebHostBuilder()
-                .UseConfiguration(config)
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                var host = new WebHostBuilder()
+                    .UseConfiguration(config)
+                    .UseKestrel()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .UseIISIntegration()
+                    .UseStartup<Startup>()
+                    .Build();
 
-            host.Run();
+                host.Run();
+            }
+            catch (Exception ex)
+            {
+                Console.Write("Unhandled exception occurred. Shutting down..." + ex.StackTrace);
+            }
+            
         }
     }
 }
