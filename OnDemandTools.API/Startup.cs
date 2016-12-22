@@ -1,15 +1,16 @@
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy.Owin;
-using NLog.Extensions.Logging;
+using Serilog;
+using System.IO;
+using Serilog.Formatting;
+using Serilog.Events;
+using OnDemandTools.Common.Logzio;
 
 namespace OnDemandTools.API
 {
@@ -21,6 +22,8 @@ namespace OnDemandTools.API
     {
         public IConfigurationRoot Configuration { get; }
 
+        public Serilog.ILogger AppLogger{ get; }
+
 
         public Startup(IHostingEnvironment env)
         {
@@ -30,6 +33,11 @@ namespace OnDemandTools.API
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+           
+            //TODO - create a section for this in appsettings.json
+            AppLogger = new LoggerConfiguration()                                             
+                       .WriteTo.Logzio("PKzpHRkmGSdahHHIpeprYuKixClLUTRh", application:"ODT", reporterType:"DDDD", environment:"DEV")
+                       .CreateLogger();
         }        
 
 
@@ -37,18 +45,20 @@ namespace OnDemandTools.API
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // All dependency injection will be done in APIBootstrapper
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider)
         {
-            // Add Nlog to pipeline. Configuration will be read from nlog.config
-            loggerFactory.AddNLog();
-             
-             
+
+            // Add serilog and catch any internal errors
+            loggerFactory.AddSerilog();
+            Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+
+
             // Specify request pipeline--strictly Nancy middleware
-            app.UseOwin(x => x.UseNancy(opt=>opt.Bootstrapper = new APIBootstrapper(Configuration)));
+            app.UseOwin(x => x.UseNancy(opt=>opt.Bootstrapper = new APIBootstrapper(Configuration, AppLogger)));
         }
 
     }

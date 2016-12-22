@@ -3,41 +3,47 @@ using Nancy.TinyIoc;
 using Microsoft.Extensions.Configuration;
 using Nancy.Bootstrapper;
 using Nancy.Authentication.Stateless;
-using NLog;
 using OnDemandTools.Utilities.Resolvers;
 using System;
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User;
-using OOnDemandTools.Utilities.EntityMapping;
+using OnDemandTools.Utilities.EntityMapping;
 using System.Security.Claims;
 using OnDemandTools.API.Helpers.MappingRules;
 using OnDemandTools.API.v1.Models;
 
 namespace OnDemandTools.API
 {
-
+    class User
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime Created { get; set; }
+    }
 
 
     // Define Nancy bootstrap configurations
     public class APIBootstrapper : DefaultNancyBootstrapper
     {
-        public IConfigurationRoot Configuration;
-        private static Logger Logger = LogManager.GetCurrentClassLogger();
+        public IConfigurationRoot Configuration;        
+        public Serilog.ILogger AppLogger { get; }
 
         public APIBootstrapper()
         {
            
         }
 
-        public APIBootstrapper(IConfigurationRoot conf)
+        public APIBootstrapper(IConfigurationRoot conf, Serilog.ILogger logger)
         {
             Configuration = conf;
+            AppLogger = logger;
         }
 
 
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {            
+        {
+            container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);
             DependencyResolver.RegisterResolver(new TinyIOCResolver(container)).RegisterImplmentation();
         }
@@ -92,8 +98,7 @@ namespace OnDemandTools.API
             ErrorPipeline er = new ErrorPipeline();
             er.AddItemToEndOfPipeline((ctx, ex) =>
             {
-
-                Logger.Error(ex);
+                AppLogger.Error(ex, ex.Message);
                 return ErrorResponse.FromException(ex);
                        
             });

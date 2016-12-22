@@ -3,7 +3,7 @@ using OnDemandTools.Utilities.EntityMapping.Rules;
 using System;
 using System.Collections.Generic;
 
-namespace OOnDemandTools.Utilities.EntityMapping
+namespace OnDemandTools.Utilities.EntityMapping
 {
 
     public static class AutoMapperDomainConfiguration
