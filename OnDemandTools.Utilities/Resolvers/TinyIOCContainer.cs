@@ -34,6 +34,9 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.Business.Modules.AiringId.IIdDistributor, OnDemandTools.Business.Modules.AiringId.IdDistributor>();
             cntr.Register<OnDemandTools.DAL.Modules.AiringId.IGetLastAiringIdQuery, OnDemandTools.DAL.Modules.AiringId.Queries.GetLastAiringIdQuery>();
+
+            cntr.Register<OnDemandTools.Business.Modules.Destination.IDestinationService, OnDemandTools.Business.Modules.Destination.DestinationService>();
+            cntr.Register<OnDemandTools.DAL.Modules.Destination.Queries.IDestinationQuery, OnDemandTools.DAL.Modules.Destination.Queries.DestinationQuery>();
         }
 
 

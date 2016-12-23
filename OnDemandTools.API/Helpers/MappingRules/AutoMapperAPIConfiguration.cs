@@ -8,6 +8,7 @@ namespace OnDemandTools.API.Helpers.MappingRules
         {
             Mapper.Initialize(cfg => {
                 cfg.AddProfile(new AiringIdProfile());
+                cfg.AddProfile(new DestinationProfile());
             });
         }
     }

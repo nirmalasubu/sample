@@ -9,9 +9,8 @@ using System.Net.Http;
 
 namespace OnDemandTools.API.v1.Routes
 {
-    public class AiringIdRoutes : BaseModule
+    public class AiringIdRoutes : NancyModule
     {
-        Serilog.ILogger _logger;
         public AiringIdRoutes(IAiringIdCreator creator, IIdDistributor distributor)
            : base("v1")
         {         
@@ -20,7 +19,6 @@ namespace OnDemandTools.API.v1.Routes
 
             Get("/airingId/generate/{prefix}", _ =>
             {
-                var k = this.Logger;
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
 
                 return distributor.Distribute((string)_.prefix)

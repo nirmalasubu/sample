@@ -14,6 +14,7 @@ namespace OnDemandTools.Utilities.EntityMapping
             Mapper.Initialize(cfg => {
                 cfg.AddProfile(new UserProfile());
                 cfg.AddProfile(new AiringIdProfile());
+                cfg.AddProfile(new DestinationProfile());
 
                 cfg.CreateMissingTypeMaps = true;
             });
