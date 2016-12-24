@@ -57,5 +57,5 @@ deployment:
     branch: rc
     commands:
       - source rc; sudo docker push "${IMAGE}"
-      - source rc; sudo docker run -it --env-file qa quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      - source rc; sudo docker run -it --env-file rc quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
