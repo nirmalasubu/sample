@@ -47,16 +47,15 @@ test:
 
 
 deployment:
-  CD:
+  development:
     branch: dev
+    commands:    
+      - source dev; sudo docker push "${IMAGE}"
+      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+
+  release:
+    branch: rc
     commands:
-       - source dev; cat ${IMAGE}    
-      #- source dev; sudo docker push "${IMAGE}"
-      #- source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
-
-    #branch: rc
-    #commands:
-
-    #  - source qa; sudo docker push "${IMAGE}"
-    #  - source qa; sudo docker run -it --env-file qa quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      - source qa; sudo docker push "${IMAGE}"
+      - source qa; sudo docker run -it --env-file qa quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
