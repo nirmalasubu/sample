@@ -40,6 +40,9 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.Business.Modules.Product.IProductService, OnDemandTools.Business.Modules.Product.ProductService>();
             cntr.Register<OnDemandTools.DAL.Modules.Product.Queries.IProductQuery, OnDemandTools.DAL.Modules.Product.Queries.ProductQuery>();
+
+            cntr.Register<OnDemandTools.Business.Modules.Queue.IQueueService, OnDemandTools.Business.Modules.Queue.QueueService>();
+            cntr.Register<OnDemandTools.DAL.Modules.Queue.Queries.IQueueQuery, OnDemandTools.DAL.Modules.Queue.Queries.QueueQuery>();
         }
 
 
