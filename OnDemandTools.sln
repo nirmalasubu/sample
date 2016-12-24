@@ -34,6 +34,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.DAL", "OnDema
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Utilities", "OnDemandTools.Utilities\OnDemandTools.Utilities.xproj", "{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Deporter", "OnDemandTools.Deporter\OnDemandTools.Deporter.xproj", "{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +76,6 @@ Global
 		{53C84700-4A66-4319-B980-6841FAD7BC7E} = {1486A4EC-B070-4937-84B3-DF747A3263A7}
 		{AC69E36D-1797-477B-908F-05374C5BF41B} = {C507CAE3-0EDC-4392-8438-D2C715237F93}
 		{3BAB2CB6-7726-4CAA-8A6B-837C0E638CD6} = {A07F6272-3EA9-48B8-8092-336DF72D557A}
+		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D} = {3B8D019C-AC64-4016-8D48-57230E39C7AE}
 	EndGlobalSection
 EndGlobal

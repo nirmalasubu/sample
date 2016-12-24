@@ -1,20 +1,13 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
-
-namespace OnDemandTools.API
+namespace OnDemandTools.Deporter
 {
-
     public class Program
     {
-        /// <summary>
-        /// Main execution entry point
-        /// </summary>
-        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             try
@@ -22,12 +15,11 @@ namespace OnDemandTools.API
                 // Set default environment to development unless indicated in environment variable
                 var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "Development" } };
 
-
                 var config = new ConfigurationBuilder()
-                .AddInMemoryCollection(defaults)
-                .AddCommandLine(args)
-                .AddEnvironmentVariables(prefix: "ASPNETCORE_")
-                .Build();
+                    .AddInMemoryCollection(defaults)
+                    .AddCommandLine(args)
+                    .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                    .Build();
 
                 var host = new WebHostBuilder()
                     .UseConfiguration(config)
@@ -43,7 +35,7 @@ namespace OnDemandTools.API
             {
                 Console.Write("Unhandled exception occurred. Shutting down..." + ex.StackTrace);
             }
-            
+           
         }
     }
 }
