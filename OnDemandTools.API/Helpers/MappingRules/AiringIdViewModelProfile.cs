@@ -4,9 +4,9 @@ using OnDemandTools.API.v1.Models;
 
 namespace OnDemandTools.API.Helpers.MappingRules
 {
-    public class AiringIdProfile: Profile
+    public class AiringIdViewModelProfile: Profile
     {
-        public AiringIdProfile()
+        public AiringIdViewModelProfile()
         {
             CreateMap<CurrentAiringId, CurrentAiringIdViewModel>()             
               .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));

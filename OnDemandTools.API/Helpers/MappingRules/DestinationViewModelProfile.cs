@@ -4,9 +4,9 @@ using OnDemandTools.Business.Modules.Destination.Model;
 
 namespace OnDemandTools.API.Helpers.MappingRules
 {
-    public class DestinationProfile: Profile
+    public class DestinationViewModelProfile: Profile
     {
-        public DestinationProfile()
+        public DestinationViewModelProfile()
         {
             CreateMap<Destination, DestinationViewModel>();
             CreateMap<Property, PropertyViewModel>();

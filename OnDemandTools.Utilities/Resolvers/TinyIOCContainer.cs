@@ -37,6 +37,9 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.Business.Modules.Destination.IDestinationService, OnDemandTools.Business.Modules.Destination.DestinationService>();
             cntr.Register<OnDemandTools.DAL.Modules.Destination.Queries.IDestinationQuery, OnDemandTools.DAL.Modules.Destination.Queries.DestinationQuery>();
+
+            cntr.Register<OnDemandTools.Business.Modules.Product.IProductService, OnDemandTools.Business.Modules.Product.ProductService>();
+            cntr.Register<OnDemandTools.DAL.Modules.Product.Queries.IProductQuery, OnDemandTools.DAL.Modules.Product.Queries.ProductQuery>();
         }
 
 

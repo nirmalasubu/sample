@@ -1,23 +1,24 @@
-﻿using MongoDB.Bson;
-using OnDemandTools.Common.Model;
+﻿using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OnDemandTools.DAL.Modules.Product.Model
+namespace OnDemandTools.API.v1.Models.Product
 {
-    public class Product:IModel
+    public class ProductViewModel : IModel
     {
-        public Product()
+        public ProductViewModel()
         {
             Destinations = new List<string>();
-            Tags = new List<string>();
+            Tags = new List<TagViewModel>();
 
-            ExternalId = Guid.NewGuid();
+            this.UpdateCreatedBy();
         }
 
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
 
-        public Guid ExternalId { get; set; }
+        public string ExternalId { get; set; }
 
         public string Name { get; set; }
 
@@ -25,7 +26,7 @@ namespace OnDemandTools.DAL.Modules.Product.Model
 
         public int MappingId { get; set; }
 
-        public List<string> Tags { get; set; }
+        public List<TagViewModel> Tags { get; set; }
 
         public List<string> Destinations { get; set; }
         public string CreatedBy { get; set; }

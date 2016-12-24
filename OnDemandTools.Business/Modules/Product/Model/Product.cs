@@ -1,23 +1,22 @@
-﻿using MongoDB.Bson;
-using OnDemandTools.Common.Model;
+﻿using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OnDemandTools.DAL.Modules.Product.Model
+namespace OnDemandTools.Business.Modules.Product.Model
 {
-    public class Product:IModel
+
+    public class Product : IModel
     {
         public Product()
         {
-            Destinations = new List<string>();
-            Tags = new List<string>();
-
-            ExternalId = Guid.NewGuid();
+            Destinations = new List<string>();            
         }
 
-        public ObjectId Id { get; set; }
+        public String Id { get; set; }
 
-        public Guid ExternalId { get; set; }
+        public string ExternalId { get; set; }
 
         public string Name { get; set; }
 
@@ -34,3 +33,4 @@ namespace OnDemandTools.DAL.Modules.Product.Model
         public DateTime ModifiedDateTime { get; set; }
     }
 }
+

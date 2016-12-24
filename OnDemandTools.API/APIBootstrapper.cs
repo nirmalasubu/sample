@@ -11,6 +11,7 @@ using OnDemandTools.Utilities.EntityMapping;
 using System.Security.Claims;
 using OnDemandTools.API.Helpers.MappingRules;
 using OnDemandTools.API.v1.Models;
+using AutoMapper;
 
 namespace OnDemandTools.API
 {
@@ -56,10 +57,9 @@ namespace OnDemandTools.API
             //container.Register<ILogic, Logic>();
             base.ApplicationStartup(container, pipelines);
 
-            // Initialize mapping rules
-            AutoMapperAPIConfiguration.Configure();
-            AutoMapperDomainConfiguration.Configure();
-            
+            // Initialize mapping rules            
+            //AutoMapperDomainConfiguration.Configure();
+            //AutoMapperAPIConfiguration.Configure();
         }
 
 

@@ -48,7 +48,9 @@
     "Serilog": "2.3.0",
     "Serilog.Sinks.RollingFile": "3.2.0",
     "System.Net.Http": "4.3.0",
-    "Serilog.Sinks.PeriodicBatching": "2.1.0"  },
+    "Serilog.Sinks.PeriodicBatching": "2.1.0",   
+    "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.1.2",
+    "Microsoft.AspNetCore.Mvc.Core": "1.1.0" },
 
   "runtimeOptions": {
     "configProperties": {

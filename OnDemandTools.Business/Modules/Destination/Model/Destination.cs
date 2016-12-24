@@ -1,10 +1,11 @@
 ﻿
+using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
 
 namespace OnDemandTools.Business.Modules.Destination.Model
 {    
-    public class Destination
+    public class Destination:IModel
     {
         public Destination()
         {
