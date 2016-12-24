@@ -60,7 +60,7 @@ deployment:
     branch: dev
     commands:    
       - cat dev
-      - sudo sed 's/odt-api/odt-job-deporter/' dev
+      - sudo sed -i 's/odt-api/odt-job-deporter/' dev
       - cat dev
 #      - source dev; sudo docker push "${IMAGE}"
 #      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
