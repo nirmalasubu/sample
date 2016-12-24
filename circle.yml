@@ -1,9 +1,7 @@
 general:
   branches:
     only:
-      - dev 
-	  - rc
-	  - /feature-.*/
+      - dev # list of branch to build
       
 machine:
   pre:  
@@ -21,7 +19,7 @@ dependencies:
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${SHIPMENT_NAME}" \
           -t "${SHIPMENT_BUILD_TOKEN_DEV}" \
-          -e "dev" \          
+          -e "${SHIPMENT_ENVIRONMENT}" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > dev;
 
@@ -54,9 +52,3 @@ deployment:
     
       - source dev; sudo docker push "${IMAGE}"
       - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true    
-
-	#branch: rc
-    #commands:
-    
-    #  - source qa; sudo docker push "${IMAGE}"
-    #  - source qa; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true   
