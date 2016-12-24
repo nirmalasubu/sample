@@ -29,10 +29,10 @@ dependencies:
           -t "${SHIPMENT_BUILD_TOKEN_QA}" \ 
           -e "qa" \
           -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > qa;
+          -n "${CIRCLE_BUILD_NUM}" > rc;
           
     - cat dev
-    - cat qa
+    - cat rc
 
 test:
   override:
@@ -56,6 +56,6 @@ deployment:
   release:
     branch: rc
     commands:
-      - source qa; sudo docker push "${IMAGE}"
-      - source qa; sudo docker run -it --env-file qa quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      - source rc; sudo docker push "${IMAGE}"
+      - source rc; sudo docker run -it --env-file qa quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
