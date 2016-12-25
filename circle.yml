@@ -18,7 +18,7 @@ dependencies:
     # use harbor-deploy to get image tag (version) from package.json (or TURNER_METADATA)
     - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
 
-    # create environment for API
+    # create CI environment for API
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${API_SHIPMENT_NAME}" \
           -t "${API_SHIPMENT_BUILD_TOKEN_DEV}" \
@@ -36,7 +36,7 @@ dependencies:
           -n "${CIRCLE_BUILD_NUM}" > api-rc;
     - cat api-qa
     - sudo sed -i 's/odt/odt-api/' api-rc;
-    - cat api-qa
+    - cat api-rc
 
 #    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
 #          -s "${SHIPMENT_NAME}" \
