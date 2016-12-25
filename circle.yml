@@ -26,7 +26,7 @@ dependencies:
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > api-dev;
     - cat api-dev             
-    - sudo sed -i 's/odt/${API_CONTAINER_NAME}/' api-dev;
+    - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-dev;
     - cat api-dev
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${API_SHIPMENT_NAME}" \
@@ -35,7 +35,7 @@ dependencies:
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > api-rc;
     - cat api-rc
-    - sudo sed -i 's/odt/${API_CONTAINER_NAME}/' api-rc;
+    - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-rc;
     - cat api-rc
 
 #    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
