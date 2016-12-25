@@ -24,19 +24,17 @@ dependencies:
           -t "${API_SHIPMENT_BUILD_TOKEN_DEV}" \
           -e "dev" \          
           -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > api-dev;
-    - cat api-dev             
+          -n "${CIRCLE_BUILD_NUM}" > api-dev;                
     - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-dev;
-    - cat api-dev
+    
     - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${API_SHIPMENT_NAME}" \
           -t "${API_SHIPMENT_BUILD_TOKEN_QA}" \
           -e "qa" \          
           -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > api-rc;
-    - cat api-rc
+          -n "${CIRCLE_BUILD_NUM}" > api-rc;    
     - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-rc;
-    - cat api-rc
+    
 
 #    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
 #          -s "${SHIPMENT_NAME}" \
@@ -55,11 +53,11 @@ test:
     # Build image for API project and test
     - cat api-dev
     - cat api-rc
-#    - source "${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "quay.io/turner/odt-api:${VERSION}" -f OnDemandTools.API/Dockerfile .
-#    - source "${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "quay.io/turner/odt-api:${VERSION}"; sleep 10  
-#    - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
-#    - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
-#    - sudo docker stop odt-api-container
+    - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
+    - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10  
+    - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
+    - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
+    - sudo docker stop odt-api-container
 #  
 #
 #    #Build image for Deporter project and test
@@ -77,9 +75,9 @@ deployment:
       # Deploy API
       - cat api-dev
       - cat api-rc 
-#      - source dev; sudo docker push "${IMAGE}"
-#      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
-#
+      - source dev; sudo docker push "${IMAGE}"
+      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+
 #      # Deploy deporter job      
 #      - sudo sed -i 's/odt-api/odt-job-deporter/' dev     
 #      - source dev; sudo docker push "${IMAGE}"
