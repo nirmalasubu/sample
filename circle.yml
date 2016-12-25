@@ -50,9 +50,7 @@ dependencies:
 
 test:
   override:
-    # Build image for API project and test
-    - cat api-dev
-    - cat api-rc
+    # Build image for API project and test    
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
     - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10  
     - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
@@ -72,11 +70,9 @@ deployment:
   development:
     branch: dev
     commands:    
-      # Deploy API
-      - cat api-dev
-      - cat api-rc 
-      - source dev; sudo docker push "${IMAGE}"
-      - source dev; sudo docker run -it --env-file dev quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      # Deploy API   
+      - source "api-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
+      - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "api-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
 #      # Deploy deporter job      
 #      - sudo sed -i 's/odt-api/odt-job-deporter/' dev     
