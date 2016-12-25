@@ -25,10 +25,18 @@ dependencies:
           -e "dev" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > api-dev;
-
+    - cat api-dev             
+    - sudo sed -i 's/odt/odt-api/' api-dev;
     - cat api-dev
-    - sudo sed -i 's/odt/odt-api/' api-dev   
-    - cat api-dev
+    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+          -s "${API_SHIPMENT_NAME}" \
+          -t "${API_SHIPMENT_BUILD_TOKEN_QA}" \
+          -e "qa" \          
+          -b "${CIRCLE_BRANCH}" \
+          -n "${CIRCLE_BUILD_NUM}" > api-qa;
+    - cat api-qa
+    - sudo sed -i 's/odt/odt-api/' api-qa;
+    - cat api-qa
 
 #    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
 #          -s "${SHIPMENT_NAME}" \
@@ -39,7 +47,7 @@ dependencies:
 #
     # change shipment, image name, container name
     # create enivironment for api development
-    - 
+    
 
 
 #test:
