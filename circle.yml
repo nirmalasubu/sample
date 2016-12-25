@@ -75,6 +75,7 @@ test:
 
 deployment:
   CI:   
+    branch: [dev, rc]
     commands:    
       # Deploy API   
       - source "api-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
