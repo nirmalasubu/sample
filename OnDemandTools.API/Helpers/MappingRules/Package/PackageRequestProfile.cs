@@ -6,7 +6,7 @@ namespace OnDemandTools.API.Helpers.MappingRules.Package
 {
     public class PackageRequestProfile: Profile
     {
-        protected override void Configure()
+        public PackageRequestProfile()
         {
             CreateMap<PackageRequest, BLModel.Package>()
                 .ForMember(x => x.DestinationCode, map => map
