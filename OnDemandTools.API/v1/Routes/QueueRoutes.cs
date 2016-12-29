@@ -22,7 +22,7 @@ namespace OnDemandTools.API.v1.Routes
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
 
-                var queues = queueSvc.GetQueueByStatus(true)
+                var queues = queueSvc.GetByStatus(true)
                                .ToViewModel<List<Queue>,List<QueueViewModel>>();
 
                 return queues;              

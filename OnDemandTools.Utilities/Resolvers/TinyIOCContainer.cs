@@ -43,6 +43,14 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.Business.Modules.Queue.IQueueService, OnDemandTools.Business.Modules.Queue.QueueService>();
             cntr.Register<OnDemandTools.DAL.Modules.Queue.Queries.IQueueQuery, OnDemandTools.DAL.Modules.Queue.Queries.QueueQuery>();
+            cntr.Register<OnDemandTools.DAL.Modules.Queue.Command.IQueueCommand, OnDemandTools.DAL.Modules.Queue.Command.QueueCommand>();
+
+            cntr.Register<OnDemandTools.Business.Modules.Package.IPackageService, OnDemandTools.Business.Modules.Package.PackageService>();
+            cntr.Register<OnDemandTools.DAL.Modules.Package.Commands.IPackageCommand, OnDemandTools.DAL.Modules.Package.Commands.PackageCommand>();
+            cntr.Register<OnDemandTools.DAL.Modules.Package.Queries.IPackageQuery, OnDemandTools.DAL.Modules.Package.Queries.PackageQuery>();
+
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetModifiedAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
         }
 
 

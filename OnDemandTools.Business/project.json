@@ -2,6 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
+    "FluentValidation.AspNetCore": "6.4.0-beta9",
     "NETStandard.Library": "1.6.1",
     "OnDemandTools.DAL": "1.0.0-*",
     "System.Security.Claims": "4.3.0"

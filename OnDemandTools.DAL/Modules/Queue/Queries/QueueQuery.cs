@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using OnDemandTools.DAL.Modules.Queue.Model;
 using MongoDB.Driver;
 using OnDemandTools.DAL.Database;
 using MongoDB.Driver.Linq;
@@ -41,7 +38,9 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
 
         public IQueryable<Model.Queue> GetPackageQueues()
         {
-            throw new NotImplementedException();
+            var queues = _database.GetCollection<Model.Queue>("DeliveryQueue").AsQueryable<Model.Queue>();
+
+            return queues.Where(q => q.DetectPackageChanges);
         }
     }
 }
