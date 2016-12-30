@@ -57,5 +57,27 @@ namespace OnDemandTools.Business.Modules.Queue
                 (queueQueryHelper.GetPackageQueues().ToList<DLModel.Queue>()
                 .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());            
         }
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'titleIds'
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="titleIds">The title ids.</param>
+        public void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds)
+        {
+            queueCommandHelper.ResetFor(queueNames, titleIds);
+        }
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'airingIds'
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="airingIds">The airing ids.</param>
+        public void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds)
+        {
+            queueCommandHelper.ResetFor(queueNames, airingIds);
+        }
     }
 }

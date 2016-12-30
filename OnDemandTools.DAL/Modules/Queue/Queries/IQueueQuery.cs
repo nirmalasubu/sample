@@ -8,6 +8,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
     public interface IQueueQuery
     {
         IQueryable<Model.Queue> GetByStatus(bool active);
+
         IQueryable<Model.Queue> Get();
 
         Model.Queue Get(int id);

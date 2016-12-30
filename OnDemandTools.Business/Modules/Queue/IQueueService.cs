@@ -20,7 +20,6 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <returns></returns>
         List<Model.Queue> GetPackageNotificationSubscribers();
 
-
         /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
         /// depends on 'titleIds' & 'destinationCode'
@@ -29,5 +28,21 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="titleIds">The title ids.</param>
         /// <param name="destinationCode">The destination code.</param>
         void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds, string destinationCode);
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'titleIds'
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="titleIds">The title ids.</param>
+        void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds);
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'airingIds'
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="airingIds">The airing ids.</param>
+        void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds);
     }
 }

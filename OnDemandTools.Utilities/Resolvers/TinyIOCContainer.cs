@@ -1,5 +1,7 @@
+using Microsoft.Extensions.Configuration;
+using Nancy;
 using Nancy.TinyIoc;
-
+using Newtonsoft.Json;
 
 namespace OnDemandTools.Utilities.Resolvers
 {
@@ -24,6 +26,8 @@ namespace OnDemandTools.Utilities.Resolvers
         public void RegisterImplmentation()
         {
             // As best practice include namespace along with class name. Also be careful not to register same instance multiple times    
+            cntr.Register<ISerializer, OnDemandTools.Utilities.Serialization.CustomJsonSerializer>();
+
             cntr.Register<OnDemandTools.Business.Modules.AiringId.IAiringIdCreator, OnDemandTools.Business.Modules.AiringId.AiringIdCreator>();
             cntr.Register<OnDemandTools.DAL.Modules.AiringId.IAiringIdSaveCommand, OnDemandTools.DAL.Modules.AiringId.Commands.AiringIdSaveCommand>();
             cntr.Register<OnDemandTools.DAL.Database.IODTDatastore, OnDemandTools.DAL.Database.ODTDatastore>();
@@ -51,8 +55,23 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetModifiedAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
+
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetModifiedAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
+
+            cntr.Register<OnDemandTools.DAL.Modules.File.Command.IFileUpsertCommand, OnDemandTools.DAL.Modules.File.Command.FileUpsertCommand>();            
+            cntr.Register< OnDemandTools.DAL.Modules.File.Queries.IFileQuery, OnDemandTools.DAL.Modules.File.Queries.FileQuery> ();
+            cntr.Register<OnDemandTools.Business.Modules.File.IFileService, OnDemandTools.Business.Modules.File.FileService>();
+
+            cntr.Register<OnDemandTools.DAL.Modules.Reporting.Command.IReportStatusCommand, OnDemandTools.DAL.Modules.Reporting.Command.ReportStatusCommand>();
+            cntr.Register<OnDemandTools.Business.Modules.Reporting.IReportingService, OnDemandTools.Business.Modules.Reporting.DFReportingService>();
+            cntr.Register<OnDemandTools.Business.Modules.Airing.IAiringService, OnDemandTools.Business.Modules.Airing.AiringService>();
+
+
+
+            // Special initialization for StatusLibrary class
+            OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<IConfiguration>());
+
         }
-
-
     }
 }

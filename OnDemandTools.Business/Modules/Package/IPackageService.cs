@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User.Model;
 using BLModel = OnDemandTools.Business.Modules.Package.Model;
-using DLModel = OnDemandTools.DAL.Modules.Package.Model;
 
 namespace OnDemandTools.Business.Modules.Package
 {

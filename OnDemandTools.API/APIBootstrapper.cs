@@ -7,11 +7,8 @@ using OnDemandTools.Utilities.Resolvers;
 using System;
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User;
-using OnDemandTools.Utilities.EntityMapping;
 using System.Security.Claims;
-using OnDemandTools.API.Helpers.MappingRules;
 using OnDemandTools.API.v1.Models;
-using AutoMapper;
 
 namespace OnDemandTools.API
 {
@@ -44,6 +41,7 @@ namespace OnDemandTools.API
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
+            
             container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);
             DependencyResolver.RegisterResolver(new TinyIOCResolver(container)).RegisterImplmentation();
@@ -53,13 +51,7 @@ namespace OnDemandTools.API
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
-
-            //container.Register<ILogic, Logic>();
             base.ApplicationStartup(container, pipelines);
-
-            // Initialize mapping rules            
-            //AutoMapperDomainConfiguration.Configure();
-            //AutoMapperAPIConfiguration.Configure();
         }
 
 

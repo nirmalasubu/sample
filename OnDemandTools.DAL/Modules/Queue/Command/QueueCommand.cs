@@ -25,6 +25,33 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             _deleteAirings = _database.GetCollection<Airing>("deletedasset");
         }
 
+        private IMongoQuery GetAiringIdsQueryByExactTitleMatch(IEnumerable<Airing> currentAirings, IEnumerable<string> titleIds)
+        {
+
+            var airingIds = (from airing in currentAirings
+                             let airingTitleIds = airing.Title.TitleIds.Where(e => e.Authority == "Turner").Select(e => e.Value)
+                             where airingTitleIds.SequenceEqual(titleIds)
+                             select airing.AssetId).ToList();
+
+            return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
+        }
+
+        private void Reset(string queueName, IMongoQuery filter, bool resetDeletedAirings = true)
+        {
+            _currentAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+
+            if (resetDeletedAirings)
+                _deleteAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+        }
+
+        private void ResetFor(string queueName, IList<string> airingIds)
+        {
+            var filter = Query.In("AssetId", new BsonArray(airingIds));
+
+            Reset(queueName, filter);
+        }
+
+
         public void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode)
         {
             var titleIdsInString = titleIds.Select(titleId => titleId.ToString()).ToList();
@@ -52,25 +79,30 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         }
 
 
-
-        private IMongoQuery GetAiringIdsQueryByExactTitleMatch(IEnumerable<Airing> currentAirings, IEnumerable<string> titleIds)
+        public void ResetFor(IList<string> queueNames, IList<int> titleIds)
         {
+            if (!queueNames.Any() || !titleIds.Any())
+                return;
 
-            var airingIds = (from airing in currentAirings
-                             let airingTitleIds = airing.Title.TitleIds.Where(e => e.Authority == "Turner").Select(e => e.Value)
-                             where airingTitleIds.SequenceEqual(titleIds)
-                             select airing.AssetId).ToList();
+            var airingIds = _modifiedAiringQuery
+                    .GetNonExpiredBy(titleIds, queueNames.AsQueryable(), DateTime.Now.ToUniversalTime())
+                    .Select(a => a.AssetId).ToList();
 
-            return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
+            foreach (var queueName in queueNames)
+            {
+                ResetFor(queueName, airingIds);
+            }
         }
 
-        private void Reset(string queueName, IMongoQuery filter, bool resetDeletedAirings = true)
+        public void ResetFor(IList<string> queueNames, IList<string> airingIds)
         {
-            _currentAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+            if (!queueNames.Any() || !airingIds.Any())
+                return;
 
-            if (resetDeletedAirings)
-                _deleteAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+            foreach (var queueName in queueNames)
+            {
+                ResetFor(queueName, airingIds);
+            }
         }
-
     }
 }
