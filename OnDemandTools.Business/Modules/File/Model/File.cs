@@ -10,7 +10,7 @@ namespace OnDemandTools.Business.Modules.File.Model
 
         }
         
-        public String Id { get; set; }
+        
         public string MediaId { get; set; }
         public string AiringId { get; set; }
         public string ContentId { get; set; }

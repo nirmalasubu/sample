@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OnDemandTools.DAL.Modules.Airings;
+using System;
 using System.Collections.Generic;
+using BLModel = OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Business.Modules.Airing
 {
@@ -12,13 +14,31 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="cutOffDateTime">The cut off date time.</param>
         /// <param name="isSeries">if set to <c>true</c> [is series].</param>
         /// <returns></returns>
-        List<Model.Airing> GetNonExpiredBy(int titleId, DateTime cutOffDateTime, bool isSeries = false);
+        List<BLModel.Airing> GetNonExpiredBy(int titleId, DateTime cutOffDateTime, bool isSeries = false);
 
         /// <summary>
         /// Gets airings by media identifier.
         /// </summary>
         /// <param name="mediaId">The media identifier.</param>
         /// <returns></returns>
-        List<Model.Airing> GetByMediaId(string mediaId);
+        List<BLModel.Airing> GetByMediaId(string mediaId);
+
+
+        /// <summary>
+        /// Gets airings by airing identifier.
+        /// </summary>
+        /// <param name="assetId">The asset identifier.</param>
+        /// <param name="getFrom">The get from.</param>
+        /// <returns></returns>
+        BLModel.Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection);
+
+        /// <summary>
+        /// Determines whether [is airing exists] [the specified asset identifier].
+        /// </summary>
+        /// <param name="assetId">The asset identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if [is airing exists] [the specified asset identifier]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsAiringExists(string assetId);
     }
 }

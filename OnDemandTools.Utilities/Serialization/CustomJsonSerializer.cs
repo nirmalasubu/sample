@@ -9,6 +9,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace OnDemandTools.Utilities.Serialization
 {
+    
     public sealed class CustomJsonSerializer : JsonSerializer, Nancy.ISerializer
     {
         public CustomJsonSerializer()

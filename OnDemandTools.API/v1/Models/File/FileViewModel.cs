@@ -15,8 +15,7 @@ namespace OnDemandTools.API.v1.Models.File
 
         }
 
-      
-        public string MediaId { get; set; }     
+        public string MediaId { get; set; }
         public string AiringId { get; set; }
         public string ContentId { get; set; }
         public int? TitleId { get; set; }
@@ -129,12 +128,16 @@ namespace OnDemandTools.API.v1.Models.File
         public FilePlayListViewModel()
         {
             Properties = new Dictionary<string, object>();
+           
         }
 
         public String Name { get; set; }
         public String Type { get; set; }
+        [JsonProperty("urls")]
         public List<Dictionary<string, FileUrlViewModel>> Urls { get; set; }
+        [JsonProperty("properties")]
         public Dictionary<string, object> Properties { get; set; }
+        
     }
 
 

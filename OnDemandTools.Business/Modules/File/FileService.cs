@@ -6,16 +6,19 @@ using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.File.Model;
 using DLModel = OnDemandTools.DAL.Modules.File.Model;
 using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.File.Command;
 
 namespace OnDemandTools.Business.Modules.File
 {
     public class FileService : IFileService
     {
         IFileQuery fileQuery;
+        IFileUpsertCommand fileCommand;
 
-        public FileService(IFileQuery fileQuery)
+        public FileService(IFileQuery fileQuery, IFileUpsertCommand fileCommand)
         {
             this.fileQuery = fileQuery;
+            this.fileCommand = fileCommand;
         }
 
         public IList<BLModel.File> GetBy(List<string> contentIds, List<int> titleIds, string airingId, string mediaId)
@@ -41,8 +44,8 @@ namespace OnDemandTools.Business.Modules.File
         }
 
         public void Save(List<BLModel.File> files, UserIdentity user)
-        {
-            throw new NotImplementedException();
+        {           
+            fileCommand.Save(files.ToDataModel<List<BLModel.File>, List<DLModel.File>>(), user.UserName);
         }
     }
 }

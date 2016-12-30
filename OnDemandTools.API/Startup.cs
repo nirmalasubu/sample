@@ -55,7 +55,7 @@ namespace OnDemandTools.API
         {
 
             services.InitializeAutoMapper();
-       
+            services.InitializePersistantStorage();       
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

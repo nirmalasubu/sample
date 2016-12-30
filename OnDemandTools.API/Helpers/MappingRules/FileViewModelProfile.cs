@@ -2,6 +2,8 @@
 using OnDemandTools.API.v1.Models.File;
 using OnDemandTools.Business.Modules.File.Model;
 using OnDemandTools.Common.Extensions;
+using RQModel = OnDemandTools.API.v1.Models.File;
+using BLModel = OnDemandTools.Business.Modules.File.Model;
 
 namespace OnDemandTools.API.Helpers.MappingRules
 {
@@ -9,25 +11,25 @@ namespace OnDemandTools.API.Helpers.MappingRules
     {
         public FileViewModelProfile()
         {
-            CreateMap<FileViewModel, File>()
-               .ForMember(dest => dest.Contents, opt => opt.Condition(src => !src.Contents.IsNullOrEmpty()));
-            CreateMap<FileContentViewModel, Content>()
+            CreateMap<RQModel.FileViewModel, BLModel.File>()
+               .ForMember(dest => dest.Contents, opt => opt.Condition(src => (!src.Contents.IsNullOrEmpty() && src.Contents.Count > 0)));
+            CreateMap<RQModel.FileContentViewModel, BLModel.Content>()
                 .ForMember(dest => dest.MediaCollection, opt => opt.MapFrom(src => src.Media));
-            CreateMap<FileMediaViewModel, Media>();
-            CreateMap<FileCaptionViewModel, Caption>();
-            CreateMap<FileContentSegmentViewModel, ContentSegment>();
-            CreateMap<FilePlayListViewModel, PlayList>();
-            CreateMap<FileUrlViewModel, Url>();
+            CreateMap<RQModel.FileMediaViewModel, BLModel.Media>();
+            CreateMap<RQModel.FileCaptionViewModel, BLModel.Caption>();
+            CreateMap<RQModel.FileContentSegmentViewModel, BLModel.ContentSegment>();
+            CreateMap<RQModel.FilePlayListViewModel, BLModel.PlayList>();
+            CreateMap<RQModel.FileUrlViewModel, BLModel.Url>();
 
 
-            CreateMap<File, FileViewModel>();
-            CreateMap<Content, FileContentViewModel>()
+            CreateMap<BLModel.File, RQModel.FileViewModel>();
+            CreateMap<BLModel.Content, RQModel.FileContentViewModel>()
                 .ForMember(dest => dest.Media, opt => opt.MapFrom(src => src.MediaCollection));
-            CreateMap<Media, FileMediaViewModel>();
-            CreateMap<Caption, FileCaptionViewModel>();
-            CreateMap<ContentSegment, FileContentSegmentViewModel>();
-            CreateMap<PlayList, FilePlayListViewModel>();
-            CreateMap<Url, FileUrlViewModel>();
+            CreateMap<BLModel.Media, RQModel.FileMediaViewModel>();
+            CreateMap<BLModel.Caption, RQModel.FileCaptionViewModel>();
+            CreateMap<BLModel.ContentSegment, RQModel.FileContentSegmentViewModel>();
+            CreateMap<BLModel.PlayList, RQModel.FilePlayListViewModel>();
+            CreateMap<BLModel.Url, RQModel.FileUrlViewModel>();
 
         }
     }

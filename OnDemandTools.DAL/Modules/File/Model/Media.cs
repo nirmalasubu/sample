@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace OnDemandTools.DAL.Modules.File.Model
@@ -19,6 +20,7 @@ namespace OnDemandTools.DAL.Modules.File.Model
         public Double TotalDuration { get; set; }
         public List<ContentSegment> ContentSegments { get; set; }
         public List<PlayList> Playlists { get; set; }
+        [BsonIgnoreIfNull]
         public String AdType { get; set; }
         public List<Caption> Captions { get; set; }
     }

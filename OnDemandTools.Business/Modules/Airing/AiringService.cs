@@ -17,6 +17,13 @@ namespace OnDemandTools.Business.Modules.Airing
             this.airingQueryHelper = airingQueryHelper;
         }
 
+        public BLModel.Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection)
+        {
+            return 
+            airingQueryHelper.GetBy(assetId, getFrom)
+                .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
+        }
+
         public List<BLModel.Airing> GetByMediaId(string mediaId)
         {
             return
@@ -30,6 +37,11 @@ namespace OnDemandTools.Business.Modules.Airing
             return
             (airingQueryHelper.GetNonExpiredBy(titleId, cutOffDateTime, isSeries).ToList<DLModel.Airing>()
                 .ToBusinessModel<List<DLModel.Airing>, List<BLModel.Airing>>());
+        }
+
+        public bool IsAiringExists(string assetId)
+        {
+            return airingQueryHelper.IsAiringExists(assetId);
         }
     }
 }

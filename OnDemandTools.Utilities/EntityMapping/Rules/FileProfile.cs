@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using MongoDB.Bson;
+using OnDemandTools.Common.Extensions;
 using BLModel = OnDemandTools.Business.Modules.File.Model;
 using DLModel = OnDemandTools.DAL.Modules.File.Model;
 
-namespace OnDemandTools.Utilities.EntityMapping
+namespace OnDemandTools.Utilities.EntityMapping.Rules
 {
     public class FileProfile:Profile
     {
@@ -17,7 +19,8 @@ namespace OnDemandTools.Utilities.EntityMapping
             CreateMap<DLModel.PlayList, BLModel.PlayList>();
             CreateMap<DLModel.Url, BLModel.Url>();
 
-            CreateMap<BLModel.File, DLModel.File>();
+            CreateMap<BLModel.File, DLModel.File>()
+                .ForMember(dest => dest.Contents, opt => opt.Condition(src => (!src.Contents.IsNullOrEmpty() && src.Contents.Count > 0)));
             CreateMap<BLModel.Item, DLModel.Item>();
             CreateMap<BLModel.Content, DLModel.Content>();
             CreateMap<BLModel.Media, DLModel.Media>();

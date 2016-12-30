@@ -5,6 +5,7 @@ using System;
 
 namespace OnDemandTools.DAL.Modules.File.Model
 {
+   
     public class File
     {
         public File()
@@ -14,8 +15,14 @@ namespace OnDemandTools.DAL.Modules.File.Model
 
         [BsonId]
         public ObjectId Id { get; set; }
+
+       
         public string MediaId { get; set; }
+
+      
         public string AiringId { get; set; }
+
+      
         public string ContentId { get; set; }
         public int? TitleId { get; set; }
         public string Type { get; set; }
@@ -28,9 +35,13 @@ namespace OnDemandTools.DAL.Modules.File.Model
 
         [BsonDefaultValue(false, SerializeDefaultValue = true)]
         public bool Video { get; set; }
+
+        [BsonIgnore]
         public bool Secure { get; set; }
         public String ModifiedBy { get; set; }
         public DateTime ModifiedDatetime { get; set; }
+
+        
         public List<Content> Contents { get; set; }
 
         // Don't persist these properties
