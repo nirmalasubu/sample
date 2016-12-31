@@ -58,7 +58,7 @@ namespace OnDemandTools.API.v1.Models.File
                     }
                     else if (request.TitleId.HasValue)
                     {
-                        //var airing = _airingQuery.GetNonExpiredBy(request.TitleId.Value, DateTime.MinValue);
+                        //var airing = airingSvc.GetNonExpiredBy(request.TitleId.Value, DateTime.MinValue);
                         //contentSegmentsCount = (airing == null) ? 0 : airing.FirstOrDefault().Versions.Count();
                         //return ((filec.Count() != contentSegmentsCount) ? false : true);
                         return true;
@@ -155,7 +155,7 @@ namespace OnDemandTools.API.v1.Models.File
                             // Verify that the given MediaId exist                   
                             Func<int, bool> titleIdExistRule = new Func<int, bool>((titleId) =>
                             {
-                                //return (_airingQuery.GetNonExpiredBy(titleId, DateTime.MinValue).IsNullOrEmpty()) ? false : true;
+                                //return (airingSvc.GetNonExpiredBy(titleId, DateTime.MinValue).IsNullOrEmpty()) ? false : true;
                                 return true;
                             });
 

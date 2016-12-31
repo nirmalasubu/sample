@@ -16,6 +16,9 @@ namespace OnDemandTools.Utilities.EntityMapping.Rules
             CreateMap<DLModel.CurrentAiringId, BLModel.CurrentAiringId>()
              .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()))
              .ForMember(d => d.BillingNumber, opt => opt.MapFrom(s => s.BillingNumber));
+
+            CreateMap<BLModel.BillingNumber, DLModel.BillingNumber>();
+            CreateMap<DLModel.BillingNumber, BLModel.BillingNumber>();
         }
     }
 }

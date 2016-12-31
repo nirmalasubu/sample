@@ -40,5 +40,26 @@ namespace OnDemandTools.Business.Modules.File
         /// <returns></returns>
         IList<BLModel.File> GetBy(List<string> contentIds, List<int> titleIds, string airingId, string mediaId);
 
+        /// <summary>
+        /// Persists the non video files.
+        /// </summary>
+        /// <param name="files">The files.</param>
+        /// <param name="userName">The user.</param>
+        void PersistNonVideoFiles(List<BLModel.File> files, string userName);
+
+        /// <summary>
+        /// Persists the video file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="userName">The user.</param>
+        void PersistVideoFile(BLModel.File file, string userName);
+
+        /// <summary>
+        /// Persists the video files.
+        /// </summary>
+        /// <param name="files">The files.</param>
+        /// <param name="userName">The user.</param>
+        void PersistVideoFiles(List<BLModel.File> files, string userName);
+
     }
 }

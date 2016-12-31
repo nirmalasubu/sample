@@ -7,10 +7,8 @@ using OnDemandTools.API.Helpers;
 using OnDemandTools.API.v1.Models.File;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.File;
-using OnDemandTools.Business.Modules.File.Model;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Model;
-using OnDemandTools.DAL.Modules.Reporting.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +17,7 @@ using AutoMapper;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using BLFileModel = OnDemandTools.Business.Modules.File.Model;
 using RQModel = OnDemandTools.API.v1.Models.File;
+using OnDemandTools.Business.Modules.Reporting;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -27,7 +26,7 @@ namespace OnDemandTools.API.v1.Routes
         private IQueueService queueSvc;
         private IFileService fileSvc;
         private FileValidator fileValidator;
-        private IReportStatusCommand reporter;
+        private IReportingService reporter;
         private IAiringService  airingSvc;
 
 
@@ -35,7 +34,7 @@ namespace OnDemandTools.API.v1.Routes
             IQueueService queueSvc,
             IFileService fileSvc,           
             FileValidator fileValidator,
-            IReportStatusCommand reporter,
+            IReportingService reporter,
             IAiringService airingSvc)
 
             : base("v1")

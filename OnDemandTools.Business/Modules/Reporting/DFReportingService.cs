@@ -19,5 +19,10 @@ namespace OnDemandTools.Business.Modules.Reporting
         {
             reportStatusCommandSvc.Report(airingId, statusMessage, dfStatus, dfDestination);
         }
+
+        public void Report(string airingId, int statusEnum, int destinationEnum, string message, bool unique = false)
+        {
+            reportStatusCommandSvc.Report(airingId, statusEnum, destinationEnum, message, unique);
+        }
     }
 }

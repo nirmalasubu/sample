@@ -17,5 +17,18 @@ namespace OnDemandTools.Business.Modules.Reporting
         /// <param name="dfStatus">The df status.</param>
         /// <param name="dfDestination">The df destination.</param>
         void Report(string airingId, string statusMessage, int dfStatus = 13, int dfDestination = 18);
+
+
+        /// <summary>
+        /// Reports status along with the provided
+        /// status message to reporting system. Status will be applied to the provided
+        /// airing identifier.
+        /// </summary>
+        /// <param name="airingId">The airing identifier.</param>
+        /// <param name="statusEnum">The status enum.</param>
+        /// <param name="destinationEnum">The destination enum.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="unique">if set to <c>true</c> [unique].</param>
+        void Report(string airingId, int statusEnum, int destinationEnum, string message, bool unique = false);
     }
 }

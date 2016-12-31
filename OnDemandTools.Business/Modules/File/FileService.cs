@@ -47,5 +47,20 @@ namespace OnDemandTools.Business.Modules.File
         {           
             fileCommand.Save(files.ToDataModel<List<BLModel.File>, List<DLModel.File>>(), user.UserName);
         }
+
+        public void PersistNonVideoFiles(List<BLModel.File> files, string userName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PersistVideoFile(BLModel.File file, string userName)
+        {
+            fileCommand.PersistVideoFile(file.ToDataModel<BLModel.File, DLModel.File>(), userName);           
+        }
+
+        public void PersistVideoFiles(List<BLModel.File> files, string userName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
