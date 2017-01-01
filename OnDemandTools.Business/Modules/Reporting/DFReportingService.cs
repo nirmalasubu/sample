@@ -1,8 +1,7 @@
-﻿using OnDemandTools.DAL.Modules.Reporting.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.Reporting.Command;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
+using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
 
 namespace OnDemandTools.Business.Modules.Reporting
 {
@@ -13,6 +12,11 @@ namespace OnDemandTools.Business.Modules.Reporting
         public DFReportingService(IReportStatusCommand reportStatusCommandSvc)
         {
             this.reportStatusCommandSvc = reportStatusCommandSvc;
+        }
+
+        public void Report(BLAiringModel.Airing airing)
+        {
+            reportStatusCommandSvc.Report(airing.ToDataModel<BLAiringModel.Airing, DLAiringModel.Airing>());
         }
 
         public void Report(string airingId, string statusMessage, int dfStatus = 13, int dfDestination = 18)

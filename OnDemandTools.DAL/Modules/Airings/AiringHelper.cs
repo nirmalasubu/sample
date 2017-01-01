@@ -1,4 +1,5 @@
 ﻿using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.DAL.Modules.Queue.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,13 @@ namespace OnDemandTools.DAL.Modules.Airings
 
         bool IsAiringExists(string assetId);
 
+    }
+
+    public interface IAiringMessagePusher
+    {
+        void PushBy(DeliverCriteria criteria);
+        void PushBy(string queueName, IList<string> airingIds);
+        void PushBy(string queueName, string query, int hoursOut, IList<string> airingIds);
     }
 
     public interface IGetAiringQuery

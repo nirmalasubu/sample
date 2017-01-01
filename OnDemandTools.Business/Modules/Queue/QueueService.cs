@@ -1,7 +1,6 @@
 ﻿using OnDemandTools.Common.Model;
 using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.DAL.Modules.Queue.Queries;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
@@ -78,6 +77,14 @@ namespace OnDemandTools.Business.Modules.Queue
         public void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds)
         {
             queueCommandHelper.ResetFor(queueNames, airingIds);
+        }
+
+        public BLModel.Queue GetByApiKey(string apiKey)
+        {
+            return
+            queueQueryHelper.GetByApiKey(apiKey)
+                .ToBusinessModel<DLModel.Queue, BLModel.Queue>();
+            
         }
     }
 }

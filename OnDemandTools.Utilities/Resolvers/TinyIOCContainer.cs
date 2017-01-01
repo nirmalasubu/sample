@@ -72,6 +72,11 @@ namespace OnDemandTools.Utilities.Resolvers
             cntr.Register<OnDemandTools.DAL.Modules.Handler.Command.IHandlerHistoryCommand, OnDemandTools.DAL.Modules.Handler.Command.HandlerHistoryCommand>();
             cntr.Register<OnDemandTools.DAL.Modules.Pathing.Queries.IPathTranslationQueries, OnDemandTools.DAL.Modules.Pathing.Queries.PathTranslationQueries>();
 
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IAiringSaveCommand, OnDemandTools.DAL.Modules.Airings.Commands.AiringSaveCommand>();
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IAiringMessagePusher, OnDemandTools.DAL.Modules.Airings.Commands.AiringMessagePusher>();
+
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.ITaskUpdater, OnDemandTools.DAL.Modules.Airings.Commands.AiringUpdateTaskCommand>();
+
             // Special initialization for StatusLibrary class
             OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<IConfiguration>());
 

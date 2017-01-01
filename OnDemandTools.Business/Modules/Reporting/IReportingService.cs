@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Business.Modules.Reporting
 {
@@ -30,5 +27,11 @@ namespace OnDemandTools.Business.Modules.Reporting
         /// <param name="message">The message.</param>
         /// <param name="unique">if set to <c>true</c> [unique].</param>
         void Report(string airingId, int statusEnum, int destinationEnum, string message, bool unique = false);
+
+        /// <summary>
+        /// Reports the specified airing.
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void Report(BLAiringModel.Airing airing);
     }
 }

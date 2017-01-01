@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
-
-namespace OnDemandTools.Utilities.Serialization
+namespace OnDemandTools.Common
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Xml.Serialization;
 
     [XmlRoot("dictionary")]
     public class SerializableDictionary<TKey, TValue>

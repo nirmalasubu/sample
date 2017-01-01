@@ -3,6 +3,8 @@ using AutoMapper;
 using MongoDB.Bson;
 using BLModel = OnDemandTools.Business.Modules.Destination.Model;
 using DLModel = OnDemandTools.DAL.Modules.Destination.Model;
+using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Utilities.EntityMapping.Rules
 {
@@ -21,6 +23,10 @@ namespace OnDemandTools.Utilities.EntityMapping.Rules
             CreateMap<DLModel.Property, BLModel.Property>();
             CreateMap<DLModel.Deliverable, BLModel.Deliverable>();
             CreateMap<DLModel.Content, BLModel.Content>();
+
+
+            CreateMap<DLModel.Destination, DLAiringModel.Destination>();
+            CreateMap<DLAiringModel.Destination, BLAiringModel.Destination>();
         }
     }
 }

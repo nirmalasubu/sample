@@ -44,5 +44,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queueNames">The queue names.</param>
         /// <param name="airingIds">The airing ids.</param>
         void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds);
+
+        /// <summary>
+        /// Gets queue by API key.
+        /// </summary>
+        /// <param name="apiKey">The API key.</param>
+        /// <returns></returns>
+        Model.Queue GetByApiKey(string apiKey);
     }
 }

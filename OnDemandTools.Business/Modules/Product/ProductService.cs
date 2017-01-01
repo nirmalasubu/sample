@@ -5,16 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.Product.Model;
 using DLModel = OnDemandTools.DAL.Modules.Product.Model;
+using OnDemandTools.DAL.Modules.Destination.Comparer;
+using OnDemandTools.DAL.Modules.Destination.Queries;
+
+using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
+using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Business.Modules.Product
 {
     public class ProductService : IProductService
     {
         IProductQuery productHelper;
+        IDestinationQuery destionationQueryHelper;
 
-        public ProductService(IProductQuery productHelper)
+        public ProductService(IProductQuery productHelper, IDestinationQuery destionationQueryHelper)
         {
             this.productHelper = productHelper;
+            this.destionationQueryHelper = destionationQueryHelper;
         }
 
 
@@ -48,6 +56,35 @@ namespace OnDemandTools.Business.Modules.Product
         {         
             return (productHelper.GetByTags(tags).ToList<DLModel.Product>()
                 .ToBusinessModel<List<DLModel.Product>,List<BLModel.Product>>());
+        }
+
+        public void ProductDestinationConverter(ref Airing.Model.Airing airing)
+        {
+            foreach (var flight in airing.Flights)
+            {
+                var products = productHelper.GetByProductIds(flight.Products.Select(p => p.ExternalId).ToList());
+                var destinationMapping = products.SelectMany(product => product.Destinations, (product, destination) => new
+                {
+                    DestinationName = destination,
+                    AuthorizationRequired = flight.Products.Where(p => p.ExternalId.Equals(product.ExternalId)).FirstOrDefault().IsAuth
+                });
+                var destinationData = destionationQueryHelper
+                    .GetByDestinationNames(destinationMapping.Select(d => d.DestinationName).ToList())
+                    .Distinct(new DestinationDataModelComparer())
+                    .ToList();
+
+                var destinations = destinationData.ToDataModel<List<DLDestinationModel.Destination>, List<DLAiringModel.Destination>>();
+              
+                foreach (var destination in destinations)
+                {
+                    //if there are multiple destinations with the same name, the least restrictive (isAuth=false) will win
+                    if (destinationMapping.Where(dm => dm.DestinationName.Equals(destination.Name)).Count() > 1 && destinationMapping.Any(dm => dm.DestinationName.Equals(destination.Name) && !dm.AuthorizationRequired))
+                        destination.AuthenticationRequired = false;
+                    else destination.AuthenticationRequired = destinationMapping.Where(dm => dm.DestinationName.Equals(destination.Name)).FirstOrDefault().AuthorizationRequired;
+                }
+
+                flight.Destinations = destinations.ToBusinessModel<List<DLAiringModel.Destination>,List<BLAiringModel.Destination>>();
+            }
         }
     }
 }

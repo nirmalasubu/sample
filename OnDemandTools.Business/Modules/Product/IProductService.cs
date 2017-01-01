@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Business.Modules.Product
 {
@@ -26,5 +27,13 @@ namespace OnDemandTools.Business.Modules.Product
         /// <param name="productIds">The product ids.</param>
         /// <returns></returns>
         List<Model.Product> GetByProductIds(List<Guid> productIds);
+
+        /// <summary>
+        /// Converts products specified in the given 
+        /// airing to its corresponding destinations
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void ProductDestinationConverter(ref BLAiringModel.Airing airing);
+
     }
 }

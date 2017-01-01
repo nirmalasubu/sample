@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using OnDemandTools.Business.Modules.Airing;
-using OnDemandTools.Business.Modules.Airing.Model;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.Common.Extensions;
 using System;
 using System.Linq;
@@ -119,20 +119,9 @@ namespace OnDemandTools.API.v1.Models.Handler
         /// </summary>
         /// <param name="ar">The ar.</param>
         /// <returns></returns>
-        int ContentSegmentsCount(Airing ar)
+        int ContentSegmentsCount(BLAiringModel.Airing ar)
         {
-            //var k = ar.PlayList.Select((e, i) => new { Element = e, Index = i })
-            //              .Where(e => e.Element.ItemType == "Segment")
-            //              .GroupBy(e => ar.PlayList.ToList().IndexOf(ar.PlayList.Where(c => c.ItemType == "Trigger" && c.Position > e.Element.Position).FirstOrDefault(), e.Index)).ToList();
-
-            //foreach (var group in k)
-            //{
-            //    var groupKey = group.Key;
-            //    foreach (var groupedItem in group)
-            //        Console.WriteLine(groupedItem.Index + " : " + groupedItem.Element.Id);
-            //}
-
-
+         
             return ar.PlayList.Select((e, i) => new { Element = e, Index = i })
                           .Where(e => e.Element.ItemType == "Segment")
                           .GroupBy(e => ar.PlayList.ToList().IndexOf(ar.PlayList.Where(c => c.ItemType == "Trigger" && c.Position > e.Element.Position).FirstOrDefault(), e.Index))
