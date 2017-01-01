@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using BLModel = OnDemandTools.Business.Modules.Airing.Model;
 
+
 namespace OnDemandTools.Business.Modules.Airing
 {
     public interface IAiringService
@@ -116,5 +117,11 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <returns></returns>
         List<BLModel.Airing> GetBy(string brand, string destination, DateTime startDate, DateTime endDate, string airingStatus = "");
 
+
+        /// <summary>
+        /// Append file information to the provided airing
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        List<BLModel.Alternate.Long.File>  RetrieveFile(BLModel.Alternate.Long.Airing airing);
     }
 }

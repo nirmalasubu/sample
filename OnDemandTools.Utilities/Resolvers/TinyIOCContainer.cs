@@ -55,9 +55,9 @@ namespace OnDemandTools.Utilities.Resolvers
 
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetModifiedAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
-
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetModifiedAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
-            cntr.Register<OnDemandTools.DAL.Modules.Airings.IGetAiringQuery, OnDemandTools.DAL.Modules.Airings.Queries.GetAiringQuery>();
+            cntr.Register<OnDemandTools.DAL.Modules.Airings.IAiringDeleteCommand, OnDemandTools.DAL.Modules.Airings.Commands.AiringDeleteCommand>();
+            cntr.Register<OnDemandTools.DAL.Modules.AiringId.IAiringIdDeleteCommand, OnDemandTools.DAL.Modules.AiringId.Commands.AiringIdDeleteCommand>();
 
             cntr.Register<OnDemandTools.DAL.Modules.File.Command.IFileUpsertCommand, OnDemandTools.DAL.Modules.File.Command.FileUpsertCommand>();            
             cntr.Register< OnDemandTools.DAL.Modules.File.Queries.IFileQuery, OnDemandTools.DAL.Modules.File.Queries.FileQuery> ();

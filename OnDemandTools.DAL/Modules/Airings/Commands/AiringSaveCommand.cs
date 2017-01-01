@@ -11,9 +11,9 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
     public class AiringSaveCommand : IAiringSaveCommand
     {
         private readonly MongoDatabase _database;
-        private readonly IGetAiringQueryPrimaryDb _getAiringQuery;
+        private readonly IGetAiringQuery _getAiringQuery;
 
-        public AiringSaveCommand(IODTDatastore connection, IGetAiringQueryPrimaryDb getAiringQueryPrimaryDb)
+        public AiringSaveCommand(IODTDatastore connection, IGetAiringQuery getAiringQueryPrimaryDb)
         {
             _database = connection.GetDatabase();
 

@@ -8,6 +8,9 @@ using OnDemandTools.Common.Model;
 using OnDemandTools.DAL.Modules.Queue.Queries;
 using System.Text;
 using OnDemandTools.Common;
+using OnDemandTools.DAL.Modules.File.Queries;
+using AutoMapper;
+using DLFileModel = OnDemandTools.DAL.Modules.File.Model;
 
 namespace OnDemandTools.Business.Modules.Airing
 {
@@ -19,11 +22,13 @@ namespace OnDemandTools.Business.Modules.Airing
         IAiringMessagePusher airingMessagePusherCommandHelper;
         IQueueQuery queueQueryHelper;
         ITaskUpdater taskUpdaterCommand;
+        IFileQuery fileQueryHelper;
 
         public AiringService(IGetAiringQuery airingQueryHelper, 
             IAiringSaveCommand airingSaveCommandHelper,
             IAiringDeleteCommand airingDeleteCommandHelper, IAiringMessagePusher airingMessagePusherCommandHelper, IQueueQuery queueQueryHelper,
-            ITaskUpdater taskUpdaterCommand)
+            ITaskUpdater taskUpdaterCommand,
+            IFileQuery fileQueryHelper)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -31,6 +36,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.airingMessagePusherCommandHelper = airingMessagePusherCommandHelper;
             this.queueQueryHelper = queueQueryHelper;
             this.taskUpdaterCommand = taskUpdaterCommand;
+            this.fileQueryHelper = fileQueryHelper;
         }
 
         public BLModel.Airing Delete(BLModel.Airing airing)
@@ -131,6 +137,42 @@ namespace OnDemandTools.Business.Modules.Airing
                 (airingQueryHelper.GetBy(brand, destination, startDate, endDate, airingStatus)
                 .ToList<DLModel.Airing>()
                 .ToBusinessModel<List<DLModel.Airing>, List<BLModel.Airing>>());
+        }
+
+        public List<BLModel.Alternate.Long.File> RetrieveFile(BLModel.Alternate.Long.Airing airing)
+        {
+            if (String.IsNullOrWhiteSpace(airing.MediaId))
+            {
+                airing.MediaId = String.Empty;
+            }
+
+            var titleIds = ExtractTitleAndSeriesIdsFrom(airing);
+            var versionIds = ExtractVersionIdsFrom(airing);
+            var files = fileQueryHelper.GetBy(versionIds, titleIds, airing.AiringId, airing.MediaId).ToList();            
+            return Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files);            
+        }
+
+
+        private List<string> ExtractVersionIdsFrom(BLModel.Alternate.Long.Airing airing)
+        {
+            return airing.Versions
+                .Select(t => t.ContentId)
+               .ToList();
+        }
+
+        private static List<int> ExtractTitleAndSeriesIdsFrom(BLModel.Alternate.Long.Airing airing)
+        {
+            var titleIds = airing.Title.TitleIds
+                .Where(t => t.Authority == "Turner" && t.Value != null)
+                .Select(t => int.Parse(t.Value))
+                .ToList();
+
+            if (airing.Title.Series.Id.HasValue)
+            {
+                titleIds.Add(airing.Title.Series.Id.Value);
+            }
+
+            return titleIds;
         }
     }
 }

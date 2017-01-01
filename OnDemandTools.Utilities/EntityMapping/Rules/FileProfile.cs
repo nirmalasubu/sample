@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using MongoDB.Bson;
 using OnDemandTools.Common.Extensions;
 using BLModel = OnDemandTools.Business.Modules.File.Model;
 using DLModel = OnDemandTools.DAL.Modules.File.Model;
+using BLAltFileModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 
 namespace OnDemandTools.Utilities.EntityMapping.Rules
 {
@@ -28,6 +28,17 @@ namespace OnDemandTools.Utilities.EntityMapping.Rules
             CreateMap<BLModel.ContentSegment, DLModel.ContentSegment>();
             CreateMap<BLModel.PlayList, DLModel.PlayList>();
             CreateMap<BLModel.Url, DLModel.Url>();
+
+
+            CreateMap<DLModel.File, BLAltFileModel.File>();
+            CreateMap<DLModel.Content, BLAltFileModel.Content>();
+            CreateMap<DLModel.Media, BLAltFileModel.Media>();                      
+            CreateMap<DLModel.Caption, BLAltFileModel.Caption>();
+            CreateMap<DLModel.ContentSegment, BLAltFileModel.ContentSegment>();
+            CreateMap<DLModel.PlayList, BLAltFileModel.PlayList>();
+            CreateMap<DLModel.Url, BLAltFileModel.Url>();
+
+            //Missing type map configuration or unsupported mapping.
 
         }
     }

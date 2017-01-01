@@ -15,8 +15,9 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
+using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using VMAiringShortModel = OnDemandTools.API.v1.Models.Airing.Short;
-using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Short;
+using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -49,10 +50,12 @@ namespace OnDemandTools.API.v1.Routes
                 FilterDestinations(airing, user.Destinations.ToList());
                 ValidateRequest(airing, user.Brands);
 
-                var viewModel = airing.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
+                var airingVM = airing.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
 
-                //if (options.Contains(Appenders.File.ToString().ToLower()))
-                //    fileAppender.Append(viewModel);
+                if (options.Contains(Appenders.File.ToString().ToLower()))
+                    airingVM.Options.Files.AddRange(
+                        airingSvc.RetrieveFile(airingVM.ToBusinessModel<VMAiringLongModel.Airing, BLAiringLongModel.Airing>())
+                        .ToViewModel<List<BLAiringLongModel.File>,List<VMAiringLongModel.File>>());
 
                 //if (options.Contains(Appenders.Title.ToString().ToLower()))
                 //    titleAppender.Append(viewModel);
@@ -81,7 +84,7 @@ namespace OnDemandTools.API.v1.Routes
                 //    packageAppender.Append(viewModel, Request.Headers.Accept);
 
 
-                return viewModel;
+                return airingVM;
             });
 
 
