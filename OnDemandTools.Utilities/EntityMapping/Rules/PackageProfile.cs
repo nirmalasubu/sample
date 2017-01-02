@@ -4,6 +4,7 @@ using DLModel = OnDemandTools.DAL.Modules.Package.Model;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
+using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate;
 
 namespace OnDemandTools.Utilities.EntityMapping.Rules
 {
@@ -21,6 +22,10 @@ namespace OnDemandTools.Utilities.EntityMapping.Rules
               .ForMember(x => x.PackageData, map => map.ResolveUsing<PackageDataResolverFromData>())
               .ForMember(x => x.Data, map => map.ResolveUsing<PackageDataStringResolverFromData>());
 
+            CreateMap<DLModel.Package, BLAiringLongModel.Package.Package>()
+             .ForMember(x => x.PackageData, map => map.ResolveUsing<PackageDataResolverFromLongData>())
+             .ForMember(x => x.Data, map => map.ResolveUsing<PackageDataStringResolverFromLongData>());
+
         }
     }
 
@@ -35,9 +40,29 @@ namespace OnDemandTools.Utilities.EntityMapping.Rules
         }
     }
 
+    class PackageDataStringResolverFromLongData : IValueResolver<DLModel.Package, BLAiringLongModel.Package.Package, string>
+    {
+        public string Resolve(DLModel.Package src, BLAiringLongModel.Package.Package des, string d, ResolutionContext context)
+        {
+            return (src.PackageData != null && !string.IsNullOrEmpty(src.PackageData.ToString())) ?
+                src.PackageData.ToString()
+                : null;
+        }
+    }
+
     class PackageDataResolverFromData : IValueResolver<DLModel.Package, BLModel.Package, object>
     {
         public object Resolve(DLModel.Package src, BLModel.Package des, object d, ResolutionContext context)
+        {
+            return (src.PackageData != null && !string.IsNullOrEmpty(src.PackageData.ToString())) ?
+                BsonSerializer.Deserialize<object>(src.PackageData)
+                : null;
+        }
+    }
+
+    class PackageDataResolverFromLongData : IValueResolver<DLModel.Package, BLAiringLongModel.Package.Package, object>
+    {
+        public object Resolve(DLModel.Package src, BLAiringLongModel.Package.Package des, object d, ResolutionContext context)
         {
             return (src.PackageData != null && !string.IsNullOrEmpty(src.PackageData.ToString())) ?
                 BsonSerializer.Deserialize<object>(src.PackageData)

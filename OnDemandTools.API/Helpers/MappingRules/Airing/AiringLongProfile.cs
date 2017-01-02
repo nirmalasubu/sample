@@ -47,6 +47,42 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Destination, VMAiringLongModel.Destination>();
 
 
+            // BL to long BL
+            CreateMap<BLAiringModel.Airing, BLAiringLongModel.Airing>()
+                .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Network))
+                .ForMember(d => d.AiringId, opt => opt.MapFrom(s => s.AssetId))
+                .ForMember(d => d.ReleasedBy, opt => opt.MapFrom(s => s.ReleaseBy))
+                .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
+
+            CreateMap<BLAiringModel.AiringLink, BLAiringLongModel.AiringLink>();
+            CreateMap<BLAiringModel.Category, BLAiringLongModel.Category>();
+            CreateMap<BLAiringModel.ClosedCaptioning, BLAiringLongModel.ClosedCaptioning>();
+            CreateMap<BLAiringModel.Destination, BLAiringLongModel.Destination>();
+            CreateMap<BLAiringModel.Duration, BLAiringLongModel.Duration>();
+            CreateMap<BLAiringModel.Episode, BLAiringLongModel.Episode>();
+
+            CreateMap<BLAiringModel.Flags, BLAiringLongModel.Flags>();
+            CreateMap<BLAiringModel.Flight, BLAiringLongModel.Flight>();
+            CreateMap<BLAiringModel.Genre, BLAiringLongModel.Genre>();
+            CreateMap<BLAiringModel.GuideCategory, BLAiringLongModel.GuideCategory>();
+            CreateMap<BLAiringModel.Category, BLAiringLongModel.Category>();
+            CreateMap<BLAiringModel.Package, BLAiringLongModel.Package>();
+            CreateMap<BLAiringModel.Participant, BLAiringLongModel.Participant>();
+            CreateMap<BLAiringModel.PlayItem, BLAiringLongModel.PlayItem>();
+            CreateMap<BLAiringModel.ProductCode, BLAiringLongModel.ProductCode>();
+            CreateMap<BLAiringModel.ProgramType, BLAiringLongModel.ProgramType>();
+            CreateMap<BLAiringModel.ProviderContentTier, BLAiringLongModel.ProviderContentTier>();
+            CreateMap<BLAiringModel.Season, BLAiringLongModel.Season>();
+            CreateMap<BLAiringModel.Series, BLAiringLongModel.Series>();
+            CreateMap<BLAiringModel.Story, BLAiringLongModel.Story>();
+            CreateMap<BLAiringModel.TVRating, BLAiringLongModel.Rating>();
+            CreateMap<BLAiringModel.Title, BLAiringLongModel.Title>()
+                .ForMember(d => d.Rating, opt => opt.MapFrom(s => s.TVRating))
+                .ForMember(d => d.Episode, opt => opt.MapFrom(s => s.Episode ?? Mapper.Map<BLAiringModel.Element, BLAiringModel.Episode>(s.Element)));
+            CreateMap<BLAiringModel.TitleId, BLAiringLongModel.TitleId>();
+            CreateMap<BLAiringModel.Version, BLAiringLongModel.Version>();
+            CreateMap<BLAiringModel.Destination, BLAiringLongModel.Destination>();
+
 
             // VM to long BL
             CreateMap<VMAiringLongModel.Airing, BLAiringLongModel.Airing>();

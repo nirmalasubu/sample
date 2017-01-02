@@ -119,9 +119,61 @@ namespace OnDemandTools.Business.Modules.Airing
 
 
         /// <summary>
-        /// Append file information to the provided airing
+        /// Append file information to the provided airing.
+        /// Match is based on INCLUSIVE or - TitleId or Airing or MediaId
         /// </summary>
         /// <param name="airing">The airing.</param>
-        List<BLModel.Alternate.Long.File>  RetrieveFile(BLModel.Alternate.Long.Airing airing);
+        void  AppendFile(ref BLModel.Alternate.Long.Airing airing);
+
+        /// <summary>
+        /// Append file information to the provided airing.
+        /// Match is based on series id
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendFileBySeriesId(ref BLModel.Alternate.Long.Airing airing);
+
+        /// <summary>
+        /// Gets the title information from Flow and appends it 
+        /// to the airing
+        /// </summary>
+        /// <param name="titleId">The title identifier.</param>
+        /// <returns></returns>
+        void AppendTitle(ref BLModel.Alternate.Long.Airing airing);
+
+        /// <summary>
+        /// Gets series information from Flow and appends it to the
+        /// airing
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendSeries(ref BLModel.Alternate.Long.Airing airing);
+
+
+        /// <summary>
+        /// Appends destination (formatted) information to the airing. This will
+        /// also include destination specific meta data
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendDestinations(ref BLModel.Alternate.Long.Airing airing);
+
+
+        /// <summary>
+        /// Appends the video status as true if this airing has at least one video
+        /// file registered with it.
+        /// 
+        /// Here are the conditions:
+        ///   1) if there is one record in Files collection that match either the airingid or mediaid (to which this airing belongs), and
+        ///   2) the file record has Video=true
+        ///   
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendStatus(ref BLModel.Alternate.Long.Airing airing);
+
+
+        /// <summary>
+        /// Appends package information to the airing
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders);
+         
     }
 }

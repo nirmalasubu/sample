@@ -6,7 +6,8 @@
     "OnDemandTools.DAL": "1.0.0-*",
     "System.Security.Claims": "4.3.0",
     "FluentValidation.AspNetCore": "6.4.0-beta9",
-    "System.Xml.XmlSerializer": "4.0.11"
+    "System.Xml.XmlSerializer": "4.0.11",
+    "RestSharp.NetCore": "105.2.3"
   },
 
   "frameworks": {

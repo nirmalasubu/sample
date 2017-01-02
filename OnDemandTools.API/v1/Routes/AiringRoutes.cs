@@ -50,41 +50,40 @@ namespace OnDemandTools.API.v1.Routes
                 FilterDestinations(airing, user.Destinations.ToList());
                 ValidateRequest(airing, user.Brands);
 
-                var airingVM = airing.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
+                var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
 
                 if (options.Contains(Appenders.File.ToString().ToLower()))
-                    airingVM.Options.Files.AddRange(
-                        airingSvc.RetrieveFile(airingVM.ToBusinessModel<VMAiringLongModel.Airing, BLAiringLongModel.Airing>())
-                        .ToViewModel<List<BLAiringLongModel.File>,List<VMAiringLongModel.File>>());
+                    airingSvc.AppendFile(ref airingLong);
 
-                //if (options.Contains(Appenders.Title.ToString().ToLower()))
-                //    titleAppender.Append(viewModel);
+                if (options.Contains(Appenders.Title.ToString().ToLower()))
+                    airingSvc.AppendTitle(ref airingLong);
 
-                //if (options.Contains(Appenders.Series.ToString().ToLower()) && (options.Contains(Appenders.File.ToString().ToLower())))
-                //{
-                //    seriesAppender.Append(viewModel);
-                //}
-                //else if (options.Contains(Appenders.Series.ToString().ToLower()))
-                //{
-                //    seriesAppender.Append(viewModel);
-                //    fileAppender.SeriesFileAppend(viewModel);
-                //}
+                if (options.Contains(Appenders.Series.ToString().ToLower())
+                            && (options.Contains(Appenders.File.ToString().ToLower())))
+                {
+                    airingSvc.AppendSeries(ref airingLong);
+                }
+                else if (options.Contains(Appenders.Series.ToString().ToLower()))
+                {
+                    airingSvc.AppendSeries(ref airingLong);
+                    airingSvc.AppendFileBySeriesId(ref airingLong);
+                }
 
-                //if (options.Contains(Appenders.Destination.ToString().ToLower()))
-                //    destinationAppender.Append(viewModel);
+                if (options.Contains(Appenders.Destination.ToString().ToLower()))
+                    airingSvc.AppendDestinations(ref airingLong);
 
+                //TODO - complete this code
                 //if (options.Contains(Appenders.Change.ToString().ToLower()))
                 //    changeAppender.Append(viewModel);
 
-                //// Append status information if requested
-                //if (options.Contains(Appenders.Status.ToString().ToLower()))
-                //    airingStatusAppender.AppendStatus(viewModel);
+                // Append status information if requested
+                if (options.Contains(Appenders.Status.ToString().ToLower()))
+                    airingSvc.AppendStatus(ref airingLong);
 
-                //if (options.Contains(Appenders.Package.ToString().ToLower()))
-                //    packageAppender.Append(viewModel, Request.Headers.Accept);
+                if (options.Contains(Appenders.Package.ToString().ToLower()))
+                    airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
 
-
-                return airingVM;
+                return airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();;
             });
 
 

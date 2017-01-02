@@ -110,7 +110,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
                     }
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -166,7 +166,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
                 MongoCollection<DF_Status> statusCollection = _dbODT.GetDatabase().GetCollection<DF_Status>("DFStatus");
                 statusCollection.Save(status);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
