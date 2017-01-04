@@ -12,7 +12,6 @@ using OnDemandTools.API.v1.Models;
 using Serilog;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace OnDemandTools.API
 {

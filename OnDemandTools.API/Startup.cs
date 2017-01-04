@@ -7,18 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy.Owin;
 using Serilog;
-using System.IO;
-using Serilog.Formatting;
-using Serilog.Events;
-using OnDemandTools.Common.Logzio;
-using AutoMapper;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using OnDemandTools.API.Helpers;
-using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API
 {
@@ -29,9 +18,6 @@ namespace OnDemandTools.API
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-
-        public Serilog.ILogger AppLogger{ get; }
-
 
         public Startup(IHostingEnvironment env)
         {

@@ -33,7 +33,6 @@ namespace OnDemandTools.API
                     .UseConfiguration(config)
                     .UseKestrel()
                     .UseContentRoot(Directory.GetCurrentDirectory())
-                    .UseIISIntegration()
                     .UseStartup<Startup>()
                     .Build();
 

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace OnDemandTools.Common.Model
 {
-    //TODO moved this from web down to DAL. Refactor as needed
     public static class ModelExtensions
     {
         public static B ToBusinessModel<D, B>(this D dataModel)
