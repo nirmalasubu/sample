@@ -3,6 +3,7 @@ using System.Linq;
 using MongoDB.Driver;
 using OnDemandTools.DAL.Database;
 using MongoDB.Driver.Linq;
+using MongoDB.Driver.Builders;
 
 namespace OnDemandTools.DAL.Modules.Queue.Queries
 {
@@ -17,7 +18,9 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
 
         public IQueryable<Model.Queue> Get()
         {
-            throw new NotImplementedException();
+            var queues = _database.GetCollection<Model.Queue>("DeliveryQueue").AsQueryable();
+
+            return queues;
         }
 
         public Model.Queue Get(int id)
@@ -27,7 +30,10 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
 
         public Model.Queue GetByApiKey(string apiKey)
         {
-            throw new NotImplementedException();
+            var query = Query.EQ("Name", apiKey);
+            var queue = _database.GetCollection<Model.Queue>("DeliveryQueue").FindOne(query);
+
+            return queue;
         }
 
         public IQueryable<Model.Queue> GetByStatus(bool active)

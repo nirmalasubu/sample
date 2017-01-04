@@ -18,6 +18,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using OnDemandTools.API.Helpers;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API
 {
@@ -39,23 +40,20 @@ namespace OnDemandTools.API
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
-           
-            //TODO - create a section for this in appsettings.json
-            AppLogger = new LoggerConfiguration()                                             
-                       .WriteTo.Logzio("PKzpHRkmGSdahHHIpeprYuKixClLUTRh", application:"ODT", reporterType:"DDDD", environment:"DEV")
-                       .CreateLogger();
+
+            Configuration = builder.Build();            
         }
 
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSingleton<IConfigurationRoot>(Configuration);            
+            services.AddSingleton<APIBootstrapper>();          
             services.InitializeAutoMapper();
-            services.InitializePersistantStorage();       
+            services.InitializePersistantStorage();  
+                 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,10 +62,9 @@ namespace OnDemandTools.API
             // Add serilog and catch any internal errors
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
-
-
+          
             // Specify request pipeline--strictly Nancy middleware
-            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = new APIBootstrapper(Configuration, AppLogger)));
+            app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = provider.GetService<APIBootstrapper>()));
         }
     }
     

@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
+using FluentValidation;
 using Nancy;
 using Nancy.Security;
+using Nancy.ModelBinding;
 using OnDemandTools.API.Helpers;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.AiringId;
@@ -18,6 +20,10 @@ using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using VMAiringShortModel = OnDemandTools.API.v1.Models.Airing.Short;
 using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
+using OnDemandTools.API.v1.Models.Airing.Task;
+using OnDemandTools.API.v1.Models.Airing.Queue;
+using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
+using AutoMapper;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -185,324 +191,305 @@ namespace OnDemandTools.API.v1.Routes
             #endregion
 
             //#region "POST Operations"
-            //Post["/airing/task"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "post" });
+            Post("/airing/task", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+                var request = this.Bind<TaskViewModel>();
 
-            //    var request = this.Bind<TaskUpdateRequest>();
+                airingSvc.UpdateTask(request.AiringIds, request.Tasks);
 
-            //    airingSvc.UpdateTask(request.AiringIds, request.Tasks);
+                return new
+                {
+                    request.AiringIds,
+                    Message = "updated successfully"
+                };
+            });
 
-            //    return new
-            //    {
-            //        request.AiringIds,
-            //        Message = "updated successfully"
-            //    }; ;
-            //};
+            Post("/airing/send/{airingId}", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+                if (!airingSvc.IsAiringExists((string)_.airingId))
+                {
+                    return Negotiate.WithModel("airingId not found")
+                                  .WithStatusCode(HttpStatusCode.NotFound);
 
-            //Post["/airing/send/{airingId}"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "post" });
+                }
 
-            //    if (!airingSvc.IsAiringExists((string)_.airingId))
-            //    {
-            //        return Negotiate.WithModel("airingId not found")
-            //                      .WithStatusCode(HttpStatusCode.NotFound);
+                airingSvc.PushToQueues(new List<string> { (string)_.airingId });
 
-            //    }
+                return new
+                {
+                    AiringId = (string)_.airingId,
+                    Message = "AiringId flagged for delivery for valid queues"
+                };
+            });
 
-            //    airingSvc.PushToQueues(new List<string> { (string)_.airingId });
+            Post("/airing/deliver/{airingId}", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+                if (!airingSvc.IsAiringExists((string)_.airingId))
+                {
+                    return Negotiate.WithModel("airingId not found")
+                                  .WithStatusCode(HttpStatusCode.NotFound);
 
-            //    return new
-            //    {
-            //        AiringId = (string)_.airingId,
-            //        Message = "AiringId flagged for delivery for valid queues"
-            //    };
-            //};
+                }
 
-            //Post["/airing/deliver/{airingId}"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "post" });
+                airingSvc.PushToQueues(new List<string> { (string)_.airingId });
 
-            //    if (!airingSvc.IsAiringExists((string)_.airingId))
-            //    {
-            //        return Negotiate.WithModel("airingId not found")
-            //                      .WithStatusCode(HttpStatusCode.NotFound);
+                return new
+                {
+                    AiringId = (string)_.airingId,
+                    Message = "AiringId flagged for delivery for valid queues"
+                };
+            });
 
-            //    }
+            Post("/airing/send", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+                var request = this.Bind<QueuePushViewModel>();
+                var queueName = queueSvc.GetByApiKey(request.QueueName);
 
-            //    airingSvc.PushToQueues(new List<string> { (string)_.airingId });
+                if (queueName == null)
+                {
 
-            //    return new
-            //    {
-            //        AiringId = (string)_.airingId,
-            //        Message = "AiringId flagged for delivery for valid queues"
-            //    };
-            //};
+                    return Negotiate.WithModel("Queue not found")
+                                .WithStatusCode(HttpStatusCode.NotFound);
+                }
 
-            //Post["/airing/send"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "post" });
+                if (!queueName.Active)
+                {
+                    return Negotiate.WithModel("Inactive queue")
+                                                  .WithStatusCode(HttpStatusCode.PreconditionFailed);
+                }
 
-            //    var request = this.Bind<PushRequest>();
-            //    var queueName = queueSvc.GetByApiKey(request.QueueName);
-            //    if (queueName == null)
-            //    {
+                var invalidAirings = new List<string>();
+                var validAiringIds = new List<string>();
 
-            //        return Negotiate.WithModel("Queue not found")
-            //                    .WithStatusCode(HttpStatusCode.NotFound);
-            //    }
-            //    if (!queueName.Active)
-            //    {
-            //        return Negotiate.WithModel("Inactive queue")
-            //                                      .WithStatusCode(HttpStatusCode.PreconditionFailed);
-            //    }
-            //    var invalidAirings = new List<string>();
-            //    var validAiringIds = new List<string>();
-            //    foreach (string airingId in request.AiringIds)
-            //    {
-            //        if (!airingSvc.IsAiringExists(airingId))
-            //        {
-            //            invalidAirings.Add(airingId);
+                foreach (string airingId in request.AiringIds)
+                {
+                    if (!airingSvc.IsAiringExists(airingId))
+                    {
+                        invalidAirings.Add(airingId);
 
-            //        }
-            //        else
-            //        {
-            //            validAiringIds.Add(airingId);
-            //        }
-            //    }
-            //    if (validAiringIds.Any())
-            //    {
-            //        airingSvc.PushToQueue(request.QueueName, request.AiringIds);
-            //    }
+                    }
+                    else
+                    {
+                        validAiringIds.Add(airingId);
+                    }
+                }
 
-            //    return new
-            //    {
-            //        validAiringIds = validAiringIds,
-            //        invalidAiringsIds = invalidAirings,
-            //        Message = "validAiringIds are flagged for delivery and delivered based on enabled options of the queue"
-            //    };
-            //};
+                if (validAiringIds.Any())
+                {
+                    airingSvc.PushToQueue(request.QueueName, request.AiringIds);
+                }
 
-            //Post["/airing/deliver"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "post" });
+                return new
+                {
+                    validAiringIds = validAiringIds,
+                    invalidAiringsIds = invalidAirings,
+                    Message = "validAiringIds are flagged for delivery and delivered based on enabled options of the queue"
+                };
+            });
 
-            //    var request = this.Bind<PushRequest>();
-            //    var queueName = queueSvc.GetByApiKey(request.QueueName);
-            //    if (queueName == null)
-            //    {
+            Post("/airing/deliver", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+                var request = this.Bind<QueuePushViewModel>();
+                var queueName = queueSvc.GetByApiKey(request.QueueName);
 
-            //        return Negotiate.WithModel("Queue not found")
-            //                    .WithStatusCode(HttpStatusCode.NotFound);
-            //    }
-            //    if (!queueName.Active)
-            //    {
-            //        return Negotiate.WithModel("Inactive queue")
-            //                                      .WithStatusCode(HttpStatusCode.PreconditionFailed);
-            //    }
-            //    var invalidAirings = new List<string>();
-            //    var validAiringIds = new List<string>();
-            //    foreach (string airingId in request.AiringIds)
-            //    {
-            //        if (!airingSvc.IsAiringExists(airingId))
-            //        {
-            //            invalidAirings.Add(airingId);
+                if (queueName == null)
+                {
 
-            //        }
-            //        else
-            //        {
-            //            validAiringIds.Add(airingId);
-            //        }
-            //    }
-            //    if (validAiringIds.Any())
-            //    {
-            //        airingSvc.PushToQueue(request.QueueName, request.AiringIds);
-            //    }
+                    return Negotiate.WithModel("Queue not found")
+                                .WithStatusCode(HttpStatusCode.NotFound);
+                }
 
-            //    return new
-            //    {
-            //        AiringIds = validAiringIds,
-            //        invalidAiringsIds = invalidAirings,
-            //        Message = "AiringIds are flagged for delivery and delivered based on enabled options of the queue"
-            //    };
-            //};
+                if (!queueName.Active)
+                {
+                    return Negotiate.WithModel("Inactive queue")
+                                                  .WithStatusCode(HttpStatusCode.PreconditionFailed);
+                }
 
-            //Post["/airing/{prefix}"] = _ =>
-            //{
+                var invalidAirings = new List<string>();
+                var validAiringIds = new List<string>();
+                foreach (string airingId in request.AiringIds)
+                {
+                    if (!airingSvc.IsAiringExists(airingId))
+                    {
+                        invalidAirings.Add(airingId);
 
-            //    // Verify that the user has permission to POST
-            //    this.RequiresClaims(new[] { "post" });
+                    }
+                    else
+                    {
+                        validAiringIds.Add(airingId);
+                    }
+                }
 
-            //    LogzIO.LogzIOServiceHelper mmLogger = (dynamic)System.Configuration.ConfigurationManager.GetSection("LogzIO");
+                if (validAiringIds.Any())
+                {
+                    airingSvc.PushToQueue(request.QueueName, request.AiringIds);
+                }
+
+                return new
+                {
+                    AiringIds = validAiringIds,
+                    invalidAiringsIds = invalidAirings,
+                    Message = "AiringIds are flagged for delivery and delivered based on enabled options of the queue"
+                };
+            });
 
 
-            //    // Bind POST request to data contract
-            //    var request = this.Bind<AiringRequest>();
-            //    try
-            //    {
-            //        // If the Airing provided in the request doesn't have an
-            //        // AiringId, create new one.
-            //        if (string.IsNullOrEmpty(request.AiringId))
-            //            request.AiringId = airingIdDistributorSvc.Distribute((string)_.prefix).AiringId;
 
-            //        // Translate data contract to airing business model
-            //        var airing = Mapper.Map<Airing>(request);
+            Post("/airing/{prefix}", _ =>
+            {
+                // Verify that the user has permission to POST
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
 
-            //        // validate
-            //        List<ValidationResult> results = new List<ValidationResult>();
-            //        results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.PostAiring.ToString()));
+                // Bind POST request to data contract
+                var request = this.Bind<VMAiringRequestModel.AiringRequest>();
+                try
+                {
+                    // If the Airing provided in the request doesn't have an
+                    // AiringId, create new one.
+                    if (string.IsNullOrEmpty(request.AiringId))
+                        request.AiringId = airingIdDistributorSvc.Distribute((string)_.prefix).AiringId;
 
-            //        // Verify if there are any validation errors. If so, return error
-            //        if (results.Where(c => (!c.IsValid)).Count() > 0)
-            //        {
-            //            var message = results.Where(c => (!c.IsValid))
-            //                        .Select(c => c.Errors.Select(d => d.ErrorMessage));
+                    // Translate data contract to airing business model
+                    var airing = Mapper.Map<BLAiringModel.Airing>(request);
 
-            //            mmLogger.Send(GetMontoringProperties(new Dictionary<string, object>()
-            //                                {{ "airingid", request.AiringId },{ "mediaid", airing.MediaId }, { "error", message },
-            //                {"message","Failure ingesting released asset" }, {"level","Error" } }));
+                    // validate
+                    List<ValidationResult> results = new List<ValidationResult>();
+                    results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.PostAiring.ToString()));
 
-            //            // Return status
-            //            return Negotiate.WithModel(message)
-            //                        .WithStatusCode(HttpStatusCode.BadRequest);
-            //        }
+                    // Verify if there are any validation errors. If so, return error
+                    if (results.Where(c => (!c.IsValid)).Count() > 0)
+                    {
+                        var message = results.Where(c => (!c.IsValid))
+                                    .Select(c => c.Errors.Select(d => d.ErrorMessage));
+                    
+                        logger.Error("Failure ingesting released asset: {AssetId}", request.AiringId);
+                       
+                        // Return status
+                        return Negotiate.WithModel(message)
+                                    .WithStatusCode(HttpStatusCode.BadRequest);
+                    }
 
-            //        // Now that the validation is succesful, proceed to
-            //        // persisting the data. But first, populate remaining
-            //        // properties for the airing business model.
-            //        airing.ReleaseOn = DateTime.UtcNow;
+                    // Now that the validation is succesful, proceed to
+                    // persisting the data. But first, populate remaining
+                    // properties for the airing business model.
+                    airing.ReleaseOn = DateTime.UtcNow;
 
-            //        // If flight information is provided in the airing, create
-            //        // the corresponding product to destination mapping as defined
-            //        // in ODT
-            //        if (airing.Flights.SelectMany(f => f.Products).Any())
-            //        {
-            //            productSvc.ProductDestinationConverter(ref airing);
-            //        }
+                    // If flight information is provided in the airing, create
+                    // the corresponding product to destination mapping as defined
+                    // in ODT
+                    if (airing.Flights.SelectMany(f => f.Products).Any())
+                    {
+                        productSvc.ProductDestinationConverter(ref airing);
+                    }
 
-            //        // If the versions exist, create a mediaid based on the
-            //        // provided version informtion and the network to which this
-            //        // asset/airing belongs
-            //        if (airing.Versions.Any())
-            //            airingSvc.AugmentMediaId(airing);
+                    // If the versions exist, create a mediaid based on the
+                    // provided version informtion and the network to which this
+                    // asset/airing belongs
+                    if (airing.Versions.Any())
+                        airingSvc.AugmentMediaId(ref airing);
 
-            //        // Finally, persist the airing data
-            //        var savedAiring = airingSvc.Save(airing, request.Instructions.DeliverImmediately, true);
+                    // Finally, persist the airing data
+                    var savedAiring = airingSvc.Save(airing, request.Instructions.DeliverImmediately, true);
 
-            //        // If immediate deliver requested, force push the airing to the
-            //        // respective queues (based on: product=>destination=>queue)
-            //        if (request.Instructions.DeliverImmediately)
-            //        {
-            //            airingSvc.PushToQueues(new List<string> { savedAiring.AiringId });
-            //        }
+                    // If immediate deliver requested, force push the airing to the
+                    // respective queues (based on: product=>destination=>queue relationship)
+                    if (request.Instructions.DeliverImmediately)
+                    {
+                        airingSvc.PushToQueues(new List<string> { savedAiring.AssetId });
+                    }
 
-            //        // Report status of this airing to monitoring system (digital fulfillment)
-            //        reporterSvc.Report(savedAiring);
+                    // Report status of this airing to monitoring system (digital fulfillment/logzio)
+                    reporterSvc.Report(savedAiring);
+                    logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring));                   
 
-            //        var logzPayload = GeneratePostAiringpropertiesForLogzIO(savedAiring);
-            //        logzPayload.Add("message", "Successfully ingested released asset");
-            //        mmLogger.Send(logzPayload);
+                    // Return airing model                    
+                    return savedAiring.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
+                }
+                catch (Exception e)
+                {
+                  
+                    logger.Error(e, "Failure ingesting released asset. AssetId:{@assetId}", request.AiringId);
+                    throw e;
+                }
 
-            //        // Return airing model
-            //        return savedAiring.ToViewModel<Airing, Common.Model.Airings.Long.Airing>();
-            //    }
-            //    catch (Exception e)
-            //    {
-
-            //        mmLogger.Send(GetMontoringProperties(new Dictionary<string, object>()
-            //                                    { { "airingid", request.AiringId },{ "exceptionMessage", e.Message} ,
-            //            { "message", "Failure ingesting released asset"},
-            //            {"level", "Error" } }));
-            //        throw e;
-            //    }
-
-            //};
+            });
 
             //#endregion
 
-            //#region "DELETE Operations"
-            //Delete["/airing"] = _ =>
-            //{
-            //    this.RequiresClaims(new[] { "delete" });
-            //    var request = this.Bind<AiringRequest>();
-            //    var airing = Mapper.Map<Airing>(request);
+            #region "DELETE Operations"
+            Delete("/airing", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Delete.Verb());
+                var request = this.Bind<VMAiringRequestModel.AiringRequest>();
+                var airing = Mapper.Map<BLAiringModel.Airing>(request);
+
+                // validate
+                List<ValidationResult> results = new List<ValidationResult>();
+                results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.DeleteAiring.ToString()));
+
+                // Verify if there are any validation errors. If so, return error
+                if (results.Where(c => (!c.IsValid)).Count() > 0)
+                {
+                    // Return status
+                    return Negotiate.WithModel(results.Where(c => (!c.IsValid))
+                                .Select(c => c.Errors.Select(d => d.ErrorMessage)))
+                                .WithStatusCode(HttpStatusCode.BadRequest);
+                }
 
 
-            //    // validate
-            //    List<ValidationResult> results = new List<ValidationResult>();
-            //    results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.DeleteAiring.ToString()));
+                var existingAiring = airingSvc.GetBy(airing.AssetId);
+                ValidateRequest(existingAiring, Context.User().Brands);
 
-            //    // Verify if there are any validation errors. If so, return error
-            //    if (results.Where(c => (!c.IsValid)).Count() > 0)
-            //    {
-            //        // Return status
-            //        return Negotiate.WithModel(results.Where(c => (!c.IsValid))
-            //                    .Select(c => c.Errors.Select(d => d.ErrorMessage)))
-            //                    .WithStatusCode(HttpStatusCode.BadRequest);
-            //    }
+                existingAiring.ReleaseBy = airing.ReleaseBy;
+                existingAiring.ReleaseOn = DateTime.UtcNow;
+                existingAiring.DeliveredTo.Clear();
 
+                airingSvc.Delete(existingAiring);
 
-            //    var existingAiring = airingSvc.GetBy(airing.AssetId);
+                if (request.Instructions.DeliverImmediately)
+                {
+                    airingSvc.PushToQueues(new List<string> { existingAiring.AssetId });
+                }
 
-            //    var user = GetUserFromContext();
+                reporterSvc.Report(existingAiring);
 
-            //    ValidateRequest(existingAiring, user.Brands);
-
-            //    existingAiring.ReleaseBy = airing.ReleaseBy;
-            //    existingAiring.ReleaseOn = DateTime.UtcNow;
-            //    existingAiring.DeliveredTo.Clear();
-
-            //    airingSvc.Delete(existingAiring);
-
-            //    if (request.Instructions.DeliverImmediately)
-            //    {
-            //        airingSvc.PushToQueues(new List<string> { existingAiring.AiringId });
-            //    }
-
-            //    reporterSvc.Report(existingAiring);
-
-            //    return new
-            //    {
-            //        AiringId = airing.AssetId,
-            //        Message = "deleted successfully"
-            //    };
-            //};
-            //#endregion
+                return new
+                {
+                    AiringId = airing.AssetId,
+                    Message = "deleted successfully"
+                };
+            });
+            #endregion
 
         }
 
+        
+        private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(BLAiringModel.Airing savedAiring)
+        {
+            Dictionary<string, object> Airingdetails = new Dictionary<string, object>();
 
-        // TODO: add logzio monitoring logix
-        //private Dictionary<string, object> GetMontoringProperties(Dictionary<string, object> properties)
-        //{
-        //    properties.Add("step", "Scheduling");
-        //    properties.Add("env", ConfigurationManager.AppSettings.Get("logzIOEnvironment"));
-        //    return properties;
-        //}
+            Airingdetails.Add("airingid", savedAiring.AssetId);
+            Airingdetails.Add("mediaid", savedAiring.MediaId);
+            List<string> lstDestination = new List<string>();
+            int i = 0;
+            string flightWindow = null;
+            foreach (var flight in savedAiring.Flights)
+            {
+                flightWindow = string.Concat(flightWindow, string.Format("flightWindow[{0}] : [startDate : {1} , endDate : {2}] \n", i, flight.Start, flight.End));
+                List<string> tempDestination = flight.Destinations.Select(x => x.Name).ToList<string>();
+                lstDestination.AddRange(tempDestination);
+                i++;
+            }
+            Airingdetails.Add("flightwindow", flightWindow);
+            Airingdetails.Add("destination", lstDestination.Distinct());         
+            return Airingdetails;
+        }
 
-        //private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(Airing savedAiring)
-        //{
-        //    Dictionary<string, object> Airingdetails = new Dictionary<string, object>();
-
-        //    Airingdetails.Add("airingid", savedAiring.AssetId);
-        //    Airingdetails.Add("mediaid", savedAiring.MediaId);
-        //    Airingdetails.Add("level", "Success");
-        //    List<string> lstDestination = new List<string>();
-        //    int i = 0;
-        //    string flightWindow = null;
-        //    foreach (var flight in savedAiring.Flights)
-        //    {
-        //        flightWindow = string.Concat(flightWindow, string.Format("flightWindow[{0}] : [startDate : {1} , endDate : {2}] \n", i, flight.Start, flight.End));
-        //        List<string> tempDestination = flight.Destinations.Select(x => x.Name).ToList<string>();
-        //        lstDestination.AddRange(tempDestination);
-        //        i++;
-        //    }
-        //    Airingdetails.Add("flightwindow", flightWindow);
-        //    Airingdetails.Add("destination", lstDestination.Distinct());
-        //    Airingdetails = GetMontoringProperties(Airingdetails);
-        //    return Airingdetails;
-        //}
 
         private List<BLAiringModel.Airing> FilterBrands(IEnumerable<BLAiringModel.Airing> airings, List<string> permissibleBrands)
         {

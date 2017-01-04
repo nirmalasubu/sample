@@ -9,39 +9,41 @@ using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User;
 using System.Security.Claims;
 using OnDemandTools.API.v1.Models;
+using Serilog;
+using OnDemandTools.Common.Logzio;
+using OnDemandTools.Common.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace OnDemandTools.API
 {
-    class User
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime Created { get; set; }
-    }
-
 
     // Define Nancy bootstrap configurations
     public class APIBootstrapper : DefaultNancyBootstrapper
     {
         public IConfigurationRoot Configuration;        
-        public Serilog.ILogger AppLogger { get; }
+        public Serilog.ILogger AppLogger { get; set; }
+       
 
-        public APIBootstrapper()
-        {
-           
-        }
-
-        public APIBootstrapper(IConfigurationRoot conf, Serilog.ILogger logger)
+        public APIBootstrapper(IConfigurationRoot conf)
         {
             Configuration = conf;
-            AppLogger = logger;
+            ConfigureLogzIOSettings(conf);
         }
 
-
+        private void ConfigureLogzIOSettings(IConfigurationRoot conf)
+        {
+            LogzIOConfiguration logzConf = new LogzIOConfiguration();
+            conf.GetSection("logzIO").Bind(logzConf);
+            AppLogger = new LoggerConfiguration()
+                      .WriteTo.Logzio(logzConf.AuthToken,
+                      application: logzConf.Application,
+                      reporterType: logzConf.ReporterType,
+                      environment: logzConf.Environment)
+                      .CreateLogger();
+        }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
-            
+        {           
             container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);
             DependencyResolver.RegisterResolver(new TinyIOCResolver(container)).RegisterImplmentation();
