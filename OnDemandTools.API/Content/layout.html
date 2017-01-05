@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>OnDemand Tools API</title>
+
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Turner OnDemand API</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid" style="margin-top: 70px">
+
+        <div class="well">
+            <p><b>Example Request Headers</b></p>
+            <p>
+                Authorization : 78bc6e15-2c61-4499-b3fc-9e54575568e8<br />
+                Content-Type : application/json
+            </p>
+        </div>
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title pointer" data-ng-click="activateTab('1')">
+                        Get Airing Details
+                    </h4>
+                </div>
+                <div data-ng-show="tabId=='1'" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <p>
+                            <div><b>Description:</b> Returns a complete airing by airing id. The <i>options</i> will allow the route to return CDN file locations if the files exist, titles data, and destination data, but will slightly impact performance.</div>
+                            <div><b>Url:</b> http://api.odt.turner.com/v1/airing/CART1003181500015319?options=file|title|destination </div>
+                            <div><b>HTTP Method:</b> GET</div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+</body>
+</html>

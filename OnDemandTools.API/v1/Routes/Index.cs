@@ -10,14 +10,32 @@ namespace OnDemandTools.API.v1.Routes
     {
         public Index()
         {
-            Get("/", _ =>
-            {
-                return Response.AsJson("Hello world", HttpStatusCode.OK);
-            });
+            
 
             Get("/healthcheck", _ =>
             {
                 return Response.AsJson("Healthy", HttpStatusCode.OK);
+            });
+
+            Get("/", _ =>
+            {
+                return View["Content/layout.html"];
+            });
+
+            Get("/(?:.*)", _ =>
+            {
+                return View["Content/layout.html"];
+            });
+
+
+            Get("/(?:.*)/(?:.*)", _ =>
+            {
+                return View["Content/layout.html"];
+            });
+
+            Get("/os", x =>
+            {
+                return System.Runtime.InteropServices.RuntimeInformation.OSDescription;
             });
         }
     }

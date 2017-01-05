@@ -27,7 +27,8 @@ namespace OnDemandTools.API
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            Configuration = builder.Build();            
+            Configuration = builder.Build();
+
         }
 
 
