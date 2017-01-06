@@ -3,7 +3,7 @@ using System;
 using BLModel = OnDemandTools.Business.Modules.Pathing.Model;
 using DLModel = OnDemandTools.DAL.Modules.Pathing.Model;
 
-namespace OnDemandTools.Utilities.EntityMapping.Rules
+namespace OnDemandTools.API.Utilities.EntityMapping.Rules
 {
     /// <summary>
     /// Mapping rules for Pathtranslation and related entities

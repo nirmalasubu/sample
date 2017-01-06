@@ -3,7 +3,7 @@ using Nancy.TinyIoc;
 using Microsoft.Extensions.Configuration;
 using Nancy.Bootstrapper;
 using Nancy.Authentication.Stateless;
-using OnDemandTools.Utilities.Resolvers;
+using OnDemandTools.API.Utilities.Resolvers;
 using System;
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.User;

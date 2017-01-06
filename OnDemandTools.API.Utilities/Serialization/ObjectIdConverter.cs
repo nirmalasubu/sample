@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using Newtonsoft.Json;
 using System.Reflection;
 
-namespace OnDemandTools.Utilities.Serialization
+namespace OnDemandTools.API.Utilities.Serialization
 {
     public class ObjectIdConverter : JsonConverter
     {

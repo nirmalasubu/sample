@@ -1,4 +1,4 @@
-namespace OnDemandTools.Utilities.Resolvers
+namespace OnDemandTools.API.Utilities.Resolvers
 {
     public static class DependencyResolver
     {

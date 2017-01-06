@@ -5,7 +5,7 @@ using System.Security.Claims;
 using BLModel = OnDemandTools.Common.Configuration;
 using DLModel = OnDemandTools.DAL.Modules.User.Model;
 
-namespace OnDemandTools.Utilities.EntityMapping.Rules
+namespace OnDemandTools.API.Utilities.EntityMapping.Rules
 {
     public class UserProfile: Profile
     {

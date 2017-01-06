@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Diagnostics;
 
-namespace OnDemandTools.Utilities.Resolvers
+namespace OnDemandTools.API.Utilities.Resolvers
 {
     public class TinyIOCResolver : IDependencyResolver
     {
@@ -55,7 +55,7 @@ namespace OnDemandTools.Utilities.Resolvers
 
             // Add those that cannot be auto registered. Basically the ones outside 'OnDemandTools' namespace or
             // someother special case   
-            cntr.Register(typeof(ISerializer), typeof(OnDemandTools.Utilities.Serialization.CustomJsonSerializer));          
+            cntr.Register(typeof(ISerializer), typeof(OnDemandTools.API.Utilities.Serialization.CustomJsonSerializer));          
 
 
             // Special initialization for StatusLibrary class

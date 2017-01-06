@@ -7,7 +7,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
-namespace OnDemandTools.Utilities.Serialization
+namespace OnDemandTools.API.Utilities.Serialization
 {
     
     public sealed class CustomJsonSerializer : JsonSerializer, Nancy.ISerializer

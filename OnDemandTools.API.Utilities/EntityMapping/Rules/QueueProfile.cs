@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
 using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
 
-namespace OnDemandTools.Utilities.EntityMapping.Rules
+namespace OnDemandTools.API.Utilities.EntityMapping.Rules
 {
     public class QueueProfile:Profile
     {

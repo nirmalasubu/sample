@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Conventions;
 
-namespace OnDemandTools.Utilities
+namespace OnDemandTools.API.Utilities
 {
     public static class MongoBoostrapper
     {

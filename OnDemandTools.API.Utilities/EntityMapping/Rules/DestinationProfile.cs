@@ -7,7 +7,7 @@ using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate;
 
-namespace OnDemandTools.Utilities.EntityMapping.Rules
+namespace OnDemandTools.API.Utilities.EntityMapping.Rules
 {
     public class DestinationProfile: Profile
     {
