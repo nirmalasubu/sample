@@ -92,7 +92,7 @@ namespace OnDemandTools.API.v1.Routes
                 var files = Mapper.Map<List<RQModel.FileViewModel>, List<BLFileModel.File>>(newFiles);
 
                 // Persist the files
-                fileSvc.Save(files, Context.User());
+                fileSvc.Save(files);
 
                 // Inform subscriber queues that are listening
                 // for file notification changes

@@ -12,7 +12,6 @@ using OnDemandTools.API.v1.Models;
 using Serilog;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.Configuration;
-using Nancy.Conventions;
 using Microsoft.AspNetCore.Http;
 
 namespace OnDemandTools.API
@@ -46,7 +45,7 @@ namespace OnDemandTools.API
         }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
+        {           
             container.Register<IHttpContextAccessor>(httpContextAccessor);
             container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);

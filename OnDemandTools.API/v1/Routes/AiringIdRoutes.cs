@@ -29,7 +29,7 @@ namespace OnDemandTools.API.v1.Routes
            {
                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
                CurrentAiringId airingId = creator.Create((string)_.prefix);               
-               return creator.Save(airingId, Context.User()).ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();              
+               return creator.Save(airingId).ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();              
            });
         }
     }

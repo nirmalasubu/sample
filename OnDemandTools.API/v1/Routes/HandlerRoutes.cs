@@ -95,7 +95,7 @@ namespace OnDemandTools.API.v1.Routes
 
                     // Persist encoding raw JSON data before proceeding
                     this.Request.Body.Seek(0, SeekOrigin.Begin);
-                    _handlerHistorySvc.Save(this.Request.Body.AsString(), Context.User(), encodingPayLoad.MediaId);
+                    _handlerHistorySvc.Save(this.Request.Body.AsString(), encodingPayLoad.MediaId);
                    
                     // Validate provided data contract. If validation errors are found
                     // then inform user, else continue
@@ -120,7 +120,7 @@ namespace OnDemandTools.API.v1.Routes
                     ApplyPathTranslationInformation(file);
 
                     // Perform CRUD
-                    _fileSvc.PersistVideoFile(file, Context.User().UserName);
+                    _fileSvc.PersistVideoFile(file);
 
                     // Inform the subscriber queues that are registered
                     // to be notified of any change (new/updates) in video file content

@@ -11,7 +11,7 @@ namespace OnDemandTools.Business.Modules.Handler
         /// <param name="handlerHistory">The handler history.</param>
         /// <param name="user">The user.</param>
         /// <param name="mediaId">The media identifier.</param>
-        void Save(String handlerHistoryJSON, UserIdentity user, String mediaId);
+        void Save(String handlerHistoryJSON, String mediaId);
 
     }
 }

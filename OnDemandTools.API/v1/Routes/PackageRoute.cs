@@ -58,7 +58,7 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
                     // Save package
-                    var savedPkg = packageSvc.SavePackage(pkgBusiness, Context.User());
+                    var savedPkg = packageSvc.SavePackage(pkgBusiness);
 
                     // Send notification to subscribed queues
                     ResetPackageQueues(savedPkg.TitleIds, savedPkg.DestinationCode);
@@ -95,7 +95,7 @@ namespace OnDemandTools.API.v1.Routes
                                 .WithStatusCode(HttpStatusCode.BadRequest);
                 }
                                
-                if (packageSvc.Delete(ref pkg, Context.User()))
+                if (packageSvc.Delete(ref pkg))
                 {  
                     ResetPackageQueues(pkg.TitleIds, pkg.DestinationCode);
                     return new

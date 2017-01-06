@@ -14,23 +14,26 @@ namespace OnDemandTools.Business.Modules.Package
     {
         IPackageCommand packagePersist;
         IPackageQuery packageQuery;
+        IApplicationContext cntx;
 
-        public PackageService(IPackageCommand packagePersist, IPackageQuery packageQuery)
+        public PackageService(IPackageCommand packagePersist, IPackageQuery packageQuery, IApplicationContext cntx)
         {
             this.packagePersist = packagePersist;
             this.packageQuery = packageQuery;
+            this.cntx = cntx;
         }
 
         /// <summary>
         /// Deletes the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
-        /// <param name="user">The user.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
+        /// <returns></returns>
 
-        public Boolean Delete(ref BLModel.Package package, UserIdentity user, bool updateHistorical = true)
+        public Boolean Delete(ref BLModel.Package package, bool updateHistorical = true)
         {
             DLModel.Package existingPkg = packageQuery.GetBy(package.TitleIds.ToList(), package.DestinationCode, package.Type);
+            var user = cntx.GetUser();
 
             if(existingPkg != null)
             {
@@ -64,11 +67,11 @@ namespace OnDemandTools.Business.Modules.Package
         /// Saves the package.
         /// </summary>
         /// <param name="package">The package business model.</param>
-        /// <param name="userName">Name of the user.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns></returns>
-        public BLModel.Package SavePackage(BLModel.Package package, UserIdentity user, bool updateHistorical)
+        public BLModel.Package SavePackage(BLModel.Package package, bool updateHistorical)
         {
+            var user = cntx.GetUser();
             package.CreatedBy = user.UserName;
             package.CreatedDateTime = DateTime.UtcNow;
             package.ModifiedBy = user.UserName;

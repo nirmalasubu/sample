@@ -10,8 +10,7 @@ namespace OnDemandTools.Business.Modules.File
         /// Saves the specified files. Update if it already exist
         /// </summary>
         /// <param name="files">The files.</param>
-        /// <param name="userName">The user.</param>
-        void Save(List<BLModel.File> files, UserIdentity user);
+        void Save(List<BLModel.File> files);
 
         /// <summary>
         /// Gets files by title identifier.
@@ -42,22 +41,19 @@ namespace OnDemandTools.Business.Modules.File
         /// Persists the non video files.
         /// </summary>
         /// <param name="files">The files.</param>
-        /// <param name="userName">The user.</param>
-        void PersistNonVideoFiles(List<BLModel.File> files, string userName);
+        void PersistNonVideoFiles(List<BLModel.File> files);
 
         /// <summary>
         /// Persists the video file.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <param name="userName">The user.</param>
-        void PersistVideoFile(BLModel.File file, string userName);
+        void PersistVideoFile(BLModel.File file);
 
         /// <summary>
         /// Persists the video files.
         /// </summary>
         /// <param name="files">The files.</param>
-        /// <param name="userName">The user.</param>
-        void PersistVideoFiles(List<BLModel.File> files, string userName);
+        void PersistVideoFiles(List<BLModel.File> files);
 
     }
 }

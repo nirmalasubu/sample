@@ -25,8 +25,7 @@ namespace OnDemandTools.Business.Modules.AiringId
                 .Append("000")
                 .Append(fiveDigitNumber.ToString("00000"));
 
-
-            Console.WriteLine(appContenxt.GetUser().UserName);
+                       
             return new CurrentAiringId
             {
                 CreatedBy = appContenxt.GetUser().UserName,
@@ -71,10 +70,9 @@ namespace OnDemandTools.Business.Modules.AiringId
             return BuildAringId(prefix, nextFiveDigitNumber);
         }
 
-        public CurrentAiringId Save(CurrentAiringId currentAiringId, UserIdentity user)
-        {
-            currentAiringId.CreatedBy = user.Name;
-            currentAiringId.ModifiedBy = user.Name;
+        public CurrentAiringId Save(CurrentAiringId currentAiringId)
+        {           
+            currentAiringId.ModifiedBy = appContenxt.GetUser().UserName;
 
             return
             (airingPerist

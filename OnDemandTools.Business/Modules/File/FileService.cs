@@ -14,11 +14,15 @@ namespace OnDemandTools.Business.Modules.File
     {
         IFileQuery fileQuery;
         IFileUpsertCommand fileCommand;
+        IApplicationContext cntx;
 
-        public FileService(IFileQuery fileQuery, IFileUpsertCommand fileCommand)
+        public FileService(IFileQuery fileQuery, 
+            IFileUpsertCommand fileCommand,
+            IApplicationContext cntx)
         {
             this.fileQuery = fileQuery;
             this.fileCommand = fileCommand;
+            this.cntx = cntx;
         }
 
         public IList<BLModel.File> GetBy(List<string> contentIds, List<int> titleIds, string airingId, string mediaId)
@@ -43,22 +47,22 @@ namespace OnDemandTools.Business.Modules.File
                 .ToBusinessModel<List<DLModel.File>, List<BLModel.File>>();
         }
 
-        public void Save(List<BLModel.File> files, UserIdentity user)
+        public void Save(List<BLModel.File> files)
         {           
-            fileCommand.Save(files.ToDataModel<List<BLModel.File>, List<DLModel.File>>(), user.UserName);
+            fileCommand.Save(files.ToDataModel<List<BLModel.File>, List<DLModel.File>>(), cntx.GetUser().UserName);
         }
 
-        public void PersistNonVideoFiles(List<BLModel.File> files, string userName)
+        public void PersistNonVideoFiles(List<BLModel.File> files)
         {
             throw new NotImplementedException();
         }
 
-        public void PersistVideoFile(BLModel.File file, string userName)
+        public void PersistVideoFile(BLModel.File file)
         {
-            fileCommand.PersistVideoFile(file.ToDataModel<BLModel.File, DLModel.File>(), userName);           
+            fileCommand.PersistVideoFile(file.ToDataModel<BLModel.File, DLModel.File>(), cntx.GetUser().UserName);           
         }
 
-        public void PersistVideoFiles(List<BLModel.File> files, string userName)
+        public void PersistVideoFiles(List<BLModel.File> files)
         {
             throw new NotImplementedException();
         }

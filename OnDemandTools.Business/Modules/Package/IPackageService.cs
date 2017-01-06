@@ -12,10 +12,9 @@ namespace OnDemandTools.Business.Modules.Package
         /// Saves the package.
         /// </summary>
         /// <param name="packageDataModel">The package data model.</param>
-        /// <param name="userName">Name of the user.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns></returns>
-        BLModel.Package SavePackage(BLModel.Package packageDataModel, UserIdentity user, bool updateHistorical = true);
+        BLModel.Package SavePackage(BLModel.Package packageDataModel, bool updateHistorical = true);
 
         /// <summary>
         /// Gets the package that matches all criteria - titleIds, destinationCode,
@@ -32,9 +31,8 @@ namespace OnDemandTools.Business.Modules.Package
         /// Deletes the specified package.
         /// </summary>
         /// <param name="package">The package.</param>
-        /// <param name="user">The user.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns></returns>
-        Boolean Delete(ref BLModel.Package package, UserIdentity user, bool updateHistorical = true);
+        Boolean Delete(ref BLModel.Package package, bool updateHistorical = true);
     }
 }
