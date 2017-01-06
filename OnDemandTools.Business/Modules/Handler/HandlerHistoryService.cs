@@ -1,5 +1,4 @@
-﻿using System;
-using OnDemandTools.Business.Modules.User.Model;
+﻿using OnDemandTools.Common.Configuration;
 using OnDemandTools.DAL.Modules.Handler.Command;
 using OnDemandTools.DAL.Modules.Handler.Model;
 

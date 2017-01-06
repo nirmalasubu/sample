@@ -12,8 +12,6 @@ namespace OnDemandTools.API.v1.Models.Product
         {
             Destinations = new List<string>();
             Tags = new List<TagViewModel>();
-
-            this.UpdateCreatedBy();
         }
 
         public string Id { get; set; }

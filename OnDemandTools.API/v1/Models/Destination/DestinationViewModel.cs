@@ -12,8 +12,7 @@ namespace OnDemandTools.API.v1.Models.Destination
             Deliverables = new List<DeliverableViewModel>();
             Properties = new List<PropertyViewModel>();
             Playlists = new List<Playlist>();
-
-            this.UpdateCreatedBy();
+            
         }
 
         public int ExternalId { get; set; }

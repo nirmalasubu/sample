@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using BLModel = OnDemandTools.Business.Modules.User.Model;
+using BLModel = OnDemandTools.Common.Configuration;
 using DLModel = OnDemandTools.DAL.Modules.User.Model;
 using OnDemandTools.DAL.Modules.User.Queries;
 using System.Collections.Generic;
 using OnDemandTools.Common.Model;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace OnDemandTools.Business.Modules.User
 {

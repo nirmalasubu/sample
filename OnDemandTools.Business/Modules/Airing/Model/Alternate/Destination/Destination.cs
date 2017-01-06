@@ -12,10 +12,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination
         {
             Deliverables = new List<Deliverable>();
             Properties = new List<Property>();
-            Playlists =  new List<Playlist>();
-            //TODO - can't use windows identity here in harbor
-            //ModifiedBy = WindowsIdentity.GetCurrent() == null ? "NA" : WindowsIdentity.GetCurrent().Name;
-            ModifiedDateTime = DateTime.UtcNow;
+            Playlists =  new List<Playlist>();           
         }
 
         public int ExternalId { get; set; }

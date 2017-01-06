@@ -4,13 +4,14 @@ using OnDemandTools.Common.Model;
 using System.Security.Principal;
 using System.Security.Claims;
 
-namespace OnDemandTools.Business.Modules.User.Model
+namespace OnDemandTools.Common.Configuration
 {
+
     public class UserIdentity : GenericIdentity, IModel
     {
         public UserIdentity() : base("", "stateless")
         {
-            UserName = "guest";           
+            UserName = "guest";
             Destinations = new List<string>();
             Brands = new List<string>();
         }
@@ -21,7 +22,7 @@ namespace OnDemandTools.Business.Modules.User.Model
         {
             get
             {
-                return this.UserName;  
+                return this.UserName;
             }
         }
 
@@ -44,7 +45,7 @@ namespace OnDemandTools.Business.Modules.User.Model
         public string UserName { get; set; }
         public string Description { get; set; }
         public Guid ApiKey { get; set; }
-       
+
         public IEnumerable<string> Destinations { get; set; }
         public IEnumerable<string> Brands { get; set; }
 
@@ -52,7 +53,7 @@ namespace OnDemandTools.Business.Modules.User.Model
         public DateTime CreatedDateTime { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedDateTime { get; set; }
-               
+
     }
 
 }

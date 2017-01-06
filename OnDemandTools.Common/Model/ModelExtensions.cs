@@ -38,7 +38,7 @@ namespace OnDemandTools.Common.Model
 
         public static void UpdateModifiedBy(this IModel model)
         {
-            model.ModifiedBy = model.CreatedBy;
+            model.ModifiedBy = model.ModifiedBy;
             model.ModifiedDateTime = DateTime.UtcNow;
         }
 

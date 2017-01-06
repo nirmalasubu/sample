@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Security.Claims;
-using BLModel = OnDemandTools.Business.Modules.User.Model;
+using BLModel = OnDemandTools.Common.Configuration;
 using DLModel = OnDemandTools.DAL.Modules.User.Model;
 
 namespace OnDemandTools.Utilities.EntityMapping.Rules

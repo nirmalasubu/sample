@@ -2,17 +2,17 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using DLModel = OnDemandTools.DAL.Modules.AiringId.Model;
-using OnDemandTools.DAL.Modules.AiringId.Commands;
 using OnDemandTools.DAL.Modules.AiringId;
 using OnDemandTools.Business.Modules.AiringId.Model;
 using OnDemandTools.Common.Model;
-using OnDemandTools.Business.Modules.User.Model;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Business.Modules.AiringId
 {
     public class AiringIdCreator : IAiringIdCreator
     {
         IAiringIdSaveCommand airingPerist;
+        IApplicationContext appContenxt;
 
 
         private CurrentAiringId BuildAringId(string prefix, int fiveDigitNumber)
@@ -25,8 +25,11 @@ namespace OnDemandTools.Business.Modules.AiringId
                 .Append("000")
                 .Append(fiveDigitNumber.ToString("00000"));
 
+
+            Console.WriteLine(appContenxt.GetUser().UserName);
             return new CurrentAiringId
             {
+                CreatedBy = appContenxt.GetUser().UserName,
                 AiringId = builder.ToString(),
                 Prefix = prefix,
                 SequenceNumber = fiveDigitNumber
@@ -41,9 +44,10 @@ namespace OnDemandTools.Business.Modules.AiringId
         }
 
 
-        public AiringIdCreator(IAiringIdSaveCommand airingIdHelper)
+        public AiringIdCreator(IAiringIdSaveCommand airingIdHelper, IApplicationContext context)
         {
             airingPerist = airingIdHelper;
+            appContenxt = context;
         }
 
         public virtual CurrentAiringId Create(string prefix)

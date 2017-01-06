@@ -7,7 +7,7 @@ namespace OnDemandTools.API.v1.Models
     {
         public CurrentAiringIdViewModel()
         {
-            this.UpdateCreatedBy();
+           
         }
 
         public string Id { get; set; }

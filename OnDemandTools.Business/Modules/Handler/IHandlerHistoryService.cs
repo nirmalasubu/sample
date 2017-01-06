@@ -1,8 +1,5 @@
-﻿using OnDemandTools.Business.Modules.User.Model;
+﻿using OnDemandTools.Common.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnDemandTools.Business.Modules.Handler
 {

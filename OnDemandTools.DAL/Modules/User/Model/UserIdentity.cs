@@ -16,7 +16,6 @@ namespace OnDemandTools.DAL.Modules.User.Model
             Destinations = new List<string>();
             Brands = new List<string>();
 
-            //this.UpdateCreatedBy();
         }
 
         public ObjectId Id { get; set; }

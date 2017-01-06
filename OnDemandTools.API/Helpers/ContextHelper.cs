@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Nancy;
-using OnDemandTools.Business.Modules.User.Model;
+using OnDemandTools.Common.Configuration;
 using System.Net.Http;
 
 namespace OnDemandTools.API.Helpers

@@ -13,6 +13,7 @@ using Serilog;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.Configuration;
 using Nancy.Conventions;
+using Microsoft.AspNetCore.Http;
 
 namespace OnDemandTools.API
 {
@@ -22,11 +23,13 @@ namespace OnDemandTools.API
     {
         public IConfigurationRoot Configuration;        
         public Serilog.ILogger AppLogger { get; set; }
-       
+        IHttpContextAccessor httpContextAccessor;
 
-        public APIBootstrapper(IConfigurationRoot conf)
+
+        public APIBootstrapper(IConfigurationRoot conf, IHttpContextAccessor httpContextAccessor)
         {
             Configuration = conf;
+            this.httpContextAccessor = httpContextAccessor;
             ConfigureLogzIOSettings(conf);
         }
 
@@ -43,7 +46,8 @@ namespace OnDemandTools.API
         }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {           
+        {
+            container.Register<IHttpContextAccessor>(httpContextAccessor);
             container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);
             DependencyResolver.RegisterResolver(new TinyIOCResolver(container)).RegisterImplmentation();
@@ -60,7 +64,7 @@ namespace OnDemandTools.API
 
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
-
+           
             // Identify request holder through API key
             var configuration = new StatelessAuthenticationConfiguration(ctx =>
             {
@@ -80,6 +84,7 @@ namespace OnDemandTools.API
 
                     // Add user information 
                     ctx.Items.Add(new KeyValuePair<string, object>("user", user.Identity));
+                    container.Resolve<IHttpContextAccessor>().HttpContext.User = user;
                     return user;
                 }
                 

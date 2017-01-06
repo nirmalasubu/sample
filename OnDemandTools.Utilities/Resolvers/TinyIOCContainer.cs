@@ -27,6 +27,7 @@ namespace OnDemandTools.Utilities.Resolvers
         {
             // As best practice include namespace along with class name. Also be careful not to register same instance multiple times    
             cntr.Register<ISerializer, OnDemandTools.Utilities.Serialization.CustomJsonSerializer>();
+            cntr.Register<OnDemandTools.Common.Configuration.IApplicationContext, OnDemandTools.Common.Configuration.HttpAPIContext>();
 
             cntr.Register<OnDemandTools.Business.Modules.AiringId.IAiringIdCreator, OnDemandTools.Business.Modules.AiringId.AiringIdCreator>();
             cntr.Register<OnDemandTools.DAL.Modules.AiringId.IAiringIdSaveCommand, OnDemandTools.DAL.Modules.AiringId.Commands.AiringIdSaveCommand>();
@@ -76,6 +77,7 @@ namespace OnDemandTools.Utilities.Resolvers
             cntr.Register<OnDemandTools.DAL.Modules.Airings.IAiringMessagePusher, OnDemandTools.DAL.Modules.Airings.Commands.AiringMessagePusher>();
 
             cntr.Register<OnDemandTools.DAL.Modules.Airings.ITaskUpdater, OnDemandTools.DAL.Modules.Airings.Commands.AiringUpdateTaskCommand>();
+            
 
             // Special initialization for StatusLibrary class
             OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<IConfiguration>());

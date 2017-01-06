@@ -7,7 +7,7 @@ namespace OnDemandTools.Business.Modules.Queue.Model
     {
         public Queue()
         {
-            this.UpdateCreatedBy();
+           
         }
 
         public string Id { get; set; }

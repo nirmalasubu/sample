@@ -7,7 +7,7 @@ namespace OnDemandTools.API.v1.Models.Queue
     {
         public QueueViewModel()
         {
-            this.UpdateCreatedBy();
+           
         }
 
         public string Id { get; set; }

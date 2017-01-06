@@ -1,5 +1,5 @@
 ﻿using OnDemandTools.Business.Modules.AiringId.Model;
-using OnDemandTools.Business.Modules.User.Model;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Business.Modules.AiringId
 {

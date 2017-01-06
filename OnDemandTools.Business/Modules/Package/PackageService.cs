@@ -4,9 +4,9 @@ using OnDemandTools.DAL.Modules.Package.Queries;
 using OnDemandTools.DAL.Modules.Package.Commands;
 using BLModel = OnDemandTools.Business.Modules.Package.Model;
 using OnDemandTools.Common.Model;
-using OnDemandTools.Business.Modules.User.Model;
 using System.Collections.Generic;
 using System.Linq;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Business.Modules.Package
 {

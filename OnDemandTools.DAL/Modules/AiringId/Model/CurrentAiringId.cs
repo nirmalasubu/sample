@@ -9,9 +9,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Model
     {
         public CurrentAiringId()
         {
-            // TODO: Add user identity
-            //CreatedBy = WindowsIdentity.GetCurrent() == null ? "NA" : WindowsIdentity.GetCurrent().Name;
-            CreatedDateTime = DateTime.UtcNow;
+           
         }
 
         public ObjectId Id { get; set; }

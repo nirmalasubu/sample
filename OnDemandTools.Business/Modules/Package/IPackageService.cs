@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using OnDemandTools.Business.Modules.User.Model;
 using BLModel = OnDemandTools.Business.Modules.Package.Model;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Business.Modules.Package
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using OnDemandTools.Common.Model;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Business.Modules.AiringId.Model
 {
@@ -7,9 +8,8 @@ namespace OnDemandTools.Business.Modules.AiringId.Model
     {
         public CurrentAiringId()
         {
-            // TODO: Add user identity
-            //CreatedBy = WindowsIdentity.GetCurrent() == null ? "NA" : WindowsIdentity.GetCurrent().Name;
             CreatedDateTime = DateTime.UtcNow;
+
         }
 
         public String Id { get; set; }
