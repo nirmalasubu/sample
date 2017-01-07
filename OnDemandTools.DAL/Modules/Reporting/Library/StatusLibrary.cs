@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Extensions;
 using OnDemandTools.DAL.Modules.Reporting.Model;
 using OnDemandTools.DAL.Modules.Reporting.Queries;
@@ -11,7 +12,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Library
     public static class StatusLibrary
     {
         private static List<DF_StatusEnum> _statusEnums;
-        private static IConfiguration _configuration;
+        private static AppSettings  _configuration;
 
         public static List<DF_StatusEnum> StatusEnums
         {
@@ -32,7 +33,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Library
             }
         }
 
-        public static void Init(IConfiguration configuration)
+        public static void Init(AppSettings configuration)
         {
             _configuration = configuration;           
         }

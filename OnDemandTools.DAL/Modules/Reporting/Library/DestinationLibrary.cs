@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using OnDemandTools.Common.Configuration;
 using OnDemandTools.DAL.Modules.Destination.Queries;
 using OnDemandTools.DAL.Modules.Reporting.Model;
 using OnDemandTools.DAL.Modules.Reporting.Queries;
@@ -12,9 +13,9 @@ namespace OnDemandTools.DAL.Modules.Reporting.Library
     public class DestinationLibrary
     {
         private List<DF_Destination> _destinations;
-        IConfiguration configuration;
+        AppSettings configuration;
 
-        public DestinationLibrary(IConfiguration configuration)
+        public DestinationLibrary(AppSettings configuration)
         {
             this.configuration = configuration;
             LoadDestinations();           

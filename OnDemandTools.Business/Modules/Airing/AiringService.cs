@@ -34,12 +34,12 @@ namespace OnDemandTools.Business.Modules.Airing
         IQueueQuery queueQueryHelper;
         ITaskUpdater taskUpdaterCommand;
         IFileQuery fileQueryHelper;
-        IConfiguration configuration;
+        AppSettings appSettings;
         IDestinationQuery destinationQueryHelper;
         IPackageQuery packageQueryHelper;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
-            IConfiguration configuration,
+            AppSettings appSettings,
             IAiringSaveCommand airingSaveCommandHelper,
             IAiringDeleteCommand airingDeleteCommandHelper, IAiringMessagePusher airingMessagePusherCommandHelper,
             IQueueQuery queueQueryHelper,
@@ -55,7 +55,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.queueQueryHelper = queueQueryHelper;
             this.taskUpdaterCommand = taskUpdaterCommand;
             this.fileQueryHelper = fileQueryHelper;
-            this.configuration = configuration;
+            this.appSettings = appSettings;
             this.destinationQueryHelper = destinationQueryHelper;
             this.packageQueryHelper = packageQueryHelper;
         }
@@ -400,14 +400,14 @@ namespace OnDemandTools.Business.Modules.Airing
             // If there are more then 5 titles (because of the partition), you can potentially
             // end up with duplicates. (Titles API limits us to 25. Consult titles api wiki.)
             var listsOfTitleIds = titleIds.Distinct().Partition(25).ToList();
-            RestClient client = new RestClient(configuration.Get("flowUrl"));
+            RestClient client = new RestClient(appSettings.GetExternalService("Flow").Url);
             var titles = new List<BLModel.Alternate.Title.Title>();
 
             foreach (var list in listsOfTitleIds)
             {              
                 var request = new RestRequest("/v2/title/{ids}?api_key={api_key}", Method.GET);
                 request.AddUrlSegment("ids", string.Join(",", list));
-                request.AddUrlSegment("api_key", configuration.Get("flowApiKey"));
+                request.AddUrlSegment("api_key", appSettings.GetExternalService("Flow").ApiKey);
 
                 Task.Run(async () =>
                 {

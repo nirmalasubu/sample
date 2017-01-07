@@ -13,6 +13,7 @@ using Serilog;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace OnDemandTools.API
 {
@@ -20,32 +21,33 @@ namespace OnDemandTools.API
     // Define Nancy bootstrap configurations
     public class APIBootstrapper : DefaultNancyBootstrapper
     {
-        public IConfigurationRoot Configuration;        
-        public Serilog.ILogger AppLogger { get; set; }
+        IConfigurationRoot Configuration;        
+        Serilog.ILogger AppLogger { get; set; }
         IHttpContextAccessor httpContextAccessor;
+        AppSettings appSettings;
 
-
-        public APIBootstrapper(IConfigurationRoot conf, IHttpContextAccessor httpContextAccessor)
+        public APIBootstrapper(IConfigurationRoot conf, IHttpContextAccessor httpContextAccessor,
+            IOptions<AppSettings> appSettings)
         {
             Configuration = conf;
             this.httpContextAccessor = httpContextAccessor;
-            ConfigureLogzIOSettings(conf);
+            this.appSettings = appSettings.Value;
+            ConfigureLogzIOSettings();
         }
 
-        private void ConfigureLogzIOSettings(IConfigurationRoot conf)
-        {
-            LogzIOConfiguration logzConf = new LogzIOConfiguration();
-            conf.GetSection("logzIO").Bind(logzConf);
+        private void ConfigureLogzIOSettings()
+        {        
             AppLogger = new LoggerConfiguration()
-                      .WriteTo.Logzio(logzConf.AuthToken,
-                      application: logzConf.Application,
-                      reporterType: logzConf.ReporterType,
-                      environment: logzConf.Environment)
+                      .WriteTo.Logzio(appSettings.LogzIO.AuthToken,
+                      application: appSettings.LogzIO.Application,
+                      reporterType: appSettings.LogzIO.ReporterType,
+                      environment: appSettings.LogzIO.Environment)
                       .CreateLogger();
         }
 
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {           
+        {
+            container.Register<AppSettings>(appSettings);
             container.Register<IHttpContextAccessor>(httpContextAccessor);
             container.Register<Serilog.ILogger>(AppLogger);
             container.Register<IConfiguration>(Configuration);

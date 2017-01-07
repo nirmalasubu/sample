@@ -13,12 +13,12 @@ namespace OnDemandTools.Common.Configuration
         string Environment { get; set; }
     }
 
-    public class LogzIOConfiguration:ILoggerSettings
-    {
-        public string AuthToken { get; set; }
-        public string Application { get; set; }
-        public string ReporterType { get; set; }
-        public string Environment { get; set; }
-    }
+    //public class LogzIOConfiguration:ILoggerSettings
+    //{
+    //    public string AuthToken { get; set; }
+    //    public string Application { get; set; }
+    //    public string ReporterType { get; set; }
+    //    public string Environment { get; set; }
+    //}
 
 }

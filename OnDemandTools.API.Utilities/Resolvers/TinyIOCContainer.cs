@@ -7,6 +7,7 @@ using System.Reflection;
 using System;
 using System.Linq;
 using System.Diagnostics;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API.Utilities.Resolvers
 {
@@ -59,7 +60,7 @@ namespace OnDemandTools.API.Utilities.Resolvers
 
 
             // Special initialization for StatusLibrary class
-            OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<IConfiguration>());
+            OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<AppSettings>());
 
         }
 

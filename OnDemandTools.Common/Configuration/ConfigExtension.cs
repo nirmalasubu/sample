@@ -13,5 +13,12 @@ namespace OnDemandTools.Common.Configuration
                 .Single(c => c.Key == key)
                 .Value;            
         }
+
+        public static Service GetExternalService (this AppSettings configuration, String name)
+        {
+            return configuration.Services
+                    .Where(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    .Single();
+        }
     }
 }

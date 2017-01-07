@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using OnDemandTools.Common.Configuration;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Reporting.Model;
 using System.Collections.Generic;
@@ -9,18 +10,17 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
 
     public class DF_DestinationQuery
     {
-        IConfiguration configuration;
+        AppSettings appSettings;
 
-        public DF_DestinationQuery(IConfiguration configuration)
+        public DF_DestinationQuery(AppSettings appSettings)
         {
-            this.configuration = configuration;
-            //  _client = new RestClient(String.Format("http://{0}", ConfigurationManager.AppSettings.Get("OnDemandToolsUrl")));
+            this.appSettings = appSettings;
         }
 
 
         public IList<DF_Destination> Get()
         {
-            ODTDatastore db = new ODTDatastore(configuration);
+            ODTDatastore db = new ODTDatastore(appSettings);
             return db.GetDatabase().GetCollection<DF_Destination>("Destination").FindAll().ToList();
 
         }

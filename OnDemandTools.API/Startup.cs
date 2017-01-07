@@ -9,6 +9,7 @@ using Nancy.Owin;
 using Serilog;
 using OnDemandTools.API.Helpers;
 using Microsoft.AspNetCore.Http;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API
 {
@@ -37,6 +38,7 @@ namespace OnDemandTools.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(Configuration.GetSection("Application"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfigurationRoot>(Configuration);            
             services.AddSingleton<APIBootstrapper>();          

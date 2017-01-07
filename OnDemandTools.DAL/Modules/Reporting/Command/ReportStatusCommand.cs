@@ -12,6 +12,7 @@ using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.DAL.Modules.Airings.Model.Comparers;
 using MongoDB.Bson;
 using Microsoft.Extensions.Configuration;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.DAL.Modules.Reporting.Command
 {
@@ -24,9 +25,9 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
         private const int BIMNOTFOUND = 18;
         private const int BIMMISMATCH = 19;
         private readonly MongoDatabase _database;
-        IConfiguration configuration;
+        AppSettings configuration;
 
-        public ReportStatusCommand(IODTDatastore connection, IConfiguration configuration)
+        public ReportStatusCommand(IODTDatastore connection, AppSettings configuration)
         {
             _database = connection.GetDatabase();
             this.configuration = configuration;

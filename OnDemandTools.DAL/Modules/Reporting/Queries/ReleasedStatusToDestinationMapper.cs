@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using OnDemandTools.Common.Configuration;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.DAL.Modules.Reporting.Library;
@@ -16,7 +17,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
     {
         readonly ODTDatastore dbConnection;
 
-        public ReleasedStatusToDestinationMapper(IConfiguration configuration)
+        public ReleasedStatusToDestinationMapper(AppSettings configuration)
         {
             dbConnection = new ODTDatastore(configuration);
         }

@@ -12,9 +12,9 @@ namespace OnDemandTools.DAL.Database
     {
         private readonly MongoDatabase _database;
     
-        public ODTDatastore(IConfiguration configuration)
+        public ODTDatastore(AppSettings appSettings)
         {
-            _database = GetDatabase(configuration.Get("connectionString"), configuration.Get("connectionOptionsDefault"));
+            _database = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
         }
 
         private MongoDatabase GetDatabase(string connectionString, string options)
@@ -41,9 +41,9 @@ namespace OnDemandTools.DAL.Database
     public class ODTPrimaryDatastore : IODTDatastore, IODTPrimaryDatastore
     {
         private readonly MongoDatabase _primaryDatabase;
-        public ODTPrimaryDatastore(IConfiguration configuration)
+        public ODTPrimaryDatastore(AppSettings appSettings)
         {
-            _primaryDatabase = GetDatabase(configuration.Get("connectionString"), configuration.Get("connectionOptionsPrimary"));
+            _primaryDatabase = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
         }
 
         private MongoDatabase GetDatabase(string connectionString, string options)

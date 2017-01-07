@@ -4,6 +4,7 @@ using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Modules.Reporting.Model;
 using OnDemandTools.DAL.Database;
 using Microsoft.Extensions.Configuration;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.DAL.Modules.Reporting.Queries
 {
@@ -11,7 +12,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
     {
         private readonly MongoDatabase _database;
 
-        public StatusEnumsQuery(IConfiguration configuration)
+        public StatusEnumsQuery(AppSettings configuration)
         {
             _database = new ODTDatastore(configuration).GetDatabase();
         }
