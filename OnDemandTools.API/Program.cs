@@ -30,6 +30,7 @@ namespace OnDemandTools.API
                 .Build();
 
                 var host = new WebHostBuilder()
+                    .CaptureStartupErrors(true)
                     .UseConfiguration(config)
                     .UseKestrel()
                     .UseContentRoot(Directory.GetCurrentDirectory())
