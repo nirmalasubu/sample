@@ -51,7 +51,7 @@ namespace OnDemandTools.API.v1.Routes
                     JObject provider = JObject.Parse(rs);
                     JObject hosting = new JObject();
                     hosting.Add("DeployedVersion", provider.SelectToken("containers[0].image").ToString().Split(':')[1]);
-                    hosting.Add("DeployedEnvironment", provider.SelectToken("name").ToString());
+                    hosting.Add("Environment", provider.SelectToken("name").ToString());
                     hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas"));
                     hosting.Add("OperatingSystem", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
                     jo.Add("HostingDetails", hosting);

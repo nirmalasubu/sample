@@ -71,7 +71,8 @@ namespace OnDemandTools.Business.Modules.AiringId
         }
 
         public CurrentAiringId Save(CurrentAiringId currentAiringId)
-        {           
+        {
+            Console.WriteLine(appContenxt.GetUser().UserName);
             currentAiringId.ModifiedBy = appContenxt.GetUser().UserName;
 
             return
