@@ -29,8 +29,7 @@ namespace OnDemandTools.API
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
-                var host = new WebHostBuilder()
-                    .CaptureStartupErrors(true)
+                var host = new WebHostBuilder()                   
                     .UseConfiguration(config)
                     .UseKestrel()
                     .UseContentRoot(Directory.GetCurrentDirectory())

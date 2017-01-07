@@ -42,6 +42,8 @@ namespace OnDemandTools.API.v1.Routes
                 JObject jo = new JObject();
                 jo.Add("Name", configuration.Name);
                 jo.Add("Description", configuration.Description);
+                jo.Add("Page", configuration.Page);
+
 
                 RestClient client = new RestClient(configuration.HostingProvider);
                 var request = new RestRequest(Method.GET);
