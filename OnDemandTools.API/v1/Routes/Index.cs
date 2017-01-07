@@ -43,8 +43,8 @@ namespace OnDemandTools.API.v1.Routes
                 jo.Add("Name", configuration.Name);
                 jo.Add("Description", configuration.Description);
 
-                RestClient client = new RestClient("http://shipit.services.dmtio.net/");
-                var request = new RestRequest("/v1/shipment/sead-ondemandtools-api/environment/dev", Method.GET);
+                RestClient client = new RestClient(configuration.HostingProvider);
+                var request = new RestRequest(Method.GET);
                 Task.Run(async () =>
                 {
                     var rs = await GetHostingProviderDetails(client, request) as String;
