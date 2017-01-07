@@ -49,12 +49,16 @@ namespace OnDemandTools.API.v1.Routes
                 {
                     var rs = await GetHostingProviderDetails(client, request) as String;
                     JObject provider = JObject.Parse(rs);
-                    JObject hosting = new JObject();
-                    hosting.Add("DeployedVersion", provider.SelectToken("containers[0].image").ToString().Split(':')[1]);
-                    hosting.Add("Environment", provider.SelectToken("name").ToString());
-                    hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas"));
-                    hosting.Add("OperatingSystem", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
-                    jo.Add("HostingDetails", hosting);
+
+                    if(provider.Count >= 1)
+                    {
+                        JObject hosting = new JObject();
+                        hosting.Add("DeployedVersion", provider.SelectToken("containers[0].image").ToString().Split(':')[1]);
+                        hosting.Add("Environment", provider.SelectToken("name").ToString());
+                        hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas"));
+                        hosting.Add("OperatingSystem", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
+                        jo.Add("HostingDetails", hosting);
+                    }                   
 
                 }).Wait();                
 
@@ -78,9 +82,15 @@ namespace OnDemandTools.API.v1.Routes
         {
             var tcs = new TaskCompletionSource<String>();
             theClient.ExecuteAsync(theRequest, response => {
-                var kk = response.Content;
-
-                tcs.SetResult(response.Content);
+                if(response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    tcs.SetResult(response.Content);
+                }
+                else
+                {
+                    tcs.SetResult(String.Empty);
+                }
+                
             });
             return tcs.Task;
         }

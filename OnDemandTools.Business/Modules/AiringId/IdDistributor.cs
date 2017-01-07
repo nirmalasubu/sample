@@ -13,14 +13,21 @@ namespace OnDemandTools.Business.Modules.AiringId
         private readonly IAiringIdSaveCommand _command;
         private static readonly object Door = new object();
 
+        //TODO - remove (also remove from constrcutor
+        Common.Configuration.AppSettings appSettings;
+
         public IdDistributor(
             IAiringIdCreator creator,
             IGetLastAiringIdQuery query,
-            IAiringIdSaveCommand command)
+            IAiringIdSaveCommand command,
+            Common.Configuration.AppSettings appSettings)
         {
             _creator = creator;
             _query = query;
             _command = command;
+
+            //TODO - remove
+            this.appSettings = appSettings;
         }
 
         public BLModel.CurrentAiringId Distribute(string prefix)
@@ -43,6 +50,27 @@ namespace OnDemandTools.Business.Modules.AiringId
                     .ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>());
            
             }
+        }
+
+        //TODO - remove
+        public BLModel.CurrentAiringId Unleash(string prefix)
+        {
+            UnleashCreator unCreator = new UnleashCreator();
+            OnDemandTools.DAL.Modules.AiringId.Queries.GetLastAiringIdQuery gq = new OnDemandTools.DAL.Modules.AiringId.Queries.GetLastAiringIdQuery(new OnDemandTools.DAL.Database.ODTPrimaryDatastore(this.appSettings));
+            BLModel.CurrentAiringId lastAiringId = gq.Gett(prefix).ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>();
+            var nextAiringId = lastAiringId.SequenceNumber > 0
+                ? unCreator.Create(lastAiringId.Prefix, lastAiringId.SequenceNumber)
+                : unCreator.Create(lastAiringId.Prefix);
+
+            nextAiringId.Id = lastAiringId.Id;
+            nextAiringId.BillingNumber = lastAiringId.BillingNumber;
+            nextAiringId.BillingNumber.Increment();
+            nextAiringId.ModifiedDateTime = DateTime.UtcNow;
+            nextAiringId.ModifiedBy = "jjohn";
+            nextAiringId.CreatedBy = "jjohn";
+            gq.Sett(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>());
+
+            return nextAiringId;
         }
     }
 }

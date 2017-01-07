@@ -7,5 +7,8 @@ namespace OnDemandTools.Business.Modules.AiringId
     public interface IIdDistributor
     {
         CurrentAiringId Distribute(string prefix);
+
+        //TODO - remove
+        CurrentAiringId Unleash(string prefix);
     }
 }

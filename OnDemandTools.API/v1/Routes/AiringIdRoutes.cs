@@ -15,7 +15,15 @@ namespace OnDemandTools.API.v1.Routes
            : base("v1")
         {         
             this.RequiresAuthentication();
-            
+
+            //TODO- remove
+            Get("/test/{prefix}", _ =>
+            {
+                this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
+                return distributor.Unleash((string)_.prefix)
+                      .ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
+
+            });
 
             Get("/airingId/generate/{prefix}", _ =>
             {
