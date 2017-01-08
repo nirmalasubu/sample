@@ -64,7 +64,7 @@ test:
     - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
     - source "api-${CIRCLE_BRANCH}"; sudo docker run --name odt-api-test-container "${IMAGE}-test" dotnet test; sleep 10
-    - source sudo docker inspect -f {{.State.Running}} odt-api-test-container
+    - source "api-${CIRCLE_BRANCH}"; sudo docker inspect -f {{.State.Running}} odt-api-test-container
     - sudo docker ps -a
     - sudo docker images
     - sudo docker stop odt-api-container

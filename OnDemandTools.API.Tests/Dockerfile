@@ -4,7 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ["dotnet", "restore"]
+RUN ["dotnet", "restore", "OnDemandTools.API.Tests"]
 
 WORKDIR /app/OnDemandTools.API.Tests
 
