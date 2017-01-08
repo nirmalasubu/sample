@@ -16,8 +16,7 @@ namespace OnDemandTools.Common.Configuration
         public MongoDB MongoDB { get; set;}
         public LogzIOConfiguration LogzIO { get; set; }
         public List<Service> Services { get; set; }
-        public string HostingProvider { get; set; }
-        public string Page { get; set; }
+        public string HostingProvider { get; set; }      
     }
 
 
