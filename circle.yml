@@ -53,16 +53,22 @@ dependencies:
           -n "${CIRCLE_BUILD_NUM}" > deporter-rc;    
     - sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-rc;
    
-
-
-test:
+compile:
   override:
-    # Build image for API project and test    
+    # Build image for API project  
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
     - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10
     - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
     - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
+    
+    # Build image for Deporter project
+    - source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
+    - source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5000:5000 "${IMAGE}"; sleep 10
+    
+test:
+  override:
+    # API Testing
     - source "api-${CIRCLE_BRANCH}"; sudo docker run --name odt-api-test-container "${IMAGE}-test" dotnet test; sleep 10
     - source "api-${CIRCLE_BRANCH}"; sudo docker inspect -f {{.State.Running}} odt-api-test-container
     - sudo docker ps -a
@@ -70,10 +76,7 @@ test:
     - sudo docker stop odt-api-container
     - sudo docker stop odt-api-test-container
   
-
-    # Build image for Deporter project and test
-    - source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
-    - source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5000:5000 "${IMAGE}"; sleep 10
+    # Deporter test
     - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
     - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
     - sudo docker stop odt-deporter-container
