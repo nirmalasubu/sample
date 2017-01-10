@@ -64,7 +64,7 @@ compile:
     
     # Build image for Deporter project
     - source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
-    - source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5000:5000 "${IMAGE}"; sleep 10
+    #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5000:5000 "${IMAGE}"; sleep 10
     
 test:
   override:
@@ -77,9 +77,9 @@ test:
     - sudo docker stop odt-api-test-container
   
     # Deporter test
-    - sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
-    - sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
-    - sudo docker stop odt-deporter-container
+    #- sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5000/healthcheck
+    #- sudo curl --retry 10 --retry-delay 5 -v http://localhost:5000/healthcheck
+    #- sudo docker stop odt-deporter-container
 
 
 deployment:
