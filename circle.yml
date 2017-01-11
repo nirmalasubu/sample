@@ -11,7 +11,6 @@ machine:
   services:
     - docker
 
-
 dependencies:
   override:
        
@@ -19,39 +18,39 @@ dependencies:
     - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
 
     # Create CI environment for API
-    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+    - if [ $CIRCLE_BRANCH = "dev" ] && docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${API_SHIPMENT_NAME}" \
           -t "${API_SHIPMENT_BUILD_TOKEN_DEV}" \
           -e "dev" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > api-dev;                
-    - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-dev;
+    - if [ $CIRCLE_BRANCH = "dev" ] && sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-dev;
     
-    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+    - if [ $CIRCLE_BRANCH = "rc" ] && docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${API_SHIPMENT_NAME}" \
           -t "${API_SHIPMENT_BUILD_TOKEN_QA}" \
           -e "qa" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > api-rc;    
-    - sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-rc;
+    - if [ $CIRCLE_BRANCH = "rc" ] && sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-rc;
 
 
     # Create CI environment for Deporter
-    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+    - if [ $CIRCLE_BRANCH = "dev" ] && docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${DEPORTER_SHIPMENT_NAME}" \
           -t "${DEPORTER_SHIPMENT_BUILD_TOKEN_DEV}" \
           -e "dev" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > deporter-dev;                
-    - sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-dev;
+    - if [ $CIRCLE_BRANCH = "dev" ] && sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-dev;
     
-    - docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
+    - if [ $CIRCLE_BRANCH = "rc" ] && docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
           -s "${DEPORTER_SHIPMENT_NAME}" \
           -t "${DEPORTER_SHIPMENT_BUILD_TOKEN_QA}" \
           -e "qa" \          
           -b "${CIRCLE_BRANCH}" \
           -n "${CIRCLE_BUILD_NUM}" > deporter-rc;    
-    - sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-rc;
+    - if [ $CIRCLE_BRANCH = "rc" ] && sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-rc;
    
 compile:
   override:
