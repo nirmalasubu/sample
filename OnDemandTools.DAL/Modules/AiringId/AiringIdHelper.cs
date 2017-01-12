@@ -16,6 +16,12 @@ namespace OnDemandTools.DAL.Modules.AiringId
     public interface IAiringIdSaveCommand
     {
         CurrentAiringId Save(CurrentAiringId currentAiringId);
+
+        CurrentAiringId Lock(string prefix);      
+
+        void UnLock(string prefix);
+
+        void UpdateAndUnlock(CurrentAiringId currentAiringId);
     }
 
     public interface IGetAiringIdsQuery

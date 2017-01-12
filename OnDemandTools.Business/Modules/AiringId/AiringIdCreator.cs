@@ -35,13 +35,6 @@ namespace OnDemandTools.Business.Modules.AiringId
             };
         }
 
-        private int Increment(int previousFiveDigitNumber)
-        {
-            return previousFiveDigitNumber == 99999
-                ? 1
-                : ++previousFiveDigitNumber;
-        }
-
 
         public AiringIdCreator(IAiringIdSaveCommand airingIdHelper, IApplicationContext context)
         {
@@ -57,16 +50,14 @@ namespace OnDemandTools.Business.Modules.AiringId
             return BuildAringId(prefix, 1);
         }
 
-        public virtual CurrentAiringId Create(string prefix, int previousFiveDigitNumber)
+        public virtual CurrentAiringId Create(string prefix, int nextFiveDigitNumber)
         {
             if (!Regex.IsMatch(prefix, "^[A-Z]{4}?"))
                 throw new ArgumentException("must be four capital letters only", "prefix");
 
-            if (previousFiveDigitNumber > 99999 || previousFiveDigitNumber < 1)
+            if (nextFiveDigitNumber > 99999 || nextFiveDigitNumber < 1)
                 throw new ArgumentOutOfRangeException("previousFiveDigitNumber", "must be between 1 and 99,999");
-
-            var nextFiveDigitNumber = Increment(previousFiveDigitNumber);
-
+             
             return BuildAringId(prefix, nextFiveDigitNumber);
         }
 

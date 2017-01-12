@@ -12,65 +12,54 @@ namespace OnDemandTools.Business.Modules.AiringId
         private readonly IGetLastAiringIdQuery _query;
         private readonly IAiringIdSaveCommand _command;
         private static readonly object Door = new object();
-
-        //TODO - remove (also remove from constrcutor
-        Common.Configuration.AppSettings appSettings;
+      
 
         public IdDistributor(
             IAiringIdCreator creator,
             IGetLastAiringIdQuery query,
-            IAiringIdSaveCommand command,
-            Common.Configuration.AppSettings appSettings)
+            IAiringIdSaveCommand command)
         {
             _creator = creator;
             _query = query;
             _command = command;
-
-            //TODO - remove
-            this.appSettings = appSettings;
         }
+
 
         public BLModel.CurrentAiringId Distribute(string prefix)
         {
-
-            lock (Door)
+            if (_query.Get(prefix) == null)
             {
-                var lastAiringId = _query.Get(prefix).ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>();
-
-                var nextAiringId = lastAiringId.SequenceNumber > 0
-                    ? _creator.Create(lastAiringId.Prefix, lastAiringId.SequenceNumber)
-                    : _creator.Create(lastAiringId.Prefix);
-
-                nextAiringId.Id = Convert.ToString(lastAiringId.Id);
-                nextAiringId.BillingNumber = lastAiringId.BillingNumber;
-                nextAiringId.BillingNumber.Increment();
-
-                return
-                    (_command.Save(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>())
-                    .ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>());
-           
+                var message = string.Format("An airing id prefix does not exist for '{0}'. You must create and airing id prefix before sending this request.", prefix);
+                throw new Exception(message);
             }
-        }
-
-        //TODO - remove
-        public BLModel.CurrentAiringId Unleash(string prefix)
-        {
-            UnleashCreator unCreator = new UnleashCreator();
-            OnDemandTools.DAL.Modules.AiringId.Queries.GetLastAiringIdQuery gq = new OnDemandTools.DAL.Modules.AiringId.Queries.GetLastAiringIdQuery(new OnDemandTools.DAL.Database.ODTPrimaryDatastore(this.appSettings));
-            BLModel.CurrentAiringId lastAiringId = gq.Gett(prefix).ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>();
-            var nextAiringId = lastAiringId.SequenceNumber > 0
-                ? unCreator.Create(lastAiringId.Prefix, lastAiringId.SequenceNumber)
-                : unCreator.Create(lastAiringId.Prefix);
-
-            nextAiringId.Id = lastAiringId.Id;
-            nextAiringId.BillingNumber = lastAiringId.BillingNumber;
-            nextAiringId.BillingNumber.Increment();
-            nextAiringId.ModifiedDateTime = DateTime.UtcNow;
-            nextAiringId.ModifiedBy = "jjohn";
-            nextAiringId.CreatedBy = "jjohn";
-            gq.Sett(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>());
-
+            bool isLocked = false;
+            BLModel.CurrentAiringId nextAiringId = null;
+            try
+            {
+                nextAiringId = _command.Lock(prefix).ToBusinessModel<CurrentAiringId, BLModel.CurrentAiringId>(); ;
+                if (nextAiringId == null)
+                {
+                    var message = string.Format("Null value returned from  lock  '{0}'", prefix);
+                    throw new Exception(message);
+                }
+                isLocked = true;
+                var result = nextAiringId.SequenceNumber > 0
+                   ? _creator.Create(nextAiringId.Prefix, nextAiringId.SequenceNumber)
+                   : _creator.Create(nextAiringId.Prefix);
+                nextAiringId.AiringId = result.AiringId;
+                nextAiringId.BillingNumber.Increment();
+                _command.UpdateAndUnlock(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>());
+            }
+            catch (Exception ex)
+            {
+                if (isLocked)
+                {
+                    _command.UnLock(prefix);
+                }
+                throw ex;
+            }
             return nextAiringId;
         }
+
     }
 }

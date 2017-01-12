@@ -2,11 +2,14 @@
 using System.Security.Principal;
 using MongoDB.Bson;
 using OnDemandTools.Common.Model;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OnDemandTools.DAL.Modules.AiringId.Model
 {
+    [BsonIgnoreExtraElements]
     public class CurrentAiringId : IModel
     {
+       
         public CurrentAiringId()
         {
            
