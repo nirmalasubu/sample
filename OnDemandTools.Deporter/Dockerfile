@@ -4,7 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ["dotnet", "restore"]
+RUN ["dotnet", "restore", "OnDemandTools.Deporter"]
 
 WORKDIR /app/OnDemandTools.Deporter
 
