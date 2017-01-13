@@ -1,4 +1,5 @@
-﻿containerName="$(docker ps --filter="name=api-test" -a --format '{{.Names}}')"
+﻿#!/bin/bash
+containerName="$(docker ps --filter="name=api-test" -a --format '{{.Names}}')"
 echo $containerName
 
 containerStatus="$(docker inspect -f {{.State.ExitCode}} $containerName)"
