@@ -68,8 +68,8 @@ compile:
 test:
   override:
     # API Testing
-    - source "api-${CIRCLE_BRANCH}"; sudo docker run --name odt-api-test-container "${IMAGE}-test" dotnet test; sleep 10
-    - source "api-${CIRCLE_BRANCH}"; sudo docker inspect -f {{.State.Running}} odt-api-test-container
+    - source "api-${CIRCLE_BRANCH}"; sudo docker run --name odt-api-test-container "${IMAGE}-test"; sleep 10
+    - source "api-${CIRCLE_BRANCH}"; sudo ./OnDemandTools.API.Tests/verify.sh
     - sudo docker ps -a
     - sudo docker images
     - sudo docker stop odt-api-container
