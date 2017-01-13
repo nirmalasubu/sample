@@ -12,12 +12,12 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
     {
         private readonly MongoDatabase _database;
         private readonly IApplicationContext _appContext;
-        //TODO - Needs to be added to unlock airingid state
-        Common.Configuration.AppSettings appSettings;
-        public AiringIdSaveCommand(IODTDatastore connection, IApplicationContext appContext)
+        private readonly AppSettings _appSettings;
+        public AiringIdSaveCommand(IODTDatastore connection, IApplicationContext appContext, AppSettings appSettings)
         {
             _database = connection.GetDatabase();
             _appContext = appContext;
+            _appSettings = appSettings;
 
         }
 
@@ -47,7 +47,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
                 {
                     var seconds = DateTime.Now.Subtract(entrytime).Seconds;
 
-                    if (seconds >= 59)
+                    if (seconds > int.Parse(_appSettings.AiringIdLockExpiredSecods))
                     {
                         UnLock(prefix);
                     }
