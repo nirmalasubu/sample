@@ -9,3 +9,7 @@ RUN ["dotnet", "restore", "OnDemandTools.API.Tests"]
 WORKDIR /app/OnDemandTools.API.Tests
 
 RUN ["dotnet", "build"]
+
+RUN ["dotnet", "test"]
+
+RUN Verify.sh
