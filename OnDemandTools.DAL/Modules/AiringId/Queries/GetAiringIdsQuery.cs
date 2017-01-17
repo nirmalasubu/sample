@@ -25,7 +25,7 @@ namespace OnDemandTools.Components.AiringId.Queries
         {
             return _database.GetCollection<CurrentAiringId>("CurrentAiringId")
                 .AsQueryable<CurrentAiringId>()
-                .First(a => a.Prefix == prefix);
+                .FirstOrDefault(a => a.Prefix == prefix);
         }
     }
 }
