@@ -47,7 +47,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
                 {
                     var seconds = DateTime.Now.Subtract(entrytime).Seconds;
 
-                    if (seconds > int.Parse(_appSettings.AiringIdLockExpiredSecods))
+                    if (seconds > int.Parse(_appSettings.AiringIdLockExpiredSeconds))
                     {
                         UnLock(prefix);
                     }

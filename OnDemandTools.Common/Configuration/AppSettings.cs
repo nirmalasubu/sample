@@ -17,7 +17,7 @@ namespace OnDemandTools.Common.Configuration
         public LogzIOConfiguration LogzIO { get; set; }
         public List<Service> Services { get; set; }
         public string HostingProvider { get; set; }
-        public string AiringIdLockExpiredSecods { get; set; }
+        public string AiringIdLockExpiredSeconds { get; set; }
     }
 
 
