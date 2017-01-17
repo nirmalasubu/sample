@@ -13,6 +13,7 @@ namespace OnDemandTools.Business.Modules.AiringId
     {
         IAiringIdSaveCommand airingPerist;
         IApplicationContext appContenxt;
+        IGetAiringIdsQuery getAiringIdQuery;
 
 
         private CurrentAiringId BuildAringId(string prefix, int fiveDigitNumber)
@@ -25,27 +26,39 @@ namespace OnDemandTools.Business.Modules.AiringId
                 .Append("000")
                 .Append(fiveDigitNumber.ToString("00000"));
 
-                       
+
             return new CurrentAiringId
             {
                 CreatedBy = appContenxt.GetUser().UserName,
                 AiringId = builder.ToString(),
                 Prefix = prefix,
-                SequenceNumber = fiveDigitNumber
+                SequenceNumber = fiveDigitNumber,
+                BillingNumber = new BillingNumber
+                {
+                    Lower = 1,
+                    Current = 1,
+                    Upper = 99999
+                }
             };
         }
 
 
-        public AiringIdCreator(IAiringIdSaveCommand airingIdHelper, IApplicationContext context)
+        public AiringIdCreator(IAiringIdSaveCommand airingIdHelper, IGetAiringIdsQuery airingIdQuery, IApplicationContext context)
         {
             airingPerist = airingIdHelper;
             appContenxt = context;
+            getAiringIdQuery = airingIdQuery;
         }
 
         public virtual CurrentAiringId Create(string prefix)
         {
             if (!Regex.IsMatch(prefix, "^[A-Z]{4}?"))
                 throw new ArgumentException("must be four capital letters only", "prefix");
+
+            if (getAiringIdQuery.Get(prefix) != null)
+            {
+                throw new ArgumentException("already exists", "prefix");
+            }
 
             return BuildAringId(prefix, 1);
         }
@@ -57,12 +70,12 @@ namespace OnDemandTools.Business.Modules.AiringId
 
             if (nextFiveDigitNumber > 99999 || nextFiveDigitNumber < 1)
                 throw new ArgumentOutOfRangeException("previousFiveDigitNumber", "must be between 1 and 99,999");
-             
+
             return BuildAringId(prefix, nextFiveDigitNumber);
         }
 
         public CurrentAiringId Save(CurrentAiringId currentAiringId)
-        {            
+        {
             currentAiringId.ModifiedBy = appContenxt.GetUser().UserName;
 
             return
@@ -71,7 +84,7 @@ namespace OnDemandTools.Business.Modules.AiringId
                 .ToBusinessModel<DLModel.CurrentAiringId, CurrentAiringId>());
 
         }
-    
+
 
     }
 
