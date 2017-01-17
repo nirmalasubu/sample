@@ -2,6 +2,7 @@
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
+using OnDemandTools.API.v1.Models.Airing.Change;
 
 namespace OnDemandTools.API.Helpers.MappingRules.Airing
 {
@@ -153,6 +154,17 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringLongModel.Url, VMAiringLongModel.Url>();
 
             CreateMap<BLAiringModel.Element, BLAiringModel.Episode>();
+
+            // Mapping BL to Model when options=change
+            CreateMap<BLAiringModel.Alternate.Change.FieldChange, Change>()
+                .ForMember(d => d.Previous, opt => opt.MapFrom(s => s.Details.Previous))
+                .ForMember(d => d.Current, opt => opt.MapFrom(s => s.Details.Current));
+
+            CreateMap<BLAiringModel.Alternate.Change.ChangeValue, ChangeValue>();
+
+            CreateMap<BLAiringModel.Alternate.Change.DeletionChange, Change>();
+            CreateMap<BLAiringModel.Alternate.Change.NewReleaseChange, Change>();
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace OnDemandTools.API.v1.Models.Airing.Change
+﻿
+namespace OnDemandTools.API.v1.Models.Airing.Change
 {
     public class Change
     {

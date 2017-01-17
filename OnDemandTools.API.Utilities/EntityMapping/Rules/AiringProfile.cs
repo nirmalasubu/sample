@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using BLModel = OnDemandTools.Business.Modules.Airing.Model;
 using DLModel = OnDemandTools.DAL.Modules.Airings.Model;
+using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 
 namespace OnDemandTools.API.Utilities.EntityMapping.Rules
 {
@@ -79,6 +80,43 @@ namespace OnDemandTools.API.Utilities.EntityMapping.Rules
             CreateMap<DLModel.Turniverse, BLModel.Turniverse>();
             CreateMap<DLModel.TVRating, BLModel.TVRating>();
             CreateMap<DLModel.Version, BLModel.Version>();
+            
+            // DAL to long BL
+            CreateMap<DLModel.Airing, BLAiringLongModel.Airing>()
+                .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Network))
+                .ForMember(d => d.AiringId, opt => opt.MapFrom(s => s.AssetId))
+                .ForMember(d => d.ReleasedBy, opt => opt.MapFrom(s => s.ReleaseBy))
+                .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
+
+            CreateMap<DLModel.AiringLink, BLAiringLongModel.AiringLink>();
+            CreateMap<DLModel.Category, BLAiringLongModel.Category>();
+            CreateMap<DLModel.ClosedCaptioning, BLAiringLongModel.ClosedCaptioning>();
+            CreateMap<DLModel.Destination, BLAiringLongModel.Destination>();
+            CreateMap<DLModel.Duration, BLAiringLongModel.Duration>();
+            CreateMap<DLModel.Episode, BLAiringLongModel.Episode>();
+
+            CreateMap<DLModel.Flags, BLAiringLongModel.Flags>();
+            CreateMap<DLModel.Flight, BLAiringLongModel.Flight>();
+            CreateMap<DLModel.Genre, BLAiringLongModel.Genre>();
+            CreateMap<DLModel.GuideCategory, BLAiringLongModel.GuideCategory>();
+            CreateMap<DLModel.Category, BLAiringLongModel.Category>();
+            CreateMap<DLModel.Package, BLAiringLongModel.Package>();
+            CreateMap<DLModel.Participant, BLAiringLongModel.Participant>();
+            CreateMap<DLModel.PlayItem, BLAiringLongModel.PlayItem>();
+            CreateMap<DLModel.ProductCode, BLAiringLongModel.ProductCode>();
+            CreateMap<DLModel.ProgramType, BLAiringLongModel.ProgramType>();
+            CreateMap<DLModel.ProviderContentTier, BLAiringLongModel.ProviderContentTier>();
+            CreateMap<DLModel.Season, BLAiringLongModel.Season>();
+            CreateMap<DLModel.Series, BLAiringLongModel.Series>();
+            CreateMap<DLModel.Story, BLAiringLongModel.Story>();
+            CreateMap<DLModel.TVRating, BLAiringLongModel.Rating>();
+            CreateMap<DLModel.Title, BLAiringLongModel.Title>()
+                .ForMember(d => d.Rating, opt => opt.MapFrom(s => s.TVRating))
+                .ForMember(d => d.Episode, opt => opt.MapFrom(s => s.Episode ?? Mapper.Map<DLModel.Element, DLModel.Episode>(s.Element)));
+            CreateMap<DLModel.TitleId, BLAiringLongModel.TitleId>();
+            CreateMap<DLModel.Version, BLAiringLongModel.Version>();
+            CreateMap<DLModel.Destination, BLAiringLongModel.Destination>();
+
 
         }
     }

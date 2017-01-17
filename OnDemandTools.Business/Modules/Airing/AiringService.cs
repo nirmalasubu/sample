@@ -22,6 +22,11 @@ using System.Threading.Tasks;
 using OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using OnDemandTools.DAL.Modules.Destination.Queries;
 using OnDemandTools.DAL.Modules.Package.Queries;
+using OnDemandTools.Business.Modules.Airing.Model.Alternate.Change;
+using OnDemandTools.Business.Modules.Airing.Builder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OnDemandTools.Business.Modules.Airing.Diffing;
 
 namespace OnDemandTools.Business.Modules.Airing
 {
@@ -37,6 +42,8 @@ namespace OnDemandTools.Business.Modules.Airing
         AppSettings appSettings;
         IDestinationQuery destinationQueryHelper;
         IPackageQuery packageQueryHelper;
+        IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper;
+        IChangeDeletedAiringQuery changeDeletedAiringQueryHelper;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
             AppSettings appSettings,
@@ -46,7 +53,9 @@ namespace OnDemandTools.Business.Modules.Airing
             ITaskUpdater taskUpdaterCommand,
             IFileQuery fileQueryHelper,
             IDestinationQuery destinationQueryHelper,
-            IPackageQuery packageQueryHelper)
+            IPackageQuery packageQueryHelper,
+            IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper,
+            IChangeDeletedAiringQuery changeDeletedAiringQueryHelper)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -58,6 +67,8 @@ namespace OnDemandTools.Business.Modules.Airing
             this.appSettings = appSettings;
             this.destinationQueryHelper = destinationQueryHelper;
             this.packageQueryHelper = packageQueryHelper;
+            this.changeHistoricalAiringQueryHelper = changeHistoricalAiringQueryHelper;
+            this.changeDeletedAiringQueryHelper = changeDeletedAiringQueryHelper;
         }
 
         #region "Public method"
@@ -175,8 +186,7 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Files.AddRange(Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files)
                                             .ToList());
         }
-
-
+        
         public void AppendTitle(ref BLModel.Alternate.Long.Airing airing)
         {
             var titleIds = airing.Title.TitleIds
@@ -193,8 +203,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
             airing.Options.Titles = titles;
         }
-
-        
+                
         public void AppendSeries(ref BLModel.Alternate.Long.Airing airing)
         {
             if (airing.Title.Series == null || airing.Title.Series.Id == null)
@@ -203,8 +212,7 @@ namespace OnDemandTools.Business.Modules.Airing
             var series = GetTitleFor(airing.Title.Series.Id.Value);
             airing.Options.Series.Add(series);
         }
-
-
+        
         public void AppendFileBySeriesId(ref BLModel.Alternate.Long.Airing airing)
         {
             if (airing.Title.Series == null || !airing.Title.Series.Id.HasValue)
@@ -214,8 +222,7 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Files.AddRange(Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files)
                                             .ToList());
         }
-
-
+        
         public void AppendDestinations(ref BLModel.Alternate.Long.Airing airing)
         {
             var destinationNames = airing.Flights
@@ -234,7 +241,13 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Destinations = destinations;
         }
 
+        public void AppendChanges(ref BLModel.Alternate.Long.Airing airing)
+        {
+            var changes = Find( ref airing);
 
+            airing.Options.Changes = changes.ToList();
+                
+        }
 
         public void AppendStatus(ref BLModel.Alternate.Long.Airing airing)
         {
@@ -263,8 +276,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 airing.Options.Status.Video = !airing.Options.Files.Where(c => c.Video == true).IsNullOrEmpty();
             }          
         }
-
-
+        
         public void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders)
         {
             var titleIds = airing.Title.TitleIds.Where(title => (title.Authority.Equals("Turner") && isNumeric(title.Value)))
@@ -355,8 +367,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList();
             }
         }
-
-
+        
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)
         {
             if (primaryTitle.TitleType != "Feature Film")
@@ -454,6 +465,148 @@ namespace OnDemandTools.Business.Modules.Airing
             return titleIds;
         }
 
+        #region "Private methods for options=change"
+        private IEnumerable<Change> Find(ref BLModel.Alternate.Long.Airing airing)
+        {
+            var groupedAirings = GetAiringsToDiffOn(new[] { airing });
+
+            var changes = new List<BLModel.Alternate.Change.Change>();
+
+            foreach (var groupedAiring in groupedAirings)
+            {
+                try
+                {
+                    if (AiringIsNew(groupedAiring))
+                    {
+                        var builder = new ChangeBuilder();
+                        changes.Add(builder.BuildNewChange(groupedAiring.First()));
+                    }
+                    else if (ComparingTwoAirings(groupedAiring))
+                    {
+                        var currentAsset = groupedAiring.FirstOrDefault();
+                        var originalAsset = groupedAiring.LastOrDefault();
+                        changes.AddRange(Find(currentAsset, originalAsset));
+                    }
+                    else if (ComparingThreeAirings(groupedAiring))
+                    {
+                        var currentAsset = groupedAiring.FirstOrDefault();
+                        var previousAsset = groupedAiring.Skip(1).FirstOrDefault();
+                        var originalAsset = groupedAiring.LastOrDefault();
+                        changes.AddRange(Find(currentAsset, previousAsset, originalAsset));
+                    }
+                    else if (AiringIsBeingDeleted(groupedAiring.Key))
+                    {
+                        var builder = new ChangeBuilder();
+                        changes.Add(builder.BuildDeletion(groupedAiring.First()));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var current = groupedAiring.FirstOrDefault();
+                    if (null != current)
+                    {
+                        var toThrow = new Exception(String.Format("Exception occurred while detecting change for Airing Id '{0}'. ", current.AiringId), ex);
+                        throw toThrow;
+                    }
+
+                    throw ex;
+                }
+            }
+
+            return changes;
+        }
+
+        protected virtual IEnumerable<IGrouping<string, BLModel.Alternate.Long.Airing>> GetAiringsToDiffOn(IEnumerable<BLModel.Alternate.Long.Airing> airings)
+        {
+            var airingIds = airings.Select(x => x.AiringId).ToList();
+
+            var historicalAirings = changeHistoricalAiringQueryHelper.Find(airingIds).ToList();
+
+            var viewModels = historicalAirings.
+                ToBusinessModel<List<DLModel.Airing>, List<BLModel.Alternate.Long.Airing>>();
+
+            var groupedAirings = GroupAiringsAndOrderSoEarliestAiringsAreFirst(viewModels);
+           
+           return groupedAirings;
+        }
+     
+        private IEnumerable<IGrouping<string, BLModel.Alternate.Long.Airing>> GroupAiringsAndOrderSoEarliestAiringsAreFirst(IEnumerable<BLModel.Alternate.Long.Airing> historicalAirings)
+        {
+            var groupedAirings = from h in historicalAirings
+                                 orderby h.ReleasedOn descending
+                                 group h by h.AiringId
+                                    into g
+                                 select g;
+            return groupedAirings;
+        }
+
+        private static bool AiringIsNew(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        {
+            return groupedAiring.Count() == 1;
+        }
+
+
+        private static bool ComparingThreeAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        {
+            return groupedAiring.Count() > 2;
+        }
+
+        private static bool ComparingTwoAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        {
+            return groupedAiring.Count() == 2;
+        }
+
+        private bool AiringIsBeingDeleted(string airingId)
+        {
+            return changeDeletedAiringQueryHelper.Query().Any(x => x.AssetId == airingId);
+        }
+        
+        public IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing originalAiring)
+        {
+            var changeBuilder = new ChangeBuilder();
+
+            var currentJson = JsonConvert.SerializeObject(currentAsset);
+            var originalJson = JsonConvert.SerializeObject(originalAiring);
+
+            var currentAssetAsJson = JObject.Parse(currentJson);
+            var originalAssetAsJson = JObject.Parse(originalJson);
+
+            var differ = new JsonDiffer();
+
+            var results = differ.FindDifferences(currentAssetAsJson, originalAssetAsJson);
+
+            foreach (var change in results)
+            {
+                changeBuilder.SetCommonValues(change, currentAsset, originalAiring);
+            }
+
+            return results;
+        }
+
+        public IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing previousAsset, BLModel.Alternate.Long.Airing originalAsset)
+        {
+            var changeBuilder = new ChangeBuilder();
+
+            var currentJson = JsonConvert.SerializeObject(currentAsset);
+            var previousJson = JsonConvert.SerializeObject(previousAsset);
+            var originalJson = JsonConvert.SerializeObject(originalAsset);
+
+            var currentAssetAsJson = JObject.Parse(currentJson);
+            var previousAssetAsJson = JObject.Parse(previousJson);
+            var originalAssetAsJson = JObject.Parse(originalJson);
+
+            var differ = new JsonDiffer();
+
+            var results = differ.FindDifferences(currentAssetAsJson, previousAssetAsJson, originalAssetAsJson);
+
+            foreach (var change in results)
+            {
+                changeBuilder.SetCommonValues(change, currentAsset, previousAsset, originalAsset);
+            }
+
+            return results;
+        }
+        #endregion
         #endregion
 
     }

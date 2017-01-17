@@ -174,6 +174,14 @@ namespace OnDemandTools.Business.Modules.Airing
         /// </summary>
         /// <param name="airing">The airing.</param>
         void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders);
-         
+
+
+        /// <summary>
+        /// Appends the airing changes
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        void AppendChanges(ref BLModel.Alternate.Long.Airing airing);
+
+
     }
 }

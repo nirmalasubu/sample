@@ -78,9 +78,9 @@ namespace OnDemandTools.API.v1.Routes
                 if (options.Contains(Appenders.Destination.ToString().ToLower()))
                     airingSvc.AppendDestinations(ref airingLong);
 
-                //TODO - complete this code
-                //if (options.Contains(Appenders.Change.ToString().ToLower()))
-                //    changeAppender.Append(viewModel);
+                
+                if (options.Contains(Appenders.Change.ToString().ToLower()))
+                    airingSvc.AppendChanges(ref airingLong);
 
                 // Append status information if requested
                 if (options.Contains(Appenders.Status.ToString().ToLower()))
@@ -190,7 +190,7 @@ namespace OnDemandTools.API.v1.Routes
             });
             #endregion
 
-            //#region "POST Operations"
+            #region "POST Operations"
             Post("/airing/task", _ =>
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
@@ -419,7 +419,7 @@ namespace OnDemandTools.API.v1.Routes
 
             });
 
-            //#endregion
+            #endregion
 
             #region "DELETE Operations"
             Delete("/airing", _ =>
