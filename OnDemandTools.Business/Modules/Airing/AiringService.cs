@@ -516,7 +516,7 @@ namespace OnDemandTools.Business.Modules.Airing
             return changes;
         }
 
-        protected virtual IEnumerable<IGrouping<string, BLModel.Alternate.Long.Airing>> GetAiringsToDiffOn(IEnumerable<BLModel.Alternate.Long.Airing> airings)
+        private IEnumerable<IGrouping<string, BLModel.Alternate.Long.Airing>> GetAiringsToDiffOn(IEnumerable<BLModel.Alternate.Long.Airing> airings)
         {
             var airingIds = airings.Select(x => x.AiringId).ToList();
 
@@ -540,18 +540,18 @@ namespace OnDemandTools.Business.Modules.Airing
             return groupedAirings;
         }
 
-        private static bool AiringIsNew(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        private bool AiringIsNew(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
         {
             return groupedAiring.Count() == 1;
         }
 
 
-        private static bool ComparingThreeAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        private  bool ComparingThreeAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
         {
             return groupedAiring.Count() > 2;
         }
 
-        private static bool ComparingTwoAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        private  bool ComparingTwoAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
         {
             return groupedAiring.Count() == 2;
         }
@@ -560,8 +560,8 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             return changeDeletedAiringQueryHelper.Query().Any(x => x.AssetId == airingId);
         }
-        
-        public IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing originalAiring)
+
+        private IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing originalAiring)
         {
             var changeBuilder = new ChangeBuilder();
 
@@ -583,7 +583,7 @@ namespace OnDemandTools.Business.Modules.Airing
             return results;
         }
 
-        public IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing previousAsset, BLModel.Alternate.Long.Airing originalAsset)
+        private IEnumerable<FieldChange> Find(BLModel.Alternate.Long.Airing currentAsset, BLModel.Alternate.Long.Airing previousAsset, BLModel.Alternate.Long.Airing originalAsset)
         {
             var changeBuilder = new ChangeBuilder();
 
