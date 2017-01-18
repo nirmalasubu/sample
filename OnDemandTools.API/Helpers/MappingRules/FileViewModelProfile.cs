@@ -4,6 +4,7 @@ using OnDemandTools.Business.Modules.File.Model;
 using OnDemandTools.Common.Extensions;
 using RQModel = OnDemandTools.API.v1.Models.File;
 using BLModel = OnDemandTools.Business.Modules.File.Model;
+using VMAiringLongFileModel = OnDemandTools.API.v1.Models.Airing.Long;
 
 namespace OnDemandTools.API.Helpers.MappingRules
 {
@@ -31,6 +32,14 @@ namespace OnDemandTools.API.Helpers.MappingRules
             CreateMap<BLModel.PlayList, RQModel.FilePlayListViewModel>();
             CreateMap<BLModel.Url, RQModel.FileUrlViewModel>();
 
+            // BL to Airing  long File Model
+            CreateMap<BLModel.File, VMAiringLongFileModel.File>();
+            CreateMap<BLModel.Content, VMAiringLongFileModel.Content>();
+            CreateMap<BLModel.Media, VMAiringLongFileModel.Media>();
+            CreateMap<BLModel.Caption, VMAiringLongFileModel.Caption>();
+            CreateMap<BLModel.ContentSegment, VMAiringLongFileModel.ContentSegment>();
+            CreateMap<BLModel.PlayList, VMAiringLongFileModel.PlayList>();
+            CreateMap<BLModel.Url, VMAiringLongFileModel.Url>();
         }
     }
 }

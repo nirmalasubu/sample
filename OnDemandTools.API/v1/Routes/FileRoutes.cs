@@ -53,7 +53,7 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var files = fileSvc.GetByTitleId((int)_.titleId);
 
-                return (files.ToViewModel<List<BLFileModel.File>, List<RQModel.FileViewModel>>());                
+                return (files.ToViewModel<List<BLFileModel.File>, List<Models.Airing.Long.File>>());                
             });
 
             Get("/files/airing/{airingId}", _ =>
@@ -61,7 +61,7 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var files = fileSvc.GetByAiringId((string)_.airingId);
 
-                return (files.ToViewModel<List<BLFileModel.File>, List<RQModel.FileViewModel>>());
+                return (files.ToViewModel<List<BLFileModel.File>, List<Models.Airing.Long.File>>());
             });
 
 
