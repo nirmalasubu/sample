@@ -189,9 +189,10 @@ namespace OnDemandTools.Business.Modules.Airing
         
         public void AppendTitle(ref BLModel.Alternate.Long.Airing airing)
         {
-            var titleIds = airing.Title.TitleIds
+            List<int> titleIds = airing.Title.TitleIds
                 .Where(t => t.Authority == "Turner" && t.Value != null)
-                .Select(t => int.Parse(t.Value));
+                .Select(t => int.Parse(t.Value)).ToList();
+            titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
 
             var titles = GetFlowTitlesFor(titleIds);
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
