@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace OnDemandTools.API.v1.Models.Destination
 {
-    public class PropertyViewModel
+    public class Property
     {
-        public PropertyViewModel()
+        public Property()
         {
             Brands = new List<string>();
             TitleIds = new List<int>();

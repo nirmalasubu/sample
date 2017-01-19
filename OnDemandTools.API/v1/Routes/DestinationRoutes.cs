@@ -1,7 +1,7 @@
 ﻿using Nancy;
 using Nancy.Security;
 using OnDemandTools.API.Helpers;
-using OnDemandTools.API.v1.Models.Destination;
+using ADModel = OnDemandTools.API.v1.Models.Destination;
 using OnDemandTools.Business.Modules.CustomExceptions;
 using OnDemandTools.Business.Modules.Destination;
 using OnDemandTools.Business.Modules.Destination.Model;
@@ -26,7 +26,7 @@ namespace OnDemandTools.API.v1.Routes
                 var name = (string)_.name;
                 ValidateRequest(name, Context.User().Destinations);
 
-                return desService.GetByName(name).ToViewModel<Destination, DestinationViewModel>();
+                return desService.GetByName(name).ToViewModel<Destination, ADModel.Destination>();
             });
 
             Get("/destinations",  _ =>
@@ -37,7 +37,7 @@ namespace OnDemandTools.API.v1.Routes
                 // retrieve permitted destinations
                 var permittedDestinations = FilterDestinations(destinations, Context.User().Destinations);
 
-                return permittedDestinations.ToViewModel<List<Destination>, List<DestinationViewModel>>();
+                return permittedDestinations.ToViewModel<List<Destination>, List<ADModel.Destination>>();
             });
 
         }

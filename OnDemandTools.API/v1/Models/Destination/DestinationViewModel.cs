@@ -5,12 +5,12 @@ using System.Xml.Serialization;
 
 namespace OnDemandTools.API.v1.Models.Destination
 {
-    public class DestinationViewModel : IModel
+    public class Destination : IModel
     {
-        public DestinationViewModel()
+        public Destination()
         {
-            Deliverables = new List<DeliverableViewModel>();
-            Properties = new List<PropertyViewModel>();
+            Deliverables = new List<Deliverable>();
+            Properties = new List<Property>();
             Playlists = new List<Playlist>();
             
         }
@@ -21,11 +21,11 @@ namespace OnDemandTools.API.v1.Models.Destination
 
         public string Description { get; set; }
 
-        public List<PropertyViewModel> Properties { get; set; }
+        public List<Property> Properties { get; set; }
 
-        public List<DeliverableViewModel> Deliverables { get; set; }
+        public List<Deliverable> Deliverables { get; set; }
 
-        public ContentViewModel Content { get; set; }
+        public Content Content { get; set; }
 
         public List<Playlist> Playlists { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace OnDemandTools.API.v1.Models.Destination
 {
-    public class ContentViewModel
+    public class Content
     {
         public bool HighDefinition { get; set; }
         public bool StandardDefinition { get; set; }

@@ -1,8 +1,8 @@
 ﻿using Nancy;
 using Nancy.Security;
 using OnDemandTools.API.Helpers;
-using OnDemandTools.API.v1.Models.Destination;
-using OnDemandTools.API.v1.Models.Product;
+using ADModel = OnDemandTools.API.v1.Models.Destination;
+using RQModel = OnDemandTools.API.v1.Models.Product;
 using OnDemandTools.Business.Modules.Destination;
 using OnDemandTools.Business.Modules.Destination.Model;
 using OnDemandTools.Business.Modules.Product;
@@ -30,8 +30,8 @@ namespace OnDemandTools.API.v1.Routes
                 var tags = ConvertParameterToTags(tagParameter);
 
                 var products = (tagParameter.HasValue)
-                    ? productSvc.GetByTags(tags).ToViewModel<List<Product>,List<ProductViewModel>>()
-                    : productSvc.GetAll().ToViewModel<List<Product>, List<ProductViewModel>>();
+                    ? productSvc.GetByTags(tags).ToViewModel<List<Product>,List<RQModel.Product>>()
+                    : productSvc.GetAll().ToViewModel<List<Product>, List<RQModel.Product>>();
 
                 return products;               
             });
@@ -41,7 +41,7 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var destinations = destinationSvc
                                   .GetByProductId((Guid)_.productId)
-                                  .ToViewModel<List<Destination>, List<DestinationViewModel>>();
+                                  .ToViewModel<List<Destination>, List<ADModel.Destination>>();
 
                 return destinations;
             });
@@ -52,7 +52,7 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var destinations = destinationSvc
                                     .GetByMappingId((int)_.mappingId)
-                                    .ToViewModel<List<Destination>, List<DestinationViewModel>>();
+                                    .ToViewModel<List<Destination>, List<ADModel.Destination>>();
 
                 return destinations;
             });

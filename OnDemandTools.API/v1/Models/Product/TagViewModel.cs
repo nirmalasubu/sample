@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OnDemandTools.API.v1.Models.Product
 {
-    public class TagViewModel
+    public class Tag
     {
-        public TagViewModel()
+        public Tag()
         {
            
         }
 
-        public TagViewModel(string tag)
+        public Tag(string tag)
         {
             Text = tag;
         }
