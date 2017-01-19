@@ -1,3 +1,6 @@
+using RestSharp;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OnDemandTools.API.Tests
@@ -9,7 +12,31 @@ namespace OnDemandTools.API.Tests
         [Fact]
         public void PassingTest()
         {
-            Assert.Equal(4, Add(2, 2));
+            RestClient client = new RestClient("http://localhost:5000/whoami");
+            var request = new RestRequest(Method.GET);
+            Task.Run(async () =>
+            {
+                var rs = await GetHostingProviderDetails(client, request) as String;
+                var kk = 4;
+
+            }).Wait();
+        }
+
+        private Task<String> GetHostingProviderDetails(RestClient theClient, RestRequest theRequest)
+        {
+            var tcs = new TaskCompletionSource<String>();
+            theClient.ExecuteAsync(theRequest, response => {
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    tcs.SetResult(response.Content);
+                }
+                else
+                {
+                    tcs.SetResult(String.Empty);
+                }
+
+            });
+            return tcs.Task;
         }
 
 
