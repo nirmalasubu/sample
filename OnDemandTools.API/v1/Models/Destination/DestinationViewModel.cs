@@ -15,6 +15,8 @@ namespace OnDemandTools.API.v1.Models.Destination
             
         }
 
+        public string Id { get; set; }
+
         public int ExternalId { get; set; }
 
         public string Name { get; set; }
