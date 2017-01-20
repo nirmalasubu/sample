@@ -102,7 +102,6 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
             try
             {
                 currentAiringId.ModifiedBy = _appContext.GetUser().UserName;
-                currentAiringId.ModifiedDateTime = DateTime.UtcNow;
 
                 var findAndModifyResult = currentAiringIds.FindAndModify(
                     new FindAndModifyArgs()

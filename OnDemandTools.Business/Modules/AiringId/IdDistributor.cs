@@ -12,7 +12,7 @@ namespace OnDemandTools.Business.Modules.AiringId
         private readonly IGetLastAiringIdQuery _query;
         private readonly IAiringIdSaveCommand _command;
         private static readonly object Door = new object();
-      
+
 
         public IdDistributor(
             IAiringIdCreator creator,
@@ -48,6 +48,8 @@ namespace OnDemandTools.Business.Modules.AiringId
                    : _creator.Create(nextAiringId.Prefix);
                 nextAiringId.AiringId = result.AiringId;
                 nextAiringId.BillingNumber.Increment();
+               
+                nextAiringId.ModifiedDateTime = DateTime.UtcNow;
                 _command.UpdateAndUnlock(nextAiringId.ToDataModel<BLModel.CurrentAiringId, CurrentAiringId>());
             }
             catch (Exception ex)
