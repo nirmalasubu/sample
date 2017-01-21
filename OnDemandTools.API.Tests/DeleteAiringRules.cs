@@ -40,7 +40,7 @@ namespace OnDemandTools.API.Tests
 
 
         [Fact, Order(1)]       
-        public void FailingTest()
+        public void PassingTest2()
         {
             Console.WriteLine(client.BaseUrl);
             String response = String.Empty;
@@ -52,7 +52,7 @@ namespace OnDemandTools.API.Tests
                 }).Wait();
             
             Console.WriteLine(response);
-            Assert.True(!String.IsNullOrEmpty(response));
+            Assert.True(String.IsNullOrEmpty(response));
 
         }
 
