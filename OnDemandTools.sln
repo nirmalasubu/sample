@@ -39,6 +39,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.API.Utilities
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.API.Tests", "OnDemandTools.API.Tests\OnDemandTools.API.Tests.xproj", "{F8F5EFDC-4EE4-4275-A1C5-19B88080BDCD}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Business.Tests", "OnDemandTools.Business.Tests\OnDemandTools.Business.Tests.xproj", "{A856E5DA-7857-47A9-9FF8-941F21946E6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{F8F5EFDC-4EE4-4275-A1C5-19B88080BDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8F5EFDC-4EE4-4275-A1C5-19B88080BDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8F5EFDC-4EE4-4275-A1C5-19B88080BDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A856E5DA-7857-47A9-9FF8-941F21946E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A856E5DA-7857-47A9-9FF8-941F21946E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A856E5DA-7857-47A9-9FF8-941F21946E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A856E5DA-7857-47A9-9FF8-941F21946E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,5 +91,6 @@ Global
 		{2AB699A2-5DA8-43FF-AF3A-8C66A586E92D} = {3B8D019C-AC64-4016-8D48-57230E39C7AE}
 		{6BA48D39-2DEC-405E-9025-8F0A6F831BAA} = {A07F6272-3EA9-48B8-8092-336DF72D557A}
 		{F8F5EFDC-4EE4-4275-A1C5-19B88080BDCD} = {78524FE9-DC3E-437E-9230-CB54BE28D906}
+		{A856E5DA-7857-47A9-9FF8-941F21946E6D} = {AA70031B-0ABE-4B3D-A5B4-FA7C95DB20B6}
 	EndGlobalSection
 EndGlobal

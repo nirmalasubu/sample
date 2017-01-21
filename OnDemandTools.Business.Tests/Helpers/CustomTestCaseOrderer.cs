@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace OnDemandTools.API.Tests.Helpers
+namespace OnDemandTools.Business.Tests.Helpers
 {
     /// <summary>
     /// Custom xUnit test case orderer that uses the OrderAttribute
     /// </summary>
     public class CustomTestCaseOrderer : ITestCaseOrderer
     {
-        public const string TypeName = "OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer";
+        public const string TypeName = "OnDemandTools.Business.Tests.Helpers.CustomTestCaseOrderer";
 
-        public const string AssembyName = "OnDemandTools.API.Tests";
+        public const string AssembyName = "OnDemandTools.Business.Tests";
 
         public static readonly ConcurrentDictionary<string, ConcurrentQueue<string>>
             QueuedTests = new ConcurrentDictionary<string, ConcurrentQueue<string>>();

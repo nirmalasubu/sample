@@ -6,6 +6,13 @@ WORKDIR /app
 
 RUN ["dotnet", "restore"]
 
+WORKDIR /app/OnDemandTools.Business.Tests
+
+RUN ["dotnet", "build"]
+
+RUN ["dotnet", "test"]
+
+
 WORKDIR /app/OnDemandTools.API
 
 RUN ["dotnet", "build"]

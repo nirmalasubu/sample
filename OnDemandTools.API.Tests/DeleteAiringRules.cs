@@ -61,7 +61,7 @@ namespace OnDemandTools.API.Tests
                 }).Wait();
             
             Console.WriteLine(response.ToString());
-            Assert.True(!(response.GetValue("StatusCode").ToString() != "OK") );
+            Assert.True((response.GetValue("StatusCode").ToString() != "OK") );
 
         }
 

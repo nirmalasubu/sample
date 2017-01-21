@@ -67,8 +67,8 @@ compile:
 test:
   override:
     # API Testing
-    - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --link odt-api-container:odtapi --name odt-api-test-container "${IMAGE}-test"
-    - source "api-${CIRCLE_BRANCH}"; sudo ./OnDemandTools.API.Tests/validate.sh
+    - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --link odt-api-container:localhost --name odt-api-test-container "${IMAGE}-test"
+    #- source "api-${CIRCLE_BRANCH}"; sudo ./OnDemandTools.API.Tests/validate.sh
     - sudo docker ps -a
     - sudo docker images
     - sudo docker stop odt-api-container
