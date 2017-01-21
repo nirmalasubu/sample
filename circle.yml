@@ -89,5 +89,5 @@ deployment:
       - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "api-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
       # Deploy deporter job
-      - source "deporter-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
-      - source "deporter-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "deporter-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      #- source "deporter-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
+      #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "deporter-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
