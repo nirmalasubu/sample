@@ -56,7 +56,7 @@ compile:
   override:
     # Build image for API project  
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
-    - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"    
+    - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10    
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck
     - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
     
