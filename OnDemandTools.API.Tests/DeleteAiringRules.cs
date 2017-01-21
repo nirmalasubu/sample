@@ -24,7 +24,7 @@ namespace OnDemandTools.API.Tests
 
             Console.WriteLine(client.BaseAddress);
             String details = String.Empty;
-            HttpResponseMessage response = await client.GetAsync("/healthcheck");
+            HttpResponseMessage response = await client.GetAsync("/whoami");
             if (response.IsSuccessStatusCode)
             {
                 details = await response.Content.ReadAsStringAsync();
