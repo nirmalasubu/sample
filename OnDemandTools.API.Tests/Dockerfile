@@ -10,4 +10,4 @@ WORKDIR /app/OnDemandTools.API.Tests
 
 RUN ["dotnet", "build"]
 
-CMD sh validate.sh
+CMD ["dotnet", "test"]
