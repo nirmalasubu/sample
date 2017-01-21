@@ -5,12 +5,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using RestSharp;
 
 namespace OnDemandTools.API.Tests.Helpers
 {
     public class APITestFixture : IDisposable
     {
-        public HttpClient RestClient { get; set; }
+        public RestClient restClient { get; set; }
         public IConfigurationRoot Configuration { get; }
 
         public APITestFixture()
@@ -21,16 +22,42 @@ namespace OnDemandTools.API.Tests.Helpers
 
             Configuration = builder.Build();
 
-            RestClient = new HttpClient();
-            RestClient.BaseAddress = new Uri(Configuration["APIEndPoint"]);
-            RestClient.DefaultRequestHeaders.Accept.Clear();
-            RestClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-           
+            restClient = new RestClient(Configuration["APIEndPoint"]);
+            restClient.AddDefaultHeader("Content-Type", "application/json");
+
         }
+
+
 
         public void Dispose()
         {
-            RestClient.Dispose();
+            restClient = null;
+        }
+    }
+
+    public static class RestClientExtension
+    {
+        public static Task<T> SubmitRequest<T>(this RestClient client, RestRequest request) where T:new()
+        {
+            var tcs = new TaskCompletionSource<T>();
+            client.ExecuteAsync<T>(request, response =>
+            {
+                tcs.SetResult(response.Data);
+            });
+
+            return tcs.Task;    
+        }
+
+
+        public static Task<String> SubmitRequest(this RestClient client, RestRequest request) 
+        {
+            var tcs = new TaskCompletionSource<String>();
+            client.ExecuteAsync(request, response =>
+            {
+                tcs.SetResult(response.Content);
+            });
+
+            return tcs.Task;
         }
     }
 }

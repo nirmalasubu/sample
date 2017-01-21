@@ -1,6 +1,8 @@
 using OnDemandTools.API.Tests.Helpers;
+using RestSharp;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OnDemandTools.API.Tests
@@ -11,43 +13,44 @@ namespace OnDemandTools.API.Tests
     public class DeleteAiringRules
     {
         APITestFixture fixture;
-        HttpClient client;
+        RestClient client;
         public DeleteAiringRules(APITestFixture fixture)
         {
             this.fixture = fixture;
-            this.client = this.fixture.RestClient;
+            this.client = this.fixture.restClient;
         }
 
-        [Fact, Order(2)]       
-        public async void PassingTest()
-        {
+        //[Fact, Order(2)]       
+        //public async void PassingTest()
+        //{
 
-            Console.WriteLine(client.BaseAddress);
-            String details = String.Empty;
-            HttpResponseMessage response = await client.GetAsync("/whoami");
-            if (response.IsSuccessStatusCode)
-            {
-                details = await response.Content.ReadAsStringAsync();
-            }
+        //    Console.WriteLine(client.BaseAddress);
+        //    String details = String.Empty;
+        //    HttpResponseMessage response = await client.GetAsync("/whoami");
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        details = await response.Content.ReadAsStringAsync();
+        //    }
 
-            Console.WriteLine(details);
-            Assert.True(!String.IsNullOrEmpty(details));
-        }
+        //    Console.WriteLine(details);
+        //    Assert.True(!String.IsNullOrEmpty(details));
+        //}
 
 
         [Fact, Order(1)]       
-        public async void FailingTest()
+        public void FailingTest()
         {
-            Console.WriteLine(client.BaseAddress);
-            String details = String.Empty;
+            Console.WriteLine(client.BaseUrl);
+            String response = String.Empty;
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync("/something");
-                if (response.IsSuccessStatusCode)
+                var request = new RestRequest("/whoami", Method.GET);
+                Task.Run(async () =>
                 {
-                    details = await response.Content.ReadAsStringAsync();
-                }
+                    response = await client.SubmitRequest(request) as String;
+
+                }).Wait();               
 
             }
             catch (Exception)
@@ -55,8 +58,8 @@ namespace OnDemandTools.API.Tests
 
             }
             
-            Console.WriteLine(details);
-            Assert.True(!String.IsNullOrEmpty(details));
+            Console.WriteLine(response);
+            Assert.True(!String.IsNullOrEmpty(response));
 
         }
 
