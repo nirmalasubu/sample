@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using RestSharp;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace OnDemandTools.API.Tests.Helpers
 {
@@ -24,7 +26,7 @@ namespace OnDemandTools.API.Tests.Helpers
 
             restClient = new RestClient(Configuration["APIEndPoint"]);
             restClient.AddDefaultHeader("Content-Type", "application/json");
-
+            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
         }
 
 
@@ -37,27 +39,66 @@ namespace OnDemandTools.API.Tests.Helpers
 
     public static class RestClientExtension
     {
-        public static Task<T> SubmitRequest<T>(this RestClient client, RestRequest request) where T:new()
+        
+        //TODO - add code to handle/propogate error properly
+        public static Task<JObject> RetrieveRecord(this RestClient client, RestRequest request) 
         {
-            var tcs = new TaskCompletionSource<T>();
-            client.ExecuteAsync<T>(request, response =>
-            {
-                tcs.SetResult(response.Data);
-            });
-
-            return tcs.Task;    
-        }
-
-
-        public static Task<String> SubmitRequest(this RestClient client, RestRequest request) 
-        {
-            var tcs = new TaskCompletionSource<String>();
+            var tcs = new TaskCompletionSource<JObject>();
             client.ExecuteAsync(request, response =>
-            {
-                tcs.SetResult(response.Content);
+            {                
+                if(response.IsSuccessful())
+                {
+                    tcs.SetResult(JObject.Parse(response.Content));
+                }
+                else
+                {
+                    var jsonObject = new JObject();
+                    jsonObject.Add("StatusCode", response.StatusCode.ToString());
+                    jsonObject.Add("Error", response.ErrorMessage);
+                    tcs.SetResult(jsonObject);
+                }
             });
 
             return tcs.Task;
+        }
+
+
+        public static Task<JArray> RetrieveRecords(this RestClient client, RestRequest request)
+        {
+            var tcs = new TaskCompletionSource<JArray>();
+            client.ExecuteAsync(request, response =>
+            {
+                if (response.IsSuccessful())
+                {
+                    tcs.SetResult(JArray.Parse(response.Content));
+                }
+                else
+                {
+                    JArray array = new JArray();
+                    var jsonObject = new JObject();
+                    jsonObject.Add("StatusCode", response.StatusCode.ToString());
+                    jsonObject.Add("Error", response.ErrorMessage);
+                    array.Add(jsonObject);
+                    tcs.SetResult(array);
+                }
+
+                
+            });
+
+            return tcs.Task;
+        }
+
+        public static bool IsSuccessful(this IRestResponse response)
+        {
+            return response.StatusCode.IsSuccessStatusCode()
+                && response.ResponseStatus == ResponseStatus.Completed;
+        }
+
+        public static bool IsSuccessStatusCode(this HttpStatusCode responseCode)
+        {
+            int numericResponse = (int)responseCode;
+            return numericResponse >= 200
+                && numericResponse <= 399;
         }
     }
 }

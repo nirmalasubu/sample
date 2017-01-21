@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
 using System;
@@ -19,40 +20,48 @@ namespace OnDemandTools.API.Tests
             this.client = this.fixture.restClient;
         }
 
+
+        // Some example code for you to get started, not necessarily actual code
         [Fact, Order(2)]       
         public void PassingTest()
         {
 
             Console.WriteLine(client.BaseUrl);
-            String response = String.Empty;
-            var request = new RestRequest("/healthcheck", Method.GET);
+            JArray response = default(JArray);
+            var request = new RestRequest("/v1/destinations", Method.GET);
             Task.Run(async () =>
                 {
-                    response = await client.SubmitRequest(request) as String;
+                    response = await client.RetrieveRecords(request);
 
                 }).Wait(); 
             
-            Console.WriteLine(response);
-            Assert.True(!String.IsNullOrEmpty(response));
-
+            if(response != null)
+            {
+                Console.WriteLine(response.ToString());
+                Assert.True(response.Count > 1);
+            }
+            else
+            {
+                Assert.True(false);
+            }
         }
-        
 
 
+        // Some example code for you to get started, not necessarily actual code
         [Fact, Order(1)]       
         public void PassingTest2()
         {
             Console.WriteLine(client.BaseUrl);
-            String response = String.Empty;
+            JObject response = new JObject();
             var request = new RestRequest("/something", Method.GET);
             Task.Run(async () =>
                 {
-                    response = await client.SubmitRequest(request) as String;
+                    response = await client.RetrieveRecord(request);
 
                 }).Wait();
             
-            Console.WriteLine(response);
-            Assert.True(String.IsNullOrEmpty(response));
+            Console.WriteLine(response.ToString());
+            Assert.True(!(response.GetValue("StatusCode").ToString() != "OK") );
 
         }
 
