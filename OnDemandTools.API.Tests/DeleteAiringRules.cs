@@ -25,7 +25,7 @@ namespace OnDemandTools.API.Tests
 
             Console.WriteLine(client.BaseUrl);
             String response = String.Empty;
-            var request = new RestRequest("/whoami", Method.GET);
+            var request = new RestRequest("/healthcheck", Method.GET);
             Task.Run(async () =>
                 {
                     response = await client.SubmitRequest(request) as String;
@@ -44,7 +44,7 @@ namespace OnDemandTools.API.Tests
         {
             Console.WriteLine(client.BaseUrl);
             String response = String.Empty;
-            var request = new RestRequest("/something", Method.GET);
+            var request = new RestRequest("/healthcheck", Method.GET);
             Task.Run(async () =>
                 {
                     response = await client.SubmitRequest(request) as String;
