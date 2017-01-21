@@ -23,7 +23,18 @@ namespace OnDemandTools.API.Tests
         {
 
             Console.WriteLine(client.BaseAddress);
-            Assert.True(true);
+            String details = String.Empty;
+            HttpResponseMessage response = await client.GetAsync("/healthcheck");
+            if (response.IsSuccessStatusCode)
+            {
+                details = await response.Content.ReadAsStringAsync();
+            }
+
+            Console.WriteLine(details);
+            Assert.True(!String.IsNullOrEmpty(details));
+
+
+            //Assert.True(true);
             //String details = String.Empty;
             //HttpResponseMessage response = await client.GetAsync("/whoami");
             //if(response.IsSuccessStatusCode)
