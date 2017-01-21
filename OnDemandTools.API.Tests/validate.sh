@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -v http://localhost:5000/healthcheck
+curl -v http://localhost:5000/whoami
