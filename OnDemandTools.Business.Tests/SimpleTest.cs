@@ -10,7 +10,7 @@ namespace OnDemandTools.Business.Tests
         [Fact, Order(1)]
         public void PassingTest()
         {
-            Assert.Equal(5, Add(2, 2));
+            Assert.Equal(4, Add(2, 2));
         }
 
        
