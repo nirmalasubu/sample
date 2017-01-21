@@ -32,31 +32,22 @@ namespace OnDemandTools.API.Tests
 
             Console.WriteLine(details);
             Assert.True(!String.IsNullOrEmpty(details));
-
-
-            //Assert.True(true);
-            //String details = String.Empty;
-            //HttpResponseMessage response = await client.GetAsync("/whoami");
-            //if(response.IsSuccessStatusCode)
-            //{
-            //    details = await response.Content.ReadAsStringAsync();
-            //}
-
-            //Assert.True(!String.IsNullOrEmpty(details));
         }
 
 
         [Fact, Order(1)]       
         public async void FailingTest()
         {
-            //String details = String.Empty;
-            //HttpResponseMessage response = await client.GetAsync("/someuri");
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    details = await response.Content.ReadAsStringAsync();
-            //}
+            Console.WriteLine(client.BaseAddress);
+            String details = String.Empty;
+            HttpResponseMessage response = await client.GetAsync("/something");
+            if (response.IsSuccessStatusCode)
+            {
+                details = await response.Content.ReadAsStringAsync();
+            }
 
-            //Assert.True(!String.IsNullOrEmpty(details));
+            Console.WriteLine(details);
+            Assert.True(!String.IsNullOrEmpty(details));
 
         }
 
