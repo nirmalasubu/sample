@@ -1,8 +1,9 @@
 ﻿using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
 using System;
-using System.Net.Http;
 using Xunit;
+using System.Threading.Tasks;
+
 namespace OnDemandTools.API.Tests
 {
     [TestCaseOrderer("OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.API.Tests")]
@@ -17,21 +18,22 @@ namespace OnDemandTools.API.Tests
             this.client = this.fixture.restClient;
         }
 
-        //[Fact, Order(1)]
-        //public async void PassingTest()
-        //{
+        [Fact, Order(1)]
+        public void PassingTest()
+        {
 
-        //    Console.WriteLine(client.BaseAddress);
-        //    String details = String.Empty;
-        //    HttpResponseMessage response = await client.GetAsync("/whoami");
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        details = await response.Content.ReadAsStringAsync();
-        //    }
+            Console.WriteLine(client.BaseUrl);
+            String response = String.Empty;
+            var request = new RestRequest("/whoami", Method.GET);
+            Task.Run(async () =>
+                {
+                    response = await client.SubmitRequest(request) as String;
 
-        //    Console.WriteLine(details);
-        //    Assert.True(!String.IsNullOrEmpty(details));
-        //}
+                }).Wait(); 
+            
+            Console.WriteLine(response);
+            Assert.True(!String.IsNullOrEmpty(response));
+        }
 
     }
 }
