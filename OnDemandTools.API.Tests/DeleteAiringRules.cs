@@ -40,12 +40,21 @@ namespace OnDemandTools.API.Tests
         {
             Console.WriteLine(client.BaseAddress);
             String details = String.Empty;
-            HttpResponseMessage response = await client.GetAsync("/something");
-            if (response.IsSuccessStatusCode)
-            {
-                details = await response.Content.ReadAsStringAsync();
-            }
 
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("/something");
+                if (response.IsSuccessStatusCode)
+                {
+                    details = await response.Content.ReadAsStringAsync();
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+            
             Console.WriteLine(details);
             Assert.True(!String.IsNullOrEmpty(details));
 
