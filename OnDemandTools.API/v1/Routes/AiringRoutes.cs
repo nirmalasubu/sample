@@ -427,7 +427,7 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Delete.Verb());
                 var request = this.Bind<VMAiringRequestModel.AiringRequest>();
                 var airing = Mapper.Map<BLAiringModel.Airing>(request);
-
+                
                 // validate
                 List<ValidationResult> results = new List<ValidationResult>();
                 results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.DeleteAiring.ToString()));
@@ -458,11 +458,12 @@ namespace OnDemandTools.API.v1.Routes
 
                 reporterSvc.Report(existingAiring);
 
-                return new
+                return new VMAiringLongModel.AiringMessage
                 {
                     AiringId = airing.AssetId,
                     Message = "deleted successfully"
                 };
+                
             });
             #endregion
 
