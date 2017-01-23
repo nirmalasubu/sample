@@ -31,7 +31,9 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<AiringRequestModel.Element, BLAiringModel.Element>();
             CreateMap<AiringRequestModel.Episode, BLAiringModel.Episode>();
             CreateMap<AiringRequestModel.Flags, BLAiringModel.Flags>();
-            CreateMap<AiringRequestModel.Flight, BLAiringModel.Flight>();
+            CreateMap<AiringRequestModel.Flight, BLAiringModel.Flight>()
+                .ForMember(d => d.Start, opt => opt.MapFrom(s => DateTime.SpecifyKind(s.Start, DateTimeKind.Unspecified)))
+                .ForMember(d => d.End, opt => opt.MapFrom(s => DateTime.SpecifyKind(s.End, DateTimeKind.Unspecified)));
             CreateMap<AiringRequestModel.Genre, BLAiringModel.Genre>();
             CreateMap<AiringRequestModel.GuideCategory, BLAiringModel.GuideCategory>();
             CreateMap<AiringRequestModel.Category, BLAiringModel.Category>();
