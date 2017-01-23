@@ -14,6 +14,9 @@ using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Nancy.Conventions;
+using System.Linq;
+
 
 namespace OnDemandTools.API
 {
@@ -106,7 +109,38 @@ namespace OnDemandTools.API
             pipelines.OnError = er;
             StatelessAuthentication.Enable(pipelines, configuration);
         }
-       
+
+
+        /// <summary>
+        /// Configures the conventions in NancyFx.
+        /// </summary>
+        /// <param name="nancyConventions">The nancy conventions.</param>
+        protected override void ConfigureConventions(NancyConventions nancyConventions)
+        {
+            base.ConfigureConventions(nancyConventions);
+
+            this.Conventions.AcceptHeaderCoercionConventions.Add((acceptHeaders, ctx) =>
+            {
+                // Provide default accept header - 'application/json' if no valid ['application/json' , 'application/xml'] accept headers are provided.
+                // This is only applicable for the API route. Note, this is a temporary solution. A better approach would be
+                // to use dedicated API handler. In the future if more customization is requested then the need for a
+                // dedicated API handler is warranted
+                if (ctx.Request.Path.Contains("/v1/"))
+                {
+                    var current = acceptHeaders as Tuple<string, decimal>[] ?? acceptHeaders.ToArray();
+                    var validHeaders = acceptHeaders.Where(h => (string.Equals(h.Item1, "application/json", StringComparison.OrdinalIgnoreCase) && h.Item2 == (decimal)1) ||
+                                          (string.Equals(h.Item1, "application/xml", StringComparison.OrdinalIgnoreCase)) && h.Item2 == (decimal)1).ToList();
+
+                    if (validHeaders.Count() <= 0)
+                    {
+                        return new[] { Tuple.Create("application/json", (decimal)1) };
+                    }
+                }
+
+                return acceptHeaders;
+            });
+        }
+
     }
 
 
