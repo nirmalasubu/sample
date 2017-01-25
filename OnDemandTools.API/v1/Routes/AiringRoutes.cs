@@ -366,8 +366,10 @@ namespace OnDemandTools.API.v1.Routes
                     {
                         var message = results.Where(c => (!c.IsValid))
                                     .Select(c => c.Errors.Select(d => d.ErrorMessage));
-                    
-                        logger.Error("Failure ingesting released asset: {AssetId}", request.AiringId);
+
+                       
+                        logger.Error("Failure ingesting released asset: {AssetId}", new Dictionary<string, object>()
+                                            {{ "airingid", request.AiringId },{ "mediaid", airing.MediaId }, { "error", message }   });
                        
                         // Return status
                         return Negotiate.WithModel(message)
@@ -420,7 +422,7 @@ namespace OnDemandTools.API.v1.Routes
             });
 
             #endregion
-
+            
             #region "DELETE Operations"
             Delete("/airing", _ =>
             {
