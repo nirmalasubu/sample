@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OnDemandTools.API.Tests
@@ -31,6 +28,11 @@ namespace OnDemandTools.API.Tests
         [InlineData("/v1/product/1/destinations", Method.GET)]
         [InlineData("/v1/destinations", Method.GET)]
         [InlineData("/v1/destination/1", Method.GET)]
+        [InlineData("/v1/files/title/1", Method.GET)]
+        [InlineData("/v1/files/airing/AIRINGID", Method.GET)]
+        [InlineData("/v1/files", Method.POST)]
+        [InlineData("/v1/package", Method.POST)]
+        [InlineData("/v1/package", Method.DELETE)]
         public void VerifyUnAuthenticatedRoutes(string route, Method method)
         {
             JObject response = new JObject();
