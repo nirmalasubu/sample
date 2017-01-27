@@ -9,6 +9,9 @@ using Xunit;
 
 namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
 {
+    /// <summary>
+    /// Hint : order 1 runs first and  then order 2 runs
+    /// </summary>
     [TestCaseOrderer("OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.API.Tests")]
     [Collection("API Collection")]
     public class CartoonAiringRules : BasePostAiringRule
@@ -26,35 +29,35 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             _airingObjectHelper = new AiringObjectHelper();
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ActiveAndExpiredAiringTest()
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, -8), "Active and Expired Airing test");
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ActiveAiringTest()
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 0), "Active  Airing test");
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void FutureAiringTest()
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 101), "Furture Airing test");
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ExpiredAiringTest()
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, -365), "Expired Airing test");
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ActiveToActiveAiringTest()
         {
             string airing = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 0), "Active to Active Airing test- Step 1");
@@ -65,7 +68,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ActiveToExpiredAiringTest()
         {
             string airing = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 0), "Active to Expired Airing test- Step 1");
@@ -76,7 +79,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             airingIds.Add(airingId);
         }
         
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ExpiredToActiveAiringTest()
         {
             string airing = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, -365), "Expired to Active Airing test- Step 1");
@@ -87,7 +90,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+        [Fact, Order(1)]
         public void ExpiredToExpiredAiringTest()
         {
             string airing = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, -365), "Expired to Expired Airing test- Step 1");
@@ -98,20 +101,20 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             airingIds.Add(airingId);
         }
 
-        [Fact, Order(4)]
+       [Fact, Order(2)]
         public void DeleteAiringTest()
         {
             foreach (string airingid in airingIds)
             {
-                DeleteAiringRequest(airingid, "Delete Airing failed for  :"+airingid);
+                DeleteAiringRequest(airingid, "Delete Airing failed for  :" + airingid);
             }
             Dispose();
         }
-       
         private void Dispose()
         {
             airingIds = null;
         }
+
     }
 
 }

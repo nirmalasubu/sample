@@ -26,7 +26,7 @@ namespace OnDemandTools.API.Tests
         public void PassingTest()
         {
 
-            Console.WriteLine(client.BaseUrl);
+            
             JArray response = default(JArray);
             var request = new RestRequest("/v1/destinations", Method.GET);
             Task.Run(async () =>
@@ -36,8 +36,7 @@ namespace OnDemandTools.API.Tests
                 }).Wait(); 
             
             if(response != null)
-            {
-                Console.WriteLine(response.ToString());
+            {   
                 Assert.True(response.Count > 1);
             }
             else
@@ -51,7 +50,7 @@ namespace OnDemandTools.API.Tests
         [Fact, Order(1)]       
         public void PassingTest2()
         {
-            Console.WriteLine(client.BaseUrl);
+           
             JObject response = new JObject();
             var request = new RestRequest("/something", Method.GET);
             Task.Run(async () =>
@@ -60,7 +59,6 @@ namespace OnDemandTools.API.Tests
 
                 }).Wait();
             
-            Console.WriteLine(response.ToString());
             Assert.True((response.GetValue("StatusCode").ToString() != "OK") );
 
         }
