@@ -14,22 +14,32 @@ namespace OnDemandTools.API.Tests.Helpers
     public class APITestFixture : IDisposable
     {
         public RestClient restClient { get; set; }
-        public IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot Configuration { get; set; }
+        public IConfigurationBuilder builder { get; set; }
 
         public APITestFixture()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+            BuildAPISettings();
+            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
+        }
+
+        public APITestFixture(string apiKeyName)
+        {
+            BuildAPISettings();
+            restClient.AddDefaultHeader("Authorization", Configuration[apiKeyName]);
+        }
+
+        private void BuildAPISettings()
+        {
+            builder = new ConfigurationBuilder()
+                  .SetBasePath(Directory.GetCurrentDirectory())
+                  .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();
 
             restClient = new RestClient(Configuration["APIEndPoint"]);
             restClient.AddDefaultHeader("Content-Type", "application/json");
-            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
         }
-
-
 
         public void Dispose()
         {

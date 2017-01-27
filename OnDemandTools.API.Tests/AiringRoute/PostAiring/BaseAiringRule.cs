@@ -9,16 +9,16 @@ using Xunit;
 
 namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
 {
-    public class BasePostAiringRule
+    public class BaseAiringRule
     {
         private readonly string _abbreviation;
         APITestFixture _fixture;
         RestClient _client;
 
-        protected BasePostAiringRule(string abbreviation, APITestFixture fixture)
+        protected BaseAiringRule(string abbreviation,string  brandApiKey)
         {
             _abbreviation = abbreviation;
-            _fixture = fixture;
+            _fixture = new APITestFixture(brandApiKey);
             _client = _fixture.restClient;
         }
 
@@ -26,7 +26,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
         {
 
             JObject response = new JObject();
-            var request = new RestRequest("/v1/airing/CARE", Method.POST);
+            var request = new RestRequest("/v1/airing/"+ _abbreviation, Method.POST);
             request.AddParameter("text/xml", airingJson, ParameterType.RequestBody);
            
             Task.Run(async () =>
@@ -38,7 +38,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             string value = response.Value<string>(@"StatusCode");
             if (value != null)
             {
-                Assert.True(false, TestCaseText);
+                Assert.True(false,  "Test method Failed for Brand : " +_abbreviation + ", Method Name :"+ TestCaseText);
             }
            
             return response[@"airingId"].ToString();
@@ -52,7 +52,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
              request.AddJsonBody(new
              {
                  AiringId =airingID,
-                 ReleasedBy= "ntuser"
+                 ReleasedBy= "UnitTestApp"
              });
             Task.Run(async () =>
             {

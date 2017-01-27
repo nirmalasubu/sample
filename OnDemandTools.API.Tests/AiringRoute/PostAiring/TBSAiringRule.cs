@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using OnDemandTools.API.Tests.Helpers;
+﻿using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
@@ -14,17 +10,18 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
     /// </summary>
     [TestCaseOrderer("OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.API.Tests")]
     [Collection("API Collection")]
-    public class CartoonAiringRules : BaseAiringRule
+    public class TBSAiringRule : BaseAiringRule
     {
         private readonly string _cartoonQueueKey;
         private readonly AiringObjectHelper _airingObjectHelper;
+      
         RestClient client;
         private readonly string _jsonString;
         private static List<string> airingIds = new List<string>();
-        public CartoonAiringRules()
-            : base("CARE", "CartoonFullAccessApiKey")
+        public TBSAiringRule()
+            : base("TBSE", "TBSFullAccessApiKey")
         {
-            _jsonString = Resources.Resources.CartoonAiringWith3Flights;
+            _jsonString = Resources.Resources.TBSAiringWithSingleFlight;
             _airingObjectHelper = new AiringObjectHelper();
         }
 
@@ -77,7 +74,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(updatedairing, -365), "Active to Expired Airing test- Step 2");
             airingIds.Add(airingId);
         }
-        
+
         [Fact, Order(1)]
         public void ExpiredToActiveAiringTest()
         {
@@ -100,8 +97,8 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             airingIds.Add(airingId);
         }
 
-       [Fact, Order(2)]
-        public void DeleteCartoonAiringTest()
+        [Fact, Order(2)]
+        public void DeleteTBSAiringTest()
         {
             foreach (string airingid in airingIds)
             {
@@ -113,7 +110,5 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
         {
             airingIds = null;
         }
-
     }
-
 }

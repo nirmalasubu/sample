@@ -1,10 +1,13 @@
 using Newtonsoft.Json.Linq;
 using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
+/// <summary>
+/// Hint : Covered all the  negative secenerios of the delete airing.
+/// Postive scenerios of delete airing is covered under each post Airing rule "Delete{{Brand}}AiringTest" Methods
+/// </summary>
 namespace OnDemandTools.API.Tests
 {
     
@@ -13,56 +16,52 @@ namespace OnDemandTools.API.Tests
     public class DeleteAiringRules
     {
         APITestFixture fixture;
-        RestClient client;
+        RestClient _client;
         public DeleteAiringRules(APITestFixture fixture)
         {
             this.fixture = fixture;
-            this.client = this.fixture.restClient;
+           _client = this.fixture.restClient;
         }
 
-
-        // Some example code for you to get started, not necessarily actual code
-        [Fact, Order(2)]       
-        public void PassingTest()
-        {
-
-            
-            JArray response = default(JArray);
-            var request = new RestRequest("/v1/destinations", Method.GET);
-            Task.Run(async () =>
-                {
-                    response = await client.RetrieveRecords(request);
-
-                }).Wait(); 
-            
-            if(response != null)
-            {   
-                Assert.True(response.Count > 1);
-            }
-            else
-            {
-                Assert.True(false);
-            }
-        }
-
-
-        // Some example code for you to get started, not necessarily actual code
-        [Fact, Order(1)]       
-        public void PassingTest2()
+        [Fact]
+        public void DeleteNonExistantAiringTest()
         {
            
             JObject response = new JObject();
-            var request = new RestRequest("/something", Method.GET);
+            var request = new RestRequest("/v1/airing", Method.DELETE);
+
+            request.AddJsonBody(new
+            {
+                AiringId = "ABCD1234",
+                ReleasedBy = "ntuser"
+            });
             Task.Run(async () =>
-                {
-                    response = await client.RetrieveRecord(request);
+            {
+                response = await _client.RetrieveRecord(request);
 
-                }).Wait();
-            
-            Assert.True((response.GetValue("StatusCode").ToString() != "OK") );
+            }).Wait();
 
+            Assert.True((response.GetValue("StatusCode").ToString() != "OK"));
         }
 
+        [Fact]
+        public void DeletAiringwithNoReleasedBy_parameterTest()
+        {
 
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing", Method.DELETE);
+
+            request.AddJsonBody(new
+            {
+                AiringId = "CARE1007291600012449"
+            });
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            Assert.True((response.GetValue("StatusCode").ToString() != "OK"));
+        }
     }
 }
