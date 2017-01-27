@@ -54,8 +54,8 @@ namespace OnDemandTools.API.Tests.AiringRoute
             if (response.Count > 0)
             {
                 var my_obj = response.First.Value<JArray>(@"flights").First.Value<JArray>(@"destinations").ToList();
-                var message = my_obj.Any(i => i.Value<String>(@"name") == "CMA") ? "Test Passed" : "User do not have access to destination";
-                Assert.True(my_obj.Any(i => i.Value<String>(@"name") == "CMA"), message);
+                var message = my_obj.Any(i => i.Value<String>(@"name") == "CNWB") ? "Test Passed" : "User do not have access to destination";
+                Assert.True(my_obj.Any(i => i.Value<String>(@"name") == "CNWB"), message);
             }
         }
     }
