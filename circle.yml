@@ -3,78 +3,45 @@ general:
     only:
      - dev
      - rc     
-      
+     
 machine:
   pre:  
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.9.0 
-
+    
   services:
     - docker
 
 dependencies:
   override:
-       
-    # Use harbor-deploy to get image tag (version) from package.json (or TURNER_METADATA)
+        
+    # Log into quay
     - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
 
-    # Create CI environment for API
-    - if [ $CIRCLE_BRANCH = "dev" ] ; then docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
-          -s "${API_SHIPMENT_NAME}" \
-          -t "${API_SHIPMENT_BUILD_TOKEN_DEV}" \
-          -e "dev" \          
-          -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > api-dev ; fi               
-    - if [ $CIRCLE_BRANCH = "dev" ] ; then sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-dev ; fi
-    
-    - if [ $CIRCLE_BRANCH = "rc" ] ; then docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
-          -s "${API_SHIPMENT_NAME}" \
-          -t "${API_SHIPMENT_BUILD_TOKEN_QA}" \
-          -e "qa" \          
-          -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > api-rc ; fi
-    - if [ $CIRCLE_BRANCH = "rc" ] ; then sudo sed -i 's/odt/'"${API_CONTAINER_NAME}"'/' api-rc ; fi
-
-
-    # Create CI environment for Deporter
-    - if [ $CIRCLE_BRANCH = "dev" ] ; then docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
-          -s "${DEPORTER_SHIPMENT_NAME}" \
-          -t "${DEPORTER_SHIPMENT_BUILD_TOKEN_DEV}" \
-          -e "dev" \          
-          -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > deporter-dev ; fi              
-    - if [ $CIRCLE_BRANCH = "dev" ] ; then sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-dev ; fi
-    
-    - if [ $CIRCLE_BRANCH = "rc" ] ; then docker run -v $(pwd):/data quay.io/turner/harbor-deploy set_build_values \
-          -s "${DEPORTER_SHIPMENT_NAME}" \
-          -t "${DEPORTER_SHIPMENT_BUILD_TOKEN_QA}" \
-          -e "qa" \          
-          -b "${CIRCLE_BRANCH}" \
-          -n "${CIRCLE_BUILD_NUM}" > deporter-rc ; fi
-    - if [ $CIRCLE_BRANCH = "rc" ] ; then sudo sed -i 's/odt/'"${DEPORTER_CONTAINER_NAME}"'/' deporter-rc ; fi
-   
+    # Prepare environment
+    - sh ApplicationSettings.sh
+    - cat envAPI
+  
 compile:
   override:
-    # Build image for API project  
-    - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
-    - source "api-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10    
+    # Build image and verify API project  
+    - source envAPI; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
+    - source envAPI; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10    
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck
-    - source "api-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
+    - source envAPI; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
     
-    # Build image for Deporter project
+    # Build image and verify for Deporter project
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5001:5000 "${IMAGE}"
     
 test:
   override:
-    # API Testing
-    - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --link odt-api-container:localhost --name odt-api-test-container "${IMAGE}-test"
-    #- source "api-${CIRCLE_BRANCH}"; sudo ./OnDemandTools.API.Tests/validate.sh
+    # API testing
+    - source envAPI; sudo docker run -it --link odt-api-container:localhost --name odt-api-test-container "${IMAGE}-test"
     - sudo docker ps -a
     - sudo docker images
     - sudo docker stop odt-api-container
     - sudo docker stop odt-api-test-container
   
-    # Deporter test
+    # Deporter testing
     #- sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5001/healthcheck
     #- sudo curl --retry 10 --retry-delay 5 -v http://localhost:5001/healthcheck
     #- sudo docker stop odt-deporter-container
@@ -83,11 +50,11 @@ test:
 deployment:
   CI:   
     branch: [dev, rc]
-    commands:    
+    commands:      
       # Deploy API   
-      - source "api-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
-      - source "api-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "api-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      - source envAPI; sudo docker push "${IMAGE}"
+      - source envAPI; sudo docker run -it --env-file "envAPI" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
       # Deploy deporter job
-      #- source "deporter-${CIRCLE_BRANCH}"; sudo docker push "${IMAGE}"
-      #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -it --env-file "deporter-${CIRCLE_BRANCH}" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      #- source envDeporter; sudo docker push "${IMAGE}"
+      #- source envDeporter; sudo docker run -it --env-file "envDeporter" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
