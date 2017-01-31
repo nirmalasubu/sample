@@ -16,7 +16,7 @@ namespace OnDemandTools.Business.Modules.AiringId
         IGetAiringIdsQuery getAiringIdQuery;
 
 
-        private CurrentAiringId BuildAringId(string prefix, int fiveDigitNumber)
+        private CurrentAiringId BuildAiringId(string prefix, int fiveDigitNumber)
         {
             var builder = new StringBuilder(prefix);
 
@@ -60,7 +60,7 @@ namespace OnDemandTools.Business.Modules.AiringId
                 throw new ArgumentException("already exists", "prefix");
             }
 
-            return BuildAringId(prefix, 1);
+            return BuildAiringId(prefix, 1);
         }
 
         public virtual CurrentAiringId Create(string prefix, int nextFiveDigitNumber)
@@ -71,7 +71,7 @@ namespace OnDemandTools.Business.Modules.AiringId
             if (nextFiveDigitNumber > 99999 || nextFiveDigitNumber < 1)
                 throw new ArgumentOutOfRangeException("previousFiveDigitNumber", "must be between 1 and 99,999");
 
-            return BuildAringId(prefix, nextFiveDigitNumber);
+            return BuildAiringId(prefix, nextFiveDigitNumber);
         }
 
         public CurrentAiringId Save(CurrentAiringId currentAiringId)

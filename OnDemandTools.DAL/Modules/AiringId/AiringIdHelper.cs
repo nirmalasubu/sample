@@ -11,6 +11,7 @@ namespace OnDemandTools.DAL.Modules.AiringId
     public interface IAiringIdDeleteCommand
     {
         void Delete(ObjectId id);
+        void Delete(string prefix);
     }
 
     public interface IAiringIdSaveCommand
