@@ -27,6 +27,9 @@ namespace OnDemandTools.Business.Modules.Product.Model
         public List<string> Tags { get; set; }
 
         public List<string> Destinations { get; set; }
+
+        public bool DynamicAdTrigger { get; set; }
+
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string ModifiedBy { get; set; }

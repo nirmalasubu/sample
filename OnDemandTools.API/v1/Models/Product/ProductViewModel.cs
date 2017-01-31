@@ -22,6 +22,9 @@ namespace OnDemandTools.API.v1.Models.Product
         public int MappingId { get; set; }
         
         public List<string> Destinations { get; set; }
+
+        public bool DynamicAdTrigger { get; set; }
+
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string ModifiedBy { get; set; }
