@@ -82,6 +82,24 @@ namespace OnDemandTools.API.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[&quot;1111A&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;}.
+        /// </summary>
+        public static string DeletePackage_InvalidTitle {
+            get {
+                return ResourceManager.GetString("DeletePackage_InvalidTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[&quot;1234&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;}.
+        /// </summary>
+        public static string DeletePackage_TypeNotPresent {
+            get {
+                return ResourceManager.GetString("DeletePackage_TypeNotPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[1234,&quot;3456&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:&quot;&quot;}.
         /// </summary>
         public static string InvalidPackage_PackageEmpty {
