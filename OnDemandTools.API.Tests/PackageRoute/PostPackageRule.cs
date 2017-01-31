@@ -23,7 +23,7 @@ namespace OnDemandTools.API.Tests.PostPackage
         }
 
         [Fact, Order(1)]
-        protected void Post_WithValidPackageDataTest()
+        public void Post_WithValidPackageDataTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.ValidPackage);
             JObject response = new JObject();
@@ -44,7 +44,7 @@ namespace OnDemandTools.API.Tests.PostPackage
         }
 
         [Fact]
-        protected void Post_WithInValidPackage_PackageDataEmptyTest()
+        public void Post_WithInValidPackage_PackageDataEmptyTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_PackageEmpty);
             JObject response = new JObject();
@@ -65,7 +65,7 @@ namespace OnDemandTools.API.Tests.PostPackage
         }
 
         [Fact]
-        protected void Post_WithInValidPackage_PackageDataNotPresentTest()
+        public void Post_WithInValidPackage_PackageDataNotPresentTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_PackageNotPresent);
             JObject response = new JObject();
@@ -86,7 +86,7 @@ namespace OnDemandTools.API.Tests.PostPackage
         }
 
         [Fact]
-        protected void Post_WithInValidPackage_TitleIdsEmptyTest()
+        public void Post_WithInValidPackage_TitleIdsEmptyTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_TitleIdsEmpty);
             JObject response = new JObject();
@@ -107,7 +107,7 @@ namespace OnDemandTools.API.Tests.PostPackage
         }
 
         [Fact]
-        protected void Post_WithInValidPackage_TypeNotPresentTest()
+        public void Post_WithInValidPackage_TypeNotPresentTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_TypeNotPresent);
             JObject response = new JObject();
