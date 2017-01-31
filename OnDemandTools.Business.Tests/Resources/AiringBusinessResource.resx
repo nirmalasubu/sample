@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TBSEAiring" xml:space="preserve">
+    <value>{"airingId": "TBSE1001241700000243","mediaId": "eb1b27b9778ed037b564a68b72ec1da9a03a41ef","name": "Parkie Awards, The",
+  "type": "Episode (Animated)",
+  "brand": "TBS",
+  "platform": "Cable",
+  "airings": [
+    {
+      "date": "2016-12-07T11:00:00Z",
+      "airingId": 8152316,
+      "linked": true
+    }
+  ],
+  "duration": {
+    "lengthInSeconds": 1354,
+    "displayMinutes": 30
+  },
+  "title": {
+    "rating": {},
+    "storyLine": {
+      "long": "After Benson doesn't take home the award for Park Manager of the Year, the guys want to make him feel like a winner.",
+      "short": "After Benson doesn't take home the award for Park Manager of the Year, the guys want to make him feel like a winner."
+    },
+    "releaseYear": 2015,
+    "keywords": "Awards, Friendship, Ghosts, Public speaking, Rites &amp; ceremonies, Suits (Clothing)",
+    "originalPremiereDate": "2015-08-06T04:00:00Z",
+    "episode": {
+      "name": "Parkie Awards, The",
+      "number": "196"
+    },
+    "series": {
+      "name": "Regular Show"
+    },
+    "season": {
+ "name": "Season 7","number": 7
+},
+    "participants": [],
+    "relatedTitleIds": [],
+    "titleIds": [
+      {
+        "type": "Episode",
+        "value": "2056504",
+        "authority": "Turner",
+        "primary": true
+      },
+      {
+        "type": "Episode",
+        "value": "EP013216350412",
+        "authority": "TMS",
+        "primary": false
+      },
+      {
+        "type": "Episode",
+        "value": "2056505",
+        "authority": "Turner",
+        "primary": false
+      },
+      {
+        "type": "Episode",
+        "value": "EP013216350413",
+        "authority": "TMS",
+        "primary": false
+      }
+    ]
+  },
+  "flights": [
+    {
+      "start": "2016-12-12T05:00:00Z",
+      "end": "2017-01-16T04:59:59Z",
+      "destinations": [
+        {
+          "externalId": 1,
+          "name": "TVN",
+          "authenticationRequired": false,
+          "package": {
+            "packageName": "REG 196",
+            "fileName": "REG 196",
+            "titleDigital": "RegShow: Parkie Awards, The",
+            "titleBrief": "Parkie Awards, The",
+            "genres": [
+              "Children"
+            ],
+            "subGenres": [],
+            "contentTiers": [
+              "CARTOONNETWORK_20_SELECT"
+            ],
+            "productCodes": [
+              "CTNOD"
+            ],
+            "guideCategories": [],
+            "programTypes": [],
+            "categories": [
+              "Regular Show;Kids/Kids Shows N-S/Regular Show"
+            ]
+          }
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "flags": {
+    "hd": false,
+    "cx": false,
+    "programmerBrandingReq": false,
+    "fastForwardAllowed": false,
+    "manuallyProcess": false
+  },
+  "versions": [
+    {
+      "contentId": "2J5JE",
+      "closedCaptioning": {
+        "file": true,
+        "encode": true
+      }
+    }
+  ],
+  "playList": [
+    {
+      "position": 1,
+      "type": "MaterialID",
+      "itemType": "Segment",
+      "idType": "MaterialID"
+    },
+    {
+      "position": 2,
+      "type": "MaterialID",
+      "itemType": "Segment",
+      "idType": "MaterialID"
+    }
+  ],
+  "deviceExclusions": [],
+  "webFlags": [],
+  "releasedOn": "2017-01-24T18:43:29.542Z",
+  "releasedBy": "c-xpanxion-ganesan",
+  "options": {
+    "files": [],
+    "titles": [],
+    "series": [],
+    "changes": [
+ ],
+    "packages": [],
+    "destinations": []
+  },
+  "properties": {}
+}</value>
+  </data>
+  <data name="TBSEHistoryflightEnddateModified" xml:space="preserve">
+    <value>{ "AssetId" : "TBSE1001241700000243", "MediaId" : "eb1b27b9778ed037b564a68b72ec1da9a03a41ef", "Name" : "Parkie Awards, The", "Type" : "Episode (Animated)", "Network" : "TBS", "Platform" : "Cable", "Airings" : [ { "Date" : "2016-12-07T11:00:00.00Z" , "AiringId" : 8152316, "Linked" : true } ], "Duration" : { "LengthInSeconds" : 1354, "DisplayMinutes" : 30 }, "Title" : { "TVRating" : {  }, "StoryLine" : { "Long" : "want to make him feel like a winner.", "Short" : " the guys want to make him feel like a winner." }, "ReleaseYear" : 2015, "Keywords" : "Awards, Friendship, Ghosts, Public speaking, Rites &amp; ceremonies, Suits (Clothing)", "OriginalPremiereDate" :  "2015-08-06T04:00:00Z", "Episode" : { "Name" : "Parkie Awards, The", "Number" : "196", "ProductionNumber" : "" }, "Series" : { "Name" : "Regular Show" }, "Season" : { "Name" : "Season 7", "Number" : 7 }, "Participants" : [  ], "TitleIds" : [ { "Type" : "Episode", "Value" : "2056504", "Authority" : "Turner", "Primary" : true }, { "Type" : "Episode", "Value" : "EP013216350412", "Authority" : "TMS" }, { "Type" : "Episode", "Value" : "2056505", "Authority" : "Turner" }, { "Type" : "Episode", "Value" : "EP013216350413", "Authority" : "TMS" } ], "RelatedTitleIds" : [  ] }, "Turniverse" : { "Start":"2016-04-03T02:30:00Z","End":"2016-07-03T02:29:59Z", "Feeds" : [ { "name" : "TVN" } ] }, "Flights" : [{ "Start":"2017-02-03T02:30:00Z","End":"2017-08-03T02:29:59Z", "Destinations" : [ { "ExternalId" : 1, "Name" : "TVN", "Package" : { "PackageName" : "REG 196", "FileName" : "REG 196", "TitleDigital" : "RegShow: Parkie Awards, The", "TitleBrief" : "Parkie Awards, The", "Genres" : [ "Children" ], "SubGenres" : [  ], "ContentTiers" : [ "CARTOONNETWORK_20_SELECT" ], "ProductCodes" : [ "CTNOD" ], "GuideCategories" : [  ], "ProgramTypes" : [  ], "Categories" : [ "Regular Show;Kids/Kids Shows N-S/Regular Show" ] } } ], "Products" : [  ], "Tags" : [  ] } ], "Flags" : { "Hd" : false, "Cx" : false, "ProgrammerBrandingReq" : false, "FastForwardAllowed" : false, "ManuallyProcess" : false }, "Versions" : [ { "ContentId" : "2J5JE", "ClosedCaptioning" : { "File" : true, "Encode" : true } } ], "PlayList" : [ { "Position" : 1, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" }, { "Position" : 2, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" } ], "DeliveredTo" : [ "dc8b9100-6744-4090-b1d5-7bc96f15af68", "79593db7-fbde-4eab-a7f9-86fa15bbe659", "4ca79295-9813-4dee-9751-293ff3d88fb1" ], "DeviceExclusions" : [  ], "WebFlags" : [  ], "Tasks" : [  ], "ReleaseOn" : "2016-10-12T17:26:28.3575626Z", "ReleaseBy" : "c-xpanxion-ganesan", "Properties" : {  }, "IgnoredQueues" : [ "d2db802c-64c2-47e8-9612-450ad6c1e853" ] }</value>
+  </data>
+  <data name="TBSEHistoryInitial" xml:space="preserve">
+    <value>{ "AssetId" : "TBSE1001241700000243", "MediaId" : "eb1b27b9778ed037b564a68b72ec1da9a03a41ef", "Name" : "Parkie Awards, The", "Type" : "Episode (Animated)", "Network" : "TBS", "Platform" : "Cable", "Airings" : [ { "Date" : "2016-12-07T11:00:00.00Z" , "AiringId" : 8152316, "Linked" : true } ], "Duration" : { "LengthInSeconds" : 1354, "DisplayMinutes" : 30 }, "Title" : { "TVRating" : {  }, "StoryLine" : { "Long" : "want to make him feel like a winner.", "Short" : " the guys want to make him feel like a winner." }, "ReleaseYear" : 2015, "Keywords" : "Awards, Friendship, Ghosts, Public speaking, Rites &amp; ceremonies, Suits (Clothing)", "OriginalPremiereDate" :  "2015-08-06T04:00:00Z", "Episode" : { "Name" : "Parkie Awards, The", "Number" : "196", "ProductionNumber" : "" }, "Series" : { "Name" : "Regular Show" }, "Season" : { "Name" : "Season 7", "Number" : 7 }, "Participants" : [  ], "TitleIds" : [ { "Type" : "Episode", "Value" : "2056504", "Authority" : "Turner", "Primary" : true }, { "Type" : "Episode", "Value" : "EP013216350412", "Authority" : "TMS" }, { "Type" : "Episode", "Value" : "2056505", "Authority" : "Turner" }, { "Type" : "Episode", "Value" : "EP013216350413", "Authority" : "TMS" } ], "RelatedTitleIds" : [  ] }, "Turniverse" : { "Start":"2016-04-03T02:30:00Z","End":"2016-07-03T02:29:59Z", "Feeds" : [ { "name" : "TVN" } ] }, "Flights" : [{ "Start":"2016-04-03T02:30:00Z","End":"2016-07-03T02:29:59Z", "Destinations" : [ { "ExternalId" : 1, "Name" : "TVN", "Package" : { "PackageName" : "REG 196", "FileName" : "REG 196", "TitleDigital" : "RegShow: Parkie Awards, The", "TitleBrief" : "Parkie Awards, The", "Genres" : [ "Children" ], "SubGenres" : [  ], "ContentTiers" : [ "CARTOONNETWORK_20_SELECT" ], "ProductCodes" : [ "CTNOD" ], "GuideCategories" : [  ], "ProgramTypes" : [  ], "Categories" : [ "Regular Show;Kids/Kids Shows N-S/Regular Show" ] } } ], "Products" : [  ], "Tags" : [  ] } ], "Flags" : { "Hd" : false, "Cx" : false, "ProgrammerBrandingReq" : false, "FastForwardAllowed" : false, "ManuallyProcess" : false }, "Versions" : [ { "ContentId" : "2J5JE", "ClosedCaptioning" : { "File" : true, "Encode" : true } } ], "PlayList" : [ { "Position" : 1, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" }, { "Position" : 2, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" } ], "DeliveredTo" : [ "dc8b9100-6744-4090-b1d5-7bc96f15af68", "79593db7-fbde-4eab-a7f9-86fa15bbe659", "4ca79295-9813-4dee-9751-293ff3d88fb1" ], "DeviceExclusions" : [  ], "WebFlags" : [  ], "Tasks" : [  ], "ReleaseOn" : "2016-10-12T17:26:28.3575626Z", "ReleaseBy" : "c-xpanxion-ganesan", "Properties" : {  }, "IgnoredQueues" : [ "d2db802c-64c2-47e8-9612-450ad6c1e853" ] }</value>
+  </data>
+  <data name="TBSEHistoryWithFightDateModified" xml:space="preserve">
+    <value>{ "AssetId" : "TBSE1001241700000243", "MediaId" : "eb1b27b9778ed037b564a68b72ec1da9a03a41ef", "Name" : "Parkie Awards, The", "Type" : "Episode (Animated)", "Network" : "TBS", "Platform" : "Cable", "Airings" : [ { "Date" : "2016-12-07T11:00:00.00Z" , "AiringId" : 8152316, "Linked" : true } ], "Duration" : { "LengthInSeconds" : 1354, "DisplayMinutes" : 30 }, "Title" : { "TVRating" : {  }, "StoryLine" : { "Long" : "want to make him feel like a winner.", "Short" : " the guys want to make him feel like a winner." }, "ReleaseYear" : 2015, "Keywords" : "Awards, Friendship, Ghosts, Public speaking, Rites &amp; ceremonies, Suits (Clothing)", "OriginalPremiereDate" :  "2015-08-06T04:00:00Z", "Episode" : { "Name" : "Parkie Awards, The", "Number" : "196", "ProductionNumber" : "" }, "Series" : { "Name" : "Regular Show" }, "Season" : { "Name" : "Season 7", "Number" : 7 }, "Participants" : [  ], "TitleIds" : [ { "Type" : "Episode", "Value" : "2056504", "Authority" : "Turner", "Primary" : true }, { "Type" : "Episode", "Value" : "EP013216350412", "Authority" : "TMS" }, { "Type" : "Episode", "Value" : "2056505", "Authority" : "Turner" }, { "Type" : "Episode", "Value" : "EP013216350413", "Authority" : "TMS" } ], "RelatedTitleIds" : [  ] }, "Turniverse" : { "Start":"2016-04-03T02:30:00Z","End":"2016-07-03T02:29:59Z", "Feeds" : [ { "name" : "TVN" } ] }, "Flights" : [{ "Start":"2017-02-03T02:30:00Z","End":"2017-07-03T02:29:59Z", "Destinations" : [ { "ExternalId" : 1, "Name" : "TVN", "Package" : { "PackageName" : "REG 196", "FileName" : "REG 196", "TitleDigital" : "RegShow: Parkie Awards, The", "TitleBrief" : "Parkie Awards, The", "Genres" : [ "Children" ], "SubGenres" : [  ], "ContentTiers" : [ "CARTOONNETWORK_20_SELECT" ], "ProductCodes" : [ "CTNOD" ], "GuideCategories" : [  ], "ProgramTypes" : [  ], "Categories" : [ "Regular Show;Kids/Kids Shows N-S/Regular Show" ] } } ], "Products" : [  ], "Tags" : [  ] } ], "Flags" : { "Hd" : false, "Cx" : false, "ProgrammerBrandingReq" : false, "FastForwardAllowed" : false, "ManuallyProcess" : false }, "Versions" : [ { "ContentId" : "2J5JE", "ClosedCaptioning" : { "File" : true, "Encode" : true } } ], "PlayList" : [ { "Position" : 1, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" }, { "Position" : 2, "Type" : "MaterialID", "ItemType" : "Segment", "IdType" : "MaterialID" } ], "DeliveredTo" : [ "dc8b9100-6744-4090-b1d5-7bc96f15af68", "79593db7-fbde-4eab-a7f9-86fa15bbe659", "4ca79295-9813-4dee-9751-293ff3d88fb1" ], "DeviceExclusions" : [  ], "WebFlags" : [  ], "Tasks" : [  ], "ReleaseOn" : "2016-10-12T17:26:28.3575626Z", "ReleaseBy" : "c-xpanxion-ganesan", "Properties" : {  }, "IgnoredQueues" : [ "d2db802c-64c2-47e8-9612-450ad6c1e853" ] }</value>
+  </data>
+</root>

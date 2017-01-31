@@ -55,221 +55,54 @@ namespace OnDemandTools.Business.Tests.Airing
       
 
         [Fact, Order(1)]
-        public void OneToOneProperties_WhenDifferent_ShouldShowAsAChange()
+        public void GetAiringwithOptionChange_InitialReleaseTest()
         {
 
             // Arrange
             var mockService = new Mock<IChangeHistoricalAiringQuery>();
+            JObject jDalObject = JObject.Parse(Resources.AiringBusinessResource.ResourceManager.GetString("TBSEHistoryInitial"));
+            JObject jBusinessObject = JObject.Parse(Resources.AiringBusinessResource.ResourceManager.GetString("TBSEAiring"));
+            var HistoryAirings = jDalObject.ToObject<DAL.Modules.Airings.Model.Airing>();
+            
+            List<DAL.Modules.Airings.Model.Airing> lstHistoryairings = new List<DAL.Modules.Airings.Model.Airing>();
+            lstHistoryairings.Add(HistoryAirings);
+            var airing = jBusinessObject.ToObject<Modules.Airing.Model.Alternate.Long.Airing>();
 
-            JObject jObject = JObject.Parse(Resources.Resources.CartoonAiringWith3Flights);
-            var dd = jObject.ToObject<DAL.Modules.Airings.Model.Airing>();
-           
+            _changeHistoricalAiringQueryHelper.Setup(cr => cr.Find(It.IsAny<List<string>>())).Returns(lstHistoryairings);
 
-          
-            List <DAL.Modules.Airings.Model.Airing> lstairings = new List<DAL.Modules.Airings.Model.Airing>();
-            lstairings.Add(dd);
-            var airing = jObject.ToObject<Modules.Airing.Model.Alternate.Long.Airing>();
-
-            _changeHistoricalAiringQueryHelper.Setup(cr =>cr.Find(It.IsAny<List<string>>())).Returns(lstairings);
+            //Act
             _airingService.AppendChanges(ref airing);
 
+            //Assert
+            Assert.True(airing.Options.Changes[0].TheChange == "New Release", string.Format("The value returned for change should be 'New Release' but it is returned as {0}", airing.Options.Changes[0].TheChange));
         }
-        
 
-        //[Fact, Order(1)]
-        //public void MultipleProperties_WhenDifferent_ShouldShowAsASeparateChanges()
-        //{
-        //    var currentAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                             {
-        //                                                 new Flight { Start = DateTime.Today.AddDays(-60), End = DateTime.Today.AddDays(-55) },
-        //                                                 new Flight { Start = DateTime.Today.AddDays(-50), End = DateTime.Today.AddDays(-45) }
-        //                                             },
-        //        Title = new Title
-        //        {
-        //            Keywords = "one two three",
-        //            ReleaseYear = 1
-        //        }
-        //    };
+        [Fact, Order(2)]
+        public void GetAiringwithOptionChange_ChangeTest()
+        {
 
-        //    var originalAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                              {
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-60),
-        //                                                          End = DateTime.Today.AddDays(-55)
-        //                                                      },
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-50),
-        //                                                          End = DateTime.Today.AddDays(-45)
-        //                                                      }
-        //                                              },
-        //        Title = new Title
-        //        {
-        //            Keywords = "four five six",
-        //            ReleaseYear = 2
-        //        }
-        //    };
+            // Arrange
+            var mockService = new Mock<IChangeHistoricalAiringQuery>();
+            JObject jDalHisoryInitialObject = JObject.Parse(Resources.AiringBusinessResource.ResourceManager.GetString("TBSEHistoryInitial"));
+            JObject jDalHistorySecondObject = JObject.Parse(Resources.AiringBusinessResource.ResourceManager.GetString("TBSEHistoryWithFightDateModified"));
+            JObject jBusinessObject = JObject.Parse(Resources.AiringBusinessResource.ResourceManager.GetString("TBSEAiring"));
+            var HistoryAirings = jDalHisoryInitialObject.ToObject<DAL.Modules.Airings.Model.Airing>();
 
-        //    var results = _finder.Find(currentAsset, originalAsset);
+            List<DAL.Modules.Airings.Model.Airing> lstHistoryairings = new List<DAL.Modules.Airings.Model.Airing>();
+            lstHistoryairings.Add(jDalHisoryInitialObject.ToObject<DAL.Modules.Airings.Model.Airing>());
+            lstHistoryairings.Add(jDalHistorySecondObject.ToObject<DAL.Modules.Airings.Model.Airing>());
+            var airing = jBusinessObject.ToObject<Modules.Airing.Model.Alternate.Long.Airing>();
 
-        //    Assert.That(results.Count(), Is.EqualTo(2));
+            _changeHistoricalAiringQueryHelper.Setup(cr => cr.Find(It.IsAny<List<string>>())).Returns(lstHistoryairings);
 
-        //    Assert.That(results.Last().TheChange, Is.EqualTo(@"Title's Keywords"));
-        //    Assert.That(results.First().TheChange, Is.EqualTo(@"Title's ReleaseYear"));
-        //}
+            //Act
+            _airingService.AppendChanges(ref airing);
 
-        //[Fact, Order(1)]
-        //public void Collections_WhenHavingDifferentCounts_ShouldShowAsChange()
-        //{
-        //    var currentAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                             {
-        //                                                 new Flight
-        //                                                     {
-        //                                                         Start = DateTime.Today.AddDays(-60),
-        //                                                         End = DateTime.Today.AddDays(-55),
-        //                                                         Destinations = new List<Destination>
-        //                                                                            {
-        //                                                                                new Destination {Name = "one"},
-        //                                                                                new Destination {Name = "two"},
-        //                                                                                new Destination {Name = "three"}
-        //                                                                            }
-        //                                                     },
-        //                                                 new Flight
-        //                                                     {
-        //                                                         Start = DateTime.Today.AddDays(-50),
-        //                                                         End = DateTime.Today.AddDays(-45),
-        //                                                         Destinations = new List<Destination>
-        //                                                                            {
-        //                                                                                new Destination {Name = "one"},
-        //                                                                                new Destination {Name = "two"},
-        //                                                                                new Destination {Name = "three"}
-        //                                                                            }
-        //                                                     }
-        //                                             }
-        //    };
+            //Assert
+            Assert.True(airing.Options.Changes[0].TheChange == "Flights's Start", string.Format("The value returned for change should be 'Flights's Start' but it is returned as {0}", airing.Options.Changes[0].TheChange));
+            Assert.True(airing.Options.Changes[1].TheChange == "Flights's End", string.Format("The value returned for change should be 'Flights's End' but it is returned as {0}", airing.Options.Changes[1].TheChange));
+        }
 
-        //    var originalAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                              {
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-60),
-        //                                                          End = DateTime.Today.AddDays(-55),
-        //                                                          Destinations = new List<Destination>
-        //                                                                             {
-        //                                                                                 new Destination {Name = "one"},
-        //                                                                                 new Destination {Name = "two"},
-        //                                                                                 new Destination
-        //                                                                                     {Name = "three"},
-        //                                                                                 new Destination {Name = "four"}
-        //                                                                             }
-        //                                                      },
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-50),
-        //                                                          End = DateTime.Today.AddDays(-45),
-        //                                                          Destinations = new List<Destination>
-        //                                                                             {
-        //                                                                                 new Destination {Name = "one"},
-        //                                                                                 new Destination {Name = "two"},
-        //                                                                                 new Destination
-        //                                                                                     {Name = "three"},
-        //                                                                                 new Destination {Name = "four"}
-        //                                                                             }
-        //                                                      }
-        //                                              }
-
-        //    };
-
-        //    var results = _finder.Find(currentAsset, originalAsset);
-
-        //    Assert.That(results.Count(), Is.EqualTo(2));
-
-        //    Assert.That(results.First().TheChange, Is.EqualTo(@"Flights's Destinations"));
-        //}
-
-        //[Fact, Order(1)]
-        //public void Collections_WhenHavingSameCountsButPropertiesDontMatch_ShouldShowAsSeparateChanges()
-        //{
-        //    var currentAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                             {
-        //                                                 new Flight
-        //                                                     {
-        //                                                         Start = DateTime.Today.AddDays(-60),
-        //                                                         End = DateTime.Today.AddDays(-55),
-        //                                                         Destinations = new List<Destination>
-        //                                                                            {
-        //                                                                                new Destination {Name = "one"},
-        //                                                                                new Destination {Name = "two"},
-        //                                                                                new Destination {Name = "three"}
-        //                                                                            }
-        //                                                     },
-        //                                                 new Flight
-        //                                                     {
-        //                                                         Start = DateTime.Today.AddDays(-50),
-        //                                                         End = DateTime.Today.AddDays(-45),
-        //                                                         Destinations = new List<Destination>
-        //                                                                            {
-        //                                                                                new Destination {Name = "one"},
-        //                                                                                new Destination {Name = "two"},
-        //                                                                                new Destination {Name = "three"}
-        //                                                                            }
-        //                                                     }
-        //                                             },
-
-        //    };
-
-        //    var originalAsset = new Airing
-        //    {
-        //        Flights = new List<Flight>
-        //                                              {
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-60),
-        //                                                          End = DateTime.Today.AddDays(-55),
-        //                                                          Destinations = new List<Destination>
-        //                                                                             {
-        //                                                                                 new Destination {Name = "four"},
-        //                                                                                 new Destination {Name = "five"},
-        //                                                                                 new Destination {Name = "six"}
-        //                                                                             }
-        //                                                      },
-        //                                                  new Flight
-        //                                                      {
-        //                                                          Start = DateTime.Today.AddDays(-50),
-        //                                                          End = DateTime.Today.AddDays(-45),
-        //                                                          Destinations = new List<Destination>
-        //                                                                             {
-        //                                                                                 new Destination {Name = "four"},
-        //                                                                                 new Destination {Name = "five"},
-        //                                                                                 new Destination {Name = "six"}
-        //                                                                             }
-        //                                                      }
-        //                                              },
-
-        //    };
-
-        //    var results = _finder.Find(currentAsset, originalAsset);
-
-        //    Assert.That(results.Count(), Is.EqualTo(6));
-
-        //    Assert.That(results.First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //    Assert.That(results.Skip(1).Take(1).First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //    Assert.That(results.Skip(2).Take(1).First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //    Assert.That(results.Skip(3).Take(1).First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //    Assert.That(results.Skip(4).Take(1).First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //    Assert.That(results.Skip(5).Take(1).First().TheChange, Is.EqualTo(@"Destinations's Name"));
-        //}
-
+       
     }
 }

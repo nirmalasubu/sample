@@ -1,30 +1,21 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-
-using Microsoft.Extensions.DependencyModel;
 using System.Reflection;
-using AutoMapper;
+using System.Threading.Tasks;
 
-namespace OnDemandTools.Business.Tests.Helpers
+namespace OnDemandTools.API.Helpers
 {
-    public class BusinessTestFixture : IDisposable
+    /// <summary>
+    /// Extensions for Automapper profile initializations
+    /// </summary>
+    public static class AutoMapperHelper
     {
-        public IConfigurationRoot Configuration { get; }
 
-        public BusinessTestFixture()
-        {
-            LoadAutoMapper();
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-
-            Configuration = builder.Build();
-        }
-
-        private void LoadAutoMapper()
+        public static void InitializeAutoMapper(this IServiceCollection services)
         {
             // Load all libraries that under our namespace
             var odtLibraries = GetReferencingAssemblies("OnDemandTools")
@@ -45,13 +36,14 @@ namespace OnDemandTools.Business.Tests.Helpers
             });
         }
 
-        private  bool IsCandidateLibrary(RuntimeLibrary library, String assemblyName)
+
+        private static bool IsCandidateLibrary(RuntimeLibrary library, String assemblyName)
         {
             return library.Name == (assemblyName)
                 || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName, StringComparison.OrdinalIgnoreCase));
         }
 
-        private  IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
+        public static IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
         {
             var assemblies = new List<Assembly>();
             var dependencies = DependencyContext.Default.RuntimeLibraries;
@@ -64,11 +56,6 @@ namespace OnDemandTools.Business.Tests.Helpers
                 }
             }
             return assemblies;
-        }
-        
-        public void Dispose()
-        {
-            
         }
     }
 }

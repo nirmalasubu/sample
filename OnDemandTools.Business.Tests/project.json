@@ -7,9 +7,14 @@
     "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Moq": "4.6.36-*",
+    "AutoMapper": "5.2.0",
+    "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.1.2",
+    "Microsoft.Extensions.Options": "1.1.0",
     "OnDemandTools.DAL": "1.0.0-*",
-    "OnDemandTools.Business": "1.0.0-*"
+    "OnDemandTools.Business": "1.0.0-*",
+    "OnDemandTools.API.Utilities": "1.0.0-*"
   },
      "frameworks": {
       "netcoreapp1.1": {
