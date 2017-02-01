@@ -34,9 +34,9 @@ namespace OnDemandTools.API.v1.Routes
             IIdDistributor airingIdDistributorSvc,
             IAiringService airingSvc,
             IReportingService reporterSvc,
-            IProductService productSvc,                                 
+            IProductService productSvc,
             AiringValidator _validator,
-            IQueueService queueSvc,            
+            IQueueService queueSvc,
             Serilog.ILogger logger
             )
             : base("v1")
@@ -78,7 +78,7 @@ namespace OnDemandTools.API.v1.Routes
                 if (options.Contains(Appenders.Destination.ToString().ToLower()))
                     airingSvc.AppendDestinations(ref airingLong);
 
-                
+
                 if (options.Contains(Appenders.Change.ToString().ToLower()))
                     airingSvc.AppendChanges(ref airingLong);
 
@@ -89,7 +89,12 @@ namespace OnDemandTools.API.v1.Routes
                 if (options.Contains(Appenders.Package.ToString().ToLower()))
                     airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
 
-                return airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();;
+                var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
+
+                if (!options.Contains(Appenders.Package.ToString().ToLower()))
+                    model.Options.Packages = null;
+
+                return model;
             });
 
 
@@ -109,7 +114,7 @@ namespace OnDemandTools.API.v1.Routes
             });
 
             Get("/airings/seriesId/{seriesId}", _ =>
-            {                
+            {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var airings = airingSvc
                     .GetNonExpiredBy((int)_.seriesId, DateTime.UtcNow, true)
@@ -367,10 +372,10 @@ namespace OnDemandTools.API.v1.Routes
                         var message = results.Where(c => (!c.IsValid))
                                     .Select(c => c.Errors.Select(d => d.ErrorMessage));
 
-                       
+
                         logger.Error("Failure ingesting released asset: {AssetId}", new Dictionary<string, object>()
                                             {{ "airingid", request.AiringId },{ "mediaid", airing.MediaId }, { "error", message }   });
-                       
+
                         // Return status
                         return Negotiate.WithModel(message)
                                     .WithStatusCode(HttpStatusCode.BadRequest);
@@ -407,14 +412,14 @@ namespace OnDemandTools.API.v1.Routes
 
                     // Report status of this airing to monitoring system (digital fulfillment/logzio)
                     reporterSvc.Report(savedAiring);
-                    logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring));                   
+                    logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring));
 
                     // Return airing model                    
                     return savedAiring.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
                 }
                 catch (Exception e)
                 {
-                  
+
                     logger.Error(e, "Failure ingesting released asset. AssetId:{@assetId}", request.AiringId);
                     throw e;
                 }
@@ -422,14 +427,14 @@ namespace OnDemandTools.API.v1.Routes
             });
 
             #endregion
-            
+
             #region "DELETE Operations"
             Delete("/airing", _ =>
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Delete.Verb());
                 var request = this.Bind<VMAiringRequestModel.AiringRequest>();
                 var airing = Mapper.Map<BLAiringModel.Airing>(request);
-                
+
                 // validate
                 List<ValidationResult> results = new List<ValidationResult>();
                 results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.DeleteAiring.ToString()));
@@ -465,13 +470,13 @@ namespace OnDemandTools.API.v1.Routes
                     AiringId = airing.AssetId,
                     Message = "deleted successfully"
                 };
-                
+
             });
             #endregion
 
         }
 
-        
+
         private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(BLAiringModel.Airing savedAiring)
         {
             Dictionary<string, object> Airingdetails = new Dictionary<string, object>();
@@ -489,7 +494,7 @@ namespace OnDemandTools.API.v1.Routes
                 i++;
             }
             Airingdetails.Add("flightwindow", flightWindow);
-            Airingdetails.Add("destination", lstDestination.Distinct());         
+            Airingdetails.Add("destination", lstDestination.Distinct());
             return Airingdetails;
         }
 
