@@ -6,7 +6,7 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate;
 
-namespace OnDemandTools.API.Utilities.EntityMapping.Rules
+namespace OnDemandTools.Common.EntityMapping
 {
 
     public class PackageProfile : Profile

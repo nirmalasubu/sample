@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "OnDemandTools.Business": "1.0.0-*",
+    "OnDemandTools.DAL": "1.0.0-*",
+    "Microsoft.Extensions.Configuration": "1.1.0",
+    "Nancy": "2.0.0-barneyrubble",
+    "OnDemandTools.API.Utilities": "1.0.0-*",
+    "LightInject": "5.0.0",
+    "LightInject.Source": "5.0.0",
+    "StructureMap": "4.4.2"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

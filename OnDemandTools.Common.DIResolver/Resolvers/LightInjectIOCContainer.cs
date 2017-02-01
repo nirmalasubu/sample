@@ -1,33 +1,27 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyModel;
-using Nancy;
-using Nancy.TinyIoc;
+﻿using Microsoft.Extensions.DependencyModel;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
 using System.Linq;
-using System.Diagnostics;
 using OnDemandTools.Common.Configuration;
 
-namespace OnDemandTools.API.Utilities.Resolvers
+
+namespace OnDemandTools.Common.DIResolver.Resolvers
 {
-    public class TinyIOCResolver : IDependencyResolver
+    public class LightInjectIOCContainer : IDependencyResolver
     {
-        private TinyIoCContainer cntr;
+   
+        private LightInject.ServiceContainer cntr;
 
-
-        public TinyIOCResolver(TinyIoCContainer underlyingContainer)
+        public LightInjectIOCContainer(LightInject.ServiceContainer underlyingContainer)
         {
-            this.cntr = underlyingContainer;           
+            this.cntr = underlyingContainer;
         }
-    
 
         public void Dispose()
         {
             cntr.Dispose();
         }
-
-      
 
         public void RegisterImplmentation()
         {
@@ -36,7 +30,7 @@ namespace OnDemandTools.API.Utilities.Resolvers
                      .SelectMany(assembly => assembly.ExportedTypes)
                      .ToList();
 
-           
+
             var profiles = odtLibraries.Where(t => t.GetTypeInfo().IsClass
                         && !t.GetTypeInfo().IsAbstract
                         && !t.GetTypeInfo().IsInterface).ToList();
@@ -56,12 +50,10 @@ namespace OnDemandTools.API.Utilities.Resolvers
 
             // Add those that cannot be auto registered. Basically the ones outside 'OnDemandTools' namespace or
             // someother special case   
-            cntr.Register(typeof(ISerializer), typeof(OnDemandTools.API.Utilities.Serialization.CustomJsonSerializer));          
 
 
             // Special initialization for StatusLibrary class
-            OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init(cntr.Resolve<AppSettings>());
-
+            OnDemandTools.DAL.Modules.Reporting.Library.StatusLibrary.Init((AppSettings)cntr.GetInstance(typeof(AppSettings)));
         }
 
 
@@ -78,9 +70,9 @@ namespace OnDemandTools.API.Utilities.Resolvers
             var dependencies = DependencyContext.Default.RuntimeLibraries;
             foreach (var library in dependencies)
             {
-                
+
                 if (IsOnDemand(library, assemblyName))
-                {                  
+                {
                     var assembly = Assembly.Load(new AssemblyName(library.Name));
                     assemblies.Add(assembly);
                 }

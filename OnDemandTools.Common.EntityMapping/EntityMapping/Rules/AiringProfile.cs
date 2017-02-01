@@ -4,7 +4,7 @@ using BLModel = OnDemandTools.Business.Modules.Airing.Model;
 using DLModel = OnDemandTools.DAL.Modules.Airings.Model;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 
-namespace OnDemandTools.API.Utilities.EntityMapping.Rules
+namespace OnDemandTools.Common.EntityMapping
 {
     public class AiringProfile : Profile
     {

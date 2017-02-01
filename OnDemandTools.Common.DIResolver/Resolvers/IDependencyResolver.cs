@@ -1,6 +1,6 @@
 using System;
 
-namespace OnDemandTools.API.Utilities.Resolvers
+namespace OnDemandTools.Common.DIResolver
 { 
     public interface IDependencyResolver : IDisposable
     {

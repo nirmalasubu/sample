@@ -12,9 +12,12 @@
     "AutoMapper": "5.2.0",
     "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.1.2",
     "Microsoft.Extensions.Options": "1.1.0",
-    "OnDemandTools.DAL": "1.0.0-*",
     "OnDemandTools.Business": "1.0.0-*",
-    "OnDemandTools.API.Utilities": "1.0.0-*"
+    "OnDemandTools.Common.EntityMapping": "1.0.0-*",
+    "LightInject": "5.0.0",
+    "LightInject.Source": "5.0.0",
+    "OnDemandTools.Common.DIResolver": "1.0.0-*",
+    "StructureMap": "4.4.2"
   },
      "frameworks": {
       "netcoreapp1.1": {

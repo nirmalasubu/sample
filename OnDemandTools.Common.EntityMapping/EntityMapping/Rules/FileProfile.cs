@@ -4,7 +4,7 @@ using BLModel = OnDemandTools.Business.Modules.File.Model;
 using DLModel = OnDemandTools.DAL.Modules.File.Model;
 using BLAltFileModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 
-namespace OnDemandTools.API.Utilities.EntityMapping.Rules
+namespace OnDemandTools.Common.EntityMapping
 {
     public class FileProfile:Profile
     {

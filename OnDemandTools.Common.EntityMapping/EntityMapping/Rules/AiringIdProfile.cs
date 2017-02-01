@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using BLModel = OnDemandTools.Business.Modules.AiringId.Model;
 using DLModel = OnDemandTools.DAL.Modules.AiringId.Model;
 
-namespace OnDemandTools.API.Utilities.EntityMapping.Rules
+namespace OnDemandTools.Common.EntityMapping
 {
     public class AiringIdProfile: Profile
     {

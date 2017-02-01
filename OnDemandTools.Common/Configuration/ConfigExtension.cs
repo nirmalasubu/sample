@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnDemandTools.Common.Configuration
-{    public static class ConfigurationExtensions
+{
+    public static class ConfigurationExtensions
     {
         public static String Get(this IConfiguration configuration, String key)
         {
@@ -19,6 +18,13 @@ namespace OnDemandTools.Common.Configuration
             return configuration.Services
                     .Where(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .Single();
+        }
+
+        public static T Get<T>(this IConfiguration config, string key) where T : new()
+        {
+            var instance = new T();
+            config.GetSection(key).Bind(instance);
+            return instance;
         }
     }
 }
