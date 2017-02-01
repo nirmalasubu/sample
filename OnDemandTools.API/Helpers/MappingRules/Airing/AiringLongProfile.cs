@@ -3,6 +3,8 @@ using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using OnDemandTools.API.v1.Models.Airing.Change;
+using OnDemandTools.API.v1.Models.Airing.Title;
+using OnDemandTools.Common.Extensions;
 
 namespace OnDemandTools.API.Helpers.MappingRules.Airing
 {
@@ -165,6 +167,9 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Alternate.Change.DeletionChange, Change>();
             CreateMap<BLAiringModel.Alternate.Change.NewReleaseChange, Change>();
 
+            CreateMap<BLAiringModel.Alternate.Title.Title, Title>()
+                          .ForMember(dest => dest.ExternalSources, opt => opt.Condition(src => (!src.ExternalSources.IsNullOrEmpty() && src.ExternalSources.Count > 0)));
+            CreateMap<BLAiringModel.Alternate.Title.ExternalSource, ExternalSource>();
         }
     }
 }
