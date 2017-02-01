@@ -69,6 +69,15 @@ namespace OnDemandTools.API.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Don&apos;t Look&quot;,&quot;Type&quot;:&quot;Episode (Animated)&quot;,&quot;Brand&quot;:&quot;Cartoon&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2016-04-02T23:00:00Z&quot;,&quot;AiringId&quot;:7906079,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1390,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-PG&quot;,&quot;Description&quot;:&quot;&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;At the top of Dead Mountain, Finn discovers a treasure that comes with a terrible price.&quot;,&quot;Short&quot;:&quot;&quot;},&quot;ReleaseYear&quot;:2016,&quot;Keywords&quot;:&quot;Eyes, Magic, Metamorphosis, Self-esteem, Self-loathing&quot;,&quot;OriginalPremiereDate&quot;:&quot;201 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CartoonAiringWithNoVersion {
+            get {
+                return ResourceManager.GetString("CartoonAiringWithNoVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to  {&quot;AiringId&quot;:&quot;&quot;,&quot;Name&quot;:&quot;ProhibitResendMediaId&quot;,&quot;Type&quot;:&quot;Episode (Animated)&quot;,&quot;Brand&quot;:&quot;Cartoon&quot;,
         ///    &quot;Platform&quot;:&quot;Broadband&quot;,
         ///    &quot;Airings&quot;:[{&quot;Date&quot;:&quot;2016-11-02T23:00:00Z&quot;,&quot;AiringId&quot;:7906010,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1390,&quot;DisplayMinutes&quot;:30}
