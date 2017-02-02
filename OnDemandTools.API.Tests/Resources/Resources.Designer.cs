@@ -172,6 +172,24 @@ namespace OnDemandTools.API.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Our Other Cops Is On !, Part 2&quot;,&quot;Type&quot;:&quot;Episode (Non-Animated)&quot;,&quot;Brand&quot;:&quot;TBS&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2013-09-11T11:30:00Z&quot;,&quot;AiringId&quot;:7108144,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1223,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-14&quot;,&quot;Description&quot;:&quot;D,L,S,V&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;When Randy is about to turn off the prison TV, another Camden episode of \&quot;COPS\&quot; is shown, this time it evolves around the events on Independence Day.&quot;,&quot;Short&quot;:&quot;When Randy is about to turn [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TBSAiringWithValidProduct {
+            get {
+                return ResourceManager.GetString("TBSAiringWithValidProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Our Other Cops Is On !, Part 2&quot;,&quot;Type&quot;:&quot;Episode (Non-Animated)&quot;,&quot;Brand&quot;:&quot;TBS&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2013-09-11T11:30:00Z&quot;,&quot;AiringId&quot;:7108144,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1223,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-14&quot;,&quot;Description&quot;:&quot;D,L,S,V&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;When Randy is about to turn off the prison TV, another Camden episode of \&quot;COPS\&quot; is shown, this time it evolves around the events on Independence Day.&quot;,&quot;Short&quot;:&quot;When Randy is about to turn [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TBSAiringWithValidProductAndNoDestination {
+            get {
+                return ResourceManager.GetString("TBSAiringWithValidProductAndNoDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[1234,&quot;3456&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
         /// </summary>
         public static string ValidPackage {
