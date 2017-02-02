@@ -91,7 +91,7 @@ namespace OnDemandTools.API.v1.Routes
 
                 var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
 
-                if (!options.Contains(Appenders.Package.ToString().ToLower()))
+                if (!options.Contains(Appenders.Package.ToString().ToLower()) || model.Options.Packages.Count <= 0)
                     model.Options.Packages = null;
 
                 return model;
