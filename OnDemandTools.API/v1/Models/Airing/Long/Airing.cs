@@ -59,12 +59,5 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
             Options = new Options();
             Properties = new SerializableDictionary<string, object>();
         }
-
-        public bool ShouldSerializeOptions()
-        {
-            // Serialize if Options not empty
-            return ((Options.Status != null || Options.Files.Count > 0 || Options.Titles.Count > 0 || Options.Series.Count > 0 ||
-                     Options.Changes.Count > 0 || Options.Destinations.Count > 0 || Options.Destinations.Count > 0 || Options.Packages != null));
-        }
     }
 }
