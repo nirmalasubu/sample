@@ -7,7 +7,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
     public class Airing
     {
         public string AiringId { get; set; }
-       
+
         public string MediaId { get; set; }
 
         public string Name { get; set; }
@@ -55,7 +55,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
             Duration = new Duration();
             Title = new Title();
             Flags = new Flags();
-          
+
             Options = new Options();
             Properties = new SerializableDictionary<string, object>();
         }
@@ -63,7 +63,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
         public bool ShouldSerializeOptions()
         {
             // Serialize if Options not empty
-            return ((Options.Files.Count > 0 || Options.Titles.Count > 0 || Options.Series.Count > 0 ||
+            return ((Options.Status != null || Options.Files.Count > 0 || Options.Titles.Count > 0 || Options.Series.Count > 0 ||
                      Options.Changes.Count > 0 || Options.Destinations.Count > 0 || Options.Destinations.Count > 0 || Options.Packages != null));
         }
     }
