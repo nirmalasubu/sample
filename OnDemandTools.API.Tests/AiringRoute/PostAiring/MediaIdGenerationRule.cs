@@ -46,6 +46,24 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
         }
 
         [Fact, Order(1)]
+        public void EnsureMediaIdIsDifferentWhenContentIsInDifferntOrder()
+        {
+            //JSON string with version with out AiringId, MediaID
+            string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(Resources.Resources.CartoonAiringWithVersionCIDOrderChanged, 0), "Media Id Generation test");
+
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/" + airingId, Method.GET);
+            Task.Run(async () =>
+            {
+                response = await _clientLocal.RetrieveRecord(request);
+
+            }).Wait();
+
+            // Assert
+            Assert.NotEqual("94ca5f6ac5222ef35a24ed05df0427ee33b32362", response.Value<string>(@"mediaId"));
+        }
+
+        [Fact, Order(1)]
         public void PostAiring_WithOutVersion_MediaIdNonGenerationTest()
         {
             //JSON string with out version
