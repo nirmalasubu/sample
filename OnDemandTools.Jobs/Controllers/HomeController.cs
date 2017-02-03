@@ -16,12 +16,6 @@ namespace OnDemandTools.Jobs.Controllers
     public class HomeController : Controller
     {
 
-        //public IActionResult Index()
-        //{
-        //    return Redirect("/dashboard");
-        //}
-
-
         Publisher pub;
         Deporter dep;
         TitleSync tsy;
@@ -32,33 +26,47 @@ namespace OnDemandTools.Jobs.Controllers
             this.tsy = tsy;
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View();
-        }
 
         [Route("")]
+        public IActionResult Index()
+        {
+            return Redirect("/dashboard");
+        }
+
+        public IActionResult Whoami()
+        {
+            //TODO - add code similar to the API whoami
+
+            return View();
+        }
+
+        public IActionResult Healthcheck()
+        {
+            //TODO - add code similar to API
+
+            return View();
+        }
+
+        public IActionResult Heartbeat()
+        {
+            //TODO - add code similar to job healthcheck that we have in ODT web
+
+            return View();
+        }
+
+
+
         public IActionResult Register()
         {
+            //TODO - left here as reference. update as needed
             var manager = new RecurringJobManager();
-            var id = Guid.NewGuid().ToString();
-            manager.AddOrUpdate("Deporter-" + id, Job.FromExpression(() => dep.Execute()), "*/2 * * * *", TimeZoneInfo.Utc);
-            manager.AddOrUpdate("Publisher-" + id, Job.FromExpression(() => pub.Execute()), "*/3 * * * *", TimeZoneInfo.Utc);
-            manager.AddOrUpdate("TitleSync-" + id, Job.FromExpression(() => tsy.Execute()), "*/1 * * * *", TimeZoneInfo.Utc);
+
+            // Create multiple job among multiple instances
+            manager.AddOrUpdate("Publisher-" + Guid.NewGuid().ToString(), Job.FromExpression(() => pub.Execute()), "*/3 * * * *", TimeZoneInfo.Utc);
+
+            // Just oone job among multiple instances
+            manager.AddOrUpdate("Deporter-", Job.FromExpression(() => dep.Execute()), "*/2 * * * *", TimeZoneInfo.Utc);
+            manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), "*/1 * * * *", TimeZoneInfo.Utc);
 
             return Redirect("/dashboard");
         }

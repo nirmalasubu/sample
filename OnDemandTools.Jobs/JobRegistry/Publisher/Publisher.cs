@@ -5,13 +5,19 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
     public class Publisher
     {
-               
+        //resolve all concrete implementations in constructor        
+        Serilog.ILogger logger;
+        public Publisher(Serilog.ILogger logger)
+        {
+           
+            this.logger = logger;
+        }
+
         public void Execute()
         {
-            var rand = new Random(1);
-            var min = rand.Next(3, 10);
-            min = min * 60 * 1000;
-            Thread.Sleep(min);
+            logger.Information("started publisher job");
+            Thread.Sleep(1000);
+            logger.Information("ending publisher job");
         }
     }
 }

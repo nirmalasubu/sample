@@ -35,6 +35,7 @@ namespace OnDemandTools.Jobs
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            // Retrieve configurations
             services.AddSingleton<IConfigurationRoot>(Configuration);
             services.Configure<AppSettings>(Configuration.GetSection("Application"));
             var appSettings = Configuration.Get<AppSettings>("Application");

@@ -7,18 +7,20 @@ namespace OnDemandTools.Jobs.JobRegistry.TitleSync
 {
     public class TitleSync
     {
+        //resolve all concrete implementations in constructor
         IAiringService svc;
-        public TitleSync(IAiringService svc)
+        Serilog.ILogger logger;
+        public TitleSync(IAiringService svc, Serilog.ILogger logger)
         {
            this.svc = svc;
+            this.logger = logger;
         }
 
         public void Execute()
         {
-            var rand = new Random(1);
-            var min = rand.Next(3, 10);
-            min = min * 60 * 1000;
-            Thread.Sleep(min);
+            logger.Information("started titlesync job");
+            Thread.Sleep(3000);
+            logger.Information("ending titlesync job");
         }
     }
 }
