@@ -47,6 +47,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Common.DIReso
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Jobs", "OnDemandTools.Jobs\OnDemandTools.Jobs.xproj", "{E6B57678-0B2D-432A-88C9-BCE27E98021B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OnDemandTools.Jobs.Tests", "OnDemandTools.Jobs.Tests\OnDemandTools.Jobs.Tests.xproj", "{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{E6B57678-0B2D-432A-88C9-BCE27E98021B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6B57678-0B2D-432A-88C9-BCE27E98021B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6B57678-0B2D-432A-88C9-BCE27E98021B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,5 +119,6 @@ Global
 		{E4025DE7-23B8-4253-9562-96896073FB50} = {1486A4EC-B070-4937-84B3-DF747A3263A7}
 		{84F7DF29-1D39-4190-972D-D44A9C4F126B} = {1486A4EC-B070-4937-84B3-DF747A3263A7}
 		{E6B57678-0B2D-432A-88C9-BCE27E98021B} = {3B8D019C-AC64-4016-8D48-57230E39C7AE}
+		{5C1B40E0-35B9-45D6-9EA8-5AE025C8FFA0} = {3B8D019C-AC64-4016-8D48-57230E39C7AE}
 	EndGlobalSection
 EndGlobal

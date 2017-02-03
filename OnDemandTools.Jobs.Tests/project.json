@@ -1,10 +1,24 @@
 {
     "version": "1.0.0-*",
     "testRunner": "xunit",
-    "dependencies": {
-        "dotnet-test-xunit": "2.2.0-preview2-build1029",
-        "xunit": "2.2.0-beta2-build3300"
-    },
+  "dependencies": {
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "xunit": "2.2.0-beta2-build3300",
+    "RestSharp.NetCore": "105.2.3",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
+    "Microsoft.Extensions.Configuration": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "OnDemandTools.Common": "1.0.0-*",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Moq": "4.6.36-*",
+    "AutoMapper": "5.2.0",
+    "AutoMapper.Extensions.Microsoft.DependencyInjection": "1.1.2",
+    "Microsoft.Extensions.Options": "1.1.0",
+    "OnDemandTools.Business": "1.0.0-*",
+    "OnDemandTools.Common.EntityMapping": "1.0.0-*",  
+    "OnDemandTools.Common.DIResolver": "1.0.0-*",
+    "StructureMap": "4.4.2"
+  },
     "frameworks": {
         "netcoreapp1.0": {
             "dependencies": {
