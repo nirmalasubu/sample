@@ -40,11 +40,10 @@ namespace OnDemandTools.Jobs.Controllers
             return View();
         }
 
-        public IActionResult Healthcheck()
+        [Route("/healthcheck")]
+        public JsonResult Healthcheck()
         {
-            //TODO - add code similar to API
-
-            return View();
+            return Json("Healthy");
         }
 
         public IActionResult Heartbeat()

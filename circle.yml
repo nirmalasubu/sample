@@ -27,7 +27,11 @@ compile:
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck
     - source envAPI; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
     
-    # Build image and verify for Deporter project
+    # Build image and verify for Job project
+    - source envJob; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Jobs/Dockerfile .
+    - source envJob; sudo docker run -d --name odt-job-container -p 5001:5000 "${IMAGE}"; sleep 10
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5001/healthcheck
+
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5001:5000 "${IMAGE}"
     
