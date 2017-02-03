@@ -31,7 +31,7 @@ compile:
     - source envJob; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Jobs/Dockerfile .
     - source envJob; sudo docker run -d --name odt-job-container -p 5001:5000 "${IMAGE}"; sleep 10
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5001/healthcheck
-
+    - sudo envJob; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.Jobs.Tests/Dockerfile .
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
     #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5001:5000 "${IMAGE}"
     
@@ -41,13 +41,13 @@ test:
     - source envAPI; sudo docker run -it --link odt-api-container:localhost --name odt-api-test-container "${IMAGE}-test"
     - sudo docker ps -a
     - sudo docker images
+     
+    # Job testing
+    - source envJob; sudo docker run -it --link odt-api-container:localhost --name odt-job-test-container "${IMAGE}-test"
+    
     - sudo docker stop odt-api-container
     - sudo docker stop odt-api-test-container
-  
-    # Deporter testing
-    #- sudo curl --retry 10 --retry-delay 5 -v http://0.0.0.0:5001/healthcheck
-    #- sudo curl --retry 10 --retry-delay 5 -v http://localhost:5001/healthcheck
-    #- sudo docker stop odt-deporter-container
+    - sudo docker stop odt-job-test-container
 
 
 deployment:
@@ -58,6 +58,6 @@ deployment:
       - source envAPI; sudo docker push "${IMAGE}"
       - source envAPI; sudo docker run -it --env-file "envAPI" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
-      # Deploy deporter job
-      #- source envDeporter; sudo docker push "${IMAGE}"
-      #- source envDeporter; sudo docker run -it --env-file "envDeporter" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+      # Deploy job
+      - source envJob; sudo docker push "${IMAGE}"
+      - source envJob; sudo docker run -it --env-file "envJob" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
