@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OnDemandTools.Common.Configuration
@@ -41,5 +42,22 @@ namespace OnDemandTools.Common.Configuration
         public string ConnectionString { get; set; }
         public string ConnectionOptionsDefault { get; set; }
         public string ConnectionOptionsPrimary { get; set; }
+
+        public string DatabaseName
+        {
+            get
+            {
+                if(!String.IsNullOrEmpty(ConnectionString))
+                {
+                    string[] bits = ConnectionString.Split('/');
+                    return bits[bits.Length - 1];
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
     }
 }
