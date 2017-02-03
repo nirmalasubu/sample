@@ -7,7 +7,7 @@
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.Configuration.Binder": "1.1.0",
     "Microsoft.Extensions.Options": "1.1.0",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",   
+    "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "NETStandard.Library": "1.6.1",
@@ -15,7 +15,8 @@
     "Serilog": "2.3.0",
     "Serilog.Sinks.PeriodicBatching": "2.1.0",
     "System.Net.Http": "4.3.0",
-    "System.Xml.XmlSerializer": "4.0.11"
+    "System.Xml.XmlSerializer": "4.0.11",
+    "RestSharp.NetCore": "105.2.3"
   },
 
   "frameworks": {
