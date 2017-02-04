@@ -15,6 +15,10 @@ using Hangfire.Mongo;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Http;
 
 namespace OnDemandTools.Jobs
 {
@@ -82,13 +86,32 @@ namespace OnDemandTools.Jobs
 
             app.UseStaticFiles();
             app.UseHangfireServer();
-            app.UseHangfireDashboard("/dashboard");
+
+            //TODO - temporary solution to allow all users. Will need to come up with an
+            // authorization mechanism
+            app.UseHangfireDashboard("/dashboard", new DashboardOptions
+            {
+                Authorization = new[] {new CustomAuthorizationFilter()}
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=home}/{action=Index}/{id?}");
             });
+        }
+    }
+
+
+    //TODO - temporary solution to allow all users. Will need to come up with an
+    // authorization mechanism
+    public class CustomAuthorizationFilter : IDashboardAuthorizationFilter
+    {
+
+        public bool Authorize(DashboardContext context)
+        {
+            return true;
         }
     }
 }
