@@ -6,8 +6,10 @@ WORKDIR /app
 
 RUN ["dotnet", "restore"]
 
-WORKDIR /app/OnDemandTools.Jobs.Tests
+WORKDIR /app/OnDemandTools.Jobs
 
 RUN ["dotnet", "build"]
 
-CMD ["dotnet", "test"]
+EXPOSE 5000/tcp
+
+CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
