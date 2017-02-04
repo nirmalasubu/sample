@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace OnDemandTools.Job.Tests.Helpers
+namespace OnDemandTools.Jobs.Tests.Helpers
 {
     /// <summary>
     /// Custom xUnit test case orderer that uses the OrderAttribute
     /// </summary>
     public class CustomTestCaseOrderer : ITestCaseOrderer
     {
-        public const string TypeName = "OnDemandTools.Job.Tests.Helpers.CustomTestCaseOrderer";
+        public const string TypeName = "OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer";
 
-        public const string AssembyName = "OnDemandTools.Job.Tests";
+        public const string AssembyName = "OnDemandTools.Jobs.Tests";
 
         public static readonly ConcurrentDictionary<string, ConcurrentQueue<string>>
             QueuedTests = new ConcurrentDictionary<string, ConcurrentQueue<string>>();

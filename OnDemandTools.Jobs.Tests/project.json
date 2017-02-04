@@ -19,21 +19,21 @@
     "OnDemandTools.Common.DIResolver": "1.0.0-*",
     "StructureMap": "4.4.2"
   },
-    "frameworks": {
-        "netcoreapp1.0": {
-            "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "type": "platform",
-                    "version": "1.0.1"
-                }
-            }
+   "frameworks": {
+      "netcoreapp1.1": {
+        "dependencies": {
+          "Microsoft.NETCore.App": {
+            "type": "platform",
+            "version": "1.1.0"
+          }
         }
+      }
     },
-    "buildOptions": {
-        "copyToOutput": {
-            "include": [ "xunit.runner.json" ]
-        }
-    },
+  "buildOptions": {
+    "copyToOutput": {
+      "include": [ "xunit.runner.json" ]
+    }
+  },
     "tooling": {
         "defaultNamespace": "OnDemandTools.Jobs.Tests"
     }

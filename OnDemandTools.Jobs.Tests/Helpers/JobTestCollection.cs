@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Job.Tests.Helpers
+namespace OnDemandTools.Jobs.Tests.Helpers
 {
-    [CollectionDefinition("API Collection")]
+    [CollectionDefinition("Job Collection")]
     public class JobTestCollection:ICollectionFixture<JobTestFixture>
     {
     }

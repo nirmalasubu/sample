@@ -15,7 +15,7 @@ using AutoMapper;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.DIResolver;
 
-namespace OnDemandTools.Job.Tests.Helpers
+namespace OnDemandTools.Jobs.Tests.Helpers
 {
     public class JobTestFixture : IDisposable
     {
@@ -26,12 +26,17 @@ namespace OnDemandTools.Job.Tests.Helpers
 
         public JobTestFixture()
         {
+            // Build configuration
             builder = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
               .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();
-            var appSettings = Configuration.Get<AppSettings>("Application");          
+            var appSettings = Configuration.Get<AppSettings>("Application");
+
+            // Setup rest client
+            restClient = new RestClient(Configuration["APIEndPoint"]);
+            restClient.AddDefaultHeader("Content-Type", "application/json");
             restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
 
             // Start up DI container
