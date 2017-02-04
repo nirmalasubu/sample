@@ -31,10 +31,8 @@ compile:
     - source envJob; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Jobs/Dockerfile .
     - source envJob; sudo docker run -d --name odt-job-container -p 5001:5000 "${IMAGE}"; sleep 10
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5001/healthcheck
-    #- source envJob; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.Jobs.Tests/Dockerfile .
-    #- source "deporter-${CIRCLE_BRANCH}"; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Deporter/Dockerfile .
-    #- source "deporter-${CIRCLE_BRANCH}"; sudo docker run -d --name odt-deporter-container -p 5001:5000 "${IMAGE}"
-    - cat envJob
+    - source envJob; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.Jobs.Tests/Dockerfile .
+    
 test:
   override:
     # API testing
@@ -43,11 +41,11 @@ test:
     - sudo docker images
      
     # Job testing
-    #- source envJob; sudo docker run -it --link odt-api-container:localhost --name odt-job-test-container "${IMAGE}-test"
+    - source envJob; sudo docker run -it --link odt-api-container:localhost --name odt-job-test-container "${IMAGE}-test"
     
     - sudo docker stop odt-api-container
     - sudo docker stop odt-api-test-container
-    #- sudo docker stop odt-job-test-container
+    - sudo docker stop odt-job-test-container
 
 
 deployment:
