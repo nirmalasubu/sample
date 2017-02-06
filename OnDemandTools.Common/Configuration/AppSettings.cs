@@ -40,6 +40,7 @@ namespace OnDemandTools.Common.Configuration
     public class MongoDB
     {
         public string ConnectionString { get; set; }
+        public string HangfireConnectionString { get; set; }
         public string ConnectionOptionsDefault { get; set; }
         public string ConnectionOptionsPrimary { get; set; }
 
