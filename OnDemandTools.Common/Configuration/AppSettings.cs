@@ -39,10 +39,12 @@ namespace OnDemandTools.Common.Configuration
 
     public class MongoDB
     {
-        public string ConnectionString { get; set; }
-        public string HangfireConnectionString { get; set; }
+        public string ConnectionString { get; set; }        
         public string ConnectionOptionsDefault { get; set; }
         public string ConnectionOptionsPrimary { get; set; }
+
+        public string HangfireConnectionString { get; set; }
+        public string HangfireConnectionOptions { get; set; }
 
         public string DatabaseName
         {
@@ -51,6 +53,22 @@ namespace OnDemandTools.Common.Configuration
                 if(!String.IsNullOrEmpty(ConnectionString))
                 {
                     string[] bits = ConnectionString.Split('/');
+                    return bits[bits.Length - 1];
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
+        public string HangFireDatabaseName
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(HangfireConnectionString))
+                {
+                    string[] bits = HangfireConnectionString.Split('/');
                     return bits[bits.Length - 1];
                 }
                 else

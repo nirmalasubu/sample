@@ -46,14 +46,13 @@ namespace OnDemandTools.Jobs
 
             // Add framework services.
             services.AddMvc();
-            var k = (appSettings.MongoDB.ConnectionString.Split('/'));
-            services.AddHangfire(x => x.UseMongoStorage(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.DatabaseName));
+            services.AddHangfire(x => x.UseMongoStorage(appSettings.MongoDB.HangfireConnectionString + appSettings.MongoDB.HangfireConnectionOptions,
+                appSettings.MongoDB.HangFireDatabaseName));
 
             // Initialize container
             var container = new Container();
-            container.Configure(c => {
-
-                
+            container.Configure(c =>
+            {
                 Serilog.ILogger appLogger = new LoggerConfiguration()
                      .WriteTo.Logzio(appSettings.LogzIO.AuthToken,
                      application: appSettings.LogzIO.Application,
@@ -82,7 +81,7 @@ namespace OnDemandTools.Jobs
             // Add serilog and catch any internal errors
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
-            
+
 
             app.UseStaticFiles();
             app.UseHangfireServer();
@@ -91,7 +90,7 @@ namespace OnDemandTools.Jobs
             // authorization mechanism
             app.UseHangfireDashboard("/dashboard", new DashboardOptions
             {
-                Authorization = new[] {new CustomAuthorizationFilter()}
+                Authorization = new[] { new CustomAuthorizationFilter() }
             });
 
             app.UseMvc(routes =>
