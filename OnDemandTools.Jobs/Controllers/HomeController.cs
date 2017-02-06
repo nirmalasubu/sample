@@ -9,21 +9,25 @@ using System.Diagnostics;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
+using OnDemandTools.Business.Modules.Queue;
 
 namespace OnDemandTools.Jobs.Controllers
 {
-   
+
     public class HomeController : Controller
     {
 
         Publisher pub;
         Deporter dep;
         TitleSync tsy;
-        public HomeController(Publisher pub, Deporter dep, TitleSync tsy)
+        IQueueService queueService;
+
+        public HomeController(Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
         {
             this.pub = pub;
             this.dep = dep;
             this.tsy = tsy;
+            this.queueService = queueService;
         }
 
 
@@ -53,15 +57,17 @@ namespace OnDemandTools.Jobs.Controllers
             return View();
         }
 
-
-
         public IActionResult Register()
         {
             //TODO - left here as reference. update as needed
             var manager = new RecurringJobManager();
 
-            // Create multiple job among multiple instances
-            manager.AddOrUpdate("Publisher-" + Guid.NewGuid().ToString(), Job.FromExpression(() => pub.Execute()), "*/3 * * * *", TimeZoneInfo.Utc);
+            foreach (var activeQueue in queueService.GetByStatus(true))
+            {
+                // Create multiple job among multiple instances
+                manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
+                    Job.FromExpression(() => pub.Execute(activeQueue.Name)), "*/3 * * * *", TimeZoneInfo.Utc);
+            }
 
             // Just oone job among multiple instances
             manager.AddOrUpdate("Deporter-", Job.FromExpression(() => dep.Execute()), "*/2 * * * *", TimeZoneInfo.Utc);

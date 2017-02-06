@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Http;
+using OnDemandTools.Jobs.Helpers;
 
 namespace OnDemandTools.Jobs
 {
@@ -67,10 +68,13 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<Publisher>();
             });
 
+            services.InitializeAutoMapper();
 
             // Resolve container 
             DependencyResolver.RegisterResolver(new StructureMapIOCContainer(container)).RegisterImplmentation();
             container.Populate(services);
+
+
 
             return container.GetInstance<IServiceProvider>();
         }

@@ -9,15 +9,15 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         Serilog.ILogger logger;
         public Publisher(Serilog.ILogger logger)
         {
-           
+
             this.logger = logger;
         }
 
-        public void Execute()
+        public void Execute(string queueName)
         {
-            logger.Information("started publisher job");
+            logger.Information("started publisher job for queue:" + queueName);
             Thread.Sleep(1000);
-            logger.Information("ending publisher job");
+            logger.Information("Publisher job completed for queue:" + queueName);
         }
     }
 }
