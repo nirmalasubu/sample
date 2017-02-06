@@ -14,11 +14,12 @@ namespace OnDemandTools.Common.Configuration
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public MongoDB MongoDB { get; set;}
+        public MongoDB MongoDB { get; set; }
         public LogzIOConfiguration LogzIO { get; set; }
         public List<Service> Services { get; set; }
         public string HostingProvider { get; set; }
         public string AiringIdLockExpiredSeconds { get; set; }
+        public JobSchedules JobSchedules { get; set; }
     }
 
 
@@ -29,7 +30,14 @@ namespace OnDemandTools.Common.Configuration
         public String ApiKey { get; set; }
     }
 
-    public class LogzIOConfiguration 
+    public class JobSchedules
+    {
+        public string Publisher { get; set; }
+        public string Deporter { get; set; }
+        public string TitleSync { get; set; }
+    }
+
+    public class LogzIOConfiguration
     {
         public string AuthToken { get; set; }
         public string Application { get; set; }
@@ -39,7 +47,7 @@ namespace OnDemandTools.Common.Configuration
 
     public class MongoDB
     {
-        public string ConnectionString { get; set; }        
+        public string ConnectionString { get; set; }
         public string ConnectionOptionsDefault { get; set; }
         public string ConnectionOptionsPrimary { get; set; }
 
@@ -50,7 +58,7 @@ namespace OnDemandTools.Common.Configuration
         {
             get
             {
-                if(!String.IsNullOrEmpty(ConnectionString))
+                if (!String.IsNullOrEmpty(ConnectionString))
                 {
                     string[] bits = ConnectionString.Split('/');
                     return bits[bits.Length - 1];

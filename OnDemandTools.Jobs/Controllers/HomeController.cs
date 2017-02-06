@@ -10,6 +10,7 @@ using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Business.Modules.Queue;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Jobs.Controllers
 {
@@ -21,13 +22,15 @@ namespace OnDemandTools.Jobs.Controllers
         Deporter dep;
         TitleSync tsy;
         IQueueService queueService;
+        AppSettings appsettings;
 
-        public HomeController(Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
+        public HomeController(AppSettings appsettings, Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
         {
             this.pub = pub;
             this.dep = dep;
             this.tsy = tsy;
             this.queueService = queueService;
+            this.appsettings = appsettings;
         }
 
 
@@ -59,6 +62,8 @@ namespace OnDemandTools.Jobs.Controllers
 
         public IActionResult Register()
         {
+            var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+
             //TODO - left here as reference. update as needed
             var manager = new RecurringJobManager();
 
@@ -66,12 +71,12 @@ namespace OnDemandTools.Jobs.Controllers
             {
                 // Create multiple job among multiple instances
                 manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                    Job.FromExpression(() => pub.Execute(activeQueue.Name)), "*/3 * * * *", TimeZoneInfo.Utc);
+                    Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone);
             }
 
             // Just oone job among multiple instances
-            manager.AddOrUpdate("Deporter-", Job.FromExpression(() => dep.Execute()), "*/2 * * * *", TimeZoneInfo.Utc);
-            manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), "*/1 * * * *", TimeZoneInfo.Utc);
+            manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone);
+            manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone);
 
             return Redirect("/dashboard");
         }
