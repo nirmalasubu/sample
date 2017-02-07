@@ -74,38 +74,42 @@ namespace OnDemandTools.Jobs
             DependencyResolver.RegisterResolver(new StructureMapIOCContainer(container)).RegisterImplmentation();
             container.Populate(services);
 
-
-
             return container.GetInstance<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            // Add serilog and catch any internal errors
-            loggerFactory.AddSerilog();
-            Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
-
-
-            app.UseStaticFiles();
-            app.UseHangfireServer();
-
-            //TODO - temporary solution to allow all users. Will need to come up with an
-            // authorization mechanism
-            app.UseHangfireDashboard("/dashboard", new DashboardOptions
+            try
             {
-                Authorization = new[] { new CustomAuthorizationFilter() }
-            });
+                // Add serilog and catch any internal errors
+                loggerFactory.AddSerilog();
+                Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=home}/{action=Index}/{id?}");
-            });
+
+                app.UseStaticFiles();
+                app.UseHangfireServer();
+
+                //TODO - temporary solution to allow all users. Will need to come up with an
+                // authorization mechanism
+                app.UseHangfireDashboard("/dashboard", new DashboardOptions
+                {
+                    Authorization = new[] { new CustomAuthorizationFilter() }
+                });
+
+                app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=home}/{action=Index}/{id?}");
+                });
+            }
+            catch (Exception e)
+            {               
+                throw e;
+            }
         }
     }
-
 
     //TODO - temporary solution to allow all users. Will need to come up with an
     // authorization mechanism

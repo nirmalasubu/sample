@@ -17,15 +17,16 @@ namespace OnDemandTools.Jobs.Controllers
 
     public class HomeController : Controller
     {
-
+        Serilog.ILogger logger;
         Publisher pub;
         Deporter dep;
         TitleSync tsy;
         IQueueService queueService;
         AppSettings appsettings;
 
-        public HomeController(AppSettings appsettings, Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
+        public HomeController(Serilog.ILogger logger, AppSettings appsettings, Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
         {
+            this.logger = logger;
             this.pub = pub;
             this.dep = dep;
             this.tsy = tsy;
@@ -62,23 +63,31 @@ namespace OnDemandTools.Jobs.Controllers
 
         public IActionResult Register()
         {
-            var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-
-            //TODO - left here as reference. update as needed
-            var manager = new RecurringJobManager();
-
-            foreach (var activeQueue in queueService.GetByStatus(true))
+            try
             {
-                // Create multiple job among multiple instances
-                manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                    Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone);
+                var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+
+                //TODO - left here as reference. update as needed
+                var manager = new RecurringJobManager();
+
+                foreach (var activeQueue in queueService.GetByStatus(true))
+                {
+                    // Create multiple job among multiple instances
+                    manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
+                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone);
+                }
+
+                // Just oone job among multiple instances
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone);
+                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone);
+
+                return Redirect("/dashboard");
             }
-
-            // Just oone job among multiple instances
-            manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone);
-            manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone);
-
-            return Redirect("/dashboard");
+            catch (Exception e)
+            {
+                logger.Error(e, "Error while registering Jobs");
+                throw e;
+            }
         }
     }
 }
