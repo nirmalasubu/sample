@@ -14,10 +14,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
         IAiringService airingServiceHelper;
         AppSettings appsettings;
 
-        public Deporter(Serilog.ILogger logger,IAiringService airingService, AppSettings appsettings)
+        public Deporter(Serilog.ILogger logger, IAiringService airingService, AppSettings appsettings)
         {
 
-           this.appsettings= appsettings;
+            this.appsettings = appsettings;
             this.logger = logger;
             this.airingServiceHelper = airingService;
         }
@@ -30,9 +30,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
                 airingServiceHelper.Deport(int.Parse(appsettings.AiringDeportGraceDays));
                 logger.Information("ending deporter job");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                logger.Error(string.Format("Error in Deporter Job : {0}", e));
+                logger.Error(e, string.Format("Error in Deporter Job : {0}", e));
+                throw;
             }
         }
     }
