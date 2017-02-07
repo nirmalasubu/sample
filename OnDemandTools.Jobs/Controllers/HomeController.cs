@@ -67,6 +67,13 @@ namespace OnDemandTools.Jobs.Controllers
             {
                 var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
+                string time=" ";
+                 foreach(TimeZoneInfo zone in TimeZoneInfo.GetSystemTimeZones())
+                {
+                    time += zone.Id + "  " + zone.DisplayName+ "\n";
+                   
+                }
+                logger.Information(time);
                 //TODO - left here as reference. update as needed
                 var manager = new RecurringJobManager();
 
