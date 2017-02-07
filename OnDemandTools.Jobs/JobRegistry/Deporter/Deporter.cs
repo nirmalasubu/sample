@@ -24,9 +24,16 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
 
         public void Execute()
         {
-            logger.Information("started deporter job");
-            airingServiceHelper.Deport(int.Parse(configuration.Get("airingDeportGraceDays")));
-             logger.Information("ending deporter job");
+            try
+            {
+                logger.Information("started deporter job");
+                airingServiceHelper.Deport(int.Parse(configuration.Get("airingDeportGraceDays")));
+                logger.Information("ending deporter job");
+            }
+            catch(Exception e)
+            {
+                logger.Error(string.Format("Error in Deporter Job : {0}", e));
+            }
         }
     }
 }
