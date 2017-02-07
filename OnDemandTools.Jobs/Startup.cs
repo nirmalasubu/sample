@@ -80,34 +80,27 @@ namespace OnDemandTools.Jobs
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            try
+            // Add serilog and catch any internal errors
+            loggerFactory.AddSerilog();
+            Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+
+            app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
+            app.UseHangfireServer();
+
+            //TODO - temporary solution to allow all users. Will need to come up with an
+            // authorization mechanism
+            app.UseHangfireDashboard("/dashboard", new DashboardOptions
             {
-                // Add serilog and catch any internal errors
-                loggerFactory.AddSerilog();
-                Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+                Authorization = new[] { new CustomAuthorizationFilter() }
+            });
 
-
-                app.UseStaticFiles();
-                app.UseHangfireServer();
-
-                //TODO - temporary solution to allow all users. Will need to come up with an
-                // authorization mechanism
-                app.UseHangfireDashboard("/dashboard", new DashboardOptions
-                {
-                    Authorization = new[] { new CustomAuthorizationFilter() }
-                });
-
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=home}/{action=Index}/{id?}");
-                });
-            }
-            catch (Exception e)
-            {               
-                throw e;
-            }
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=home}/{action=Index}/{id?}");
+            });
         }
     }
 
