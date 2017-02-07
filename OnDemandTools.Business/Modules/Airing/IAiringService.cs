@@ -182,6 +182,12 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="airing">The airing.</param>
         void AppendChanges(ref BLModel.Alternate.Long.Airing airing);
 
+        /// <summary>
+        /// Deport Expired airing from current asset
+        /// </summary>
+        /// <param name="airingDeportGraceDays">The airingDeportGraceDays</param>
+        void Deport(int airingDeportGraceDays);
+
 
     }
 }

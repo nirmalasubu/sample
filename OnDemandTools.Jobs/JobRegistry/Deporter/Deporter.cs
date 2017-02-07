@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Common.Configuration;
+using System;
 using System.Threading;
 
 
@@ -8,16 +11,22 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
     {
         //resolve all concrete implementations in constructor        
         Serilog.ILogger logger;
-        public Deporter(Serilog.ILogger logger)
+        IAiringService airingServiceHelper;
+        private IConfiguration configuration { get; }
+
+        public Deporter(Serilog.ILogger logger,IAiringService airingService, IConfiguration configuration)
         {
+
+            this.configuration = configuration;
             this.logger = logger;
+            this.airingServiceHelper = airingService;
         }
 
         public void Execute()
         {
             logger.Information("started deporter job");
-            Thread.Sleep(6000);
-            logger.Information("ending deporter job");
+            airingServiceHelper.Deport(int.Parse(configuration.Get("airingDeportGraceDays")));
+             logger.Information("ending deporter job");
         }
     }
 }

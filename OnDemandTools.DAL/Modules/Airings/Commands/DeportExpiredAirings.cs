@@ -11,20 +11,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
-    public interface IDeportExpiredAiring
-    {
-        void Deport();
-    }
+   
 
     public class DeportExpiredAiring : IDeportExpiredAiring
     {
         private readonly MongoCollection<Airing> _currentCollection;
         private readonly MongoCollection<Airing> _expiredCollection;
-        private IConfiguration configuration { get; set; }
-
-        public DeportExpiredAiring(IODTDatastore connection, IConfiguration configuration)
+      
+        public DeportExpiredAiring(IODTDatastore connection)
         {
-            this.configuration = configuration;
+           
             var database = connection.GetDatabase();
 
             _currentCollection = database.GetCollection<Airing>(DataStoreConfiguration.CurrentAssetsCollection);
@@ -38,9 +34,9 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
         /// <summary>
         /// Gets the expired airings.
         /// </summary>
-        public void Deport()
+        public void Deport(int airingDeportGraceDays)
         {
-            DateTime cutOffDateTime = DateTime.UtcNow.AddDays(-int.Parse(configuration.Get("airingDeportGraceDays")));
+            DateTime cutOffDateTime = DateTime.UtcNow.AddDays(-airingDeportGraceDays);
 
             var strQuery =
                 "{ 'Flights.End': { $lte: ISODate('" + DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")

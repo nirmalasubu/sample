@@ -44,6 +44,7 @@ namespace OnDemandTools.Business.Modules.Airing
         IPackageQuery packageQueryHelper;
         IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper;
         IChangeDeletedAiringQuery changeDeletedAiringQueryHelper;
+        IDeportExpiredAiring deportExpiredAiringHelper;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
             AppSettings appSettings,
@@ -55,7 +56,8 @@ namespace OnDemandTools.Business.Modules.Airing
             IDestinationQuery destinationQueryHelper,
             IPackageQuery packageQueryHelper,
             IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper,
-            IChangeDeletedAiringQuery changeDeletedAiringQueryHelper)
+            IChangeDeletedAiringQuery changeDeletedAiringQueryHelper,
+            IDeportExpiredAiring deportExpiredAiringHelper)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -69,6 +71,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.packageQueryHelper = packageQueryHelper;
             this.changeHistoricalAiringQueryHelper = changeHistoricalAiringQueryHelper;
             this.changeDeletedAiringQueryHelper = changeDeletedAiringQueryHelper;
+            this.deportExpiredAiringHelper = deportExpiredAiringHelper;
         }
 
         #region "Public method"
@@ -300,6 +303,11 @@ namespace OnDemandTools.Business.Modules.Airing
 
             }
 
+        }
+
+        public void Deport(int airingDeportGraceDays)
+        {
+            deportExpiredAiringHelper.Deport(airingDeportGraceDays);
         }
         #endregion
 

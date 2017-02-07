@@ -92,4 +92,9 @@ namespace OnDemandTools.DAL.Modules.Airings
     {
         IQueryable<Airing> GetNonExpiredBy(IList<int> titleIds, IQueryable<string> queueNames, DateTime cutOffDateTime);
     }
+
+    public interface IDeportExpiredAiring
+    {
+        void Deport(int airingDeportGraceDays);
+    }
 }
