@@ -12,12 +12,12 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
         //resolve all concrete implementations in constructor        
         Serilog.ILogger logger;
         IAiringService airingServiceHelper;
-        private IConfiguration configuration { get; }
+        AppSettings appsettings;
 
-        public Deporter(Serilog.ILogger logger,IAiringService airingService, IConfiguration configuration)
+        public Deporter(Serilog.ILogger logger,IAiringService airingService, AppSettings appsettings)
         {
 
-            this.configuration = configuration;
+           this.appsettings= appsettings;
             this.logger = logger;
             this.airingServiceHelper = airingService;
         }
@@ -27,7 +27,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
             try
             {
                 logger.Information("started deporter job");
-                airingServiceHelper.Deport(int.Parse(configuration.Get("airingDeportGraceDays")));
+                airingServiceHelper.Deport(int.Parse(appsettings.AiringDeportGraceDays));
                 logger.Information("ending deporter job");
             }
             catch(Exception e)
