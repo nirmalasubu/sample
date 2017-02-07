@@ -1,5 +1,7 @@
 ﻿using OnDemandTools.Business.Modules.Queue;
+using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.DAL.Modules.Queue.Command;
+using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,11 +13,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         //resolve all concrete implementations in constructor        
         Serilog.ILogger logger;
         IQueueService queueService;
+        IQueueLocker queueLocker;
+        string processId;
 
-        public Publisher(Serilog.ILogger logger, IQueueService queueService)
+        public Publisher(
+            Serilog.ILogger logger, 
+            IQueueService queueService,
+            IQueueLocker queueLocker)
         {
             this.logger = logger;
             this.queueService = queueService;
+            this.queueLocker = queueLocker;
+            var processId = GetProcessId();
         }
 
         public void Execute(string queueName)
@@ -30,7 +39,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 return;
             }
 
-            var processId = GetProcessId();
+            
 
             try
             {
@@ -38,19 +47,20 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
                 // Critical section within threads
                 DeliveryQueueLock qLock;
-                lock (threadLock)
-                {
-                    qLock = _queueLocker.AquireLockFor(queue.Name, processId);
-                }
+
+                qLock = queueLocker.AquireLockFor(queue.Name, processId);
+
 
                 // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
                 if (qLock.IsLockedBy(processId))
                 {
+                    var deliveryDetails = SetupDeliveryDetails();
+
                     LogInformation("Acquiring lock on queue", queue, processId);
 
                     // Proceed to processing the queue                    
                     LogInformation("Hard core processing on queue started", queue, processId);
-                    ProcessQueue(queue, details);
+                    ProcessQueue(queue, deliveryDetails);
                     LogInformation("Successfully completed hard core processing on queue", queue, processId);
 
                     // Set last process time for the queue
@@ -74,12 +84,17 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             {
                 // Release lock on the queue
                 LogInformation("Removing lock on queue", queue, processId);
-                _queueLocker.ReleaseLockFor(queue.Name, processId);
+                queueLocker.ReleaseLockFor(queue.Name, processId);
                 LogInformation("Successfully removed lock on queue", queue, processId);
             }
 
 
             logger.Information("Publisher job completed for queue:" + queueName);
+        }
+
+        private DeliveryDetails SetupDeliveryDetails()
+        {
+            return new DeliveryDetails();
         }
 
         private void LogInformation(string message, Business.Modules.Queue.Model.Queue queue, string processId)
@@ -102,7 +117,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         /// </summary>
         /// <param name="queue">The queue.</param>
         /// <param name="details">The details.</param>
-        private void ProcessQueue(DeliveryQueue queue, DeliveryDetails details)
+        private void ProcessQueue(Queue queue, DeliveryDetails details)
         {
             pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Retrieving current airings that should be send to queue", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName);
             var currentAirings = GetCurrentAirings(queue, details.Limit);
