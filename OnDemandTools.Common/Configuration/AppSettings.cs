@@ -36,6 +36,7 @@ namespace OnDemandTools.Common.Configuration
         public string Publisher { get; set; }
         public string Deporter { get; set; }
         public string TitleSync { get; set; }
+        public string TimeZone { get; set; }
     }
 
     public class LogzIOConfiguration

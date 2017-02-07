@@ -61,37 +61,12 @@ namespace OnDemandTools.Jobs.Controllers
             return View();
         }
 
-        public IActionResult TimeZones()
-        {
-            string time = " ";
-            foreach (TimeZoneInfo zone in TimeZoneInfo.GetSystemTimeZones())
-            {
-                time += zone.Id + "  " + zone.DisplayName + "\n";
-            }
-
-            logger.Information(time);
-
-            return new ContentResult
-            {
-                ContentType = "application/text",
-                Content = time,
-                StatusCode = 200
-            };
-        }
-
         public IActionResult Register()
         {
             try
             {
-                var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById(appsettings.JobSchedules.TimeZone);
 
-                string time=" ";
-                 foreach(TimeZoneInfo zone in TimeZoneInfo.GetSystemTimeZones())
-                {
-                    time += zone.Id + "  " + zone.DisplayName+ "\n";
-                   
-                }
-                logger.Information(time);
                 //TODO - left here as reference. update as needed
                 var manager = new RecurringJobManager();
 
