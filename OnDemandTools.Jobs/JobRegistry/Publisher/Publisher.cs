@@ -6,6 +6,7 @@ using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -18,7 +19,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         string processId;
 
         public Publisher(
-            Serilog.ILogger logger, 
+            Serilog.ILogger logger,
             IQueueService queueService,
             IQueueLocker queueLocker)
         {
@@ -39,7 +40,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 logger.Information("No Active queue found for queue name: {0}", queueName);
                 return;
             }
-           
+
             try
             {
                 logger.Information("Acquiring lock on queue {0}; Queue Name: {1}, process Id", queue.FriendlyName, queueName, processId);
@@ -118,51 +119,47 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         /// <param name="details">The details.</param>
         private void ProcessQueue(Queue queue, DeliveryDetails details)
         {
-            LogInformation("Retrieving current airings that should be send to queue", queue);            
+            LogInformation("Retrieving current airings that should be send to queue", queue);
             var currentAirings = GetCurrentAirings(queue, details.Limit);
-            LogInformation(string.Format("Successfully retrieved {0} current airings",currentAirings.Count), queue);
-            
+            LogInformation(string.Format("Successfully retrieved {0} current airings", currentAirings.Count), queue);
 
-            LogInformation("Retrieving deleted airings that should be send to queue", queue);            
+
+            LogInformation("Retrieving deleted airings that should be send to queue", queue);
             var deletedAirings = GetDeletedAirings(queue, details.Limit);
-            LogInformation(string.Format("Successfully retrieved {0} deleted airings", currentAirings.Count), queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Successfully retrieved {4} deleted airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, deletedAirings.Count);
+            LogInformation(string.Format("Successfully retrieved {0} deleted airings", deletedAirings.Count), queue);
 
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Applying validation on all {4} current airings based on queue settings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, currentAirings.Count);
+
+            LogInformation("Applying validation on all current airings based on queue settings", queue);
             var validAirings = ValidateAirings(queue, currentAirings, details);
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Completed validation on all {4} current airings, resulting in a total of {5} valid current airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, currentAirings.Count, validAirings.Count);
+            LogInformation(string.Format("Completed validation on all {0} current airings, resulting in a total of {1} valid current airings", currentAirings.Count, validAirings.Count), queue);
 
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Applying validation on all {4} deleted airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, currentAirings.Count);
+
+            LogInformation("Applying validation on all deleted airings", queue);
+
             var validDeletedAirings = ValidateDeletedAirings(queue, deletedAirings, details);
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Completed validation on all {4} deleted airings, resulting in a total of {5} valid deleted airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, deletedAirings.Count, validDeletedAirings.Count);
+            LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count), queue);
+
 
             if (validAirings.Any())
             {
                 //Creates Queue/Binding if not exists
-                LogInformation("", queue);
-                pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Queue setup - started", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName);
+                LogInformation("Queue setup - started", queue);
                 _remoteQueueHandler.Create(queue);
-                LogInformation("", queue);
-                pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Queue setup - completed", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName);
+                LogInformation("Queue setup - completed", queue);
             }
 
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Preparing to distribute airings current:{4} deleted:{5} to queue", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, validAirings.Count, deletedAirings.Count);
+            LogInformation("Preparing to distribute current and deleted airings to queue", queue);
+
             var envelopes = _envelopeStuffer.Generate(validAirings, queue, Action.Modify);
             envelopes.AddRange(_envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
             _envelopeDistributor.Distribute(envelopes, queue, details);
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Successfully distributed airings current:{4} deleted:{5} to queue", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, validAirings.Count, deletedAirings.Count);
+            LogInformation("Successfully distributed current and deleted airings to queue", queue);
 
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Update delivery status of all distributed airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName);
+
+            LogInformation("Update delivery status of all distributed airings", queue);
+
             UpdateDeliveredTo(validAirings, validDeletedAirings, queue.Name);
-            LogInformation("", queue);
-            pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Successfully updated delivery status of all distributed airings", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName);
+            LogInformation("Successfully updated delivery status of all distributed airings", queue);
         }
 
         private List<Airing> GetDeletedAirings(Queue queue, int limit)
@@ -206,9 +203,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     // Append additional useful information
                     string message = "Queue validation error. ";
                     message += result.Message;
-                    LogInformation("", queue);
-                    pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Validation error. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, result.Message);
-                    pbLogger.Info("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Validation error. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, result.Message);
+                    LogInformation(string.Format("Validation error. {0} - {1}", airing.AssetId, result.Message), queue);
                     _reportStatusCommand.Report(queue, airing.AssetId, message, result.StatusEnum, true);
                 }
                 if (queue.BimRequired)
@@ -234,24 +229,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var bimisMatch = results.Where(r => !r.Valid && r.StatusEnum == BIMMISMATCH).FirstOrDefault();
             if (bimFoundResult != null)
             {
-                LogInformation("", queue);
-                pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM  Found. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimFoundResult.Message);
-                pbLogger.Info("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM  Found. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimFoundResult.Message);
+                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
-                LogInformation("", queue);
-                pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM Not Found. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimNotFoundResult.Message);
-                pbLogger.Info("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM Not Found. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimNotFoundResult.Message);
+                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
-                LogInformation("", queue);
-                pbLogger.Trace("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM Mismatch. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimisMatch.Message);
-                pbLogger.Info("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}:BIM Mismatch. {4} - {5}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId, bimisMatch.Message);
+                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
@@ -283,8 +272,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 else
                 {
-                    LogInformation("", queue);
-                    pbLogger.Info("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Validation error. {4} - No 'Modify' action message delivered to the queue", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, queue.FriendlyName, airing.AssetId);
+                    LogInformation(string.Format("Validation error. {0} - No 'Modify' action message delivered to the queue", airing.AssetId), queue);
                     invalidArings.Add(airing.AssetId);
                 }
             }
