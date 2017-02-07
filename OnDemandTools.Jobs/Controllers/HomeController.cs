@@ -61,6 +61,24 @@ namespace OnDemandTools.Jobs.Controllers
             return View();
         }
 
+        public IActionResult TimeZones()
+        {
+            string time = " ";
+            foreach (TimeZoneInfo zone in TimeZoneInfo.GetSystemTimeZones())
+            {
+                time += zone.Id + "  " + zone.DisplayName + "\n";
+            }
+
+            logger.Information(time);
+
+            return new ContentResult
+            {
+                ContentType = "application/text",
+                Content = time,
+                StatusCode = 200
+            };
+        }
+
         public IActionResult Register()
         {
             try
