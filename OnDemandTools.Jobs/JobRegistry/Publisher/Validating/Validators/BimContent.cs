@@ -1,4 +1,5 @@
-﻿
+﻿using OnDemandTools.Jobs.JobRegistry.Publisher.Validators;
+
 namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators
 {
     public class BimContent

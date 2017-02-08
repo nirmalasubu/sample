@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using OnDemandTools.Jobs.JobRegistry.Models.Model;
+using OnDemandTools.Jobs.JobRegistry.Models;
 using OrionService;
 using System.Threading.Tasks;
 

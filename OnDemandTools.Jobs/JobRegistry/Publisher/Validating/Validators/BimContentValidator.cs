@@ -3,6 +3,8 @@ using System.Linq;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
+using OnDemandTools.Jobs.Adapters.Queries;
+using OnDemandTools.Jobs.JobRegistry.Models;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validators
 {
@@ -144,8 +146,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validators
             return orionMaterialIds.All(bimMaterialIds.Contains);
         }
     }
-
-
 
     enum Sources
     {

@@ -1,9 +1,11 @@
 ﻿using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
+using OnDemandTools.DAL.Modules.Reporting.Command;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 using System;
@@ -21,13 +23,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         IQueueLocker queueLocker;
         string processId;
         StringBuilder jobLogs = new StringBuilder();
-
         //TODO 384 Move to airing service
         CurrentAiringsQuery currentAiringsQuery;
         DeletedAiringsQuery deletedAiringsQuery;
-
         IEnvelopeDistributor envelopeDistributor;
         IEnvelopeStuffer envelopeStuffer;
+        IQueueReporter reportStatusCommand;
+        IUpdateAiringQueueDelivery updateAiringQueueDelivery;
+        IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
+
+        private const int BIMFOUND = 17;
+        private const int BIMNOTFOUND = 18;
+        private const int BIMMISMATCH = 19;
 
         public Publisher(
             Serilog.ILogger logger,
@@ -36,7 +43,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             CurrentAiringsQuery currentAiringsQuery,
             DeletedAiringsQuery deletedAiringsQuery,
             IEnvelopeDistributor envelopeDistributor,
-            IEnvelopeStuffer envelopeStuffer)
+            IEnvelopeStuffer envelopeStuffer,
+            IQueueReporter reportStatusCommand,
+            IUpdateAiringQueueDelivery updateAiringQueueDelivery,
+            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery)
         {
             this.logger = logger;
             this.queueService = queueService;
@@ -46,6 +56,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.deletedAiringsQuery = deletedAiringsQuery;
             this.envelopeDistributor = envelopeDistributor;
             this.envelopeStuffer = envelopeStuffer;
+            this.reportStatusCommand = reportStatusCommand;
+            this.updateAiringQueueDelivery = updateAiringQueueDelivery;
+            this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
         }
 
         public void Execute(string queueName)
@@ -233,7 +246,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     string message = "Queue validation error. ";
                     message += result.Message;
                     LogInformation(string.Format("Validation error. {0} - {1}", airing.AssetId, result.Message));
-                    _reportStatusCommand.Report(queue, airing.AssetId, message, result.StatusEnum, true);
+                    reportStatusCommand.Report(queue, airing.AssetId, message, result.StatusEnum, true);
                 }
                 if (queue.BimRequired)
                 {
@@ -251,7 +264,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         }
 
 
-        private void SendBIMStatus(IList<ValidationResult> results, Airing airing, DeliveryQueue queue, DeliveryDetails details)
+        private void SendBIMStatus(IList<ValidationResult> results, Airing airing, Queue queue, DeliveryDetails details)
         {
             var bimFoundResult = results.Where(r => r.Valid && r.StatusEnum == BIMFOUND).FirstOrDefault();
             var bimNotFoundResult = results.Where(r => !r.Valid && r.StatusEnum == BIMNOTFOUND).FirstOrDefault();
@@ -259,18 +272,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             if (bimFoundResult != null)
             {
                 LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
-                _reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
                 LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
-                _reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
                 LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimFoundResult.Message));
-                _reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
 
@@ -279,9 +292,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             foreach (var airingId in ignoreAirings)
             {
                 if (isDeleted)
-                    _updateDeletedAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+                    updateDeletedAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
                 else
-                    _udateAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+                    updateAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
             }
         }
 

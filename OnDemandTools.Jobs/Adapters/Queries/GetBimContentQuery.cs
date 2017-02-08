@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using FBDService;
+using OnDemandTools.Jobs.JobRegistry.Models;
 using System.Linq;
-using OnDemandTools.Jobs.JobRegistry.Models.Model;
-using FBDService;
 using System.Threading.Tasks;
 
 namespace OnDemandTools.Jobs.Adapters.Queries
@@ -14,16 +11,18 @@ namespace OnDemandTools.Jobs.Adapters.Queries
         #region IGetBimContentQuery Members
 
         public Content Get(string contentId)
-        {            
-            BIMToolRecord[] response = null;
+        {
+
+            GetBIMRecordByMaterialIdResponse result = null;
 
             var client = new FBDWSSoapClient(new FBDWSSoapClient.EndpointConfiguration());
 
             Task.Run(async () =>
             {
-                response = await client.GetBIMRecordByMaterialIdAsync(contentId + "%");
+                result = await client.GetBIMRecordByMaterialIdAsync(contentId + "%");
             }).Wait();
 
+            var response = result.Body.GetBIMRecordByMaterialIdResult.ToList();
 
             if (!response.Any())
                 return new Content();
@@ -31,8 +30,7 @@ namespace OnDemandTools.Jobs.Adapters.Queries
             var content = new Content
             {
                 ContentId = contentId,
-                MaterialIds = response
-                                      .Select(r => r.MaterialId).ToList()
+                MaterialIds = response.Select(r => r.MaterialId).ToList()
             };
 
             return content;

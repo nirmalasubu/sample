@@ -1,11 +1,11 @@
 ﻿using EasyNetQ;
 using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -73,9 +73,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
     public interface IQueueReporter
     {
-        void Report(DeliveryQueue queue, string airingId, string message, int statusEnum, bool unique = false);
+        void Report(Queue queue, string airingId, string message, int statusEnum, bool unique = false);
 
-        void BimReport(DeliveryQueue queue, string airingId, string message, int statusEnum);
+        void BimReport(Queue queue, string airingId, string message, int statusEnum);
 
     }
 

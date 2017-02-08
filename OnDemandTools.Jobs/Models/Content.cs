@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnDemandTools.Jobs.JobRegistry.Models.Model
+namespace OnDemandTools.Jobs.JobRegistry.Models
 {
     public class Content
     {
