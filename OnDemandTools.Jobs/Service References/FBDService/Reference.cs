@@ -9,9 +9,11 @@
 
 namespace FBDService
 {
+    using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
-    
-    
+
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MediaExistsInBIMResult", Namespace="http://tempuri.org/")]
@@ -4769,6 +4771,11 @@ namespace FBDService
         public GetBIMRecordByMaterialIdResponse(FBDService.GetBIMRecordByMaterialIdResponseBody Body)
         {
             this.Body = Body;
+        }
+
+        public static implicit operator List<object>(GetBIMRecordByMaterialIdResponse v)
+        {
+            throw new NotImplementedException();
         }
     }
     

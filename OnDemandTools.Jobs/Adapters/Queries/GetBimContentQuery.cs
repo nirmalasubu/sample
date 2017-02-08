@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using OnDemandTools.Jobs.JobRegistry.Models.Model;
 using FBDService;
+using System.Threading.Tasks;
 
 namespace OnDemandTools.Jobs.Adapters.Queries
 {
@@ -13,19 +14,16 @@ namespace OnDemandTools.Jobs.Adapters.Queries
         #region IGetBimContentQuery Members
 
         public Content Get(string contentId)
-        {
-            List<BIMToolRecord> response;
+        {            
+            BIMToolRecord[] response = null;
 
-            try
-            {
-                var client = new FBDWSSoapClient(new FBDWSSoapClient.EndpointConfiguration());
+            var client = new FBDWSSoapClient(new FBDWSSoapClient.EndpointConfiguration());
 
-                response = client.GetBIMRecordByMaterialId(contentId + "%").ToList();
-            }
-            catch (Exception ex)
+            Task.Run(async () =>
             {
-                throw ex;
-            }
+                response = await client.GetBIMRecordByMaterialIdAsync(contentId + "%");
+            }).Wait();
+
 
             if (!response.Any())
                 return new Content();
@@ -35,7 +33,6 @@ namespace OnDemandTools.Jobs.Adapters.Queries
                 ContentId = contentId,
                 MaterialIds = response
                                       .Select(r => r.MaterialId).ToList()
-                                      .ConvertAll(i => i.ToString(CultureInfo.InvariantCulture))
             };
 
             return content;
