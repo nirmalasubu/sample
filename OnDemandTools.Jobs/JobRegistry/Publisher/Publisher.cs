@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Text;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -17,6 +18,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         IQueueService queueService;
         IQueueLocker queueLocker;
         string processId;
+        StringBuilder jobLogs = new StringBuilder();
 
         public Publisher(
             Serilog.ILogger logger,
@@ -31,65 +33,73 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         public void Execute(string queueName)
         {
-            logger.Information("started publisher job for queue:" + queueName);
-
-            var queue = queueService.GetByApiKey(queueName);
-
-            if (queue != null && !queue.Active)
-            {
-                logger.Information("No Active queue found for queue name: {0}", queueName);
-                return;
-            }
-
             try
             {
-                logger.Information("Acquiring lock on queue {0}; Queue Name: {1}, process Id", queue.FriendlyName, queueName, processId);
+                LogInformation(string.Format("started publisher job for queue: {0} and processId: {1}", queueName, processId));
 
-                // Critical section within threads
-                DeliveryQueueLock qLock;
+                var queue = queueService.GetByApiKey(queueName);
 
-                qLock = queueLocker.AquireLockFor(queue.Name, processId);
-
-
-                // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
-                if (qLock.IsLockedBy(processId))
+                if (queue != null && !queue.Active)
                 {
-                    var deliveryDetails = SetupDeliveryDetails();
-
-                    LogInformation("Acquiring lock on queue", queue);
-
-                    // Proceed to processing the queue                    
-                    LogInformation("Hard core processing on queue started", queue);
-                    ProcessQueue(queue, deliveryDetails);
-                    LogInformation("Successfully completed hard core processing on queue", queue);
-
-                    // Set last process time for the queue
-                    LogInformation("Setting queue last processed time", queue);
-                    _markProcessedCommand.UpdateQueueProcessedTime(queue.Name);
-                    LogInformation("Successfully set queue last processed time", queue);
-                }
-                else
-                {
-                    LogInformation(string.Format("Couldn't acquire lock on queue. It is locked by process {0}", qLock.ProcessId), queue);
+                    LogInformation(string.Format("No Active queue found for queue name: {0}", queueName));
+                    return;
                 }
 
-                LogInformation("Successfully completed operation on queue", queue);
-            }
-            catch (Exception ex)
-            {
-                LogError(ex, "Abruptly stopped operation on queue", queue);
-                throw;
+                try
+                {
+                    LogInformation(string.Format("Acquiring lock on queue {0}; Queue Name: {1}, process Id: {2}", queue.FriendlyName, queueName, processId));
+
+                    // Critical section within threads
+                    DeliveryQueueLock qLock;
+
+                    qLock = queueLocker.AquireLockFor(queue.Name, processId);
+
+
+                    // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
+                    if (qLock.IsLockedBy(processId))
+                    {
+                        var deliveryDetails = SetupDeliveryDetails();
+
+                        LogInformation("Acquired lock on queue");
+
+                        // Proceed to processing the queue                    
+                        LogInformation("Hard core processing on queue started");
+                        ProcessQueue(queue, deliveryDetails);
+                        LogInformation("Successfully completed hard core processing on queue");
+
+                        // Set last process time for the queue
+                        LogInformation("Setting queue last processed time");
+                        _markProcessedCommand.UpdateQueueProcessedTime(queue.Name);
+                        LogInformation("Successfully set queue last processed time");
+                    }
+                    else
+                    {
+                        LogInformation(string.Format("Couldn't acquire lock on queue. It is locked by process {0}", qLock.ProcessId));
+                    }
+
+                    LogInformation("Successfully completed operation on queue");
+                }
+                catch (Exception ex)
+                {
+                    LogError(ex, "Abruptly stopped operation on queue", queue);
+                    throw;
+                }
+                finally
+                {
+                    // Release lock on the queue
+                    LogInformation("Removing lock on queue");
+                    queueLocker.ReleaseLockFor(queue.Name, processId);
+                    LogInformation("Successfully removed lock on queue");
+                }
+
+
+                logger.Information("Publisher job completed for queue:" + queueName);
             }
             finally
             {
-                // Release lock on the queue
-                LogInformation("Removing lock on queue", queue);
-                queueLocker.ReleaseLockFor(queue.Name, processId);
-                LogInformation("Successfully removed lock on queue", queue);
+                logger.Information(jobLogs.ToString());
             }
 
-
-            logger.Information("Publisher job completed for queue:" + queueName);
         }
 
         private DeliveryDetails SetupDeliveryDetails()
@@ -97,9 +107,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             return new DeliveryDetails();
         }
 
-        private void LogInformation(string message, Queue queue)
+        private void LogInformation(string message)
         {
-            logger.Information("{0}. QueueName: {1}  Queue: {2}, Process Id: {3}", message, queue.Name, queue.FriendlyName, processId);
+            jobLogs.Append(message);
+            jobLogs.Append("\r\n");
         }
 
         private void LogError(Exception exception, string message, Queue queue)
@@ -119,47 +130,47 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         /// <param name="details">The details.</param>
         private void ProcessQueue(Queue queue, DeliveryDetails details)
         {
-            LogInformation("Retrieving current airings that should be send to queue", queue);
+            LogInformation("Retrieving current airings that should be send to queue");
             var currentAirings = GetCurrentAirings(queue, details.Limit);
-            LogInformation(string.Format("Successfully retrieved {0} current airings", currentAirings.Count), queue);
+            LogInformation(string.Format("Successfully retrieved {0} current airings", currentAirings.Count));
 
 
-            LogInformation("Retrieving deleted airings that should be send to queue", queue);
+            LogInformation("Retrieving deleted airings that should be send to queue");
             var deletedAirings = GetDeletedAirings(queue, details.Limit);
-            LogInformation(string.Format("Successfully retrieved {0} deleted airings", deletedAirings.Count), queue);
+            LogInformation(string.Format("Successfully retrieved {0} deleted airings", deletedAirings.Count));
 
 
-            LogInformation("Applying validation on all current airings based on queue settings", queue);
+            LogInformation("Applying validation on all current airings based on queue settings");
             var validAirings = ValidateAirings(queue, currentAirings, details);
-            LogInformation(string.Format("Completed validation on all {0} current airings, resulting in a total of {1} valid current airings", currentAirings.Count, validAirings.Count), queue);
+            LogInformation(string.Format("Completed validation on all {0} current airings, resulting in a total of {1} valid current airings", currentAirings.Count, validAirings.Count));
 
 
-            LogInformation("Applying validation on all deleted airings", queue);
+            LogInformation("Applying validation on all deleted airings");
 
             var validDeletedAirings = ValidateDeletedAirings(queue, deletedAirings, details);
-            LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count), queue);
+            LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count));
 
 
             if (validAirings.Any())
             {
                 //Creates Queue/Binding if not exists
-                LogInformation("Queue setup - started", queue);
+                LogInformation("Queue setup - started");
                 _remoteQueueHandler.Create(queue);
-                LogInformation("Queue setup - completed", queue);
+                LogInformation("Queue setup - completed");
             }
 
-            LogInformation("Preparing to distribute current and deleted airings to queue", queue);
+            LogInformation("Preparing to distribute current and deleted airings to queue");
 
             var envelopes = _envelopeStuffer.Generate(validAirings, queue, Action.Modify);
             envelopes.AddRange(_envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
             _envelopeDistributor.Distribute(envelopes, queue, details);
-            LogInformation("Successfully distributed current and deleted airings to queue", queue);
+            LogInformation("Successfully distributed current and deleted airings to queue");
 
 
-            LogInformation("Update delivery status of all distributed airings", queue);
+            LogInformation("Update delivery status of all distributed airings");
 
             UpdateDeliveredTo(validAirings, validDeletedAirings, queue.Name);
-            LogInformation("Successfully updated delivery status of all distributed airings", queue);
+            LogInformation("Successfully updated delivery status of all distributed airings");
         }
 
         private List<Airing> GetDeletedAirings(Queue queue, int limit)
@@ -203,7 +214,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     // Append additional useful information
                     string message = "Queue validation error. ";
                     message += result.Message;
-                    LogInformation(string.Format("Validation error. {0} - {1}", airing.AssetId, result.Message), queue);
+                    LogInformation(string.Format("Validation error. {0} - {1}", airing.AssetId, result.Message));
                     _reportStatusCommand.Report(queue, airing.AssetId, message, result.StatusEnum, true);
                 }
                 if (queue.BimRequired)
@@ -229,18 +240,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var bimisMatch = results.Where(r => !r.Valid && r.StatusEnum == BIMMISMATCH).FirstOrDefault();
             if (bimFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
+                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
+                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
-                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimFoundResult.Message), queue);
+                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimFoundResult.Message));
                 _reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
@@ -272,7 +283,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 else
                 {
-                    LogInformation(string.Format("Validation error. {0} - No 'Modify' action message delivered to the queue", airing.AssetId), queue);
+                    LogInformation(string.Format("Validation error. {0} - No 'Modify' action message delivered to the queue", airing.AssetId));
                     invalidArings.Add(airing.AssetId);
                 }
             }
