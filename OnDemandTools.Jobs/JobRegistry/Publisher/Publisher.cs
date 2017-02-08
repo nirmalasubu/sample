@@ -1,15 +1,15 @@
-﻿using OnDemandTools.Business.Modules.Queue;
+﻿using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.Jobs.JobRegistry.Models;
+using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
 using System.Text;
-using OnDemandTools.DAL.Modules.Airings.Queries;
-using OnDemandTools.DAL.Modules.Airings.Model;
-using OnDemandTools.Business.Modules.Airing;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -26,12 +26,17 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         CurrentAiringsQuery currentAiringsQuery;
         DeletedAiringsQuery deletedAiringsQuery;
 
+        IEnvelopeDistributor envelopeDistributor;
+        IEnvelopeStuffer envelopeStuffer;
+
         public Publisher(
             Serilog.ILogger logger,
             IQueueService queueService,
             IQueueLocker queueLocker,
             CurrentAiringsQuery currentAiringsQuery,
-            DeletedAiringsQuery deletedAiringsQuery)
+            DeletedAiringsQuery deletedAiringsQuery,
+            IEnvelopeDistributor envelopeDistributor,
+            IEnvelopeStuffer envelopeStuffer)
         {
             this.logger = logger;
             this.queueService = queueService;
@@ -39,6 +44,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var processId = GetProcessId();
             this.currentAiringsQuery = currentAiringsQuery;
             this.deletedAiringsQuery = deletedAiringsQuery;
+            this.envelopeDistributor = envelopeDistributor;
+            this.envelopeStuffer = envelopeStuffer;
         }
 
         public void Execute(string queueName)
@@ -172,9 +179,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
             LogInformation("Preparing to distribute current and deleted airings to queue");
 
-            var envelopes = _envelopeStuffer.Generate(validAirings, queue, Action.Modify);
-            envelopes.AddRange(_envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
-            _envelopeDistributor.Distribute(envelopes, queue, details);
+            var envelopes = envelopeStuffer.Generate(validAirings, queue, Action.Modify);
+            envelopes.AddRange(envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
+            envelopeDistributor.Distribute(envelopes, queue, details);
             LogInformation("Successfully distributed current and deleted airings to queue");
 
 
@@ -209,7 +216,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             if (!validators.Any())
                 return airings.ToList();
 
-            var validator = new AiringValidator(validators);
+            var validator = new Validating.AiringValidator(validators);
             var validAirings = new List<Airing>();
 
             foreach (var airing in airings)
