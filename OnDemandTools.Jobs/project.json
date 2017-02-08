@@ -9,11 +9,16 @@
       "imports": [
         "dotnet5.6",
         "portable-net45+win8"
-      ]
+      ],
+      "dependencies": {
+        "System.ServiceModel.Duplex": "4.3.0",
+        "System.ServiceModel.Http": "4.3.0",
+        "System.ServiceModel.NetTcp": "4.3.0",
+        "System.ServiceModel.Security": "4.3.0",
+        "System.Xml.XmlSerializer": "4.3.0"
+      }
     }
   },
-
-
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.1.0",
@@ -51,14 +56,11 @@
     "Hangfire.Mongo": "0.3.2",
     "RestSharp.NetCore": "105.2.3"
   },
-
-
   "runtimeOptions": {
     "configProperties": {
       "System.GC.Server": true
     }
   },
-
   "publishOptions": {
     "include": [
       "wwwroot",
@@ -67,11 +69,11 @@
       "web.config"
     ]
   },
-
   "scripts": {
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    "postpublish": [
+      "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
+    ]
   },
-
   "tooling": {
     "defaultNamespace": "OnDemandTools.Jobs"
   }

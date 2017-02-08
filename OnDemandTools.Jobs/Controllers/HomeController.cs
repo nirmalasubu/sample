@@ -11,6 +11,8 @@ using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
+using FBDService;
+using OrionService;
 
 namespace OnDemandTools.Jobs.Controllers
 {
@@ -69,6 +71,42 @@ namespace OnDemandTools.Jobs.Controllers
 
             return Json("Error in the application");
         }
+
+        public IActionResult CheckBim(string id)
+        {
+            var endpoint = new FBDWSSoapClient.EndpointConfiguration();
+
+            GetBIMRecordByMaterialIdResponse response = null;
+
+            var client = new FBDWSSoapClient(endpoint);
+
+            Task.Run(async () =>
+            {
+                response = await client.GetBIMRecordByMaterialIdAsync(id + "%");
+            }).Wait();
+
+            return Json(response);
+        }
+
+        public IActionResult CheckOrion(string id)
+        {
+            var client = new InventoryClient();
+            var request = new BasicVersionByCID
+            {
+                ContentID = new string[] { id }
+            };
+
+            GetBasicVersionInformationByCIDResponseMessage response = null;
+
+            Task.Run(async () =>
+            {
+                response = await client.GetBasicVersionInformationByCIDAsync(request);
+            }).Wait();
+
+            return Json(response);
+        }
+
+
 
         public IActionResult Register()
         {
