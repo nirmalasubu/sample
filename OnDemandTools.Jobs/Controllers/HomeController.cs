@@ -51,6 +51,7 @@ namespace OnDemandTools.Jobs.Controllers
         [Route("/healthcheck")]
         public JsonResult Healthcheck()
         {
+           
             return Json("Healthy");
         }
 
@@ -59,6 +60,14 @@ namespace OnDemandTools.Jobs.Controllers
             //TODO - add code similar to job healthcheck that we have in ODT web
 
             return View();
+        }
+
+        [Route("/error")]
+        public IActionResult Error()
+        {
+            //TODO - If required write a error view
+
+            return Json("Error in the application");
         }
 
         public IActionResult Register()

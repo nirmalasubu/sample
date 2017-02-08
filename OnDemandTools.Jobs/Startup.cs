@@ -84,7 +84,15 @@ namespace OnDemandTools.Jobs
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
-            app.UseDeveloperExceptionPage();
+            if (env.EnvironmentName == "local"|| env.EnvironmentName == "development")
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+            app.UseErrorLogging();
             app.UseStaticFiles();
             app.UseHangfireServer();
 
