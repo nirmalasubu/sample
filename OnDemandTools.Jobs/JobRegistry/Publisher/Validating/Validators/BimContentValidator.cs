@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using OnDemandTools.Business.Modules.Adapters;
-using OnDemandTools.Business.Modules.Adapters.Model;
 using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
+using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validators
 {
@@ -145,15 +145,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validators
         }
     }
 
-    public interface IGetBimContentQuery
-    {
-        Content Get(string contentId);
-    }
 
-    public interface IGetOrionContentQuery
-    {
-        Content Get(string contentId);
-    }
 
     enum Sources
     {
