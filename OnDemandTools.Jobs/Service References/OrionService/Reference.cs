@@ -7782,7 +7782,7 @@ namespace OrionService
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IInventory))
             {
-                return new System.ServiceModel.EndpointAddress("http://orion/Webservice/Longform/Inventory.svc");
+                return new System.ServiceModel.EndpointAddress("http://orion.turner.com/Webservice/Longform/Inventory.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

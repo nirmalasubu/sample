@@ -5468,11 +5468,11 @@ namespace FBDService
         {
             if ((endpointConfiguration == EndpointConfiguration.FBDWSSoap))
             {
-                return new System.ServiceModel.EndpointAddress("http://fbd/FBDWS.asmx");
+                return new System.ServiceModel.EndpointAddress("http://fbd.turner.com/FBDWS.asmx");
             }
             if ((endpointConfiguration == EndpointConfiguration.FBDWSSoap12))
             {
-                return new System.ServiceModel.EndpointAddress("http://fbd/FBDWS.asmx");
+                return new System.ServiceModel.EndpointAddress("http://fbd.turner.com/FBDWS.asmx");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
