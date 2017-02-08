@@ -31,6 +31,15 @@ namespace OnDemandTools.Business.Modules.Queue
             queueCommandHelper.ResetFor(queueNames, titleIds, destinationCode);
         }
 
+        /// <summary>
+        /// Updates Queue processing date with current time
+        /// </summary>
+        /// <param name="name"></param>
+        public void UpdateQueueProcessedTime(string name)
+        {
+            queueCommandHelper.UpdateQueueProcessedTime(name);
+        }
+
 
         /// <summary>
         /// Retrieves those queues that match the provided
@@ -43,7 +52,7 @@ namespace OnDemandTools.Business.Modules.Queue
             return
             (queueQueryHelper.GetByStatus(active).ToList<DLModel.Queue>()
                 .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());
-            
+
         }
 
         /// <summary>
@@ -54,7 +63,7 @@ namespace OnDemandTools.Business.Modules.Queue
         {
             return
                 (queueQueryHelper.GetPackageQueues().ToList<DLModel.Queue>()
-                .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());            
+                .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());
         }
 
         /// <summary>
@@ -84,7 +93,7 @@ namespace OnDemandTools.Business.Modules.Queue
             return
             queueQueryHelper.GetByApiKey(apiKey)
                 .ToBusinessModel<DLModel.Queue, BLModel.Queue>();
-            
+
         }
     }
 }

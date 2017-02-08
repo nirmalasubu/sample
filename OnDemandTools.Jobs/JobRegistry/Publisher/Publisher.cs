@@ -1,5 +1,4 @@
-﻿using OnDemandTools.Business.Modules.Airing.Model;
-using OnDemandTools.Business.Modules.Queue;
+﻿using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.Jobs.JobRegistry.Models;
@@ -8,6 +7,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
 using System.Text;
+using OnDemandTools.DAL.Modules.Airings.Queries;
+using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.Business.Modules.Airing;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -20,15 +22,23 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         string processId;
         StringBuilder jobLogs = new StringBuilder();
 
+        //TODO 384 Move to airing service
+        CurrentAiringsQuery currentAiringsQuery;
+        DeletedAiringsQuery deletedAiringsQuery;
+
         public Publisher(
             Serilog.ILogger logger,
             IQueueService queueService,
-            IQueueLocker queueLocker)
+            IQueueLocker queueLocker,
+            CurrentAiringsQuery currentAiringsQuery,
+            DeletedAiringsQuery deletedAiringsQuery)
         {
             this.logger = logger;
             this.queueService = queueService;
             this.queueLocker = queueLocker;
             var processId = GetProcessId();
+            this.currentAiringsQuery = currentAiringsQuery;
+            this.deletedAiringsQuery = deletedAiringsQuery;
         }
 
         public void Execute(string queueName)
@@ -69,7 +79,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
                         // Set last process time for the queue
                         LogInformation("Setting queue last processed time");
-                        _markProcessedCommand.UpdateQueueProcessedTime(queue.Name);
+                        queueService.UpdateQueueProcessedTime(queue.Name);
                         LogInformation("Successfully set queue last processed time");
                     }
                     else
@@ -120,7 +130,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         private string GetProcessId()
         {
-            throw new NotImplementedException();
+            return Environment.MachineName;
         }
 
         /// <summary>
@@ -155,7 +165,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             {
                 //Creates Queue/Binding if not exists
                 LogInformation("Queue setup - started");
-                _remoteQueueHandler.Create(queue);
+                //TODO 384 Create Queue handler
+                //_remoteQueueHandler.Create(queue);
                 LogInformation("Queue setup - completed");
             }
 
@@ -176,16 +187,16 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private List<Airing> GetDeletedAirings(Queue queue, int limit)
         {
             var deletedAirings = new List<Airing>();
-            deletedAirings.AddRange(_deletedAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }, true).ToList());
-            deletedAirings.AddRange(_deletedAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
+            deletedAirings.AddRange(deletedAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }, true).ToList());
+            deletedAirings.AddRange(deletedAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
             return deletedAirings.Distinct(new AiringComparer()).ToList();
         }
 
         private List<Airing> GetCurrentAirings(Queue queue, int limit)
         {
             var currentAirings = new List<Airing>();
-            currentAirings.AddRange(_currentAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }).ToList());
-            currentAirings.AddRange(_currentAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
+            currentAirings.AddRange(currentAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }).ToList());
+            currentAirings.AddRange(currentAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
             return currentAirings.Distinct(new AiringComparer()).ToList();
         }
 

@@ -8,5 +8,6 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode);
         void ResetFor(IList<string> queueNames, IList<int> titleIds);
         void ResetFor(IList<string> queueNames, IList<string> airingIds);
+        void UpdateQueueProcessedTime(string name);
     }
 }

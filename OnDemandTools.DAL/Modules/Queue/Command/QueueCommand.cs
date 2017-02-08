@@ -16,6 +16,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         private readonly IGetModifiedAiringQuery _modifiedAiringQuery;
         private readonly MongoCollection<Airing> _currentAirings;
         private readonly MongoCollection<Airing> _deleteAirings;
+        private readonly MongoCollection<Model.Queue> _queuesCollection;
 
         public QueueCommand(IODTDatastore connection, IGetModifiedAiringQuery modifiedAiringQuery)
         {
@@ -23,6 +24,8 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             _modifiedAiringQuery = modifiedAiringQuery;
             _currentAirings = _database.GetCollection<Airing>("currentassets");
             _deleteAirings = _database.GetCollection<Airing>("deletedasset");
+
+            _queuesCollection = _database.GetCollection<Model.Queue>("DeliveryQueue");
         }
 
         private IMongoQuery GetAiringIdsQueryByExactTitleMatch(IEnumerable<Airing> currentAirings, IEnumerable<string> titleIds)
@@ -103,6 +106,11 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             {
                 ResetFor(queueName, airingIds);
             }
+        }
+
+        public void UpdateQueueProcessedTime(string name)
+        {
+            _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));
         }
     }
 }

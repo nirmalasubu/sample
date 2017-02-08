@@ -51,5 +51,11 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="apiKey">The API key.</param>
         /// <returns></returns>
         Model.Queue GetByApiKey(string apiKey);
+
+        /// <summary>
+        /// Updates Queue procesing date with Current time 
+        /// </summary>
+        /// <param name="name"></param>
+        void UpdateQueueProcessedTime(string name);
     }
 }
