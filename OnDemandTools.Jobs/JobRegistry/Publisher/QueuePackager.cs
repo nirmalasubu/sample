@@ -8,7 +8,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     {
         public QueueAiring Package(Airing airing, Action action)
         {
-            var queueAiring = Mapper.Map<Airing, QueueAiring>(airing);
+            var queueAiring = new QueueAiring();
+            queueAiring.AiringId = airing.AssetId;
             queueAiring.Action = action.ToString();
             return queueAiring;
         }

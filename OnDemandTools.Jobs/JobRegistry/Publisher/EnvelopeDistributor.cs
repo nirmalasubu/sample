@@ -1,6 +1,7 @@
 ﻿using EasyNetQ;
 using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
@@ -12,11 +13,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     public class EnvelopeDistributor : IEnvelopeDistributor
     {
         private readonly IQueueReporter _reporter;
-        private readonly IEnvelopeDistributorQueueHistoryRecorder _historyRecorder;
+        private readonly IQueueMessageRecorder _historyRecorder;
 
         //TODO 384 Pass the string builder and add the log
         //private static Logger pbLogger = LogManager.GetLogger("Publisher");
-        public EnvelopeDistributor(IQueueReporter queueReporter, IEnvelopeDistributorQueueHistoryRecorder queueHistoryRecorder)
+        public EnvelopeDistributor(IQueueReporter queueReporter, IQueueMessageRecorder queueHistoryRecorder)
         {
             _reporter = queueReporter;
             _historyRecorder = queueHistoryRecorder;
@@ -64,11 +65,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
             details.Bus.Publish(details.Exchange, routingKey, false, message);
         }
-    }
-
-    public interface IEnvelopeDistributorQueueHistoryRecorder
-    {
-        void Record(HistoricalMessage record);
     }
 
     public interface IQueueReporter

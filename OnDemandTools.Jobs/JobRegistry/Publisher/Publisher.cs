@@ -64,7 +64,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.logger = logger;
             this.queueService = queueService;
             this.queueLocker = queueLocker;
-            var processId = GetProcessId();
+            processId = GetProcessId();
             this.currentAiringsQuery = currentAiringsQuery;
             this.deletedAiringsQuery = deletedAiringsQuery;
             this.envelopeDistributor = envelopeDistributor;

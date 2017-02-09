@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Http;
 using OnDemandTools.Jobs.Helpers;
+using OnDemandTools.DAL.Modules.Airings.Commands;
 
 namespace OnDemandTools.Jobs
 {
@@ -60,7 +61,7 @@ namespace OnDemandTools.Jobs
                      reporterType: appSettings.LogzIO.ReporterType,
                      environment: appSettings.LogzIO.Environment)
                      .CreateLogger();
-
+                c.ForSingletonOf<IUpdateAiringQueueDelivery>().Use<UpdateAiringQueueDelivery>();
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
