@@ -21,6 +21,13 @@ namespace OnDemandTools.Common.Configuration
         public string AiringIdLockExpiredSeconds { get; set; }
         public string AiringDeportGraceDays { get; set; }
         public JobSchedules JobSchedules { get; set; }
+        public CloudQueue CloudQueue { get; set; }
+    }
+
+    public class CloudQueue
+    {
+        public string MqUrl { get; set; }
+        public string MqExchange { get; set; }
     }
 
 

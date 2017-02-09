@@ -1,11 +1,12 @@
-﻿using OnDemandTools.Business.Modules.Airing;
+﻿using EasyNetQ;
+using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.Common.Configuration;
 using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
-using OnDemandTools.DAL.Modules.Reporting.Command;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
@@ -23,6 +24,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         //resolve all concrete implementations in constructor        
         private readonly Serilog.ILogger logger;
+        private readonly AppSettings appsettings;
         private readonly string processId;
         private readonly IQueueService queueService;
         private readonly IQueueLocker queueLocker;
@@ -41,8 +43,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private const int BIMNOTFOUND = 18;
         private const int BIMMISMATCH = 19;
 
+        public const int Limit = 1000;
+
         public Publisher(
             Serilog.ILogger logger,
+            AppSettings appsettings,
             IQueueService queueService,
             IQueueLocker queueLocker,
             CurrentAiringsQuery currentAiringsQuery,
@@ -70,6 +75,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.messageDeliveryValidator = messageDeliveryValidator;
             this.bimContentValidator = bimContentValidator;
             this.mediaIdValidator = mediaIdValidator;
+            this.appsettings = appsettings;
         }
 
         public void Execute(string queueName)
@@ -99,13 +105,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
                     if (qLock.IsLockedBy(processId))
                     {
-                        var deliveryDetails = SetupDeliveryDetails();
-
                         LogInformation("Acquired lock on queue");
 
                         // Proceed to processing the queue                    
                         LogInformation("Hard core processing on queue started");
-                        ProcessQueue(queue, deliveryDetails);
+                        ProcessQueue(queue);
                         LogInformation("Successfully completed hard core processing on queue");
 
                         // Set last process time for the queue
@@ -169,26 +173,26 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         /// </summary>
         /// <param name="queue">The queue.</param>
         /// <param name="details">The details.</param>
-        private void ProcessQueue(Queue queue, DeliveryDetails details)
+        private void ProcessQueue(Queue queue)
         {
             LogInformation("Retrieving current airings that should be send to queue");
-            var currentAirings = GetCurrentAirings(queue, details.Limit);
+            var currentAirings = GetCurrentAirings(queue, Limit);
             LogInformation(string.Format("Successfully retrieved {0} current airings", currentAirings.Count));
 
 
             LogInformation("Retrieving deleted airings that should be send to queue");
-            var deletedAirings = GetDeletedAirings(queue, details.Limit);
+            var deletedAirings = GetDeletedAirings(queue, Limit);
             LogInformation(string.Format("Successfully retrieved {0} deleted airings", deletedAirings.Count));
 
 
             LogInformation("Applying validation on all current airings based on queue settings");
-            var validAirings = ValidateAirings(queue, currentAirings, details);
+            var validAirings = ValidateAirings(queue, currentAirings);
             LogInformation(string.Format("Completed validation on all {0} current airings, resulting in a total of {1} valid current airings", currentAirings.Count, validAirings.Count));
 
 
             LogInformation("Applying validation on all deleted airings");
 
-            var validDeletedAirings = ValidateDeletedAirings(queue, deletedAirings, details);
+            var validDeletedAirings = ValidateDeletedAirings(queue, deletedAirings);
             LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count));
 
 
@@ -205,7 +209,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
             var envelopes = envelopeStuffer.Generate(validAirings, queue, Action.Modify);
             envelopes.AddRange(envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
-            envelopeDistributor.Distribute(envelopes, queue, details);
+            Distribute(queue, envelopes);
             LogInformation("Successfully distributed current and deleted airings to queue");
 
 
@@ -213,6 +217,20 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
             UpdateDeliveredTo(validAirings, validDeletedAirings, queue.Name);
             LogInformation("Successfully updated delivery status of all distributed airings");
+        }
+
+        private void Distribute(Queue queue, List<Envelope> envelopes)
+        {
+            using (var bus = RabbitHutch.CreateBus(appsettings.CloudQueue.MqUrl).Advanced)
+            {
+                var deliveryDetails = new DeliveryDetails
+                {
+                    Bus = bus,
+                    Exchange = bus.ExchangeDeclare(appsettings.CloudQueue.MqExchange, EasyNetQ.Topology.ExchangeType.Direct)
+                };
+
+                envelopeDistributor.Distribute(envelopes, queue, deliveryDetails);
+            }
         }
 
         private List<Airing> GetDeletedAirings(Queue queue, int limit)
@@ -231,7 +249,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             return currentAirings.Distinct(new AiringComparer()).ToList();
         }
 
-        private List<Airing> ValidateAirings(Queue queue, IEnumerable<Airing> airings, DeliveryDetails details)
+        private List<Airing> ValidateAirings(Queue queue, IEnumerable<Airing> airings)
         {
             var validators = LoadValidators(queue);
 
@@ -261,7 +279,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 if (queue.BimRequired)
                 {
-                    SendBIMStatus(results, airing, queue, details);
+                    SendBIMStatus(results, airing, queue);
                 }
 
             }
@@ -275,7 +293,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         }
 
 
-        private void SendBIMStatus(IList<ValidationResult> results, Airing airing, Queue queue, DeliveryDetails details)
+        private void SendBIMStatus(IList<ValidationResult> results, Airing airing, Queue queue)
         {
             var bimFoundResult = results.Where(r => r.Valid && r.StatusEnum == BIMFOUND).FirstOrDefault();
             var bimNotFoundResult = results.Where(r => !r.Valid && r.StatusEnum == BIMNOTFOUND).FirstOrDefault();
@@ -309,7 +327,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
         }
 
-        private List<Airing> ValidateDeletedAirings(Queue queue, List<Airing> airings, DeliveryDetails details)
+        private List<Airing> ValidateDeletedAirings(Queue queue, List<Airing> airings)
         {
             var validAirings = new List<Airing>();
             if (!airings.Any()) return validAirings;
