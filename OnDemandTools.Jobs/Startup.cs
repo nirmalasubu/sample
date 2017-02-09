@@ -65,7 +65,8 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
-                c.ForSingletonOf<TitleSync>();                
+                c.For<TitleSync>();
+                c.For<Publisher>();
             });
 
             services.InitializeAutoMapper();
@@ -84,7 +85,7 @@ namespace OnDemandTools.Jobs
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
-            if (env.EnvironmentName == "local"|| env.EnvironmentName == "development")
+            if (env.EnvironmentName == "local" || env.EnvironmentName == "development")
             {
                 app.UseDeveloperExceptionPage();
             }

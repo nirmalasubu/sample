@@ -301,13 +301,13 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
             if (bimNotFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
+                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
-                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimFoundResult.Message));
+                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
