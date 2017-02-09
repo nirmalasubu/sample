@@ -126,7 +126,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 catch (Exception ex)
                 {
-                    LogInformation(string.Format("Abruptly stopped operation on queue. Exception: {0}", ex.Message);
+                    LogInformation(string.Format("Abruptly stopped operation on queue. Exception: {0}", ex.Message));
                     LogError(ex, "Abruptly stopped operation on queue", queue);
                     throw;
                 }
@@ -146,11 +146,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 logger.Information(jobLogs.ToString());
             }
 
-        }
-
-        private DeliveryDetails SetupDeliveryDetails()
-        {
-            return new DeliveryDetails();
         }
 
         private void LogInformation(string message)
