@@ -8,6 +8,8 @@ using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.DAL.Modules.Reporting.Command;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
+using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
+using OnDemandTools.Jobs.JobRegistry.Publisher.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +19,23 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
     public class Publisher
     {
-        //resolve all concrete implementations in constructor        
-        Serilog.ILogger logger;
-        IQueueService queueService;
-        IQueueLocker queueLocker;
-        string processId;
         StringBuilder jobLogs = new StringBuilder();
-        //TODO 384 Move to airing service
-        CurrentAiringsQuery currentAiringsQuery;
-        DeletedAiringsQuery deletedAiringsQuery;
-        IEnvelopeDistributor envelopeDistributor;
-        IEnvelopeStuffer envelopeStuffer;
-        IQueueReporter reportStatusCommand;
-        IUpdateAiringQueueDelivery updateAiringQueueDelivery;
-        IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
+
+        //resolve all concrete implementations in constructor        
+        private readonly Serilog.ILogger logger;
+        private readonly string processId;
+        private readonly IQueueService queueService;
+        private readonly IQueueLocker queueLocker;
+        private readonly CurrentAiringsQuery currentAiringsQuery;
+        private readonly DeletedAiringsQuery deletedAiringsQuery;
+        private readonly IEnvelopeDistributor envelopeDistributor;
+        private readonly IEnvelopeStuffer envelopeStuffer;
+        private readonly IQueueReporter reportStatusCommand;
+        private readonly IUpdateAiringQueueDelivery updateAiringQueueDelivery;
+        private readonly IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
+        private readonly IMessageDeliveryValidator messageDeliveryValidator;
+        private readonly IAiringValidatorStep bimContentValidator;
+        private readonly IAiringValidatorStep mediaIdValidator;
 
         private const int BIMFOUND = 17;
         private const int BIMNOTFOUND = 18;
@@ -46,7 +51,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             IEnvelopeStuffer envelopeStuffer,
             IQueueReporter reportStatusCommand,
             IUpdateAiringQueueDelivery updateAiringQueueDelivery,
-            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery)
+            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
+            IMessageDeliveryValidator messageDeliveryValidator,
+            BimContentValidator bimContentValidator,
+            MediaIdValidator mediaIdValidator)
         {
             this.logger = logger;
             this.queueService = queueService;
@@ -59,6 +67,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.reportStatusCommand = reportStatusCommand;
             this.updateAiringQueueDelivery = updateAiringQueueDelivery;
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
+            this.messageDeliveryValidator = messageDeliveryValidator;
+            this.bimContentValidator = bimContentValidator;
+            this.mediaIdValidator = mediaIdValidator;
         }
 
         public void Execute(string queueName)
@@ -308,7 +319,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             foreach (var airing in airings)
             {
                 //Delete message will be delivered only when there is any modified message delivered for the same queue.
-                if (_messageDeliveryValidator.Validate(airing, queue.Name))
+                if (messageDeliveryValidator.Validate(airing, queue.Name))
                 {
                     validAirings.Add(airing);
                 }
@@ -333,7 +344,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var validators = new List<IAiringValidatorStep>();
 
             if (queue.BimRequired)
-                validators.Add(_bimContentValidator);
+                validators.Add(bimContentValidator);
 
             // Verify if queue is configured to receive
             // airings without versions. If not, apply validation.
@@ -344,7 +355,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
             if (queue.IsProhibitResendMediaId)
             {
-                validators.Add(_mediaIdValidator);
+                validators.Add(mediaIdValidator);
             }
 
             return validators;
@@ -354,12 +365,12 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         {
             foreach (var airing in currentAirings)
             {
-                _udateAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
+                updateAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
             }
 
             foreach (var airing in deleteAirings)
             {
-                _updateDeletedAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
+                updateDeletedAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
             }
         }
     }

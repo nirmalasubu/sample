@@ -23,7 +23,9 @@ namespace OnDemandTools.Business.Modules.Queue.Model
         public bool Report { get; set; }
 
         public bool BimRequired { get; set; }
-        public bool DetectTitleChanges { get; set; }
+        public bool AllowAiringsWithNoVersion { get; set; }
+
+        public bool DetectTitleChanges { get; set; }        
         public bool DetectImageChanges { get; set; }
         public bool DetectVideoChanges { get; set; }
         public bool DetectPackageChanges { get; set; }
