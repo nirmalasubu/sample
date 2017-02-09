@@ -126,6 +126,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 catch (Exception ex)
                 {
+                    LogInformation(string.Format("Abruptly stopped operation on queue. Exception: {0}", ex.Message);
                     LogError(ex, "Abruptly stopped operation on queue", queue);
                     throw;
                 }
@@ -138,7 +139,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
 
 
-                logger.Information("Publisher job completed for queue:" + queueName);
+                LogInformation("Publisher job completed for queue:" + queueName);
             }
             finally
             {
@@ -160,7 +161,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         private void LogError(Exception exception, string message, Queue queue)
         {
-            logger.Error(exception, "{0}. QueueName: {1}  Queue: {2}, Process Id: {3}", message, queue.Name, queue.FriendlyName, processId);
+            logger.Error(exception, string.Format("{0}. QueueName: {1}  Queue: {2}, Process Id: {3}", message, queue.Name, queue.FriendlyName, processId));
         }
 
         private string GetProcessId()
