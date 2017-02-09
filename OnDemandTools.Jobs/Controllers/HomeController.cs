@@ -12,7 +12,7 @@ using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
 using Hangfire.Storage;
-using OnDemandTools.Jobs.Model;
+using OnDemandTools.Jobs.Models;
 using RestSharp;
 using FBDService;
 using OrionService;
@@ -58,8 +58,8 @@ namespace OnDemandTools.Jobs.Controllers
         public JsonResult Healthcheck()
         {
 
-            Healthcheck hCheck = new Healthcheck();          
-            var con =JobStorage.Current.GetConnection();
+            Healthcheck hCheck = new Healthcheck();
+            var con = JobStorage.Current.GetConnection();
             var servers = JobStorage.Current.GetMonitoringApi().Servers();
             var server = JobStorage.Current.GetComponents();
             var dateTimeExpire = DateTime.UtcNow.AddMinutes(-1);
@@ -68,13 +68,13 @@ namespace OnDemandTools.Jobs.Controllers
                 hCheck.IsAppHealthy = false;  //server stop alert
             }
             var DeporterJob = con.GetAllEntriesFromHash($"recurring-job:{"Deporter"}");
-            hCheck.DeporterAgentsHealth = GetJobState(con, DeporterJob)== "Succeeded" ? "excellent": "critical";
+            hCheck.DeporterAgentsHealth = GetJobState(con, DeporterJob) == "Succeeded" ? "excellent" : "critical";
 
             List<string> QueueJobsStatus = new List<string>();
-            var activeQueues=queueService.GetByStatus(true);
+            var activeQueues = queueService.GetByStatus(true);
             foreach (var activeQueue in activeQueues)
             {
-                var QueueJob = con.GetAllEntriesFromHash($"recurring-job:{string.Format("Publisher-{0}", activeQueue.Name)}"); 
+                var QueueJob = con.GetAllEntriesFromHash($"recurring-job:{string.Format("Publisher-{0}", activeQueue.Name)}");
                 QueueJobsStatus.Add(GetJobState(con, QueueJob));
             }
             int succeedQueueJob = QueueJobsStatus.Where(x => x == "Succeeded").Count();
@@ -82,7 +82,7 @@ namespace OnDemandTools.Jobs.Controllers
             if (postOfficePCT == 100.0) hCheck.PublisherAgentsHealth = "excellent";
             if (postOfficePCT < 100.0 && postOfficePCT >= 50.0) hCheck.PublisherAgentsHealth = "moderate";
             if (postOfficePCT < 50.0) hCheck.PublisherAgentsHealth = "critical";
-           
+
             var TitleSyncJob = con.GetAllEntriesFromHash($"recurring-job:{"TitleSync"}");
             hCheck.TitleSyncAgentsHealth = GetJobState(con, TitleSyncJob) == "Succeeded" ? "excellent" : "critical";
 
