@@ -65,8 +65,7 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
-                c.ForSingletonOf<TitleSync>();
-                c.ForSingletonOf<Publisher>();
+                c.ForSingletonOf<TitleSync>();                
             });
 
             services.InitializeAutoMapper();
