@@ -39,7 +39,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private readonly IMessageDeliveryValidator messageDeliveryValidator;
         private readonly IAiringValidatorStep bimContentValidator;
         private readonly IAiringValidatorStep mediaIdValidator;
-
+        private readonly IRemoteQueueHandler remoteQueueHandler;
         private const int BIMFOUND = 17;
         private const int BIMNOTFOUND = 18;
         private const int BIMMISMATCH = 19;
@@ -60,7 +60,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
             IMessageDeliveryValidator messageDeliveryValidator,
             BimContentValidator bimContentValidator,
-            MediaIdValidator mediaIdValidator)
+            MediaIdValidator mediaIdValidator,
+            IRemoteQueueHandler remoteQueueHandler)
         {
             this.logger = logger;
             this.queueService = queueService;
@@ -77,6 +78,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.bimContentValidator = bimContentValidator;
             this.mediaIdValidator = mediaIdValidator;
             this.appsettings = appsettings;
+            this.remoteQueueHandler = remoteQueueHandler;
         }
 
         public void Execute(string queueName)
@@ -196,8 +198,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             {
                 //Creates Queue/Binding if not exists
                 LogInformation("Queue setup - started");
-                //TODO 384 Create Queue handler
-                //_remoteQueueHandler.Create(queue);
+                remoteQueueHandler.Create(queue);
                 LogInformation("Queue setup - completed");
             }
             else
