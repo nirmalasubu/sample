@@ -21,6 +21,7 @@ using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Http;
 using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.DAL.Modules.Airings.Commands;
+using OnDemandTools.Jobs.Models;
 
 namespace OnDemandTools.Jobs
 {
@@ -95,7 +96,11 @@ namespace OnDemandTools.Jobs
             }
             app.UseErrorLogging();
             app.UseStaticFiles();
-            app.UseHangfireServer();
+
+            var options = new BackgroundJobServerOptions();
+            options.Queues = Enum.GetNames(typeof(HangfireQueue));
+            options.WorkerCount = 5;
+            app.UseHangfireServer(options);
 
             //TODO - temporary solution to allow all users. Will need to come up with an
             // authorization mechanism

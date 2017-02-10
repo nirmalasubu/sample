@@ -146,19 +146,20 @@ namespace OnDemandTools.Jobs.Controllers
             {
                 var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById(appsettings.JobSchedules.TimeZone);
 
-                //TODO - left here as reference. update as needed
+
                 var manager = new RecurringJobManager();
+
+
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
+                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
 
                 foreach (var activeQueue in queueService.GetByStatus(true))
                 {
                     // Create multiple job among multiple instances
                     manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone);
+                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.pusblisher.ToString());
                 }
 
-                // Just oone job among multiple instances
-                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone);
-                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone);
 
                 return Redirect("/dashboard");
             }

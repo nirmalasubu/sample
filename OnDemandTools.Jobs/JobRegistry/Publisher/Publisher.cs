@@ -86,7 +86,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
                 var queue = queueService.GetByApiKey(queueName);
 
-                if (queue != null && !queue.Active)
+                if (queue == null || !queue.Active)
                 {
                     LogInformation(string.Format("No Active queue found for queue name: {0}", queueName));
                     return;
