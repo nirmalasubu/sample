@@ -46,19 +46,28 @@ namespace OnDemandTools.Jobs.Controllers
         [Route("/healthcheck")]
         public JsonResult Healthcheck()
         {
+            
+            return Json("Healthy");
+        }
 
+        [Route("/heartbeat")]
+        public IActionResult Heartbeat()
+        {
             Healthcheck hCheck = new Healthcheck();
+            hCheck.IsAppHealthy = true;
             var con = JobStorage.Current.GetConnection();
             var servers = JobStorage.Current.GetMonitoringApi().Servers();
-            var server = JobStorage.Current.GetComponents();
-            var dateTimeExpire = DateTime.UtcNow.AddMinutes(-1);
+           
+            var dateTimeExpire = DateTime.UtcNow.AddMinutes(-int.Parse(appsettings.JobSchedules.HeartBeatExpireMinute));
             if (servers.All(x => x.Heartbeat.HasValue && x.Heartbeat < dateTimeExpire))
             {
                 hCheck.IsAppHealthy = false;  //server stop alert
             }
+            // deporter Job
             var DeporterJob = con.GetAllEntriesFromHash($"recurring-job:{"Deporter"}");
-            hCheck.DeporterAgentsHealth = GetJobState(con, DeporterJob) == "Succeeded" ? "excellent" : "critical";
+            hCheck.DeporterAgentsHealth = GetJobState(con, DeporterJob);
 
+            // Queues Job
             List<string> QueueJobsStatus = new List<string>();
             var activeQueues = queueService.GetByStatus(true);
             foreach (var activeQueue in activeQueues)
@@ -66,23 +75,25 @@ namespace OnDemandTools.Jobs.Controllers
                 var QueueJob = con.GetAllEntriesFromHash($"recurring-job:{string.Format("Publisher-{0}", activeQueue.Name)}");
                 QueueJobsStatus.Add(GetJobState(con, QueueJob));
             }
-            int succeedQueueJob = QueueJobsStatus.Where(x => x == "Succeeded").Count();
-            double postOfficePCT = ((Double)succeedQueueJob / activeQueues.Count()) * 100;
-            if (postOfficePCT == 100.0) hCheck.PublisherAgentsHealth = "excellent";
-            if (postOfficePCT < 100.0 && postOfficePCT >= 50.0) hCheck.PublisherAgentsHealth = "moderate";
-            if (postOfficePCT < 50.0) hCheck.PublisherAgentsHealth = "critical";
+            if (QueueJobsStatus.All(x => x == "Recurring job not started"))
+            {
+                hCheck.PublisherAgentsHealth = "Recurring job not started";
+            }
+            else
+            {
+                int succeedQueueJob = QueueJobsStatus.Where(x => x == "excellent").Count();
+                double postOfficePCT = ((Double)succeedQueueJob / activeQueues.Count()) * 100;
+                if (postOfficePCT == 100.0) hCheck.PublisherAgentsHealth = "excellent";
+                if (postOfficePCT < 100.0 && postOfficePCT >= 50.0) hCheck.PublisherAgentsHealth = "moderate";
+                if (postOfficePCT < 50.0) hCheck.PublisherAgentsHealth = "critical";
+            }
 
+            // TitleSync Job
             var TitleSyncJob = con.GetAllEntriesFromHash($"recurring-job:{"TitleSync"}");
-            hCheck.TitleSyncAgentsHealth = GetJobState(con, TitleSyncJob) == "Succeeded" ? "excellent" : "critical";
+            hCheck.TitleSyncAgentsHealth = GetJobState(con, TitleSyncJob);
 
             return Json(hCheck);
-        }
-
-        public IActionResult Heartbeat()
-        {
-            //TODO - add code similar to job healthcheck that we have in ODT web
-
-            return View();
+            
         }
 
         [Route("/error")]
@@ -132,11 +143,11 @@ namespace OnDemandTools.Jobs.Controllers
 
         private string GetJobState(IStorageConnection con, Dictionary<string, string> Job)
         {
-            string state = "Failed";
+            string state = "Recurring job not started";  // if LastJobId is not present then recurring job is not started
             if (Job != null && Job.ContainsKey("LastJobId"))
             {
                 var d = con.GetJobData(Job["LastJobId"]);
-                state = d.State;
+                state = d.State== "Succeeded" ? "excellent" : "critical";
             }
             return state;
         }

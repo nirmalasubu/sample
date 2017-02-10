@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Hangfire;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Common.Configuration;
 using System;
-using System.Threading;
-
 
 namespace OnDemandTools.Jobs.JobRegistry.Deporter
 {
@@ -22,6 +20,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Deporter
             this.airingServiceHelper = airingService;
         }
 
+        [AutomaticRetry(Attempts = 0)]        
         public void Execute()
         {
             try

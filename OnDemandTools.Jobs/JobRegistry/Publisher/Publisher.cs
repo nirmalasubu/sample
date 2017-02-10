@@ -1,4 +1,5 @@
 ﻿using EasyNetQ;
+using Hangfire;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
@@ -81,6 +82,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.remoteQueueHandler = remoteQueueHandler;
         }
 
+
+        [AutomaticRetry(Attempts = 0)]        
         public void Execute(string queueName)
         {
             try

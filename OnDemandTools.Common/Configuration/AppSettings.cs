@@ -44,6 +44,7 @@ namespace OnDemandTools.Common.Configuration
         public string Deporter { get; set; }
         public string TitleSync { get; set; }
         public string TimeZone { get; set; }
+        public string HeartBeatExpireMinute { get; set; }
     }
 
     public class LogzIOConfiguration
