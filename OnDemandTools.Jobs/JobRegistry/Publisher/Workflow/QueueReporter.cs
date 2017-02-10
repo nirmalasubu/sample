@@ -35,4 +35,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         }
     }
+
+    public interface IQueueReporter
+    {
+        void Report(Queue queue, string airingId, string message, int statusEnum, bool unique = false);
+
+        void BimReport(Queue queue, string airingId, string message, int statusEnum);
+    }
 }

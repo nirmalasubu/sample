@@ -7,6 +7,7 @@ using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
+using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
@@ -150,8 +151,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
         private void LogInformation(string message)
         {
-            jobLogs.Append(message);
-            jobLogs.Append("\r\n");
+            jobLogs.AppendWithTime(message);
         }
 
         private void LogError(Exception exception, string message, Queue queue)
@@ -192,13 +192,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count));
 
 
-            if (validAirings.Any())
+            if (validAirings.Any() || validDeletedAirings.Any())
             {
                 //Creates Queue/Binding if not exists
                 LogInformation("Queue setup - started");
                 //TODO 384 Create Queue handler
                 //_remoteQueueHandler.Create(queue);
                 LogInformation("Queue setup - completed");
+            }
+            else
+            {
+                LogInformation("No Airings found to distribute");
+                return;
             }
 
             LogInformation("Preparing to distribute current and deleted airings to queue");
@@ -207,12 +212,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             envelopes.AddRange(envelopeStuffer.Generate(validDeletedAirings, queue, Action.Delete));
             Distribute(queue, envelopes);
             LogInformation("Successfully distributed current and deleted airings to queue");
-
-
-            LogInformation("Update delivery status of all distributed airings");
-
-            UpdateDeliveredTo(validAirings, validDeletedAirings, queue.Name);
-            LogInformation("Successfully updated delivery status of all distributed airings");
         }
 
         private void Distribute(Queue queue, List<Envelope> envelopes)
@@ -225,7 +224,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     Exchange = bus.ExchangeDeclare(appsettings.CloudQueue.MqExchange, EasyNetQ.Topology.ExchangeType.Direct)
                 };
 
-                envelopeDistributor.Distribute(envelopes, queue, deliveryDetails);
+                envelopeDistributor.Distribute(envelopes, queue, deliveryDetails, jobLogs);
             }
         }
 

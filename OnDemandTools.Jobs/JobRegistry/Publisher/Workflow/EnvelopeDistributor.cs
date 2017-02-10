@@ -1,12 +1,15 @@
 ﻿using EasyNetQ;
 using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
+using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
@@ -14,19 +17,31 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     {
         private readonly IQueueReporter _reporter;
         private readonly IQueueMessageRecorder _historyRecorder;
+        private readonly IUpdateAiringQueueDelivery _updateAiringQueueDelivery;
+        private readonly IUpdateDeletedAiringQueueDelivery _updateDeletedAiringQueueDelivery;
 
-        //TODO 384 Pass the string builder and add the log
-        //private static Logger pbLogger = LogManager.GetLogger("Publisher");
-        public EnvelopeDistributor(IQueueReporter queueReporter, IQueueMessageRecorder queueHistoryRecorder)
+        public EnvelopeDistributor(
+            IQueueReporter queueReporter,
+            IQueueMessageRecorder queueHistoryRecorder,
+            IUpdateAiringQueueDelivery updateAiringQueueDelivery,
+            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery)
         {
             _reporter = queueReporter;
             _historyRecorder = queueHistoryRecorder;
+            _updateAiringQueueDelivery = updateAiringQueueDelivery;
+            _updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
         }
 
-        public void Distribute(IList<Envelope> envelopes, Queue deliveryQueue, DeliveryDetails details)
+        public void Distribute(IList<Envelope> envelopes, Queue deliveryQueue, DeliveryDetails details, StringBuilder logger)
         {
             foreach (var envelope in envelopes.OrderBy(e => e.PostMarkedDateTime))
             {
+                if (IsAiringDistributed(envelope, deliveryQueue.Name))
+                {
+                    logger.AppendWithTime(string.Format("Airing {0} already delivered to the queue", envelope.AiringId));
+                    continue;
+                }
+
                 var message = JsonConvert.SerializeObject(envelope.Message);
 
                 try
@@ -40,18 +55,51 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     _reporter.Report(deliveryQueue, envelope.AiringId,
                         string.Format("Sent successfully to {0} Message: {1}", deliveryQueue.FriendlyName, message),
                         12);
-                }
-                catch (Exception exception)
-                {
-                    //pbLogger.Trace(String.Format("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Failed to deliver message:{4}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, deliveryQueue.FriendlyName, message));
-                    //pbLogger.Error(String.Format("Agent:{0}-Job:{1}-Thread:{2}-Queue:{3}: Failed to deliver message:{4}", details.Agent.AgentId, details.Job.JobName, Thread.CurrentThread.ManagedThreadId, deliveryQueue.FriendlyName, message));
 
+                    UpdateDeliveredTo(envelope, deliveryQueue.Name);
+
+                    logger.AppendWithTime(string.Format("Airing {0} successfully delivered to the queue", envelope.AiringId));
+                }
+                catch
+                {
                     _reporter.Report(deliveryQueue, envelope.AiringId,
                         string.Format("Failed to send to {0} Message: {1}", deliveryQueue.FriendlyName, message), 4,
                         true);
 
                     throw;
                 }
+            }
+        }
+
+        private void UpdateDeliveredTo(Envelope envelope, string queueName)
+        {
+            switch (envelope.Message.Action)
+            {
+                case "Create":
+                case "Modify":
+                    _updateAiringQueueDelivery.PushDeliveredTo(envelope.AiringId, queueName);
+                    break;
+                case "Delete":
+                    _updateDeletedAiringQueueDelivery.PushDeliveredTo(envelope.AiringId, queueName);
+                    break;
+                default:
+                    throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
+
+            }
+        }
+
+        private bool IsAiringDistributed(Envelope envelope, string queueName)
+        {
+            switch (envelope.Message.Action)
+            {
+                case "Create":
+                case "Modify":
+                    return _updateAiringQueueDelivery.IsAiringDistributed(envelope.AiringId, queueName);
+                case "Delete":
+                    return _updateDeletedAiringQueueDelivery.IsAiringDistributed(envelope.AiringId, queueName);
+                default:
+                    throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
+
             }
         }
 
@@ -65,14 +113,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
             details.Bus.Publish(details.Exchange, routingKey, false, message);
         }
-    }
-
-    public interface IQueueReporter
-    {
-        void Report(Queue queue, string airingId, string message, int statusEnum, bool unique = false);
-
-        void BimReport(Queue queue, string airingId, string message, int statusEnum);
-
     }
 
 }
