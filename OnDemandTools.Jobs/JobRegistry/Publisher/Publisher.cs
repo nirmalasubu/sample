@@ -374,18 +374,5 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
             return validators;
         }
-
-        private void UpdateDeliveredTo(IEnumerable<Airing> currentAirings, IEnumerable<Airing> deleteAirings, string name)
-        {
-            foreach (var airing in currentAirings)
-            {
-                updateAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
-            }
-
-            foreach (var airing in deleteAirings)
-            {
-                updateDeletedAiringQueueDelivery.PushDeliveredTo(airing.AssetId, name);
-            }
-        }
     }
 }
