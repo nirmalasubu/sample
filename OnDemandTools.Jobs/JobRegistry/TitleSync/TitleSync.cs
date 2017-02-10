@@ -20,10 +20,13 @@ namespace OnDemandTools.Jobs.JobRegistry.TitleSync
         IJobQuery _jobQuery;
         IJobCommand _jobCommand;
         Serilog.ILogger logger;
-        public TitleSync(IModifiedTitlesService svc, Serilog.ILogger logger)
+        public TitleSync(IModifiedTitlesService svc, Serilog.ILogger logger, IJobQuery jobQuery, IJobCommand jobCommand, QueueQuery queueQuery)
         {
-           this.svc = svc;
+            this.svc = svc;
             this.logger = logger;
+            this._jobCommand = jobCommand;
+            this._jobQuery = jobQuery;
+            this._queueQuery = queueQuery;
         }
 
         public void Execute()

@@ -8,24 +8,26 @@ using BLModel = OnDemandTools.Business.Modules.ModifiedTitles.Model;
 using DQModel = OnDemandTools.DAL.Modules.Queue.Model;
 using System.Threading.Tasks;
 using OnDemandTools.Common.Extensions;
+using OnDemandTools.DAL.Modules.Queue.Command;
 
 namespace OnDemandTools.Business.Modules.ModifiedTitles
 {
     public class ModifiedTitleService: IModifiedTitlesService
     {
-        private readonly IResetDeliveryCommand _resetDeliveryCommand;
+        private IQueueCommand _resetDeliveryCommand;
         private readonly ITitleIdsQuery _titlIdsQuery;
         private readonly ITitleIdsCommand _titleIDsCommand;
         private readonly RestClient _client;
         AppSettings appSettings;
 
-        public ModifiedTitleService(IResetDeliveryCommand resetDeliveryCommand,
+        public ModifiedTitleService(IQueueCommand resetDeliveryCommand,
             ITitleIdsQuery titlIdsQuery,
-            ITitleIdsCommand titleIDsCommand)
+            ITitleIdsCommand titleIDsCommand, AppSettings _appSettings)
         {
             _resetDeliveryCommand = resetDeliveryCommand;
             _titlIdsQuery = titlIdsQuery;
             _titleIDsCommand = titleIDsCommand;
+            this.appSettings = _appSettings;
             _client = new RestClient(appSettings.GetExternalService("Flow").Url);
         }
 
@@ -33,7 +35,7 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
         {
 
             //"Retrieving all titles from Flow that were modified since sinceTitleBSONId
-            List<BLModel.UpdatedTitle> modifiedTitles = GetTitleIdsModifiedAfter(sinceTitleBSONId);
+            List<BLModel.UpdatedTitle> modifiedTitles = !string.IsNullOrEmpty(sinceTitleBSONId) ? GetTitleIdsModifiedAfter(sinceTitleBSONId) : null;
             List<int> modifiedTitleIds = new List<int>();
             if (!modifiedTitles.IsNullOrEmpty())
             {
@@ -48,7 +50,7 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
             var titleIds = _titlIdsQuery.Get(limit).ToList();
 
             //"Preparing to send modified titles to queues"
-            var queueNames = queues.Select(q => q.Name);
+            var queueNames = queues.Select(q => q.Name).ToList();
             _resetDeliveryCommand.ResetFor(queueNames, titleIds);
 
             //"Deleting previously persisted modified titles in ODT"
