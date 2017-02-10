@@ -48,7 +48,7 @@ namespace OnDemandTools.Jobs.Controllers
                 {
                     // Create multiple job among multiple instances
                     manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.pusblisher.ToString());
+                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.publisher.ToString());
                 }
 
                 return "Successfully registered jobs";
@@ -72,7 +72,7 @@ namespace OnDemandTools.Jobs.Controllers
 
                 // Create multiple job among multiple instances
                 manager.AddOrUpdate(string.Format("Publisher-{0}", id),
-                    Job.FromExpression(() => pub.Execute(id)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.pusblisher.ToString());
+                    Job.FromExpression(() => pub.Execute(id)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.publisher.ToString());
 
             }
             catch (Exception e)
