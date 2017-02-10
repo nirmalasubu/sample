@@ -253,3 +253,4 @@ paket-files/
 *.sln.iml
 /OnDemandTools/
 /mss-sead-odt/
+/OnDemandTools.Common/Configuration/AppSettings.cs.orig
