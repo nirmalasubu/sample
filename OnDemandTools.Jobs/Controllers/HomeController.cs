@@ -1,40 +1,29 @@
+using FBDService;
+using Hangfire;
+using Hangfire.Storage;
+using Microsoft.AspNetCore.Mvc;
+using OnDemandTools.Business.Modules.Queue;
+using OnDemandTools.Common.Configuration;
+using OnDemandTools.Jobs.Models;
+using OrionService;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Hangfire;
-using Hangfire.Common;
-using System.Diagnostics;
-using OnDemandTools.Jobs.JobRegistry.TitleSync;
-using OnDemandTools.Jobs.JobRegistry.Publisher;
-using OnDemandTools.Jobs.JobRegistry.Deporter;
-using OnDemandTools.Business.Modules.Queue;
-using OnDemandTools.Common.Configuration;
-using Hangfire.Storage;
-using OnDemandTools.Jobs.Models;
-using RestSharp;
-using FBDService;
-using OrionService;
 
 namespace OnDemandTools.Jobs.Controllers
 {
 
     public class HomeController : Controller
     {
-        Serilog.ILogger logger;
-        Publisher pub;
-        Deporter dep;
-        TitleSync tsy;
+        Serilog.ILogger logger;       
         IQueueService queueService;
         AppSettings appsettings;
 
-        public HomeController(Serilog.ILogger logger, AppSettings appsettings, Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
+        public HomeController(Serilog.ILogger logger, AppSettings appsettings, IQueueService queueService)
         {
             this.logger = logger;
-            this.pub = pub;
-            this.dep = dep;
-            this.tsy = tsy;
             this.queueService = queueService;
             this.appsettings = appsettings;
         }
@@ -136,38 +125,6 @@ namespace OnDemandTools.Jobs.Controllers
             }).Wait();
 
             return Json(response);
-        }
-
-
-
-        public IActionResult Register()
-        {
-            try
-            {
-                var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById(appsettings.JobSchedules.TimeZone);
-
-
-                var manager = new RecurringJobManager();
-
-
-                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
-                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
-
-                foreach (var activeQueue in queueService.GetByStatus(true))
-                {
-                    // Create multiple job among multiple instances
-                    manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.pusblisher.ToString());
-                }
-
-
-                return Redirect("/dashboard");
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, "Error while registering Jobs");
-                throw e;
-            }
         }
 
 
