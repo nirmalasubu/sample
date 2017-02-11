@@ -83,7 +83,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         }
 
 
-        [AutomaticRetry(Attempts = 0)]        
+        [AutomaticRetry(Attempts = 0)]
         public void Execute(string queueName)
         {
             try
@@ -98,6 +98,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     return;
                 }
 
+                bool lockAquired = false;
+
                 try
                 {
                     LogInformation(string.Format("Acquiring lock on queue {0}; Queue Name: {1}, process Id: {2}", queue.FriendlyName, queueName, processId));
@@ -107,10 +109,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 
                     qLock = queueLocker.AquireLockFor(queue.Name, processId);
 
-
                     // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
                     if (qLock.IsLockedBy(processId))
                     {
+                        lockAquired = true;
+
                         LogInformation("Acquired lock on queue");
 
                         // Proceed to processing the queue                    
@@ -138,10 +141,13 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 }
                 finally
                 {
-                    // Release lock on the queue
-                    LogInformation("Removing lock on queue");
-                    queueLocker.ReleaseLockFor(queue.Name, processId);
-                    LogInformation("Successfully removed lock on queue");
+                    if (lockAquired)
+                    {
+                        // Release lock on the queue
+                        LogInformation("Removing lock on queue");
+                        queueLocker.ReleaseLockFor(queue.Name, processId);
+                        LogInformation("Successfully removed lock on queue");
+                    }
                 }
 
 
