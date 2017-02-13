@@ -17,7 +17,7 @@ namespace OnDemandTools.Jobs.Controllers
 
     public class HomeController : Controller
     {
-        Serilog.ILogger logger;       
+        Serilog.ILogger logger;
         IQueueService queueService;
         AppSettings appsettings;
 
@@ -46,8 +46,16 @@ namespace OnDemandTools.Jobs.Controllers
         [Route("/healthcheck")]
         public JsonResult Healthcheck()
         {
-            
+
             return Json("Healthy");
+        }
+
+        [Route("/hangfireservers")]
+        public JsonResult GetHangfireServers()
+        {
+            var servers = JobStorage.Current.GetMonitoringApi().Servers();
+
+            return Json(servers);
         }
 
         [Route("/heartbeat")]
@@ -57,7 +65,7 @@ namespace OnDemandTools.Jobs.Controllers
             hCheck.IsAppHealthy = true;
             var con = JobStorage.Current.GetConnection();
             var servers = JobStorage.Current.GetMonitoringApi().Servers();
-           
+
             var dateTimeExpire = DateTime.UtcNow.AddMinutes(-int.Parse(appsettings.JobSchedules.HeartBeatExpireMinute));
             if (servers.All(x => x.Heartbeat.HasValue && x.Heartbeat < dateTimeExpire))
             {
@@ -93,7 +101,7 @@ namespace OnDemandTools.Jobs.Controllers
             hCheck.TitleSyncAgentsHealth = GetJobState(con, TitleSyncJob);
 
             return Json(hCheck);
-            
+
         }
 
         [Route("/error")]
@@ -147,7 +155,7 @@ namespace OnDemandTools.Jobs.Controllers
             if (Job != null && Job.ContainsKey("LastJobId"))
             {
                 var d = con.GetJobData(Job["LastJobId"]);
-                state = d.State== "Succeeded" ? "excellent" : "critical";
+                state = d.State == "Succeeded" ? "excellent" : "critical";
             }
             return state;
         }
