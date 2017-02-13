@@ -68,13 +68,6 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
 
             _airings.Update(query, update, UpdateFlags.Multi);
         }
-
-        public bool IsAiringDistributed(string airingId, string queueName)
-        {
-            var airing = _airings.FindOne(Query.And(Query.EQ("AssetId", airingId), Query.EQ("DeliveredTo", queueName)));
-
-            return airing != null;
-        }
         #endregion
 
     }

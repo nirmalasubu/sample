@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
 using OnDemandTools.Jobs.Adapters.Queries;

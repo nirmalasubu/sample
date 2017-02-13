@@ -1,12 +1,12 @@
 ﻿using EasyNetQ;
 using Hangfire;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Common.Configuration;
+using OnDemandTools.DAL.Modules.Airings;
 using OnDemandTools.DAL.Modules.Airings.Commands;
-using OnDemandTools.DAL.Modules.Airings.Model;
-using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.Models;
@@ -30,13 +30,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private readonly string processId;
         private readonly IQueueService queueService;
         private readonly IQueueLocker queueLocker;
-        private readonly CurrentAiringsQuery currentAiringsQuery;
-        private readonly DeletedAiringsQuery deletedAiringsQuery;
+        private readonly IAiringService airingService;
         private readonly IEnvelopeDistributor envelopeDistributor;
         private readonly IEnvelopeStuffer envelopeStuffer;
         private readonly IQueueReporter reportStatusCommand;
-        private readonly IUpdateAiringQueueDelivery updateAiringQueueDelivery;
-        private readonly IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
         private readonly IMessageDeliveryValidator messageDeliveryValidator;
         private readonly IAiringValidatorStep bimContentValidator;
         private readonly IAiringValidatorStep mediaIdValidator;
@@ -52,8 +49,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             AppSettings appsettings,
             IQueueService queueService,
             IQueueLocker queueLocker,
-            CurrentAiringsQuery currentAiringsQuery,
-            DeletedAiringsQuery deletedAiringsQuery,
+            IAiringService airingService,
             IEnvelopeDistributor envelopeDistributor,
             IEnvelopeStuffer envelopeStuffer,
             IQueueReporter reportStatusCommand,
@@ -68,13 +64,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.queueService = queueService;
             this.queueLocker = queueLocker;
             processId = GetProcessId();
-            this.currentAiringsQuery = currentAiringsQuery;
-            this.deletedAiringsQuery = deletedAiringsQuery;
             this.envelopeDistributor = envelopeDistributor;
             this.envelopeStuffer = envelopeStuffer;
             this.reportStatusCommand = reportStatusCommand;
-            this.updateAiringQueueDelivery = updateAiringQueueDelivery;
-            this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
             this.messageDeliveryValidator = messageDeliveryValidator;
             this.bimContentValidator = bimContentValidator;
             this.mediaIdValidator = mediaIdValidator;
@@ -241,16 +233,16 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private List<Airing> GetDeletedAirings(Queue queue, int limit)
         {
             var deletedAirings = new List<Airing>();
-            deletedAirings.AddRange(deletedAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }, true).ToList());
-            deletedAirings.AddRange(deletedAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
+            deletedAirings.AddRange(airingService.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }, true, AiringCollection.DeletedCollection).ToList());
+            deletedAirings.AddRange(airingService.GetDeliverToBy(queue.Name, limit, AiringCollection.DeletedCollection).ToList());
             return deletedAirings.Distinct(new AiringComparer()).ToList();
         }
 
         private List<Airing> GetCurrentAirings(Queue queue, int limit)
         {
             var currentAirings = new List<Airing>();
-            currentAirings.AddRange(currentAiringsQuery.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }).ToList());
-            currentAirings.AddRange(currentAiringsQuery.GetDeliverToBy(queue.Name, limit).ToList());
+            currentAirings.AddRange(airingService.GetBy(queue.Query, queue.HoursOut, new[] { queue.Name }).ToList());
+            currentAirings.AddRange(airingService.GetDeliverToBy(queue.Name, limit).ToList());
             return currentAirings.Distinct(new AiringComparer()).ToList();
         }
 
@@ -326,9 +318,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             foreach (var airingId in ignoreAirings)
             {
                 if (isDeleted)
-                    updateDeletedAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+                    airingService.PushIgnoredQueueTo(airingId, queueName);
                 else
-                    updateAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+                    airingService.PushIgnoredQueueTo(airingId, queueName);
             }
         }
 

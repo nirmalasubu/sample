@@ -5,7 +5,5 @@
         void PushDeliveredTo(string airingId, string queueName);
        
         void PushIgnoredQueueTo(string airingId, string queueName);
-
-        bool IsAiringDistributed(string airingId, string queueName);
     }
 }

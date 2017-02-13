@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using Newtonsoft.Json;
+using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
@@ -17,19 +18,16 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     {
         private readonly IQueueReporter _reporter;
         private readonly IQueueMessageRecorder _historyRecorder;
-        private readonly IUpdateAiringQueueDelivery _updateAiringQueueDelivery;
-        private readonly IUpdateDeletedAiringQueueDelivery _updateDeletedAiringQueueDelivery;
+        private readonly IAiringService _airingService;
 
         public EnvelopeDistributor(
             IQueueReporter queueReporter,
             IQueueMessageRecorder queueHistoryRecorder,
-            IUpdateAiringQueueDelivery updateAiringQueueDelivery,
-            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery)
+            IAiringService airingService)
         {
             _reporter = queueReporter;
             _historyRecorder = queueHistoryRecorder;
-            _updateAiringQueueDelivery = updateAiringQueueDelivery;
-            _updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
+            _airingService = airingService;
         }
 
         public void Distribute(IList<Envelope> envelopes, Queue deliveryQueue, DeliveryDetails details, StringBuilder logger)
@@ -77,10 +75,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             {
                 case "Create":
                 case "Modify":
-                    _updateAiringQueueDelivery.PushDeliveredTo(envelope.AiringId, queueName);
+                    _airingService.PushDeliveredTo(envelope.AiringId, queueName);
                     break;
                 case "Delete":
-                    _updateDeletedAiringQueueDelivery.PushDeliveredTo(envelope.AiringId, queueName);
+                    _airingService.PushDeliveredTo(envelope.AiringId, queueName);
                     break;
                 default:
                     throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
@@ -94,9 +92,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             {
                 case "Create":
                 case "Modify":
-                    return _updateAiringQueueDelivery.IsAiringDistributed(envelope.AiringId, queueName);
+                    return _airingService.IsAiringDistributed(envelope.AiringId, queueName);
                 case "Delete":
-                    return _updateDeletedAiringQueueDelivery.IsAiringDistributed(envelope.AiringId, queueName);
+                    return _airingService.IsAiringDistributed(envelope.AiringId, queueName, DAL.Modules.Airings.AiringCollection.DeletedCollection);
                 default:
                     throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
 

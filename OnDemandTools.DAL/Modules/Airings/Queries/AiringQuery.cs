@@ -31,6 +31,13 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
             return airings.AsEnumerable();
         }
 
+        public bool IsAiringDistributed(string airingId, string queueName)
+        {
+            var airing = Collection.FindOne(Query.And(Query.EQ("AssetId", airingId), Query.EQ("DeliveredTo", queueName)));
+
+            return airing != null;
+        }
+
         public IEnumerable<Airing> GetBy(string jsonQuery, int hoursOut, IList<string> queueNames, bool includeEndDate = false)
         {
             var queryDoc = Create(jsonQuery);

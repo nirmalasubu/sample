@@ -27,6 +27,8 @@ using OnDemandTools.Business.Modules.Airing.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnDemandTools.Business.Modules.Airing.Diffing;
+using OnDemandTools.DAL.Modules.Airings.Queries;
+using OnDemandTools.DAL.Modules.Airings.Commands;
 
 namespace OnDemandTools.Business.Modules.Airing
 {
@@ -45,6 +47,10 @@ namespace OnDemandTools.Business.Modules.Airing
         IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper;
         IChangeDeletedAiringQuery changeDeletedAiringQueryHelper;
         IDeportExpiredAiring deportExpiredAiringHelper;
+        CurrentAiringsQuery currentAiringsQuery;
+        DeletedAiringsQuery deletedAiringsQuery;
+        IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
+        IUpdateAiringQueueDelivery updateAiringQueueDelivery;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
             AppSettings appSettings,
@@ -57,7 +63,9 @@ namespace OnDemandTools.Business.Modules.Airing
             IPackageQuery packageQueryHelper,
             IChangeHistoricalAiringQuery changeHistoricalAiringQueryHelper,
             IChangeDeletedAiringQuery changeDeletedAiringQueryHelper,
-            IDeportExpiredAiring deportExpiredAiringHelper)
+            IDeportExpiredAiring deportExpiredAiringHelper,
+            CurrentAiringsQuery currentAiringsQuery,
+            DeletedAiringsQuery deletedAiringsQuery)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -72,6 +80,8 @@ namespace OnDemandTools.Business.Modules.Airing
             this.changeHistoricalAiringQueryHelper = changeHistoricalAiringQueryHelper;
             this.changeDeletedAiringQueryHelper = changeDeletedAiringQueryHelper;
             this.deportExpiredAiringHelper = deportExpiredAiringHelper;
+            this.currentAiringsQuery = currentAiringsQuery;
+            this.deletedAiringsQuery = deletedAiringsQuery;
         }
 
         #region "Public method"
@@ -87,6 +97,37 @@ namespace OnDemandTools.Business.Modules.Airing
             return
             airingQueryHelper.GetBy(assetId, getFrom)
                 .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
+        }
+
+        public IEnumerable<BLModel.Airing> GetDeliverToBy(string queueName, int limit, AiringCollection getFrom = AiringCollection.CurrentCollection)
+        {
+            IEnumerable<DLModel.Airing> airings = new List<DLModel.Airing>();
+            if (getFrom == AiringCollection.CurrentCollection)
+                airings = currentAiringsQuery.GetDeliverToBy(queueName, limit);
+            else
+                airings = deletedAiringsQuery.GetDeliverToBy(queueName, limit);
+
+            return airings.ToBusinessModel<IEnumerable<DLModel.Airing>, IEnumerable<BLModel.Airing>>();
+
+        }
+
+        public IEnumerable<BLModel.Airing> GetBy(string jsonQuery, int hoursOut, IList<string> queueNames, bool includeEndDate = false, AiringCollection getFrom = AiringCollection.CurrentCollection)
+        {
+            IEnumerable<DLModel.Airing> airings = new List<DLModel.Airing>();
+            if (getFrom == AiringCollection.CurrentCollection)
+                airings = currentAiringsQuery.GetBy(jsonQuery, hoursOut, queueNames, includeEndDate);
+            else
+                airings = deletedAiringsQuery.GetBy(jsonQuery, hoursOut, queueNames, includeEndDate);
+
+            return airings.ToBusinessModel<IEnumerable<DLModel.Airing>, IEnumerable<BLModel.Airing>>();
+        }
+
+        public bool IsAiringDistributed(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection)
+        {
+            if (getFrom == AiringCollection.CurrentCollection)
+                return currentAiringsQuery.IsAiringDistributed(airingId, queueName);
+            else
+                return deletedAiringsQuery.IsAiringDistributed(airingId, queueName);
         }
 
         public List<BLModel.Airing> GetByMediaId(string mediaId)
@@ -132,6 +173,30 @@ namespace OnDemandTools.Business.Modules.Airing
                 airingMessagePusherCommandHelper.PushBy(deliveryQueue.Name, deliveryQueue.Query, deliveryQueue.HoursOut, airingIds);
             }
 
+        }
+
+        public void PushDeliveredTo(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection)
+        {
+            if (getFrom == AiringCollection.CurrentCollection)
+            {
+                updateAiringQueueDelivery.PushDeliveredTo(airingId, queueName);
+            }
+            else if (getFrom == AiringCollection.DeletedCollection)
+            {
+                updateDeletedAiringQueueDelivery.PushDeliveredTo(airingId, queueName);
+            }
+        }
+
+        public void PushIgnoredQueueTo(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection)
+        {
+            if (getFrom == AiringCollection.CurrentCollection)
+            {
+                updateAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+            }
+            else if (getFrom == AiringCollection.DeletedCollection)
+            {
+                updateDeletedAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+            }
         }
 
         public void AugmentMediaId(ref BLModel.Airing airing)
@@ -189,7 +254,7 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Files.AddRange(Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files)
                                             .ToList());
         }
-        
+
         public void AppendTitle(ref BLModel.Alternate.Long.Airing airing)
         {
             List<int> titleIds = airing.Title.TitleIds
@@ -207,7 +272,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
             airing.Options.Titles = titles;
         }
-                
+
         public void AppendSeries(ref BLModel.Alternate.Long.Airing airing)
         {
             if (airing.Title.Series == null || airing.Title.Series.Id == null)
@@ -216,7 +281,7 @@ namespace OnDemandTools.Business.Modules.Airing
             var series = GetTitleFor(airing.Title.Series.Id.Value);
             airing.Options.Series.Add(series);
         }
-        
+
         public void AppendFileBySeriesId(ref BLModel.Alternate.Long.Airing airing)
         {
             if (airing.Title.Series == null || !airing.Title.Series.Id.HasValue)
@@ -226,7 +291,7 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Files.AddRange(Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files)
                                             .ToList());
         }
-        
+
         public void AppendDestinations(ref BLModel.Alternate.Long.Airing airing)
         {
             var destinationNames = airing.Flights
@@ -238,7 +303,7 @@ namespace OnDemandTools.Business.Modules.Airing
             var destinations = destinationQueryHelper.GetByDestinationNames(destinationNames)
                                 .ToBusinessModel<List<DLDestinationModel.Destination>, List<BLModel.Alternate.Destination.Destination>>();
 
-            FilterPropertiesByBrand(destinations, ref airing); 
+            FilterPropertiesByBrand(destinations, ref airing);
             new BLModel.Alternate.Destination.DeliverableFormatter(airing).Format(destinations); // destinations passed by reference for formatting
             new BLModel.Alternate.Destination.PropertyFormatter(airing).Format(destinations); // destinations passed by reference for formatting
 
@@ -247,10 +312,10 @@ namespace OnDemandTools.Business.Modules.Airing
 
         public void AppendChanges(ref BLModel.Alternate.Long.Airing airing)
         {
-            var changes = Find( ref airing);
+            var changes = Find(ref airing);
 
             airing.Options.Changes = changes.ToList();
-                
+
         }
 
         public void AppendStatus(ref BLModel.Alternate.Long.Airing airing)
@@ -278,9 +343,9 @@ namespace OnDemandTools.Business.Modules.Airing
             else
             {
                 airing.Options.Status.Video = !airing.Options.Files.Where(c => c.Video == true).IsNullOrEmpty();
-            }          
+            }
         }
-        
+
         public void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders)
         {
             var titleIds = airing.Title.TitleIds.Where(title => (title.Authority.Equals("Turner") && isNumeric(title.Value)))
@@ -376,7 +441,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList();
             }
         }
-        
+
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)
         {
             if (primaryTitle.TitleType != "Feature Film")
@@ -424,7 +489,7 @@ namespace OnDemandTools.Business.Modules.Airing
             var titles = new List<BLModel.Alternate.Title.Title>();
 
             foreach (var list in listsOfTitleIds)
-            {              
+            {
                 var request = new RestRequest("/v2/title/{ids}?api_key={api_key}", Method.GET);
                 request.AddUrlSegment("ids", string.Join(",", list));
                 request.AddUrlSegment("api_key", appSettings.GetExternalService("Flow").ApiKey);
@@ -446,7 +511,8 @@ namespace OnDemandTools.Business.Modules.Airing
         private Task<List<BLModel.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
         {
             var tcs = new TaskCompletionSource<List<BLModel.Alternate.Title.Title>>();
-            theClient.ExecuteAsync<List<BLModel.Alternate.Title.Title>>(theRequest, response => {
+            theClient.ExecuteAsync<List<BLModel.Alternate.Title.Title>>(theRequest, response =>
+            {
                 tcs.SetResult(response.Data);
             });
             return tcs.Task;
@@ -535,10 +601,10 @@ namespace OnDemandTools.Business.Modules.Airing
                 ToBusinessModel<List<DLModel.Airing>, List<BLModel.Alternate.Long.Airing>>();
 
             var groupedAirings = GroupAiringsAndOrderSoEarliestAiringsAreFirst(viewModels);
-           
-           return groupedAirings;
+
+            return groupedAirings;
         }
-     
+
         private IEnumerable<IGrouping<string, BLModel.Alternate.Long.Airing>> GroupAiringsAndOrderSoEarliestAiringsAreFirst(IEnumerable<BLModel.Alternate.Long.Airing> historicalAirings)
         {
             var groupedAirings = from h in historicalAirings
@@ -555,12 +621,12 @@ namespace OnDemandTools.Business.Modules.Airing
         }
 
 
-        private  bool ComparingThreeAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        private bool ComparingThreeAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
         {
             return groupedAiring.Count() > 2;
         }
 
-        private  bool ComparingTwoAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
+        private bool ComparingTwoAirings(IEnumerable<BLModel.Alternate.Long.Airing> groupedAiring)
         {
             return groupedAiring.Count() == 2;
         }
@@ -615,6 +681,10 @@ namespace OnDemandTools.Business.Modules.Airing
 
             return results;
         }
+
+
+
+
         #endregion
         #endregion
 

@@ -1,4 +1,4 @@
-﻿using OnDemandTools.DAL.Modules.Airings.Model;
+﻿using OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.DAL.Modules.QueueMessages;
 using System.Linq;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;

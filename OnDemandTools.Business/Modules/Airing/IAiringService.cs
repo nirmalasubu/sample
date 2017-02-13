@@ -42,6 +42,35 @@ namespace OnDemandTools.Business.Modules.Airing
         BLModel.Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection);
 
         /// <summary>
+        /// Gets the airings by deliveredTo and Queue name
+        /// </summary>
+        /// <param name="queueName">queue name</param>
+        /// <param name="limit">not of rows to return</param>
+        /// <param name="getFrom">Current or Delete collections</param>
+        /// <returns></returns>
+        IEnumerable<BLModel.Airing> GetDeliverToBy(string queueName, int limit, AiringCollection getFrom = AiringCollection.CurrentCollection);
+
+        /// <summary>
+        /// Checks given airing airingid distributed or not
+        /// </summary>
+        /// <param name="airingId">the airing id</param>
+        /// <param name="queueName">the queue name</param>
+        /// <returns></returns>
+        bool IsAiringDistributed(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection);
+
+        /// <summary>
+        /// Gets the airing by given queue query
+        /// </summary>
+        /// <param name="jsonQuery">query to retrive airings</param>
+        /// <param name="hoursOut">no of hours before</param>
+        /// <param name="queueNames">queue name to retrieve</param>
+        /// <param name="includeEndDate">Include end date filter?</param>
+        /// <param name="getFrom">Current or delete airng</param>
+        /// <returns></returns>
+        IEnumerable<BLModel.Airing> GetBy(string jsonQuery, int hoursOut, IList<string> queueNames, bool includeEndDate = false, AiringCollection getFrom = AiringCollection.CurrentCollection);
+
+
+        /// <summary>
         /// Determines whether [is airing exists] [the specified asset identifier].
         /// </summary>
         /// <param name="assetId">The asset identifier.</param>
@@ -81,6 +110,20 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="queueName">Name of the queue.</param>
         /// <param name="airingIds">The airing ids.</param>
         void PushToQueues(IList<string> airingIds);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="airingId"></param>
+        /// <param name="queueName"></param>
+        void PushDeliveredTo(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="airingId"></param>
+        /// <param name="queueName"></param>
+        void PushIgnoredQueueTo(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection);
 
         /// <summary>
         /// Augments media identifier to the given airing
@@ -187,7 +230,5 @@ namespace OnDemandTools.Business.Modules.Airing
         /// </summary>
         /// <param name="airingDeportGraceDays">The airingDeportGraceDays</param>
         void Deport(int airingDeportGraceDays);
-
-
     }
 }

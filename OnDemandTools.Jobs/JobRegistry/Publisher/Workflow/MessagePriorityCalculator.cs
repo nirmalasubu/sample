@@ -1,5 +1,5 @@
 ﻿using OnDemandTools.Business.Modules.Queue.Model;
-using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.Business.Modules.Airing.Model;
 using System;
 using System.Linq;
 

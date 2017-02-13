@@ -1,4 +1,4 @@
-﻿using OnDemandTools.DAL.Modules.Airings.Model;
+﻿using OnDemandTools.Business.Modules.Airing.Model;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validating
 {

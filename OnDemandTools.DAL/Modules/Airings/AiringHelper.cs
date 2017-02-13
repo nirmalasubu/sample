@@ -10,7 +10,8 @@ namespace OnDemandTools.DAL.Modules.Airings
     {
         CurrentOrExpiredCollection,
         DeletedCollection,
-        ExpiredCollection
+        ExpiredCollection,
+        CurrentCollection,
     }
 
     public interface IAiringDeleteCommand
