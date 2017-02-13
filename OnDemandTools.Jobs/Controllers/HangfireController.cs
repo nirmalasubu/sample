@@ -86,9 +86,7 @@ namespace OnDemandTools.Jobs.Controllers
         public void Delete(string id)
         {
             try
-            {
-                var estTimeZone = TimeZoneInfo.FindSystemTimeZoneById(appsettings.JobSchedules.TimeZone);
-
+            {   
                 var manager = new RecurringJobManager();
 
                 manager.RemoveIfExists(string.Format("Publisher-{0}", id));

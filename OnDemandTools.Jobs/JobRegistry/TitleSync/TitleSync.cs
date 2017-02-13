@@ -5,8 +5,10 @@ using OnDemandTools.DAL.Modules.Job.Queries;
 using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.DAL.Modules.Queue.Model;
 using OnDemandTools.DAL.Modules.Queue.Queries;
+using OnDemandTools.Jobs.Helpers;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 
@@ -20,6 +22,7 @@ namespace OnDemandTools.Jobs.JobRegistry.TitleSync
         IJobQuery _jobQuery;
         IJobCommand _jobCommand;
         Serilog.ILogger logger;
+        StringBuilder jobInfo = new StringBuilder();
         public TitleSync(IModifiedTitlesService svc, Serilog.ILogger logger, IJobQuery jobQuery, IJobCommand jobCommand, QueueQuery queueQuery)
         {
             this.svc = svc;
@@ -31,13 +34,14 @@ namespace OnDemandTools.Jobs.JobRegistry.TitleSync
 
         public void Execute()
         {
-            logger.Information("started titlesync job");
+            jobInfo.AppendWithTime("started titlesync job");
+
             try
             {
-                logger.Information("####################Registering title synchronization process#####################################");
+                jobInfo.AppendWithTime("####################Registering title synchronization process#####################################");
 
                 // Register title sync job. If it already exist, do nothing.
-                logger.Information("Registering title sync job");
+                jobInfo.AppendWithTime("Registering title sync job");
                 JobDataModel jb = new JobDataModel()
                 {
                     JobName = DAL.Modules.Job.Jobs.TitleSync.ToString(),
@@ -46,56 +50,51 @@ namespace OnDemandTools.Jobs.JobRegistry.TitleSync
                     LastProcessedTitleBSONId = svc.GetLastModifiedTitleIdOnOrBefore(DateTime.UtcNow)
                 };
                 jb = _jobCommand.RegisterTitleSyncJob(jb);
-                logger.Information("Successfully registered title sync job");
+                jobInfo.AppendWithTime("Successfully registered title sync job");
 
-                logger.Information("####################Completed registration of title synchronization process##########################");
+                jobInfo.AppendWithTime("####################Completed registration of title synchronization process##########################");
 
-                while (true)
+
+                try
                 {
-                    try
-                    {
-                        logger.Information("####################Started title synchronization process#####################################");
+                    jobInfo.AppendWithTime("####################Started title synchronization process#####################################");
 
-                        // Retrieve all active queues
-                        logger.Information("Retrieving queues that are active");
-                        var queues = _queueQuery.Get().Where(q => q.Active == true);
-                        logger.Information("Retrieved {0} active queues for processing", queues.Count());
+                    // Retrieve all active queues
+                    jobInfo.AppendWithTime("Retrieving queues that are active");
+                    var queues = _queueQuery.Get().Where(q => q.Active == true);
+                    jobInfo.AppendWithTime(string.Format("Retrieved {0} active queues for processing", queues.Count()));
 
-                        // Try to retieve title sync job information. Our assumption is that there will only be one title sync job
-                        logger.Information("Retrieving title sync job information");
-                        var job = _jobQuery.Get(DAL.Modules.Job.Jobs.TitleSync.ToString());
-                        logger.Information("Successfully retrieved title sync job information");
+                    // Try to retieve title sync job information. Our assumption is that there will only be one title sync job
+                    jobInfo.AppendWithTime("Retrieving title sync job information");
+                    var job = _jobQuery.Get(DAL.Modules.Job.Jobs.TitleSync.ToString());
+                    jobInfo.AppendWithTime("Successfully retrieved title sync job information");
 
-                        // From the list of active queues, retrieve those queues that are subscribed for title change notification.
-                        // Proceed to send notification to those queues
-                        logger.Information("Attempting to send title change notification to subscribed queues");
-                        job.LastProcessedTitleBSONId = svc.Update(queues.Where(q => q.DetectTitleChanges), job.LastProcessedTitleBSONId, job.Limit);
-                        logger.Information("Successfully sent title change notification to subscribed queues");
+                    // From the list of active queues, retrieve those queues that are subscribed for title change notification.
+                    // Proceed to send notification to those queues
+                    jobInfo.AppendWithTime("Attempting to send title change notification to subscribed queues");
+                    job.LastProcessedTitleBSONId = svc.Update(queues.Where(q => q.DetectTitleChanges), job.LastProcessedTitleBSONId, job.Limit);
+                    jobInfo.AppendWithTime("Successfully sent title change notification to subscribed queues");
 
-                        // Update run status                
-                        logger.Information("Attempting to update last run time and last processed title BSON id");
-                        _jobCommand.UpdateTitleJobStats(job.LastProcessedTitleBSONId);
-                        logger.Information("Successfully updated last run time and last processed title BSON id");
+                    // Update run status                
+                    jobInfo.AppendWithTime("Attempting to update last run time and last processed title BSON id");
+                    _jobCommand.UpdateTitleJobStats(job.LastProcessedTitleBSONId);
+                    jobInfo.AppendWithTime("Successfully updated last run time and last processed title BSON id");
 
-                        logger.Information("####################Completed title synchronization process###################################");
+                    jobInfo.AppendWithTime("####################Completed title synchronization process###################################");
 
-                        // Wait for sometime
-                        Thread.Sleep(60000);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Information("Error:{0}", ex.Message);
-                        logger.Information("####################Abruptly ended title synchronization process##############################");
-                    }
                 }
-
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Abruptly ended title synchronization process");
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                logger.Information("Error:{0}", ex.Message);
-                logger.Information("####################Abruptly ended title synchronization process##############################");
+                jobInfo.AppendWithTime("ending titlesync job");
+
+                logger.Information(jobInfo.ToString());
             }
-            logger.Information("ending titlesync job");
+
         }
     }
 }
