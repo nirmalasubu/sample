@@ -185,7 +185,7 @@ namespace OnDemandTools.Jobs.Controllers
             if (Job != null && Job.ContainsKey("LastJobId"))
             {
                 var d = con.GetJobData(Job["LastJobId"]);
-                state = d.State == "Succeeded" ? "excellent" : "critical";
+                state = d.State != "Failed" ? "excellent" : "critical";
             }
             return state;
         }
