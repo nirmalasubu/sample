@@ -7,8 +7,8 @@ namespace OnDemandTools.Jobs.Models
 {
     public class Healthcheck
     {
-        public string DeporterAgentsHealth { get; internal set; }
         public bool IsAppHealthy { get; internal set; }
+        public string DeporterAgentsHealth { get; internal set; }       
         public string PublisherAgentsHealth { get; internal set; }
         public string TitleSyncAgentsHealth { get; internal set; }
     }
