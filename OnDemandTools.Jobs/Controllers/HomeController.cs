@@ -40,11 +40,11 @@ namespace OnDemandTools.Jobs.Controllers
         public IActionResult Whoami()
         {
             // Construct application details like version, hosting environment, dependent services etc
-            IDictionary<string, Dictionary<string, string>> details = new Dictionary<string, Dictionary<string, string>>();
-            Dictionary<string, string> appDetails = new Dictionary<string, string>();
-            appDetails.Add("Name", appsettings.Name);
-            appDetails.Add("Description", appsettings.Description);
-            details.Add("ApplicationDetails", appDetails);
+            JObject jo = new JObject();
+            jo.Add("Name", appsettings.Name);
+            jo.Add("Description", appsettings.Description);
+
+
             RestClient client = new RestClient(appsettings.HostingProvider);
             var request = new RestRequest(Method.GET);
             Task.Run(async () =>
@@ -54,23 +54,27 @@ namespace OnDemandTools.Jobs.Controllers
 
                 if (provider.Count >= 1)
                 {
-                    Dictionary<string, string> hosting = new Dictionary<string, string>();
+                    JObject hosting = new JObject();
                     hosting.Add("DeployedVersion", provider.SelectToken("containers[0].image").ToString().Split(':')[1]);
                     hosting.Add("Environment", provider.SelectToken("name").ToString());
-                    hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas").ToString());
+                    hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas"));
                     hosting.Add("OperatingSystem", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
-                    details.Add("HostingDetails", hosting);
+                    jo.Add("HostingDetails", hosting);
                 }
+
             }).Wait();
 
-            Dictionary<string, string> serviceProviders = new Dictionary<string, string>();
+            JArray serviceProviders = new JArray();
             foreach (var svc in appsettings.Services)
             {
-                serviceProviders.Add(svc.Name, svc.Url);
+                JObject s = new JObject();
+                s.Add(svc.Name, svc.Url);
+                serviceProviders.Add(s);
             }
-            details.Add("ExternalServiceProviders", serviceProviders);
+            jo.Add("ExternalServiceProviders", serviceProviders);
 
-            return Json(details);
+
+            return Json(jo);
         }
 
         [Route("/healthcheck")]
