@@ -9,14 +9,12 @@ namespace OnDemandTools.DAL.Modules.Job.Commands
     public class JobCommand : IJobCommand
     {
         private readonly MongoCollection<JobDataModel> _jobCollection;
-        private readonly MongoCollection<AgentDataModel> _agentCollection;
 
         public JobCommand(IODTDatastore connection)
         {
             var database = connection.GetDatabase();
 
             _jobCollection = database.GetCollection<JobDataModel>("Job");
-            _agentCollection = database.GetCollection<AgentDataModel>("JobAgent");
         }
 
         /// <summary>
@@ -41,29 +39,6 @@ namespace OnDemandTools.DAL.Modules.Job.Commands
             else
                 throw new Exception("Error saving job: " + job.JobName + " - "+ job.AgentId.ToString());
 
-        }
-
-        /// <summary>
-        /// Registers the agent.
-        /// </summary>
-        /// <param name="agent">The agent.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Error saving agent:  + agent.AgentName +  -  + agent.AgentId.ToString()</exception>
-        public AgentDataModel RegisterAgent(AgentDataModel agent)
-        {
-
-            var query = Query.And(Query.EQ("AgentName", agent.AgentName), Query.EQ("AgentId", agent.AgentId));
-            var update = Update<AgentDataModel>
-                .Set(c => c.AgentId, agent.AgentId)
-                .Set(c => c.AgentName, agent.AgentName)
-                .Set(c => c.CreateDateTime, DateTime.UtcNow)
-                .Set(c => c.LastRunDateTime, DateTime.UtcNow);
-
-            WriteConcernResult wr = _agentCollection.Update(query, update, UpdateFlags.Upsert);
-            if (wr.DocumentsAffected >= 1)
-                return _agentCollection.FindOne(query);
-            else
-                throw new Exception("Error saving agent: " + agent.AgentName + " - " + agent.AgentId.ToString());
         }
 
         public void UpdateJobLastRunDateTime(JobDataModel job)
@@ -95,13 +70,6 @@ namespace OnDemandTools.DAL.Modules.Job.Commands
                .Set(c => c.LastRunDateTime, DateTime.UtcNow);
                
             _jobCollection.Update(query, update);
-        }
-
-
-        public void UpdateAgentLastRunDateTime(AgentDataModel agent)
-        {
-            var query = Query.And(Query.EQ("AgentName", agent.AgentName), Query.EQ("AgentId", agent.AgentId));
-            _agentCollection.Update(query, Update.Set("LastRunDateTime", DateTime.UtcNow));
         }
 
 

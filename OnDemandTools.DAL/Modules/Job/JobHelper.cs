@@ -22,18 +22,12 @@ namespace OnDemandTools.DAL.Modules.Job
         void UpdateTitleJobStats(String lastTitleBSONId);
 
         void UpdateDeporterJobStats();
-
-        void UpdateAgentLastRunDateTime(AgentDataModel agent);
-        AgentDataModel RegisterAgent(AgentDataModel agent);
     }
 
 
     public interface IJobLastRunQuery
     {
         JobDataModel Get(string name);
-        IEnumerable<AgentDataModel> GetHealthyAgents(string name);
-
-        IEnumerable<AgentDataModel> GetAgents(string name);
 
         IEnumerable<JobDataModel> GetJobs(string name);
 

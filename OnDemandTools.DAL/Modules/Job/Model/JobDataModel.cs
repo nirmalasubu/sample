@@ -18,14 +18,4 @@ namespace OnDemandTools.DAL.Modules.Job.Model
         [BsonIgnoreIfNull]
         public String LastProcessedTitleBSONId { get; set; }
     }
-
-    public class AgentDataModel
-    {
-        [BsonId]
-        public ObjectId Id { get; set; }
-        public int AgentId { get; set; }
-        public string AgentName { get; set; }
-        public DateTime CreateDateTime { get; set; }
-        public DateTime LastRunDateTime { get; set; }
-    }
 }

@@ -42,23 +42,6 @@ namespace OnDemandTools.DAL.Modules.Job.Queries
             return collection.FindOne(query);
         }
 
-
-        public IEnumerable<AgentDataModel> GetHealthyAgents(string name)
-        {
-            var lifetimeInMinutes = int.Parse(_appSettings.HealthAgentLifetimeInMinutes) * -1;
-
-            return GetAgents(name).Where(a => a.LastRunDateTime > DateTime.UtcNow.AddMinutes(lifetimeInMinutes));
-        }
-
-        public IEnumerable<AgentDataModel> GetAgents(string name)
-        {
-            var collection = _database.GetCollection<AgentDataModel>("JobAgent");
-
-            var agents = collection.Find(Query.EQ("AgentName", name));
-
-            return agents;
-        }
-
         public IEnumerable<JobDataModel> GetHealthyJobs(string name)
         {
             var lifetimeInMinutes = int.Parse(_appSettings.HealthAgentLifetimeInMinutes) * -1;
