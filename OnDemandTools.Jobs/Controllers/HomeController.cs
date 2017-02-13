@@ -2,6 +2,7 @@ using FBDService;
 using Hangfire;
 using Hangfire.Storage;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Jobs.Models;
@@ -35,12 +36,41 @@ namespace OnDemandTools.Jobs.Controllers
             return Redirect("/dashboard");
         }
 
-        [Route("/Whoami")]
+        [Route("/whoami")]
         public IActionResult Whoami()
         {
-            //TODO - add code similar to the API whoami
+            // Construct application details like version, hosting environment, dependent services etc
+            IDictionary<string, Dictionary<string, string>> details = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, string> appDetails = new Dictionary<string, string>();
+            appDetails.Add("Name", appsettings.Name);
+            appDetails.Add("Description", appsettings.Description);
+            details.Add("ApplicationDetails", appDetails);
+            RestClient client = new RestClient(appsettings.HostingProvider);
+            var request = new RestRequest(Method.GET);
+            Task.Run(async () =>
+            {
+                var rs = await GetHostingProviderDetails(client, request) as String;
+                JObject provider = JObject.Parse(rs);
 
-            return View();
+                if (provider.Count >= 1)
+                {
+                    Dictionary<string, string> hosting = new Dictionary<string, string>();
+                    hosting.Add("DeployedVersion", provider.SelectToken("containers[0].image").ToString().Split(':')[1]);
+                    hosting.Add("Environment", provider.SelectToken("name").ToString());
+                    hosting.Add("NumberOfInstancesRunning", provider.SelectToken("providers[0].replicas").ToString());
+                    hosting.Add("OperatingSystem", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
+                    details.Add("HostingDetails", hosting);
+                }
+            }).Wait();
+
+            Dictionary<string, string> serviceProviders = new Dictionary<string, string>();
+            foreach (var svc in appsettings.Services)
+            {
+                serviceProviders.Add(svc.Name, svc.Url);
+            }
+            details.Add("ExternalServiceProviders", serviceProviders);
+
+            return Json(details);
         }
 
         [Route("/healthcheck")]
