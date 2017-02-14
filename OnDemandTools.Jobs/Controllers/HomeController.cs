@@ -141,8 +141,6 @@ namespace OnDemandTools.Jobs.Controllers
         [Route("/error")]
         public IActionResult Error()
         {
-            //TODO - If required write a error view
-
             return Json("Error in the application");
         }
 

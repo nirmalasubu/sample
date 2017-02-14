@@ -40,16 +40,22 @@ namespace OnDemandTools.Jobs.Controllers
 
                 var manager = new RecurringJobManager();
 
-
-               // manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
                 manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
 
-                //foreach (var activeQueue in queueService.GetByStatus(true))
-                //{
-                //    // Create multiple job among multiple instances
-                //    manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
-                //        Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.publisher.ToString());
-                //}
+                foreach (var activeQueue in queueService.GetByStatus(true))
+                {
+                    if (activeQueue.Name.ToLower().StartsWith("unittest") && activeQueue.ContactEmailAddress.ToLower().Equals("ondemandtoolssupport@turner.com"))
+                    {
+                        manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
+                            Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.publisher.ToString());
+                    }
+                    else
+                    {
+                        manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
+                            Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Publisher, estTimeZone, HangfireQueue.publisher.ToString());
+                    }
+                }
 
                 return "Successfully registered jobs";
             }
@@ -86,7 +92,7 @@ namespace OnDemandTools.Jobs.Controllers
         public void Delete(string id)
         {
             try
-            {   
+            {
                 var manager = new RecurringJobManager();
 
                 manager.RemoveIfExists(string.Format("Publisher-{0}", id));
