@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RestSharp;
 using BLModel = OnDemandTools.Business.Modules.ModifiedTitles.Model;
-using DQModel = OnDemandTools.DAL.Modules.Queue.Model;
+using BLQueueModel = OnDemandTools.Business.Modules.Queue.Model;
 using System.Threading.Tasks;
 using OnDemandTools.Common.Extensions;
 using OnDemandTools.DAL.Modules.Queue.Command;
@@ -31,7 +31,7 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
             _client = new RestClient(appSettings.GetExternalService("Flow").Url);
         }
 
-        public String Update(IQueryable<DQModel.Queue> queues, String sinceTitleBSONId, int limit)
+        public String Update(IEnumerable<BLQueueModel.Queue> queues, String sinceTitleBSONId, int limit)
         {
 
             //"Retrieving all titles from Flow that were modified since sinceTitleBSONId

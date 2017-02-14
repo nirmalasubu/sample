@@ -1,9 +1,9 @@
-﻿using OnDemandTools.DAL.Modules.Airings;
+﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using BLModel = OnDemandTools.Business.Modules.ModifiedTitles.Model;
-using DQModel = OnDemandTools.DAL.Modules.Queue.Model;
+using BLQueueModel = OnDemandTools.Business.Modules.Queue.Model;
 
 
 namespace OnDemandTools.Business.Modules.ModifiedTitles
@@ -17,7 +17,7 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
         /// <param name="sinceTitleBSONId">Last Modified Title Id.</param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        String Update(IQueryable<DQModel.Queue> queues, String sinceTitleBSONId, int limit);
+        String Update(IEnumerable<BLQueueModel.Queue> queues, String sinceTitleBSONId, int limit);
 
         /// <summary>
         /// Retrieve titles modified since the date on which the given titleid was modified.
