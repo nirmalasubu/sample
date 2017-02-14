@@ -42,6 +42,11 @@ namespace OnDemandTools.Jobs.Controllers
             this.cloudAmqpSync = cloudAmqpSync;
         }
 
+        /// <summary>
+        /// To Register new recurring Job initially
+        /// </summary>
+        /// <returns>Status</returns>
+
         [HttpGet]
         public string Get()
         {
@@ -84,6 +89,11 @@ namespace OnDemandTools.Jobs.Controllers
 
         }
 
+
+        /// <summary>
+        /// To Add new queue to the Publisher
+        /// </summary>
+        /// <param name="id">the queue name</param>
         [HttpPost("{id}")]
         public void Post(string id)
         {
@@ -105,6 +115,10 @@ namespace OnDemandTools.Jobs.Controllers
             }
         }
 
+        /// <summary>
+        /// To remove a  queue in the publisher
+        /// </summary>
+        /// <param name="id">the queue name</param>
         [HttpDelete("{id}")]
         public void Delete(string id)
         {

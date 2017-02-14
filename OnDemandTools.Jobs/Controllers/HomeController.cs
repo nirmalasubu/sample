@@ -36,6 +36,10 @@ namespace OnDemandTools.Jobs.Controllers
             return Redirect("/dashboard");
         }
 
+        /// <summary>
+        /// Detailed information about the application
+        /// </summary>
+        /// <returns> version, hosting environment, dependent services</returns>
         [Route("/whoami")]
         public IActionResult Whoami()
         {
@@ -77,6 +81,10 @@ namespace OnDemandTools.Jobs.Controllers
             return Json(jo);
         }
 
+        /// <summary>
+        /// To determine application status
+        /// </summary>
+        /// <returns></returns>
         [Route("/healthcheck")]
         public JsonResult Healthcheck()
         {
@@ -84,6 +92,10 @@ namespace OnDemandTools.Jobs.Controllers
             return Json("Healthy");
         }
 
+        /// <summary>
+        /// Get the list of servers running in the hangfire
+        /// </summary>
+        /// <returns>The active servers</returns>
         [Route("/hangfireservers")]
         public JsonResult GetHangfireServers()
         {
@@ -92,6 +104,10 @@ namespace OnDemandTools.Jobs.Controllers
             return Json(servers);
         }
 
+        /// <summary>
+        /// To check all the running Jobs are status
+        /// </summary>
+        /// <returns>The recurring Jobs status</returns>
         [Route("/heartbeat")]
         public IActionResult Heartbeat()
         {
@@ -138,12 +154,21 @@ namespace OnDemandTools.Jobs.Controllers
 
         }
 
+        /// <summary>
+        /// Application error or exception response
+        /// </summary>
+        /// <returns>the error response</returns>
         [Route("/error")]
         public IActionResult Error()
         {
             return Json("Error in the application");
         }
 
+        /// <summary>
+        /// To determine Bim value
+        /// </summary>
+        /// <param name="id">"Id"</param>
+        /// <returns>Bim status</returns>
         public IActionResult CheckBim(string id)
         {
             var endpoint = new FBDWSSoapClient.EndpointConfiguration();
@@ -160,6 +185,11 @@ namespace OnDemandTools.Jobs.Controllers
             return Json(response);
         }
 
+        /// <summary>
+        /// To determine Orion value
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>orion status</returns>
         public IActionResult CheckOrion(string id)
         {
             var client = new InventoryClient();
