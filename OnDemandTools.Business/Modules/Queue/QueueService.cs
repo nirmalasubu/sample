@@ -33,6 +33,7 @@ namespace OnDemandTools.Business.Modules.Queue
             this.queueCommandHelper = queueCommandHelper;
             this.queueLocker = queueLocker;
             this.queueMessages = queueMessages;
+            this.historyRecorder = historyRecorder;
         }
 
         /// <summary>
