@@ -100,7 +100,7 @@ namespace OnDemandTools.Jobs.Controllers
             var con = JobStorage.Current.GetConnection();
             var servers = JobStorage.Current.GetMonitoringApi().Servers();
 
-            var dateTimeExpire = DateTime.UtcNow.AddMinutes(-int.Parse(appsettings.JobSchedules.HeartBeatExpireMinute));
+            var dateTimeExpire = DateTime.UtcNow.AddMinutes((-1 * appsettings.JobSchedules.HeartBeatExpireMinute));
             if (servers.All(x => x.Heartbeat.HasValue && x.Heartbeat < dateTimeExpire))
             {
                 hCheck.IsAppHealthy = false;  //server stop alert

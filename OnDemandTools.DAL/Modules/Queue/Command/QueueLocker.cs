@@ -7,16 +7,19 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.DAL.Modules.Queue.Command
 {
     public class QueueLocker : IQueueLocker, IClearQueueLocker
     {
         private readonly MongoCollection<DeliveryQueueLock> _collection;
+        private readonly AppSettings _appSetting;
 
-        public QueueLocker(IODTPrimaryDatastore connection)
+        public QueueLocker(IODTPrimaryDatastore connection, AppSettings appSetting)
         {
             var database = connection.GetDatabase();
+            _appSetting = appSetting;
 
             _collection = database.GetCollection<DeliveryQueueLock>("DeliveryQueueLock");           
         }
@@ -60,8 +63,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
 
         private List<DeliveryQueueLock> PurgeExpiredLocks(string name, IEnumerable<DeliveryQueueLock> qLocks)
         {
-            //TODO Change it to app settings
-            var expiredMinutes = 20;
+            var expiredMinutes = _appSetting.JobSchedules.QueueLockExpireMinute;
 
             var expiredDateTime = DateTime.UtcNow.AddMinutes(-expiredMinutes);
 
