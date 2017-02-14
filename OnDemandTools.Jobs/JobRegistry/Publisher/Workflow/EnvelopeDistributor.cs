@@ -1,8 +1,8 @@
 ﻿using EasyNetQ;
 using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
-using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.Jobs.Helpers;
@@ -16,12 +16,12 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
     public class EnvelopeDistributor : IEnvelopeDistributor
     {
-        private readonly IQueueReporter _reporter;
+        private readonly IQueueReporterService _reporter;
         private readonly IQueueMessageRecorder _historyRecorder;
         private readonly IAiringService _airingService;
 
         public EnvelopeDistributor(
-            IQueueReporter queueReporter,
+            IQueueReporterService queueReporter,
             IQueueMessageRecorder queueHistoryRecorder,
             IAiringService airingService)
         {

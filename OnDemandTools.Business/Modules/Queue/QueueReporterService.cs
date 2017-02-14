@@ -1,29 +1,28 @@
-﻿using OnDemandTools.Business.Modules.Queue.Model;
-using OnDemandTools.DAL.Modules.Reporting.Command;
+﻿using OnDemandTools.DAL.Modules.Reporting.Command;
 
-namespace OnDemandTools.Jobs.JobRegistry.Publisher
+namespace OnDemandTools.Business.Modules.Queue
 {
-    public class QueueReporter : IQueueReporter
+    public class QueueReporterService : IQueueReporterService
     {
         private readonly IReportStatusCommand _command;
 
-        public QueueReporter(IReportStatusCommand command)
+        public QueueReporterService(IReportStatusCommand command)
         {
             _command = command;
         }
 
-        public void Report(Queue queue, string airingId, string message, int statusEnum, bool unique = false)
+        public void Report(Model.Queue queue, string airingId, string message, int statusEnum, bool unique = false)
         {
             // If the queue requested to see statuses in digital fulfillment, proceed with
             // reporting to digital fulfillment
             if (queue.Report)
-            {               
+            {
                 // Airing destination is defaulted to 18 (NONE) as defined in digital fulfillment
                 _command.Report(airingId, statusEnum, 18, message, unique);
             }
-                
+
         }
-        public void BimReport(Queue queue, string airingId, string message, int statusEnum)
+        public void BimReport(Model.Queue queue, string airingId, string message, int statusEnum)
         {
             // If the queue requested to see statuses in digital fulfillment, proceed with
             // reporting to digital fulfillment
@@ -34,12 +33,5 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
 
         }
-    }
-
-    public interface IQueueReporter
-    {
-        void Report(Queue queue, string airingId, string message, int statusEnum, bool unique = false);
-
-        void BimReport(Queue queue, string airingId, string message, int statusEnum);
     }
 }

@@ -29,7 +29,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private readonly IAiringService airingService;
         private readonly IEnvelopeDistributor envelopeDistributor;
         private readonly IEnvelopeStuffer envelopeStuffer;
-        private readonly IQueueReporter reportStatusCommand;
+        private readonly IQueueReporterService reportStatusCommand;
         private readonly IMessageDeliveryValidator messageDeliveryValidator;
         private readonly IAiringValidatorStep bimContentValidator;
         private readonly IAiringValidatorStep mediaIdValidator;
@@ -47,7 +47,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             IAiringService airingService,
             IEnvelopeDistributor envelopeDistributor,
             IEnvelopeStuffer envelopeStuffer,
-            IQueueReporter reportStatusCommand,
+            IQueueReporterService reportStatusCommand,
             IMessageDeliveryValidator messageDeliveryValidator,
             BimContentValidator bimContentValidator,
             MediaIdValidator mediaIdValidator,
