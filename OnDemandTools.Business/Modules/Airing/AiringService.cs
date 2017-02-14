@@ -1,34 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using OnDemandTools.DAL.Modules.Airings;
-using BLModel = OnDemandTools.Business.Modules.Airing.Model;
-using DLModel = OnDemandTools.DAL.Modules.Airings.Model;
-using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
-using DLPackageModel = OnDemandTools.DAL.Modules.Package.Model;
-using System.Linq;
-using OnDemandTools.Common.Model;
-using OnDemandTools.DAL.Modules.Queue.Queries;
-using System.Text;
-using OnDemandTools.Common;
-using OnDemandTools.DAL.Modules.File.Queries;
-using AutoMapper;
-using DLFileModel = OnDemandTools.DAL.Modules.File.Model;
-using OnDemandTools.Business.Modules.Airing.Model.Alternate.Title;
-using RestSharp;
-using Microsoft.Extensions.Configuration;
-using OnDemandTools.Common.Configuration;
-using OnDemandTools.Common.Extensions;
-using System.Threading.Tasks;
-using OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
-using OnDemandTools.DAL.Modules.Destination.Queries;
-using OnDemandTools.DAL.Modules.Package.Queries;
-using OnDemandTools.Business.Modules.Airing.Model.Alternate.Change;
-using OnDemandTools.Business.Modules.Airing.Builder;
+﻿using AutoMapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OnDemandTools.Business.Modules.Airing.Builder;
 using OnDemandTools.Business.Modules.Airing.Diffing;
-using OnDemandTools.DAL.Modules.Airings.Queries;
+using OnDemandTools.Business.Modules.Airing.Model.Alternate.Change;
+using OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
+using OnDemandTools.Business.Modules.Airing.Model.Alternate.Title;
+using OnDemandTools.Common;
+using OnDemandTools.Common.Configuration;
+using OnDemandTools.Common.Extensions;
+using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.Airings;
 using OnDemandTools.DAL.Modules.Airings.Commands;
+using OnDemandTools.DAL.Modules.Airings.Queries;
+using OnDemandTools.DAL.Modules.Destination.Queries;
+using OnDemandTools.DAL.Modules.File.Queries;
+using OnDemandTools.DAL.Modules.Package.Queries;
+using OnDemandTools.DAL.Modules.Queue.Queries;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BLModel = OnDemandTools.Business.Modules.Airing.Model;
+using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
+using DLFileModel = OnDemandTools.DAL.Modules.File.Model;
+using DLModel = OnDemandTools.DAL.Modules.Airings.Model;
+using DLPackageModel = OnDemandTools.DAL.Modules.Package.Model;
 
 namespace OnDemandTools.Business.Modules.Airing
 {
@@ -65,7 +64,9 @@ namespace OnDemandTools.Business.Modules.Airing
             IChangeDeletedAiringQuery changeDeletedAiringQueryHelper,
             IDeportExpiredAiring deportExpiredAiringHelper,
             CurrentAiringsQuery currentAiringsQuery,
-            DeletedAiringsQuery deletedAiringsQuery)
+            DeletedAiringsQuery deletedAiringsQuery,
+            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
+            IUpdateAiringQueueDelivery updateAiringQueueDelivery)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -82,6 +83,8 @@ namespace OnDemandTools.Business.Modules.Airing
             this.deportExpiredAiringHelper = deportExpiredAiringHelper;
             this.currentAiringsQuery = currentAiringsQuery;
             this.deletedAiringsQuery = deletedAiringsQuery;
+            this.updateAiringQueueDelivery = updateAiringQueueDelivery;
+            this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
         }
 
         #region "Public method"
@@ -106,6 +109,8 @@ namespace OnDemandTools.Business.Modules.Airing
                 airings = currentAiringsQuery.GetDeliverToBy(queueName, limit);
             else if (getFrom == AiringCollection.DeletedCollection)
                 airings = deletedAiringsQuery.GetDeliverToBy(queueName, limit);
+            else
+                throw new NotImplementedException();
 
             return airings.ToBusinessModel<IEnumerable<DLModel.Airing>, IEnumerable<BLModel.Airing>>();
 
