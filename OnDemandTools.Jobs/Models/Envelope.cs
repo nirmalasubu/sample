@@ -1,5 +1,5 @@
-﻿using System;
-using OnDemandTools.DAL.Modules.Airings.Model.Queues;
+﻿using OnDemandTools.Jobs.Models;
+using System;
 
 namespace OnDemandTools.Jobs.JobRegistry.Models
 {

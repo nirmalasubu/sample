@@ -1,4 +1,4 @@
-namespace OnDemandTools.DAL.Modules.Airings.Model.Queues
+﻿namespace OnDemandTools.Jobs.Models
 {
     public class QueueAiring
     {

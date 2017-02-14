@@ -1,5 +1,5 @@
 ﻿using OnDemandTools.Business.Modules.Airing.Model;
-using OnDemandTools.DAL.Modules.Airings.Model.Queues;
+using OnDemandTools.Jobs.Models;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher
 {
