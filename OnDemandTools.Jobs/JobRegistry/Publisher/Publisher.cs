@@ -20,8 +20,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     public class Publisher
     {
         StringBuilder jobLogs = new StringBuilder();
-
-        //resolve all concrete implementations in constructor        
         private readonly Serilog.ILogger logger;
         private readonly AppSettings appsettings;
         private readonly string processId;
@@ -315,7 +313,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var validAirings = new List<Airing>();
             if (!airings.Any()) return validAirings;
 
-            var invalidArings = new List<string>();
+            var invalidAirings = new List<string>();
 
             foreach (var airing in airings)
             {
@@ -327,14 +325,14 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 else
                 {
                     LogInformation(string.Format("Validation error. {0} - No 'Modify' action message delivered to the queue", airing.AssetId));
-                    invalidArings.Add(airing.AssetId);
+                    invalidAirings.Add(airing.AssetId);
                 }
             }
 
 
-            if (invalidArings.Any())
+            if (invalidAirings.Any())
             {
-                UpdateIgnoreQueues(queue.Name, invalidArings, true);
+                UpdateIgnoreQueues(queue.Name, invalidAirings, true);
             }
 
             return validAirings;
