@@ -144,7 +144,15 @@ namespace OnDemandTools.Business.Modules.Queue
             return queueMessages.GetByMediaId(mediaId, queueName).Any();
         }
 
-
+        /// <summary>
+        /// Check and returns any message delived for given Queue and AiringId
+        /// </summary>
+        /// <param name="airingId">media id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        public bool AnyMessageDeliveredForAiringId(string airingId, string queueName)
+        {
+            return queueMessages.GetBy(queueName, airingId).Any();
+        }
 
         /// <summary>
         /// Adds the historical message for the queue delivery
@@ -159,6 +167,6 @@ namespace OnDemandTools.Business.Modules.Queue
             var historicalMessage = new HistoricalMessage(airingId, mediaId, message, remoteQueueName, messagePriority);
 
             historyRecorder.Record(historicalMessage);
-        }        
+        }
     }
 }

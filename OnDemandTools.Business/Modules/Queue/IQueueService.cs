@@ -82,6 +82,13 @@ namespace OnDemandTools.Business.Modules.Queue
         bool AnyMessageDeliveredForMediaId(string mediaId, string queueName);
 
         /// <summary>
+        /// Check and returns any message delived for given Queue and AiringId
+        /// </summary>
+        /// <param name="airingId">airing id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        bool AnyMessageDeliveredForAiringId(string airingId, string queueName);
+
+        /// <summary>
         /// Adds the historical message for the queue delivery
         /// </summary>
         /// <param name="airingId">the airing id</param>
