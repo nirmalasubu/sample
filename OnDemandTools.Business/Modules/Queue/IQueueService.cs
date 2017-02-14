@@ -57,5 +57,21 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="name"></param>
         void UpdateQueueProcessedTime(string name);
+
+
+        /// <summary>
+        /// Locks the queue
+        /// </summary>
+        /// <param name="queueName">queue name to lock</param>
+        /// <param name="processorId">processor id to lock</param>
+        /// <returns>Returns true if locked sucessfully</returns>
+        bool Lock(string queueName,string processorId);
+
+        /// <summary>
+        /// Unlocks the queue
+        /// </summary>
+        /// <param name="queueName">queue name to lock</param>
+        /// <param name="processorId">processor id to lock</param>
+        void Unlock(string queueName, string processorId);
     }
 }

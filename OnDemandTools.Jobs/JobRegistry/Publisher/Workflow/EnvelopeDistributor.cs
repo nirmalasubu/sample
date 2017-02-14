@@ -94,7 +94,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 case "Modify":
                     return _airingService.IsAiringDistributed(envelope.AiringId, queueName);
                 case "Delete":
-                    return _airingService.IsAiringDistributed(envelope.AiringId, queueName, DAL.Modules.Airings.AiringCollection.DeletedCollection);
+                    return _airingService.IsAiringDistributed(envelope.AiringId, queueName, AiringCollection.DeletedCollection);
                 default:
                     throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
 

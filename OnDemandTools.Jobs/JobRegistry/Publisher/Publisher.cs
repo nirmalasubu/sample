@@ -5,9 +5,6 @@ using OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Common.Configuration;
-using OnDemandTools.DAL.Modules.Airings;
-using OnDemandTools.DAL.Modules.Airings.Commands;
-using OnDemandTools.DAL.Modules.Queue.Command;
 using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using OnDemandTools.Jobs.JobRegistry.Publisher.Validating;
@@ -29,7 +26,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private readonly AppSettings appsettings;
         private readonly string processId;
         private readonly IQueueService queueService;
-        private readonly IQueueLocker queueLocker;
         private readonly IAiringService airingService;
         private readonly IEnvelopeDistributor envelopeDistributor;
         private readonly IEnvelopeStuffer envelopeStuffer;
@@ -48,13 +44,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             Serilog.ILogger logger,
             AppSettings appsettings,
             IQueueService queueService,
-            IQueueLocker queueLocker,
             IAiringService airingService,
             IEnvelopeDistributor envelopeDistributor,
             IEnvelopeStuffer envelopeStuffer,
             IQueueReporter reportStatusCommand,
-            IUpdateAiringQueueDelivery updateAiringQueueDelivery,
-            IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
             IMessageDeliveryValidator messageDeliveryValidator,
             BimContentValidator bimContentValidator,
             MediaIdValidator mediaIdValidator,
@@ -62,7 +55,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         {
             this.logger = logger;
             this.queueService = queueService;
-            this.queueLocker = queueLocker;
             processId = GetProcessId();
             this.envelopeDistributor = envelopeDistributor;
             this.envelopeStuffer = envelopeStuffer;
@@ -96,13 +88,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 {
                     LogInformation(string.Format("Acquiring lock on queue {0}; Queue Name: {1}, process Id: {2}", queue.FriendlyName, queueName, processId));
 
-                    // Critical section within threads
-                    DeliveryQueueLock qLock;
-
-                    qLock = queueLocker.AquireLockFor(queue.Name, processId);
-
-                    // Verify if the queue currently has a lock. If so, don't do anything; else, proceed with processing the queue
-                    if (qLock.IsLockedBy(processId))
+                    if (queueService.Lock(queue.Name, processId))
                     {
                         lockAquired = true;
 
@@ -120,7 +106,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     }
                     else
                     {
-                        LogInformation(string.Format("Couldn't acquire lock on queue. It is locked by process {0}", qLock.ProcessId));
+                        LogInformation("Couldn't acquire lock on queue. It is locked by another process.");
                     }
 
                     LogInformation("Successfully completed operation on queue");
@@ -137,7 +123,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     {
                         // Release lock on the queue
                         LogInformation("Removing lock on queue");
-                        queueLocker.ReleaseLockFor(queue.Name, processId);
+                        queueService.Unlock(queue.Name, processId);
                         LogInformation("Successfully removed lock on queue");
                     }
                 }
@@ -302,7 +288,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             }
             if (bimNotFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
+                LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 

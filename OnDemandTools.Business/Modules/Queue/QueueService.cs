@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
 using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
+using System;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -13,11 +14,13 @@ namespace OnDemandTools.Business.Modules.Queue
 
         IQueueQuery queueQueryHelper;
         IQueueCommand queueCommandHelper;
+        IQueueLocker queueLocker;
 
-        public QueueService(IQueueQuery queueQueryHelper, IQueueCommand queueCommandHelper)
+        public QueueService(IQueueQuery queueQueryHelper, IQueueCommand queueCommandHelper, IQueueLocker queueLocker)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
+            this.queueLocker = queueLocker;
         }
 
         /// <summary>
@@ -94,6 +97,28 @@ namespace OnDemandTools.Business.Modules.Queue
             queueQueryHelper.GetByApiKey(apiKey)
                 .ToBusinessModel<DLModel.Queue, BLModel.Queue>();
 
+        }
+
+        /// <summary>
+        /// Locks the queue
+        /// </summary>
+        /// <param name="queueName">queue name to lock</param>
+        /// <param name="processorId">processor id to lock</param>
+        /// <returns>Returns true if locked sucessfully</returns>
+        public bool Lock(string queueName, string processId)
+        {
+            var qLock = queueLocker.AquireLockFor(queueName, processId);
+            return qLock.IsLockedBy(processId);
+        }
+
+        /// <summary>
+        /// Unlocks the queue
+        /// </summary>
+        /// <param name="queueName">queue name to lock</param>
+        /// <param name="processorId">processor id to lock</param>
+        public void Unlock(string queueName, string processId)
+        {
+            queueLocker.ReleaseLockFor(queueName, processId);
         }
     }
 }

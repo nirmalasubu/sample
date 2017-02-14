@@ -6,14 +6,6 @@ using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Airings
 {
-    public enum AiringCollection
-    {
-        CurrentOrExpiredCollection,
-        DeletedCollection,
-        ExpiredCollection,
-        CurrentCollection,
-    }
-
     public interface IAiringDeleteCommand
     {
         Airing Delete(Airing airing);
