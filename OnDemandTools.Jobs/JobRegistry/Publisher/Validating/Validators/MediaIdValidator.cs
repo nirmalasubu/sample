@@ -1,16 +1,15 @@
 ﻿using OnDemandTools.Business.Modules.Airing.Model;
-using OnDemandTools.DAL.Modules.QueueMessages;
-using System.Linq;
+using OnDemandTools.Business.Modules.Queue;
 
 namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators
 {
     public class MediaIdValidator : IAiringValidatorStep
     {
-        private readonly IGetQueueMessagesQuery _queueMessagesQuery;
+        private readonly IQueueService queueService;
 
-        public MediaIdValidator(IGetQueueMessagesQuery queueMessagesQuery)
+        public MediaIdValidator(IQueueService queueService)
         {
-            _queueMessagesQuery = queueMessagesQuery;
+            this.queueService = queueService;
         }
 
         public ValidationResult Validate(Airing airing, string remoteQueueName)
@@ -18,9 +17,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher.Validating.Validators
             if (string.IsNullOrEmpty(airing.MediaId))
                 return new ValidationResult(false, 11, "MediaId is missing when it was required.", true);
 
-            return _queueMessagesQuery.GetByMediaId(airing.MediaId, remoteQueueName).Any() ? new ValidationResult(false, 11, "MediaId already delivered to the queue.", true) : new ValidationResult(true);
+            return queueService.AnyMessageDeliveredForMediaId(airing.MediaId, remoteQueueName) ?
+                new ValidationResult(false, 11, "MediaId already delivered to the queue.", true)
+                : new ValidationResult(true);
         }
-
     }
-
 }

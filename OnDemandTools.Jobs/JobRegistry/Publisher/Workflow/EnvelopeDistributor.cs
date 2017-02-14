@@ -3,8 +3,6 @@ using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
-using OnDemandTools.DAL.Modules.QueueMessages.Commands;
-using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.Models;
 using System;
@@ -17,16 +15,16 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
     public class EnvelopeDistributor : IEnvelopeDistributor
     {
         private readonly IQueueReporterService _reporter;
-        private readonly IQueueMessageRecorder _historyRecorder;
+        private readonly IQueueService _queueService;
         private readonly IAiringService _airingService;
 
         public EnvelopeDistributor(
             IQueueReporterService queueReporter,
-            IQueueMessageRecorder queueHistoryRecorder,
+            IQueueService queueService,
             IAiringService airingService)
         {
             _reporter = queueReporter;
-            _historyRecorder = queueHistoryRecorder;
+            _queueService = queueService;
             _airingService = airingService;
         }
 
@@ -46,9 +44,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                 {
                     Deliver(envelope, deliveryQueue.RoutingKey, details);
 
-                    var historicalMessage = new HistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);
-
-                    _historyRecorder.Record(historicalMessage);
+                    _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);                    
 
                     _reporter.Report(deliveryQueue, envelope.AiringId,
                         string.Format("Sent successfully to {0} Message: {1}", deliveryQueue.FriendlyName, message),

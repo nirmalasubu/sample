@@ -6,6 +6,9 @@ using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
 using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
 using System;
+using OnDemandTools.DAL.Modules.QueueMessages;
+using OnDemandTools.DAL.Modules.QueueMessages.Model;
+using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -15,12 +18,21 @@ namespace OnDemandTools.Business.Modules.Queue
         IQueueQuery queueQueryHelper;
         IQueueCommand queueCommandHelper;
         IQueueLocker queueLocker;
+        IGetQueueMessagesQuery queueMessages;
+        IQueueMessageRecorder historyRecorder;
 
-        public QueueService(IQueueQuery queueQueryHelper, IQueueCommand queueCommandHelper, IQueueLocker queueLocker)
+
+        public QueueService(
+            IQueueQuery queueQueryHelper,
+            IQueueCommand queueCommandHelper,
+            IQueueLocker queueLocker,
+            IGetQueueMessagesQuery queueMessages,
+            IQueueMessageRecorder historyRecorder)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
             this.queueLocker = queueLocker;
+            this.queueMessages = queueMessages;
         }
 
         /// <summary>
@@ -120,5 +132,33 @@ namespace OnDemandTools.Business.Modules.Queue
         {
             queueLocker.ReleaseLockFor(queueName, processId);
         }
+
+
+        /// <summary>
+        /// Check and returns any message delived for given Queue and MediaId
+        /// </summary>
+        /// <param name="mediaId">media id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        public bool AnyMessageDeliveredForMediaId(string mediaId, string queueName)
+        {
+            return queueMessages.GetByMediaId(mediaId, queueName).Any();
+        }
+
+
+
+        /// <summary>
+        /// Adds the historical message for the queue delivery
+        /// </summary>
+        /// <param name="airingId">the airing id</param>
+        /// <param name="mediaId">the media id</param>
+        /// <param name="message">the message</param>
+        /// <param name="remoteQueueName">the queue name</param>
+        /// <param name="messagePriority">message priority</param>
+        public void AddHistoricalMessage(string airingId, string mediaId, string message, string remoteQueueName, byte? messagePriority)
+        {
+            var historicalMessage = new HistoricalMessage(airingId, mediaId, message, remoteQueueName, messagePriority);
+
+            historyRecorder.Record(historicalMessage);
+        }        
     }
 }

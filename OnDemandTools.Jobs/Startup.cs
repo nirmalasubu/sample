@@ -1,27 +1,23 @@
-using System;
+using Hangfire;
+using Hangfire.Dashboard;
+using Hangfire.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OnDemandTools.Common.Configuration;
-using StructureMap;
 using OnDemandTools.Common.DIResolver;
 using OnDemandTools.Common.DIResolver.Resolvers;
-using Serilog;
 using OnDemandTools.Common.Logzio;
-using Hangfire;
-using Hangfire.Mongo;
-using OnDemandTools.Jobs.JobRegistry.Deporter;
-using OnDemandTools.Jobs.JobRegistry.TitleSync;
-using OnDemandTools.Jobs.JobRegistry.Publisher;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Hangfire.Dashboard;
-using Microsoft.AspNetCore.Http;
 using OnDemandTools.Jobs.Helpers;
-using OnDemandTools.DAL.Modules.Airings.Commands;
+using OnDemandTools.Jobs.JobRegistry.Deporter;
+using OnDemandTools.Jobs.JobRegistry.Publisher;
+using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.Models;
+using Serilog;
+using StructureMap;
+using System;
 
 namespace OnDemandTools.Jobs
 {
@@ -62,7 +58,6 @@ namespace OnDemandTools.Jobs
                      reporterType: appSettings.LogzIO.ReporterType,
                      environment: appSettings.LogzIO.Environment)
                      .CreateLogger();
-                c.ForSingletonOf<IUpdateAiringQueueDelivery>().Use<UpdateAiringQueueDelivery>();
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();

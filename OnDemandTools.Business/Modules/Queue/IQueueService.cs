@@ -65,7 +65,7 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queueName">queue name to lock</param>
         /// <param name="processorId">processor id to lock</param>
         /// <returns>Returns true if locked sucessfully</returns>
-        bool Lock(string queueName,string processorId);
+        bool Lock(string queueName, string processorId);
 
         /// <summary>
         /// Unlocks the queue
@@ -73,5 +73,22 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queueName">queue name to lock</param>
         /// <param name="processorId">processor id to lock</param>
         void Unlock(string queueName, string processorId);
+
+        /// <summary>
+        /// Check and returns any message delived for given Queue and MediaId
+        /// </summary>
+        /// <param name="mediaId">media id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        bool AnyMessageDeliveredForMediaId(string mediaId, string queueName);
+
+        /// <summary>
+        /// Adds the historical message for the queue delivery
+        /// </summary>
+        /// <param name="airingId">the airing id</param>
+        /// <param name="mediaId">the media id</param>
+        /// <param name="message">the message</param>
+        /// <param name="remoteQueueName">the queue name</param>
+        /// <param name="messagePriority">message priority</param>
+        void AddHistoricalMessage(string airingId, string mediaId, string message, string remoteQueueName, byte? messagePriority);
     }
 }
