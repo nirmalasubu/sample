@@ -53,6 +53,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         {
             this.logger = logger;
             this.queueService = queueService;
+            this.airingService = airingService;
             processId = GetProcessId();
             this.envelopeDistributor = envelopeDistributor;
             this.envelopeStuffer = envelopeStuffer;

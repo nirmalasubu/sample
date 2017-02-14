@@ -104,7 +104,7 @@ namespace OnDemandTools.Business.Modules.Airing
             IEnumerable<DLModel.Airing> airings = new List<DLModel.Airing>();
             if (getFrom == AiringCollection.CurrentCollection)
                 airings = currentAiringsQuery.GetDeliverToBy(queueName, limit);
-            else
+            else if (getFrom == AiringCollection.DeletedCollection)
                 airings = deletedAiringsQuery.GetDeliverToBy(queueName, limit);
 
             return airings.ToBusinessModel<IEnumerable<DLModel.Airing>, IEnumerable<BLModel.Airing>>();
@@ -116,8 +116,10 @@ namespace OnDemandTools.Business.Modules.Airing
             IEnumerable<DLModel.Airing> airings = new List<DLModel.Airing>();
             if (getFrom == AiringCollection.CurrentCollection)
                 airings = currentAiringsQuery.GetBy(jsonQuery, hoursOut, queueNames, includeEndDate);
-            else
+            else if (getFrom == AiringCollection.DeletedCollection)
                 airings = deletedAiringsQuery.GetBy(jsonQuery, hoursOut, queueNames, includeEndDate);
+            else
+                throw new NotImplementedException();
 
             return airings.ToBusinessModel<IEnumerable<DLModel.Airing>, IEnumerable<BLModel.Airing>>();
         }
@@ -126,8 +128,10 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             if (getFrom == AiringCollection.CurrentCollection)
                 return currentAiringsQuery.IsAiringDistributed(airingId, queueName);
-            else
+            else if (getFrom == AiringCollection.DeletedCollection)
                 return deletedAiringsQuery.IsAiringDistributed(airingId, queueName);
+            else
+                throw new NotImplementedException();
         }
 
         public List<BLModel.Airing> GetByMediaId(string mediaId)
@@ -185,6 +189,10 @@ namespace OnDemandTools.Business.Modules.Airing
             {
                 updateDeletedAiringQueueDelivery.PushDeliveredTo(airingId, queueName);
             }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void PushIgnoredQueueTo(string airingId, string queueName, AiringCollection getFrom = AiringCollection.CurrentCollection)
@@ -196,6 +204,10 @@ namespace OnDemandTools.Business.Modules.Airing
             else if (getFrom == AiringCollection.DeletedCollection)
             {
                 updateDeletedAiringQueueDelivery.PushIgnoredQueueTo(airingId, queueName);
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
