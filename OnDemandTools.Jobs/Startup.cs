@@ -11,6 +11,7 @@ using OnDemandTools.Common.DIResolver;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Jobs.Helpers;
+using OnDemandTools.Jobs.JobRegistry.CloudAmqpSync;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
@@ -63,6 +64,7 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<Deporter>();
                 c.For<TitleSync>();
                 c.For<Publisher>();
+                c.For<CloudAmqpSync>();
             });
 
             services.InitializeAutoMapper();
@@ -79,6 +81,9 @@ namespace OnDemandTools.Jobs
         {
             // Add serilog and catch any internal errors
             loggerFactory.AddSerilog();
+
+            var appSettings = Configuration.Get<AppSettings>("Application");
+
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
             if (env.EnvironmentName == "local" || env.EnvironmentName == "development")
@@ -95,6 +100,7 @@ namespace OnDemandTools.Jobs
             var options = new BackgroundJobServerOptions();
             options.Queues = Enum.GetNames(typeof(HangfireQueue));
             options.WorkerCount = 5;
+            GlobalJobFilters.Filters.Add(new HangfireJobExpirationTimeout(appSettings));
             app.UseHangfireServer(options);
 
             //TODO - temporary solution to allow all users. Will need to come up with an

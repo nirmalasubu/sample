@@ -3,11 +3,13 @@ using Hangfire.Common;
 using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
+using OnDemandTools.Jobs.JobRegistry.CloudAmqpSync;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.Models;
 using System;
+using System.Diagnostics;
 
 namespace OnDemandTools.Jobs.Controllers
 {
@@ -20,8 +22,16 @@ namespace OnDemandTools.Jobs.Controllers
         TitleSync tsy;
         IQueueService queueService;
         AppSettings appsettings;
+        CloudAmqpSync cloudAmqpSync;
 
-        public HangfireController(Serilog.ILogger logger, AppSettings appsettings, Publisher pub, Deporter dep, TitleSync tsy, IQueueService queueService)
+        public HangfireController(Serilog.ILogger logger,
+            AppSettings appsettings, 
+            Publisher pub, 
+            Deporter dep, 
+            TitleSync tsy, 
+            IQueueService queueService,
+            CloudAmqpSync cloudAmqpSync
+            )
         {
             this.logger = logger;
             this.pub = pub;
@@ -29,6 +39,7 @@ namespace OnDemandTools.Jobs.Controllers
             this.tsy = tsy;
             this.queueService = queueService;
             this.appsettings = appsettings;
+            this.cloudAmqpSync = cloudAmqpSync;
         }
 
         [HttpGet]
@@ -40,8 +51,14 @@ namespace OnDemandTools.Jobs.Controllers
 
                 var manager = new RecurringJobManager();
 
-                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
-                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), 
+                    appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
+
+                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), 
+                    appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
+
+                manager.AddOrUpdate("CloudAmqpSync", Job.FromExpression(() => cloudAmqpSync.Execute()),
+                    appsettings.JobSchedules.CloudAmqpSync, estTimeZone, HangfireQueue.titlesync.ToString());                
 
                 foreach (var activeQueue in queueService.GetByStatus(true))
                 {

@@ -31,7 +31,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
         private readonly IMessageDeliveryValidator messageDeliveryValidator;
         private readonly IAiringValidatorStep bimContentValidator;
         private readonly IAiringValidatorStep mediaIdValidator;
-        private readonly IRemoteQueueHandler remoteQueueHandler;
         private const int BIMFOUND = 17;
         private const int BIMNOTFOUND = 18;
         private const int BIMMISMATCH = 19;
@@ -48,8 +47,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             IQueueReporterService reportStatusCommand,
             IMessageDeliveryValidator messageDeliveryValidator,
             BimContentValidator bimContentValidator,
-            MediaIdValidator mediaIdValidator,
-            IRemoteQueueHandler remoteQueueHandler)
+            MediaIdValidator mediaIdValidator)
         {
             this.logger = logger;
             this.queueService = queueService;
@@ -62,7 +60,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             this.bimContentValidator = bimContentValidator;
             this.mediaIdValidator = mediaIdValidator;
             this.appsettings = appsettings;
-            this.remoteQueueHandler = remoteQueueHandler;
         }
 
 
@@ -180,14 +177,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             LogInformation(string.Format("Completed validation on all {0} deleted airings, resulting in a total of {1} valid deleted airings", deletedAirings.Count, validDeletedAirings.Count));
 
 
-            if (validAirings.Any() || validDeletedAirings.Any())
-            {
-                //Creates Queue/Binding if not exists
-                LogInformation("Queue setup - started");
-                remoteQueueHandler.Create(queue);
-                LogInformation("Queue setup - completed");
-            }
-            else
+            if (!(validAirings.Any() || validDeletedAirings.Any()))
             {
                 LogInformation("No Airings found to distribute");
                 return;
