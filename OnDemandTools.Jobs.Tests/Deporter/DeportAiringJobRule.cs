@@ -29,28 +29,23 @@ namespace OnDemandTools.Jobs.Tests.Deporter
         {
             //Prepare
             IAiringService airingService = fixture.container.GetInstance<IAiringService>();
-            JObject airingJson = JObject.Parse(Resources.Resource.ResourceManager.GetString("AiringWithSingleFlight"));
-            JObject response = new JObject();
-            var request = new RestRequest("/v1/airing/TBSE", Method.POST);
-            request.AddParameter("application/json", UpdateAiringDates(airingJson), ParameterType.RequestBody);
-
-            Task.Run(async () =>
+            var airingPost = UpdateAiringDates(JObject.Parse(Resources.Resource.ResourceManager.GetString("AiringWithSingleFlight"))).ToObject<BLModel.Airing>();
+            var savedAiringObj = airingService.Save(airingPost, false, true);
+            bool IsAiringExistInCurrentCollection = airingService.IsAiringExists(savedAiringObj.AssetId);
+            if (!IsAiringExistInCurrentCollection)
             {
-                response = await _client.RetrieveRecord(request);
-
-            }).Wait();
-            
-            string airingId = response.Value<string>(@"airingId");
+                Assert.True(false, "Deporter Airing test Failed : Airing is  not returned from Current Collection : " + savedAiringObj.AssetId);
+            }
 
             //Act 
+            Thread.Sleep(20000);
             airingService.Deport(int.Parse(fixture.Configuration["airingDeportGraceDays"]));
 
             //Assert
-            BLModel.Airing expiredairingModel= airingService.GetBy(airingId, AiringCollection.ExpiredCollection);
-
+            BLModel.Airing expiredairingModel= airingService.GetBy(savedAiringObj.AssetId, AiringCollection.ExpiredCollection);
             if (expiredairingModel == null)
             {
-                Assert.True(false, "Deporter Airing test Failed : Airirng is  not returned from Expired Collection : " + expiredairingModel.AssetId);
+                Assert.True(false, "Deporter Airing test Failed : Airing is  not returned from Expired Collection : " + expiredairingModel.AssetId);
             }
         }
         
@@ -62,7 +57,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
             foreach (JObject obj in jArray)
             {
                 obj["Start"] = DateTime.UtcNow.AddDays(-2);
-                obj["End"] = DateTime.UtcNow.AddDays(-1);                
+                obj["End"] = DateTime.UtcNow.AddSeconds(30);                
             }
 
             jObject["ReleasedOn"] = DateTime.UtcNow.AddDays(-int.Parse(fixture.Configuration["airingDeportGraceDays"]));
