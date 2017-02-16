@@ -5,6 +5,8 @@ using System.Linq;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Airing;
 using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace OnDemandTools.Jobs.Tests.Publisher
 {
@@ -13,11 +15,12 @@ namespace OnDemandTools.Jobs.Tests.Publisher
     public class TestClientDeliveryQueues
     {
         JobTestFixture _fixture;
-        RestClient _client;
+        RestClient _jobClient;
 
        public TestClientDeliveryQueues(JobTestFixture fixture)
         {
             _fixture = fixture;
+            _jobClient = _fixture.jobRestClient;
         }
 
         [Fact, Order(10)]
@@ -31,9 +34,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             
             IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
-            OnDemandTools.Jobs.JobRegistry.Publisher.Publisher publisher = _fixture.container.GetInstance<OnDemandTools.Jobs.JobRegistry.Publisher.Publisher>();
-
-           
+                   
             var queues = AiringDataStore.ProcessedAirings.SelectMany(e => e.ExpectedQueues.ToArray()).Distinct().ToList();
 
             queues.AddRange(AiringDataStore.ProcessedAirings.SelectMany(e => e.UnExpectedQueues.ToArray()).Distinct().ToList());
@@ -49,7 +50,14 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                     Assert.True(false, string.Format("Unit test delivery queue not found: API Key {0}", queue));
                 }
 
-                publisher.Execute(deliveryQueue.Name);
+                var request = new RestRequest("/api/unittest/"+ deliveryQueue.Name, Method.GET);
+                
+                Task.Run(async () =>
+                {
+                  JObject response = await _jobClient.RetrieveRecord(request);
+
+                }).Wait();
+             
             }
 
             ProhibitResendMediaIdTest();

@@ -20,6 +20,7 @@ namespace OnDemandTools.Jobs.Tests.Helpers
     public class JobTestFixture : IDisposable
     {
         public RestClient restClient { get; set; }
+        public RestClient jobRestClient { get; set; }
         public IConfigurationRoot Configuration { get; set; }
         public IConfigurationBuilder builder { get; set; }
         public StructureMap.Container container { get; set; }
@@ -38,6 +39,12 @@ namespace OnDemandTools.Jobs.Tests.Helpers
             restClient = new RestClient(Configuration["APIEndPoint"]);
             restClient.AddDefaultHeader("Content-Type", "application/json");
             restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
+
+            // Setup Job rest client
+            jobRestClient = new RestClient(Configuration["JobEndPoint"]);
+            jobRestClient.AddDefaultHeader("Content-Type", "application/json");
+           
+
 
             // Start up DI container
             this.container = new StructureMap.Container();
