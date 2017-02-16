@@ -60,9 +60,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
             AiringDataStore.AddAiring(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["cartoonProhibitResendMediaIdToQueueKey"]);
-            airingUnitTestService.RemoveMediaIdFromHistory(response.Value<string>(@"mediaId"));
-            
-        }
+                 }
 
 
         private JObject UpdateAiringDates(JObject jObject)

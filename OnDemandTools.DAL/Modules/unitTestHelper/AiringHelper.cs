@@ -24,10 +24,11 @@ namespace OnDemandTools.DAL.Modules.unitTestHelper
             _history = _database.GetCollection<HistoricalMessage>("MessageHistory");
         }
 
-       public void  UpdateAiringRelesedDate(string airingId, DateTime releasedon)
+       public void  UpdateAiringRelasedDateAndFlightEndDate(string airingId, DateTime releasedon)
         {
             var query = Query.EQ("AssetId", airingId);
-            var set = Update .Set("ReleaseOn", releasedon);
+            var set = Update .Set("ReleaseOn", releasedon)
+                .Set("Flights.0.End", DateTime.UtcNow.AddDays(-2));
 
             _airingCollection.Update(query, set);
 

@@ -32,8 +32,26 @@ public static class RestClientExtension
             return tcs.Task;
         }
 
+    public static Task<string> RetrieveString(this RestClient client, RestRequest request)
+    {
+        var tcs = new TaskCompletionSource<string>();
+        client.ExecuteAsync(request, response =>
+        {
+            if (response.IsSuccessful())
+            {
+                tcs.SetResult(response.Content.ToString());
+            }
+            else
+            {
+                tcs.SetResult(response.StatusCode.ToString());
+            }
+        });
 
-        public static Task<JArray> RetrieveRecords(this RestClient client, RestRequest request)
+        return tcs.Task;
+    }
+
+
+    public static Task<JArray> RetrieveRecords(this RestClient client, RestRequest request)
         {
             var tcs = new TaskCompletionSource<JArray>();
             client.ExecuteAsync(request, response =>

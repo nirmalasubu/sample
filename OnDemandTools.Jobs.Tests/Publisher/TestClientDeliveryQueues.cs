@@ -23,11 +23,6 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _jobClient = _fixture.jobRestClient;
         }
 
-        [Fact, Order(10)]
-        public void VerifyClientQueueDelivery1()
-        {
-        }
-
 
         [Fact, Order(10)]
         public void VerifyClientQueueDelivery()
@@ -54,7 +49,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 
                 Task.Run(async () =>
                 {
-                  JObject response = await _jobClient.RetrieveRecord(request);
+                  string response = await _jobClient.RetrieveString(request);
 
                 }).Wait();
              
@@ -86,7 +81,6 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                         var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
                                                        activeAiring.Airing, ignoredQueue);
 
-                       // activeAiring.AddMessage(failureMessage);
                         Assert.True(false,failureMessage);
 
                     }

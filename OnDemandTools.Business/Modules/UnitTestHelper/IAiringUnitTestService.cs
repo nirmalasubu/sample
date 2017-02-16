@@ -8,7 +8,7 @@ namespace OnDemandTools.Business.Modules.Airing
      public interface IAiringUnitTestService
     {
 
-         void UpdateAiringRelasedDate(string airingId, DateTime releaseDate);
+         void UpdateAiringRelasedDateAndFlightEndDate(string airingId, DateTime releaseDate);
 
         void RemoveMediaIdFromHistory(string mediaId);
     }

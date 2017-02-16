@@ -14,9 +14,9 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             _airingHelper = airingHelper;
         }
-         public void UpdateAiringRelasedDate(string airingId, DateTime releaseDate)
+         public void UpdateAiringRelasedDateAndFlightEndDate(string airingId, DateTime releaseDate)
         {
-            _airingHelper.UpdateAiringRelesedDate(airingId, releaseDate);
+            _airingHelper.UpdateAiringRelasedDateAndFlightEndDate(airingId, releaseDate);
         }
 
         public void RemoveMediaIdFromHistory(string mediaId)

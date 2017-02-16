@@ -41,7 +41,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
 
             }).Wait();
             string airingId = response.Value<string>(@"airingId");
-            airingUnitTestService.UpdateAiringRelasedDate(airingId, DateTime.UtcNow.AddDays(-3));
+            airingUnitTestService.UpdateAiringRelasedDateAndFlightEndDate(airingId, DateTime.UtcNow.AddDays(-3));
 
             //Act 
             airingService.Deport(int.Parse(fixture.Configuration["airingDeportGraceDays"]));
@@ -63,7 +63,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
             foreach (JObject obj in jArray)
             {
                 obj["Start"] = DateTime.UtcNow.AddDays(-2);
-                obj["End"] = DateTime.Now.AddSeconds(20);
+                obj["End"] = DateTime.Now.AddDays(2);
             }
 
             jObject["ReleasedOn"] = DateTime.UtcNow.AddDays(-int.Parse(fixture.Configuration["airingDeportGraceDays"]));

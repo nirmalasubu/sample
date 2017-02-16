@@ -7,7 +7,7 @@ namespace OnDemandTools.DAL.Modules.unitTestHelper
 {
      public interface IAiringHelper
     {
-        void UpdateAiringRelesedDate(string airingId, DateTime releasedon);
+        void UpdateAiringRelasedDateAndFlightEndDate(string airingId, DateTime releasedon);
 
         void RemoveMediaIdFromHistory(string mediaId);
     }
