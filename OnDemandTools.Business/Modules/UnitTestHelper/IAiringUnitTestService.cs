@@ -9,5 +9,7 @@ namespace OnDemandTools.Business.Modules.Airing
     {
 
          void UpdateAiringRelasedDate(string airingId, DateTime releaseDate);
+
+        void RemoveMediaIdFromHistory(string mediaId);
     }
 }

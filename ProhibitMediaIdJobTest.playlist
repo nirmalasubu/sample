@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="OnDemandTools.Jobs.Tests.Publisher.TestClientDeliveryQueues.VerifyClientQueueDelivery" /><Add Test="OnDemandTools.Jobs.Tests.Publisher.CartoonProhibitResendMediaIdTest.AiringResendToQueuewithExsistingMediaID" /><Add Test="OnDemandTools.Jobs.Tests.Publisher.CartoonProhibitResendMediaIdTest.AiringSendtoQueueWithNewMediaID" /></Playlist>

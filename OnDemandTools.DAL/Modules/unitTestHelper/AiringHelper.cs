@@ -2,6 +2,7 @@
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,14 @@ namespace OnDemandTools.DAL.Modules.unitTestHelper
     {
         private readonly MongoDatabase _database;
 
-        private readonly MongoCollection<Airing> _collection;
+        private readonly MongoCollection<Airing> _airingCollection;
+        private readonly MongoCollection<HistoricalMessage> _history;
+
         public AiringHelper(IODTDatastore connection)
         {
             _database = connection.GetDatabase();
-            _collection = _database.GetCollection<Airing>("currentassets");
+            _airingCollection = _database.GetCollection<Airing>("currentassets");
+            _history = _database.GetCollection<HistoricalMessage>("MessageHistory");
         }
 
        public void  UpdateAiringRelesedDate(string airingId, DateTime releasedon)
@@ -25,11 +29,14 @@ namespace OnDemandTools.DAL.Modules.unitTestHelper
             var query = Query.EQ("AssetId", airingId);
             var set = Update .Set("ReleaseOn", releasedon);
 
-            _collection.Update(query, set);
+            _airingCollection.Update(query, set);
 
             
         }
 
-      
+        public void RemoveMediaIdFromHistory(string mediaId)
+        {
+            _history.Remove(Query.EQ("MediaId", mediaId));
+        }
     }
 }

@@ -18,5 +18,10 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             _airingHelper.UpdateAiringRelesedDate(airingId, releaseDate);
         }
+
+        public void RemoveMediaIdFromHistory(string mediaId)
+        {
+            _airingHelper.RemoveMediaIdFromHistory(mediaId);
+        }
     }
 }
