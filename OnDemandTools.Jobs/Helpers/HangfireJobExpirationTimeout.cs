@@ -16,7 +16,7 @@ namespace OnDemandTools.Jobs.Helpers
         public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
         {
             //TODO change to FromDays after testing
-            context.JobExpirationTimeout = TimeSpan.FromMinutes(appSettings.JobSchedules.JobLogExpirationTimeOutInDays);
+            context.JobExpirationTimeout = TimeSpan.FromDays(appSettings.JobSchedules.JobLogExpirationTimeOutInDays);
         }
 
         public void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
