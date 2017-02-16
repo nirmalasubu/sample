@@ -17,7 +17,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         JobTestFixture _fixture;
         RestClient _jobClient;
 
-       public TestClientDeliveryQueues(JobTestFixture fixture)
+        public TestClientDeliveryQueues(JobTestFixture fixture)
         {
             _fixture = fixture;
             _jobClient = _fixture.jobRestClient;
@@ -27,9 +27,9 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         [Fact, Order(10)]
         public void VerifyClientQueueDelivery()
         {
-            
+
             IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
-                   
+
             var queues = AiringDataStore.ProcessedAirings.SelectMany(e => e.ExpectedQueues.ToArray()).Distinct().ToList();
 
             queues.AddRange(AiringDataStore.ProcessedAirings.SelectMany(e => e.UnExpectedQueues.ToArray()).Distinct().ToList());
@@ -38,31 +38,34 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             foreach (var queue in queues)
             {
-                 var deliveryQueue = queueService.GetByApiKey(queue);
+                var deliveryQueue = queueService.GetByApiKey(queue);
 
                 if (deliveryQueue == null)
                 {
                     Assert.True(false, string.Format("Unit test delivery queue not found: API Key {0}", queue));
                 }
 
-                var request = new RestRequest("/api/unittest/"+ deliveryQueue.Name, Method.GET);
-                
+                var request = new RestRequest("/api/unittest/" + deliveryQueue.Name, Method.GET);
+                request.Timeout = (10 * 60 * 1000); // 10minutes
+
                 Task.Run(async () =>
                 {
-                  string response = await _jobClient.RetrieveString(request);
+                    string response = await _jobClient.RetrieveString(request);
 
                 }).Wait();
-             
             }
+
+            //To avoid primary and secondary database sync issue
+            Thread.Sleep(10000);
 
             ProhibitResendMediaIdTest();
 
         }
 
-        private void ProhibitResendMediaIdTest()    
+        private void ProhibitResendMediaIdTest()
         {
             IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
-            
+
             foreach (var activeAiring in AiringDataStore.ProcessedAirings)
             {
                 if (!activeAiring.IgnoredQueues.Any()) continue;
@@ -81,7 +84,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                         var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
                                                        activeAiring.Airing, ignoredQueue);
 
-                        Assert.True(false,failureMessage);
+                        Assert.True(false, failureMessage);
 
                     }
                     else
@@ -92,5 +95,5 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }
         }
     }
-    
+
 }
