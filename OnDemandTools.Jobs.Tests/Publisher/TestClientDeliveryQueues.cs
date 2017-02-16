@@ -56,7 +56,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }
 
             //To avoid primary and secondary database sync issue
-            Thread.Sleep(10000);
+            Thread.Sleep((2 * 60 * 1000));
 
             ProhibitResendMediaIdTest();
 
