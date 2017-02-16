@@ -67,7 +67,7 @@ namespace OnDemandTools.Jobs.Controllers
 
                 foreach (var activeQueue in queueService.GetByStatus(true))
                 {
-                    if (activeQueue.Name.ToLower().StartsWith("unittest") && activeQueue.ContactEmailAddress.ToLower().Equals("ondemandtoolssupport@turner.com"))
+                    if (activeQueue.FriendlyName.ToLower().StartsWith("unittest") && activeQueue.ContactEmailAddress.ToLower().Equals("ondemandtoolssupport@turner.com"))
                     {
                         manager.AddOrUpdate(string.Format("Publisher-{0}", activeQueue.Name),
                             Job.FromExpression(() => pub.Execute(activeQueue.Name)), appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.publisher.ToString());
