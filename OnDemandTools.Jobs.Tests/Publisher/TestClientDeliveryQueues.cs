@@ -56,9 +56,15 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }
 
             //To avoid primary and secondary database sync issue
-            Thread.Sleep((2 * 60 * 1000));
+             Thread.Sleep((2 * 60 * 1000));
 
             ProhibitResendMediaIdTest();
+
+            ActiveAiringDeliveryTest();
+
+            ExpiredAiringDelieryTest();
+
+            PriorityQueueTest();
 
         }
 
@@ -70,7 +76,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             {
                 if (!activeAiring.IgnoredQueues.Any()) continue;
 
-                var airing = airingService.GetBy(activeAiring.Airing,
+                var airing = airingService.GetBy(activeAiring.AiringId,
                                          activeAiring.IsDeleted
                                              ? AiringCollection.DeletedCollection
                                              : AiringCollection.CurrentOrExpiredCollection);
@@ -82,7 +88,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                     {
 
                         var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
-                                                       activeAiring.Airing, ignoredQueue);
+                                                       activeAiring.AiringId, ignoredQueue);
 
                         Assert.True(false, failureMessage);
 
@@ -94,6 +100,98 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 }
             }
         }
-    }
 
+        private void ActiveAiringDeliveryTest()
+        {
+            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            foreach (var activeAiring in AiringDataStore.ProcessedAirings)
+            {
+                if (!activeAiring.ExpectedQueues.Any()) continue;
+
+                var airing = airingService.GetBy(activeAiring.AiringId,
+                                          activeAiring.IsDeleted
+                                              ? AiringCollection.DeletedCollection
+                                              : AiringCollection.CurrentOrExpiredCollection);
+
+                foreach (var expectedQueue in activeAiring.ExpectedQueues)
+                {
+                    if (!airing.DeliveredTo.Contains(expectedQueue))
+                    {
+                        var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
+                                                       activeAiring.AiringId, expectedQueue);
+
+                        activeAiring.AddMessage(failureMessage);
+                        Assert.True(false, failureMessage);
+
+                    }
+                    else
+                    {
+                        activeAiring.AddMessage(string.Format("Airing successfully delivered to Queue {0}", expectedQueue));
+                    }
+                }
+            }
+        }
+
+        private void ExpiredAiringDelieryTest()
+        {
+            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            foreach (var expiredAiring in AiringDataStore.ProcessedAirings)
+            {
+                if (!expiredAiring.UnExpectedQueues.Any()) continue;
+                var airing = airingService.GetBy(expiredAiring.AiringId,
+                                           expiredAiring.IsDeleted
+                                               ? AiringCollection.DeletedCollection
+                                               : AiringCollection.CurrentOrExpiredCollection);
+
+                foreach (var queueName in expiredAiring.UnExpectedQueues)
+                {
+                    if (airing.DeliveredTo.Contains(queueName))
+                    {
+                        var failureMessage = string.Format("{0}. Airing {1} should not delivered to queue {2}",
+                                                           expiredAiring.TestName,
+                                                           expiredAiring.AiringId, queueName);
+
+                        expiredAiring.AddMessage(failureMessage, true);
+
+                        Assert.True(false, failureMessage);
+                    }
+                    else
+                    {
+                        expiredAiring.AddMessage(string.Format("Airing not delivered to Queue {0}", queueName));
+                    }
+                }
+            }
+        }
+
+        private void PriorityQueueTest()
+        {
+            IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
+            foreach (var airingWithPriority in AiringDataStore.ProcessedAirings)
+            {
+                if (airingWithPriority.Priority == null) continue;
+
+                var messageDeliveryHistory =
+                    queueService.GetMessageDeliveredForAiringId( airingWithPriority.AiringId,airingWithPriority.ExpectedQueues.First());
+            
+
+                if (messageDeliveryHistory == null) continue;
+
+                if (airingWithPriority.Priority != messageDeliveryHistory.MessagePriority)
+                {
+                    airingWithPriority.AddMessage(string.Format(
+                            "Airing delivered with incorrect priority {0}, expected priority {1}"
+                            , messageDeliveryHistory.MessagePriority,
+                            airingWithPriority.Priority
+                          ));
+
+                    Assert.True(false, airingWithPriority.TestName + ". " + airingWithPriority.Messages.Last());
+                }
+                else
+                {
+                    airingWithPriority.AddMessage(
+                        string.Format("Airing successfully delivered to with priority {0} for the start date {1}", messageDeliveryHistory.MessagePriority, ""));
+                }
+            }
+        }
+    }
 }

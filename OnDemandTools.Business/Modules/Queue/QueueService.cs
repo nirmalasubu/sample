@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
 using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
-using System;
 using OnDemandTools.DAL.Modules.QueueMessages;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
-    public class QueueService : IQueueService
+    public class QueueService :IQueueService
     {
 
         IQueueQuery queueQueryHelper;
@@ -169,5 +168,19 @@ namespace OnDemandTools.Business.Modules.Queue
 
             historyRecorder.Record(historicalMessage);
         }
+
+
+        /// <summary>
+        ///  returns any message delived for given Queue and AiringId
+        /// </summary>
+        /// <param name="airingId">media id to check</param>
+        /// <param name="queueName">queue name to check</param>
+      
+
+        public BLModel.HistoricalMessage GetMessageDeliveredForAiringId(string airingId, string queueName)
+        {
+           HistoricalMessage historicalMessage = queueMessages.GetBy(queueName, airingId).First();
+               return historicalMessage.ToBusinessModel<HistoricalMessage, BLModel.HistoricalMessage>();
+        }
     }
-}
+    }

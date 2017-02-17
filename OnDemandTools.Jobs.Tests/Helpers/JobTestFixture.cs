@@ -27,6 +27,20 @@ namespace OnDemandTools.Jobs.Tests.Helpers
 
         public JobTestFixture()
         {
+            BuildJobSettings();
+            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]); ;
+        }
+
+
+        public JobTestFixture(string apiKeyName)
+        {
+            BuildJobSettings();
+            restClient.AddDefaultHeader("Authorization", Configuration[apiKeyName]);
+        }
+
+
+        private void BuildJobSettings()
+        {
             // Build configuration
             builder = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
@@ -38,12 +52,12 @@ namespace OnDemandTools.Jobs.Tests.Helpers
             // Setup rest client
             restClient = new RestClient(Configuration["APIEndPoint"]);
             restClient.AddDefaultHeader("Content-Type", "application/json");
-            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
+           
 
             // Setup Job rest client
             jobRestClient = new RestClient(Configuration["JobEndPoint"]);
             jobRestClient.AddDefaultHeader("Content-Type", "application/json");
-           
+
 
 
             // Start up DI container
@@ -54,7 +68,6 @@ namespace OnDemandTools.Jobs.Tests.Helpers
             // Load mapping            
             LoadAutoMapper();
         }
-
 
         private void LoadAutoMapper()
         {

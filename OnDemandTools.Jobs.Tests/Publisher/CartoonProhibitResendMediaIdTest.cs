@@ -3,8 +3,7 @@ using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,7 +25,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         [Fact, Order(1)]
         public void AiringSendtoQueueWithNewMediaID()
         {
-            JObject airingJson = JObject.Parse(Resources.Resource.ResourceManager.GetString("CartoonProhibitResendMediaId"));
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("CartoonProhibitResendMediaId"));
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing/TBSE", Method.POST);
             request.AddParameter("application/json", UpdateAiringDates(airingJson), ParameterType.RequestBody);
@@ -39,7 +38,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             string airingId = response.Value<string>(@"airingId"); ;
             AiringDataStore.AddAiring(airingId,
                 "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Initial Test", 
-                fixture.Configuration["cartoonProhibitResendMediaIdToQueueKey"]);
+                fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
 
            
         }
@@ -48,7 +47,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         public void AiringResendToQueuewithExsistingMediaID()
         {
             IAiringUnitTestService airingUnitTestService = fixture.container.GetInstance<IAiringUnitTestService>();
-            JObject airingJson = JObject.Parse(Resources.Resource.ResourceManager.GetString("CartoonProhibitResendMediaId"));
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("CartoonProhibitResendMediaId"));
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing/TBSE", Method.POST);
             request.AddParameter("application/json", UpdateAiringDates(airingJson), ParameterType.RequestBody);
@@ -59,7 +58,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
-            AiringDataStore.AddAiring(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["cartoonProhibitResendMediaIdToQueueKey"]);
+            AiringDataStore.AddAiring(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
                  }
 
 

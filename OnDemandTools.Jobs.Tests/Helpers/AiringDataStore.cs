@@ -16,7 +16,7 @@ namespace OnDemandTools.Jobs.Tests.Helpers
 
         public AiringDataStore(string airing)
         {
-            Airing = airing;
+            AiringId = airing;
 
             ExpectedQueues = new List<string>();
             UnExpectedQueues = new List<string>();
@@ -116,7 +116,9 @@ namespace OnDemandTools.Jobs.Tests.Helpers
 
         public static List<AiringDataStore> ProcessedAirings { get; private set; }
 
-        public string Airing { get; private set; }
+        public string AiringId { get; private set; }
+
+        public string Brand { get; private set; }
 
         public bool AssetShouldExistsInCurrentCollection { get; private set; }
 

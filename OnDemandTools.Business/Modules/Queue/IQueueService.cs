@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OnDemandTools.Business.Modules.Queue.Model;
+using System.Collections.Generic;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -97,5 +98,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="remoteQueueName">the queue name</param>
         /// <param name="messagePriority">message priority</param>
         void AddHistoricalMessage(string airingId, string mediaId, string message, string remoteQueueName, byte? messagePriority);
+
+        /// <summary>
+        ///  returns any message delived for given Queue and AiringId
+        /// </summary>
+        /// <param name="airingId">airing id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        HistoricalMessage GetMessageDeliveredForAiringId(string airingId, string queueName);
     }
 }

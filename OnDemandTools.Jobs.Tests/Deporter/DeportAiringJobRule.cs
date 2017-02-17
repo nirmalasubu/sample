@@ -30,7 +30,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
             //Prepare
             IAiringService airingService = fixture.container.GetInstance<IAiringService>();
             IAiringUnitTestService airingUnitTestService= fixture.container.GetInstance<IAiringUnitTestService>();
-            JObject airingJson = JObject.Parse(Resources.Resource.ResourceManager.GetString("AiringWithSingleFlight"));
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("AiringWithSingleFlight"));
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing/TBSE", Method.POST);
             request.AddParameter("application/json", UpdateAiringDates(airingJson), ParameterType.RequestBody);
@@ -44,7 +44,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
             airingUnitTestService.UpdateAiringRelasedDateAndFlightEndDate(airingId, DateTime.UtcNow.AddDays(-3));
 
             //Act 
-            airingService.Deport(int.Parse(fixture.Configuration["airingDeportGraceDays"]));
+            airingService.Deport(int.Parse(fixture.Configuration["AiringDeportGraceDays"]));
 
             //Assert
             BLModel.Airing expiredairingModel = airingService.GetBy(airingId, AiringCollection.ExpiredCollection);
