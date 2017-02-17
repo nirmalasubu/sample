@@ -272,18 +272,18 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             var bimisMatch = results.Where(r => !r.Valid && r.StatusEnum == BIMMISMATCH).FirstOrDefault();
             if (bimFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
+               // LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
-                LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
+              //  LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
-                LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
+              //  LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
