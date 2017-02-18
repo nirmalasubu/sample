@@ -4,7 +4,7 @@ using RestSharp;
 using System.Collections.Generic;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.AiringRoute.PostAiring
+namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
 {
     /// <summary>
     /// Hint : order 1 runs first and  then order 2 runs

@@ -5,7 +5,7 @@ using RestSharp;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.AiringRoute.PostAiring
+namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
 {
     public class BaseAiringRule
     {
@@ -13,20 +13,20 @@ namespace OnDemandTools.Jobs.Tests.AiringRoute.PostAiring
         JobTestFixture _fixture;
         RestClient _client;
 
-        protected BaseAiringRule(string abbreviation,string  brandApiKey)
+        protected BaseAiringRule(string abbreviation, string brandApiKey)
         {
             _abbreviation = abbreviation;
             _fixture = new JobTestFixture(brandApiKey);
             _client = _fixture.restClient;
         }
 
-        protected string PostAiringTest(string airingJson,string TestCaseText)
+        protected string PostAiringTest(string airingJson, string TestCaseText)
         {
 
             JObject response = new JObject();
-            var request = new RestRequest("/v1/airing/"+ _abbreviation, Method.POST);
+            var request = new RestRequest("/v1/airing/" + _abbreviation, Method.POST);
             request.AddParameter("text/xml", airingJson, ParameterType.RequestBody);
-           
+
             Task.Run(async () =>
             {
                 response = await _client.RetrieveRecord(request);
@@ -36,9 +36,9 @@ namespace OnDemandTools.Jobs.Tests.AiringRoute.PostAiring
             string value = response.Value<string>(@"StatusCode");
             if (value != null)
             {
-                Assert.True(false,  "Test method Failed for Brand : " +_abbreviation + ", Method Name :"+ TestCaseText);
+                Assert.True(false, "Test method Failed for Brand : " + _abbreviation + ", Method Name :" + TestCaseText);
             }
-           
+
             return response[@"airingId"].ToString();
         }
 
@@ -46,12 +46,12 @@ namespace OnDemandTools.Jobs.Tests.AiringRoute.PostAiring
         {
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing", Method.DELETE);
-          
-             request.AddJsonBody(new
-             {
-                 AiringId =airingID,
-                 ReleasedBy= "UnitTestApp"
-             });
+
+            request.AddJsonBody(new
+            {
+                AiringId = airingID,
+                ReleasedBy = "UnitTestApp"
+            });
             Task.Run(async () =>
             {
                 response = await _client.RetrieveRecord(request);

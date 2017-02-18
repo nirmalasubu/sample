@@ -1,11 +1,9 @@
-﻿using OnDemandTools.Jobs.Tests.AiringRoute.PostAiring;
-using OnDemandTools.Jobs.Tests.Helpers;
-using OnDemandTools.Jobs.Tests.Resources;
+﻿using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System.Collections.Generic;
 using Xunit;
 
-namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
+namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
 {
     /// <summary>
     /// Hint : order 1 runs first and  then order 2 runs
@@ -23,7 +21,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
         public TBSAiringRule(JobTestFixture fixture)
             : base("TBSE", "TBSFullAccessApiKey")
         {
-            _jsonString = Resources.TBSAiringWithSingleFlight;
+            _jsonString = Resources.Resources.TBSAiringWithSingleFlight;
             _airingObjectHelper = new AiringObjectHelper();
             _tbsQueueKey = fixture.Configuration["TbsQueueApiKey"];
         }

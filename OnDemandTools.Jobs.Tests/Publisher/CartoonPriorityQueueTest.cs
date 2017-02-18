@@ -1,6 +1,5 @@
-﻿using OnDemandTools.Jobs.Tests.AiringRoute.PostAiring;
-using OnDemandTools.Jobs.Tests.Helpers;
-using OnDemandTools.Jobs.Tests.Resources;
+﻿using OnDemandTools.Jobs.Tests.Helpers;
+using OnDemandTools.Jobs.Tests.Publisher.PostAiring;
 using RestSharp;
 using System.Collections.Generic;
 using Xunit;

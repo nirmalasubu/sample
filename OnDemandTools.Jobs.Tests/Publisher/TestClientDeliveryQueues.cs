@@ -1,12 +1,11 @@
-﻿using OnDemandTools.Jobs.Tests.Helpers;
-using RestSharp;
-using Xunit;
-using System.Linq;
+﻿using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Queue;
-using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Jobs.Tests.Helpers;
+using RestSharp;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using Xunit;
 
 namespace OnDemandTools.Jobs.Tests.Publisher
 {
