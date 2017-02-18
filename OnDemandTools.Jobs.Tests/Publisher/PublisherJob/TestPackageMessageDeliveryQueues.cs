@@ -8,14 +8,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher
+namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
 {
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(9)]
     public class TestPackageMessageDeliveryQueues
     {
-        private const string CartoonBrand = "Cartoon";
-        private const string TbsBrand = "TBS";
+        private const string CartoonBrand = "CAR";        
         private readonly string cartoonQueueName;
         private string cartoonProhibitResendMediaIdToQueueApiKey = Resources.Resources.CartoonProhibitResendMediaId;
         private string validPkg = Resources.Resources.ValidPackage;
@@ -38,11 +38,11 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             cartoonQueueName = fixture.Configuration["CartoonQueueApiKey"];
         }
 
-        [Fact, Order(45)]
+        [Fact, Order(60)]
         public void CartoonInvalidTitlePostPackageTest()
         {
-            _alreadyDeliveredAirings = AiringDataStore.ProcessedAirings.Where(e => e.Brand == CartoonBrand).ToList();
-            cartoonAiringId = _alreadyDeliveredAirings.Where(e => e.Brand == CartoonBrand).Select(s => s.AiringId).FirstOrDefault();
+            _alreadyDeliveredAirings = AiringDataStore.ProcessedAirings.Where(e => e.AiringId.StartsWith(CartoonBrand)).ToList();
+            cartoonAiringId = _alreadyDeliveredAirings.Select(s => s.AiringId).FirstOrDefault();
             //Thread.Sleep(500);
             JObject _cartoonAiring = new JObject();
             var requestAiring = new RestRequest("/v1/airing/" + cartoonAiringId, Method.GET);

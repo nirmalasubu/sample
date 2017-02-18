@@ -4,11 +4,12 @@ using RestSharp;
 using System.Collections.Generic;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher
+namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
 {
 
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(1)]
     public class CartoonPriorityQueueTest : BaseAiringRule
     {
         private readonly string _cartoonQueueKey;

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace OnDemandTools.Jobs.Tests.Helpers
 {
-    [CollectionDefinition("Job Collection")]
+    [CollectionDefinition("Jobs")]
     public class JobTestCollection:ICollectionFixture<JobTestFixture>
     {
     }

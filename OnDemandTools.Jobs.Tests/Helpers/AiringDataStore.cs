@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OnDemandTools.Jobs.Tests.Helpers
 {
@@ -117,8 +114,6 @@ namespace OnDemandTools.Jobs.Tests.Helpers
         public static List<AiringDataStore> ProcessedAirings { get; private set; }
 
         public string AiringId { get; private set; }
-
-        public string Brand { get; private set; }
 
         public bool AssetShouldExistsInCurrentCollection { get; private set; }
 

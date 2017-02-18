@@ -7,10 +7,11 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher
+namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
 {
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(2)]
     public class CartoonProhibitResendMediaIdTest
     {
         JobTestFixture fixture;
@@ -37,10 +38,10 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
             AiringDataStore.AddAiring(airingId,
-                "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Initial Test", 
+                "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Initial Test",
                 fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
 
-           
+
         }
 
         [Fact, Order(2)]
@@ -59,7 +60,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
             AiringDataStore.AddAiring(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
-                 }
+        }
 
 
         private JObject UpdateAiringDates(JObject jObject)
@@ -72,7 +73,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 obj["Start"] = DateTime.UtcNow.AddDays(-2);
                 obj["End"] = DateTime.Now.AddDays(2);
             }
-            
+
             return jObject;
 
         }

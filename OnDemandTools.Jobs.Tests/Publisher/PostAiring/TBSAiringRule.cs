@@ -9,7 +9,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
     /// Hint : order 1 runs first and  then order 2 runs
     /// </summary>
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(1)]
     public class TBSAiringRule : BaseAiringRule
     {
         private readonly string _tbsQueueKey;

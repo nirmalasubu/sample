@@ -12,7 +12,7 @@ using System.Threading;
 namespace OnDemandTools.Jobs.Tests.Deporter
 {
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
     public class DeportAiringJobRule
     {
         JobTestFixture fixture;

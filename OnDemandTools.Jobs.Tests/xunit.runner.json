@@ -1,5 +1,7 @@
 {
-    "diagnosticMessages": false,
-    "methodDisplay": "classAndMethod",
-    "parallelizeTestCollections": false
+  "diagnosticMessages": true,
+  "methodDisplay": "classAndMethod",
+  "parallelizeTestCollections": false,
+  "maxParallelThreads": 1,
+  "parallelizeAssembly": false
 }

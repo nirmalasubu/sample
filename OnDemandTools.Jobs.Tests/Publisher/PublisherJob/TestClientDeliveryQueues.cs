@@ -3,14 +3,14 @@ using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher
+namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
 {
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(1)]
     public class TestClientDeliveryQueues
     {
         JobTestFixture _fixture;
@@ -23,7 +23,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         }
 
 
-        [Fact, Order(10)]
+        [Fact, Order(1)]
         public void VerifyClientQueueDelivery()
         {
 
@@ -53,9 +53,6 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
                 }).Wait();
             }
-
-            //To avoid primary and secondary database sync issue
-             Thread.Sleep((2 * 60 * 1000));
 
             ProhibitResendMediaIdTest();
 

@@ -10,7 +10,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
     /// Hint : order 1 runs first and  then order 2 runs
     /// </summary>
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
-    [Collection("Job Collection")]
+    [Collection("Jobs")]
+    [Order(1)]
     public class CartoonAiringRules : BaseAiringRule
     {
         private readonly string _cartoonQueueKey;
@@ -45,7 +46,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
         public void ExpiredAiringTest()
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, -365), "Expired Airing test");
-            AiringDataStore.AddAiring(airingId, true, "Expired Airing test","", _cartoonQueueKey);
+            AiringDataStore.AddAiring(airingId, true, "Expired Airing test", "", _cartoonQueueKey);
         }
 
         [Fact, Order(1)]
@@ -69,7 +70,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(updatedairing, -365), "Active to Expired Airing test- Step 2");
             AiringDataStore.AddAiring(airingId, true, "Active to Expired Airing test", _cartoonQueueKey);
         }
-        
+
         [Fact, Order(1)]
         public void ExpiredToActiveAiringTest()
         {
@@ -89,7 +90,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
             string updatedairing = _airingObjectHelper.UpdateAiringId(airing, _jsonString);
 
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDates(updatedairing, -365), "Expired to Expired Airing test- Step 2");
-            AiringDataStore.AddAiring(airingId, true, "Expired to Expired Airing test","", _cartoonQueueKey);
+            AiringDataStore.AddAiring(airingId, true, "Expired to Expired Airing test", "", _cartoonQueueKey);
         }
 
     }

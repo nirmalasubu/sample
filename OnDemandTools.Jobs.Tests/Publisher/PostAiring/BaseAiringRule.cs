@@ -7,7 +7,7 @@ using Xunit;
 
 namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
 {
-    public class BaseAiringRule
+    public abstract class BaseAiringRule
     {
         private readonly string _abbreviation;
         JobTestFixture _fixture;
