@@ -115,7 +115,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 queueService.Unlock(deliveryQueue.Name);
 
                 var request = new RestRequest("/api/unittest/" + deliveryQueue.Name, Method.GET);
-                request.Timeout = (10 * 60 * 1000); // 10minutes
+                request.Timeout = 1200000; //20 minutes
 
                 string response = string.Empty;
                 Task.Run(async () =>
@@ -124,7 +124,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
                 }).Wait();
 
-                Assert.True(response.Contains("Successfully processed"), "Queue Success message not received");
+                Assert.True(response.Contains("Successfully processed"), "Queue Success message not received, returned message: " + response);
             }
 
             ProhibitResendMediaIdTest();
