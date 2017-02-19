@@ -74,7 +74,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
                     _airingService.PushDeliveredTo(envelope.AiringId, queueName);
                     break;
                 case "Delete":
-                    _airingService.PushDeliveredTo(envelope.AiringId, queueName);
+                    _airingService.PushDeliveredTo(envelope.AiringId, queueName, AiringCollection.DeletedCollection);
                     break;
                 default:
                     throw new Exception("Unable to determine the airing collection for action: " + envelope.Message.Action);
