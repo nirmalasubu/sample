@@ -6,8 +6,13 @@
     "OnDemandTools.DAL": "1.0.0-*",
     "System.Security.Claims": "4.3.0",
     "FluentValidation.AspNetCore": "6.4.0-beta9",
-    "System.Xml.XmlSerializer": "4.0.11",
-    "RestSharp.NetCore": "105.2.3"
+    "RestSharp.NetCore": "105.2.3",
+    "System.ServiceModel.Duplex": "4.3.0",
+    "System.ServiceModel.Http": "4.3.0",
+    "System.ServiceModel.NetTcp": "4.3.0",
+    "System.ServiceModel.Security": "4.3.0",
+    "System.Xml.XmlSerializer": "4.3.0",
+    "EasyNetQ-dotnet-core": "2.0.2-radicalgeek-netc0001"
   },
 
   "frameworks": {

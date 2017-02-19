@@ -1,12 +1,9 @@
 ﻿using Hangfire;
+using OnDemandTools.Business.Modules.AiringPublisher.Workflow;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
-using OnDemandTools.Jobs.JobRegistry.Publisher;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace OnDemandTools.Jobs.JobRegistry.CloudAmqpSync
 {
