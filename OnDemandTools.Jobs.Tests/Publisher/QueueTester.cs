@@ -90,8 +90,6 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         #region Queue Delivery test
         public void VerifyClientQueueDelivery()
         {
-            return;
-
             if (!_processedAirings.Any())
             {
                 Assert.True(false, "No airing found to run the pubslisher job");
@@ -113,6 +111,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 {
                     Assert.True(false, string.Format("Unit test delivery queue not found: API Key {0}", queue));
                 }
+
+                queueService.Unlock(deliveryQueue.Name);
 
                 var request = new RestRequest("/api/unittest/" + deliveryQueue.Name, Method.GET);
                 request.Timeout = (10 * 60 * 1000); // 10minutes
@@ -156,7 +156,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                     if (!airing.IgnoredQueues.Contains(ignoredQueue))
                     {
 
-                        var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
+                        var failureMessage = string.Format("{0}. Airing {1} not added to ignored queue {2}", activeAiring.TestName,
                                                        activeAiring.AiringId, ignoredQueue);
 
                         Assert.True(false, failureMessage);

@@ -76,6 +76,12 @@ namespace OnDemandTools.Business.Modules.Queue
         void Unlock(string queueName, string processorId);
 
         /// <summary>
+        /// Unlocks the queue
+        /// </summary>
+        /// <param name="name">queue name</param>
+        void Unlock(string name);
+
+        /// <summary>
         /// Check and returns any message delived for given Queue and MediaId
         /// </summary>
         /// <param name="mediaId">media id to check</param>
@@ -98,6 +104,13 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="remoteQueueName">the queue name</param>
         /// <param name="messagePriority">message priority</param>
         void AddHistoricalMessage(string airingId, string mediaId, string message, string remoteQueueName, byte? messagePriority);
+
+        /// <summary>
+        /// Deletes messages by media id
+        /// </summary>
+        /// <param name="mediaId"></param>
+        void DeleteHistoricalMessage(string mediaId);
+
 
         /// <summary>
         ///  returns any message delived for given Queue and AiringId

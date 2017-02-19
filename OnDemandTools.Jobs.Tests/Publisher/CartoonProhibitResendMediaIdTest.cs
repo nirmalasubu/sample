@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System;
@@ -17,6 +18,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         JobTestFixture fixture;
         RestClient _client;
         private static QueueTester _queueTester;
+        private const string MediaId = "9685466546e03242c571e62902801b6220057079";
+
         public CartoonProhibitResendMediaIdTest(JobTestFixture fixture)
             : base("TBSE", "", fixture)
         {
@@ -28,6 +31,14 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         }
 
         [Fact, Order(1)]
+        public void DeleteHistoricalMessage()
+        {
+            var queueService = fixture.container.GetInstance<IQueueService>();
+
+            queueService.DeleteHistoricalMessage(MediaId);
+        }
+
+        [Fact, Order(2)]
         public void AiringSendtoQueueWithNewMediaID()
         {
             JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("CartoonProhibitResendMediaId"));
@@ -48,7 +59,13 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         }
 
-        [Fact, Order(2)]
+        [Fact, Order(3)]
+        public void VerifyClientDeliveryQueueForDeliverTest()
+        {
+            _queueTester.VerifyClientQueueDelivery();
+        }
+
+        [Fact, Order(4)]
         public void AiringResendToQueuewithExsistingMediaID()
         {
             IAiringUnitTestService airingUnitTestService = fixture.container.GetInstance<IAiringUnitTestService>();
@@ -67,7 +84,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         }
 
         [Fact, Order(99)]
-        public void VerifyClientDelieryQueue()
+        public void VerifyClientDeliveryQueueForNotDeliverTest()
         {
             _queueTester.VerifyClientQueueDelivery();
         }

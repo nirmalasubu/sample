@@ -133,6 +133,14 @@ namespace OnDemandTools.Business.Modules.Queue
             queueLocker.ReleaseLockFor(queueName, processId);
         }
 
+        /// <summary>
+        /// Unlocks the queue
+        /// </summary>
+        /// <param name="queueName">queue name to lock</param>
+        public void Unlock(string queueName)
+        {
+            queueLocker.ReleaseLockFor(queueName, null);
+        }
 
         /// <summary>
         /// Check and returns any message delived for given Queue and MediaId
@@ -169,13 +177,22 @@ namespace OnDemandTools.Business.Modules.Queue
             historyRecorder.Record(historicalMessage);
         }
 
+        /// <summary>
+        /// Deletes messages by media id
+        /// </summary>
+        /// <param name="mediaId"></param>
+        public void DeleteHistoricalMessage(string mediaId)
+        {            
+            historyRecorder.Remove(mediaId);
+        }
+
 
         /// <summary>
         ///  returns any message delived for given Queue and AiringId
         /// </summary>
         /// <param name="airingId">media id to check</param>
         /// <param name="queueName">queue name to check</param>
-      
+
 
         public BLModel.HistoricalMessage GetMessageDeliveredForAiringId(string airingId, string queueName)
         {

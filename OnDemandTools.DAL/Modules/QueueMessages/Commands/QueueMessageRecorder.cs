@@ -1,6 +1,8 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using MongoDB.Driver;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
+using MongoDB.Driver.Builders;
 
 namespace OnDemandTools.DAL.Modules.QueueMessages.Commands
 {
@@ -18,6 +20,11 @@ namespace OnDemandTools.DAL.Modules.QueueMessages.Commands
         public void Record(HistoricalMessage record)
         {
             _history.Save(record);
+        }
+
+        public void Remove(string mediaId)
+        {
+            _history.Remove(Query.EQ("MediaId", mediaId));
         }
     }
 }

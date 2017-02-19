@@ -293,7 +293,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Publisher
             foreach (var airingId in ignoreAirings)
             {
                 if (isDeleted)
-                    airingService.PushIgnoredQueueTo(airingId, queueName);
+                    airingService.PushIgnoredQueueTo(airingId, queueName, AiringCollection.DeletedCollection);
                 else
                     airingService.PushIgnoredQueueTo(airingId, queueName);
             }

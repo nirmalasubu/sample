@@ -97,7 +97,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         }
 
         [Fact, Order(99)]
-        public void VerifyClientDelieryQueue()
+        public void VerifyClientDeliveryQueue()
         {
             _queueTester.VerifyClientQueueDelivery();
         }

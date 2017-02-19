@@ -46,7 +46,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDeliverImmedialtely(_jsonString, 0, false), "Priority: Airing Starts Today Test");
 
-            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts Today Test", _cartoonQueueKey, 5);
+            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts Today Test", _cartoonQueueKey, 6);
         }
 
         [Fact, Order(1)]
@@ -54,7 +54,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDeliverImmedialtely(_jsonString, 1, false), "Priority: Airing Starts In Next 1 Day Test");
 
-            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 1 Day Test", _cartoonQueueKey, 4);
+            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 1 Day Test", _cartoonQueueKey, 5);
         }
 
         [Fact, Order(1)]
@@ -70,7 +70,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDeliverImmedialtely(_jsonString, 3, false), "Priority: Airing Starts In Next 3 Day Test");
 
-            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 3 Day Test", _cartoonQueueKey, 3);
+            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 3 Day Test", _cartoonQueueKey, 4);
         }
 
         [Fact, Order(1)]
@@ -86,7 +86,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDeliverImmedialtely(_jsonString, 7, false), "Priority: Airing Starts In Next 7 Day Test");
 
-            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 7 Day Test", _cartoonQueueKey, 2);
+            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts In Next 7 Day Test", _cartoonQueueKey, 3);
         }
 
 
@@ -112,7 +112,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             string airingId = PostAiringTest(_airingObjectHelper.UpdateDeliverImmedialtely(_jsonString, 14, false), "Priority: Airing Starts With 2 Week Test");
 
-            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts With 2 Week Test", _cartoonQueueKey, 1);
+            _queueTester.AddAiringToDataStore(airingId, "Priority: Airing Starts With 2 Week Test", _cartoonQueueKey, 2);
         }
 
         [Fact, Order(1)]
@@ -133,7 +133,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         }
 
         [Fact, Order(99)]
-        public void VerifyClientDelieryQueue()
+        public void VerifyClientDeliveryQueue()
         {
             _queueTester.VerifyClientQueueDelivery();
         }

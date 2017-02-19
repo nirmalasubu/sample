@@ -21,7 +21,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             var database = connection.GetDatabase();
             _appSetting = appSetting;
 
-            _collection = database.GetCollection<DeliveryQueueLock>("DeliveryQueueLock");           
+            _collection = database.GetCollection<DeliveryQueueLock>("DeliveryQueueLock");
         }
 
         public DeliveryQueueLock AquireLockFor(string name, string processId)
@@ -77,7 +77,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             _collection.Remove(Query.And(Query.EQ("Name", name), Query.LTE("LockedOn", expireDateTime)));
         }
 
-        public  Int64 ReleaseLocksFor(int agentId)
+        public Int64 ReleaseLocksFor(int agentId)
         {
             WriteConcernResult wr = _collection.Remove(Query.Matches("ProcessId", new BsonRegularExpression(new Regex(agentId + "-(\\d)+"))));
             return wr.DocumentsAffected;
@@ -85,7 +85,10 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
 
         public DeliveryQueueLock ReleaseLockFor(string name, string processId)
         {
-            _collection.Remove(Query.And(Query.EQ("Name", name), Query.EQ("ProcessId", processId)));
+            if (processId == null)
+                _collection.Remove(Query.EQ("Name", name));
+            else
+                _collection.Remove(Query.And(Query.EQ("Name", name), Query.EQ("ProcessId", processId)));
 
             return new DeliveryQueueLock(name, processId, false);
         }
