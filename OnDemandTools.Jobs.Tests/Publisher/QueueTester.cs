@@ -10,6 +10,9 @@ using Xunit;
 
 namespace OnDemandTools.Jobs.Tests.Publisher
 {
+
+    [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
+    [Collection("Jobs")]
     public class QueueTester
     {
         private readonly JobTestFixture _fixture;

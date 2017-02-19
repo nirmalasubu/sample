@@ -14,6 +14,8 @@ using System.Reflection;
 using AutoMapper;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.DIResolver;
+using Serilog;
+using OnDemandTools.Common.Logzio;
 
 namespace OnDemandTools.Jobs.Tests.Helpers
 {
@@ -62,7 +64,15 @@ namespace OnDemandTools.Jobs.Tests.Helpers
 
             // Start up DI container
             this.container = new StructureMap.Container();
+            Serilog.ILogger appLogger = new LoggerConfiguration()
+                     .WriteTo.Logzio(appSettings.LogzIO.AuthToken,
+                     application: appSettings.LogzIO.Application,
+                     reporterType: appSettings.LogzIO.ReporterType,
+                     environment: appSettings.LogzIO.Environment)
+                     .CreateLogger();
             container.Configure(c => c.ForSingletonOf<AppSettings>().Use(appSettings));
+            container.Configure(c => c.ForSingletonOf<Serilog.ILogger>().Use(appLogger));
+           
             DependencyResolver.RegisterResolver(new StructureMapIOCContainer(container)).RegisterImplmentation();
 
             // Load mapping            
