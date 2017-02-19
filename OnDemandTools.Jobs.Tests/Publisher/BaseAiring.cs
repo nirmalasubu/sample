@@ -1,22 +1,21 @@
 ﻿using Newtonsoft.Json.Linq;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
-
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
+namespace OnDemandTools.Jobs.Tests.Publisher
 {
-    public abstract class BaseAiringRule
+    public abstract class BaseAiring
     {
         private readonly string _abbreviation;
-        JobTestFixture _fixture;
-        RestClient _client;
+        private readonly JobTestFixture _fixture;
+        private readonly RestClient _client;
 
-        protected BaseAiringRule(string abbreviation, string brandApiKey)
+        protected BaseAiring(string abbreviation, string brandApiKey, JobTestFixture fixture)
         {
             _abbreviation = abbreviation;
-            _fixture = new JobTestFixture(brandApiKey);
+            _fixture = fixture;
             _client = _fixture.restClient;
         }
 
@@ -65,6 +64,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PostAiring
             }
             return response[@"airingId"].ToString();
         }
+
 
 
     }

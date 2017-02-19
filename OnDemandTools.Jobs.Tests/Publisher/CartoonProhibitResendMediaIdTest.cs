@@ -7,20 +7,24 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
+namespace OnDemandTools.Jobs.Tests.Publisher
 {
     [TestCaseOrderer("OnDemandTools.Jobs.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.Jobs.Tests")]
     [Collection("Jobs")]
     [Order(2)]
-    public class CartoonProhibitResendMediaIdTest
+    public class CartoonProhibitResendMediaIdTest : BaseAiring
     {
         JobTestFixture fixture;
         RestClient _client;
-
+        private static QueueTester _queueTester;
         public CartoonProhibitResendMediaIdTest(JobTestFixture fixture)
+            : base("TBSE", "", fixture)
         {
             this.fixture = fixture;
             _client = this.fixture.restClient;
+
+            if (_queueTester == null)
+                _queueTester = new QueueTester(fixture);
         }
 
         [Fact, Order(1)]
@@ -37,7 +41,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
 
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
-            AiringDataStore.AddAiring(airingId,
+            _queueTester.AddAiringToDataStore(airingId,
                 "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Initial Test",
                 fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
 
@@ -59,7 +63,13 @@ namespace OnDemandTools.Jobs.Tests.Publisher.PublisherJob
 
             }).Wait();
             string airingId = response.Value<string>(@"airingId"); ;
-            AiringDataStore.AddAiring(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
+            _queueTester.AddAiringToDataStore(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
+        }
+
+        [Fact, Order(99)]
+        public void VerifyClientDelieryQueue()
+        {
+            _queueTester.VerifyClientQueueDelivery();
         }
 
 
