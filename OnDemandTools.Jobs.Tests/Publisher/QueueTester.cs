@@ -1,10 +1,10 @@
 ﻿using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.AiringPublisher;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 
@@ -14,14 +14,14 @@ namespace OnDemandTools.Jobs.Tests.Publisher
     {
         private readonly JobTestFixture _fixture;
         private readonly RestClient _client;
-        private readonly RestClient _jobClient;
+        private readonly IPublisher _publisher;
         private readonly List<AiringDataStore> _processedAirings;
 
         public QueueTester(JobTestFixture fixture)
         {
             _fixture = fixture;
             _client = _fixture.restClient;
-            _jobClient = _fixture.jobRestClient;
+            _publisher = _fixture.container.GetInstance<IPublisher>();
             _processedAirings = new List<AiringDataStore>();
         }
 
@@ -114,17 +114,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
                 queueService.Unlock(deliveryQueue.Name);
 
-                var request = new RestRequest("/api/unittest/" + deliveryQueue.Name, Method.GET);
-                request.Timeout = 1200000; //20 minutes
-
-                string response = string.Empty;
-                Task.Run(async () =>
-                {
-                    response = await _jobClient.RetrieveString(request);
-
-                }).Wait();
-
-                Assert.True(response.Contains("Successfully processed"), "Queue Success message not received, returned message: " + response);
+                _publisher.Execute(deliveryQueue.Name);
             }
 
             ProhibitResendMediaIdTest();
