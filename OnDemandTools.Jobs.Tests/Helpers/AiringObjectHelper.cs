@@ -22,8 +22,8 @@ namespace OnDemandTools.Jobs.Tests.Helpers
            
             foreach (JObject obj in jArray)
             {
-                obj["Start"] = DateTime.UtcNow.AddDays(noOfDaysBefore);
-                obj["End"] = DateTime.UtcNow.AddDays(noOfDaysBefore).AddDays(7);
+                obj["Start"] = DateTime.UtcNow.Date.AddDays(noOfDaysBefore);
+                obj["End"] = DateTime.UtcNow.Date.AddDays(noOfDaysBefore).AddDays(7);
 
                 noOfDaysBefore = noOfDaysBefore + 7;
             }
