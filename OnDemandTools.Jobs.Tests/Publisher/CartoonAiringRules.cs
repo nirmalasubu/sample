@@ -98,10 +98,16 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _queueTester.AddAiringToDataStore(airingId, true, "Expired to Expired Airing test", "", _cartoonQueueKey);
         }
 
-        [Fact, Order(99)]
+        [Fact, Order(98)]
         public void VerifyClientDeliveryQueue()
         {
             _queueTester.VerifyClientQueueDelivery();
         }
+
+        [Fact, Order(99)]
+        public void PackageDeliveryTest()
+        {
+            _queueTester.PackageDeliveryTest();
+        }        
     }
 }
