@@ -46,7 +46,8 @@ namespace OnDemandTools.Jobs.Tests.Helpers
             // Build configuration
             builder = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json");
+              .AddJsonFile("appsettings.json")
+              .AddEnvironmentVariables();
 
             Configuration = builder.Build();
             var appSettings = Configuration.Get<AppSettings>("Application");

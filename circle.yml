@@ -41,7 +41,7 @@ test:
     - sudo docker images
      
     # Job testing
-    - source envJob; sudo docker run -it --link odt-api-container:localhost --name odt-job-test-container "${IMAGE}-test"
+    - source envJob; sudo docker run -it --link odt-api-container:apihost --link odt-job-container:jobhost --name odt-job-test-container "${IMAGE}-test"
 
     - sudo docker stop odt-api-container
     - sudo docker stop odt-api-test-container
