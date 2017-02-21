@@ -344,7 +344,26 @@ namespace OnDemandTools.API.v1.Routes
                 };
             });
 
+            Post("/airing/playlist/{airingid}", _ =>
+            {
+                // Verify that the user has permission to POST
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
 
+                var airingId = (string)_.airingid;
+
+                // Bind POST request to data contract
+                var request = this.Bind<VMAiringRequestModel.PlayListRequest>();
+                try
+                {
+                    return "Successfully updated the playlist.";
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Failure ingesting playlist to airing. Airingid:{@airingId}", airingId);
+                    throw e;
+                }
+
+            });
 
             Post("/airing/{prefix}", _ =>
             {
