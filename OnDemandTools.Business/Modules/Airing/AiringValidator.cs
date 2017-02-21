@@ -11,12 +11,13 @@ namespace OnDemandTools.Business.Modules.Airing
 {
     public enum AiringValidationRuleSet
     {
-       PostAiring,
-       DeleteAiring
+        PostAiring,
+        DeleteAiring,
+        PostPlaylist
     }
 
-    public class AiringValidator: AbstractValidator<BLModel.Airing>
-    {       
+    public class AiringValidator : AbstractValidator<BLModel.Airing>
+    {
         IGetAiringQuery _airingQuery;
         IDestinationQuery _desQuery;
 
@@ -65,10 +66,12 @@ namespace OnDemandTools.Business.Modules.Airing
                             // Verify that the given airingId exist                   
                             Func<String, bool> airingIdExistRule = new Func<String, bool>((airingId) =>
                             {
-                                try {
+                                try
+                                {
                                     return (_airingQuery.GetBy(airingId) != null);
                                 }
-                                catch(Exception) {
+                                catch (Exception)
+                                {
                                     return false;
                                 }
                             });
@@ -77,6 +80,56 @@ namespace OnDemandTools.Business.Modules.Airing
                               .Must(airingIdExistRule)
                               .WithMessage("Provided AiringId does not exist.");
                         });
+            });
+
+            RuleSet(AiringValidationRuleSet.PostPlaylist.ToString(), () =>
+            {
+                // Verify required fields are provided
+                RuleFor(c => c)
+                       .Must(c => !String.IsNullOrEmpty(c.AssetId))
+                       .WithMessage("Airing Id required")
+                       .Must(c => !String.IsNullOrEmpty(c.ReleaseBy))
+                       .WithMessage("ReleaseBy field required")
+                       .Must(c => (c.PlayList != null && c.PlayList.Any()))
+                       .WithMessage("Playlist is required")
+                       .DependentRules(dr =>
+                       {
+                           // Verify that the given airingId exist                   
+                           Func<String, bool> airingIdExistRule = new Func<String, bool>((airingId) =>
+                           {
+                               try
+                               {
+                                   return (_airingQuery.GetBy(airingId, AiringCollection.CurrentCollection) != null);
+                               }
+                               catch (Exception)
+                               {
+                                   return false;
+                               }
+                           });
+
+                           dr.RuleFor(c => c.AssetId)
+                             .Must(airingIdExistRule)
+                             .WithMessage("Provided AiringId does not exist.");
+                       })
+                        .DependentRules(pl =>
+                         {
+                             // Verify that the given airingId exist                   
+                             Func<BLModel.Airing, bool> playlistRule = new Func<BLModel.Airing, bool>((airing) =>
+                             {
+                                 try
+                                 {
+                                     return true;
+                                 }
+                                 catch (Exception)
+                                 {
+                                     return false;
+                                 }
+                             });
+
+                             pl.RuleFor(c => c)
+                               .Must(playlistRule)
+                               .WithMessage("Provided AiringId does not exist.");
+                         });
             });
         }
     }
@@ -96,7 +149,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
                 RuleForEach(c => c.Products)
                     .SetValidator(new ProductValidator(desQuery));
-            });          
+            });
         }
     }
 
@@ -115,12 +168,12 @@ namespace OnDemandTools.Business.Modules.Airing
                          return !desQuery
                         .GetByProductIds(new List<Guid> { c.ExternalId })
                         .IsNullOrEmpty();
-                        
+
                      })
-                     .WithMessage("Product {0} doesn't have a destination. Products require one or more destination before content can be fulfilled. Please contact ODT team - OnDemandToolsSupport@turner.com", c=>c.ExternalId);
+                     .WithMessage("Product {0} doesn't have a destination. Products require one or more destination before content can be fulfilled. Please contact ODT team - OnDemandToolsSupport@turner.com", c => c.ExternalId);
 
             });
-          
+
         }
-    }   
+    }
 }

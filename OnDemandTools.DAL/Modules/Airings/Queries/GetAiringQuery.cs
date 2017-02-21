@@ -35,6 +35,9 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
                 case AiringCollection.CurrentOrExpiredCollection:
                     airing = _currentCollection.FindOne(query) ?? GetFromExpiredCollection(query);
                     break;
+                case AiringCollection.CurrentCollection:
+                    airing = _currentCollection.FindOne(query);
+                    break;
                 case AiringCollection.ExpiredCollection:
                     airing = GetFromExpiredCollection(query);
                     break;
