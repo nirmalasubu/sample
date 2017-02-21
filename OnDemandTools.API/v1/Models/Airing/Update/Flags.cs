@@ -7,5 +7,6 @@
         public bool ProgrammerBrandingReq { get; set; }
         public bool FastForwardAllowed { get; set; }
         public bool ManuallyProcess { get; set; }
+        public bool Stacked { get; set; }
     }
 }
