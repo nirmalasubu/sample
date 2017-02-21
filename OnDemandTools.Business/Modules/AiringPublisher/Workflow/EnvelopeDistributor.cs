@@ -99,7 +99,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
         private void Deliver(Envelope envelope, string routingKey, DeliveryDetails details)
         {
             var json = JsonConvert.SerializeObject(envelope.Message);
-            var message = new Message<String>(json);
+            var message = new Message<string>(json);
             if (envelope.MessagePriority != null)
             {
                 message.Properties.Priority = envelope.MessagePriority.Value;
