@@ -58,5 +58,23 @@ namespace OnDemandTools.API.Tests.AiringRoute
             Assert.True(response.SelectToken("flags.stacked").Value<bool>());
 
         }
+
+        [Fact, Order(1)]
+        public void AiringWithNoStackedflagTest()
+        {
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("TBSAiringWithSingleFlight"));
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/TBSE", Method.POST);
+            request.AddParameter("application/json", airingJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            Assert.False(response.SelectToken("flags.stacked").Value<bool>());
+
+        }
     }
 }
