@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.AiringPublisher.Models;
 using OnDemandTools.Business.Modules.Queue;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
                 {
                     Deliver(envelope, deliveryQueue.RoutingKey, details);
 
-                    _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);                    
+                    _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);
 
                     _reporter.Report(deliveryQueue, envelope.AiringId,
                         string.Format("Sent successfully to {0} Message: {1}", deliveryQueue.FriendlyName, message),
@@ -99,12 +100,14 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
         private void Deliver(Envelope envelope, string routingKey, DeliveryDetails details)
         {
             var json = JsonConvert.SerializeObject(envelope.Message);
-            var message = new Message<string>(json);
+            byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(json);
+            IBasicProperties props = details.RabbitMqChannel.CreateBasicProperties();
             if (envelope.MessagePriority != null)
             {
-                message.Properties.Priority = envelope.MessagePriority.Value;
+                props.Priority = envelope.MessagePriority.Value;
             }
-            details.Bus.Publish(details.Exchange, routingKey, false, message);
+
+            details.RabbitMqChannel.BasicPublish(details.ExchangeName, routingKey, false, props, messageBodyBytes);
         }
     }
 

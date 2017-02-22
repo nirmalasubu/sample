@@ -6,6 +6,7 @@ using OnDemandTools.Business.Modules.AiringPublisher.Validating.Validators;
 using OnDemandTools.Business.Modules.AiringPublisher.Workflow;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Common.Configuration;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
             this.mediaIdValidator = mediaIdValidator;
             this.appsettings = appsettings;
         }
-        
+
         public void Execute(string queueName)
         {
             try
@@ -189,16 +190,21 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
 
         private void Distribute(BLQueue.Queue queue, List<Envelope> envelopes)
         {
-            using (var bus = RabbitHutch.CreateBus(appsettings.CloudQueue.MqUrl).Advanced)
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.Uri = appsettings.CloudQueue.MqUrl;
+            IConnection conn = factory.CreateConnection();
+
+            using (IModel model = conn.CreateModel())
             {
+                model.ExchangeDeclare(appsettings.CloudQueue.MqExchange, ExchangeType.Direct, true);
                 var deliveryDetails = new DeliveryDetails
                 {
-                    Bus = bus,
-                    Exchange = bus.ExchangeDeclare(appsettings.CloudQueue.MqExchange, EasyNetQ.Topology.ExchangeType.Direct)
+                    RabbitMqChannel = model,
+                    ExchangeName = appsettings.CloudQueue.MqExchange
                 };
-
                 envelopeDistributor.Distribute(envelopes, queue, deliveryDetails, jobLogs);
             }
+
         }
 
         private List<BLAiring.Airing> GetDeletedAirings(BLQueue.Queue queue, int limit)
@@ -268,18 +274,18 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
             var bimisMatch = results.Where(r => !r.Valid && r.StatusEnum == BIMMISMATCH).FirstOrDefault();
             if (bimFoundResult != null)
             {
-               // LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
+                // LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
-              //  LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
+                //  LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
-              //  LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
+                //  LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
                 reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
