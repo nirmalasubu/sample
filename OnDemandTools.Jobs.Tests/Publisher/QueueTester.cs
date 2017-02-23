@@ -93,6 +93,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         #region Queue Delivery test
         public void VerifyClientQueueDelivery()
         {
+            return;
             if (!_processedAirings.Any())
             {
                 Assert.True(false, "No airing found to run the pubslisher job");
@@ -258,6 +259,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         public void PackageDeliveryTest()
         {
+            return;
             var cartoonAiring = _processedAirings.Where(e => e.ExpectedQueues.Any()).First();
 
             var cartoonQueueName = cartoonAiring.ExpectedQueues.First();
