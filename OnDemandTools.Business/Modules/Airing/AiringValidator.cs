@@ -87,38 +87,37 @@ namespace OnDemandTools.Business.Modules.Airing
                 // Verify required fields are provided
                 RuleFor(c => c)
                        .Must(c => !String.IsNullOrEmpty(c.AssetId))
-                       .WithMessage("Airing Id required")
+                       .WithMessage("AiringId is required OR AiringId does not exist.")
                        .Must(c => !String.IsNullOrEmpty(c.ReleaseBy))
                        .WithMessage("ReleaseBy field required")
+                        .Must(c => (c.Versions != null && c.Versions.Any()))
+                       .WithMessage("Version not exists in existing airing.")
                        .Must(c => (c.PlayList != null && c.PlayList.Any()))
                        .WithMessage("Playlist is required")
-                       .DependentRules(dr =>
-                       {
-                           // Verify that the given airingId exist                   
-                           Func<String, bool> airingIdExistRule = new Func<String, bool>((airingId) =>
-                           {
-                               try
-                               {
-                                   return (_airingQuery.GetBy(airingId, AiringCollection.CurrentCollection) != null);
-                               }
-                               catch (Exception)
-                               {
-                                   return false;
-                               }
-                           });
-
-                           dr.RuleFor(c => c.AssetId)
-                             .Must(airingIdExistRule)
-                             .WithMessage("Provided AiringId does not exist.");
-                       })
-                        .DependentRules(pl =>
+                       .DependentRules(pl =>
                          {
                              // Verify that the given airingId exist                   
                              Func<BLModel.Airing, bool> playlistRule = new Func<BLModel.Airing, bool>((airing) =>
                              {
                                  try
                                  {
+                                     foreach (var segment in airing.PlayList.Where(e => e.ItemType == "Segment"))
+                                     {
+                                         var versionFound = false;
+                                         foreach (var version in airing.Versions)
+                                         {
+                                             if (segment.Id.Contains(version.ContentId))
+                                             {
+                                                 versionFound = true;
+                                                 break;
+                                             }
+                                         }
+
+                                         if (!versionFound) return false;
+                                     }
+
                                      return true;
+
                                  }
                                  catch (Exception)
                                  {
