@@ -24,6 +24,7 @@ using OnDemandTools.API.v1.Models.Airing.Task;
 using OnDemandTools.API.v1.Models.Airing.Queue;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 using AutoMapper;
+using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -350,6 +351,8 @@ namespace OnDemandTools.API.v1.Routes
                 // Verify that the user has permission to POST
                 this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
 
+                var user = Context.User();
+
                 // Bind POST request to data contract
                 var request = this.Bind<VMAiringRequestModel.AiringRequest>();
                 try
@@ -412,7 +415,7 @@ namespace OnDemandTools.API.v1.Routes
 
                     // Report status of this airing to monitoring system (digital fulfillment/logzio)
                     reporterSvc.Report(savedAiring);
-                    logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring));
+                    logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring, user));
 
                     // Return airing model                    
                     return savedAiring.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
@@ -477,24 +480,60 @@ namespace OnDemandTools.API.v1.Routes
         }
 
 
-        private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(BLAiringModel.Airing savedAiring)
+        private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(BLAiringModel.Airing savedAiring, UserIdentity user)
         {
             Dictionary<string, object> Airingdetails = new Dictionary<string, object>();
 
             Airingdetails.Add("airingid", savedAiring.AssetId);
             Airingdetails.Add("mediaid", savedAiring.MediaId);
-            List<string> lstDestination = new List<string>();
+            Airingdetails.Add("Brand", savedAiring.Network);
+
             int i = 0;
-            string flightWindow = null;
+            string flightWindow = null, products = null, destinations = null;
             foreach (var flight in savedAiring.Flights)
             {
                 flightWindow = string.Concat(flightWindow, string.Format("flightWindow[{0}] : [startDate : {1} , endDate : {2}] \n", i, flight.Start, flight.End));
-                List<string> tempDestination = flight.Destinations.Select(x => x.Name).ToList<string>();
-                lstDestination.AddRange(tempDestination);
+                int j = 0;
+                foreach (var product in flight.Products)
+                {
+                    products = string.Concat(products, string.Format("products[{0}] : [IsAuth : {1}] \n", j, product.IsAuth));
+                    j++;
+                }
+
+                foreach (var destination in flight.Destinations)
+                {
+                    destinations = string.Concat(destinations, string.Format("[Name : {0}, authenticationRequired : {1}, externalId : {2}] \n",
+                                                                              destination.Name, destination.AuthenticationRequired, destination.ExternalId));
+                }
+
                 i++;
             }
+            string titleIds = null;
+            i = 0;
+            foreach (var element in savedAiring.Title.TitleIds)
+            {
+                titleIds = string.Concat(titleIds, string.Format("titleIds[{0}] : [type : {1} , value : {2} , authority : {3}] \n",
+                                                                  i, element.Type, element.Value, element.Authority));
+                i++;
+            }
+            string title = null;
+            title = string.Concat(title, string.Format("title : [rating : [code : {0}, description : {1}] , storyline : [short : {2}], \n" +
+                                                               "releaseYear : {3}, keywords : {4}, originalPremiereDate : {5}, \n " +
+                                                               "episode : [name : {6}, number : {7}], series : [name : {8}, id : {9}]",
+                                                                  savedAiring.Title.TVRating.Code, savedAiring.Title.TVRating.Description,
+                                                                  savedAiring.Title.StoryLine.Short, savedAiring.Title.ReleaseYear, savedAiring.Title.Keywords,
+                                                                  savedAiring.Title.OriginalPremiereDate, savedAiring.Title.Episode.Name,
+                                                                  savedAiring.Title.Episode.Number, savedAiring.Title.Series.Name, savedAiring.Title.Series.Id));
+            Airingdetails.Add("title", title);
+            Airingdetails.Add("titleIds", titleIds);
             Airingdetails.Add("flightwindow", flightWindow);
-            Airingdetails.Add("destination", lstDestination.Distinct());
+            Airingdetails.Add("products", products);
+            Airingdetails.Add("flags", string.Format("hd : {0}, cx : {1}, ProgrammerBrandingReq : {2}, FastForwardAllowed : {3}, ManuallyProcess : {4}",
+                                                      savedAiring.Flags.Hd, savedAiring.Flags.Cx, savedAiring.Flags.ProgrammerBrandingReq,
+                                                      savedAiring.Flags.FastForwardAllowed, savedAiring.Flags.ManuallyProcess));
+            Airingdetails.Add("destination", destinations);
+            Airingdetails.Add("apikey", user.ApiKey.ToString().Substring(user.ApiKey.ToString().Length - 4));
+
             return Airingdetails;
         }
 
