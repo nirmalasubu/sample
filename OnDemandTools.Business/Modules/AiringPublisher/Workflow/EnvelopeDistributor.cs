@@ -102,7 +102,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
             var json = JsonConvert.SerializeObject(envelope.Message);
 
             //Need to double serialize due to EasynetQ, and it can be removed on V2.
-            json = JsonConvert.SerializeObject(envelope.Message);
+            json = JsonConvert.SerializeObject(json);
 
             byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(json);
             IBasicProperties props = details.RabbitMqChannel.CreateBasicProperties();
