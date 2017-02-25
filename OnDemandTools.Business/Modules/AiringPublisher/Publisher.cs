@@ -192,17 +192,38 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
         {
             ConnectionFactory factory = new ConnectionFactory();
             factory.Uri = appsettings.CloudQueue.MqUrl;
-            IConnection conn = factory.CreateConnection();
 
-            using (IModel model = conn.CreateModel())
+            using (IConnection conn = factory.CreateConnection())
             {
-                model.ExchangeDeclare(appsettings.CloudQueue.MqExchange, ExchangeType.Direct, true);
-                var deliveryDetails = new DeliveryDetails
+                try
                 {
-                    RabbitMqChannel = model,
-                    ExchangeName = appsettings.CloudQueue.MqExchange
-                };
-                envelopeDistributor.Distribute(envelopes, queue, deliveryDetails, jobLogs);
+                    using (IModel channel = conn.CreateModel())
+                    {
+                        try
+                        {
+                            channel.ExchangeDeclare(appsettings.CloudQueue.MqExchange, ExchangeType.Direct, true);
+                            var deliveryDetails = new DeliveryDetails
+                            {
+                                RabbitMqChannel = channel,
+                                ExchangeName = appsettings.CloudQueue.MqExchange
+                            };
+
+                            envelopeDistributor.Distribute(envelopes, queue, deliveryDetails, jobLogs);
+
+                        }
+                        finally
+                        {
+                            channel.Close();
+                        }
+
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+
+                }
+
             }
 
         }

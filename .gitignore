@@ -44,6 +44,7 @@ dlldata.c
 # DNX
 project.lock.json
 artifacts/
+.vscode/settings.json
 
 *_i.c
 *_p.c
