@@ -151,14 +151,29 @@
   <data name="InvalidPackage_PackageNotPresent" xml:space="preserve">
     <value>{"TitleIds":[1234,"3456"],"DestinationCode":"TNTW","Type":"CSC-MTR"}</value>
   </data>
+  <data name="InvalidPackage_ContentIdsEmpty" xml:space="preserve">
+    <value>{"TitleIds":[],"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>  
   <data name="InvalidPackage_TitleIdsEmpty" xml:space="preserve">
-    <value>{"TitleIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+    <value>{"TitleIds":[],"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
-  <data name="InvalidPackage_TitleIdsNotPresent" xml:space="preserve">
+  <data name="InvalidPackage_BothIdsEmpty" xml:space="preserve">
+    <value>{"TitleIds":[],"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>
+  <data name="InvalidPackage_BothIdsNotPresent" xml:space="preserve">
     <value>{"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>   
+  <data name="InvalidPackage_TitleIdsNotPresent" xml:space="preserve">
+    <value>{"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
+  <data name="InvalidPackage_ContentIdsNotPresent" xml:space="preserve">
+    <value>{"TitleIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>  
   <data name="InvalidPackage_TypeNotPresent" xml:space="preserve">
-    <value>{"TitleIds":[1234,"3456"],"DestinationCode":"TNTW","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+    <value>{"TitleIds":[1234,"3456"],"ContentIds":[],"DestinationCode":"TNTW","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>
+  <data name="InvalidPackage_BothIdsPresent" xml:space="preserve">
+    <value>{"TitleIds":[1234,"3456"],"ContentIds":["1G9C0","2K439"],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
   <data name="TBSAiringStackedFalse" xml:space="preserve">
     <value>{"Name":"Our Other Cops Is On !, Part 2","Type":"Episode (Non-Animated)","Brand":"TBS","Platform":"Broadband","Airings":[{"Date":"2013-09-11T11:30:00Z","AiringId":7108144,"Linked":true}],"Duration":{"LengthInSeconds":1223,"DisplayMinutes":30},"Title":{"Rating":{"Code":"TV-14","Description":"D,L,S,V"},"StoryLine":{"Long":"When Randy is about to turn off the prison TV, another Camden episode of \"COPS\" is shown, this time it evolves around the events on Independence Day.","Short":"When Randy is about to turn off the prison TV, another Camden episode of \"COPS\" is shown, this time it evolves around the events on Independence Day."},"ReleaseYear":2007,"Keywords":"My Name is Earl, TBS, Comedy, Jason Lee , Jaime Pressly ","OriginalPremiereDate":"2008-11-10T05:00:00Z","Episode":{"Name":"Our Other Cops Is On !, Part 2","Number":"308","ProductionNumber":"3ALJ09"},"Element":null,"Series":{"Name":"My Name is Earl","Id":671985},"Season":{"Name":"Season 3","Number":3},"Participants":[{"Name":"Jaime Pressly","Role":"Actor"},{"Name":"Jason Lee","Role":"Actor"}],"TitleIds":[{"Type":"Episode","Value":"715835","Authority":"Turner","Primary":true},{"Type":"Episode","Value":"EP007538600080","Authority":"TMS","Primary":false}]},"Flights":[{"Start":"2013-09-11T15:00:00Z","End":"2013-09-18T14:59:59Z","Destinations":[{"ExternalId":1,"Name":"TVN","AuthenticationRequired":true,"Package":{"PackageName":"Our Other Cops Is On !, Part 2","FileName":"Our Other Cops Is On !, Part 2","TitleDigital":"Our Other Cops Is On !, Part 2","TitleBrief":"Our Other Cops Is On !, Part 2","Categories":[],"Genres":["Comedy"],"SubGenres":[],"ContentTiers":[],"ProductCodes":[],"GuideCategories":[],"ProgramTypes":[]}}]}],"Flags":{"Hd":false,"Cx":false,"ProgrammerBrandingReq":false,"FastForwardAllowed":false,"ManuallyProcess":false,"Stacked":false},"Versions":[{"ContentId":"1E66T","ClosedCaptioning":{"File":false,"Encode":true}}],"Instructions":{"PerformDeliveryValidation":false},"DeviceExclusions":[],"ReleasedBy":"UnitTestApp"}</value>

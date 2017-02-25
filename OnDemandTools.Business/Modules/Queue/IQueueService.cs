@@ -32,6 +32,15 @@ namespace OnDemandTools.Business.Modules.Queue
 
         /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'contentIds' & 'destinationCode'
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="contentIds">The content ids.</param>
+        /// <param name="destinationCode">The destination code.</param>
+        void FlagForRedelivery(IList<string> queueNames, IList<string> contentIds, string destinationCode);
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
         /// depends on 'titleIds'
         /// </summary>
         /// <param name="queueNames">The queue names.</param>

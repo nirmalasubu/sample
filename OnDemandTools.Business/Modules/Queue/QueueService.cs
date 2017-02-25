@@ -47,6 +47,17 @@ namespace OnDemandTools.Business.Modules.Queue
         }
 
         /// <summary>
+        /// Flags the given list of queues for redelivery
+        /// </summary>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="contentIds">The content ids.</param>
+        /// <param name="destinationCode">The destination code.</param>
+        public void FlagForRedelivery(IList<string> queueNames, IList<string> contentIds, string destinationCode)
+        {
+            queueCommandHelper.ResetFor(queueNames, contentIds, destinationCode);
+        }
+
+        /// <summary>
         /// Updates Queue processing date with current time
         /// </summary>
         /// <param name="name"></param>

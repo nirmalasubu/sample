@@ -63,6 +63,22 @@ namespace OnDemandTools.Business.Modules.Package
                 .ToBusinessModel<DLModel.Package, BLModel.Package>());            
         }
 
+                /// <summary>
+        /// Gets the package that matches all criteria - titleIds, destinationCode,
+        /// type - explicitly. If more than one package is found then the first one
+        /// will be returned
+        /// </summary>
+        /// <param name="contentIds">The content ids.</param>
+        /// <param name="destinationCode">The destination code.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public BLModel.Package GetBy(List<string> contentIds, string destinationCode, string type)
+        {
+            return (
+            packageQuery.GetBy(contentIds, destinationCode, type)
+                .ToBusinessModel<DLModel.Package, BLModel.Package>());            
+        }
+
         /// <summary>
         /// Saves the package.
         /// </summary>

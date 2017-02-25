@@ -27,6 +27,17 @@ namespace OnDemandTools.Business.Modules.Package
         /// <returns></returns>
         BLModel.Package GetBy(List<int> titleIds, string destinationCode, string type);
 
+                /// <summary>
+        /// Gets the package that matches all criteria - titleIds, destinationCode,
+        /// type - explicitly. If more than one package is found then the first one
+        /// will be returned
+        /// </summary>
+        /// <param name="contentIds">The title ids.</param>
+        /// <param name="destinationCode">The destination code.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        BLModel.Package GetBy(List<string> contentIds, string destinationCode, string type);
+
         /// <summary>
         /// Deletes the specified package.
         /// </summary>

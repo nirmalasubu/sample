@@ -39,6 +39,17 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
         }
 
+        private IMongoQuery GetAiringIdsQueryByExactCIDMatch(IEnumerable<Airing> currentAirings, IEnumerable<string> contentIds)
+        {
+
+            var airingIds = (from airing in currentAirings
+                             let airingContentIds = airing.Versions.Select(e => e.ContentId)
+                             where airingContentIds.SequenceEqual(contentIds)
+                             select airing.AssetId).ToList();
+
+            return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
+        }
+
         private void Reset(string queueName, IMongoQuery filter, bool resetDeletedAirings = true)
         {
             _currentAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
@@ -75,6 +86,31 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                 if (!currentAirings.Any()) continue;
 
                 var airingIdsQuery = GetAiringIdsQueryByExactTitleMatch(currentAirings, titleIdsInString);
+
+                if (airingIdsQuery != null)
+                    Reset(queueName, airingIdsQuery, false);
+            }
+        }
+        public void ResetFor(IList<string> queueNames, IList<string> contentIds, string destinationCode)
+        {
+            var contentIdsInString = contentIds.Select(cid => cid).ToList();
+
+            foreach (var queueName in queueNames)
+            {
+                var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
+
+                query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Verions.ContentId", BsonValue.Create(contentId))));
+
+                if (!string.IsNullOrEmpty(destinationCode))
+                {
+                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+                }
+
+                var currentAirings = _currentAirings.Find(query).ToList();
+
+                if (!currentAirings.Any()) continue;
+
+                var airingIdsQuery = GetAiringIdsQueryByExactCIDMatch(currentAirings, contentIdsInString);
 
                 if (airingIdsQuery != null)
                     Reset(queueName, airingIdsQuery, false);

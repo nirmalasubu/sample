@@ -368,13 +368,18 @@ namespace OnDemandTools.Business.Modules.Airing
             var titleIds = airing.Title.TitleIds.Where(title => (title.Authority.Equals("Turner") && isNumeric(title.Value)))
                             .Select(thisTitle => (getTitleId(thisTitle.Value)));
 
+            var contentIds = airing.Versions.Select(version => version.ContentId);
+
             //double check no bad titleIds are in the array.
             titleIds = titleIds.Where(title => (title != -1)).ToList();
             var destinations = airing.Flights.SelectMany(flight =>
                                                          flight.Destinations.Select(destination => destination.Name));
-            var packages = packageQueryHelper.GetBy(titleIds.ToList(), destinations.ToList()).ToList();
-
-            airing.Options.Packages = packages.ToViewModel<List<DLPackageModel.Package>, List<BLModel.Alternate.Package.Package>>();
+            List<DLPackageModel.Package> matchingPackages = new List<DLPackageModel.Package>();
+            List<DLPackageModel.Package> titlePackages = packageQueryHelper.GetBy(titleIds.ToList(), destinations.ToList()).ToList();
+            List<DLPackageModel.Package> cidPackages = packageQueryHelper.GetBy(contentIds.ToList(), destinations.ToList()).ToList();
+            matchingPackages.AddRange(titlePackages);
+            matchingPackages.AddRange(cidPackages);
+            airing.Options.Packages = matchingPackages.ToViewModel<List<DLPackageModel.Package>, List<BLModel.Alternate.Package.Package>>();
 
             // verify the kind of serialization
             bool isXMLSerialization = (acceptHeaders.Count(c => c.Item1 == "application/xml") > 0) ? true : false;

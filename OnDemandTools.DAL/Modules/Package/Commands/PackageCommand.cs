@@ -24,7 +24,12 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
             var historicalCollection = _database.GetCollection<Model.Package>(DataStoreConfiguration.HistoricalPackagesCollection);
 
             var qc = new List<IMongoQuery>();
-            qc.Add(Query.EQ("TitleIds", BsonValue.Create(packageDataModel.TitleIds)));
+            IMongoQuery idClause = Query.EQ("TitleIds", BsonValue.Create(new List<int>()));
+            if(packageDataModel.TitleIds != null && packageDataModel.TitleIds.Count > 0)
+                idClause = Query.EQ("TitleIds", BsonValue.Create(packageDataModel.TitleIds));
+            else if(packageDataModel.ContentIds != null && packageDataModel.ContentIds.Count > 0)
+                idClause = Query.EQ("ContentIds", BsonValue.Create(packageDataModel.ContentIds));
+            qc.Add(idClause);
             qc.Add(Query.EQ("Type", packageDataModel.Type));
             if (!string.IsNullOrEmpty(packageDataModel.DestinationCode))
                 qc.Add(Query.EQ("DestinationCode", packageDataModel.DestinationCode));
@@ -61,30 +66,35 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
             }
         }
 
-        public Model.Package Delete(Model.Package pkg, string userName, bool updateHistorical)
+        public Model.Package Delete(Model.Package packageDataModel, string userName, bool updateHistorical)
         {
             var currentCollection = _database.GetCollection<Model.Package>(DataStoreConfiguration.CurrentPackagesCollection);
             var deletedCollection = _database.GetCollection<Model.Package>(DataStoreConfiguration.DeletedPackagesCollection);
             var historicalCollection = _database.GetCollection<HistoricalRecord>(DataStoreConfiguration.HistoricalPackagesCollection);
 
             if (updateHistorical)
-                historicalCollection.Save(new HistoricalRecord(pkg, "DELETE", userName));
+                historicalCollection.Save(new HistoricalRecord(packageDataModel, "DELETE", userName));
 
             var qc = new List<IMongoQuery>();
-            qc.Add(Query.EQ("TitleIds", BsonValue.Create(pkg.TitleIds)));
-            qc.Add(Query.EQ("Type", pkg.Type));
-            if (!string.IsNullOrEmpty(pkg.DestinationCode))
-                qc.Add(Query.EQ("DestinationCode", pkg.DestinationCode));
+            IMongoQuery idClause = Query.EQ("TitleIds", BsonValue.Create(new List<int>()));
+            if(packageDataModel.TitleIds != null && packageDataModel.TitleIds.Count > 0)
+                idClause = Query.EQ("TitleIds", BsonValue.Create(packageDataModel.TitleIds));
+            else if(packageDataModel.ContentIds != null && packageDataModel.ContentIds.Count > 0)
+                idClause = Query.EQ("ContentIds", BsonValue.Create(packageDataModel.ContentIds));
+            qc.Add(idClause);
+            qc.Add(Query.EQ("Type", packageDataModel.Type));
+            if (!string.IsNullOrEmpty(packageDataModel.DestinationCode))
+                qc.Add(Query.EQ("DestinationCode", packageDataModel.DestinationCode));
             else //we need to explicitly add a query to exclude
                 qc.Add(Query.NotExists("DestinationCode"));
 
             currentCollection.Remove(Query.And(qc));
 
             deletedCollection.Update(Query.And(qc),
-                Update.Replace(pkg),
+                Update.Replace(packageDataModel),
                 UpdateFlags.Upsert);
 
-            return pkg;
+            return packageDataModel;
         }
     }
 }

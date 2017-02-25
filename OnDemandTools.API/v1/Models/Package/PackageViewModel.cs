@@ -10,9 +10,10 @@ namespace OnDemandTools.API.v1.Models.Package
         public PackageViewModel()
         {
             TitleIds = new List<int>();
+            ContentIds = new List<string>();
         }
         public List<int> TitleIds { get; set; }
-
+        public List<string> ContentIds { get; set; }
         public string DestinationCode { get; set; }
 
         public string Type { get; set; }

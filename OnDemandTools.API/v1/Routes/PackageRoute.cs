@@ -61,7 +61,7 @@ namespace OnDemandTools.API.v1.Routes
                     var savedPkg = packageSvc.SavePackage(pkgBusiness);
 
                     // Send notification to subscribed queues
-                    ResetPackageQueues(savedPkg.TitleIds, savedPkg.DestinationCode);
+                    DeterminePackageReset(pkgBusiness);
 
                     // Return response
                     return Mapper.Map<PackageRequest>(savedPkg);                   
@@ -97,7 +97,7 @@ namespace OnDemandTools.API.v1.Routes
                                
                 if (packageSvc.Delete(ref pkg))
                 {  
-                    ResetPackageQueues(pkg.TitleIds, pkg.DestinationCode);
+                    DeterminePackageReset(pkg);
                     return new
                     {
                         Message = "Package deleted successfully"
@@ -108,6 +108,29 @@ namespace OnDemandTools.API.v1.Routes
 
             });
             #endregion
+        }
+
+        private void DeterminePackageReset(Package pkg)
+        {
+            if(pkg.TitleIds != null && pkg.TitleIds.Count > 0) {
+                ResetPackageQueues(pkg.TitleIds, pkg.DestinationCode);
+                return;
+            }
+            if(pkg.ContentIds != null && pkg.ContentIds.Count > 0) {
+                ResetPackageQueues(pkg.ContentIds, pkg.DestinationCode);
+                return;
+            }            
+        }
+
+        private void ResetPackageQueues(IList<string> contentIds, string destinationCode)
+        {
+            var packageQueues = queueSvc.GetPackageNotificationSubscribers();
+
+            if (!packageQueues.Any()) return;
+
+            var queueNames = packageQueues.Select(p => p.Name).ToList();
+
+            queueSvc.FlagForRedelivery(queueNames, contentIds, destinationCode);
         }
 
         private void ResetPackageQueues(IList<int> titleIds, string destinationCode)

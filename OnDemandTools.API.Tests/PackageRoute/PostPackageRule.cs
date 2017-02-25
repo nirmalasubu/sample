@@ -38,9 +38,8 @@ namespace OnDemandTools.API.Tests.PostPackage
 
             string value = response.Value<string>(@"StatusCode");
             if (value == null)
-            {
                 Assert.True(true,  "Package posted for Title Ids : "+ packageJson[@"TitleIds"].ToString());
-            }
+            
         }
 
         [Fact]
@@ -103,6 +102,27 @@ namespace OnDemandTools.API.Tests.PostPackage
             if (value != null)
             {
                 Assert.True(true, "At least one TitleId is required");
+            }
+        }
+
+        [Fact]
+        public void Post_WithInValidPackage_ContentIdsEmptyTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_ContentIdsEmpty);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.POST);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"StatusCode");
+            if (value != null)
+            {
+                Assert.True(true, "At least one TitleId or ContentId is required");
             }
         }
 

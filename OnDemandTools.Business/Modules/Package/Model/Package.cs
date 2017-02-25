@@ -12,8 +12,11 @@ namespace OnDemandTools.Business.Modules.Package.Model
         public Package()
         {
             TitleIds = new List<int>();
+            ContentIds = new List<string>();
         }
         public List<int> TitleIds { get; set; }
+
+        public List<string> ContentIds { get; set; }
 
         public string DestinationCode { get; set; }
 

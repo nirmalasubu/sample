@@ -9,8 +9,11 @@ namespace OnDemandTools.API.v1.Models.Airing.Package
         public Package()
         {
             TitleIds = new List<int>();
+            ContentIds = new List<string>();
         }
         public List<int> TitleIds { get; set; }
+
+        public List<string> ContentIds { get; set; }
 
         public string DestinationCode { get; set; }
 
@@ -20,5 +23,15 @@ namespace OnDemandTools.API.v1.Models.Airing.Package
         public object PackageData { get; set; }
 
         public string Data { get; set; }
+
+        public bool ShouldSerializeTitleIds()
+        {
+            return (TitleIds.Count > 0);
+        }
+
+        public bool ShouldSerializeContentIds()
+        {
+            return (ContentIds.Count > 0);
+        }
     }
 }
