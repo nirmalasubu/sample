@@ -374,6 +374,9 @@ namespace OnDemandTools.Business.Modules.Airing
             titleIds = titleIds.Where(title => (title != -1)).ToList();
             var destinations = airing.Flights.SelectMany(flight =>
                                                          flight.Destinations.Select(destination => destination.Name));
+            var packages = packageQueryHelper.GetBy(airing.AiringId, titleIds.ToList(), destinations.ToList()).ToList();
+
+            airing.Options.Packages = packages.ToViewModel<List<DLPackageModel.Package>, List<BLModel.Alternate.Package.Package>>();
             List<DLPackageModel.Package> matchingPackages = new List<DLPackageModel.Package>();
             List<DLPackageModel.Package> titlePackages = packageQueryHelper.GetBy(titleIds.ToList(), destinations.ToList()).ToList();
             List<DLPackageModel.Package> cidPackages = packageQueryHelper.GetBy(contentIds.ToList(), destinations.ToList()).ToList();

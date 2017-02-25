@@ -118,6 +118,28 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         }
 
 
+        public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
+        {
+            foreach (var queueName in queueNames)
+            {
+                var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
+
+                query = Query.EQ("AssetId", airingId);
+
+                if (!string.IsNullOrEmpty(destinationCode))
+                {
+                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+                }
+
+                var currentAirings = _currentAirings.Find(query).ToList();
+
+                if (!currentAirings.Any()) continue;
+                else
+                    Reset(queueName, query, false);
+            }
+        }
+
+
         public void ResetFor(IList<string> queueNames, IList<int> titleIds)
         {
             if (!queueNames.Any() || !titleIds.Any())
@@ -148,5 +170,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         {
             _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));
         }
+
+       
     }
 }

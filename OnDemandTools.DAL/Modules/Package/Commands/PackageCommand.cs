@@ -25,11 +25,17 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
 
             var qc = new List<IMongoQuery>();
             IMongoQuery idClause = Query.EQ("TitleIds", BsonValue.Create(new List<int>()));
-            if(packageDataModel.TitleIds != null && packageDataModel.TitleIds.Count > 0)
+            if (packageDataModel.TitleIds != null && packageDataModel.TitleIds.Count > 0)
                 idClause = Query.EQ("TitleIds", BsonValue.Create(packageDataModel.TitleIds));
-            else if(packageDataModel.ContentIds != null && packageDataModel.ContentIds.Count > 0)
+            else if (packageDataModel.ContentIds != null && packageDataModel.ContentIds.Count > 0)
                 idClause = Query.EQ("ContentIds", BsonValue.Create(packageDataModel.ContentIds));
-            qc.Add(idClause);
+
+            //Either AiringId or TitleId or ContentId  would be provided
+            if (!string.IsNullOrEmpty(packageDataModel.AiringId))
+                qc.Add(Query.EQ("AiringId", packageDataModel.AiringId));
+            else
+                qc.Add(idClause);
+
             qc.Add(Query.EQ("Type", packageDataModel.Type));
             if (!string.IsNullOrEmpty(packageDataModel.DestinationCode))
                 qc.Add(Query.EQ("DestinationCode", packageDataModel.DestinationCode));
@@ -49,7 +55,7 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
             if (deletedPkg != null)
                 deletedCollection.Remove(Query.And(qc)); //remove it       
 
-            if (matchingPkg != null) //if there is already a package with same TitleIds, DestinationCode and Type in Package -- then overwrite the package.
+            if (matchingPkg != null) //if there is already a package with same TitleIds or ContentIds or AiringId , DestinationCode and Type in Package -- then overwrite the package.
             {
                 matchingPkg.PackageData = packageDataModel.PackageData;
                 collection.Update(Query.EQ("_id", matchingPkg.Id), Update.Replace(matchingPkg));
@@ -81,7 +87,13 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
                 idClause = Query.EQ("TitleIds", BsonValue.Create(packageDataModel.TitleIds));
             else if(packageDataModel.ContentIds != null && packageDataModel.ContentIds.Count > 0)
                 idClause = Query.EQ("ContentIds", BsonValue.Create(packageDataModel.ContentIds));
-            qc.Add(idClause);
+
+            //Either AiringId or TitleId or ContentId  would be provided
+            if (!string.IsNullOrEmpty(packageDataModel.AiringId))
+                qc.Add(Query.EQ("AiringId", packageDataModel.AiringId));
+            else
+                qc.Add(idClause);
+
             qc.Add(Query.EQ("Type", packageDataModel.Type));
             if (!string.IsNullOrEmpty(packageDataModel.DestinationCode))
                 qc.Add(Query.EQ("DestinationCode", packageDataModel.DestinationCode));

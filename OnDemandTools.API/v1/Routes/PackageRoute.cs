@@ -112,35 +112,39 @@ namespace OnDemandTools.API.v1.Routes
 
         private void DeterminePackageReset(Package pkg)
         {
-            if(pkg.TitleIds != null && pkg.TitleIds.Count > 0) {
-                ResetPackageQueues(pkg.TitleIds, pkg.DestinationCode);
+            var packageQueues = queueSvc.GetPackageNotificationSubscribers();
+
+            if (!packageQueues.Any()) return;
+
+            var queueNames = packageQueues.Select(p => p.Name).ToList();
+
+            if (pkg.TitleIds != null && pkg.TitleIds.Count > 0) {
+                ResetPackageQueues(queueNames,pkg.TitleIds, pkg.DestinationCode);
                 return;
             }
             if(pkg.ContentIds != null && pkg.ContentIds.Count > 0) {
-                ResetPackageQueues(pkg.ContentIds, pkg.DestinationCode);
+                ResetPackageQueues(queueNames,pkg.ContentIds, pkg.DestinationCode);
                 return;
-            }            
+            }
+            if (!string.IsNullOrEmpty(pkg.AiringId))
+            {
+                ResetPackageQueues( queueNames,pkg.AiringId, pkg.DestinationCode);
+                return;
+            }
         }
 
-        private void ResetPackageQueues(IList<string> contentIds, string destinationCode)
+        private void ResetPackageQueues(IList<string> queueNames, string airingId, string destinationCode)
         {
-            var packageQueues = queueSvc.GetPackageNotificationSubscribers();
+            queueSvc.FlagForRedelivery(queueNames, airingId, destinationCode);
+        }
 
-            if (!packageQueues.Any()) return;
-
-            var queueNames = packageQueues.Select(p => p.Name).ToList();
-
+        private void ResetPackageQueues(IList<string> queueNames,IList<string> contentIds, string destinationCode )
+        {
             queueSvc.FlagForRedelivery(queueNames, contentIds, destinationCode);
         }
 
-        private void ResetPackageQueues(IList<int> titleIds, string destinationCode)
+        private void ResetPackageQueues(IList<string> queueNames, IList<int> titleIds, string destinationCode)
         {
-            var packageQueues = queueSvc.GetPackageNotificationSubscribers();
-
-            if (!packageQueues.Any()) return;
-
-            var queueNames = packageQueues.Select(p => p.Name).ToList();
-
             queueSvc.FlagForRedelivery(queueNames, titleIds, destinationCode);
         }
 

@@ -41,6 +41,15 @@ namespace OnDemandTools.Business.Modules.Queue
 
         /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
+        /// depends on 'airingId' & 'destinationCode 
+        /// </summary>
+        /// <param name="queueNames">The queue names</param>
+        /// <param name="airingId">The airing id</param>
+        /// <param name="destinationCode">The destination code</param>
+        void FlagForRedelivery(IList<string> queueNames, string airingId, string destinationCode);
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery. Assets selected for delivery
         /// depends on 'titleIds'
         /// </summary>
         /// <param name="queueNames">The queue names.</param>
@@ -119,7 +128,7 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="mediaId"></param>
         void DeleteHistoricalMessage(string mediaId);
-
+        
 
         /// <summary>
         ///  returns any message delived for given Queue and AiringId

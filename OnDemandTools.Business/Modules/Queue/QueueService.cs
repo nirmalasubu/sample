@@ -8,6 +8,7 @@ using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
 using OnDemandTools.DAL.Modules.QueueMessages;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
+using System;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -55,6 +56,17 @@ namespace OnDemandTools.Business.Modules.Queue
         public void FlagForRedelivery(IList<string> queueNames, IList<string> contentIds, string destinationCode)
         {
             queueCommandHelper.ResetFor(queueNames, contentIds, destinationCode);
+        }
+
+        /// <summary>
+        /// Flags the given list of queues for redelivery
+        /// </summary>
+        /// <param name="queueNames">The queue names</param>
+        /// <param name="airingId">The airing id</param>
+        /// <param name="destinationCode">The destination code</param>
+        public void FlagForRedelivery(IList<string> queueNames, string airingId, string destinationCode)
+        {
+            queueCommandHelper.ResetFor(queueNames, airingId, destinationCode);
         }
 
         /// <summary>
@@ -210,5 +222,7 @@ namespace OnDemandTools.Business.Modules.Queue
            HistoricalMessage historicalMessage = queueMessages.GetBy(queueName, airingId).First();
                return historicalMessage.ToBusinessModel<HistoricalMessage, BLModel.HistoricalMessage>();
         }
+
+       
     }
     }

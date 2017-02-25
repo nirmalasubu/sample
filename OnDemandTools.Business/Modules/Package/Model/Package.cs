@@ -14,6 +14,8 @@ namespace OnDemandTools.Business.Modules.Package.Model
             TitleIds = new List<int>();
             ContentIds = new List<string>();
         }
+        public string AiringId { get; set; }
+
         public List<int> TitleIds { get; set; }
 
         public List<string> ContentIds { get; set; }

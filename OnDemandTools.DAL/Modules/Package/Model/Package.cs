@@ -12,7 +12,16 @@ namespace OnDemandTools.DAL.Modules.Package.Model
         [BsonId]
         public virtual ObjectId Id { get; set; }
 
+        [BsonIgnoreIfDefault]
+        [BsonIgnoreIfNull]
+        public string AiringId { get; set; }
+
+        [BsonIgnoreIfDefault]
+        [BsonIgnoreIfNull]
         public IList<int> TitleIds { get; set; }
+
+        [BsonIgnoreIfDefault]
+        [BsonIgnoreIfNull]
         public IList<string> ContentIds { get; set; }
 
         //[BsonDefaultValue("")]
