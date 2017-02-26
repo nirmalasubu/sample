@@ -11,6 +11,8 @@ namespace OnDemandTools.API.v1.Models.Airing.Package
             TitleIds = new List<int>();
             ContentIds = new List<string>();
         }
+        public string AiringId { get; set; }
+
         public List<int> TitleIds { get; set; }
 
         public List<string> ContentIds { get; set; }

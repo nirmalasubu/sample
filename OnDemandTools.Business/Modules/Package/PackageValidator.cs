@@ -23,7 +23,7 @@ namespace OnDemandTools.Business.Modules.Package
             {
                 // Verify required fields are provided
                 RuleFor(c => c)
-                       .Must(c => (!string.IsNullOrEmpty(c.AiringId) || c.TitleIds.Any() || c.ContentIds.Any()))
+                       .Must(c => (!string.IsNullOrEmpty(c.AiringId) || c.TitleIds.Any() || (c.ContentIds.Any()&& !c.ContentIds.All(x => string.IsNullOrEmpty(x)))))
                        .WithMessage("At least one AiringId or  TitleId or ContentId is required")
                        .Must(c => !(c.ContentIds.Any() && c.TitleIds.Any() && string.IsNullOrEmpty(c.AiringId))
                                    && !(!string.IsNullOrEmpty(c.AiringId) && c.ContentIds.Any() && c.TitleIds.Any())
