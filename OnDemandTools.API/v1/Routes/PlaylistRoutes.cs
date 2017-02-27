@@ -1,37 +1,24 @@
-﻿using FluentValidation.Results;
+﻿using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Nancy;
-using Nancy.Security;
 using Nancy.ModelBinding;
+using Nancy.Security;
 using OnDemandTools.API.Helpers;
 using OnDemandTools.Business.Modules.Airing;
-using OnDemandTools.Business.Modules.AiringId;
-using OnDemandTools.Business.Modules.CustomExceptions;
-using OnDemandTools.Business.Modules.Product;
-using OnDemandTools.Business.Modules.Queue;
-using OnDemandTools.Business.Modules.Reporting;
-using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
-using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
-using VMAiringShortModel = OnDemandTools.API.v1.Models.Airing.Short;
-using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
-using OnDemandTools.API.v1.Models.Airing.Task;
-using OnDemandTools.API.v1.Models.Airing.Queue;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
-using AutoMapper;
-using OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.API.v1.Routes
 {
 
     public class PlaylistRoutes : NancyModule
     {
-        public PlaylistRoutes(           
+        public PlaylistRoutes(
             IAiringService airingSvc,
             AiringValidator _validator,
             Serilog.ILogger logger
@@ -43,7 +30,7 @@ namespace OnDemandTools.API.v1.Routes
 
 
             #region "POST Operations"
-           
+
 
             Post("/playlist/{airingid}", _ =>
             {
@@ -74,6 +61,15 @@ namespace OnDemandTools.API.v1.Routes
                         airing.ReleaseOn = DateTime.UtcNow;
 
                     }
+                    else
+                    {
+                        var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
+                                                    "AiringId is required." : "Provided AiringId does not exists.";
+
+                        // Return status
+                        return Negotiate.WithModel(airingErrorMessage)
+                                    .WithStatusCode(HttpStatusCode.BadRequest);
+                    }
 
                     // validate
                     List<ValidationResult> results = new List<ValidationResult>();
@@ -83,7 +79,7 @@ namespace OnDemandTools.API.v1.Routes
                     if (results.Where(c => (!c.IsValid)).Count() > 0)
                     {
                         var message = results.Where(c => (!c.IsValid))
-                                    .Select(c => c.Errors.Select(d => d.ErrorMessage));
+                                    .Select(c => c.Errors.Select(d => d.ErrorMessage)).ToList();
 
 
                         logger.Error("Failure ingesting playlist released asset: {AssetId}", new Dictionary<string, object>()
@@ -111,6 +107,6 @@ namespace OnDemandTools.API.v1.Routes
             #endregion
 
 
-        }      
+        }
     }
 }

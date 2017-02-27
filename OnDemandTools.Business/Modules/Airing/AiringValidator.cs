@@ -106,7 +106,7 @@ namespace OnDemandTools.Business.Modules.Airing
                                          var versionFound = false;
                                          foreach (var version in airing.Versions)
                                          {
-                                             if (segment.Id.Contains(version.ContentId))
+                                             if (segment.Id.StartsWith(version.ContentId))
                                              {
                                                  versionFound = true;
                                                  break;
@@ -127,7 +127,8 @@ namespace OnDemandTools.Business.Modules.Airing
 
                              pl.RuleFor(c => c)
                                .Must(playlistRule)
-                               .WithMessage("Provided AiringId does not exist.");
+                               .WithMessage("Provided Segment CID does not match with Version CID(s) {0}.",
+                               c => string.Join(",", c.Versions.Select(e => e.ContentId)));
                          });
             });
         }

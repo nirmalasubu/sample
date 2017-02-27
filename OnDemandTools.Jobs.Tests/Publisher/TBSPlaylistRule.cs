@@ -18,11 +18,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         private readonly string _tbsQueueKey;
         private readonly AiringObjectHelper _airingObjectHelper;
         private static QueueTester _queueTester;
-
-        RestClient client;
         private readonly string _jsonString;
         private static List<string> airingIds = new List<string>();
-
         private static string _airingId;
         JobTestFixture _fixture;
 
@@ -45,6 +42,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             _airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 1), "Active  Airing test");
             _queueTester.AddAiringToDataStore(_airingId, true, "Playlist Active Airing test", _tbsQueueKey);
+
+            Assert.True(_airingId.StartsWith("TBSE"), "Airing id not begins with prefix TBSE");
         }
 
         [Fact, Order(2)]
