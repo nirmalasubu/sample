@@ -68,7 +68,7 @@ namespace OnDemandTools.Business.Modules.Airing
                             {
                                 try
                                 {
-                                    return (_airingQuery.GetBy(airingId) != null);
+                                    return _airingQuery.IsAiringExists(airingId);
                                 }
                                 catch (Exception)
                                 {

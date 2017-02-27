@@ -10,5 +10,11 @@ namespace OnDemandTools.API.v1.Models.Airing.Update
         public IList<PlayItem> PlayList { get; set; }
 
         public string ReleasedBy { get; set; }
+
+        public PlayListRequest()
+        {
+            PlayList = new List<PlayItem>();
+            ReleasedBy = string.Empty;
+        }
     }
 }

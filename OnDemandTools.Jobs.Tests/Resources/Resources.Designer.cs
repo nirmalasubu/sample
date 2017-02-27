@@ -190,6 +190,15 @@ namespace OnDemandTools.Jobs.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to  {&quot;PlayList&quot;:[{&quot;Position&quot;:1,&quot;Id&quot;:&quot;1E66T/01&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:2,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:3,&quot;Id&quot;:&quot;1E66T/02&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:4,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:5,&quot;Id&quot;:&quot;1E66T/03&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:6,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TbsValidPlaylist {
+            get {
+                return ResourceManager.GetString("TbsValidPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[1234,&quot;3456&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
         /// </summary>
         public static string ValidPackage {

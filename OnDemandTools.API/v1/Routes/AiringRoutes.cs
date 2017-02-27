@@ -344,61 +344,6 @@ namespace OnDemandTools.API.v1.Routes
                 };
             });
 
-            Post("/airing/playlist/{airingid}", _ =>
-            {
-                // Verify that the user has permission to POST
-                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
-
-                var airingId = (string)_.airingid;
-
-                // Bind POST request to data contract
-                var request = this.Bind<VMAiringRequestModel.PlayListRequest>();
-                try
-                {
-                    var airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
-
-                    if (airing != null)
-                    {
-                        airing.PlayList = Mapper.Map<List<BLAiringModel.PlayItem>>(request.PlayList);
-                        airing.ReleaseBy = request.ReleasedBy;
-                        airing.IgnoredQueues = new List<string>();
-                        airing.DeliveredTo = new List<string>();                        
-                    }
-                    else
-                        airing = new BLAiringModel.Airing();
-
-                    // validate
-                    List<ValidationResult> results = new List<ValidationResult>();
-                    results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.PostPlaylist.ToString()));
-
-                    // Verify if there are any validation errors. If so, return error
-                    if (results.Where(c => (!c.IsValid)).Count() > 0)
-                    {
-                        var message = results.Where(c => (!c.IsValid))
-                                    .Select(c => c.Errors.Select(d => d.ErrorMessage));
-
-
-                        logger.Error("Failure ingesting playlist released asset: {AssetId}", new Dictionary<string, object>()
-                                            {{ "airingid", airingId},{ "mediaid", airing.MediaId }, { "error", message }   });
-
-                        // Return status
-                        return Negotiate.WithModel(message)
-                                    .WithStatusCode(HttpStatusCode.BadRequest);
-                    }
-
-                    // Finally, persist the airing data
-                    var savedAiring = airingSvc.Save(airing, false, true);
-
-                    return "Successfully updated the playlist.";
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e, "Failure ingesting playlist to airing. Airingid:{@airingId}", airingId);
-                    throw e;
-                }
-
-            });
-
             Post("/airing/{prefix}", _ =>
             {
                 // Verify that the user has permission to POST
