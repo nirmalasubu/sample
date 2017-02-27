@@ -230,5 +230,13 @@ namespace OnDemandTools.Business.Modules.Airing
         /// </summary>
         /// <param name="airingDeportGraceDays">The airingDeportGraceDays</param>
         void Deport(int airingDeportGraceDays);
+
+        /// <summary>
+        /// Deletes the package mapped to airing.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
+        /// <returns>true/false</returns>
+        bool DeleteAiringMappedPackages(string airingId, string username, bool updateHistorical = true);
     }
 }
