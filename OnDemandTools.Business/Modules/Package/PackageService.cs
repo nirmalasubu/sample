@@ -29,10 +29,17 @@ namespace OnDemandTools.Business.Modules.Package
         /// <param name="package">The package.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns></returns>
-
         public Boolean Delete(ref BLModel.Package package, bool updateHistorical = true)
         {
-            DLModel.Package existingPkg = packageQuery.GetBy(package.TitleIds.ToList(), package.DestinationCode, package.Type);
+            DLModel.Package existingPkg= new DLModel.Package();
+            if (package.TitleIds.ToList().Any())
+                existingPkg = packageQuery.GetBy(package.TitleIds.ToList(), package.DestinationCode, package.Type);
+
+            if (package.ContentIds.ToList().Any())
+                existingPkg = packageQuery.GetBy(package.ContentIds.ToList(), package.DestinationCode, package.Type);
+
+            if (!string.IsNullOrEmpty(package.AiringId))
+                existingPkg = packageQuery.GetBy(package.AiringId, package.DestinationCode, package.Type);
             var user = cntx.GetUser();
 
             if(existingPkg != null)
@@ -63,7 +70,7 @@ namespace OnDemandTools.Business.Modules.Package
                 .ToBusinessModel<DLModel.Package, BLModel.Package>());            
         }
 
-                /// <summary>
+        /// <summary>
         /// Gets the package that matches all criteria - titleIds, destinationCode,
         /// type - explicitly. If more than one package is found then the first one
         /// will be returned
@@ -93,9 +100,9 @@ namespace OnDemandTools.Business.Modules.Package
             package.ModifiedBy = user.UserName;
             package.ModifiedDateTime = DateTime.UtcNow;
 
-            return 
+            return
             (packagePersist.Save(package.ToDataModel<BLModel.Package, DLModel.Package>(), user.UserName, updateHistorical)
                 .ToBusinessModel<DLModel.Package, BLModel.Package>());
-        }
+        }       
     }
 }

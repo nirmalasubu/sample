@@ -153,7 +153,7 @@
   </data>
   <data name="InvalidPackage_ContentIdsEmpty" xml:space="preserve">
     <value>{"TitleIds":[],"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
-  </data>  
+  </data>
   <data name="InvalidPackage_TitleIdsEmpty" xml:space="preserve">
     <value>{"TitleIds":[],"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
@@ -162,13 +162,13 @@
   </data>
   <data name="InvalidPackage_BothIdsNotPresent" xml:space="preserve">
     <value>{"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
-  </data>   
+  </data>
   <data name="InvalidPackage_TitleIdsNotPresent" xml:space="preserve">
     <value>{"ContentIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
   <data name="InvalidPackage_ContentIdsNotPresent" xml:space="preserve">
     <value>{"TitleIds":[],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
-  </data>  
+  </data>
   <data name="InvalidPackage_TypeNotPresent" xml:space="preserve">
     <value>{"TitleIds":[1234,"3456"],"ContentIds":[],"DestinationCode":"TNTW","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
@@ -192,5 +192,14 @@
   </data>
   <data name="ValidPackage" xml:space="preserve">
     <value>{"TitleIds":[1234,"3456"],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>
+  <data name="InvalidPackage_InvalidAiringId" xml:space="preserve">
+    <value>{"AiringId":"XXX","DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>
+  <data name="InvalidPackage_AllIdsPresent" xml:space="preserve">
+    <value>{"AiringId":"CARE1005021600011137","TitleIds":[1234,"3456"],"ContentIds":["1G9C0","2K439"],"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
+  </data>
+  <data name="InvalidPackage_NoIdsPresent" xml:space="preserve">
+    <value>{"DestinationCode":"TNTW","Type":"CSC-MTR","PackageData":{"PackageName":"TestPackageUpdated","TestArray":[12345,1235,76544,2314213,12312,3123123],"TestObect":{"ObjectData":[{"Key":5,"Value":"TestValue"},{"Key":"SomeKey","Value":1234}],"AnotherProperty":1234.5134}}}</value>
   </data>
 </root>

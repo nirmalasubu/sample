@@ -48,6 +48,29 @@ public static class RestClientExtension
     }
 
 
+    public static Task<JObject> RetrieveRecordwithContent(this RestClient client, RestRequest request)
+    {
+        var tcs = new TaskCompletionSource<JObject>();
+        client.ExecuteAsync(request, response =>
+        {
+           
+                if (response.IsSuccessful())
+                {
+                    tcs.SetResult(JObject.Parse(response.Content));
+                }
+                else
+                {
+                    var jsonObject = new JObject();
+                    jsonObject.Add("StatusCode", response.StatusCode.ToString());
+                    jsonObject.Add("ErrorMessage", response.Content.ToString());
+                    tcs.SetResult(jsonObject);
+                }
+        });
+
+        return tcs.Task;
+    }
+
+
     public static Task<JArray> RetrieveRecords(this RestClient client, RestRequest request)
     {
         var tcs = new TaskCompletionSource<JArray>();

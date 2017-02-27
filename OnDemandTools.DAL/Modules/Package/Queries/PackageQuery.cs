@@ -71,5 +71,18 @@ namespace OnDemandTools.DAL.Modules.Package.Queries
                 qc.Add(Query.EQ("DestinationCode", destinationCode));
             return collection.Find(Query.And(qc)).FirstOrDefault();
         }
+
+        public Model.Package GetBy(string airingId, string destinationCode, string type)
+        {
+            var collection = _database
+                .GetCollection<Model.Package>("Package");
+            var qc = new List<IMongoQuery>();
+            qc.Add(Query.EQ("AiringId", airingId));
+            if (!string.IsNullOrEmpty(type))
+                qc.Add(Query.EQ("Type", type));
+            if (!string.IsNullOrEmpty(destinationCode))
+                qc.Add(Query.EQ("DestinationCode", destinationCode));
+            return collection.Find(Query.And(qc)).FirstOrDefault();
+        }
     }
 }

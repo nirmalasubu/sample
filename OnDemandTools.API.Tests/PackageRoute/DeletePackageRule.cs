@@ -52,5 +52,71 @@ namespace OnDemandTools.API.Tests.PackageRoute
 
             Assert.True((response.GetValue("StatusCode").ToString() != "OK"));
         }
+
+        #region Delete Package With AiringId
+        [Fact]
+        public void Delete_WithInValidPackage_InvalidAiringIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_InvalidAiringId);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.DELETE);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("Provided AiringId does not exist"));
+            }
+        }
+
+        [Fact]
+        public void Delete_WithInValidPackage_NoAiringIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_NoIdsPresent);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.DELETE);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("At least one AiringId or  TitleId or ContentId is required"));
+            }
+        }
+
+        [Fact]
+        public void Delete_WithInValidPackage_withAiringIdAndContentidAndTitleIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_AllIdsPresent);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.DELETE);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("Cannot delete package. Must only provide either AiringId or TitleId or ContentId"));
+            }
+        }
+
+        #endregion
     }
 }

@@ -147,6 +147,95 @@ namespace OnDemandTools.API.Tests.PostPackage
             }
         }
 
+        #region Post Package With AiringId
+        [Fact]
+        public void Post_WithInValidPackage_InvalidAiringIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_InvalidAiringId);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.POST);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("Provided AiringId does not exist"));
+            }
+        }
+
+        [Fact]
+        public void Post_WithInValidPackage_NoAiringIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_NoIdsPresent);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.POST);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("At least one AiringId or  TitleId or ContentId is required"));
+            }
+        }
+
+        [Fact]
+        public void Post_WithInValidPackage_withAiringIdAndContentidAndTitleIdPresentTest()
+        {
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_AllIdsPresent);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.POST);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"ErrorMessage");
+            if (value != null)
+            {
+                Assert.True(value.Contains("Cannot register package. Must only provide either AiringId or TitleId or ContentId"));
+            }
+        }
+
+        [Fact]
+        public void Post_WithValidPackage_withAiringIdTest()
+        {
+           
+            string airingId =PostAiring();          
+            JObject packageJson = JObject.Parse(Resources.Resources.InvalidPackage_NoIdsPresent);
+            packageJson.Add("AiringId", airingId);
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/package", Method.POST);
+            request.AddParameter("application/json", packageJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecordwithContent(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"AiringId");
+
+            if(value == null)
+                Assert.True(airingId.Equals(airingId));
+        }
+
+        #endregion
+
         [Fact, Order(2)]
         public void DeleteExistingPackageTest()
         {
@@ -163,5 +252,24 @@ namespace OnDemandTools.API.Tests.PostPackage
 
             Assert.True((response.GetValue("message").ToString() == "Package deleted successfully"));
         }
+
+        #region Private Mathods 
+
+        private string PostAiring()
+        {
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("TBSAiringWithSingleFlight"));
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/TBSE", Method.POST);
+            request.AddParameter("application/json", airingJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            return response.SelectToken("airingId").Value<string>();
+        }
+        #endregion
     }
 }

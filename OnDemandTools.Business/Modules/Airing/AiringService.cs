@@ -15,6 +15,7 @@ using OnDemandTools.DAL.Modules.Airings.Commands;
 using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Destination.Queries;
 using OnDemandTools.DAL.Modules.File.Queries;
+using OnDemandTools.DAL.Modules.Package.Commands;
 using OnDemandTools.DAL.Modules.Package.Queries;
 using OnDemandTools.DAL.Modules.Queue.Queries;
 using RestSharp;
@@ -50,6 +51,8 @@ namespace OnDemandTools.Business.Modules.Airing
         DeletedAiringsQuery deletedAiringsQuery;
         IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
         IUpdateAiringQueueDelivery updateAiringQueueDelivery;
+        IPackageCommand packagePersist;
+        IApplicationContext cntx;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
             AppSettings appSettings,
@@ -66,7 +69,9 @@ namespace OnDemandTools.Business.Modules.Airing
             CurrentAiringsQuery currentAiringsQuery,
             DeletedAiringsQuery deletedAiringsQuery,
             IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
-            IUpdateAiringQueueDelivery updateAiringQueueDelivery)
+            IUpdateAiringQueueDelivery updateAiringQueueDelivery,
+            IPackageCommand packagePersist,
+            IApplicationContext cntx)
         {
             this.airingQueryHelper = airingQueryHelper;
             this.airingSaveCommandHelper = airingSaveCommandHelper;
@@ -85,14 +90,42 @@ namespace OnDemandTools.Business.Modules.Airing
             this.deletedAiringsQuery = deletedAiringsQuery;
             this.updateAiringQueueDelivery = updateAiringQueueDelivery;
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
+            this.packagePersist = packagePersist;
+            this.cntx = cntx;
         }
 
         #region "Public method"
         public BLModel.Airing Delete(BLModel.Airing airing)
         {
+            DeleteAiringMappedPackages(airing.AssetId);
             return
             airingDeleteCommandHelper.Delete(airing.ToDataModel<BLModel.Airing, DLModel.Airing>())
                 .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
+        }
+
+        /// <summary>
+        /// Deletes the specified package.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
+        /// <returns></returns>
+        public bool DeleteAiringMappedPackages(string airingId, bool updateHistorical = true)
+        {
+            DLPackageModel.Package existingPkg = new DLPackageModel.Package();
+
+            if (!string.IsNullOrEmpty(airingId))
+                existingPkg = packageQueryHelper.GetBy(airingId, "", "");
+
+            var user = cntx.GetUser();
+            if (existingPkg != null)
+            {
+                existingPkg.ModifiedBy = user.UserName;
+                existingPkg.ModifiedDateTime = DateTime.UtcNow;
+                packagePersist.Delete(existingPkg, user.UserName, updateHistorical);
+                return true;
+            }
+
+            return false;
         }
 
         public BLModel.Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection)

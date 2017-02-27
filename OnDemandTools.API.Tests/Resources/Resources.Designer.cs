@@ -118,6 +118,15 @@ namespace OnDemandTools.API.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to {&quot;AiringId&quot;:&quot;CARE1005021600011137&quot;,&quot;TitleIds&quot;:[1234,&quot;3456&quot;],&quot;ContentIds&quot;:[&quot;1G9C0&quot;,&quot;2K439&quot;],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
+        /// </summary>
+        public static string InvalidPackage_AllIdsPresent {
+            get {
+                return ResourceManager.GetString("InvalidPackage_AllIdsPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to {&quot;TitleIds&quot;:[],&quot;ContentIds&quot;:[],&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
         /// </summary>
         public static string InvalidPackage_BothIdsEmpty {
@@ -159,6 +168,24 @@ namespace OnDemandTools.API.Tests.Resources {
         public static string InvalidPackage_ContentIdsNotPresent {
             get {
                 return ResourceManager.GetString("InvalidPackage_ContentIdsNotPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to {&quot;AiringId&quot;:&quot;XXX&quot;,&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
+        /// </summary>
+        public static string InvalidPackage_InvalidAiringId {
+            get {
+                return ResourceManager.GetString("InvalidPackage_InvalidAiringId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to {&quot;DestinationCode&quot;:&quot;TNTW&quot;,&quot;Type&quot;:&quot;CSC-MTR&quot;,&quot;PackageData&quot;:{&quot;PackageName&quot;:&quot;TestPackageUpdated&quot;,&quot;TestArray&quot;:[12345,1235,76544,2314213,12312,3123123],&quot;TestObect&quot;:{&quot;ObjectData&quot;:[{&quot;Key&quot;:5,&quot;Value&quot;:&quot;TestValue&quot;},{&quot;Key&quot;:&quot;SomeKey&quot;,&quot;Value&quot;:1234}],&quot;AnotherProperty&quot;:1234.5134}}}.
+        /// </summary>
+        public static string InvalidPackage_NoIdsPresent {
+            get {
+                return ResourceManager.GetString("InvalidPackage_NoIdsPresent", resourceCulture);
             }
         }
         
