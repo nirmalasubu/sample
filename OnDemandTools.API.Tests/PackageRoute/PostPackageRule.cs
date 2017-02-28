@@ -228,10 +228,10 @@ namespace OnDemandTools.API.Tests.PostPackage
 
             }).Wait();
 
-            string value = response.Value<string>(@"AiringId");
+            string RetrivedAiringId = response.Value<string>(@"airingId");
 
-            if(value == null)
-                Assert.True(airingId.Equals(airingId));
+            if(RetrivedAiringId != null)
+                Assert.True(airingId.Equals(RetrivedAiringId));
         }
 
         #endregion
