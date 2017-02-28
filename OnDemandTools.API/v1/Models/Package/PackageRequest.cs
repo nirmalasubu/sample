@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OnDemandTools.API.v1.Models.Package
 {
@@ -18,14 +19,26 @@ namespace OnDemandTools.API.v1.Models.Package
 
         public string DestinationCode { get; set; }
 
+        public string Type { get; set; }
+
+        [JsonConverter(typeof(PackageDataConverter))]
+        public object PackageData { get; set; }
+
+        #region Serialisation
         public bool ShouldSerializeDestinationCode()
         {
             return !string.IsNullOrEmpty(DestinationCode);
         }
 
-        public string Type { get; set; }
+        public bool ShouldSerializeTitleIds()
+        {
+            return TitleIds.Any();
+        }
 
-        [JsonConverter(typeof(PackageDataConverter))]
-        public object PackageData { get; set; }
+        public bool ShouldSerializeContentIds()
+        {
+            return ContentIds.Any();
+        }
+        #endregion
     }
 }

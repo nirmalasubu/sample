@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using OnDemandTools.Common.Model;
+using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Package.Model
 {
@@ -44,6 +45,20 @@ namespace OnDemandTools.DAL.Modules.Package.Model
         public Package()
         {
             TitleIds = new List<int>();
+            ContentIds = new List<string>();
         }
+
+        #region Serialisation
+
+        public bool ShouldSerializeTitleIds()
+        {
+            return TitleIds.Any();
+        }
+
+        public bool ShouldSerializeContentIds()
+        {
+            return ContentIds.Any();
+        }
+        #endregion
     }
 }
