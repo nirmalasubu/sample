@@ -101,6 +101,8 @@ namespace OnDemandTools.Business.Modules.Airing
                              {
                                  try
                                  {
+                                     var foundCids = new List<string>();
+
                                      foreach (var segment in airing.PlayList.Where(e => e.ItemType == "Segment"))
                                      {
                                          var versionFound = false;
@@ -109,15 +111,21 @@ namespace OnDemandTools.Business.Modules.Airing
                                              if (segment.Id.StartsWith(version.ContentId))
                                              {
                                                  versionFound = true;
+
+                                                 if (!foundCids.Contains(version.ContentId))
+                                                     foundCids.Add(version.ContentId);
+
                                                  break;
                                              }
                                          }
 
+                                         //Return validation error if Segment CID's not matches with Version CID's
                                          if (!versionFound) return false;
                                      }
 
-                                     return true;
 
+                                     //Returns true if all version matches with Segements, if not then it will return false.
+                                     return foundCids.Count == airing.Versions.Count;
                                  }
                                  catch (Exception)
                                  {
@@ -127,7 +135,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
                              pl.RuleFor(c => c)
                                .Must(playlistRule)
-                               .WithMessage("Provided Segment CID does not match with Version CID(s) {0}.",
+                               .WithMessage("Provided Segment CID(s) does not match with Version CID(s) {0}.",
                                c => string.Join(",", c.Versions.Select(e => e.ContentId)));
                          });
             });
