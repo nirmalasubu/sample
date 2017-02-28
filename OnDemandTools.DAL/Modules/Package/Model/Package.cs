@@ -17,12 +17,8 @@ namespace OnDemandTools.DAL.Modules.Package.Model
         [BsonIgnoreIfNull]
         public string AiringId { get; set; }
 
-        [BsonIgnoreIfDefault]
-        [BsonIgnoreIfNull]
         public IList<int> TitleIds { get; set; }
-
-        [BsonIgnoreIfDefault]
-        [BsonIgnoreIfNull]
+        
         public IList<string> ContentIds { get; set; }
 
         //[BsonDefaultValue("")]
@@ -60,5 +56,7 @@ namespace OnDemandTools.DAL.Modules.Package.Model
             return ContentIds.Any();
         }
         #endregion
+
+
     }
 }
