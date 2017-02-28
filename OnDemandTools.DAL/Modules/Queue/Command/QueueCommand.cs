@@ -99,7 +99,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             {
                 var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
 
-                query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Verions.ContentId", BsonValue.Create(contentId))));
+                query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Versions.ContentId", BsonValue.Create(contentId))));
 
                 if (!string.IsNullOrEmpty(destinationCode))
                 {

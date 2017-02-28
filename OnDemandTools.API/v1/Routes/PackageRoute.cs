@@ -118,11 +118,11 @@ namespace OnDemandTools.API.v1.Routes
 
             var queueNames = packageQueues.Select(p => p.Name).ToList();
 
-            if (pkg.TitleIds != null && pkg.TitleIds.Count > 0) {
+            if (pkg.TitleIds != null && pkg.TitleIds.Any()) {
                 ResetPackageQueues(queueNames,pkg.TitleIds, pkg.DestinationCode);
                 return;
             }
-            if(pkg.ContentIds != null && pkg.ContentIds.Count > 0) {
+            if(pkg.ContentIds != null && pkg.ContentIds.Any()) {
                 ResetPackageQueues(queueNames,pkg.ContentIds, pkg.DestinationCode);
                 return;
             }
