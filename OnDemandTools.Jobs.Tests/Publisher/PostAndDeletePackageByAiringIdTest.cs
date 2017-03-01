@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.AiringPublisher;
+using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Jobs.Tests.Helpers;
 using RestSharp;
 using System;
@@ -21,9 +23,9 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private readonly string _tbsQueueKey;
         private readonly AiringObjectHelper _airingObjectHelper;
-        private static QueueTester _queueTester;
-        private readonly string _jsonString;       
-        private static string _airingId;
+        private readonly string _jsonString;
+        private readonly IPublisher _publisher;
+        private  static string _airingId;
         JobTestFixture _fixture;
         RestClient _client;
 
@@ -32,42 +34,39 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             _airingObjectHelper = new AiringObjectHelper();
             _jsonString = _airingObjectHelper.UpdateDates(Resources.Resources.TBSAiringWithSingleFlight, 1);
-
             _tbsQueueKey = fixture.Configuration["TbsQueueApiKey"];
-
             _fixture = fixture;
             _client = _fixture.restClient;
-
-            if (_queueTester == null)
-                _queueTester = new QueueTester(fixture);
+            _publisher = _fixture.container.GetInstance<IPublisher>();
         }
 
         /// <summary>
         /// Step 1: New Airing Posted
         /// </summary>
         [Fact, Order(1)]
-        public void Post_ValidAiring()
+        public void PostAndDeletePackage_PostValidAiring_ReturnsAiringIdTest()
         {
-            _airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 1), "Active  Airing test");
-            _queueTester.AddAiringToDataStore(_airingId, true, "Post Active Airing test: For package", _tbsQueueKey);
+            _airingId = PostAiringTest(_airingObjectHelper.UpdateDates(_jsonString, 1), "Active  Airing test");         
 
-            Assert.True(_airingId.StartsWith("TBSE"), "Airing id not begins with prefix TBSE");
+            Assert.True(_airingId.StartsWith("TBSE"), "Post Active Airing  posted with prefix TBSE");
         }
 
         /// <summary>
         /// Step 2 : Verify Airing delivered to Queue
         /// </summary>
         [Fact, Order(2)]
-        public void PostedAiringQueueDeliveryTest()
+        public void PostAndDeletePackage_AiringDeliveryToQueue_ReturnsDeliveredToQueueTest()
         {
-            _queueTester.VerifyClientQueueDelivery();
+            var message = string.Format("Post airing :  Airing {0} has been delivered to the queue {1}.", _tbsQueueKey,
+                                           _airingId);
+            Assert.True(IsAiringIdDelvieredToQueue(), message);
         }
 
         /// <summary>
         /// Step 3: Post package for the airing 
         /// </summary>
         [Fact, Order(3)]
-        public void PostPackagetest()
+        public void PostAndDeletePackage_PostPackage_ReturnsPostedPackageTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.PackageWithNoIds);
             packageJson.Add("AiringId", _airingId);           
@@ -91,25 +90,30 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         /// <param name="queueName"></param>
         /// 
         [Fact, Order(4)]
-        public void PostedPackageQueueNotificationTest()
+        public void PostAndDeletePackage_PostPackageQueueNotification_ReturnsTrueTest()
         {
-            PackageChangeQueueNotification();
+            var message = string.Format("Post Package : DeliveredTo QueueName {0} has been removed for airing {1}.", _tbsQueueKey,
+                                            _airingId);
+
+            Assert.True(PackageChangeQueueNotification(), message);
         }
         
         /// <summary>
         /// Verify Posted package notifications sent back to Queue
         /// </summary>
         [Fact, Order(5)]
-        public void PostedpackageQueueDeliveryTest()
+        public void PostAndDeletePackage_PostedpackageQueueDelivery_ReturnsDeliveredToQueueTest()
         {
-            _queueTester.VerifyClientQueueDelivery();
+            var message = string.Format("Delete Package : Related Package airing {0} has been delivered to the queue {1}.", _tbsQueueKey,
+                                           _airingId);
+            Assert.True(IsAiringIdDelvieredToQueue(), message);
         }
         
         /// <summary>
-        /// Step 6: Post package for the airing 
+        /// Step 6: delete package for the airing 
         /// </summary>
         [Fact, Order(6)]
-        public void DeletePackagetest()
+        public void PostAndDeletePackage_DeletePackage_ReturnsDeletedMessageTest()
         {
             JObject packageJson = JObject.Parse(Resources.Resources.PackageWithNoIds);
             packageJson.Add("AiringId", _airingId);
@@ -132,33 +136,57 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         /// <param name="airingId"></param>
         /// <param name="queueName"></param>       
         [Fact, Order(7)]
-        public void DeletedPackageQueueNotificationTest()
+        public void PostAndDeletePackage_DeletePackageQueueNotification_ReturnsTrueTest()
         {
-            PackageChangeQueueNotification();
-        }
+            var message = string.Format("Delete Package : DeliveredTo QueueName {0} has been removed for airing {1}.", _tbsQueueKey,
+                                            _airingId);
 
-        [Fact, Order(8)]
-        public void DeletedpackageQueueDeliveryTest()
-        {
-            _queueTester.VerifyClientQueueDelivery();
+            Assert.True(PackageChangeQueueNotification(), message);
         }
 
         /// <summary>
         /// step 8: Check the package deletion notification delivered to Queue
         /// </summary>
-        /// <param name="airingId"></param>
-        /// <param name="queueName"></param>  
-        private void PackageChangeQueueNotification()
+        [Fact, Order(8)]
+        public void PostAndDeletePackage_DeletedpackageQueueDelivery_ReturnsDeliveredToQueueTest()
+        {
+            var message = string.Format("Delete Package : Related Package airing {0} has been delivered to the queue {1}.", _tbsQueueKey,
+                                          _airingId);
+           Assert.True(IsAiringIdDelvieredToQueue(), message);          
+        }
+
+
+        #region Private Methods 
+
+        private bool PackageChangeQueueNotification()
         {
             var _airingService = _fixture.container.GetInstance<IAiringService>();
 
-            if (!_airingService.IsAiringDistributed(_airingId, _tbsQueueKey))
-            {
-                var message = string.Format("Package Queue : DeliveredTo {0} has been removed for airing {1}.", _tbsQueueKey,
-                                            _airingId);
-                Assert.True(true, message);
-            }
+            return (!_airingService.IsAiringDistributed(_airingId, _tbsQueueKey));
         }
+
+        private bool IsAiringIdDelvieredToQueue()
+        {
+
+            IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
+            var deliveryQueue = queueService.GetByApiKey(_tbsQueueKey);
+            if (deliveryQueue == null)
+            {
+                Assert.True(false, string.Format("Unit test delivery queue not found: API Key {0}", _tbsQueueKey));
+            }
+            queueService.Unlock(deliveryQueue.Name);
+            _publisher.Execute(deliveryQueue.Name);
+
+            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+
+            var airing = airingService.GetBy(_airingId);
+
+            return airing.DeliveredTo.Contains(_tbsQueueKey);
+            
+        }
+
+        #endregion
+
     }
 
 
