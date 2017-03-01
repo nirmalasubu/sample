@@ -16,11 +16,11 @@ using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 namespace OnDemandTools.API.v1.Routes
 {
 
-    public class PlaylistRoutes : NancyModule
+    public sealed class PlaylistRoutes : NancyModule
     {
         public PlaylistRoutes(
             IAiringService airingSvc,
-            AiringValidator _validator,
+            AiringValidator validator,
             Serilog.ILogger logger
             )
             : base("v1")
@@ -43,7 +43,7 @@ namespace OnDemandTools.API.v1.Routes
                 var request = this.Bind<VMAiringRequestModel.PlayListRequest>();
                 try
                 {
-                    var airing = new BLAiringModel.Airing();
+                    BLAiringModel.Airing airing;
 
                     if (airingSvc.IsAiringExists(airingId))
                     {
@@ -72,11 +72,15 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
                     // validate
-                    List<ValidationResult> results = new List<ValidationResult>();
-                    results.Add(_validator.Validate(airing, ruleSet: AiringValidationRuleSet.PostPlaylist.ToString()));
+                    var results = new List<ValidationResult>
+                                  {
+                                      validator.Validate(airing,
+                                          ruleSet:
+                                          AiringValidationRuleSet.PostPlaylist.ToString())
+                                  };
 
                     // Verify if there are any validation errors. If so, return error
-                    if (results.Where(c => (!c.IsValid)).Count() > 0)
+                    if (results.Any(c => (!c.IsValid)))
                     {
                         var message = results.Where(c => (!c.IsValid))
                                     .Select(c => c.Errors.Select(d => d.ErrorMessage)).ToList();
@@ -91,14 +95,14 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
                     // Finally, persist the airing data
-                    var savedAiring = airingSvc.Save(airing, false, true);
+                    airingSvc.Save(airing, false, true);
 
                     return "Successfully updated the playlist.";
                 }
                 catch (Exception e)
                 {
                     logger.Error(e, "Failure ingesting playlist to airing. Airingid:{@airingId}", airingId);
-                    throw e;
+                    throw;
                 }
 
             });
