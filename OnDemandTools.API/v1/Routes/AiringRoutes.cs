@@ -487,7 +487,7 @@ namespace OnDemandTools.API.v1.Routes
 
             Airingdetails.Add("airingid", savedAiring.AssetId);
             Airingdetails.Add("mediaid", savedAiring.MediaId);
-            Airingdetails.Add("Brand", savedAiring.Network);
+            Airingdetails.Add("brand", savedAiring.Network);
 
             int i = 0;
             string flightWindow = null, products = null, destinations = null;
@@ -517,16 +517,18 @@ namespace OnDemandTools.API.v1.Routes
                                                                   i, element.Type, element.Value, element.Authority));
                 i++;
             }
-            string title = null;
-            title = string.Concat(title, string.Format("title : [rating : [code : {0}, description : {1}] , storyline : [short : {2}], \n" +
-                                                               "releaseYear : {3}, keywords : {4}, originalPremiereDate : {5}, \n " +
-                                                               "episode : [name : {6}, number : {7}], series : [name : {8}, id : {9}]",
-                                                                  savedAiring.Title.TVRating.Code, savedAiring.Title.TVRating.Description,
-                                                                  savedAiring.Title.StoryLine.Short, savedAiring.Title.ReleaseYear, savedAiring.Title.Keywords,
-                                                                  savedAiring.Title.OriginalPremiereDate, savedAiring.Title.Episode.Name,
-                                                                  savedAiring.Title.Episode.Number, savedAiring.Title.Series.Name, savedAiring.Title.Series.Id));
-            Airingdetails.Add("title", title);
+            
+            i = 0;
+            string RelatedTitleIds = null;
+            foreach (var element in savedAiring.Title.RelatedTitleIds)
+            {
+                RelatedTitleIds = string.Concat(RelatedTitleIds, string.Format("RelatedTitleIds[{0}] : [type : {1} , value : {2} , authority : {3}] \n",
+                                                                  i, element.Type, element.Value, element.Authority));
+                i++;
+            }
+            
             Airingdetails.Add("titleIds", titleIds);
+            Airingdetails.Add("relatedTitleIds", RelatedTitleIds);
             Airingdetails.Add("flightwindow", flightWindow);
             Airingdetails.Add("products", products);
             Airingdetails.Add("flags", string.Format("hd : {0}, cx : {1}, ProgrammerBrandingReq : {2}, FastForwardAllowed : {3}, ManuallyProcess : {4}",
