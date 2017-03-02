@@ -43,7 +43,7 @@ namespace OnDemandTools.Business.Modules.Package
                            {
                                try
                                {
-                                   return (string.IsNullOrEmpty(airingId)) ? true : (_airingQuery.GetBy(airingId) != null);
+                                   return (string.IsNullOrEmpty(airingId)) ? true : _airingQuery.IsAiringExists(airingId);
                                }
                                catch (Exception)
                                {
@@ -53,7 +53,7 @@ namespace OnDemandTools.Business.Modules.Package
 
                            dr.RuleFor(c => c.AiringId)
                              .Must(airingIdExistRule)
-                             .WithMessage("Provided AiringId does not exist.");
+                             .WithMessage("Provided AiringId does not exist/expired.");
                        });
 
 
@@ -79,7 +79,7 @@ namespace OnDemandTools.Business.Modules.Package
                            {
                                try
                                {
-                                   return (string.IsNullOrEmpty(airingId)) ? true : (_airingQuery.GetBy(airingId) != null);
+                                   return (string.IsNullOrEmpty(airingId)) ? true : _airingQuery.IsAiringExists(airingId);
                                }
                                catch (Exception)
                                {
@@ -89,7 +89,7 @@ namespace OnDemandTools.Business.Modules.Package
 
                            dr.RuleFor(c => c.AiringId)
                              .Must(airingIdExistRule)
-                             .WithMessage("Provided AiringId does not exist.");
+                             .WithMessage("Provided AiringId does not exist/expired.");
                        });
             });
         }
