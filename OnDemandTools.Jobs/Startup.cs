@@ -59,12 +59,14 @@ namespace OnDemandTools.Jobs
                      reporterType: appSettings.LogzIO.ReporterType,
                      environment: appSettings.LogzIO.Environment)
                      .CreateLogger();
+                c.For<IApplicationContext>().Use<JobContext>();
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
                 c.For<TitleSync>();
                 c.For<Publisher>();
                 c.For<CloudAmqpSync>();
+
             });
 
             services.InitializeAutoMapper();

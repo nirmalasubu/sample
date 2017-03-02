@@ -52,7 +52,8 @@ namespace OnDemandTools.Business.Modules.Airing
         IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
         IUpdateAiringQueueDelivery updateAiringQueueDelivery;
         IPackageCommand packagePersist;
-      
+        private IApplicationContext cntx;
+
         public AiringService(IGetAiringQuery airingQueryHelper,
             AppSettings appSettings,
             IAiringSaveCommand airingSaveCommandHelper,
@@ -69,7 +70,8 @@ namespace OnDemandTools.Business.Modules.Airing
             DeletedAiringsQuery deletedAiringsQuery,
             IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
             IUpdateAiringQueueDelivery updateAiringQueueDelivery,
-            IPackageCommand packagePersist
+            IPackageCommand packagePersist,
+            IApplicationContext cntx
            )
         {
             this.airingQueryHelper = airingQueryHelper;
@@ -90,13 +92,13 @@ namespace OnDemandTools.Business.Modules.Airing
             this.updateAiringQueueDelivery = updateAiringQueueDelivery;
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
             this.packagePersist = packagePersist;
-           
+            this.cntx = cntx;
         }
 
         #region "Public method"
         public BLModel.Airing Delete(BLModel.Airing airing)
         {
-          
+
             return
             airingDeleteCommandHelper.Delete(airing.ToDataModel<BLModel.Airing, DLModel.Airing>())
                 .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
@@ -105,19 +107,20 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <summary>
         /// Deletes the package mapped to airing.
         /// </summary>
-        /// <param name="package">The package.</param>
+        /// <param name="airingId">The package.</param>
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns></returns>
-        public bool DeleteAiringMappedPackages(string airingId,string username, bool updateHistorical = true)
+        public bool DeleteAiringMappedPackages(string airingId, bool updateHistorical = true)
         {
             DLPackageModel.Package existingPkg = new DLPackageModel.Package();
 
             if (!string.IsNullOrEmpty(airingId))
                 existingPkg = packageQueryHelper.GetBy(airingId, "", "");
 
-           
+
             if (existingPkg != null)
             {
+                var username = cntx.GetUser().Name;
                 existingPkg.ModifiedBy = username;
                 existingPkg.ModifiedDateTime = DateTime.UtcNow;
                 packagePersist.Delete(existingPkg, username, updateHistorical);
@@ -406,7 +409,7 @@ namespace OnDemandTools.Business.Modules.Airing
             titleIds = titleIds.Where(title => (title != -1)).ToList();
             var destinations = airing.Flights.SelectMany(flight =>
                                                          flight.Destinations.Select(destination => destination.Name));
-          
+
             List<DLPackageModel.Package> matchingPackages = new List<DLPackageModel.Package>();
             List<DLPackageModel.Package> titleAndAiringIdPackages = packageQueryHelper.GetBy(airing.AiringId, titleIds.ToList(), destinations.ToList()).ToList();
             List<DLPackageModel.Package> cidPackages = packageQueryHelper.GetBy(contentIds.ToList(), destinations.ToList()).ToList();
@@ -736,7 +739,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
             return results;
         }
-                #endregion
+        #endregion
         #endregion
 
     }

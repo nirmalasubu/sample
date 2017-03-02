@@ -460,7 +460,7 @@ namespace OnDemandTools.API.v1.Routes
                 airingSvc.Delete(existingAiring);
 
                 //Delete related packages of airing
-                airingSvc.DeleteAiringMappedPackages(airing.AssetId, Context.User().UserName);
+                airingSvc.DeleteAiringMappedPackages(airing.AssetId);
 
                 if (request.Instructions.DeliverImmediately)
                 {

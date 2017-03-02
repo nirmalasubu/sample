@@ -19,7 +19,7 @@ namespace OnDemandTools.Business.Tests.Helpers
     public class BusinessTestFixture : IDisposable
     {
 
-        public IConfigurationRoot Configuration { get; }       
+        public IConfigurationRoot Configuration { get; }
         public StructureMap.Container container { get; set; }
 
         public BusinessTestFixture()
@@ -34,7 +34,9 @@ namespace OnDemandTools.Business.Tests.Helpers
 
             // Start up DI container
             this.container = new StructureMap.Container();
+            
             container.Configure(c => c.ForSingletonOf<AppSettings>().Use(appSettings));
+            container.Configure(c => c.For<IApplicationContext>().Use<BusinessTestContext>());
             DependencyResolver.RegisterResolver(new StructureMapIOCContainer(container)).RegisterImplmentation();
 
             // Load mapping            
