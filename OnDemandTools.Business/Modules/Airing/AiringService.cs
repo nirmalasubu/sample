@@ -122,8 +122,7 @@ namespace OnDemandTools.Business.Modules.Airing
             {
                 var username = cntx.GetUser().Name;
                 existingPkg.ModifiedBy = username;
-                existingPkg.ModifiedDateTime = DateTime.UtcNow;
-                packagePersist.Delete(existingPkg, username, updateHistorical);
+                packagePersist.DeletePackagebyAiringId(airingId, username, updateHistorical);
                 return true;
             }
 

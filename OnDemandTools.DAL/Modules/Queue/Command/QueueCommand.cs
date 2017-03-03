@@ -120,22 +120,22 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
 
         public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
         {
+           var query = Query.EQ("AssetId", airingId);
+
+            if (!string.IsNullOrEmpty(destinationCode))
+            {
+                query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+            }
+
+            var currentAiring = _currentAirings.FindOne(query);
+            if (currentAiring==null || !currentAiring.DeliveredTo.Any()) return;
+
             foreach (var queueName in queueNames)
             {
-                var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
-
-                query = Query.EQ("AssetId", airingId);
-
-                if (!string.IsNullOrEmpty(destinationCode))
+                if (currentAiring.DeliveredTo.Contains(queueName))
                 {
-                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
-                }
-
-                var currentAirings = _currentAirings.Find(query).ToList();
-
-                if (!currentAirings.Any()) continue;
-                else
                     Reset(queueName, query, false);
+                }
             }
         }
 

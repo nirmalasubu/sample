@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.Models.History;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -107,6 +108,40 @@ namespace OnDemandTools.DAL.Modules.Package.Commands
                 UpdateFlags.Upsert);
 
             return packageDataModel;
+        }
+
+        public bool DeletePackagebyAiringId(string airingId, string userName, bool updateHistorical)
+        {
+            var currentCollection = _database.GetCollection<Model.Package>(DataStoreConfiguration.CurrentPackagesCollection);
+            var deletedCollection = _database.GetCollection<Model.Package>(DataStoreConfiguration.DeletedPackagesCollection);
+            var historicalCollection = _database.GetCollection<HistoricalRecord>(DataStoreConfiguration.HistoricalPackagesCollection);
+        
+            var qc = new List<IMongoQuery>();
+
+            if (!string.IsNullOrEmpty(airingId))
+                qc.Add(Query.EQ("AiringId", airingId));
+
+            List<Model.Package> matchingPkgs = currentCollection
+            .Find(Query.And(qc))
+            .AsQueryable().ToList();
+
+            if (!matchingPkgs.Any()) return false;  // There is no packages for airingId
+
+            foreach (Model.Package matchingPkg in matchingPkgs)
+            {
+                matchingPkg.ModifiedBy = userName;
+                matchingPkg.ModifiedDateTime = DateTime.UtcNow;
+                if (updateHistorical)
+                    historicalCollection.Save(new HistoricalRecord(matchingPkg, "DELETE", userName));
+
+                deletedCollection.Update(Query.EQ("_id", matchingPkg.Id),
+                    Update.Replace(matchingPkg),
+                    UpdateFlags.Upsert);
+            }
+
+            currentCollection.Remove(Query.And(qc));
+
+            return true;
         }
     }
 }
