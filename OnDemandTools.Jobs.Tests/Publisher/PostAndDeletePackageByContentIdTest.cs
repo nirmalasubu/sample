@@ -81,9 +81,9 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 response = await _client.RetrieveRecord(requestPackage);
             }).Wait();
 
-            string cids = response.Value<string>(@"contentIds");
+            List<string> cids = response["contentIds"].Select(s => (string)s).ToList();
 
-            Assert.True(cids.Equals(_contentIds));
+            Assert.True(cids[0].Equals(_contentIds[0]));
         }
 
         /// <summary>
