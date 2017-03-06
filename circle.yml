@@ -36,10 +36,8 @@ compile:
 test:
   override:
     # API testing
-    - source envAPI; sudo docker run -it --link odt-api-container:localhost --name odt-api-test-container "${IMAGE}-test"
-    - sudo docker ps -a
-    - sudo docker images
-     
+    - source envAPI; sudo docker run -it --link odt-api-container:apihost --name odt-api-test-container "${IMAGE}-test"
+       
     # Job testing
     - source envJob; sudo docker run -it --link odt-api-container:apihost --link odt-job-container:jobhost --name odt-job-test-container "${IMAGE}-test"
 
