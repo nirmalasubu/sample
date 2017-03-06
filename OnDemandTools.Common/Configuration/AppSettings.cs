@@ -24,6 +24,7 @@ namespace OnDemandTools.Common.Configuration
         public string HealthAgentLifetimeInMinutes { get; set; }
         public JobSchedules JobSchedules { get; set; }
         public CloudQueue CloudQueue { get; set; }     
+        public bool EnableMediaIdGenrationByPlayList { get; set; }
     }
 
     public class CloudQueue

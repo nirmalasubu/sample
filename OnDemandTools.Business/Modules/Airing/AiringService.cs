@@ -254,9 +254,19 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             var contentIds = new StringBuilder();
 
-            foreach (var version in airing.Versions)
+            if (appSettings.EnableMediaIdGenrationByPlayList)
             {
-                contentIds.Append(version.ContentId);
+                foreach (var playList in airing.PlayList.Where(t => t.Type != "Trigger"))
+                {
+                    contentIds.Append(playList.Id);
+                }
+            }
+            else
+            {
+                foreach (var version in airing.Versions)
+                {
+                    contentIds.Append(version.ContentId);
+                }
             }
 
             airing.MediaId = IdGenerator.Generate(string.Concat(contentIds.ToString(), airing.Network));
