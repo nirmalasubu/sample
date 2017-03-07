@@ -372,7 +372,7 @@ namespace OnDemandTools.Business.Modules.Airing
         public void AppendStatus(ref BLModel.Alternate.Long.Airing airing)
         {
             // initialize status property
-            airing.Options.Status = new Status();
+            airing.Options.Status = new BLModel.Alternate.Long.Status();
 
             // Check if file information is already included. If so, do not
             // retrieve again; else, retrieve it
