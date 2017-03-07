@@ -1,30 +1,31 @@
-﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 using OnDemandTools.API.Helpers;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Status;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 
 namespace OnDemandTools.API.v1.Routes
 {
     public sealed class AiringStatusRoutes : NancyModule
     {
+        private readonly IStatusSerivce _statusService;
+
         public AiringStatusRoutes(
             IAiringService airingSvc,
-            AiringValidator validator,
+            IStatusSerivce statusService,
             Serilog.ILogger logger
             )
             : base("v1")
         {
             this.RequiresAuthentication();
+
+            _statusService = statusService;
 
             #region "POST Operations"
 
@@ -36,66 +37,48 @@ namespace OnDemandTools.API.v1.Routes
 
                 var airingId = (string)_.airingid;
 
-                // Bind POST request to data contract
-                var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
                 try
                 {
-                    BLAiringModel.Airing airing;
-
                     if (airingSvc.IsAiringExists(airingId))
                     {
-                        airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
+                        // Bind POST request to data contract
+                        var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
+
+                        var validationResults = ValidateRequest(request);
+
+                        if (validationResults.Any())
+                        {
+                            return Negotiate.WithModel(validationResults)
+                                   .WithStatusCode(HttpStatusCode.BadRequest);
+                        }
+
+                        var airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
 
                         foreach (var status in request.Status)
                         {
                             airing.Status[status.Key] = status.Value;
-                        } 
-                        
+                        }
+
                         //Clears the existing delivery details
-                        airing.IgnoredQueues = new List<string>();
-                        airing.DeliveredTo = new List<string>();
-                    }
-                    else
-                    {
-                        var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
-                                                    "AiringId is required." : "Provided AiringId does not exists.";
+                        //TODO Queue reset logic goes here
 
-                        // Return status
-                        return Negotiate.WithModel(airingErrorMessage)
-                                    .WithStatusCode(!string.IsNullOrWhiteSpace(airingId) ? HttpStatusCode.NotFound : HttpStatusCode.BadRequest);
+                        // Finally, persist the airing data
+                        airingSvc.Save(airing, false, true);
+
+                        return "Successfully updated the airing status.";
                     }
 
-                    // validate
-                    var results = new List<ValidationResult>
-                                  {
-                                      validator.Validate(airing,
-                                          ruleSet:
-                                          AiringValidationRuleSet.PostPlaylist.ToString())
-                                  };
+                    var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
+                                                "AiringId is required." : "Provided AiringId does not exists.";
 
-                    // Verify if there are any validation errors. If so, return error
-                    if (results.Any(c => (!c.IsValid)))
-                    {
-                        var message = results.Where(c => (!c.IsValid))
-                                    .Select(c => c.Errors.Select(d => d.ErrorMessage)).ToList();
+                    // Return status
+                    return Negotiate.WithModel(airingErrorMessage)
+                                .WithStatusCode(!string.IsNullOrWhiteSpace(airingId) ? HttpStatusCode.NotFound : HttpStatusCode.BadRequest);
 
-
-                        logger.Error("Failure ingesting status to released asset: {AssetId}", new Dictionary<string, object>()
-                                            {{ "airingid", airingId},{ "mediaid", airing.MediaId }, { "error", message }   });
-
-                        // Return status
-                        return Negotiate.WithModel(message)
-                                    .WithStatusCode(HttpStatusCode.BadRequest);
-                    }
-
-                    // Finally, persist the airing data
-                    airingSvc.Save(airing, false, true);
-
-                    return "Successfully updated the airing status.";
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, "Failure ingesting playlist to airing. Airingid:{@airingId}", airingId);
+                    logger.Error(e, "Failure ingesting status to airing. Airingid:{@airingId}", airingId);
                     throw;
                 }
 
@@ -106,5 +89,18 @@ namespace OnDemandTools.API.v1.Routes
 
 
         }
+
+        private IEnumerable<string> ValidateRequest(VMAiringRequestModel.AiringStatusRequest request)
+        {
+            if (request.Status == null || request.Status.Count == 0)
+                return new List<string>() { "Airing status is required." };
+
+            var validStatus = _statusService.GetAllStatus();
+
+            return from status in request.Status
+                   where validStatus.All(e => e.Name != status.Key)
+                   select string.Format("Provided Status key '{0}' not exists.", status.Key);
+        }
     }
+
 }

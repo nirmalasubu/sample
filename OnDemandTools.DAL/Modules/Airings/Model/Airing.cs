@@ -58,7 +58,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public Dictionary<string, object> Properties { get; set; }
 
-        public Dictionary<string, object> Status { get; set; }
+        public Dictionary<string, bool> Status { get; set; }
 
         public IList<string> IgnoredQueues { get; set; }
 
@@ -76,7 +76,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
             DeliveredTo = new List<string>();
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();
-            Status = new Dictionary<string, object>();
+            Status = new Dictionary<string, bool>();
         }
     }
 }
