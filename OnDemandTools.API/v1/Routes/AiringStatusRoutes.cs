@@ -45,13 +45,15 @@ namespace OnDemandTools.API.v1.Routes
                     if (airingSvc.IsAiringExists(airingId))
                     {
                         airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
+
+                        foreach (var status in request.Status)
+                        {
+                            airing.Status[status.Key] = status.Value;
+                        } 
                         
                         //Clears the existing delivery details
                         airing.IgnoredQueues = new List<string>();
                         airing.DeliveredTo = new List<string>();
-
-                        //Sets the date with the current date time
-                        airing.ReleaseOn = DateTime.UtcNow;
                     }
                     else
                     {

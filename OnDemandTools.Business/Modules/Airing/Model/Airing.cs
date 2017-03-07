@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 
 namespace OnDemandTools.Business.Modules.Airing.Model
-{   
+{
     public class Airing
-    {        
+    {
         public virtual String Id { get; set; }
 
         public virtual string AssetId { get; set; }
@@ -54,6 +54,8 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public Dictionary<string, object> Properties { get; set; }
 
+        public Dictionary<string, bool> Status { get; set; }
+
         public IList<string> IgnoredQueues { get; set; }
 
         public Airing()
@@ -70,6 +72,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             DeliveredTo = new List<string>();
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();
+            Status = new Dictionary<string, bool>();
         }
     }
 }
