@@ -13,7 +13,8 @@ namespace OnDemandTools.Business.Modules.Airing
     {
         PostAiring,
         DeleteAiring,
-        PostPlaylist
+        PostPlaylist,
+        AiringStatus
     }
 
     public class AiringValidator : AbstractValidator<BLModel.Airing>
