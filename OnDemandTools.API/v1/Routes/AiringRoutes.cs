@@ -6,7 +6,6 @@ using Nancy.ModelBinding;
 using OnDemandTools.API.Helpers;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.AiringId;
-using OnDemandTools.Business.Modules.CustomExceptions;
 using OnDemandTools.Business.Modules.Product;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Reporting;
@@ -25,6 +24,7 @@ using OnDemandTools.API.v1.Models.Airing.Queue;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 using AutoMapper;
 using OnDemandTools.Common.Configuration;
+using OnDemandTools.Common.Exceptions;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -134,7 +134,7 @@ namespace OnDemandTools.API.v1.Routes
                 List<BLAiringModel.Airing> airings;
                 DateTime startDate;
                 DateTime endDate;
-                if ((Request.Query["startDate"] != String.Empty) && (Request.Query["endDate"] != String.Empty))
+                if ((Request.Query.ContainsKey("startDate")) && (Request.Query.ContainsKey("endDate")))
                 {
                     // validate
                     ValidationResult results = new ValidationResult();

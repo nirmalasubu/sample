@@ -2,11 +2,9 @@
 using Nancy.Configuration;
 using Nancy.Json;
 using Nancy.Responses;
-using OnDemandTools.Business.Modules.CustomExceptions;
+using OnDemandTools.Common.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace OnDemandTools.API.v1.Models
 {

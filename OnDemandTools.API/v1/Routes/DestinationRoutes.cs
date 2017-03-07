@@ -2,13 +2,13 @@
 using Nancy.Security;
 using OnDemandTools.API.Helpers;
 using ADModel = OnDemandTools.API.v1.Models.Destination;
-using OnDemandTools.Business.Modules.CustomExceptions;
 using OnDemandTools.Business.Modules.Destination;
 using OnDemandTools.Business.Modules.Destination.Model;
 using OnDemandTools.Common.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using OnDemandTools.Common.Exceptions;
 
 namespace OnDemandTools.API.v1.Routes
 {

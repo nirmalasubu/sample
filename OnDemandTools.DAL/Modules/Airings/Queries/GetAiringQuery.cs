@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using OnDemandTools.Common.Exceptions;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using System;
@@ -218,12 +219,6 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
         }
     }
 
-    public class AiringNotFoundException : Exception
-    {
-        public AiringNotFoundException(string message)
-            : base(message)
-        {
-        }
-    }
+ 
    
 }

@@ -2,12 +2,12 @@
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Modules.Airings.Model;
-using OnDemandTools.DAL.Modules.Airings.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using OnDemandTools.DAL.Database;
 using FileModel = OnDemandTools.DAL.Modules.File.Model;
+using OnDemandTools.Common.Exceptions;
 
 namespace OnDemandTools.DAL.Modules.File.Queries
 {

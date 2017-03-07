@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace OnDemandTools.Business.Modules.CustomExceptions
+
+namespace OnDemandTools.Common.Exceptions
 {
     public class AiringNotFoundException : Exception
     {
