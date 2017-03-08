@@ -29,6 +29,7 @@ namespace OnDemandTools.Business.Modules.Queue.Model
         public bool DetectImageChanges { get; set; }
         public bool DetectVideoChanges { get; set; }
         public bool DetectPackageChanges { get; set; }
+        public bool DetectStatusChanges { get; set; }
         public bool IsPriorityQueue { get; set; }
         public bool IsProhibitResendMediaId { get; set; }
 
