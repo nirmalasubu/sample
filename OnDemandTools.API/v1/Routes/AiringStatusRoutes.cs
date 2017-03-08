@@ -3,6 +3,7 @@ using Nancy.ModelBinding;
 using Nancy.Security;
 using OnDemandTools.API.Helpers;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Status;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace OnDemandTools.API.v1.Routes
         public AiringStatusRoutes(
             IAiringService airingSvc,
             IStatusSerivce statusService,
+            IQueueService queueService,
             Serilog.ILogger logger
             )
             : base("v1")
@@ -61,6 +63,13 @@ namespace OnDemandTools.API.v1.Routes
 
                         //Clears the existing delivery details
                         //TODO Queue reset logic goes here
+                        var statusQueues = queueService.GetStatusNotificationSubscribers();
+
+                        foreach (var deliveryQueues in statusQueues)
+                        {
+                            if (airing.DeliveredTo.Contains(deliveryQueues.Name))
+                                airing.DeliveredTo.Remove(deliveryQueues.Name);
+                        }
 
                         // Finally, persist the airing data
                         airingSvc.Save(airing, false, true);

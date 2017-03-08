@@ -48,5 +48,12 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
 
             return queues.Where(q => q.DetectPackageChanges);
         }
+
+        public IQueryable<Model.Queue> GetStatusQueues()
+        {
+            var queues = _database.GetCollection<Model.Queue>("DeliveryQueue").AsQueryable<Model.Queue>();
+
+            return queues.Where(q => q.DetectStatusChanges);
+        }
     }
 }

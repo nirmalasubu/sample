@@ -105,6 +105,17 @@ namespace OnDemandTools.Business.Modules.Queue
         }
 
         /// <summary>
+        /// Retrieves those queues that are subscribed to receive status notification
+        /// </summary>
+        /// <returns></returns>
+        public List<Model.Queue> GetStatusNotificationSubscribers()
+        {
+            return
+                (queueQueryHelper.GetStatusQueues().ToList<DLModel.Queue>()
+                .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());
+        }
+
+        /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
         /// depends on 'titleIds'
         /// </summary>

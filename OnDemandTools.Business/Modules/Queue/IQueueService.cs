@@ -22,6 +22,12 @@ namespace OnDemandTools.Business.Modules.Queue
         List<Model.Queue> GetPackageNotificationSubscribers();
 
         /// <summary>
+        /// Retrieves those queues that are subscribed to receive status notification
+        /// </summary>
+        /// <returns></returns>
+        List<Model.Queue> GetStatusNotificationSubscribers();
+
+        /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
         /// depends on 'titleIds' & 'destinationCode'
         /// </summary>

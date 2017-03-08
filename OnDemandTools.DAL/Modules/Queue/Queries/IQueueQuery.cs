@@ -16,5 +16,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
         Model.Queue GetByApiKey(string apiKey);
 
         IQueryable<Model.Queue> GetPackageQueues();
+
+        IQueryable<Model.Queue> GetStatusQueues();
     }
 }
