@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 
 namespace OnDemandTools.API.v1.Routes
@@ -41,49 +42,45 @@ namespace OnDemandTools.API.v1.Routes
 
                 try
                 {
-                    if (airingSvc.IsAiringExists(airingId))
+                    if (!airingSvc.IsAiringExists(airingId))
                     {
-                        // Bind POST request to data contract
-                        var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
+                        var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
+                            "AiringId is required." : "Provided AiringId does not exists.";
 
-                        var validationResults = ValidateRequest(request);
-
-                        if (validationResults.Any())
-                        {
-                            return Negotiate.WithModel(validationResults)
-                                   .WithStatusCode(HttpStatusCode.BadRequest);
-                        }
-
-                        var airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
-
-                        foreach (var status in request.Status)
-                        {
-                            airing.Status[status.Key] = status.Value;
-                        }
-
-                        //Clears the existing delivery details
-                        //TODO Queue reset logic goes here
-                        var statusQueues = queueService.GetStatusNotificationSubscribers();
-
-                        foreach (var deliveryQueues in statusQueues)
-                        {
-                            if (airing.DeliveredTo.Contains(deliveryQueues.Name))
-                                airing.DeliveredTo.Remove(deliveryQueues.Name);
-                        }
-
-                        // Finally, persist the airing data
-                        airingSvc.Save(airing, false, true);
-
-                        return "Successfully updated the airing status.";
+                        // Return's NOT found status if airing not exists in current collection.
+                        return Negotiate.WithModel(airingErrorMessage)
+                                    .WithStatusCode(!string.IsNullOrWhiteSpace(airingId) ? HttpStatusCode.NotFound : HttpStatusCode.BadRequest);
                     }
 
-                    var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
-                                                "AiringId is required." : "Provided AiringId does not exists.";
+                    // Bind POST request to data contract
+                    var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
 
-                    // Return status
-                    return Negotiate.WithModel(airingErrorMessage)
-                                .WithStatusCode(!string.IsNullOrWhiteSpace(airingId) ? HttpStatusCode.NotFound : HttpStatusCode.BadRequest);
+                    //Validates the airing requests
+                    var validationResults = ValidateRequest(request);
 
+                    if (validationResults.Any())
+                    {
+                        //returns validation results if there is any
+                        return Negotiate.WithModel(validationResults)
+                               .WithStatusCode(HttpStatusCode.BadRequest);
+                    }
+
+                    var airing = airingSvc.GetBy(airingId, AiringCollection.CurrentCollection);
+
+
+                    //Updates the airing status with the POST request
+                    foreach (var status in request.Status)
+                    {
+                        airing.Status[status.Key] = status.Value;
+                    }
+
+                    //Reset's delivery details to redeliver the airing
+                    ResetDeliveryQueue(queueService, airing);
+
+                    // Finally, persist the airing data
+                    airingSvc.Save(airing, false, true);
+
+                    return "Successfully updated the airing status.";
                 }
                 catch (Exception e)
                 {
@@ -99,6 +96,32 @@ namespace OnDemandTools.API.v1.Routes
 
         }
 
+        /// <summary>
+        /// Reset's the delivery queue for the airing
+        /// </summary>
+        /// <param name="queueService">Queue service</param>
+        /// <param name="airing">the airing to reset</param>
+        private static void ResetDeliveryQueue(IQueueService queueService, Airing airing)
+        {
+            var statusQueues = queueService.GetStatusNotificationSubscribers();
+
+            foreach (var deliveryQueue in statusQueues.Select(e => e.Name))
+            {
+                if (airing.DeliveredTo.Contains(deliveryQueue))
+                    airing.DeliveredTo.Remove(deliveryQueue);
+
+                if (airing.IgnoredQueues.Contains(deliveryQueue))
+                    airing.IgnoredQueues.Remove(deliveryQueue);
+
+            }
+        }
+
+
+        /// <summary>
+        /// Validates the request
+        /// </summary>
+        /// <param name="request">the airing status request</param>
+        /// <returns>Validation error's in list</returns>
         private IEnumerable<string> ValidateRequest(VMAiringRequestModel.AiringStatusRequest request)
         {
             if (request.Status == null || request.Status.Count == 0)
