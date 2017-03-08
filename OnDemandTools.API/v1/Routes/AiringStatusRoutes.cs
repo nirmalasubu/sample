@@ -55,7 +55,7 @@ namespace OnDemandTools.API.v1.Routes
                     // Bind POST request to data contract
                     var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
 
-                    //Validates the airing requests
+                    //Validates the airing status request
                     var validationResults = ValidateRequest(request);
 
                     if (validationResults.Any())
