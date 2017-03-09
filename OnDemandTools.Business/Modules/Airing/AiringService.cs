@@ -371,30 +371,27 @@ namespace OnDemandTools.Business.Modules.Airing
 
         public void AppendStatus(ref BLModel.Alternate.Long.Airing airing)
         {
-            // initialize status property
-            airing.Options.Status = new BLModel.Alternate.Long.Status();
-
+            airing.Options.Status = airing.Status;  // Retrieve other status from airing collection
             // Check if file information is already included. If so, do not
             // retrieve again; else, retrieve it
             if (airing.Options.Files.IsNullOrEmpty())
             {
-
                 if (String.IsNullOrWhiteSpace(airing.MediaId))
                 {
                     airing.MediaId = String.Empty;
                 }
-
                 var files = fileQueryHelper.Get(airing.AiringId).ToList();
 
                 if (!files.IsNullOrEmpty())
                 {
-                    airing.Options.Status.Video = !files.Where(c => c.Video == true).IsNullOrEmpty();
+                    airing.Options.Status["video"] = !files.Where(c => c.Video == true).IsNullOrEmpty();
                 }
             }
             else
             {
-                airing.Options.Status.Video = !airing.Options.Files.Where(c => c.Video == true).IsNullOrEmpty();
+                airing.Options.Status["video"] = !airing.Options.Files.Where(c => c.Video == true).IsNullOrEmpty();
             }
+            
         }
 
         public void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders)

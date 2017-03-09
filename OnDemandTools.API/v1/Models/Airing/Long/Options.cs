@@ -5,6 +5,7 @@ using VMTitleModel = OnDemandTools.API.v1.Models.Airing.Title;
 using VMChangeModel = OnDemandTools.API.v1.Models.Airing.Change;
 using VMPackageModel = OnDemandTools.API.v1.Models.Airing.Package;
 using VMDestinationModel = OnDemandTools.API.v1.Models.Airing.Destination;
+using OnDemandTools.Common;
 
 namespace OnDemandTools.API.v1.Models.Airing.Long
 {
@@ -18,6 +19,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
             Series = new List<VMTitleModel.Title>();
             Destinations = new List<VMDestinationModel.Destination>();
             Changes = new List<VMChangeModel.Change>();
+            Status = new SerializableDictionary<string, bool>();
         }
 
         public List<File> Files { get; set; }
@@ -31,9 +33,9 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
         public List<VMPackageModel.Package> Packages { get; set; }
 
         public List<VMDestinationModel.Destination> Destinations { get; set; }
-
-
-        public Status Status { get; set; }
+     
+        [JsonConverter(typeof(AiringStatusConverter))]
+        public SerializableDictionary<string, bool> Status { get; set; }
 
     }
 }

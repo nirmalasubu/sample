@@ -45,6 +45,8 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 
         public SerializableDictionary<string, object> Properties { get; set; }
 
+        public SerializableDictionary<string, bool> Status { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();
@@ -59,6 +61,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
           
             Options = new Options();
             Properties = new SerializableDictionary<string, object>();
+            Status= new SerializableDictionary<string, bool>();
         }
     }
 }

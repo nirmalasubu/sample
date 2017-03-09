@@ -3,6 +3,8 @@ using VMTitleModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Title
 using VMChangeModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Change;
 using VMPackageModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Package;
 using VMDestinationModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination;
+using System.Xml.Serialization;
+using OnDemandTools.Common;
 
 namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 {
@@ -16,6 +18,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
             Series = new List<VMTitleModel.Title>();
             Destinations = new List<VMDestinationModel.Destination>();
             Changes = new List<VMChangeModel.Change>();
+            Status = new SerializableDictionary<string, bool>();
         }
       
         public List<File> Files { get; set; }
@@ -30,8 +33,6 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 
         public List<VMDestinationModel.Destination> Destinations { get; set; }
 
-
-        public Status Status { get; set; }
-       
+        public SerializableDictionary<string, bool> Status { get; set; }
     }
 }
