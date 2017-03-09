@@ -1,7 +1,9 @@
 ﻿using Nancy;
 using Nancy.Configuration;
 using Nancy.Json;
+using Nancy.ModelBinding;
 using Nancy.Responses;
+using Newtonsoft.Json;
 using OnDemandTools.Common.Exceptions;
 using System;
 
@@ -39,6 +41,11 @@ namespace OnDemandTools.API.v1.Models
             if (ex is SecurityAccessDeniedException)
             {
                 statusCode = HttpStatusCode.Forbidden;
+            }
+            
+            if (ex is ModelBindingException || ex is JsonException)
+            {
+                statusCode = HttpStatusCode.BadRequest;
             }
 
             var response = new ErrorResponse(error)
