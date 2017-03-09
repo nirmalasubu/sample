@@ -64,11 +64,11 @@ namespace OnDemandTools.API.v1.Routes
                     else
                     {
                         var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
-                                                    "AiringId is required." : "Provided AiringId does not exists.";
+                                                    "AiringId is required." : "Provided AiringId does not exists or expired.";
 
                         // Return status
                         return Negotiate.WithModel(airingErrorMessage)
-                                    .WithStatusCode(HttpStatusCode.BadRequest);
+                                    .WithStatusCode(string.IsNullOrWhiteSpace(airingId) ? HttpStatusCode.BadRequest : HttpStatusCode.NotFound);
                     }
 
                     // validate

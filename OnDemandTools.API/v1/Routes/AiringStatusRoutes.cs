@@ -45,7 +45,7 @@ namespace OnDemandTools.API.v1.Routes
                     if (!airingSvc.IsAiringExists(airingId))
                     {
                         var airingErrorMessage = string.IsNullOrWhiteSpace(airingId) ?
-                            "AiringId is required." : "Provided AiringId does not exists.";
+                            "AiringId is required." : "Provided AiringId does not exists or expired.";
 
                         // Return's NOT found status if airing not exists in current collection.
                         return Negotiate.WithModel(airingErrorMessage)
