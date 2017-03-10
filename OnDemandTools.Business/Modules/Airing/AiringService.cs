@@ -386,6 +386,10 @@ namespace OnDemandTools.Business.Modules.Airing
                 {
                     airing.Options.Status["video"] = !files.Where(c => c.Video == true).IsNullOrEmpty();
                 }
+                else
+                {
+                    airing.Options.Status["video"] = false;
+                }
             }
             else
             {
