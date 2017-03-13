@@ -94,6 +94,14 @@ namespace OnDemandTools.API.v1.Routes
                                     .WithStatusCode(HttpStatusCode.BadRequest);
                     }
 
+                  
+                    // If the versions exist, create a mediaid based on the
+                    // provided version informtion,playlists and the network to which this
+                    // asset/airing belongs
+                    if (airing.Versions.Any())
+                        airingSvc.AugmentMediaId(ref airing);
+
+
                     // Finally, persist the airing data
                     airingSvc.Save(airing, false, true);
 
