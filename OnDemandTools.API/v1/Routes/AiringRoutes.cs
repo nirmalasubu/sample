@@ -396,7 +396,7 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
                     // If the versions exist, create a mediaid based on the
-                    // provided version informtion and the network to which this
+                    // provided version informtion,playlists and the network to which this
                     // asset/airing belongs
                     if (airing.Versions.Any())
                         airingSvc.AugmentMediaId(ref airing);
