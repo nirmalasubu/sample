@@ -44,7 +44,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
         }
 
         [Fact, Order(2)]
-        public void GetAiringWithOptionStatus_GetAiringWithOptionStatus_Returns_StatusTest()
+        public void GetAiringWithOptionStatus_GetAiringWithOptionStatus_Returns_MEDIUMStatusTest()
         {
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing/"+AIRINGID+"?options=status", Method.GET);
