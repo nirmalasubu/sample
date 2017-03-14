@@ -18,7 +18,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         JobTestFixture fixture;
         RestClient _client;
         private static QueueTester _queueTester;
-        private const string MediaId = "9685466546e03242c571e62902801b6220057079";
+        private const string MediaId = "de24e1255c4ef791151d2da61bbcf9e352a4c2d1";
 
         public CartoonProhibitResendMediaIdTest(JobTestFixture fixture)
             : base("TBSE", "", fixture)
