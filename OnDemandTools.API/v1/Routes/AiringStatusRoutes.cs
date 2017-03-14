@@ -80,7 +80,7 @@ namespace OnDemandTools.API.v1.Routes
                     // Finally, persist the airing data
                     airingSvc.Save(airing, false, true);
 
-                    return "Successfully updated the airing status.";
+                    return new { Result = "Successfully updated the airing status." };
                 }
                 catch (Exception e)
                 {

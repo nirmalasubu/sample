@@ -13,7 +13,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
     [Order(1)]
     public class TbsAiringStatusRule : BaseAiring
     {
-        private const string ValidAiringStatusJson = "{ 'Status':{ 'MEDIUM':'true' } }";
+        private const string ValidAiringStatusJson = "{ \"Status\": { \"MEDIUM\" : \"true\" } }";
 
         public TbsAiringStatusRule(JobTestFixture fixture)
             : base("TBSE", "TBSFullAccessApiKey", fixture)
@@ -56,7 +56,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         [Fact]
         [Order(2)]
-        public void Playlist_WithInvalidPayload_ShouldFail()
+        public void AiringStatus_WithInvalidPayload_ShouldFail()
         {
             var airingStatusPayload = ValidAiringStatusJson;
 
@@ -70,7 +70,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         [Fact]
         [Order(2)]
-        public void Playlist_WithInvalidStatusKey_ShouldFail()
+        public void AiringStatus_WithInvalidStatusKey_ShouldFail()
         {
             var airingStatusPayload = ValidAiringStatusJson;
 
@@ -84,7 +84,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         [Fact]
         [Order(2)]
-        public void Playlist_WithInvalidStatusValue_ShouldFail()
+        public void AiringStatus_WithInvalidStatusValue_ShouldFail()
         {
             var airingStatusPayload = ValidAiringStatusJson;
 
@@ -98,22 +98,19 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         [Fact]
         [Order(4)]
-        public void Playlist_WithValidPost_ShouldPassAndQueueVariableShouldBeCleared()
+        public void AiringStatus_WithValidPost_ShouldPassAndQueueVariableShouldBeCleared()
         {
 
             var airingStatusPayload = ValidAiringStatusJson;
 
-            var statusCode = PostAiringStatus(airingStatusPayload, _airingId);
-
-            Assert.True(statusCode == "Ok", "API Not Returned Ok response for valid airing status.");
+            PostAiringStatus(airingStatusPayload, _airingId);
 
             var airingService = _fixture.container.GetInstance<IAiringService>();
 
-           // var airing = airingService.GetBy(_airingId);
+            var airing = airingService.GetBy(_airingId);
 
-          //  Assert.True(!airing.DeliveredTo.Any(), "Delivered Queue not cleared for successfull playlist post.");
+            Assert.True(airing.DeliveredTo.Contains(_tbsQueueKey), "Delivered Queue not cleared for successfull Airing Status post.");
 
-          //  Assert.True(!airing.IgnoredQueues.Any(), "Ignored Queue not cleared for successfull playlist post.");
         }
     }
 }
