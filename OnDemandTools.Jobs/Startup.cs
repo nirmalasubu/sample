@@ -13,6 +13,7 @@ using OnDemandTools.Common.Logzio;
 using OnDemandTools.Jobs.Helpers;
 using OnDemandTools.Jobs.JobRegistry.CloudAmqpSync;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
+using OnDemandTools.Jobs.JobRegistry.Mailbox;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
 using OnDemandTools.Jobs.Models;
@@ -64,6 +65,7 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
                 c.For<TitleSync>();
+                c.For<Mailbox>();
                 c.For<Publisher>();
                 c.For<CloudAmqpSync>();
 

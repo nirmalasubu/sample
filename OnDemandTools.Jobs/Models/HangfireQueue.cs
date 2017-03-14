@@ -4,6 +4,7 @@
     {
         publisher,
         titlesync,
-        deporter
+        deporter,
+        mailbox
     }
 }

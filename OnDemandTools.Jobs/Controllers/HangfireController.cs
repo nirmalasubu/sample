@@ -7,6 +7,7 @@ using OnDemandTools.Jobs.JobRegistry.CloudAmqpSync;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using OnDemandTools.Jobs.JobRegistry.TitleSync;
+using OnDemandTools.Jobs.JobRegistry.Mailbox;
 using OnDemandTools.Jobs.Models;
 using System;
 using System.Diagnostics;
@@ -20,15 +21,17 @@ namespace OnDemandTools.Jobs.Controllers
         Publisher pub;
         Deporter dep;
         TitleSync tsy;
+        Mailbox mbx;
         IQueueService queueService;
         AppSettings appsettings;
         CloudAmqpSync cloudAmqpSync;
 
         public HangfireController(Serilog.ILogger logger,
-            AppSettings appsettings, 
-            Publisher pub, 
-            Deporter dep, 
-            TitleSync tsy, 
+            AppSettings appsettings,
+            Publisher pub,
+            Deporter dep,
+            TitleSync tsy,
+            Mailbox mbx,
             IQueueService queueService,
             CloudAmqpSync cloudAmqpSync
             )
@@ -37,6 +40,7 @@ namespace OnDemandTools.Jobs.Controllers
             this.pub = pub;
             this.dep = dep;
             this.tsy = tsy;
+            this.mbx = mbx;
             this.queueService = queueService;
             this.appsettings = appsettings;
             this.cloudAmqpSync = cloudAmqpSync;
@@ -56,14 +60,17 @@ namespace OnDemandTools.Jobs.Controllers
 
                 var manager = new RecurringJobManager();
 
-                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()), 
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()),
                     appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
 
-                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()), 
+                manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()),
                     appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
 
+                manager.AddOrUpdate("MailBox", Job.FromExpression(() => mbx.Execute("Sql")),
+                    appsettings.JobSchedules.MailBox, estTimeZone, HangfireQueue.mailbox.ToString());
+
                 manager.AddOrUpdate("CloudAmqpSync", Job.FromExpression(() => cloudAmqpSync.Execute()),
-                    appsettings.JobSchedules.CloudAmqpSync, estTimeZone, HangfireQueue.titlesync.ToString());                
+                    appsettings.JobSchedules.CloudAmqpSync, estTimeZone, HangfireQueue.titlesync.ToString());
 
                 foreach (var activeQueue in queueService.GetByStatus(true))
                 {
