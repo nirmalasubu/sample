@@ -1,4 +1,6 @@
-﻿using OnDemandTools.Business.Tests.Helpers;
+﻿using System;
+using System.Linq;
+using OnDemandTools.Business.Tests.Helpers;
 using Xunit;
 using Newtonsoft.Json.Linq;
 using OnDemandTools.Business.Modules.Airing;
@@ -52,7 +54,7 @@ namespace OnDemandTools.Business.Tests.Airing
             airingService.AppendChanges(ref businessAiring);
 
             //Assert           
-            Assert.True(businessAiring.Options.Changes[1].TheChange == "Flights's End", string.Format("The value returned for change should be 'Flights's End' but it is returned as {0}", businessAiring.Options.Changes[1].TheChange));
+            Assert.True(businessAiring.Options.Changes.Any(e => e.TheChange == "Flights's End"), "Flight End change not found.");
         }
 
 

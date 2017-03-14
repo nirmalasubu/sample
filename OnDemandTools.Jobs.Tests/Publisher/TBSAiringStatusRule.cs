@@ -109,7 +109,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             var airing = airingService.GetBy(_airingId);
 
-            Assert.True(airing.DeliveredTo.Contains(_tbsQueueKey), "Delivered Queue not cleared for successfull Airing Status post.");
+            Assert.True(!airing.DeliveredTo.Contains(_tbsQueueKey), "Delivered Queue not cleared for successfull Airing Status post.");
 
         }
     }
