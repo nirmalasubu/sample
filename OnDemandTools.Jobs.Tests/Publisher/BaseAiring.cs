@@ -45,13 +45,29 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         /// Post the playlist
         /// </summary>
         /// <param name="playlistJson">Playlist JSON content</param>
-        /// <param name="TestCaseText"></param>
+        /// <param name="airingId">the airing id</param>
         /// <returns></returns>
         protected string PostPlaylist(string playlistJson, string airingId)
         {
             JObject response = new JObject();
             var request = new RestRequest(string.Format("/v1/playlist/{0}", airingId), Method.POST);
             request.AddParameter("text/json", playlistJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            return response.Value<string>(@"StatusCode");
+
+        }
+
+        protected string PostAiringStatus(string airingStatusJson, string airingId)
+        {
+            JObject response = new JObject();
+            var request = new RestRequest(string.Format("/v1/airingstatus/{0}", airingId), Method.POST);
+            request.AddParameter("text/json", airingStatusJson, ParameterType.RequestBody);
 
             Task.Run(async () =>
             {

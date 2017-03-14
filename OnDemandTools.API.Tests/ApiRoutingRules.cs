@@ -33,7 +33,9 @@ namespace OnDemandTools.API.Tests
         [InlineData("/v1/files", Method.POST)]
         [InlineData("/v1/package", Method.POST)]
         [InlineData("/v1/package", Method.DELETE)]
-        public void VerifyUnAuthenticatedRoutes(string route, Method method)
+        [InlineData("/v1/playlist/AIRINGID", Method.POST)]
+        [InlineData("/v1/airingstatus/AIRINGID", Method.POST)]
+        public void Api_ResponseTests_ShouldReturnUnAuthenticated(string route, Method method)
         {
             JObject response = new JObject();
 
@@ -49,5 +51,23 @@ namespace OnDemandTools.API.Tests
 
             Assert.True((response.GetValue("StatusCode").ToString() == "Unauthorized"));
         }
+
+        [Theory]
+        [InlineData("/v1/airingstatus/AIRINGID", Method.POST)]
+        public void Api_ResponseTests_ShouldReturnNotFound(string route, Method method)
+        {
+            JObject response = new JObject();
+
+            var request = new RestRequest(route, method);
+
+            Task.Run(async () =>
+            {
+                response = await client.RetrieveRecord(request);
+
+            }).Wait();
+
+            Assert.True((response.GetValue("StatusCode").ToString() == "NotFound"));
+        }
+
     }
 }
