@@ -71,6 +71,15 @@ namespace OnDemandTools.API.Tests.Resources {
         /// <summary>
         ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Don&apos;t Look&quot;,&quot;Type&quot;:&quot;Episode (Animated)&quot;,&quot;Brand&quot;:&quot;Cartoon&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2016-04-02T23:00:00Z&quot;,&quot;AiringId&quot;:7906079,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1390,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-PG&quot;,&quot;Description&quot;:&quot;&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;At the top of Dead Mountain, Finn discovers a treasure that comes with a terrible price.&quot;,&quot;Short&quot;:&quot;&quot;},&quot;ReleaseYear&quot;:2016,&quot;Keywords&quot;:&quot;Eyes, Magic, Metamorphosis, Self-esteem, Self-loathing&quot;,&quot;OriginalPremiereDate&quot;:&quot;201 [rest of string was truncated]&quot;;.
         /// </summary>
+        public static string CartoonAiringWith3FlightsWithDifferentPlaylist {
+            get {
+                return ResourceManager.GetString("CartoonAiringWith3FlightsWithDifferentPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Don&apos;t Look&quot;,&quot;Type&quot;:&quot;Episode (Animated)&quot;,&quot;Brand&quot;:&quot;Cartoon&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2016-04-02T23:00:00Z&quot;,&quot;AiringId&quot;:7906079,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1390,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-PG&quot;,&quot;Description&quot;:&quot;&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;At the top of Dead Mountain, Finn discovers a treasure that comes with a terrible price.&quot;,&quot;Short&quot;:&quot;&quot;},&quot;ReleaseYear&quot;:2016,&quot;Keywords&quot;:&quot;Eyes, Magic, Metamorphosis, Self-esteem, Self-loathing&quot;,&quot;OriginalPremiereDate&quot;:&quot;201 [rest of string was truncated]&quot;;.
+        /// </summary>
         public static string CartoonAiringWithNoVersion {
             get {
                 return ResourceManager.GetString("CartoonAiringWithNoVersion", resourceCulture);
@@ -83,6 +92,24 @@ namespace OnDemandTools.API.Tests.Resources {
         public static string CartoonAiringWithVersionCIDOrderChanged {
             get {
                 return ResourceManager.GetString("CartoonAiringWithVersionCIDOrderChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to  {&quot;PlayList&quot;:[{&quot;Position&quot;:1,&quot;Id&quot;:&quot;2PVM8/01&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:2,&quot;Id&quot;:&quot;2PVM8/02&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:3,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:4,&quot;Id&quot;:&quot;2PVM8/03&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:5,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:6,&quot;Id&quot;:&quot;24Y9W/01&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;, [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CartoonAirngWithValidPlaylist {
+            get {
+                return ResourceManager.GetString("CartoonAirngWithValidPlaylist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to  {&quot;PlayList&quot;:[{&quot;Position&quot;:1,&quot;Id&quot;:&quot;2PVM8/01&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:2,&quot;Id&quot;:&quot;2PVM8/02&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:3,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:4,&quot;Id&quot;:&quot;2PVM8/03&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;,&quot;IdType&quot;:&quot;MaterialID&quot;},{&quot;Position&quot;:5,&quot;Id&quot;:&quot;&quot;,&quot;Type&quot;:&quot;Trigger&quot;,&quot;ItemType&quot;:&quot;Trigger&quot;,&quot;IdType&quot;:&quot;&quot;},{&quot;Position&quot;:6,&quot;Id&quot;:&quot;24Y9W/01&quot;,&quot;Type&quot;:&quot;MaterialID&quot;,&quot;ItemType&quot;:&quot;Segment&quot;, [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CartoonAirngWithValidPlaylistEdited {
+            get {
+                return ResourceManager.GetString("CartoonAirngWithValidPlaylistEdited", resourceCulture);
             }
         }
         
