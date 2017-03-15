@@ -13,9 +13,9 @@ namespace OnDemandTools.Jobs.Helpers
             optionsBuilder.UseSqlServer(ConnectionString);
         }
 
-        public virtual DbSet<Airing> Airings { get; set; }
-        public virtual DbSet<AiringDestination> AiringDestinations { get; set; }
-        public virtual DbSet<AiringTitle> AiringTitles { get; set; }
-        public virtual DbSet<DestinationFlight> DestinationFlights { get; set; }
+        public virtual DbSet<Airing> Airing { get; set; }
+        public virtual DbSet<AiringDestination> AiringDestination { get; set; }
+        public virtual DbSet<AiringTitle> AiringTitle { get; set; }
+        public virtual DbSet<DestinationFlight> DestinationFlight { get; set; }
     }
 }

@@ -133,11 +133,11 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             {
                 if (airingMessage.Action.Equals("Delete"))
                 {
-                    var existingAiring = db.Airings.SingleOrDefault(a => a.AiringId == airingMessage.AiringId);
+                    var existingAiring = db.Airing.SingleOrDefault(a => a.AiringId == airingMessage.AiringId);
 
                     if (existingAiring != null)
                     {
-                        db.Airings.Remove(existingAiring);
+                        db.Airing.Remove(existingAiring);
                     }
                 }
                 else if (airingMessage.Action.Equals("Modify"))
@@ -152,14 +152,14 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     var airingData = MapAiring(airingView);
 
-                    var existingAiring = db.Airings.SingleOrDefault(a => a.AiringId == airingView.Id);
+                    var existingAiring = db.Airing.SingleOrDefault(a => a.AiringId == airingView.AssetId);
 
                     if (existingAiring != null)
                     {
-                        db.Airings.Remove(existingAiring);
+                        db.Airing.Remove(existingAiring);
                     }
 
-                    db.Airings.Add(airingData);
+                    db.Airing.Add(airingData);
                 }
 
                 db.SaveChanges();
