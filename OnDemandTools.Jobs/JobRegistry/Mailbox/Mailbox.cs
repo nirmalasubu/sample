@@ -17,12 +17,6 @@ using AiringLong = OnDemandTools.Business.Modules.Airing.Model.Airing;
 
 namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 {
-    enum Delivery
-    {
-        Sql,
-        Ftp,
-        Post
-    }
 
     public class Mailbox
     {
@@ -41,11 +35,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             airingSvc = _airingSvc;
         }
 
-        public void Execute(string deliveryType)
+        public void Execute()
         {
-            if (!Enum.TryParse(deliveryType, out _delivery))
-                logger.Error(string.Format("Incorrect delivery type. Try {0}, {1}, {2}", Delivery.Sql, Delivery.Post, Delivery.Ftp));
-
             SetupQueue();
         }
 
@@ -93,7 +84,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             catch (Exception ex)
             {
                 logger.Error(ex, "Mailbox exception");
-                //throw;
             }
         }
 
@@ -109,21 +99,13 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                 var airingMessage = JsonConvert.DeserializeObject<QueueAiring>(messageInString);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("received message: {0}, priority: {1}", actualMessage, priority);
-                Console.ResetColor();
+                logger.Information( string.Format("received message: {0}, priority: {1}", actualMessage, priority));
 
-                switch (_delivery)
-                {
-                    case Delivery.Sql:
-                        DeliverToSqlDatabase(airingMessage);
-                        break;
-                }
+                DeliverToSqlDatabase(airingMessage);
             }
             catch (Exception ex)
             {
                 logger.Error(ex,"Message not processed");
-                Console.WriteLine(ex.Message);
             }
         }
 

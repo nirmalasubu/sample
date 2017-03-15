@@ -66,7 +66,7 @@ namespace OnDemandTools.Jobs.Controllers
                 manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()),
                     appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());
 
-                manager.AddOrUpdate("MailBox", Job.FromExpression(() => mbx.Execute("Sql")),
+                manager.AddOrUpdate("MailBox", Job.FromExpression(() => mbx.Execute()),
                     appsettings.JobSchedules.MailBox, estTimeZone, HangfireQueue.mailbox.ToString());
 
                 manager.AddOrUpdate("CloudAmqpSync", Job.FromExpression(() => cloudAmqpSync.Execute()),
