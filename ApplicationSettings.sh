@@ -19,6 +19,15 @@ then
  echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_DEV"" >> envJob
 fi;
 
+if [ $CIRCLE_BRANCH = 'sandbox' ];
+then
+ STATE="REF"
+ echo "ENVIRONMENT=ref" > envAPI
+ echo "ENVIRONMENT=ref" > envJob
+ echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_REF"" >> envAPI
+ echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_REF"" >> envJob
+fi;
+
 if [ $CIRCLE_BRANCH = 'rc' ];
 then
  STATE="QA" 
