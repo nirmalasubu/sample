@@ -50,9 +50,6 @@ namespace OnDemandTools.Jobs
             services.AddHangfire(x => x.UseMongoStorage(appSettings.MongoDB.HangfireConnectionString + appSettings.MongoDB.HangfireConnectionOptions,
                 appSettings.MongoDB.HangFireDatabaseName));
 
-            //config the Sqldb connection string
-            OnDemandReportingContext.ConnectionString = appSettings.SqlDB.ConnectionString;
-
             // Initialize container
             var container = new Container();
             container.Configure(c =>
@@ -67,8 +64,8 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
-                c.For<TitleSync>();
-                c.For<Mailbox>();
+                c.ForSingletonOf<Mailbox>();
+                c.For<TitleSync>();                
                 c.For<Publisher>();
                 c.For<CloudAmqpSync>();
 

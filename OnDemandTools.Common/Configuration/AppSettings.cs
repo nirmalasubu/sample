@@ -15,7 +15,7 @@ namespace OnDemandTools.Common.Configuration
         public string Name { get; set; }
         public string Description { get; set; }
         public MongoDB MongoDB { get; set; }
-        public SqlDB SqlDB { get; set; }
+        public ReportingSqlDB ReportingSqlDB { get; set; }
         public LogzIOConfiguration LogzIO { get; set; }
         public List<Service> Services { get; set; }
         public string HostingProvider { get; set; }
@@ -30,7 +30,7 @@ namespace OnDemandTools.Common.Configuration
     {
         public string MqUrl { get; set; }
         public string MqExchange { get; set; }
-        public string MqQueue { get; set; }
+        public string ReportingQueueID { get; set; }
     }
 
 
@@ -105,7 +105,7 @@ namespace OnDemandTools.Common.Configuration
 
     }
 
-    public class SqlDB
+    public class ReportingSqlDB
     {
         public string ConnectionString { get; set; }
     }

@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AiringLong = OnDemandTools.Business.Modules.Airing.Model.Airing;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 {
@@ -39,6 +40,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             SetupQueue();
         }
 
+
         private void SetupQueue(bool isPriorityQueue = false)
         {
             try
@@ -49,29 +51,43 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                 {
                     try
                     {
-                        using (IModel model = conn.CreateModel())
+                        using (var channel = conn.CreateModel())
                         {
                             try
                             {
-                                bool noAck = false;
-                                BasicGetResult result = model.BasicGet(appsettings.CloudQueue.MqQueue, noAck);
-                                if (result == null)
+
+                                // Get a snap shot of the message count at this given time. 
+                                // Then sequentially  consume and process each message
+                                uint messageCount = channel.MessageCount(appsettings.CloudQueue.ReportingQueueID);
+
+                                for (int i = 1; i <= messageCount; i++)
                                 {
-                                    logger.Information(string.Format("Queue {0} is not available.", appsettings.CloudQueue.MqQueue));
+                                    // Fetching Individual Messages ("pull API")
+                                    bool noAck = false;
+                                    BasicGetResult result = channel.BasicGet(appsettings.CloudQueue.ReportingQueueID, noAck);
+                                    if (result == null)
+                                    {
+                                        logger.Information(string.Format("Queue {0} is not available.", appsettings.CloudQueue.ReportingQueueID));
+                                    }
+                                    else
+                                    {
+                                        IBasicProperties props = result.BasicProperties;
+                                        byte[] body = result.Body;
+                                        
+                                        // Process the retrieved message
+                                        ProcessMessage(result.Body, result.BasicProperties.Priority);
+
+                                        // acknowledge receipt of the message
+                                        channel.BasicAck(result.DeliveryTag, false);
+                                    }
                                 }
-                                else
-                                {
-                                    IBasicProperties props = result.BasicProperties;
-                                    byte[] body = result.Body;
-                                    ProcessMessage(result.Body, result.BasicProperties.Priority);
-                                    // acknowledge receipt of the message
-                                    model.BasicAck(result.DeliveryTag, false);
-                                }
+
                             }
                             finally
-                            {                                
-                                model.Close();
+                            {
+                                channel.Close();
                             }
+
                         }
                     }
                     finally
@@ -98,19 +114,19 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                 var airingMessage = JsonConvert.DeserializeObject<QueueAiring>(messageInString);
 
-                logger.Information( string.Format("received message: {0}, priority: {1}", actualMessage, priority));
+                logger.Information(string.Format("received message: {0}, priority: {1}", actualMessage, priority));
 
                 DeliverToSqlDatabase(airingMessage);
             }
             catch (Exception ex)
             {
-                logger.Error(ex,"Message not processed");
+                logger.Error(ex, "Message not processed");
             }
         }
 
         private void DeliverToSqlDatabase(QueueAiring airingMessage)
         {
-            using (var db = new OnDemandReportingContext())
+            using (var db = new OnDemandReportingContext(appsettings.ReportingSqlDB.ConnectionString))
             {
                 if (airingMessage.Action.Equals("Delete"))
                 {
@@ -133,11 +149,12 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     var airingData = MapAiring(airingView);
 
-                    var existingAiring = db.Airing.SingleOrDefault(a => a.AiringId == airingView.AssetId);
+                    var existingAiring = db.Airing.AsNoTracking().SingleOrDefault(a => a.AiringId == airingView.AssetId);
 
                     if (existingAiring != null)
                     {
                         db.Airing.Remove(existingAiring);
+                        db.SaveChanges();
                     }
 
                     db.Airing.Add(airingData);
@@ -153,9 +170,9 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
             return result;
         }
-        
 
-        private static DateTime ConvertToBc(DateTime dateTime)
+
+        private DateTime ConvertToBc(DateTime dateTime)
         {
             if (dateTime >= dateTime.Date && dateTime < dateTime.Date.AddHours(6))
                 return dateTime.AddDays(-1);
@@ -163,17 +180,17 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             return dateTime;
         }
 
-        private static DateTime ConvertToEst(DateTime dateTime)
-        {
+        private DateTime ConvertToEst(DateTime dateTime)
+        {            
             return TimeZoneInfo.ConvertTime(dateTime, TimeZoneInfo);
         }
 
-        private static DateTime? GetLinearDateTime(AiringLong airingView)
+        private DateTime? GetLinearDateTime(AiringLong airingView)
         {
             return (airingView.Airings.Any() && airingView.Airings.First().Linked) ? airingView.Airings.First().Date : null;
         }
 
-        private static DateTime? GetEarliestStartDate(AiringLong airingView)
+        private DateTime? GetEarliestStartDate(AiringLong airingView)
         {
             var flight = airingView.Flights.OrderBy(f => f.Start).FirstOrDefault();
 
@@ -183,7 +200,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             return flight.Start;
         }
 
-        private static DateTime? GetLatestEndDate(AiringLong airingView)
+        private DateTime? GetLatestEndDate(AiringLong airingView)
         {
             var flight = airingView.Flights.OrderByDescending(f => f.End).FirstOrDefault();
 
@@ -193,7 +210,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             return flight.End;
         }
 
-        private static Airing MapAiring(AiringLong airingView)
+        private Airing MapAiring(AiringLong airingView)
         {
             var airingStart = GetEarliestStartDate(airingView);
             var airingEnd = GetLatestEndDate(airingView);
@@ -221,7 +238,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             return airingData;
         }
 
-        private static ICollection<AiringDestination> MapDestinations(AiringLong airing)
+        private ICollection<AiringDestination> MapDestinations(AiringLong airing)
         {
             var destinations = new List<AiringDestination>();
 
@@ -260,7 +277,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             return destinations;
         }
 
-        private static ICollection<AiringTitle> MapTitleIds(AiringLong airing)
+        private ICollection<AiringTitle> MapTitleIds(AiringLong airing)
         {
             return airing.Title.TitleIds.Where(t => t.Authority.Equals("Turner")).Select(titleId => new AiringTitle
             {
@@ -268,6 +285,20 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                 TitleId = int.Parse(titleId.Value)
 
             }).ToList();
+        }
+
+
+
+        private void WaitForExitCommand()
+        {
+            Console.WriteLine("Type exit then press enter to close the app.");
+
+            var command = string.Empty;
+
+            while (!command.Equals("exit"))
+            {
+                command = Console.ReadLine() ?? string.Empty;
+            }
         }
     }
 }
