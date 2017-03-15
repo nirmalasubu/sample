@@ -33,7 +33,7 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
-    "Microsoft.Extensions.Logging": "1.1.0",
+    "Microsoft.Extensions.Logging": "1.1.1",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
@@ -55,7 +55,9 @@
     "Hangfire": "1.6.8",
     "Hangfire.Mongo": "0.3.2",
     "RestSharp.NetCore": "105.2.3",
-    "EasyNetQ-dotnet-core": "2.0.2-radicalgeek-netc0001"
+    "EasyNetQ-dotnet-core": "2.0.2-radicalgeek-netc0001",
+    "Microsoft.EntityFrameworkCore": "1.1.1",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1"
   },
   "runtimeOptions": {
     "configProperties": {

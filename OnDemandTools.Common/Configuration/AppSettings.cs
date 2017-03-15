@@ -15,6 +15,7 @@ namespace OnDemandTools.Common.Configuration
         public string Name { get; set; }
         public string Description { get; set; }
         public MongoDB MongoDB { get; set; }
+        public SqlDB SqlDB { get; set; }
         public LogzIOConfiguration LogzIO { get; set; }
         public List<Service> Services { get; set; }
         public string HostingProvider { get; set; }
@@ -22,7 +23,7 @@ namespace OnDemandTools.Common.Configuration
         public string AiringDeportGraceDays { get; set; }
         public string HealthAgentLifetimeInMinutes { get; set; }
         public JobSchedules JobSchedules { get; set; }
-        public CloudQueue CloudQueue { get; set; }
+        public CloudQueue CloudQueue { get; set; }     
     }
 
     public class CloudQueue
@@ -102,5 +103,10 @@ namespace OnDemandTools.Common.Configuration
             }
         }
 
+    }
+
+    public class SqlDB
+    {
+        public string ConnectionString { get; set; }
     }
 }

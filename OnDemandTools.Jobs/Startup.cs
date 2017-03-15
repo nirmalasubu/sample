@@ -50,6 +50,9 @@ namespace OnDemandTools.Jobs
             services.AddHangfire(x => x.UseMongoStorage(appSettings.MongoDB.HangfireConnectionString + appSettings.MongoDB.HangfireConnectionOptions,
                 appSettings.MongoDB.HangFireDatabaseName));
 
+            //config the Sqldb connection string
+            OnDemandReportingContext.ConnectionString = appSettings.SqlDB.ConnectionString;
+
             // Initialize container
             var container = new Container();
             container.Configure(c =>
