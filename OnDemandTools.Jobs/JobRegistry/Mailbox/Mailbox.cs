@@ -15,12 +15,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AiringLong = OnDemandTools.Business.Modules.Airing.Model.Airing;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 {
 
     public class Mailbox
     {
+        StringBuilder jobLogs = new StringBuilder();
         IAiringService airingSvc;
         AppSettings appsettings;
         Serilog.ILogger logger;
@@ -37,7 +39,10 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
         public void Execute()
         {
+            LogInformation(string.Format("started mailbox job and setting up the queue{0}", appsettings.CloudQueue.ReportingQueueID));
             SetupQueue();
+            LogInformation(string.Format("mailbox job completed for queue {0}", appsettings.CloudQueue.ReportingQueueID));
+            logger.Information(jobLogs.ToString());
         }
 
 
@@ -45,60 +50,70 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
         {
             try
             {
+                LogInformation("instantiating the connection to rabbitmq");
                 ConnectionFactory factory = new ConnectionFactory();
                 factory.Uri = appsettings.CloudQueue.MqUrl;
                 using (IConnection conn = factory.CreateConnection())
                 {
                     try
                     {
+                        LogInformation("opening a channel");
                         using (var channel = conn.CreateModel())
                         {
                             try
                             {
-
+                                LogInformation(string.Format("getting the message count from the queue {0}"));
                                 // Get a snap shot of the message count at this given time. 
-                                // Then sequentially  consume and process each message
+                                // Then sequentially  consume and process each message                                
                                 uint messageCount = channel.MessageCount(appsettings.CloudQueue.ReportingQueueID);
 
+                                LogInformation(string.Format("sequentially  consuming and processing each message from the queue {0}", appsettings.CloudQueue.ReportingQueueID));
                                 for (int i = 1; i <= messageCount; i++)
                                 {
                                     // Fetching Individual Messages ("pull API")
                                     bool noAck = false;
+
+                                    LogInformation(string.Format("fetching the message - {0}", i));
                                     BasicGetResult result = channel.BasicGet(appsettings.CloudQueue.ReportingQueueID, noAck);
+
                                     if (result == null)
                                     {
-                                        logger.Information(string.Format("Queue {0} is not available.", appsettings.CloudQueue.ReportingQueueID));
+                                        LogInformation(string.Format("Queue {0} is not available.", appsettings.CloudQueue.ReportingQueueID));
                                     }
                                     else
                                     {
                                         IBasicProperties props = result.BasicProperties;
                                         byte[] body = result.Body;
-                                        
-                                        // Process the retrieved message
+
+                                        LogInformation(string.Format("started processing the retrieved mesage - {0}", i));
                                         ProcessMessage(result.Body, result.BasicProperties.Priority);
 
-                                        // acknowledge receipt of the message
+                                        LogInformation(string.Format("acknowledging receipt of the message - {0}", i));
                                         channel.BasicAck(result.DeliveryTag, false);
+
+                                        LogInformation(string.Format("completed processing of message - {0}", i));
                                     }
                                 }
 
                             }
                             finally
                             {
-                                channel.Close();
+                                LogInformation("closing the channel");
+                                channel.Close();                                
                             }
 
                         }
                     }
                     finally
                     {
+                        LogInformation("closing the connection");
                         conn.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Mailbox exception");
+                LogError(ex, "Abruptly stopped operation on queue");
             }
         }
 
@@ -114,14 +129,24 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                 var airingMessage = JsonConvert.DeserializeObject<QueueAiring>(messageInString);
 
-                logger.Information(string.Format("received message: {0}, priority: {1}", actualMessage, priority));
+                LogInformation(string.Format("received message: {0}, priority: {1}", actualMessage, priority));
 
                 DeliverToSqlDatabase(airingMessage);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Message not processed");
+                LogError(ex, "Abruptly stopped processing on queue");
             }
+        }
+
+        private void LogInformation(string message)
+        {
+            jobLogs.AppendWithTime(message);
+        }
+
+        private void LogError(Exception exception, string message)
+        {
+            logger.Error(exception, string.Format("{0}. Queue: {1}", message, appsettings.CloudQueue.ReportingQueueID));
         }
 
         private void DeliverToSqlDatabase(QueueAiring airingMessage)
@@ -181,7 +206,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
         }
 
         private DateTime ConvertToEst(DateTime dateTime)
-        {            
+        {
             return TimeZoneInfo.ConvertTime(dateTime, TimeZoneInfo);
         }
 
