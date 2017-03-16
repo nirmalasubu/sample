@@ -62,7 +62,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                         {
                             try
                             {
-                                LogInformation(string.Format("getting the message count from the queue {0}"));
+                                LogInformation(string.Format("getting the message count from the queue {0}", appsettings.CloudQueue.ReportingQueueID));
                                 // Get a snap shot of the message count at this given time. 
                                 // Then sequentially  consume and process each message                                
                                 uint messageCount = channel.MessageCount(appsettings.CloudQueue.ReportingQueueID);
@@ -99,7 +99,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                             finally
                             {
                                 LogInformation("closing the channel");
-                                channel.Close();                                
+                                channel.Close();
                             }
 
                         }
