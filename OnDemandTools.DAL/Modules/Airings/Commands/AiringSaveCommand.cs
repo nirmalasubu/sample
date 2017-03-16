@@ -5,6 +5,7 @@ using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
@@ -28,7 +29,10 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
 
             if (updateHistorical)
             {
-                historicalCollection.Save(airing);
+                var airingInString = JsonConvert.SerializeObject(airing);
+                var historyAiring = JsonConvert.DeserializeObject<Airing>(airingInString);
+                historyAiring.Id = ObjectId.Empty;
+                historicalCollection.Save(historyAiring);
             }
 
             airing.Id = ObjectId.Empty;
