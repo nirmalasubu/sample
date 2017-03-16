@@ -151,6 +151,8 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
         private void DeliverToSqlDatabase(QueueAiring airingMessage)
         {
+            LogInformation("started delivering to sql database");
+
             using (var db = new OnDemandReportingContext(appsettings.ReportingSqlDB.ConnectionString))
             {
                 if (airingMessage.Action.Equals("Delete"))
@@ -159,6 +161,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     if (existingAiring != null)
                     {
+                        LogInformation(string.Format("remove airing - {0} from database", airingMessage.AiringId));
                         db.Airing.Remove(existingAiring);
                     }
                 }
@@ -168,7 +171,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     if (airingView == null)
                     {
-                        logger.Error(string.Format("Airing not found: {0}", airingMessage.AiringId));
+                        LogInformation(string.Format("Airing not found: {0}", airingMessage.AiringId));
                         return;
                     }
 
@@ -182,6 +185,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                         db.SaveChanges();
                     }
 
+                    LogInformation(string.Format("add airing - {0} to database", airingMessage.AiringId));
                     db.Airing.Add(airingData);
                 }
 
