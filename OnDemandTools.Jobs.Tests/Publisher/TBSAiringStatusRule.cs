@@ -51,6 +51,11 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         public void AiringStatus_Asset_ShouldDeliverToQueue()
         {
             _queueTester.VerifyClientQueueDelivery();
+
+            var allAiringMessages = _queueTester.ProcessedAirings.Select(e => string.Join(", ", e.Messages));
+
+            Assert.True(!_queueTester.ProcessedAirings.Any(e => e.HasQueueDeliveryError), 
+                string.Join(", ", allAiringMessages));
         }
 
 

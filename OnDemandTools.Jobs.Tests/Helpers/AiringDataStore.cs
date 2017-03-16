@@ -16,6 +16,8 @@ namespace OnDemandTools.Jobs.Tests.Helpers
             IgnoredQueues = new List<string>();
 
             Messages = new List<string>();
+
+
         }
         #endregion
 
@@ -65,6 +67,9 @@ namespace OnDemandTools.Jobs.Tests.Helpers
         public byte? Priority { get; set; }
 
         public List<string> IgnoredQueues { get; set; }
+
+        public bool HasQueueDeliveryError { get; set; }
+
         #endregion
 
     }

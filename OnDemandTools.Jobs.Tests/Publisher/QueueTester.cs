@@ -20,6 +20,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         private readonly IPublisher _publisher;
         private readonly List<AiringDataStore> _processedAirings;
 
+        public List<AiringDataStore> ProcessedAirings => _processedAirings;
+
         public QueueTester(JobTestFixture fixture)
         {
             _fixture = fixture;
@@ -152,6 +154,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                         var failureMessage = string.Format("{0}. Airing {1} not added to ignored queue {2}", activeAiring.TestName,
                                                        activeAiring.AiringId, ignoredQueue);
 
+                        activeAiring.HasQueueDeliveryError = true;
                         Assert.True(false, failureMessage);
 
                     }
@@ -182,7 +185,10 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                         var failureMessage = string.Format("{0}. Airing {1} not delivered to queue {2}", activeAiring.TestName,
                                                        activeAiring.AiringId, expectedQueue);
 
-                        activeAiring.AddMessage(failureMessage);
+                        activeAiring.AddMessage(failureMessage, true);
+
+                        activeAiring.HasQueueDeliveryError = true;
+
                         Assert.True(false, failureMessage);
 
                     }
@@ -214,7 +220,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                                                            expiredAiring.AiringId, queueName);
 
                         expiredAiring.AddMessage(failureMessage, true);
-
+                        expiredAiring.HasQueueDeliveryError = true;
                         Assert.True(false, failureMessage);
                     }
                     else
@@ -245,7 +251,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                             , messageDeliveryHistory.MessagePriority,
                             airingWithPriority.Priority
                           ));
-
+                    airingWithPriority.HasQueueDeliveryError = true;
                     Assert.True(false, airingWithPriority.TestName + ". " + airingWithPriority.Messages.Last());
                 }
                 else
