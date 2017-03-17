@@ -3,6 +3,7 @@ general:
     only:
      - dev
      - rc
+     - sandbox
 
 machine:
   pre:  
@@ -48,7 +49,7 @@ test:
 
 deployment:
   CI:   
-    branch: [dev, rc]
+    branch: [dev, rc, sandbox]
     commands:      
       # Deploy API   
       - source envAPI; sudo docker push "${IMAGE}"
