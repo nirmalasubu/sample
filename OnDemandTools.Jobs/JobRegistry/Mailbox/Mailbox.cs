@@ -26,7 +26,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
         IAiringService airingSvc;
         AppSettings appsettings;
         Serilog.ILogger logger;
-        public static TimeZoneInfo TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+        public TimeZoneInfo TimeZoneInfo;
 
         public Mailbox(AppSettings appsettings,
                        Serilog.ILogger logger,
@@ -35,6 +35,7 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
             this.appsettings = appsettings;
             this.logger = logger;
             airingSvc = _airingSvc;
+            TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(appsettings.JobSchedules.TimeZone);
         }
 
         public void Execute()
