@@ -24,7 +24,7 @@ namespace OnDemandTools.Jobs.Helpers
 
 
 
-        public DbSet<Airing> Airing { get; set; }
+        public virtual DbSet<Airing> Airing { get; set; }
         public virtual DbSet<AiringDestination> AiringDestination { get; set; }
         public virtual DbSet<AiringTitle> AiringTitle { get; set; }
         public virtual DbSet<DestinationFlight> DestinationFlight { get; set; }

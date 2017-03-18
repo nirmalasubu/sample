@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using AiringLong = OnDemandTools.Business.Modules.Airing.Model.Airing;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using OnDemandTools.Common.Extensions;
 
 namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 {
@@ -40,120 +41,120 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
         public void Execute()
         {
-            LogInformation(string.Format("started mailbox job and setting up the queue{0}", appsettings.CloudQueue.ReportingQueueID));
-            SetupQueue();
-            LogInformation(string.Format("mailbox job completed for queue {0}", appsettings.CloudQueue.ReportingQueueID));
-            logger.Information(jobLogs.ToString());
+            ProcessQueue();
         }
 
-
-        private void SetupQueue(bool isPriorityQueue = false)
+        private void ProcessQueue(bool isPriorityQueue = false)
         {
             try
             {
-                LogInformation("instantiating the connection to rabbitmq");
+                AppendLogInfo(string.Format("Mailbox started processing queue {0}", appsettings.CloudQueue.ReportingQueueID));
+                AppendLogInfo("Instantiating connection to rabbitmq");
                 ConnectionFactory factory = new ConnectionFactory();
                 factory.Uri = appsettings.CloudQueue.MqUrl;
                 using (IConnection conn = factory.CreateConnection())
                 {
                     try
                     {
-                        LogInformation("opening a channel");
+                        AppendLogInfo("Opening a channel");
                         using (var channel = conn.CreateModel())
                         {
                             try
                             {
-                                LogInformation(string.Format("getting the message count from the queue {0}", appsettings.CloudQueue.ReportingQueueID));
+                                AppendLogInfo(string.Format("Getting message count from queue {0}", appsettings.CloudQueue.ReportingQueueID));
                                 // Get a snap shot of the message count at this given time. 
                                 // Then sequentially  consume and process each message                                
                                 uint messageCount = channel.MessageCount(appsettings.CloudQueue.ReportingQueueID);
 
-                                LogInformation(string.Format("sequentially  consuming and processing each message from the queue {0}", appsettings.CloudQueue.ReportingQueueID));
+                                if (messageCount <= 0)
+                                    AppendLogInfo(string.Format("{0} messages in queue {1}. Nothing to process. Finishing the job.", messageCount, appsettings.CloudQueue.ReportingQueueID));
+                                else
+                                    AppendLogInfo(string.Format("{0} messages in queue {1}. Sequentially consuming and processing each message", messageCount, appsettings.CloudQueue.ReportingQueueID));
+
                                 for (int i = 1; i <= messageCount; i++)
                                 {
                                     // Fetching Individual Messages ("pull API")
                                     bool noAck = false;
-
-                                    LogInformation(string.Format("fetching the message - {0}", i));
                                     BasicGetResult result = channel.BasicGet(appsettings.CloudQueue.ReportingQueueID, noAck);
+                                    IBasicProperties props = result.BasicProperties;
+                                    byte[] body = result.Body;
 
-                                    if (result == null)
+                                    if (!result.Body.IsNullOrEmpty())
                                     {
-                                        LogInformation(string.Format("Queue {0} is not available.", appsettings.CloudQueue.ReportingQueueID));
-                                    }
-                                    else
-                                    {
-                                        IBasicProperties props = result.BasicProperties;
-                                        byte[] body = result.Body;
-
-                                        LogInformation(string.Format("started processing the retrieved mesage - {0}", i));
                                         ProcessMessage(result.Body, result.BasicProperties.Priority);
-
-                                        LogInformation(string.Format("acknowledging receipt of the message - {0}", i));
                                         channel.BasicAck(result.DeliveryTag, false);
-
-                                        LogInformation(string.Format("completed processing of message - {0}", i));
                                     }
                                 }
 
                             }
+                            catch (Exception)
+                            {
+                                throw;
+                            }
                             finally
                             {
-                                LogInformation("closing the channel");
+                                AppendLogInfo("Closing the channel");
                                 channel.Close();
                             }
 
                         }
                     }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                     finally
                     {
-                        LogInformation("closing the connection");
+                        AppendLogInfo("Closing the connection");
                         conn.Close();
                     }
                 }
+
+                AppendLogInfo(string.Format("Mailbox completed processing queue {0}", appsettings.CloudQueue.ReportingQueueID));
             }
             catch (Exception ex)
             {
-                LogError(ex, "Abruptly stopped operation on queue");
+                AppendLogInfo(string.Format("{0}. Mailbox abruptly stopped processing queue: {1}", ex, appsettings.CloudQueue.ReportingQueueID));
+                logger.Error(ex, string.Format("{0}. Mailbox abruptly stopped processing queue: {1}", ex, appsettings.CloudQueue.ReportingQueueID));
+            }
+            finally
+            {
+                logger.Information(jobLogs.ToString());
+                jobLogs.Clear();
             }
         }
 
+        // Process message that was retrieved from queue
         private void ProcessMessage(byte[] message, byte priority)
         {
+            var messageInString = System.Text.Encoding.UTF8.GetString(message);
+            var actualMessage = messageInString;
+
             try
             {
-                var messageInString = System.Text.Encoding.UTF8.GetString(message);
-                var actualMessage = messageInString;
-
                 if (messageInString.Contains("\\"))
                     messageInString = JsonConvert.DeserializeObject<string>(messageInString);
 
                 var airingMessage = JsonConvert.DeserializeObject<QueueAiring>(messageInString);
-
-                LogInformation(string.Format("received message: {0}, priority: {1}", actualMessage, priority));
-
                 DeliverToSqlDatabase(airingMessage);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                LogError(ex, "Abruptly stopped processing on queue");
+                logger.Error(ex, string.Format("{0}. Failure in Mailbox while processing message {1} from queue {2}", ex, messageInString, appsettings.CloudQueue.ReportingQueueID));
             }
+
+
         }
 
-        private void LogInformation(string message)
+        // Append log messages for finally processing
+        private void AppendLogInfo(string message)
         {
             jobLogs.AppendWithTime(message);
         }
 
-        private void LogError(Exception exception, string message)
-        {
-            logger.Error(exception, string.Format("{0}. Queue: {1}", message, appsettings.CloudQueue.ReportingQueueID));
-        }
 
         private void DeliverToSqlDatabase(QueueAiring airingMessage)
         {
-            LogInformation("started delivering to sql database");
-
             using (var db = new OnDemandReportingContext(appsettings.ReportingSqlDB.ConnectionString))
             {
                 if (airingMessage.Action.Equals("Delete"))
@@ -162,7 +163,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     if (existingAiring != null)
                     {
-                        LogInformation(string.Format("remove airing - {0} from database", airingMessage.AiringId));
                         db.Airing.Remove(existingAiring);
                     }
                 }
@@ -172,13 +172,12 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
 
                     if (airingView == null)
                     {
-                        LogInformation(string.Format("Airing not found: {0}", airingMessage.AiringId));
                         return;
                     }
 
                     var airingData = MapAiring(airingView);
 
-                    var existingAiring = db.Airing.AsNoTracking().SingleOrDefault(a => a.AiringId == airingView.AssetId);
+                    var existingAiring = db.Airing.SingleOrDefault(a => a.AiringId == airingView.AssetId);
 
                     if (existingAiring != null)
                     {
@@ -186,7 +185,6 @@ namespace OnDemandTools.Jobs.JobRegistry.Mailbox
                         db.SaveChanges();
                     }
 
-                    LogInformation(string.Format("add airing - {0} to database", airingMessage.AiringId));
                     db.Airing.Add(airingData);
                 }
 
