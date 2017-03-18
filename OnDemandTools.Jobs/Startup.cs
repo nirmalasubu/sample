@@ -64,7 +64,7 @@ namespace OnDemandTools.Jobs
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
                 c.ForSingletonOf<Deporter>();
-                c.ForSingletonOf<Mailbox>();
+                c.For<Mailbox>();
                 c.For<TitleSync>();                
                 c.For<Publisher>();
                 c.For<CloudAmqpSync>();
