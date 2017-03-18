@@ -22,10 +22,8 @@ namespace OnDemandTools.Jobs.Controllers
 
         [HttpGet("{id}")]
         public  IActionResult ProcessPushlisher(string id)
-        {
-            mail.Execute();
-            //pub.Execute(id);
-
+        {           
+            pub.Execute(id);
             return Json("Successfully processed");
         }
     }
