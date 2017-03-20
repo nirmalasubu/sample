@@ -47,6 +47,7 @@ namespace OnDemandTools.Common.Configuration
         public string Deporter { get; set; }
         public string TitleSync { get; set; }
         public string MailBox { get; set; }
+        public string DfStatusDeporter { get; set; }
         public string TimeZone { get; set; }
         public string CloudAmqpSync { get; set; }
         public int HeartBeatExpireMinute { get; set; }

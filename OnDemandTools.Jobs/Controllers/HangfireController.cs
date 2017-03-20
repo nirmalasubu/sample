@@ -25,6 +25,7 @@ namespace OnDemandTools.Jobs.Controllers
         IQueueService queueService;
         AppSettings appsettings;
         CloudAmqpSync cloudAmqpSync;
+        private DfStatusDeporter dfStatusDeporter;
 
         public HangfireController(Serilog.ILogger logger,
             AppSettings appsettings,
@@ -33,7 +34,8 @@ namespace OnDemandTools.Jobs.Controllers
             TitleSync tsy,
             Mailbox mbx,
             IQueueService queueService,
-            CloudAmqpSync cloudAmqpSync
+            CloudAmqpSync cloudAmqpSync,
+            DfStatusDeporter dfStatusDeporter
             )
         {
             this.logger = logger;
@@ -44,6 +46,7 @@ namespace OnDemandTools.Jobs.Controllers
             this.queueService = queueService;
             this.appsettings = appsettings;
             this.cloudAmqpSync = cloudAmqpSync;
+            this.dfStatusDeporter = dfStatusDeporter;
         }
 
         /// <summary>
@@ -62,6 +65,9 @@ namespace OnDemandTools.Jobs.Controllers
 
                 manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()),
                     appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
+
+                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dfStatusDeporter.Execute()),
+                    appsettings.JobSchedules.DfStatusDeporter, estTimeZone, HangfireQueue.deporter.ToString());
 
                 manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()),
                     appsettings.JobSchedules.TitleSync, estTimeZone, HangfireQueue.titlesync.ToString());

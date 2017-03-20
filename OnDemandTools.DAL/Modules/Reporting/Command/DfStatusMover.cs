@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
-using OnDemandTools.DAL.Modules.AiringId.Model;
 using OnDemandTools.DAL.Modules.Reporting.Model;
 
 namespace OnDemandTools.DAL.Modules.Reporting.Command
 {
     public class DfStatusMover : IDfStatusMover
     {
-
         private readonly MongoCollection<DF_Status> _currentCollection;
 
         private readonly MongoCollection<DF_Status> _expiredCollection;

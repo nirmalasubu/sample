@@ -7,20 +7,20 @@ using OnDemandTools.DAL.Modules.Reporting.Queries;
 
 namespace OnDemandTools.Business.Modules.Reporting
 {
-    public class DfStatusDeporter : IDfStatusDeporter
+    public class DfStatusDeporterService : IDfStatusDeporterService
     {
         private readonly IAiringService _airingService;
         private readonly IDfStatusQuery _statusQuery;
         private readonly IDfStatusMover _statusMover;
 
-        public DfStatusDeporter(IDfStatusQuery statusQuery, IAiringService airingService, IDfStatusMover statusMover)
+        public DfStatusDeporterService(IDfStatusQuery statusQuery, IAiringService airingService, IDfStatusMover statusMover)
         {
             _statusQuery = statusQuery;
             _airingService = airingService;
             _statusMover = statusMover;
         }
 
-        public void DeportDfStatus()
+        public void DeportDfStatuses()
         {
             var modifiedTime = DateTime.Now;
 
