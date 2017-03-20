@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.DAL.Modules.Reporting.Command;
 using OnDemandTools.DAL.Modules.Reporting.Queries;
 
 namespace OnDemandTools.Business.Modules.Reporting
@@ -10,11 +11,13 @@ namespace OnDemandTools.Business.Modules.Reporting
     {
         private readonly IAiringService _airingService;
         private readonly IDfStatusQuery _statusQuery;
+        private readonly IDfStatusMover _statusMover;
 
-        public DfStatusDeporter(IDfStatusQuery statusQuery, IAiringService airingService)
+        public DfStatusDeporter(IDfStatusQuery statusQuery, IAiringService airingService, IDfStatusMover statusMover)
         {
             _statusQuery = statusQuery;
             _airingService = airingService;
+            _statusMover = statusMover;
         }
 
         public void DeportDfStatus()
@@ -51,7 +54,7 @@ namespace OnDemandTools.Business.Modules.Reporting
 
                     if (isExpiredSatus)
                     {
-
+                        _statusMover.MoveToExpireCollection(dfStatus);
                     }
                 }
             }
