@@ -87,7 +87,8 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.TitleId, BLAiringLongModel.TitleId>();
             CreateMap<BLAiringModel.Version, BLAiringLongModel.Version>();
             CreateMap<BLAiringModel.Destination, BLAiringLongModel.Destination>();
-
+            CreateMap<BLAiringModel.Property, BLAiringLongModel.Property>();
+            CreateMap<BLAiringModel.Deliverable, BLAiringLongModel.Deliverable>();
 
             // VM to long BL
             CreateMap<VMAiringLongModel.Airing, BLAiringLongModel.Airing>();
@@ -148,6 +149,9 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringLongModel.TitleId, VMAiringLongModel.TitleId>();
             CreateMap<BLAiringLongModel.Version, VMAiringLongModel.Version>();
             CreateMap<BLAiringLongModel.Destination, VMAiringLongModel.Destination>();
+             CreateMap<BLAiringLongModel.Deliverable, VMAiringLongModel.Deliverable>();
+            CreateMap<BLAiringLongModel.Property, VMAiringLongModel.Property>();
+
             CreateMap<BLAiringLongModel.Status, VMAiringLongModel.Status>();
             CreateMap<BLAiringLongModel.File, VMAiringLongModel.File>();
             CreateMap<BLAiringLongModel.Content, VMAiringLongModel.Content>();
