@@ -30,7 +30,6 @@ namespace OnDemandTools.API
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-
         }
 
 
@@ -51,8 +50,7 @@ namespace OnDemandTools.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider)
         {
             // Add serilog and catch any internal errors
-            loggerFactory.
-                AddSerilog();
+            loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
           
             // Specify request pipeline--strictly Nancy middleware

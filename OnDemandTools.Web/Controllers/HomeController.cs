@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,24 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OnDemandTools.Web.Controllers
 {
-    [Route("/[controller]")]
     public class HomeController : Controller
     {
-
-        [Route("/error")]
-        public IActionResult Error()
-        {
-            return View("");
-        }
-
-        [Route("/")]
         public IActionResult Index()
         {
-            return Json("hi");
+            return View();
         }
 
-        [Route("/healthcheck")]
-        public JsonResult Healthcheck()
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
+
+            return View();
+        }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
+
+        public IActionResult Ego()
         {
             return Json("Healthy");
         }
