@@ -66,7 +66,7 @@ namespace OnDemandTools.Jobs.Controllers
                 manager.AddOrUpdate("Deporter", Job.FromExpression(() => dep.Execute()),
                     appsettings.JobSchedules.Deporter, estTimeZone, HangfireQueue.deporter.ToString());
 
-                manager.AddOrUpdate("Deporter", Job.FromExpression(() => dfStatusDeporter.Execute()),
+                manager.AddOrUpdate("DfStatusDeporter", Job.FromExpression(() => dfStatusDeporter.Execute()),
                     appsettings.JobSchedules.DfStatusDeporter, estTimeZone, HangfireQueue.deporter.ToString());
 
                 manager.AddOrUpdate("TitleSync", Job.FromExpression(() => tsy.Execute()),

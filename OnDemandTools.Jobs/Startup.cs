@@ -68,6 +68,7 @@ namespace OnDemandTools.Jobs
                 c.For<TitleSync>();                
                 c.For<Publisher>();
                 c.For<CloudAmqpSync>();
+                c.For<DfStatusDeporter>();
 
             });
 
