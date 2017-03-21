@@ -4,25 +4,25 @@ using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using System;
-using OnDemandTools.Common.Configuration;
 using System.Linq;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Configuration;
+using OnDemandTools.DAL.Modules.Reporting.Command;
+using OnDemandTools.DAL.Modules.Reporting.Queries;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
-   
-
     public class DeportExpiredAiring : IDeportExpiredAiring
     {
         private readonly MongoCollection<Airing> _currentCollection;
         private readonly MongoCollection<Airing> _expiredCollection;
-      
-        public DeportExpiredAiring(IODTDatastore connection)
-        {
-           
-            var database = connection.GetDatabase();
+        private readonly IDfStatusMover _statusMover;
+        private readonly IDfStatusQuery _statusQuery;
 
+        public DeportExpiredAiring(IODTDatastore connection, IDfStatusMover statusMover, IDfStatusQuery statusQuery)
+        {
+
+            var database = connection.GetDatabase();
+            _statusMover = statusMover;
+            _statusQuery = statusQuery;
             _currentCollection = database.GetCollection<Airing>(DataStoreConfiguration.CurrentAssetsCollection);
             _expiredCollection = database.GetCollection<Airing>(DataStoreConfiguration.ExpiredAssetsCollection);
         }
@@ -59,11 +59,24 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
                     var query = Query.EQ("AssetId", ar.AssetId);
                     _expiredCollection.Update(query, Update.Replace(ar), UpdateFlags.Upsert);
 
+                    DeportAiringStatuses(ar.AssetId);
+
                     // Then remove from current collecton
                     _currentCollection.Remove(query);
                 }
             }
         }
 
+        /// <summary>
+        /// Deport's assocaited airing statuses by airingId
+        /// </summary>
+        /// <param name="airingid">the airing id</param>
+        private void DeportAiringStatuses(string airingid)
+        {
+            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid))
+            {
+                _statusMover.MoveToExpireCollection(dfStatus);
+            }
+        }
     }
 }

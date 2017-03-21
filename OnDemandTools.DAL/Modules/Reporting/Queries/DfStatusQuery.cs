@@ -2,12 +2,9 @@
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using OnDemandTools.DAL.Modules.Reporting.Model;
-using OnDemandTools.DAL.Database;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
-using MongoDB.Driver.Linq;
 using OnDemandTools.Common.Configuration;
+using OnDemandTools.DAL.Database;
+using OnDemandTools.DAL.Modules.Reporting.Model;
 
 namespace OnDemandTools.DAL.Modules.Reporting.Queries
 {
@@ -21,7 +18,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
         }
 
         /// <summary>
-        /// Get the top 1000 records by modified time
+        ///     Get the top 1000 records by modified time
         /// </summary>
         /// <param name="modifedTime"></param>
         /// <returns></returns>
@@ -34,6 +31,19 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
                 .SetLimit(1000)
                 .SetSortOrder(SortBy.Descending("ModifiedDate"))
                 .AsQueryable();
+        }
+
+        /// <summary>
+        ///     Get's the DF status by given airingId
+        /// </summary>
+        /// <param name="airingId">the airingId</param>
+        /// <returns></returns>
+        public IQueryable<DF_Status> GetDfStatuses(string airingId)
+        {
+            var query = Query.EQ("AssetID", airingId);
+
+            return _database.GetCollection<DF_Status>("DFStatus")
+                .Find(query).AsQueryable();
         }
     }
 }

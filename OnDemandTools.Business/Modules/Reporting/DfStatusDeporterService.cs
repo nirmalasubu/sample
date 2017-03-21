@@ -20,6 +20,9 @@ namespace OnDemandTools.Business.Modules.Reporting
             _statusMover = statusMover;
         }
 
+        /// <summary>
+        /// Iterate thru all the DF Statuses and it deports expired airing statuses 
+        /// </summary>
         public void DeportDfStatuses()
         {
             var modifiedTime = DateTime.Now;
@@ -57,6 +60,18 @@ namespace OnDemandTools.Business.Modules.Reporting
                         _statusMover.MoveToExpireCollection(dfStatus);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Deports the airing status by given airingId
+        /// </summary>
+        /// <param name="airingId">the airing id</param>
+        public void DeportByAssetId(string airingId)
+        {
+            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingId))
+            {
+                _statusMover.MoveToExpireCollection(dfStatus);
             }
         }
     }
