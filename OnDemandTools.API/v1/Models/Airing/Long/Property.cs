@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
-namespace OnDemandTools.Business.Modules.Airing.Model
+namespace OnDemandTools.API.v1.Models.Airing.Long
 {
     public class Property
     {
@@ -21,5 +22,4 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public List<int> SeriesIds { get; set; }
     }
-
 }

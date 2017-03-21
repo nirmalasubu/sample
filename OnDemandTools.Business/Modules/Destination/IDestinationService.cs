@@ -48,5 +48,11 @@ namespace OnDemandTools.Business.Modules.Destination
         /// <returns></returns>
         List<Model.Destination> GetByProductIds(IList<Guid> productIds);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="airing"></param>
+        void MapAiringDetinationProperties(ref Airing.Model.Airing airing);
+
      }
 }

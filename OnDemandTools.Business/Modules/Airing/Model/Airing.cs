@@ -58,6 +58,8 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public IList<string> IgnoredQueues { get; set; }
 
+        public List<Alternate.Title.Title> FlowTitleData { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();
@@ -66,6 +68,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             PlayList = new List<PlayItem>();
             DeviceExclusions = new List<string>();
             WebFlags = new List<string>();
+            FlowTitleData=new List<Alternate.Title.Title>();
             Duration = new Duration();
             Title = new Title();
             Flags = new Flags();

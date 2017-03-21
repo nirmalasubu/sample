@@ -25,6 +25,7 @@ using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
 using AutoMapper;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Exceptions;
+using OnDemandTools.Business.Modules.Destination;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -38,7 +39,8 @@ namespace OnDemandTools.API.v1.Routes
             IProductService productSvc,
             AiringValidator _validator,
             IQueueService queueSvc,
-            Serilog.ILogger logger
+            Serilog.ILogger logger,
+            IDestinationService destinationSvc
             )
             : base("v1")
         {
@@ -395,6 +397,7 @@ namespace OnDemandTools.API.v1.Routes
                         productSvc.ProductDestinationConverter(ref airing);
                     }
 
+                    destinationSvc.MapAiringDetinationProperties(ref airing);
                     // If the versions exist, create a mediaid based on the
                     // provided version informtion and the network to which this
                     // asset/airing belongs
