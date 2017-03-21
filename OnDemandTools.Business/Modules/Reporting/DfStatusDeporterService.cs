@@ -27,7 +27,7 @@ namespace OnDemandTools.Business.Modules.Reporting
         {
             var modifiedTime = DateTime.Now;
 
-            var expiredAirings = new List<string>();
+            var expiredAirings = new Dictionary<string, bool>();
 
             while (true)
             {
@@ -40,38 +40,16 @@ namespace OnDemandTools.Business.Modules.Reporting
 
                 foreach (var dfStatus in dfStatuses)
                 {
-                    var isExpiredSatus = false;
-
-                    if (expiredAirings.Contains(dfStatus.AssetID))
+                    if (!expiredAirings.ContainsKey(dfStatus.AssetID))
                     {
-                        isExpiredSatus = true;
-                    }
-                    else
-                    {
-                        if (!_airingService.IsAiringExists(dfStatus.AssetID))
-                        {
-                            isExpiredSatus = true;
-                            expiredAirings.Add(dfStatus.AssetID);
-                        }
+                        expiredAirings[dfStatus.AssetID] = !_airingService.IsAiringExists(dfStatus.AssetID);
                     }
 
-                    if (isExpiredSatus)
+                    if (expiredAirings[dfStatus.AssetID])
                     {
                         _statusMover.MoveToExpireCollection(dfStatus);
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Deports the airing status by given airingId
-        /// </summary>
-        /// <param name="airingId">the airing id</param>
-        public void DeportByAssetId(string airingId)
-        {
-            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingId))
-            {
-                _statusMover.MoveToExpireCollection(dfStatus);
             }
         }
     }

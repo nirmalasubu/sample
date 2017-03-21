@@ -1,7 +1,9 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Newtonsoft.Json;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Reporting.Model;
+using OnDemandTools.DAL.Modules.Reporting.Queries;
 
 namespace OnDemandTools.DAL.Modules.Reporting.Command
 {
@@ -11,20 +13,54 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
 
         private readonly MongoCollection<DF_Status> _expiredCollection;
 
-        public DfStatusMover(IODTDatastore connection)
+        private readonly IDfStatusQuery _statusQuery;
+
+        public DfStatusMover(IODTDatastore connection, IDfStatusQuery statusQuery)
         {
             var database = connection.GetDatabase();
+            _statusQuery = statusQuery;
             _currentCollection = database.GetCollection<DF_Status>("DFStatus");
             _expiredCollection = database.GetCollection<DF_Status>("DFExpiredStatus");
         }
 
+
+        /// <summary>
+        /// Deport's assocaited airing statuses by airingId
+        /// </summary>
+        /// <param name="airingid">the airing id</param>
+        public void MoveToExpireCollection(string airingid)
+        {
+            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid))
+            {
+                MoveToExpireCollection(dfStatus);
+            }
+        }
+
+        /// <summary>
+        /// Deports the Status to Expired Collection
+        /// </summary>
+        /// <param name="status"></param>
         public void MoveToExpireCollection(DF_Status status)
         {
-            _expiredCollection.Save(status);
+            var expiredStatus = CloneStatus(status);
+            _expiredCollection.Save(expiredStatus);
 
             var query = Query<DF_Status>.EQ(e => e.Id, status.Id);
 
             _currentCollection.Remove(query);
+        }
+
+        /// <summary>
+        /// Clones the status
+        /// </summary>
+        /// <param name="status">the DF status to clone</param>
+        /// <returns></returns>
+        private DF_Status CloneStatus(DF_Status status)
+        {
+            var clonedStatusString = JsonConvert.SerializeObject(status);
+            var clonedStatus = JsonConvert.DeserializeObject<DF_Status>(clonedStatusString);
+            clonedStatus.Id = string.Empty;
+            return clonedStatus;
         }
     }
 }
