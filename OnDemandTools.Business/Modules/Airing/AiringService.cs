@@ -461,20 +461,21 @@ namespace OnDemandTools.Business.Modules.Airing
                     if (property.Brands.Any() && !property.Brands.Contains(airing.Brand))
                     {
                         propertiesToRemove.Add(property);
+                        continue;
                     }
 
-                    var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+                    if (property.TitleIds.Any() && property.SeriesIds.Any()) // Property has both title and series id . any one of the title/series Id should match
+                    {
+                        if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property) && !IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property))
+                        {
+                            propertiesToRemove.Add(property);
+                        }
+                        continue;
+                    }
 
                     if (property.TitleIds.Any())
                     {
-                        if (titleIds.Any())
-                        {
-                            if (!property.TitleIds.Any(titleIds.Contains))
-                            {
-                                propertiesToRemove.Add(property);
-                            }
-                        }
-                        else
+                        if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property)) // Any one of the title Id should match
                         {
                             propertiesToRemove.Add(property);
                         }
@@ -482,14 +483,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
                     if (property.SeriesIds.Any())
                     {
-                        if (airing.Title.Series.Id.HasValue)
-                        {
-                            if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
-                            {
-                                propertiesToRemove.Add(property);
-                            }
-                        }
-                        else
+                        if (!IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property)) // Any one of the series Id should match
                         {
                             propertiesToRemove.Add(property);
                         }
@@ -498,6 +492,40 @@ namespace OnDemandTools.Business.Modules.Airing
 
                 destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList();
             }
+        }
+
+        private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Property property)
+        {
+            if (airing.Title.Series.Id.HasValue)
+            {
+                if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Property property)
+        {
+            var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+            if (titleIds.Any())
+            {
+                if (!property.TitleIds.Any(titleIds.Contains))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+           
         }
 
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)
