@@ -175,10 +175,14 @@ namespace OnDemandTools.Business.Modules.Destination
                 .Where(t => t.Authority == "Turner" && t.Value != null)
                 .Select(t => int.Parse(t.Value)).ToList();
             titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
+            List<Airing.Model.Alternate.Title.Title> titles =new List<Airing.Model.Alternate.Title.Title>();
 
-            var titles = GetFlowTitlesFor(titleIds);
-
-            airing.FlowTitleData = titles;
+            if (!airing.FlowTitleData.Any()) // Fetch when flowData is not available
+            {
+                 titles = GetFlowTitlesFor(titleIds);
+                 airing.FlowTitleData = titles;
+            }
+            
         }
 
         private List<Airing.Model.Alternate.Title.Title> GetFlowTitlesFor(IEnumerable<int> titleIds)
