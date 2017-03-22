@@ -23,6 +23,11 @@ namespace OnDemandTools.Business.Modules.Destination
         IDestinationQuery destinationHelper;
         AppSettings appSettings;
 
+
+        private const string Episode = "{TITLE_EPISODE_NUMBER}";
+
+        private const string AiringStorylineLong = "{AIRING_STORYLINE_LONG}";
+        private const string AiringStorylineShort = "{AIRING_STORYLINE_SHORT}";
         private const string TitleStorylinePattern = @"{TITLE_STORYLINE([\w\W\d ]+)}";
 
         public DestinationService(IDestinationQuery destinationHelper, AppSettings appSettings)
@@ -40,7 +45,7 @@ namespace OnDemandTools.Business.Modules.Destination
         public BLModel.Destination GetByName(string destinationName)
         {
             return
-                (destinationHelper.Get().First(d => d.Name == destinationName)               
+                (destinationHelper.Get().First(d => d.Name == destinationName)
                 .ToBusinessModel<DLModel.Destination, BLModel.Destination>());
         }
 
@@ -103,9 +108,12 @@ namespace OnDemandTools.Business.Modules.Destination
                 .ToBusinessModel<List<DLModel.Destination>, List<BLModel.Destination>>());
         }
 
-        public void MapAiringDetinationProperties(ref Airing.Model.Airing airing)
+        /// <summary>
+        /// Add Destination properties and deliverables to airing
+        /// </summary>
+        /// <param name="airing">airing</param>
+        public void AddAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
         {
-
             foreach (var flight in airing.Flights)
             {
                 foreach (var destination in flight.Destinations)
@@ -115,13 +123,13 @@ namespace OnDemandTools.Business.Modules.Destination
 
                     foreach (var property in destinationdetails.Properties)
                     {
-                        if (property.Brands.Any() && !property.Brands.Contains(airing.Network))
+                        if (property.Brands.Any() && !property.Brands.Contains(airing.Network)) //airing and property brand should be same
                         {
                             propertiesToRemove.Add(property);
                             continue;
                         }
 
-                        if (property.TitleIds.Any() && property.SeriesIds.Any())
+                        if (property.TitleIds.Any() && property.SeriesIds.Any()) // Property has both title and series id . any one of the title/series Id should match
                         {
                             if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property) && !IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property))
                             {
@@ -130,9 +138,9 @@ namespace OnDemandTools.Business.Modules.Destination
                             continue;
                         }
 
-                        if (property.TitleIds.Any())
+                        if (property.TitleIds.Any()) 
                         {
-                            if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property))
+                            if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property)) // Any one of the title Id should match
                             {
                                 propertiesToRemove.Add(property);
                             }
@@ -140,29 +148,28 @@ namespace OnDemandTools.Business.Modules.Destination
 
                         if (property.SeriesIds.Any())
                         {
-                            if (!IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property))
+                            if (!IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property)) // Any one of the series Id should match
                             {
                                 propertiesToRemove.Add(property);
                             }
                         }
                     }
-                    destinationdetails.Properties = destinationdetails.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList();
-                    destination.Properties = destinationdetails.Properties.ToBusinessModel<List<BLModel.Property>,List<Airing.Model.Property>>();
-                    destination.Deliverables= destinationdetails.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Airing.Model.Deliverable>>();
-                    bool value=checkDelvierablesandPropertyrequiresFlowTitle(destination);
-                    if(value)
+                    destinationdetails.Properties = destinationdetails.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList(); //remove  unmatched  properties
+                    destination.Properties = destinationdetails.Properties.ToBusinessModel<List<BLModel.Property>, List<Property>>();
+                    destination.Deliverables = destinationdetails.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Deliverable>>();
+                    bool isFlowDataRequired = CheckDelvierablesandPropertiesRequiresFlowTitle(destination); //check any Delvierables Properties  token requires flow data
+                    if (isFlowDataRequired)
                     {
                         GetFlowValuesforAiring(ref airing);
                     }
-                    new Airing.Model.DeliverableFormatter(airing).Format(destination); // destinations passed by reference for formatting
-                    new Airing.Model.PropertyFormatter(airing).Format(destination); // destinations passed by reference for formatting
-                    destination.Deliverables = destination.Deliverables.Where(x => x.Value != string.Empty).ToList();
+                    new DeliverableFormatter(airing).Format(destination); // destinations passed by reference for formatting to transform Deliverable tokens
+                    new PropertyFormatter(airing).Format(destination); // destinations passed by reference for formatting to transform property tokens
+                    destination.Deliverables = destination.Deliverables.Where(x => x.Value != string.Empty).ToList(); // remove the empty tokens
                 }
-
             }
         }
-           
-        private void GetFlowValuesforAiring( ref Airing.Model.Airing airing)
+        #region PRIVATE METHODS
+        private void GetFlowValuesforAiring(ref Airing.Model.Airing airing)
         {
             List<int> titleIds = airing.Title.TitleIds
                 .Where(t => t.Authority == "Turner" && t.Value != null)
@@ -170,10 +177,9 @@ namespace OnDemandTools.Business.Modules.Destination
             titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
 
             var titles = GetFlowTitlesFor(titleIds);
-            
-                 airing.FlowTitleData = titles;
-        }
 
+            airing.FlowTitleData = titles;
+        }
 
         private List<Airing.Model.Alternate.Title.Title> GetFlowTitlesFor(IEnumerable<int> titleIds)
         {
@@ -208,57 +214,40 @@ namespace OnDemandTools.Business.Modules.Destination
         private Task<List<Airing.Model.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
         {
             var tcs = new TaskCompletionSource<List<Airing.Model.Alternate.Title.Title>>();
-            theClient.ExecuteAsync<List<Airing.Model.Alternate.Title.Title >> (theRequest, response =>
-            {
-                tcs.SetResult(response.Data);
-            });
+            theClient.ExecuteAsync<List<Airing.Model.Alternate.Title.Title>>(theRequest, response =>
+          {
+              tcs.SetResult(response.Data);
+          });
             return tcs.Task;
         }
 
-        private bool checkDelvierablesandPropertyrequiresFlowTitle(Airing.Model.Destination destination)
+        private bool CheckDelvierablesandPropertiesRequiresFlowTitle(Airing.Model.Destination destination)
         {
-            if(destination.Properties.Any(s => s.Value == "{TITLE_EPISODE_NUMBER}")){
-                return true;
-            }
-          
-            foreach(Property p in destination.Properties)
+            foreach (Property p in destination.Properties)
             {
-                    var match = Regex.Match(p.Value, TitleStorylinePattern);
-                if (match.Success)
-                     return true;
-            }
+                if (p.Value == Episode || p.Value == AiringStorylineLong || p.Value == AiringStorylineShort)
+                {
+                    return true;
+                }
 
-            if (destination.Deliverables.Any(s => s.Value == "{TITLE_EPISODE_NUMBER}"))
-            {
-                return true;
+                var match = Regex.Match(p.Value, TitleStorylinePattern);
+                if (match.Success)
+                    return true;
             }
 
             foreach (Deliverable p in destination.Deliverables)
             {
+                if (p.Value == Episode || p.Value == AiringStorylineLong || p.Value == AiringStorylineShort)
+                {
+                    return true;
+                }
+
                 var match = Regex.Match(p.Value, TitleStorylinePattern);
                 if (match.Success)
                     return true;
             }
             return false;
         }
-
-        //public void AppendTitle(Airing airing)
-        //{
-        //    List<int> titleIds = airing.Title.TitleIds
-        //        .Where(t => t.Authority == "Turner" && t.Value != null)
-        //        .Select(t => int.Parse(t.Value)).ToList();
-        //    titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
-
-        //    var titles = GetFlowTitlesFor(titleIds);
-        //    var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
-        //    if (primaryTitleId != null)
-        //    {
-        //        var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
-        //        UpdateTitleFieldsFor(ref airing, primaryTitle);
-        //    }
-
-        //    airing.Options.Titles = titles;
-        //}
 
         private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, BLModel.Property property)
         {
@@ -292,6 +281,6 @@ namespace OnDemandTools.Business.Modules.Destination
             }
             return true;
         }
-
+        #endregion
     }
 }

@@ -397,7 +397,9 @@ namespace OnDemandTools.API.v1.Routes
                         productSvc.ProductDestinationConverter(ref airing);
                     }
 
-                    destinationSvc.MapAiringDetinationProperties(ref airing);
+                    //Add properties and deliverables to the airing destination
+                    destinationSvc.AddAiringDestinationPropertiesAndDeliverables(ref airing);
+
                     // If the versions exist, create a mediaid based on the
                     // provided version informtion and the network to which this
                     // asset/airing belongs

@@ -49,10 +49,10 @@ namespace OnDemandTools.Business.Modules.Destination
         List<Model.Destination> GetByProductIds(IList<Guid> productIds);
 
         /// <summary>
-        /// 
+        /// Add Destination properties and deliverables to airing
         /// </summary>
-        /// <param name="airing"></param>
-        void MapAiringDetinationProperties(ref Airing.Model.Airing airing);
+        /// <param name="airing">airing</param>
+        void AddAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing);
 
      }
 }

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
 namespace OnDemandTools.Business.Modules.Airing.Model
 {
+    /// <summary>
+    ///  Base class to transform Deliverables and Properties Tokens of airing destination
+    /// </summary>
     public class Formatter
     {
+        #region CONSTANTS
         private const string HdPattern = @"{IFHD=([\w\W\d ]+)ELSE=([\w\W\d ]*)}";
 
         private const string AiringId = "{AIRING_ID}";
@@ -20,9 +23,11 @@ namespace OnDemandTools.Business.Modules.Airing.Model
         private const string AiringStorylineLong = "{AIRING_STORYLINE_LONG}";
         private const string AiringStorylineShort = "{AIRING_STORYLINE_SHORT}";
         private const string TitleStorylinePattern = @"{TITLE_STORYLINE([\w\W\d ]+)}";
-
+        #endregion
 
         protected readonly Airing Airing;
+
+        #region CONSTRUCTOR
 
         public Formatter()
         {
@@ -33,6 +38,9 @@ namespace OnDemandTools.Business.Modules.Airing.Model
         {
             Airing = airing;
         }
+        #endregion
+
+        #region PRIVATE METHODS
 
         public string Format(string value)
         {
@@ -50,11 +58,11 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
             value = Airing == null
                 ? value.Replace(AiringStorylineLong, string.Empty)
-                : value.Replace(AiringStorylineLong, Airing.Title.StoryLine.Long);
+                : value.Replace(AiringStorylineLong, FormatAiringStoryLineLong(Airing));
 
             value = Airing == null
                 ? value.Replace(AiringStorylineShort, string.Empty)
-                : value.Replace(AiringStorylineShort, Airing.Title.StoryLine.Short);
+                : value.Replace(AiringStorylineShort, FormatAiringStoryLineShort(Airing));
 
             value = Airing == null
                ? value.Replace(Episode, string.Empty)
@@ -67,7 +75,45 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             return value;
         }
 
-      
+        #endregion
+
+        #region PRIVATE METHODS
+
+        private string FormatAiringStoryLineShort(Airing airing)
+        {
+            if(!string.IsNullOrEmpty(Airing.Title.StoryLine.Short))
+            {
+                return Airing.Title.StoryLine.Short;
+            }
+
+            var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
+            if (primaryTitleId != null)
+            {
+                var primaryTitle = Airing.FlowTitleData.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
+                var storyline = primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Short (245 Characters)");
+                return (storyline == null) ? string.Empty : storyline.Description;
+            }
+            return string.Empty;
+        }
+
+        private string FormatAiringStoryLineLong(Airing airing)
+        {
+            if (!string.IsNullOrEmpty(Airing.Title.StoryLine.Long))
+            {
+                return Airing.Title.StoryLine.Long;
+            }
+            var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
+
+            if (primaryTitleId != null)
+            {
+                var primaryTitle = Airing.FlowTitleData.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
+                var storyline = primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Turner External");
+
+                return (storyline == null) ? string.Empty : storyline.Description;
+            }
+
+            return string.Empty;
+        }
 
         private string FormatEpisodeNumber(IEnumerable<Alternate.Title.Title> titles)
         {
@@ -103,8 +149,6 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
             return Regex.Replace(value, TitleStorylinePattern, BuildStorylineFrom(Airing.FlowTitleData, type));
         }
-
-
 
         private string FormatHd(Airing airing, string value)
         {
@@ -153,5 +197,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
             return storyline.ToString();
         }
+
+        #endregion
     }
 }
