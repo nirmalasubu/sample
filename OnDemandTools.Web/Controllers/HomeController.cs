@@ -10,12 +10,18 @@ namespace OnDemandTools.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View("Login");
         }
 
         public IActionResult Error()
         {
             return View();
+        }
+
+        public JsonResult Healthcheck()
+        {
+
+            return Json("Healthy");
         }
 
     }

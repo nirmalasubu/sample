@@ -33,6 +33,12 @@ compile:
     - source envJob; sudo docker run -d --name odt-job-container -p 5001:5000 "${IMAGE}"; sleep 10
     - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5001/healthcheck
     - source envJob; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.Jobs.Tests/Dockerfile .
+
+    # Build image for Web project
+    - source envWeb; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Web/Dockerfile .
+    - source envWeb; sudo docker run -d --name odt-web-container -p 5002:5000 "${IMAGE}"; sleep 10
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5002/healthcheck 
+
     
 test:
   override:
@@ -55,6 +61,10 @@ deployment:
       - source envAPI; sudo docker push "${IMAGE}"
       - source envAPI; sudo docker run -it --env-file "envAPI" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
 
-      # Deploy job
+      # Deploy Job
       - source envJob; sudo docker push "${IMAGE}"
       - source envJob; sudo docker run -it --env-file "envJob" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+
+      # Deploy Web
+      - source envWeb; sudo docker push "${IMAGE}"
+      - source envWeb; sudo docker run -it --env-file "envWeb" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true

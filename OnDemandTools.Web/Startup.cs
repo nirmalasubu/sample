@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Microsoft.AspNetCore.Http;
 using OnDemandTools.Common.Configuration;
-
+using OnDemandTools.Web.Helpers;
 
 namespace OnDemandTools.Web
 {
@@ -31,8 +31,9 @@ namespace OnDemandTools.Web
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfigurationRoot>(Configuration);
-            services.Configure<AppSettings>(Configuration.GetSection("Application"));
-           
+            services.Configure<AppSettings>(Configuration.GetSection("Application"));           
+            services.InitializeAutoMapper();
+            
             // Add framework services.
             services.AddMvc();
         }
