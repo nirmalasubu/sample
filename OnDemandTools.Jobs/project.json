@@ -52,7 +52,7 @@
     "Serilog.Sinks.RollingFile": "3.2.0",
     "Serilog.Sinks.PeriodicBatching": "2.1.0",
     "StructureMap.Microsoft.DependencyInjection": "1.3.0",
-    "Hangfire": "1.6.8",
+    "Hangfire": "1.6.12",
     "Hangfire.Mongo": "0.3.2",
     "RestSharp.NetCore": "105.2.3",
     "EasyNetQ-dotnet-core": "2.0.2-radicalgeek-netc0001",
