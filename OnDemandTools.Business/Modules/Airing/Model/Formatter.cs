@@ -87,10 +87,10 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             }
 
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
-            if (primaryTitleId != null)
+            if (primaryTitleId != null && Airing.FlowTitleData.Any())
             {
                 var primaryTitle = Airing.FlowTitleData.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
-                var storyline = primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Short (245 Characters)");
+                var storyline = (primaryTitle != null) ? primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Short (245 Characters)"):null;
                 return (storyline == null) ? string.Empty : storyline.Description;
             }
             return string.Empty;
@@ -104,10 +104,11 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             }
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
 
-            if (primaryTitleId != null)
+            if (primaryTitleId != null && Airing.FlowTitleData.Any())
             {
                 var primaryTitle = Airing.FlowTitleData.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
-                var storyline = primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Turner External");
+                var storyline = (primaryTitle!=null)?primaryTitle.Storylines.FirstOrDefault(s => s.Type == "Turner External")
+                    :null;
 
                 return (storyline == null) ? string.Empty : storyline.Description;
             }
