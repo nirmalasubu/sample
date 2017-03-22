@@ -18,6 +18,11 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
             Collection = collection;
         }
 
+        public List<string> GetAllAiringIds()
+        {
+           return Collection.FindAllAs<Airing>().Select(e => e.AssetId).ToList();
+        }
+
         public IEnumerable<Airing> GetDeliverToBy(string queueName, int limit)
         {
             var query = Query.And(Query.NotIn("DeliveredTo", new BsonArray { queueName }),

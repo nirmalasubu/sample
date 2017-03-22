@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.DAL.Modules.Reporting.Command;
 using OnDemandTools.DAL.Modules.Reporting.Queries;
 
@@ -12,12 +13,18 @@ namespace OnDemandTools.Business.Modules.Reporting
         private readonly IAiringService _airingService;
         private readonly IDfStatusQuery _statusQuery;
         private readonly IDfStatusMover _statusMover;
+        private readonly CurrentAiringsQuery _currentAiringsQuery;
 
-        public DfStatusDeporterService(IDfStatusQuery statusQuery, IAiringService airingService, IDfStatusMover statusMover)
+        public DfStatusDeporterService(
+            IDfStatusQuery statusQuery,
+            IAiringService airingService,
+            IDfStatusMover statusMover,
+            CurrentAiringsQuery currentAiringsQuery)
         {
             _statusQuery = statusQuery;
             _airingService = airingService;
             _statusMover = statusMover;
+            _currentAiringsQuery = currentAiringsQuery;
         }
 
         /// <summary>
@@ -28,6 +35,8 @@ namespace OnDemandTools.Business.Modules.Reporting
             var modifiedTime = DateTime.Now;
 
             var expiredAirings = new Dictionary<string, bool>();
+
+            var currentAirings = _currentAiringsQuery.GetAllAiringIds();
 
             while (true)
             {
@@ -40,12 +49,7 @@ namespace OnDemandTools.Business.Modules.Reporting
 
                 foreach (var dfStatus in dfStatuses)
                 {
-                    if (!expiredAirings.ContainsKey(dfStatus.AssetID))
-                    {
-                        expiredAirings[dfStatus.AssetID] = !_airingService.IsAiringExists(dfStatus.AssetID);
-                    }
-
-                    if (expiredAirings[dfStatus.AssetID])
+                    if (!currentAirings.Contains(dfStatus.AssetID))
                     {
                         _statusMover.MoveToExpireCollection(dfStatus);
                     }
