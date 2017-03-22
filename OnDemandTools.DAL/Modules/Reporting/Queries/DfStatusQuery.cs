@@ -18,7 +18,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
         }
 
         /// <summary>
-        ///     Get the top 1000 records by modified time
+        ///     Get the top 10000 records by modified time
         /// </summary>
         /// <param name="modifedTime"></param>
         /// <returns></returns>
@@ -28,7 +28,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
 
             return _database.GetCollection<DF_Status>("DFStatus")
                 .Find(query)
-                .SetLimit(1000)
+                .SetLimit(10000)
                 .SetSortOrder(SortBy.Descending("ModifiedDate"))
                 .AsQueryable();
         }
