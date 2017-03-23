@@ -19,7 +19,7 @@ then
  echo "ENVIRONMENT=dev" > envWeb
  echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_DEV"" >> envAPI
  echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_DEV"" >> envJob
- echo "TOKEN="$WEB_SHIPMENT_BUILD_TOKEN_DEV"" >> envWeb
+ echo "TOKEN="$WEBAPP_SHIPMENT_BUILD_TOKEN_DEV"" >> envWeb
 fi;
 
 if [ $CIRCLE_BRANCH = 'sandbox' ];
@@ -30,7 +30,7 @@ then
  echo "ENVIRONMENT=ref" > envWeb
  echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_REF"" >> envAPI
  echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_REF"" >> envJob
- echo "TOKEN="$WEB_SHIPMENT_BUILD_TOKEN_REF"" >> envWeb
+ echo "TOKEN="$WEBAPP_SHIPMENT_BUILD_TOKEN_REF"" >> envWeb
 fi;
 
 if [ $CIRCLE_BRANCH = 'rc' ];
@@ -41,7 +41,7 @@ then
  echo "ENVIRONMENT=qa" > envWeb
  echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_QA"" >> envAPI
  echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_QA"" >> envJob
- echo "TOKEN="$WEB_SHIPMENT_BUILD_TOKEN_QA"" >> envWeb
+ echo "TOKEN="$WEBAPP_SHIPMENT_BUILD_TOKEN_QA"" >> envWeb
 fi;
 
 # Add version 
@@ -58,19 +58,19 @@ echo "REGISTRY=quay.io/turner" >> envWeb
 # Add container
 echo "CONTAINER="$API_CONTAINER_NAME"" >> envAPI
 echo "CONTAINER="$JOB_CONTAINER_NAME"" >> envJob
-echo "CONTAINER="$JOB_CONTAINER_NAME"" >> envWeb
+echo "CONTAINER="$WEBAPP_CONTAINER_NAME"" >> envWeb
 
 # Add image
 echo "IMAGE=quay.io/turner/"$API_CONTAINER_NAME":"$VERSION"" >> envAPI
 echo "IMAGE=quay.io/turner/"$JOB_CONTAINER_NAME":"$VERSION"" >> envJob
-echo "IMAGE=quay.io/turner/"$JOB_CONTAINER_NAME":"$VERSION"" >> envWeb
+echo "IMAGE=quay.io/turner/"$WEBAPP_CONTAINER_NAME":"$VERSION"" >> envWeb
 
 # Latest image
 echo "LATEST=quay.io/turner/"$API_CONTAINER_NAME":latest" >> envAPI
 echo "LATEST=quay.io/turner/"$JOB_CONTAINER_NAME":latest" >> envJob
-echo "LATEST=quay.io/turner/"$JOB_CONTAINER_NAME":latest" >> envWeb
+echo "LATEST=quay.io/turner/"$WEBAPP_CONTAINER_NAME":latest" >> envWeb
 
 # Add Shipment
 echo "SHIPMENT="$API_SHIPMENT_NAME"" >> envAPI
 echo "SHIPMENT="$JOB_SHIPMENT_NAME"" >> envJob
-echo "SHIPMENT="$JOB_SHIPMENT_NAME"" >> envWeb
+echo "SHIPMENT="$WEBAPP_SHIPMENT_NAME"" >> envWeb
