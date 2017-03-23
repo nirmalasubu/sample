@@ -27,12 +27,12 @@ namespace OnDemandTools.API.v1.Routes
         private IFileService fileSvc;
         private FileValidator fileValidator;
         private IReportingService reporter;
-        private IAiringService  airingSvc;
+        private IAiringService airingSvc;
 
 
         public FileRoutes(
             IQueueService queueSvc,
-            IFileService fileSvc,           
+            IFileService fileSvc,
             FileValidator fileValidator,
             IReportingService reporter,
             IAiringService airingSvc)
@@ -46,14 +46,14 @@ namespace OnDemandTools.API.v1.Routes
             this.fileValidator = fileValidator;
             this.reporter = reporter;
             this.airingSvc = airingSvc;
-            
+
 
             Get("/files/title/{titleId}", _ =>
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var files = fileSvc.GetByTitleId((int)_.titleId);
 
-                return (files.ToViewModel<List<BLFileModel.File>, List<Models.Airing.Long.File>>());                
+                return (files.ToViewModel<List<BLFileModel.File>, List<Models.Airing.Long.File>>());
             });
 
             Get("/files/airing/{airingId}", _ =>
@@ -65,11 +65,11 @@ namespace OnDemandTools.API.v1.Routes
             });
 
 
-            Post("/files",  _ =>
-            {
+            Post("/files", _ =>
+           {
                 // Verify if the user has post permission  
                 this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
-                var k = this.Request.Body.ToString();
+               var k = this.Request.Body.ToString();
 
                 // Bind POST request to data contract
                 var newFiles = this.Bind<List<RQModel.FileViewModel>>();
@@ -79,14 +79,14 @@ namespace OnDemandTools.API.v1.Routes
 
                 // Verify if there are any validation errors. If so, return error
                 if (results.Where(c => (!c.IsValid)).Count() > 0)
-                {
+               {
                     // Report status to monitoring system
                     ReportStatusToMonitoringSystem(newFiles, "Ingestion of file data failed due to validation errors in payload");
 
                     // Return status
                     return Negotiate.WithModel(results.Where(c => (!c.IsValid)).Select(c => c.Errors.Select(d => d.ErrorMessage)))
-                                    .WithStatusCode(HttpStatusCode.BadRequest);
-                }
+                                   .WithStatusCode(HttpStatusCode.BadRequest);
+               }
 
                 // Translate data contract to file business model
                 var files = Mapper.Map<List<RQModel.FileViewModel>, List<BLFileModel.File>>(newFiles);
@@ -103,10 +103,10 @@ namespace OnDemandTools.API.v1.Routes
 
                 // Return Status
                 return Response.AsJson(new
-                {
-                    result = "success"
-                }, HttpStatusCode.OK);
-            });
+               {
+                   result = "success"
+               }, HttpStatusCode.OK);
+           });
 
         }
 
@@ -157,20 +157,20 @@ namespace OnDemandTools.API.v1.Routes
             {
 
                 if (!String.IsNullOrEmpty(file.AiringId))
-                    reporter.Report(file.AiringId, statusMessage);
+                    reporter.Report(file.AiringId, true, statusMessage);
                 else if (!String.IsNullOrWhiteSpace(file.MediaId))
                 {
                     // Report to all assets under mediaid
                     List<BLAiringModel.Airing> airings = airingSvc.GetByMediaId(file.MediaId).ToList();
                     foreach (var airing in airings)
-                        reporter.Report(airing.AssetId, statusMessage);
+                        reporter.Report(airing.AssetId, true, statusMessage);
                 }
                 else if (file.TitleId.HasValue)
                 {
                     // Report to all assets under titleid
                     List<BLAiringModel.Airing> airings = airingSvc.GetNonExpiredBy(file.TitleId.Value, DateTime.MinValue).ToList();
                     foreach (var airing in airings)
-                        reporter.Report(airing.AssetId, statusMessage);
+                        reporter.Report(airing.AssetId, true, statusMessage);
                 }
             }
         }

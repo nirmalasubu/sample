@@ -1,5 +1,4 @@
-﻿using EasyNetQ;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.AiringPublisher.Models;
 using OnDemandTools.Business.Modules.Queue;
@@ -46,7 +45,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 
                     _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);
 
-                    _reporter.Report(deliveryQueue, envelope.AiringId,
+                    _reporter.Report(deliveryQueue, envelope.AiringId, envelope.Message.Action!= "Delete",
                         string.Format("Sent successfully to {0} Message: {1}", deliveryQueue.FriendlyName, message),
                         12);
 
@@ -56,7 +55,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
                 }
                 catch
                 {
-                    _reporter.Report(deliveryQueue, envelope.AiringId,
+                    _reporter.Report(deliveryQueue, envelope.AiringId, envelope.Message.Action != "Delete",
                         string.Format("Failed to send to {0} Message: {1}", deliveryQueue.FriendlyName, message), 4,
                         true);
 

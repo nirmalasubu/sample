@@ -175,7 +175,7 @@ namespace OnDemandTools.API.v1.Routes
 
                 foreach (var airing in airings)
                 {
-                    _reporterSvc.Report(airing, dfStatusCode, dfDestinationCode, statusMessage);
+                    _reporterSvc.Report(airing, true, dfStatusCode, dfDestinationCode, statusMessage);
                 }
             }
         }

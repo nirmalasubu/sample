@@ -150,7 +150,6 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
         /// Processes the queue.
         /// </summary>
         /// <param name="queue">The queue.</param>
-        /// <param name="details">The details.</param>
         private void ProcessQueue(BLQueue.Queue queue)
         {
             LogInformation("Retrieving current airings that should be send to queue");
@@ -270,7 +269,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
                     string message = "Queue validation error. ";
                     message += result.Message;
                     LogInformation(string.Format("Validation error. {0} - {1}", airing.AssetId, result.Message));
-                    reportStatusCommand.Report(queue, airing.AssetId, message, result.StatusEnum, true);
+                    reportStatusCommand.Report(queue, airing.AssetId, true, message, result.StatusEnum, true);
                 }
                 if (queue.BimRequired)
                 {
@@ -296,18 +295,18 @@ namespace OnDemandTools.Business.Modules.AiringPublisher
             if (bimFoundResult != null)
             {
                 // LogInformation(string.Format("BIM  Found. {0} - {1}", airing.AssetId, bimFoundResult.Message));
-                reportStatusCommand.BimReport(queue, airing.AssetId, bimFoundResult.Message, bimFoundResult.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, true, bimFoundResult.Message, bimFoundResult.StatusEnum);
             }
             if (bimNotFoundResult != null)
             {
                 //  LogInformation(string.Format("BIM  Not Found. {0} - {1}", airing.AssetId, bimNotFoundResult.Message));
-                reportStatusCommand.BimReport(queue, airing.AssetId, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, true, bimNotFoundResult.Message, bimNotFoundResult.StatusEnum);
             }
 
             if (bimisMatch != null)
             {
                 //  LogInformation(string.Format("BIM  Mismatch. {0} - {1}", airing.AssetId, bimisMatch.Message));
-                reportStatusCommand.BimReport(queue, airing.AssetId, bimisMatch.Message, bimisMatch.StatusEnum);
+                reportStatusCommand.BimReport(queue, airing.AssetId, true, bimisMatch.Message, bimisMatch.StatusEnum);
             }
         }
 

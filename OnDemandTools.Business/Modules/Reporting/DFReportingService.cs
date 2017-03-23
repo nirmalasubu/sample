@@ -14,19 +14,19 @@ namespace OnDemandTools.Business.Modules.Reporting
             this.reportStatusCommandSvc = reportStatusCommandSvc;
         }
 
-        public void Report(BLAiringModel.Airing airing)
+        public void Report(BLAiringModel.Airing airing, bool isActiveAiringStatus)
         {
-            reportStatusCommandSvc.Report(airing.ToDataModel<BLAiringModel.Airing, DLAiringModel.Airing>());
+            reportStatusCommandSvc.Report(airing.ToDataModel<BLAiringModel.Airing, DLAiringModel.Airing>(), isActiveAiringStatus);
         }
 
-        public void Report(string airingId, string statusMessage, int dfStatus = 13, int dfDestination = 18)
+        public void Report(string airingId, bool isActiveAiringStatus, string statusMessage, int dfStatus = 13, int dfDestination = 18)
         {
-            reportStatusCommandSvc.Report(airingId, statusMessage, dfStatus, dfDestination);
+            reportStatusCommandSvc.Report(airingId, isActiveAiringStatus, statusMessage, dfStatus, dfDestination);
         }
 
-        public void Report(string airingId, int statusEnum, int destinationEnum, string message, bool unique = false)
+        public void Report(string airingId, bool isActiveAiringStatus, int statusEnum, int destinationEnum, string message, bool unique = false)
         {
-            reportStatusCommandSvc.Report(airingId, statusEnum, destinationEnum, message, unique);
+            reportStatusCommandSvc.Report(airingId, isActiveAiringStatus, statusEnum, destinationEnum, message, unique);
         }
     }
 }

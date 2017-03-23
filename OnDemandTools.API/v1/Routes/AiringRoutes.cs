@@ -421,7 +421,7 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
                     // Report status of this airing to monitoring system (digital fulfillment/logzio)
-                    reporterSvc.Report(savedAiring);
+                    reporterSvc.Report(savedAiring, airingSvc.IsAiringExists(savedAiring.AssetId));
                     logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring, user));
 
                     // Return airing model                    
@@ -476,7 +476,7 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.PushToQueues(new List<string> { existingAiring.AssetId });
                 }
 
-                reporterSvc.Report(existingAiring);
+                reporterSvc.Report(existingAiring, false);
 
                 return new VMAiringLongModel.AiringMessage
                 {
