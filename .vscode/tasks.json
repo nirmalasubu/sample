@@ -4,29 +4,46 @@
     "version": "0.1.0",
     "command": "dotnet",
     "isShellCommand": true,
+    "showOutput": "always",
     "args": [],
-    "tasks": [
+    "tasks": [      
+         {
+            "taskName": "Solution-Restore",
+            "suppressTaskName": true,
+            "args": [
+                "restore"
+            ],                           
+            "problemMatcher": "$msCompile"
+        }  ,  
         {
-            "taskName": "build",
-            "args": [ 
+            "taskName": "Debug-ODT-API",
+            "suppressTaskName": true,
+            "args": [
+                "build", 
                 "${workspaceRoot}/OnDemandTools.API/project.json"
             ],
-            "isBuildCommand": true,
-            "showOutput": "silent",
+            "isBuildCommand": true,                         
             "problemMatcher": "$msCompile"
-        },
+        },  
         {
-            "taskName": "restore",
-            "args": [ 
-                "${workspaceRoot}/OnDemandTools.API/project.json",
-                "${workspaceRoot}/OnDemandTools.Common/project.json",
-                "${workspaceRoot}/OnDemandTools.DAL/project.json",
-                "${workspaceRoot}/OnDemandTools.Business/project.json",
-                "${workspaceRoot}/OnDemandTools.API.Utilities/project.json"
+            "taskName": "Debug-ODT-Jobs",
+            "suppressTaskName": true,
+            "args": [
+                "build", 
+                "${workspaceRoot}/OnDemandTools.Jobs/project.json"
             ],
-            "isBuildCommand": true,
-            "showOutput": "silent",
+            "isBuildCommand": true,                      
             "problemMatcher": "$msCompile"
-        }
+        },     
+        {
+            "taskName": "Debug-ODT-WebApp",
+            "suppressTaskName": true,
+            "args": [
+                "build", 
+                "${workspaceRoot}/OnDemandTools.Web/project.json"
+            ],
+            "isBuildCommand": true,                               
+            "problemMatcher": "$msCompile"
+        }           
     ]
 }
