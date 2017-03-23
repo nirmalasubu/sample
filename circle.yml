@@ -37,7 +37,8 @@ compile:
     # Build image for Web project
     - source envWeb; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Web/Dockerfile .
     - source envWeb; sudo docker run -d --name odt-web-container -p 5002:5000 "${IMAGE}"; sleep 10
-    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5002/healthcheck 
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5002/healthcheck
+    - cat envWeb
 
     
 test:
