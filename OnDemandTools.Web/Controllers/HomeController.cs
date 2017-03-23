@@ -8,6 +8,7 @@ namespace OnDemandTools.Web.Controllers
 {
     public class HomeController : Controller
     {
+        [Route("")]
         public IActionResult Index()
         {
             return View("Login");
@@ -18,6 +19,7 @@ namespace OnDemandTools.Web.Controllers
             return View();
         }
 
+        [Route("/healthcheck")]
         public JsonResult Healthcheck()
         {
 
