@@ -31,12 +31,13 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Deliverable, BLAiringLongModel.Destination.Deliverable>();
             CreateMap<DLModel.Content, BLAiringLongModel.Destination.Content>();
 
-            CreateMap<DLModel.Destination, DLAiringModel.Destination>()
-             .ForMember(d => d.Properties, opt => opt.Ignore())
-             .ForMember(d => d.Deliverables, opt => opt.Ignore());
+            CreateMap<DLModel.Destination, DLAiringModel.Destination>();
+            CreateMap<DLModel.Property, DLAiringModel.Property>();
+            CreateMap<DLModel.Deliverable, DLAiringModel.Deliverable>();
             CreateMap<DLModel.Property, DLAiringModel.Property>();
             CreateMap<DLModel.Deliverable, DLAiringModel.Deliverable>();
             CreateMap<DLAiringModel.Destination, BLAiringModel.Destination>();
+            CreateMap<BLModel.Destination, BLAiringModel.Destination>();
             CreateMap <BLModel.Property, BLAiringModel.Property> ();
             CreateMap<BLModel.Deliverable, BLAiringModel.Deliverable>();
         }

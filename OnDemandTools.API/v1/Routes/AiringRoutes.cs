@@ -395,11 +395,15 @@ namespace OnDemandTools.API.v1.Routes
                     if (airing.Flights.SelectMany(f => f.Products).Any())
                     {
                         productSvc.ProductDestinationConverter(ref airing);
+                        destinationSvc.TransformAiringDestinationPropertiesAndDeliverables(ref airing);
                     }
-
-                    //Add properties and deliverables to the airing destination
-                    destinationSvc.AddAiringDestinationPropertiesAndDeliverables(ref airing);
-
+                    else
+                    {
+                        //Add properties and deliverables to the airing destination
+                        destinationSvc.GetAiringDestinationPropertiesAndDeliverables(ref airing);
+                        destinationSvc.TransformAiringDestinationPropertiesAndDeliverables(ref airing);
+                    }
+                    
                     // If the versions exist, create a mediaid based on the
                     // provided version informtion and the network to which this
                     // asset/airing belongs

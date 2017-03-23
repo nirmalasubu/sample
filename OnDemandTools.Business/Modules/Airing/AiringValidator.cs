@@ -151,12 +151,14 @@ namespace OnDemandTools.Business.Modules.Airing
 
             RuleSet(AiringValidationRuleSet.PostAiring.ToString(), () =>
             {
-                RuleFor(c => c)
+                RuleFor(c => c)               
                 .Must(c => !c.Destinations.IsNullOrEmpty() ^ !c.Products.IsNullOrEmpty())
                 .WithMessage("Either products or destinations are required, not both");
 
                 RuleForEach(c => c.Products)
                     .SetValidator(new ProductValidator(desQuery));
+                RuleForEach(c => c.Destinations)
+                  .SetValidator(new DestinationValidator(desQuery));
             });
         }
     }
@@ -179,6 +181,29 @@ namespace OnDemandTools.Business.Modules.Airing
 
                      })
                      .WithMessage("Product {0} doesn't have a destination. Products require one or more destination before content can be fulfilled. Please contact ODT team - OnDemandToolsSupport@turner.com", c => c.ExternalId);
+
+            });
+
+        }
+    }
+
+    class DestinationValidator : AbstractValidator<BLModel.Destination>
+    {
+        public DestinationValidator(IDestinationQuery desQuery)
+        {
+
+            RuleSet(AiringValidationRuleSet.PostAiring.ToString(), () =>
+            {
+                // Verify  destination exists
+                RuleFor(c => c)
+                     .Must(c =>
+                     {
+                         return desQuery
+                        .GetByDestinationNames(new List<string> { c.Name })
+                        .Any();
+
+                     })
+                     .WithMessage(" {0} destination doesn't exists.  Please contact ODT team - OnDemandToolsSupport@turner.com", c => c.Name);
 
             });
 

@@ -11,6 +11,7 @@ using RestSharp;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Extensions;
 using System.Threading.Tasks;
+using OnDemandTools.DAL.Modules.Destination.Comparer;
 
 namespace OnDemandTools.Business.Modules.Destination
 {
@@ -61,6 +62,7 @@ namespace OnDemandTools.Business.Modules.Destination
         }
 
 
+
         /// <summary>
         /// Gets destinations by mapping identifier.
         /// </summary>
@@ -109,19 +111,38 @@ namespace OnDemandTools.Business.Modules.Destination
         }
 
         /// <summary>
-        /// Add Destination properties and deliverables to airing
+        /// Get Destination properties and deliverables to airing
+        /// </summary>
+        /// <param name="airing">airing</param>    
+
+        public void GetAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
+        {
+            foreach (var flight in airing.Flights)
+            {
+                var destinationNames = flight.Destinations.Select(d => d.Name).Distinct().ToList();
+
+                List<BLModel.Destination> destination = (destinationHelper.GetByDestinationNames(destinationNames)
+                                                         .Distinct(new DestinationDataModelComparer()).ToList().
+                                                          ToViewModel<List<DLModel.Destination>, List<BLModel.Destination>>());
+
+                flight.Destinations = GetByDestinationNames(destinationNames)
+                              .ToBusinessModel<List<BLModel.Destination>, List<Airing.Model.Destination>>();
+            }
+        }
+
+        /// <summary>
+        /// Fliter and transform Destination properties and deliverables to airing
         /// </summary>
         /// <param name="airing">airing</param>
-        public void AddAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
+        public void TransformAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
         {
             foreach (var flight in airing.Flights)
             {
                 foreach (var destination in flight.Destinations)
                 {
-                    var propertiesToRemove = new List<BLModel.Property>();
-                    BLModel.Destination destinationdetails = GetByName(destination.Name);
+                    var propertiesToRemove = new List<Property>();
 
-                    foreach (var property in destinationdetails.Properties)
+                    foreach (var property in destination.Properties)
                     {
                         if (property.Brands.Any() && !property.Brands.Contains(airing.Network)) //airing and property brand should be same
                         {
@@ -138,7 +159,7 @@ namespace OnDemandTools.Business.Modules.Destination
                             continue;
                         }
 
-                        if (property.TitleIds.Any()) 
+                        if (property.TitleIds.Any())
                         {
                             if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property)) // Any one of the title Id should match
                             {
@@ -154,9 +175,7 @@ namespace OnDemandTools.Business.Modules.Destination
                             }
                         }
                     }
-                    destinationdetails.Properties = destinationdetails.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList(); //remove  unmatched  properties
-                    destination.Properties = destinationdetails.Properties.ToBusinessModel<List<BLModel.Property>, List<Property>>();
-                    destination.Deliverables = destinationdetails.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Deliverable>>();
+                    destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList(); //remove  unmatched  properties
                     bool isFlowDataRequired = CheckDelvierablesandPropertiesRequiresFlowTitle(destination); //check any Delvierables Properties  token requires flow data
                     if (isFlowDataRequired)
                     {
@@ -168,6 +187,7 @@ namespace OnDemandTools.Business.Modules.Destination
                 }
             }
         }
+
         #region PRIVATE METHODS
         private void GetFlowValuesforAiring(ref Airing.Model.Airing airing)
         {
@@ -175,14 +195,14 @@ namespace OnDemandTools.Business.Modules.Destination
                 .Where(t => t.Authority == "Turner" && t.Value != null)
                 .Select(t => int.Parse(t.Value)).ToList();
             titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
-            List<Airing.Model.Alternate.Title.Title> titles =new List<Airing.Model.Alternate.Title.Title>();
+            List<Airing.Model.Alternate.Title.Title> titles = new List<Airing.Model.Alternate.Title.Title>();
 
             if (!airing.FlowTitleData.Any()) // Fetch when flowData is not available
             {
-                 titles = GetFlowTitlesFor(titleIds);
-                 airing.FlowTitleData = titles;
+                titles = GetFlowTitlesFor(titleIds);
+                airing.FlowTitleData = titles;
             }
-            
+
         }
 
         private List<Airing.Model.Alternate.Title.Title> GetFlowTitlesFor(IEnumerable<int> titleIds)
@@ -253,7 +273,7 @@ namespace OnDemandTools.Business.Modules.Destination
             return false;
         }
 
-        private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, BLModel.Property property)
+        private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Property property)
         {
             var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
             if (titleIds.Any())
@@ -270,7 +290,7 @@ namespace OnDemandTools.Business.Modules.Destination
             return true;
         }
 
-        private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, BLModel.Property property)
+        private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Property property)
         {
             if (airing.Title.Series.Id.HasValue)
             {
