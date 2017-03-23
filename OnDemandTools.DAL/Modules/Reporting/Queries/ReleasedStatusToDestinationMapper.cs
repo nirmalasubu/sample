@@ -24,11 +24,11 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
 
         #region public methods
 
-        public List<DF_Status> CreateDestinationStatuses(DF_Status status, IList<DF_Destination> destinations)
+        public List<DF_Status> CreateDestinationStatuses(DF_Status status, IList<DF_Destination> destinations, bool isActiveAiringStatus)
         {
             var releasedDestinationStatuses = new List<DF_Status>();
             var currentFeedDestinations = GetDestinations(status.AssetID, destinations).ToList();
-            List<DF_Status> dd = GetStatusesByAssetId(status.AssetID);
+            List<DF_Status> dd = GetStatusesByAssetId(status.AssetID, isActiveAiringStatus);
             var releasedStatuses = dd.Where(s => s.StatusEnum == StatusLibrary.GetStatusEnumByValue("Released").Enum).ToList();
 
             var existingReportedDestinations = GetReportedDestinations(releasedStatuses);
@@ -203,9 +203,9 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
         }
 
 
-        public List<DF_Status> GetStatusesByAssetId(string assetId)
+        public List<DF_Status> GetStatusesByAssetId(string assetId, bool isActiveAiringStatus)
         {
-            return dbConnection.GetDatabase().GetCollection<DF_Status>("DFStatus").Find(Query.EQ("AssetID", assetId)).OrderBy(c => c.CreatedDate).ToList();
+            return dbConnection.GetDatabase().GetCollection<DF_Status>(isActiveAiringStatus ? "DFStatus" : "DFExpiredStatus").Find(Query.EQ("AssetID", assetId)).OrderBy(c => c.CreatedDate).ToList();
         }
     }
 }
