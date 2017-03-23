@@ -17,7 +17,8 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
         ///     Get's the DF status by given airingId
         /// </summary>
         /// <param name="airingId">the airingId</param>
+        /// <param name="getFromActiveCollection">get from active status collection, if false it will get from expired collection</param>
         /// <returns></returns>
-        IQueryable<DF_Status> GetDfStatuses(string airingId);
+        IQueryable<DF_Status> GetDfStatuses(string airingId, bool getFromActiveCollection);
     }
 }

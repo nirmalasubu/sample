@@ -37,12 +37,13 @@ namespace OnDemandTools.DAL.Modules.Reporting.Queries
         ///     Get's the DF status by given airingId
         /// </summary>
         /// <param name="airingId">the airingId</param>
+        /// <param name="getFromActiveCollection">get from active collection? otherwise it will get from expired collection</param>
         /// <returns></returns>
-        public IQueryable<DF_Status> GetDfStatuses(string airingId)
+        public IQueryable<DF_Status> GetDfStatuses(string airingId, bool getFromActiveCollection = true)
         {
             var query = Query.EQ("AssetID", airingId);
 
-            return _database.GetCollection<DF_Status>("DFStatus")
+            return _database.GetCollection<DF_Status>(getFromActiveCollection ? "DFStatus" : "DFExpiredStatus")
                 .Find(query).AsQueryable();
         }
     }

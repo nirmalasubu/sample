@@ -25,12 +25,24 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
 
 
         /// <summary>
-        /// Deport's assocaited airing statuses by airingId
+        /// Deport's associated airing statuses by airingId
         /// </summary>
         /// <param name="airingid">the airing id</param>
         public void MoveToExpireCollection(string airingid)
         {
-            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid))
+            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid, true))
+            {
+                MoveToExpireCollection(dfStatus);
+            }
+        }
+
+        /// <summary>
+        /// Deport's associated airing statuses by airingId
+        /// </summary>
+        /// <param name="airingid">the airing id</param>
+        public void MoveToCurrentCollection(string airingid)
+        {
+            foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid, false))
             {
                 MoveToExpireCollection(dfStatus);
             }
@@ -49,6 +61,22 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
 
             _currentCollection.Remove(query);
         }
+
+        /// <summary>
+        /// Deports the Status to Expired Collection
+        /// </summary>
+        /// <param name="status"></param>
+        public void MoveToCurrentCollection(DF_Status status)
+        {
+            var expiredStatus = CloneStatus(status);
+            _currentCollection.Save(expiredStatus);
+
+            var query = Query<DF_Status>.EQ(e => e.Id, status.Id);
+
+            _expiredCollection.Remove(query);
+        }
+
+        
 
         /// <summary>
         /// Clones the status

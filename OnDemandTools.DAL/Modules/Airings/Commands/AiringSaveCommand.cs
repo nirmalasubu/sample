@@ -6,6 +6,7 @@ using OnDemandTools.DAL.Modules.Airings.Model;
 using System;
 using System.Linq;
 using Newtonsoft.Json;
+using OnDemandTools.DAL.Modules.Reporting.Command;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
@@ -13,12 +14,13 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
     {
         private readonly MongoDatabase _database;
         private readonly IGetAiringQuery _getAiringQuery;
+        private readonly IDfStatusMover _dfStatusMover;
 
-        public AiringSaveCommand(IODTDatastore connection, IGetAiringQuery getAiringQueryPrimaryDb)
+        public AiringSaveCommand(IODTDatastore connection, IGetAiringQuery getAiringQueryPrimaryDb, IDfStatusMover dfStatusMover)
         {
             _database = connection.GetDatabase();
-
             _getAiringQuery = getAiringQueryPrimaryDb;
+            _dfStatusMover = dfStatusMover;
         }
 
         public Airing Save(Airing airing, bool hasImmediateDelivery, bool updateHistorical)
@@ -54,6 +56,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
                 if (expiredAsset != null)
                 {
                     expiredCollection.Remove(query);
+                    _dfStatusMover.MoveToCurrentCollection(airing.AssetId);
                 }
 
                 return _getAiringQuery.GetBy(airing.AssetId);
