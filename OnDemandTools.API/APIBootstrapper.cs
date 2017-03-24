@@ -5,6 +5,7 @@ using Nancy.Bootstrapper;
 using Nancy.Authentication.Stateless;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using OnDemandTools.Business.Modules.User;
 using System.Security.Claims;
 using OnDemandTools.API.v1.Models;
@@ -23,7 +24,7 @@ namespace OnDemandTools.API
     // Define Nancy bootstrap configurations
     public class APIBootstrapper : DefaultNancyBootstrapper
     {
-        IConfigurationRoot Configuration;        
+        IConfigurationRoot Configuration;
         Serilog.ILogger AppLogger { get; set; }
         IHttpContextAccessor httpContextAccessor;
         AppSettings appSettings;
@@ -38,7 +39,7 @@ namespace OnDemandTools.API
         }
 
         private void ConfigureLogzIOSettings()
-        {        
+        {
             AppLogger = new LoggerConfiguration()
                       .WriteTo.Logzio(appSettings.LogzIO.AuthToken,
                       application: appSettings.LogzIO.Application,
@@ -67,7 +68,7 @@ namespace OnDemandTools.API
 
         protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
         {
-           
+
             // Identify request holder through API key
             var configuration = new StatelessAuthenticationConfiguration(ctx =>
             {
@@ -90,23 +91,83 @@ namespace OnDemandTools.API
                     container.Resolve<IHttpContextAccessor>().HttpContext.User = user;
                     return user;
                 }
-                
+
                 return null;
             });
 
-
-
             // Add a default error handler to pipeline
             ErrorPipeline er = new ErrorPipeline();
-            er.AddItemToEndOfPipeline((ctx, ex) =>
-            {
-                AppLogger.Error(ex, ex.Message);
-                return ErrorResponse.FromException(ex);
-                       
-            });
+            er.AddItemToEndOfPipeline((ctx, ex) => LogAndGetErrorResponse(ex, ctx));
 
             pipelines.OnError = er;
             StatelessAuthentication.Enable(pipelines, configuration);
+        }
+
+        private ErrorResponse LogAndGetErrorResponse(Exception ex, NancyContext ctx)
+        {
+            var errorResponse = ErrorResponse.FromException(ex);
+            try
+            {
+                var messageDictionary = GetErrorProperties(ex, ctx, errorResponse);
+
+                AppLogger.Information(string.Format("{0} {1}", ex.Message, " {Error} "), messageDictionary);
+            }
+            catch (Exception exception)
+            {
+                //Logs the actual error message if there is any expception
+                AppLogger.Error(ex, ex.Message);
+
+                AppLogger.Information(exception, "Unexpected error occured while logging the error.");
+            }
+
+            return errorResponse;
+        }
+
+        private Dictionary<string, object> GetErrorProperties(Exception ex, NancyContext ctx, ErrorResponse errorResponse)
+        {
+            var messageDictionary = new Dictionary<string, object>
+            {
+                ["stackTrace"] = ex.StackTrace,
+                ["requestUrl"] = ctx.Request.Url,
+                ["requestHostAddress"] = ctx.Request.UserHostAddress
+            };
+
+
+
+            try
+            {
+                if (ctx.Request.Body.Length > 0)
+                {
+                    StreamReader sr = new StreamReader(ctx.Request.Body, System.Text.Encoding.UTF8);
+                    messageDictionary["requestBody"] = sr.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                AppLogger.Error(e, "Unexpected error occured while reading request body.");
+            }
+
+
+            if (ex.InnerException != null)
+            {
+                messageDictionary["innerException"] = string.Format("{0} - {1}", ex.InnerException.Message,
+                    ex.InnerException.StackTrace ?? string.Empty);
+            }
+
+            try
+            {
+                var apiKey = ctx.Request.Headers.Authorization;
+                if (apiKey.Length > 7)
+                    messageDictionary["apiKey"] = apiKey.Substring(apiKey.Length - 7);
+            }
+            catch (Exception e)
+            {
+                AppLogger.Error(e, "Unexpected error occured while reading api key.");
+            }
+
+            messageDictionary["statusCode"] = errorResponse.StatusCode;
+
+            return messageDictionary;
         }
 
 

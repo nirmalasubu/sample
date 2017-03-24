@@ -197,9 +197,9 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
         {
             var airings = new List<Airing>();
             var query = Query.And(Query.EQ("MediaId", mediaId));
-            bool IsAiringsExists = _currentCollection.Find(query).Count() > 0 ? true : false;
+            bool isAiringsExists = _currentCollection.Find(query).Any();
 
-            if (!IsAiringsExists)
+            if (!isAiringsExists)
             {
                 throw new AiringNotFoundException(string.Format("No Airings found for media id {0}.", mediaId));
             }

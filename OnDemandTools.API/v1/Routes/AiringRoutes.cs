@@ -492,11 +492,13 @@ namespace OnDemandTools.API.v1.Routes
 
         private Dictionary<string, object> GeneratePostAiringpropertiesForLogzIO(BLAiringModel.Airing savedAiring, UserIdentity user)
         {
-            Dictionary<string, object> Airingdetails = new Dictionary<string, object>();
+            Dictionary<string, object> airingdetails = new Dictionary<string, object>
+                                                       {
+                                                           {"airingid", savedAiring.AssetId},
+                                                           {"mediaid",savedAiring.MediaId},
+                                                           {"brand", savedAiring.Network}
+                                                       };
 
-            Airingdetails.Add("airingid", savedAiring.AssetId);
-            Airingdetails.Add("mediaid", savedAiring.MediaId);
-            Airingdetails.Add("brand", savedAiring.Network);
 
             int i = 0;
             string flightWindow = null, products = null, destinations = null;
@@ -526,27 +528,27 @@ namespace OnDemandTools.API.v1.Routes
                                                                   i, element.Type, element.Value, element.Authority));
                 i++;
             }
-            
+
             i = 0;
-            string RelatedTitleIds = null;
+            string relatedTitleIds = null;
             foreach (var element in savedAiring.Title.RelatedTitleIds)
             {
-                RelatedTitleIds = string.Concat(RelatedTitleIds, string.Format("RelatedTitleIds[{0}] : [type : {1} , value : {2} , authority : {3}] \n",
+                relatedTitleIds = string.Concat(relatedTitleIds, string.Format("RelatedTitleIds[{0}] : [type : {1} , value : {2} , authority : {3}] \n",
                                                                   i, element.Type, element.Value, element.Authority));
                 i++;
             }
-            
-            Airingdetails.Add("titleIds", titleIds);
-            Airingdetails.Add("relatedTitleIds", RelatedTitleIds);
-            Airingdetails.Add("flightwindow", flightWindow);
-            Airingdetails.Add("products", products);
-            Airingdetails.Add("flags", string.Format("hd : {0}, cx : {1}, ProgrammerBrandingReq : {2}, FastForwardAllowed : {3}, ManuallyProcess : {4}",
+
+            airingdetails.Add("titleIds", titleIds);
+            airingdetails.Add("relatedTitleIds", relatedTitleIds);
+            airingdetails.Add("flightwindow", flightWindow);
+            airingdetails.Add("products", products);
+            airingdetails.Add("flags", string.Format("hd : {0}, cx : {1}, ProgrammerBrandingReq : {2}, FastForwardAllowed : {3}, ManuallyProcess : {4}",
                                                       savedAiring.Flags.Hd, savedAiring.Flags.Cx, savedAiring.Flags.ProgrammerBrandingReq,
                                                       savedAiring.Flags.FastForwardAllowed, savedAiring.Flags.ManuallyProcess));
-            Airingdetails.Add("destination", destinations);
-            Airingdetails.Add("apikey", user.ApiKey.ToString().Substring(user.ApiKey.ToString().Length - 4));
+            airingdetails.Add("destination", destinations);
+            airingdetails.Add("apikey", user.ApiKey.ToString().Substring(user.ApiKey.ToString().Length - 4));
 
-            return Airingdetails;
+            return airingdetails;
         }
 
 
