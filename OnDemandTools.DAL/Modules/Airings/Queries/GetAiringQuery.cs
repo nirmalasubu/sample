@@ -162,11 +162,20 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
 
         public List<Airing> GetBy(string brand, string destination, DateTime startDate, DateTime endDate, string airingStatus = "")
         {
-            var query = Query.And(
-               Query.EQ("Flights.Destinations.Name", destination),
-               Query.EQ("Network", brand),
-               Query.LTE("Flights.Start", endDate.ToUniversalTime()),
-               Query.GTE("Flights.End", startDate.ToUniversalTime()));
+            IMongoQuery query;
+            if (startDate!=DateTime.MinValue && endDate!=DateTime.MinValue)
+            {
+                 query = Query.And(
+                   Query.EQ("Flights.Destinations.Name", destination),
+                   Query.EQ("Network", brand),
+                   Query.LTE("Flights.Start", endDate.ToUniversalTime()),
+                   Query.GTE("Flights.End", startDate.ToUniversalTime()));
+            }else
+            {
+                 query = Query.And(
+                  Query.EQ("Flights.Destinations.Name", destination),
+                  Query.EQ("Network", brand));
+            }
 
 
             airingStatus = string.IsNullOrEmpty(airingStatus) ? "active" : airingStatus.ToLower();
