@@ -54,8 +54,10 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
         /// <param name="status"></param>
         public void MoveToExpireCollection(DF_Status status)
         {
-            var expiredStatus = CloneStatus(status);
-            _expiredCollection.Save(expiredStatus);
+            if (_expiredCollection.FindOne(Query<DF_Status>.EQ(e => e.Id, status.Id)) == null)
+            {
+                _expiredCollection.Save(status);
+            }
 
             var query = Query<DF_Status>.EQ(e => e.Id, status.Id);
 
@@ -76,7 +78,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
             _expiredCollection.Remove(query);
         }
 
-        
+
 
         /// <summary>
         /// Clones the status
