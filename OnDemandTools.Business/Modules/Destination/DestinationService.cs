@@ -121,12 +121,22 @@ namespace OnDemandTools.Business.Modules.Destination
             {
                 var destinationNames = flight.Destinations.Select(d => d.Name).Distinct().ToList();
 
-                List<BLModel.Destination> destination = (destinationHelper.GetByDestinationNames(destinationNames)
+                var dbDestinations = (destinationHelper.GetByDestinationNames(destinationNames)
                                                          .Distinct(new DestinationDataModelComparer()).ToList().
                                                           ToViewModel<List<DLModel.Destination>, List<BLModel.Destination>>());
 
-                flight.Destinations = GetByDestinationNames(destinationNames)
-                              .ToBusinessModel<List<BLModel.Destination>, List<Airing.Model.Destination>>();
+                foreach (Airing.Model.Destination des in flight.Destinations)
+                {
+                    foreach (BLModel.Destination dbDes in dbDestinations)
+                    {
+                        if (dbDes.Name == des.Name)
+                        {
+                            des.Properties = dbDes.Properties.ToBusinessModel<List<BLModel.Property>, List<Property>>();
+                            des.Deliverables = dbDes.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Deliverable>>();
+                        }
+                    }
+                }
+
             }
         }
 

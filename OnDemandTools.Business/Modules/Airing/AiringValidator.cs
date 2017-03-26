@@ -157,8 +157,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
                 RuleForEach(c => c.Products)
                     .SetValidator(new ProductValidator(desQuery));
-                RuleForEach(c => c.Destinations)
-                  .SetValidator(new DestinationValidator(desQuery));
+               
             });
         }
     }
@@ -187,26 +186,5 @@ namespace OnDemandTools.Business.Modules.Airing
         }
     }
 
-    class DestinationValidator : AbstractValidator<BLModel.Destination>
-    {
-        public DestinationValidator(IDestinationQuery desQuery)
-        {
-
-            RuleSet(AiringValidationRuleSet.PostAiring.ToString(), () =>
-            {
-                // Verify  destination exists
-                RuleFor(c => c)
-                     .Must(c =>
-                     {
-                         return desQuery
-                        .GetByDestinationNames(new List<string> { c.Name })
-                        .Any();
-
-                     })
-                     .WithMessage(" {0} destination doesn't exists.  Please contact ODT team - OnDemandToolsSupport@turner.com", c => c.Name);
-
-            });
-
-        }
-    }
+  
 }

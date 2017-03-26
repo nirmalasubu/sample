@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
+using VMAiringPostResponseModel = OnDemandTools.API.v1.Models.Airing.Long;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using OnDemandTools.API.v1.Models.Airing.Change;
 using OnDemandTools.API.v1.Models.Airing.Title;
@@ -176,6 +177,50 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Alternate.Title.Title, Title>()
                           .ForMember(dest => dest.ExternalSources, opt => opt.Condition(src => (!src.ExternalSources.IsNullOrEmpty() && src.ExternalSources.Count > 0)));
             CreateMap<BLAiringModel.Alternate.Title.ExternalSource, ExternalSource>();
+
+
+            // BL to VM  for Post Airing ResponseModel
+            CreateMap<BLAiringModel.Airing, VMAiringPostResponseModel.PostResponseAiring>()
+                .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Network))
+                .ForMember(d => d.AiringId, opt => opt.MapFrom(s => s.AssetId))
+                .ForMember(d => d.ReleasedBy, opt => opt.MapFrom(s => s.ReleaseBy))
+                .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
+
+            CreateMap<BLAiringModel.AiringLink, VMAiringPostResponseModel.AiringLink>();
+            CreateMap<BLAiringModel.Category, VMAiringPostResponseModel.Category>();
+            CreateMap<BLAiringModel.ClosedCaptioning, VMAiringPostResponseModel.ClosedCaptioning>();
+
+            CreateMap<BLAiringModel.Duration, VMAiringPostResponseModel.Duration>();
+            CreateMap<BLAiringModel.Episode, VMAiringPostResponseModel.Episode>();
+
+            CreateMap<BLAiringModel.Flags, VMAiringPostResponseModel.Flags>();
+            CreateMap<BLAiringModel.Flight, VMAiringPostResponseModel.PostResponseFlight>();
+            CreateMap<BLAiringModel.Genre, VMAiringPostResponseModel.Genre>();
+            CreateMap<BLAiringModel.GuideCategory, VMAiringPostResponseModel.GuideCategory>();
+            CreateMap<BLAiringModel.Category, VMAiringPostResponseModel.Category>();
+            CreateMap<BLAiringModel.Package, VMAiringPostResponseModel.Package>();
+            CreateMap<BLAiringModel.Participant, VMAiringPostResponseModel.Participant>();
+            CreateMap<BLAiringModel.PlayItem, VMAiringPostResponseModel.PlayItem>();
+            CreateMap<BLAiringModel.ProductCode, VMAiringPostResponseModel.ProductCode>();
+            CreateMap<BLAiringModel.ProgramType, VMAiringPostResponseModel.ProgramType>();
+            CreateMap<BLAiringModel.ProviderContentTier, VMAiringPostResponseModel.ProviderContentTier>();
+            CreateMap<BLAiringModel.Season, VMAiringPostResponseModel.Season>();
+            CreateMap<BLAiringModel.Series, VMAiringPostResponseModel.Series>();
+            CreateMap<BLAiringModel.Story, VMAiringPostResponseModel.Story>();
+            CreateMap<BLAiringModel.TVRating, VMAiringPostResponseModel.Rating>();
+            CreateMap<BLAiringModel.Title, VMAiringPostResponseModel.Title>()
+                .ForMember(d => d.Rating, opt => opt.MapFrom(s => s.TVRating))
+                .ForMember(d => d.Episode, opt => opt.MapFrom(s => s.Episode ?? Mapper.Map<BLAiringModel.Element, BLAiringModel.Episode>(s.Element)));
+
+            CreateMap<BLAiringModel.TitleId, VMAiringPostResponseModel.TitleId>();
+            CreateMap<BLAiringModel.Version, VMAiringPostResponseModel.Version>();
+            CreateMap<BLAiringModel.Destination, VMAiringPostResponseModel.PostResponseDestination>()
+                 .ForMember(d => d.Properties, opt => opt.Ignore())
+                 .ForMember(d => d.Deliverables, opt => opt.Ignore());
+
+
+            CreateMap<BLAiringModel.Property, VMAiringPostResponseModel.Property>();
+            CreateMap<BLAiringModel.Deliverable, VMAiringPostResponseModel.Deliverable>();
         }
     }
 }

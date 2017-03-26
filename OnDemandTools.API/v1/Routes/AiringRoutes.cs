@@ -19,6 +19,7 @@ using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
 using VMAiringShortModel = OnDemandTools.API.v1.Models.Airing.Short;
 using VMAiringLongModel = OnDemandTools.API.v1.Models.Airing.Long;
+using VMAiringPostResponseModel = OnDemandTools.API.v1.Models.Airing.Long;
 using OnDemandTools.API.v1.Models.Airing.Task;
 using OnDemandTools.API.v1.Models.Airing.Queue;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
@@ -425,7 +426,7 @@ namespace OnDemandTools.API.v1.Routes
                     logger.Information("Successfully ingested released asset: {Asset}", GeneratePostAiringpropertiesForLogzIO(savedAiring, user));
 
                     // Return airing model                    
-                    return savedAiring.ToViewModel<BLAiringModel.Airing, VMAiringLongModel.Airing>();
+                    return savedAiring.ToViewModel<BLAiringModel.Airing, VMAiringPostResponseModel.PostResponseAiring>();
                 }
                 catch (Exception e)
                 {
