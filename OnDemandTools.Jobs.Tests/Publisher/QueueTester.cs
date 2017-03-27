@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OnDemandTools.Business.Modules.Reporting;
 using Xunit;
 
 namespace OnDemandTools.Jobs.Tests.Publisher
@@ -19,6 +20,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         private readonly RestClient _client;
         private readonly IPublisher _publisher;
         private readonly List<AiringDataStore> _processedAirings;
+        public readonly IDfStatusDeporterService _dfStatusService;
 
         public List<AiringDataStore> ProcessedAirings => _processedAirings;
 
@@ -27,6 +29,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _fixture = fixture;
             _client = _fixture.restClient;
             _publisher = _fixture.container.GetInstance<IPublisher>();
+            _dfStatusService = _fixture.container.GetInstance<IDfStatusDeporterService>();
             _processedAirings = new List<AiringDataStore>();
         }
 
@@ -94,7 +97,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         #region Queue Delivery test
         public void VerifyClientQueueDelivery()
-        {           
+        {
             if (!_processedAirings.Any())
             {
                 Assert.True(false, "No airing found to run the pubslisher job");
@@ -177,6 +180,20 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                                           activeAiring.IsDeleted
                                               ? AiringCollection.DeletedCollection
                                               : AiringCollection.CurrentOrExpiredCollection);
+
+                if (!_dfStatusService.HasMessages(activeAiring.AiringId, !activeAiring.IsDeleted))
+                {
+                    activeAiring.HasQueueDeliveryError = true;
+
+                    Assert.True(false,
+                        activeAiring.IsDeleted
+                            ? string.Format(
+                                "Airing {0}, DF messages added to current collection instead of Expired/Deleted collection",
+                                activeAiring.AiringId)
+                            : string.Format(
+                                "Airing {0}, DF messages added to expired collection instead of active collection",
+                                activeAiring.AiringId));
+                }
 
                 foreach (var expectedQueue in activeAiring.ExpectedQueues)
                 {
@@ -295,7 +312,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             titleIds[0] = (Convert.ToInt32(titleIds[0]) - 100).ToString();
             jTitleIds = JArray.FromObject(titleIds);
-            
+
             PostPackage(jTitleIds, destination);
 
             CheckPackageQueueDelivery(_cartoonAiring, true, cartoonQueueName);

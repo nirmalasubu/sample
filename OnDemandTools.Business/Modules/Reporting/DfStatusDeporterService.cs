@@ -48,5 +48,17 @@ namespace OnDemandTools.Business.Modules.Reporting
                 }
             }
         }
+
+
+        /// <summary>
+        /// Checks the airing DF messages exists in Current or Expired DF Status collection
+        /// </summary>
+        /// <param name="airingId">the airing id</param>
+        /// <param name="isActiveAiringCollection">is Active Airing Collection?</param>
+        /// <returns></returns>
+        public bool HasMessages(string airingId, bool isActiveAiringCollection)
+        {
+            return _statusQuery.GetDfStatuses(airingId, isActiveAiringCollection).Any();
+        }
     }
 }
