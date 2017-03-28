@@ -3,16 +3,20 @@ using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.AiringId.Model;
 using OnDemandTools.DAL.Modules.Airings.Model;
+using OnDemandTools.DAL.Modules.Reporting.Command;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
     public class AiringDeleteCommand : IAiringDeleteCommand
     {
         private readonly MongoDatabase _database;
+        private readonly IDfStatusMover _dfStatusMover;
 
-        public AiringDeleteCommand(IODTDatastore connection)
+        public AiringDeleteCommand(IODTDatastore connection,
+            IDfStatusMover dfStatusMover)
         {
             _database = connection.GetDatabase();
+            _dfStatusMover = dfStatusMover;
         }
 
         public Airing Delete(Airing airing)
@@ -29,6 +33,8 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
             deletedCollection.Update(Query.EQ("AssetId", airing.AssetId),
                 Update.Replace(airing),
                 UpdateFlags.Upsert);
+
+            _dfStatusMover.MoveToExpireCollection(airing.AssetId);
 
             return airing;
         }
