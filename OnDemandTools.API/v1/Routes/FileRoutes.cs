@@ -157,7 +157,7 @@ namespace OnDemandTools.API.v1.Routes
             {
 
                 if (!String.IsNullOrEmpty(file.AiringId))
-                    reporter.Report(file.AiringId, true, statusMessage);
+                    reporter.Report(file.AiringId, airingSvc.IsAiringExists(file.AiringId), statusMessage);
                 else if (!String.IsNullOrWhiteSpace(file.MediaId))
                 {
                     // Report to all assets under mediaid
