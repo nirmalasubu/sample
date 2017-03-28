@@ -132,14 +132,19 @@ namespace OnDemandTools.API
                 ["requestHostAddress"] = ctx.Request.UserHostAddress
             };
 
-
-
             try
             {
                 if (ctx.Request.Body.Length > 0)
                 {
-                    StreamReader sr = new StreamReader(ctx.Request.Body, System.Text.Encoding.UTF8);
-                    messageDictionary["requestBody"] = sr.ReadToEnd();
+                    using (var sr = new StreamReader(ctx.Request.Body))
+                    {
+                        sr.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                        var requestBody = sr.ReadToEnd();
+
+                        messageDictionary["requestBody"] = requestBody;
+
+                    }
                 }
             }
             catch (Exception e)
