@@ -302,7 +302,7 @@ namespace OnDemandTools.Business.Modules.Destination
 
         private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Property property)
         {
-            if (airing.Title.Series.Id.HasValue)
+            if (airing.Title.Series!=null && airing.Title.Series.Id.HasValue)
             {
                 if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
                 {
