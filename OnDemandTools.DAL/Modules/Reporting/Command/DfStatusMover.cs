@@ -44,7 +44,7 @@ namespace OnDemandTools.DAL.Modules.Reporting.Command
         {
             foreach (var dfStatus in _statusQuery.GetDfStatuses(airingid, false))
             {
-                MoveToExpireCollection(dfStatus);
+                MoveToCurrentCollection(dfStatus);
             }
         }
 
