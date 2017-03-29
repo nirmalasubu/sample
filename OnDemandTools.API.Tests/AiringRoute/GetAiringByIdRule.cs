@@ -41,7 +41,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             // Assert
             Assert.True(response.Value<string>(@"airingId") == "CARE1007291600012447", string.Format("Model Airing Id should be 'CARE1007291600012447' and but the returned {0}", response.Value<string>(@"airingId")));
-            Assert.True(response.Value<string>(@"type") == "Feature Film", string.Format("Type should be 'Feature Film' and but the returned {0}", response.Value<string>(@"type")));
+            Assert.True(response.Value<string>(@"type") == "Episode (Animated)", string.Format("Type should be 'Episode (Animated)' and but the returned {0}", response.Value<string>(@"type")));
             Assert.True(response.Value<string>(@"brand") == "Cartoon", string.Format("Brand should be 'Cartoon' and but the returned {0}", response.Value<string>(@"brand")));
             Assert.True(response.Value<string>(@"platform") == "Broadband", string.Format("Platform should be 'Broadband' and but the returned {0}", response.Value<string>(@"platform")));
 
@@ -110,7 +110,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
                 Assert.True(false, "AiringId : CARE1007291600012447 is deleted");
             }
             var seriesToken = response[@"options"]["series"];
-            Assert.Null(seriesToken.First);
+            Assert.NotNull(seriesToken.First);
 
 
         }
@@ -177,8 +177,33 @@ namespace OnDemandTools.API.Tests.AiringRoute
             var fileToken = response[@"options"]["files"];
             var seriesToken = response[@"options"]["series"];
             Assert.NotNull(fileToken.First);
-            Assert.Null(seriesToken.First);
+            Assert.NotNull(seriesToken.First);
 
+        }
+
+        [Fact]
+        public void GetAiringById_PassingValidId_With_DestinationAndProperties()
+        {
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/CARE1007291600012447?options=destination", Method.GET);
+            Task.Run(async () =>
+            {
+                response = await client.RetrieveRecord(request);
+
+            }).Wait();
+
+            // Assert  
+            string v = response.Value<String>(@"StatusCode");
+            if (v != null)
+            {
+                Assert.True(false, "AiringId : CARE1007291600012447 is deleted");
+            }
+            var destinationToken = response[@"options"]["destinations"];
+            var propertiesToken = destinationToken.First[@"properties"];
+            var deliverablesToken = destinationToken.First[@"deliverables"];
+            Assert.NotNull(destinationToken.First);
+            Assert.NotNull(propertiesToken.First);
+            Assert.Null(deliverablesToken.First);
         }
 
     }
