@@ -42,6 +42,12 @@ namespace OnDemandTools.API.Tests.AiringRoute
             
             Assert.True(jSeries.Value<string>(@"id") == "326558", string.Format("Series Id should be '326558' and but the returned {0}", jSeries.Value<string>(@"id")));
 
+            var flightsDestinationToken = response.First[@"flights"].First["destinations"];
+            var propertiesToken = flightsDestinationToken.First["properties"];
+            var deliverablesToken = flightsDestinationToken.First["deliverables"];
+            Assert.Null(propertiesToken.First);
+            Assert.Null(deliverablesToken.First);
+
         }
 
         [Fact]

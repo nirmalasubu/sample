@@ -56,6 +56,12 @@ namespace OnDemandTools.API.Tests.AiringRoute
                 var my_obj = response.First.Value<JArray>(@"flights").First.Value<JArray>(@"destinations").ToList();
                 var message = my_obj.Any(i => i.Value<String>(@"name") == "CNWB") ? "Test Passed" : "User do not have access to destination";
                 Assert.True(my_obj.Any(i => i.Value<String>(@"name") == "CNWB"), message);
+
+                var flightsDestinationToken = response.First[@"flights"].First["destinations"];
+                var propertiesToken = flightsDestinationToken.First["properties"];
+                var deliverablesToken = flightsDestinationToken.First["deliverables"];
+                Assert.Null(propertiesToken.First);
+                Assert.Null(deliverablesToken.First);
             }
         }
     }
