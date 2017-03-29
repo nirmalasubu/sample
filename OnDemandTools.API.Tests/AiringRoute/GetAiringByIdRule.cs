@@ -198,9 +198,10 @@ namespace OnDemandTools.API.Tests.AiringRoute
             {
                 Assert.True(false, "AiringId : CARE1007291600012447 is deleted");
             }
-            var destinationToken = response[@"options"]["destinations"];
-            var propertiesToken = destinationToken.First[@"properties"];
-            var deliverablesToken = destinationToken.First[@"deliverables"];
+            var destinationToken = response[@"options"]["destinations"];            
+            var flightsDestinationToken = response[@"flights"].First["destinations"];
+            var propertiesToken = flightsDestinationToken.First["properties"];
+            var deliverablesToken = flightsDestinationToken.First["deliverables"];
             Assert.NotNull(destinationToken.First);
             Assert.NotNull(propertiesToken.First);
             Assert.Null(deliverablesToken.First);
