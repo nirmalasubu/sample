@@ -67,9 +67,7 @@ namespace OnDemandTools.Jobs
                 c.For<Mailbox>();
                 c.For<TitleSync>();                
                 c.For<Publisher>();
-                c.For<CloudAmqpSync>();
-                c.For<DfStatusDeporter>();
-
+                c.For<CloudAmqpSync>();             
             });
 
             services.InitializeAutoMapper();

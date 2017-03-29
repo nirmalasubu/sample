@@ -1,12 +1,7 @@
 ﻿namespace OnDemandTools.Business.Modules.Reporting
 {
-    public interface IDfStatusDeporterService
+    public interface IDfStatusService
     {
-        /// <summary>
-        /// Iterate thru all the DF Statuses and it deports expired airing statuses 
-        /// </summary>
-        void DeportDfStatuses();
-
         /// <summary>
         /// Checks the airing DF messages exists in Current or Expired DF Status collection
         /// </summary>

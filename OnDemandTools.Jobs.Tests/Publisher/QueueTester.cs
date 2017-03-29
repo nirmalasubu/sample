@@ -20,7 +20,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         private readonly RestClient _client;
         private readonly IPublisher _publisher;
         private readonly List<AiringDataStore> _processedAirings;
-        public readonly IDfStatusDeporterService _dfStatusService;
+        public readonly IDfStatusService _dfStatusService;
 
         public List<AiringDataStore> ProcessedAirings => _processedAirings;
 
@@ -29,7 +29,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _fixture = fixture;
             _client = _fixture.restClient;
             _publisher = _fixture.container.GetInstance<IPublisher>();
-            _dfStatusService = _fixture.container.GetInstance<IDfStatusDeporterService>();
+            _dfStatusService = _fixture.container.GetInstance<IDfStatusService>();
             _processedAirings = new List<AiringDataStore>();
         }
 

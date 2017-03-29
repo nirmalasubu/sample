@@ -30,7 +30,7 @@ namespace OnDemandTools.Jobs.Tests.Deporter
             //Prepare
             IAiringService airingService = fixture.container.GetInstance<IAiringService>();
             IAiringUnitTestService airingUnitTestService = fixture.container.GetInstance<IAiringUnitTestService>();
-            var dfStatusService = fixture.container.GetInstance<IDfStatusDeporterService>();
+            var dfStatusService = fixture.container.GetInstance<IDfStatusService>();
             JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("TBSAiringWithSingleFlight"));
             JObject response = new JObject();
             var request = new RestRequest("/v1/airing/TBSE", Method.POST);
