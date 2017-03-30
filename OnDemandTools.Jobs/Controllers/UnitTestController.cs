@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Jobs.JobRegistry.Publisher;
 using System.Threading;
 using System.Threading.Tasks;
+using Hangfire;
+using OnDemandTools.Jobs.JobRegistry.Airings;
 using OnDemandTools.Jobs.JobRegistry.Mailbox;
 
 namespace OnDemandTools.Jobs.Controllers
@@ -24,9 +27,12 @@ namespace OnDemandTools.Jobs.Controllers
             return Json("Successfully processed");
         }
 
-        [HttpPost("{id}")]
-        public IActionResult CleanupAirings(string id)
+        [HttpPost]
+        public IActionResult CleanupAirings([FromBody]string[] values)
         {
+            UnitTestAiringCleanUp cleanUp = new UnitTestAiringCleanUp();
+            var jobId = BackgroundJob.Enqueue(() => cleanUp.Execute(values));
+
             return Json("Successfully processed");
         }
 

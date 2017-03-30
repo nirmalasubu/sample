@@ -20,6 +20,7 @@ using OnDemandTools.Jobs.Models;
 using Serilog;
 using StructureMap;
 using System;
+using System.Linq;
 
 namespace OnDemandTools.Jobs
 {
@@ -101,7 +102,10 @@ namespace OnDemandTools.Jobs
             app.UseStaticFiles();
 
             var options = new BackgroundJobServerOptions();
-            options.Queues = Enum.GetNames(typeof(HangfireQueue));
+
+            var queues=  Enum.GetNames(typeof(HangfireQueue)).ToList();
+            queues.Add("default");
+            options.Queues = queues.ToArray();
             options.WorkerCount = 5;
             GlobalJobFilters.Filters.Add(new HangfireJobExpirationTimeout(appSettings));
             app.UseHangfireServer(options);
