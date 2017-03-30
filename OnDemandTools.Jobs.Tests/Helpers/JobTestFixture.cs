@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyModel;
+using MongoDB.Bson.IO;
+using Newtonsoft.Json.Linq;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.DIResolver;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.Logzio;
+using OnDemandTools.DAL.Modules.Airings.Queries;
 using RestSharp;
 using Serilog;
 using StructureMap;
@@ -21,63 +25,81 @@ namespace OnDemandTools.Jobs.Tests.Helpers
         public JobTestFixture()
         {
             BuildJobSettings();
-            restClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
-            ;
+            RestClient.AddDefaultHeader("Authorization", Configuration["TesterAPIKey"]);
         }
 
 
         public JobTestFixture(string apiKeyName)
         {
             BuildJobSettings();
-            restClient.AddDefaultHeader("Authorization", Configuration[apiKeyName]);
+            RestClient.AddDefaultHeader("Authorization", Configuration[apiKeyName]);
         }
 
-        public RestClient restClient { get; set; }
-        public RestClient jobRestClient { get; set; }
+        public RestClient RestClient { get; set; }
+        public RestClient JobRestClient { get; set; }
         public IConfigurationRoot Configuration { get; set; }
-        public IConfigurationBuilder builder { get; set; }
-        public Container container { get; set; }
+        public IConfigurationBuilder Builder { get; set; }
+        public Container Container { get; set; }
+        public List<string> ProcessedAiringIds { get; set; }
+
 
         public void Dispose()
         {
-            restClient = null;
+            CleanupTestAirings(ProcessedAiringIds);
+            RestClient = null;
+            JobRestClient = null;
+        }
+
+        private void CleanupTestAirings(List<string> processedAiringIds)
+        {
+            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(processedAiringIds);
+
+            var request = new RestRequest("/api/unittest/test");
+            request.AddParameter("text/json", jsonString, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                var response = await JobRestClient.RetrieveRecord(request);
+            }).Wait();
         }
 
 
         private void BuildJobSettings()
         {
+            ProcessedAiringIds = new List<string>();
+
             // Build configuration
-            builder = new ConfigurationBuilder()
+            Builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
 
-            Configuration = builder.Build();
+            Configuration = Builder.Build();
             var appSettings = Configuration.Get<AppSettings>("Application");
 
             // Setup rest client
-            restClient = new RestClient(Configuration["APIEndPoint"]);
-            restClient.AddDefaultHeader("Content-Type", "application/json");
+            RestClient = new RestClient(Configuration["APIEndPoint"]);
+            RestClient.AddDefaultHeader("Content-Type", "application/json");
 
 
             // Setup Job rest client
-            jobRestClient = new RestClient(Configuration["JobEndPoint"]);
-            jobRestClient.AddDefaultHeader("Content-Type", "application/json");
+            JobRestClient = new RestClient(Configuration["JobEndPoint"]);
+            JobRestClient.AddDefaultHeader("Content-Type", "application/json");
 
 
             // Start up DI container
-            container = new Container();
+            Container = new Container();
             ILogger appLogger = new LoggerConfiguration()
                 .WriteTo.Logzio(appSettings.LogzIO.AuthToken,
                     appSettings.LogzIO.Application,
                     appSettings.LogzIO.ReporterType,
                     appSettings.LogzIO.Environment)
                 .CreateLogger();
-            container.Configure(c => c.ForSingletonOf<AppSettings>().Use(appSettings));
-            container.Configure(c => c.For<IApplicationContext>().Use<JobContext>());
-            container.Configure(c => c.ForSingletonOf<ILogger>().Use(appLogger));
+            Container.Configure(c => c.ForSingletonOf<AppSettings>().Use(appSettings));
+            Container.Configure(c => c.For<IApplicationContext>().Use<JobContext>());
+            Container.Configure(c => c.ForSingletonOf<ILogger>().Use(appLogger));
 
-            DependencyResolver.RegisterResolver(new StructureMapIOCContainer(container)).RegisterImplmentation();
+            DependencyResolver.RegisterResolver(new StructureMapIOCContainer(Container)).RegisterImplmentation();
 
             // Load mapping            
             LoadAutoMapper();

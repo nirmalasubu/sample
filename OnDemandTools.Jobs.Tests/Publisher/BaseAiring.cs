@@ -16,7 +16,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             _abbreviation = abbreviation;
             _fixture = fixture;
-            _client = _fixture.restClient;
+            _client = _fixture.RestClient;
         }
 
         protected string PostAiringTest(string airingJson, string TestCaseText)
@@ -38,7 +38,11 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 Assert.True(false, "Test method Failed for Brand : " + _abbreviation + ", Method Name :" + TestCaseText);
             }
 
-            return response[@"airingId"].ToString();
+            var airingId= response[@"airingId"].ToString();
+
+            _fixture.ProcessedAiringIds.Add(airingId);
+
+            return airingId;
         }
 
         /// <summary>

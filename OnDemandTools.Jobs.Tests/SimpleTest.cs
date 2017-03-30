@@ -15,7 +15,7 @@ namespace OnDemandTools.Jobs.Tests
         public SimpleTest(JobTestFixture fixture)
         {
             this.fixture = fixture;
-            this.client = this.fixture.restClient;
+            this.client = this.fixture.RestClient;
         }
 
         [Theory]

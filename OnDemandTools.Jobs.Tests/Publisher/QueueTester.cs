@@ -27,9 +27,9 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         public QueueTester(JobTestFixture fixture)
         {
             _fixture = fixture;
-            _client = _fixture.restClient;
-            _publisher = _fixture.container.GetInstance<IPublisher>();
-            _dfStatusService = _fixture.container.GetInstance<IDfStatusService>();
+            _client = _fixture.RestClient;
+            _publisher = _fixture.Container.GetInstance<IPublisher>();
+            _dfStatusService = _fixture.Container.GetInstance<IDfStatusService>();
             _processedAirings = new List<AiringDataStore>();
         }
 
@@ -103,7 +103,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
                 Assert.True(false, "No airing found to run the pubslisher job");
             }
 
-            IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
+            IQueueService queueService = _fixture.Container.GetInstance<IQueueService>();
 
             var queues = _processedAirings.SelectMany(e => e.ExpectedQueues.ToArray()).Distinct().ToList();
 
@@ -137,7 +137,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private void ProhibitResendMediaIdTest()
         {
-            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            IAiringService airingService = _fixture.Container.GetInstance<IAiringService>();
 
             foreach (var activeAiring in _processedAirings)
             {
@@ -171,7 +171,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private void ActiveAiringDeliveryTest()
         {
-            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            IAiringService airingService = _fixture.Container.GetInstance<IAiringService>();
             foreach (var activeAiring in _processedAirings)
             {
                 if (!activeAiring.ExpectedQueues.Any()) continue;
@@ -219,7 +219,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private void ExpiredAiringDelieryTest()
         {
-            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            IAiringService airingService = _fixture.Container.GetInstance<IAiringService>();
             foreach (var expiredAiring in _processedAirings)
             {
                 if (!expiredAiring.UnExpectedQueues.Any()) continue;
@@ -250,7 +250,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private void PriorityQueueTest()
         {
-            IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
+            IQueueService queueService = _fixture.Container.GetInstance<IQueueService>();
             foreach (var airingWithPriority in _processedAirings)
             {
                 if (airingWithPriority.Priority == null) continue;
@@ -336,7 +336,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         {
             var airingId = jAiring.Value<string>(@"airingId");
 
-            var _airingService = _fixture.container.GetInstance<IAiringService>();
+            var _airingService = _fixture.Container.GetInstance<IAiringService>();
 
             if (isSuccessTest)
             {

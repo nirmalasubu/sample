@@ -36,8 +36,8 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _jsonString = _airingObjectHelper.UpdateDates(Resources.Resources.TBSAiringWithSingleFlight, 1);
             _tbsQueueKey = fixture.Configuration["TbsQueueApiKey"];
             _fixture = fixture;
-            _client = _fixture.restClient;
-            _publisher = _fixture.container.GetInstance<IPublisher>();
+            _client = _fixture.RestClient;
+            _publisher = _fixture.Container.GetInstance<IPublisher>();
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         private bool PackageChangeQueueNotification()
         {
-            var _airingService = _fixture.container.GetInstance<IAiringService>();
+            var _airingService = _fixture.Container.GetInstance<IAiringService>();
 
             return (!_airingService.IsAiringDistributed(_airingId, _tbsQueueKey));
         }
@@ -168,7 +168,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
         private bool IsAiringIdDelvieredToQueue()
         {
 
-            IQueueService queueService = _fixture.container.GetInstance<IQueueService>();
+            IQueueService queueService = _fixture.Container.GetInstance<IQueueService>();
             var deliveryQueue = queueService.GetByApiKey(_tbsQueueKey);
             if (deliveryQueue == null)
             {
@@ -177,7 +177,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             queueService.Unlock(deliveryQueue.Name);
             _publisher.Execute(deliveryQueue.Name);
 
-            IAiringService airingService = _fixture.container.GetInstance<IAiringService>();
+            IAiringService airingService = _fixture.Container.GetInstance<IAiringService>();
 
             var airing = airingService.GetBy(_airingId);
 

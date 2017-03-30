@@ -110,7 +110,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             PostAiringStatus(airingStatusPayload, _airingId);
 
-            var airingService = _fixture.container.GetInstance<IAiringService>();
+            var airingService = _fixture.Container.GetInstance<IAiringService>();
 
             var airing = airingService.GetBy(_airingId);
 
