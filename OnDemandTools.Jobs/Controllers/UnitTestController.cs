@@ -14,10 +14,12 @@ namespace OnDemandTools.Jobs.Controllers
     public class UnitTestController : Controller
     {
         Publisher pub;
+        PurgeUnitTestAirings purgeAirings;
 
-        public UnitTestController(Publisher pub, Mailbox mail)
+        public UnitTestController(Publisher pub, PurgeUnitTestAirings purgeAirings)
         {
             this.pub = pub;
+            this.purgeAirings = purgeAirings;
         }
 
         [HttpGet("{id}")]
@@ -30,8 +32,7 @@ namespace OnDemandTools.Jobs.Controllers
         [HttpPost]
         public IActionResult CleanupAirings([FromBody]string[] values)
         {
-            UnitTestAiringCleanUp cleanUp = new UnitTestAiringCleanUp();
-            var jobId = BackgroundJob.Enqueue(() => cleanUp.Execute(values));
+            var jobId = BackgroundJob.Enqueue(() => purgeAirings.Execute(values));
 
             return Json("Successfully processed");
         }

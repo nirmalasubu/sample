@@ -11,6 +11,7 @@ using OnDemandTools.Common.DIResolver;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.Logzio;
 using OnDemandTools.Jobs.Helpers;
+using OnDemandTools.Jobs.JobRegistry.Airings;
 using OnDemandTools.Jobs.JobRegistry.CloudAmqpSync;
 using OnDemandTools.Jobs.JobRegistry.Deporter;
 using OnDemandTools.Jobs.JobRegistry.Mailbox;
@@ -68,7 +69,8 @@ namespace OnDemandTools.Jobs
                 c.For<Mailbox>();
                 c.For<TitleSync>();                
                 c.For<Publisher>();
-                c.For<CloudAmqpSync>();             
+                c.For<CloudAmqpSync>();
+                c.For<PurgeUnitTestAirings>();        
             });
 
             services.InitializeAutoMapper();

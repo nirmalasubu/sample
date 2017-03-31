@@ -238,5 +238,12 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="updateHistorical">if set to <c>true</c> [update historical].</param>
         /// <returns>true/false</returns>
         bool DeleteAiringMappedPackages(string airingId, bool updateHistorical = true);
+
+        /// <summary>
+        /// Purge unit test airings
+        /// </summary>
+        /// <param name="airingIds">airings to bury</param>
+        /// <returns></returns>
+        void PurgeUnitTestAirings(List<string> airingIds);
     }
 }

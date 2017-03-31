@@ -52,6 +52,7 @@ namespace OnDemandTools.Business.Modules.Airing
         IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery;
         IUpdateAiringQueueDelivery updateAiringQueueDelivery;
         IPackageCommand packagePersist;
+        IPurgeAiringCommand purgeAiringCommand;
         private IApplicationContext cntx;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
@@ -71,6 +72,7 @@ namespace OnDemandTools.Business.Modules.Airing
             IUpdateDeletedAiringQueueDelivery updateDeletedAiringQueueDelivery,
             IUpdateAiringQueueDelivery updateAiringQueueDelivery,
             IPackageCommand packagePersist,
+            IPurgeAiringCommand purgeAiringCommand,
             IApplicationContext cntx
            )
         {
@@ -92,6 +94,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.updateAiringQueueDelivery = updateAiringQueueDelivery;
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
             this.packagePersist = packagePersist;
+            this.purgeAiringCommand = purgeAiringCommand;
             this.cntx = cntx;
         }
 
@@ -766,6 +769,11 @@ namespace OnDemandTools.Business.Modules.Airing
             }
 
             return results;
+        }
+
+        public void PurgeUnitTestAirings(List<string> airingIds)
+        {
+            purgeAiringCommand.PurgeAirings(airingIds);
         }
         #endregion
         #endregion
