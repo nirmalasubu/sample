@@ -39,12 +39,6 @@ namespace OnDemandTools.API.Tests.AiringRoute
                 Assert.True(response.First.Value<string>(@"brand") == "Cartoon", string.Format("Brand should be 'Cartoon' and but the returned {0}", response.First.Value<string>(@"brand")));
                 Assert.True(my_obj.Value<string>(@"start") == "01/10/2020 08:00:00", string.Format("Start should be '01/10/2020 08:00:00' and but the returned {0}", my_obj.Value<string>(@"start")));
                 Assert.True(my_obj.Value<string>(@"end") == "01/18/2020 07:59:59", string.Format("End should be '01/18/2020 07:59:59' and but the returned {0}", my_obj.Value<string>(@"end")));
-
-                var flightsDestinationToken = response.First[@"flights"].First["destinations"];
-                var propertiesToken = flightsDestinationToken.First["properties"];
-                var deliverablesToken = flightsDestinationToken.First["deliverables"];
-                Assert.Null(propertiesToken.First);
-                Assert.Null(deliverablesToken.First);
             }
         }
 

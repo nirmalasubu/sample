@@ -42,12 +42,6 @@ namespace OnDemandTools.API.Tests.AiringRoute
             // Assert
             Assert.True(jTitleIds.First.Value<string>(@"value") == "2065580", string.Format("Title Id should be '2065580' and but the returned {0}", jTitleIds.First.Value<string>(@"value")));
 
-            var flightsDestinationToken = response.First[@"flights"].First["destinations"];
-            var propertiesToken = flightsDestinationToken.First["properties"];
-            var deliverablesToken = flightsDestinationToken.First["deliverables"];
-            Assert.NotNull(propertiesToken.First);
-            Assert.Null(deliverablesToken.First);
-
         }
 
         [Fact]
