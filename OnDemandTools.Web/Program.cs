@@ -19,7 +19,7 @@ namespace OnDemandTools.Web
             try
             {
                 // Set default environment to development unless indicated in environment variable
-                var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "local" } };
+                var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "development" } };
 
 
                 var config = new ConfigurationBuilder()
