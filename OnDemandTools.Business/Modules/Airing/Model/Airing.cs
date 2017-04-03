@@ -60,6 +60,8 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public List<Alternate.Title.Title> FlowTitleData { get; set; }
 
+        public List<ChangeNotification> ChangeNotifcations { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();

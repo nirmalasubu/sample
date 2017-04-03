@@ -53,6 +53,7 @@ namespace OnDemandTools.Business.Modules.Airing
         IUpdateAiringQueueDelivery updateAiringQueueDelivery;
         IPackageCommand packagePersist;
         IPurgeAiringCommand purgeAiringCommand;
+        IChangeNotificaitonCommands changeNotificaitonCommands;
         private IApplicationContext cntx;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
@@ -73,6 +74,7 @@ namespace OnDemandTools.Business.Modules.Airing
             IUpdateAiringQueueDelivery updateAiringQueueDelivery,
             IPackageCommand packagePersist,
             IPurgeAiringCommand purgeAiringCommand,
+            IChangeNotificaitonCommands changeNotificaitonCommands,
             IApplicationContext cntx
            )
         {
@@ -95,6 +97,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
             this.packagePersist = packagePersist;
             this.purgeAiringCommand = purgeAiringCommand;
+            this.changeNotificaitonCommands = changeNotificaitonCommands;
             this.cntx = cntx;
         }
 
@@ -398,7 +401,7 @@ namespace OnDemandTools.Business.Modules.Airing
             {
                 airing.Options.Status["video"] = !airing.Options.Files.Where(c => c.Video == true).IsNullOrEmpty();
             }
-            
+
         }
 
         public void AppendPackage(ref BLModel.Alternate.Long.Airing airing, IEnumerable<Tuple<string, decimal>> acceptHeaders)
@@ -436,6 +439,38 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             deportExpiredAiringHelper.Deport(airingDeportGraceDays);
         }
+
+
+        /// <summary>
+        /// Create's the change notification
+        /// </summary>
+        /// <param name="airingId">the airing Id to notify</param>
+        /// <param name="changeNotificaitonType">change notificaiton type</param>
+        /// <param name="queuesToBeNotified">queues to be notified</param>
+        /// <param name="changedValues">changed values</param>
+        public void CreateNotification(string airingId, ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties = null)
+        {
+            var notifications = GetNotifications(changeNotificationType, queuesToBeNotified, changedProperties);
+
+            changeNotificaitonCommands.Save(airingId, notifications);
+        }
+
+        private IEnumerable<DLModel.ChangeNotification> GetNotifications(ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties)
+        {
+            foreach (var queueName in queuesToBeNotified)
+            {
+                DLModel.ChangeNotification notification = new DLModel.ChangeNotification
+                {
+                    QueueName = queueName,
+                    ChangeNotificationType = changeNotificationType,
+                    ChangedProperties = changedProperties,
+                };
+
+                yield return notification;
+            }
+        }
+
+
         #endregion
 
         #region "Private methods"
@@ -528,7 +563,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 return false;
             }
             return true;
-           
+
         }
 
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)

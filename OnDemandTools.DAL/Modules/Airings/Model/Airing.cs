@@ -62,6 +62,8 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public IList<string> IgnoredQueues { get; set; }
 
+        public IList<ChangeNotification> ChangeNotifications { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();

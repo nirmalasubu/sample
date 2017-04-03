@@ -245,5 +245,15 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="airingIds">airings to bury</param>
         /// <returns></returns>
         void PurgeUnitTestAirings(List<string> airingIds);
+
+
+        /// <summary>
+        /// Create's the change notification
+        /// </summary>
+        /// <param name="airingId">the airing Id to notify</param>
+        /// <param name="changeNotificaitonType">change notificaiton type</param>
+        /// <param name="queuesToBeNotified">queues to be notified</param>
+        /// <param name="changedValues">changed values</param>
+        void CreateNotification(string airingId, ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties = null);
     }
 }
