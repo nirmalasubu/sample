@@ -9,7 +9,7 @@ namespace OnDemandTools.Business.Modules.User
     {
         List<UserIdentity> GetUsers();
         UserIdentity GetById(String id);
-        UserIdentity GetByUserName(string userName);
+        ClaimsPrincipal GetByUserName(string userName);
         ClaimsPrincipal GetBy(Guid apiKey);
     }
 }

@@ -19,7 +19,7 @@ namespace OnDemandTools.Web
             try
             {
                 // Set default environment to development unless indicated in environment variable
-                var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "Development" } };
+                var defaults = new Dictionary<string, string> { { WebHostDefaults.EnvironmentKey, "local" } };
 
 
                 var config = new ConfigurationBuilder()
@@ -28,15 +28,33 @@ namespace OnDemandTools.Web
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
+              if(config.GetValue<string>("environment") == "local"){
+
                 var host = new WebHostBuilder()
                     .UseConfiguration(config)
                     .UseKestrel()
                     .UseIISIntegration()
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseStartup<Startup>()
+                    .UseUrls("http://localhost:5010")
                     .Build();
 
-                host.Run();
+                     host.Run();
+
+              }
+              else {
+                 var host = new WebHostBuilder()
+                    .UseConfiguration(config)
+                    .UseKestrel()
+                    .UseIISIntegration()
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .UseStartup<Startup>()                    
+                    .Build();
+
+                 host.Run();
+              }
+
+               
             }
             catch (Exception ex)
             {

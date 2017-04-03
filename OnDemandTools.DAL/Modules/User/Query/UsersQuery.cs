@@ -56,5 +56,6 @@ namespace OnDemandTools.DAL.Modules.User.Queries
 
             return user ?? new Model.UserIdentity();
         }
+        
     }
 }

@@ -23,7 +23,9 @@ namespace OnDemandTools.Common.Configuration
         public string AiringDeportGraceDays { get; set; }
         public string HealthAgentLifetimeInMinutes { get; set; }
         public JobSchedules JobSchedules { get; set; }
-        public CloudQueue CloudQueue { get; set; }     
+        public CloudQueue CloudQueue { get; set; }  
+
+        public AzureAd AzureAd { get; set; }   
     }
 
     public class CloudQueue
@@ -109,5 +111,15 @@ namespace OnDemandTools.Common.Configuration
     public class ReportingSqlDB
     {
         public string ConnectionString { get; set; }
+    }
+
+
+    public class AzureAd {
+        public string ClientId { get; set; }
+        public string Tenant { get; set; }
+
+        public string AadInstance { get; set; }
+
+        public string PostLogoutRedirectUri { get; set; }
     }
 }

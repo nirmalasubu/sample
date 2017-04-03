@@ -40,10 +40,11 @@ namespace OnDemandTools.Business.Modules.User
             return null;
         }
 
-        public BLModel.UserIdentity GetByUserName(string userName)
+        public ClaimsPrincipal GetByUserName(string userName)
         {
-            userQuery.GetBy(userName).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();
-            return null;
+            BLModel.UserIdentity user = userQuery.GetBy(userName).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>(); 
+             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
+            return (userClaim);          
         }
 
     }

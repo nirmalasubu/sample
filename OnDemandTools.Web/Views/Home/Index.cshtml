@@ -1,5 +1,20 @@
+@using System.Security.Principal
+
 @{
     ViewData["Title"] = "Home Page";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+     <p>@User.Identity.Name</p>
+      <p>@Html.ActionLink("Log Out", "LogOff", "Account")</p>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
 }
 
 
