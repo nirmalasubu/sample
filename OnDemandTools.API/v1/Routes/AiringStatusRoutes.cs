@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
-using OnDemandTools.Common.Extensions;
+using OnDemandTools.Business.Modules.Queue.Model;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -75,75 +75,21 @@ namespace OnDemandTools.API.v1.Routes
                         airing.Status[status.Key] = status.Value;
                     }
 
+                    var statusQueues = queueService.GetStatusNotificationSubscribers();
+
                     //Reset's delivery details to redeliver the airing
-                    ResetDeliveryQueue(queueService, airing);
+                    ResetDeliveryQueue(statusQueues, airing);
 
                     // Finally, persist the airing data
                     airingSvc.Save(airing, false, true);
+
+                    airingSvc.CreateNotification(airing.AssetId, ChangeNotificationType.Status, statusQueues.Select(e=>e.Name).ToList());                    
 
                     return new { Result = "Successfully updated the airing status." };
                 }
                 catch (Exception e)
                 {
                     logger.Error(e, "Failure ingesting status to airing. Airingid:{@airingId}", airingId);
-                    throw;
-                }
-
-            });
-
-            Post("/airingstatus/mediaId/{mediaid}", _ =>
-            {
-                // Verify that the user has permission to POST
-                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
-
-                var mediaId = (string)_.mediaid;
-
-                if (string.IsNullOrWhiteSpace(mediaId))
-                {
-                    return Negotiate.WithModel("MediaId is required.")
-                                    .WithStatusCode(HttpStatusCode.BadRequest);
-                }
-
-                var airingsByMediaId = airingSvc.GetByMediaId(mediaId);
-
-                try
-                {
-                    // Bind POST request to data contract
-                    var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
-
-                    //Validates the airing status request
-                    var validationResults = ValidateRequest(request);
-
-                    if (validationResults.Any())
-                    {
-                        //returns validation results if there is any
-                        return Negotiate.WithModel(validationResults)
-                               .WithStatusCode(HttpStatusCode.BadRequest);
-                    }
-
-                    //Updates the airing status with the POST request
-
-                    foreach (var airing in airingsByMediaId)
-                    {
-                        foreach (var status in request.Status)
-                        {
-                            airing.Status[status.Key] = status.Value;
-                        }
-
-                        //Reset's delivery details to redeliver the airing
-                        ResetDeliveryQueue(queueService, airing);
-
-                        // Finally, persist the airing data
-                        airingSvc.Save(airing, false, true);
-
-                        logger.Information("Successfully updated the airing status. AiringId : {AiringId}", airing.AssetId);
-                    }                   
-
-                    return new { Result = "Successfully updated the airings status." };
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e, "Failure ingesting status to airings by mediaid. Mediaid:{@mediaId}", mediaId);
                     throw;
                 }
 
@@ -160,10 +106,8 @@ namespace OnDemandTools.API.v1.Routes
         /// </summary>
         /// <param name="queueService">Queue service</param>
         /// <param name="airing">the airing to reset</param>
-        private static void ResetDeliveryQueue(IQueueService queueService, Airing airing)
+        private void ResetDeliveryQueue(List<Queue> statusQueues, Airing airing)
         {
-            var statusQueues = queueService.GetStatusNotificationSubscribers();
-
             foreach (var deliveryQueue in statusQueues.Select(e => e.Name))
             {
                 if (airing.DeliveredTo.Contains(deliveryQueue))
@@ -171,7 +115,6 @@ namespace OnDemandTools.API.v1.Routes
 
                 if (airing.IgnoredQueues.Contains(deliveryQueue))
                     airing.IgnoredQueues.Remove(deliveryQueue);
-
             }
         }
 

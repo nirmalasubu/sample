@@ -22,14 +22,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
         {
             var query = Query.EQ("AssetId", airingId);
 
-            List<BsonValue> notifications = new List<BsonValue>();
-
-            foreach (var changeNotification in changeNotifications)
-            {
-                notifications.Add(BsonValue.Create(changeNotification));
-            }
-
-            var upd = Update.PushAll("ChangeNotifications", notifications);
+            var upd = Update.PushAll("ChangeNotifications", new BsonArray(changeNotifications));
 
             _collection.Update(query, upd);
         }
