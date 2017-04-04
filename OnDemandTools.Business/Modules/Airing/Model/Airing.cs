@@ -60,7 +60,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public List<Alternate.Title.Title> FlowTitleData { get; set; }
 
-        public List<ChangeNotification> ChangeNotifcations { get; set; }
+        public List<ChangeNotification> ChangeNotifications { get; set; }
 
         public Airing()
         {
@@ -78,7 +78,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();
             Status = new Dictionary<string, bool>();
-            ChangeNotifcations = new List<ChangeNotification>();
+            ChangeNotifications = new List<ChangeNotification>();
         }
     }
 }
