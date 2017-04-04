@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using OnDemandTools.Business.Modules.Airing.Model;
 using VMAiringRequestModel = OnDemandTools.API.v1.Models.Airing.Update;
+using OnDemandTools.Common.Extensions;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -85,6 +86,64 @@ namespace OnDemandTools.API.v1.Routes
                 catch (Exception e)
                 {
                     logger.Error(e, "Failure ingesting status to airing. Airingid:{@airingId}", airingId);
+                    throw;
+                }
+
+            });
+
+            Post("/airingstatus/mediaId/{mediaid}", _ =>
+            {
+                // Verify that the user has permission to POST
+                this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+
+                var mediaId = (string)_.mediaid;
+
+                if (string.IsNullOrWhiteSpace(mediaId))
+                {
+                    return Negotiate.WithModel("MediaId is required.")
+                                    .WithStatusCode(HttpStatusCode.BadRequest);
+                }
+
+                var airingsByMediaId = airingSvc.GetByMediaId(mediaId);
+
+                try
+                {
+                    // Bind POST request to data contract
+                    var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
+
+                    //Validates the airing status request
+                    var validationResults = ValidateRequest(request);
+
+                    if (validationResults.Any())
+                    {
+                        //returns validation results if there is any
+                        return Negotiate.WithModel(validationResults)
+                               .WithStatusCode(HttpStatusCode.BadRequest);
+                    }
+
+                    //Updates the airing status with the POST request
+
+                    foreach (var airing in airingsByMediaId)
+                    {
+                        foreach (var status in request.Status)
+                        {
+                            airing.Status[status.Key] = status.Value;
+                        }
+
+                        //Reset's delivery details to redeliver the airing
+                        ResetDeliveryQueue(queueService, airing);
+
+                        // Finally, persist the airing data
+                        airingSvc.Save(airing, false, true);
+
+                        logger.Information("Successfully updated the airing status. AiringId : {AiringId}", airing.AssetId);
+                    }                   
+
+                    return new { Result = "Successfully updated the airings status." };
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e, "Failure ingesting status to airings by mediaid. Mediaid:{@mediaId}", mediaId);
                     throw;
                 }
 
