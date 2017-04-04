@@ -65,7 +65,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             Reset(queueName, filter);
         }
 
-
+        #region Package
         public void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode)
         {
             var titleIdsInString = titleIds.Select(titleId => titleId.ToString()).ToList();
@@ -88,9 +88,14 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                 var airingIdsQuery = GetAiringIdsQueryByExactTitleMatch(currentAirings, titleIdsInString);
 
                 if (airingIdsQuery != null)
+                {
                     Reset(queueName, airingIdsQuery, false);
+                    ResetPackageUpdate(queueName, airingIdsQuery);
+                }
+                    
             }
         }
+
         public void ResetFor(IList<string> queueNames, IList<string> contentIds, string destinationCode)
         {
             var contentIdsInString = contentIds.Select(cid => cid).ToList();
@@ -113,10 +118,9 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                 var airingIdsQuery = GetAiringIdsQueryByExactCIDMatch(currentAirings, contentIdsInString);
 
                 if (airingIdsQuery != null)
-                    Reset(queueName, airingIdsQuery, false);
+                    ResetPackageUpdate(queueName, airingIdsQuery);
             }
         }
-
 
         public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
         {
@@ -134,11 +138,21 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             {
                 if (currentAiring.DeliveredTo.Contains(queueName))
                 {
-                    Reset(queueName, query, false);
+                    ResetPackageUpdate(queueName, query);
                 }
             }
         }
 
+        private void ResetPackageUpdate(string queueName, IMongoQuery airingIdsQuery)
+        {
+            List<UpdateBuilder> updateAiringProperties = new List<UpdateBuilder>();
+            updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
+            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications", new ChangeNotification { QueueName = queueName, ChangeNotificationType = ChangeNotificationType.Package }));
+
+            IMongoUpdate update = Update.Combine(updateAiringProperties);
+            _currentAirings.Update(airingIdsQuery, update, UpdateFlags.Multi);
+        }
+        #endregion
 
         public void ResetFor(IList<string> queueNames, IList<int> titleIds)
         {

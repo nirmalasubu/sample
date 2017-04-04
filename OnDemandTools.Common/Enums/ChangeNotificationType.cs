@@ -3,5 +3,6 @@
     Title,
     File,
     Handler,
-    Status
+    Status,
+    Package
 }
