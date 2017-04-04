@@ -78,6 +78,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();
             Status = new Dictionary<string, bool>();
+            ChangeNotifcations = new List<ChangeNotification>();
         }
     }
 }

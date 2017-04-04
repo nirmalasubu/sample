@@ -68,8 +68,7 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="getFrom">Current or delete airng</param>
         /// <returns></returns>
         IEnumerable<BLModel.Airing> GetBy(string jsonQuery, int hoursOut, IList<string> queueNames, bool includeEndDate = false, AiringCollection getFrom = AiringCollection.CurrentCollection);
-
-
+       
         /// <summary>
         /// Determines whether [is airing exists] [the specified asset identifier].
         /// </summary>
@@ -254,6 +253,6 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="changeNotificaitonType">change notificaiton type</param>
         /// <param name="queuesToBeNotified">queues to be notified</param>
         /// <param name="changedValues">changed values</param>
-        void CreateNotification(string airingId, ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties = null);
+        void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> list);
     }
 }

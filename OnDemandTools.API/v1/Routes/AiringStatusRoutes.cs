@@ -75,15 +75,14 @@ namespace OnDemandTools.API.v1.Routes
                         airing.Status[status.Key] = status.Value;
                     }
 
-                    var statusQueues = queueService.GetStatusNotificationSubscribers();
-
-                    //Reset's delivery details to redeliver the airing
-                    ResetDeliveryQueue(statusQueues, airing);
+                    // get all active queues
+                    var statusQueues = queueService.GetByStatus(true);
 
                     // Finally, persist the airing data
                     airingSvc.Save(airing, false, true);
 
-                    airingSvc.CreateNotification(airing.AssetId, ChangeNotificationType.Status, statusQueues.Select(e=>e.Name).ToList());                    
+                    //update the status notification
+                    airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing));
 
                     return new { Result = "Successfully updated the airing status." };
                 }
@@ -101,22 +100,47 @@ namespace OnDemandTools.API.v1.Routes
 
         }
 
-        /// <summary>
-        /// Reset's the delivery queue for the airing
-        /// </summary>
-        /// <param name="queueService">Queue service</param>
-        /// <param name="airing">the airing to reset</param>
-        private void ResetDeliveryQueue(List<Queue> statusQueues, Airing airing)
-        {
-            foreach (var deliveryQueue in statusQueues.Select(e => e.Name))
-            {
-                if (airing.DeliveredTo.Contains(deliveryQueue))
-                    airing.DeliveredTo.Remove(deliveryQueue);
 
-                if (airing.IgnoredQueues.Contains(deliveryQueue))
-                    airing.IgnoredQueues.Remove(deliveryQueue);
+
+        /// <summary>
+        ///  Reset's the delivery queue for the airing
+        /// </summary>
+        /// <param name="statusQueues"></param>
+        /// <param name="airing"></param>
+        /// <returns>list of status change notifications</returns>
+        private List<ChangeNotification> ResetDeliveryQueue(List<Queue> statusQueues, Airing airing)
+        {
+            IList<string> queuesTobeNotified = new List<string>();
+            List<string> airingStatusNames = airing.Status.Keys.ToList();
+
+            List<ChangeNotification> ChangeNotifcations = new List<ChangeNotification>();
+            foreach (string statusname in airingStatusNames)
+            {
+                var subscribedQueues = statusQueues.Where(x => x.StatusNames.Contains(statusname));
+                foreach (var deliveryQueue in subscribedQueues.Select(e => e.Name))
+                {
+                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue))
+                    {
+                        if (ChangeNotifcations.Select(x => x.QueueName).Contains(deliveryQueue))
+                        {
+                            var existingChangeNotification = ChangeNotifcations.Where(x => x.QueueName == deliveryQueue).FirstOrDefault();
+                            existingChangeNotification.ChangedProperties.Add(statusname);
+                        }
+                        else
+                        {
+                            ChangeNotification newChangeNotification = new ChangeNotification();
+                            newChangeNotification.QueueName = deliveryQueue;
+                            newChangeNotification.ChangeNotificationType = ChangeNotificationType.Status;
+                            newChangeNotification.ChangedProperties.Add(statusname);
+                            ChangeNotifcations.Add(newChangeNotification);
+                        }
+                    }
+                }
             }
+            return ChangeNotifcations;
         }
+
+
 
 
         /// <summary>

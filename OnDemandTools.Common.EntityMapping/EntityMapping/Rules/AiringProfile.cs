@@ -43,7 +43,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.Turniverse, DLModel.Turniverse>();
             CreateMap<BLModel.TVRating, DLModel.TVRating>();
             CreateMap<BLModel.Version, DLModel.Version>();
-
+            CreateMap<BLModel.ChangeNotification, DLModel.ChangeNotification>();
 
 
 
@@ -80,7 +80,8 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Turniverse, BLModel.Turniverse>();
             CreateMap<DLModel.TVRating, BLModel.TVRating>();
             CreateMap<DLModel.Version, BLModel.Version>();
-            
+            CreateMap<DLModel.ChangeNotification, BLModel.ChangeNotification>();
+
             // DAL to long BL
             CreateMap<DLModel.Airing, BLAiringLongModel.Airing>()
                 .ForMember(d => d.Brand, opt => opt.MapFrom(s => s.Network))

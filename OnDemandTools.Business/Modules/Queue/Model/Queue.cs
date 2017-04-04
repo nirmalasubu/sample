@@ -1,5 +1,6 @@
 ﻿using OnDemandTools.Common.Model;
 using System;
+using System.Collections.Generic;
 
 namespace OnDemandTools.Business.Modules.Queue.Model
 {
@@ -32,6 +33,7 @@ namespace OnDemandTools.Business.Modules.Queue.Model
         public bool DetectStatusChanges { get; set; }
         public bool IsPriorityQueue { get; set; }
         public bool IsProhibitResendMediaId { get; set; }
+        public List<string> StatusNames { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }

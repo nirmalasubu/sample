@@ -2,6 +2,7 @@
 using System.Security.Principal;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace OnDemandTools.DAL.Modules.Queue.Model
 {
@@ -33,6 +34,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Model
         public bool DetectStatusChanges { get; set; }
         public bool IsPriorityQueue { get; set; }
         public bool IsProhibitResendMediaId { get; set; }
+        public List<string> StatusNames { get; set; }
 
         public DateTime ProcessedDateTime { get; set; }
 

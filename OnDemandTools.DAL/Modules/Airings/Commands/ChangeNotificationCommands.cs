@@ -4,6 +4,7 @@ using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
@@ -20,11 +21,15 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
 
         public void Save(string airingId, IEnumerable<ChangeNotification> changeNotifications)
         {
-            var query = Query.EQ("AssetId", airingId);
+            IMongoQuery query = Query.EQ("AssetId", airingId);
 
-            var upd = Update.PushAllWrapped<ChangeNotification>("ChangeNotifications", changeNotifications);
+            List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
+            updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName).ToList<string>()));
+            updateValues.Add(Update.PushAllWrapped("ChangeNotifications", changeNotifications));
+         
 
-            _collection.Update(query, upd);
+            IMongoUpdate update = Update.Combine(updateValues);
+            _collection.Update(query, update);
         }
     }
 

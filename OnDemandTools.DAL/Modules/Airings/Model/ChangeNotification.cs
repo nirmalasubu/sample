@@ -14,5 +14,6 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
         public ChangeNotificationType ChangeNotificationType { get; set; }
 
         public List<string> ChangedProperties { get; set; }
+   
     }
 }

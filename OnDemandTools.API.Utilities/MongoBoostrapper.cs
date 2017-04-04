@@ -37,7 +37,7 @@ namespace OnDemandTools.API.Utilities
             ConventionRegistry.Register("turniverse", pack, type => type == typeof(DAL.Modules.Airings.Model.Turniverse));
             ConventionRegistry.Register("titleId", pack, type => type == typeof(DAL.Modules.Airings.Model.TitleId));
             ConventionRegistry.Register("closedCaptioning", pack, type => type == typeof(DAL.Modules.Airings.Model.ClosedCaptioning));
-
+            ConventionRegistry.Register("ChangeNotification", pack, type => type == typeof(DAL.Modules.Airings.Model.ChangeNotification));
             ConventionRegistry.Register("file", pack, type => type == typeof(DAL.Modules.File.Model.File));
         }
     }

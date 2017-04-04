@@ -448,28 +448,18 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="changeNotificaitonType">change notificaiton type</param>
         /// <param name="queuesToBeNotified">queues to be notified</param>
         /// <param name="changedValues">changed values</param>
-        public void CreateNotification(string airingId, ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties = null)
+   
+
+        /// <summary>
+        /// update the status change notifcation
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <param name="list"></param>
+        public void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> list)
         {
-            var notifications = GetNotifications(changeNotificationType, queuesToBeNotified, changedProperties);
-
-            changeNotificaitonCommands.Save(airingId, notifications);
+            changeNotificaitonCommands.Save(assetId, list.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
+              
         }
-
-        private IEnumerable<DLModel.ChangeNotification> GetNotifications(ChangeNotificationType changeNotificationType, List<string> queuesToBeNotified, List<string> changedProperties)
-        {
-            foreach (var queueName in queuesToBeNotified)
-            {
-                DLModel.ChangeNotification notification = new DLModel.ChangeNotification
-                {
-                    QueueName = queueName,
-                    ChangeNotificationType = changeNotificationType,
-                    ChangedProperties = changedProperties,
-                };
-
-                yield return notification;
-            }
-        }
-
 
         #endregion
 
@@ -810,6 +800,8 @@ namespace OnDemandTools.Business.Modules.Airing
         {
             purgeAiringCommand.PurgeAirings(airingIds);
         }
+
+       
         #endregion
         #endregion
 
