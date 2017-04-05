@@ -24,7 +24,8 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
             IMongoQuery query = Query.EQ("AssetId", airingId);
 
             List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
-            updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName).ToList<string>()));
+            updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName)));
+            updateValues.Add(Update.PullAllWrapped("IgnoredQueues", changeNotifications.Select(e => e.QueueName)));
             updateValues.Add(Update.PushAllWrapped("ChangeNotifications", changeNotifications));
          
 

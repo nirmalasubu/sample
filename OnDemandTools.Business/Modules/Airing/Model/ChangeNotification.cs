@@ -11,7 +11,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public string QueueName { get; set; }
 
-        public ChangeNotificationType ChangeNotificationType { get; set; }
+        public string ChangeNotificationType { get; set; }
 
         public List<string> ChangedProperties { get; set; }
     }

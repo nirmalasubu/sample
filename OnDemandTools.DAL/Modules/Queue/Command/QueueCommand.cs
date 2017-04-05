@@ -28,6 +28,151 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             _queuesCollection = _database.GetCollection<Model.Queue>("DeliveryQueue");
         }
 
+        #region PUBLIC METHODS
+        /// <summary>
+        /// Reset package queues with titieIds
+        /// </summary>
+        /// <param name="queueNames"></param>
+        /// <param name="titleIds"></param>
+        /// <param name="destinationCode"></param>
+        public void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode)
+        {
+            var titleIdsInString = titleIds.Select(titleId => titleId.ToString()).ToList();
+
+            foreach (var queueName in queueNames)
+            {
+                IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                            Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
+                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
+                
+                query = titleIdsInString.Aggregate(query, (current, titleId) => Query.And(current, Query.EQ("Title.TitleIds.Value", BsonValue.Create(titleId))));
+
+                if (!string.IsNullOrEmpty(destinationCode))
+                {
+                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+                }
+
+                var currentAirings = _currentAirings.Find(query).ToList();
+
+                if (!currentAirings.Any()) continue;
+
+                var airingIdsQuery = GetAiringIdsQueryByExactTitleMatch(currentAirings, titleIdsInString);
+
+                if (airingIdsQuery != null)
+                {
+                    ResetQueueInMongo(queueName, airingIdsQuery, ChangeNotificationType.Package.ToString(), false);
+                }
+                    
+            }
+        }
+
+        /// <summary>
+        ///reset package queues with contentIds 
+        /// </summary>
+        /// <param name="queueNames"></param>
+        /// <param name="contentIds"></param>
+        /// <param name="destinationCode"></param>
+        public void ResetFor(IList<string> queueNames, IList<string> contentIds, string destinationCode)
+        {
+            var contentIdsInString = contentIds.Select(cid => cid).ToList();
+
+            foreach (var queueName in queueNames)
+            {
+                IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                            Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
+                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName }))); 
+               
+
+                query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Versions.ContentId", BsonValue.Create(contentId))));
+
+                if (!string.IsNullOrEmpty(destinationCode))
+                {
+                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+                }
+
+                var currentAirings = _currentAirings.Find(query).ToList();
+
+                if (!currentAirings.Any()) continue;
+
+                var airingIdsQuery = GetAiringIdsQueryByExactCIDMatch(currentAirings, contentIdsInString);
+
+                if (airingIdsQuery != null)
+                    ResetQueueInMongo(queueName, airingIdsQuery, ChangeNotificationType.Package.ToString(), false);
+            }
+        }
+
+        /// <summary>
+        /// reset package queues with airingId
+        /// </summary>
+        /// <param name="queueNames"></param>
+        /// <param name="airingId"></param>
+        /// <param name="destinationCode"></param>
+        public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
+        {
+           var query = Query.EQ("AssetId", airingId);
+
+            if (!string.IsNullOrEmpty(destinationCode))
+            {
+                query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
+            }
+
+            var currentAiring = _currentAirings.FindOne(query);
+            if (currentAiring==null) return;
+          
+            foreach (var queueName in queueNames)
+            {
+                if (currentAiring.DeliveredTo.Contains(queueName) || currentAiring.ChangeNotifications.Select(x => x.QueueName).Contains(queueName)
+                    || currentAiring.IgnoredQueues.Contains(queueName))
+                {
+                 ResetQueueInMongo(queueName, query, ChangeNotificationType.Package.ToString(),false);
+                }
+            }
+        }
+       
+        /// <summary>
+        /// reset file queues with titleIds
+        /// </summary>
+        /// <param name="queueNames"></param>
+        /// <param name="titleIds"></param>
+        public void ResetFor(IList<string> queueNames, IList<int> titleIds)
+        {
+            if (!queueNames.Any() || !titleIds.Any())
+                return;
+
+            var airingIds = _modifiedAiringQuery
+                    .GetNonExpiredBy(titleIds, queueNames.AsQueryable(), DateTime.Now.ToUniversalTime())
+                    .Select(a => a.AssetId).ToList();
+
+            foreach (var queueName in queueNames)
+            {
+                ResetFor(queueName, airingIds);
+            }
+        }
+
+        /// <summary>
+        /// reset file queues with airingIds
+        /// </summary>
+        /// <param name="queueNames"></param>
+        /// <param name="airingIds"></param>
+        public void ResetFor(IList<string> queueNames, IList<string> airingIds)
+        {
+            if (!queueNames.Any() || !airingIds.Any())
+                return;
+
+            foreach (var queueName in queueNames)
+            {
+                ResetFor(queueName, airingIds);
+            }
+        }
+
+        public void UpdateQueueProcessedTime(string name)
+        {
+            _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));
+        }
+        #endregion
+
+        #region PRIVATE METHODS
+
         private IMongoQuery GetAiringIdsQueryByExactTitleMatch(IEnumerable<Airing> currentAirings, IEnumerable<string> titleIds)
         {
 
@@ -50,141 +195,30 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
         }
 
-        private void Reset(string queueName, IMongoQuery filter, bool resetDeletedAirings = true)
+        private void ResetFor(string queueName, IList<string> airingIds)
         {
-            _currentAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+            IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                             Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
+                                             Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
+            query = Query.And(query, Query.In("AssetId", new BsonArray(airingIds)));
+            ResetQueueInMongo(queueName, query, ChangeNotificationType.File.ToString());
+        }
 
+        private void ResetQueueInMongo(string queueName, IMongoQuery filter,string changeNotificationType, bool resetDeletedAirings = true)
+        {
+            List<UpdateBuilder> updateAiringProperties = new List<UpdateBuilder>();
+            updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
+            updateAiringProperties.Add(Update.PullAllWrapped("IgnoredQueues", queueName));
+            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications", 
+                                        new ChangeNotification { QueueName = queueName, ChangeNotificationType = changeNotificationType }));
+
+            IMongoUpdate update = Update.Combine(updateAiringProperties);
+            _currentAirings.Update(filter, update, UpdateFlags.Multi);
             if (resetDeletedAirings)
                 _deleteAirings.Update(filter, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
         }
 
-        private void ResetFor(string queueName, IList<string> airingIds)
-        {
-            var filter = Query.In("AssetId", new BsonArray(airingIds));
-
-            Reset(queueName, filter);
-        }
-
-        #region Package
-        public void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode)
-        {
-            var titleIdsInString = titleIds.Select(titleId => titleId.ToString()).ToList();
-
-            foreach (var queueName in queueNames)
-            {
-                var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
-
-                query = titleIdsInString.Aggregate(query, (current, titleId) => Query.And(current, Query.EQ("Title.TitleIds.Value", BsonValue.Create(titleId))));
-
-                if (!string.IsNullOrEmpty(destinationCode))
-                {
-                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
-                }
-
-                var currentAirings = _currentAirings.Find(query).ToList();
-
-                if (!currentAirings.Any()) continue;
-
-                var airingIdsQuery = GetAiringIdsQueryByExactTitleMatch(currentAirings, titleIdsInString);
-
-                if (airingIdsQuery != null)
-                {
-                    Reset(queueName, airingIdsQuery, false);
-                    ResetPackageUpdate(queueName, airingIdsQuery);
-                }
-                    
-            }
-        }
-
-        public void ResetFor(IList<string> queueNames, IList<string> contentIds, string destinationCode)
-        {
-            var contentIdsInString = contentIds.Select(cid => cid).ToList();
-
-            foreach (var queueName in queueNames)
-            {
-                var query = Query.In("DeliveredTo", new BsonArray(new List<string> { queueName }));
-
-                query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Versions.ContentId", BsonValue.Create(contentId))));
-
-                if (!string.IsNullOrEmpty(destinationCode))
-                {
-                    query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
-                }
-
-                var currentAirings = _currentAirings.Find(query).ToList();
-
-                if (!currentAirings.Any()) continue;
-
-                var airingIdsQuery = GetAiringIdsQueryByExactCIDMatch(currentAirings, contentIdsInString);
-
-                if (airingIdsQuery != null)
-                    ResetPackageUpdate(queueName, airingIdsQuery);
-            }
-        }
-
-        public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
-        {
-           var query = Query.EQ("AssetId", airingId);
-
-            if (!string.IsNullOrEmpty(destinationCode))
-            {
-                query = Query.And(query, Query.EQ("Flights.Destinations.Name", destinationCode));
-            }
-
-            var currentAiring = _currentAirings.FindOne(query);
-            if (currentAiring==null || !currentAiring.DeliveredTo.Any()) return;
-
-            foreach (var queueName in queueNames)
-            {
-                if (currentAiring.DeliveredTo.Contains(queueName))
-                {
-                    ResetPackageUpdate(queueName, query);
-                }
-            }
-        }
-
-        private void ResetPackageUpdate(string queueName, IMongoQuery airingIdsQuery)
-        {
-            List<UpdateBuilder> updateAiringProperties = new List<UpdateBuilder>();
-            updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
-            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications", new ChangeNotification { QueueName = queueName, ChangeNotificationType = ChangeNotificationType.Package }));
-
-            IMongoUpdate update = Update.Combine(updateAiringProperties);
-            _currentAirings.Update(airingIdsQuery, update, UpdateFlags.Multi);
-        }
         #endregion
 
-        public void ResetFor(IList<string> queueNames, IList<int> titleIds)
-        {
-            if (!queueNames.Any() || !titleIds.Any())
-                return;
-
-            var airingIds = _modifiedAiringQuery
-                    .GetNonExpiredBy(titleIds, queueNames.AsQueryable(), DateTime.Now.ToUniversalTime())
-                    .Select(a => a.AssetId).ToList();
-
-            foreach (var queueName in queueNames)
-            {
-                ResetFor(queueName, airingIds);
-            }
-        }
-
-        public void ResetFor(IList<string> queueNames, IList<string> airingIds)
-        {
-            if (!queueNames.Any() || !airingIds.Any())
-                return;
-
-            foreach (var queueName in queueNames)
-            {
-                ResetFor(queueName, airingIds);
-            }
-        }
-
-        public void UpdateQueueProcessedTime(string name)
-        {
-            _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));
-        }
-
-       
     }
 }

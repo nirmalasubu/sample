@@ -454,10 +454,10 @@ namespace OnDemandTools.Business.Modules.Airing
         /// update the status change notifcation
         /// </summary>
         /// <param name="assetId"></param>
-        /// <param name="list"></param>
-        public void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> list)
+        /// <param name="changeNotifications"></param>
+        public void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> changeNotifications)
         {
-            changeNotificaitonCommands.Save(assetId, list.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
+            changeNotificaitonCommands.Save(assetId, changeNotifications.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
               
         }
 

@@ -119,7 +119,7 @@ namespace OnDemandTools.API.v1.Routes
                 var subscribedQueues = statusQueues.Where(x => x.StatusNames.Contains(statusname));
                 foreach (var deliveryQueue in subscribedQueues.Select(e => e.Name))
                 {
-                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue))
+                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue)|| airing.ChangeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
                     {
                         if (ChangeNotifcations.Select(x => x.QueueName).Contains(deliveryQueue))
                         {
@@ -130,7 +130,7 @@ namespace OnDemandTools.API.v1.Routes
                         {
                             ChangeNotification newChangeNotification = new ChangeNotification();
                             newChangeNotification.QueueName = deliveryQueue;
-                            newChangeNotification.ChangeNotificationType = ChangeNotificationType.Status;
+                            newChangeNotification.ChangeNotificationType = ChangeNotificationType.Status.ToString();
                             newChangeNotification.ChangedProperties.Add(statusname);
                             ChangeNotifcations.Add(newChangeNotification);
                         }

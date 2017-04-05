@@ -245,14 +245,12 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <returns></returns>
         void PurgeUnitTestAirings(List<string> airingIds);
 
-
+      
         /// <summary>
-        /// Create's the change notification
+        /// Create's the change notification for status
         /// </summary>
-        /// <param name="airingId">the airing Id to notify</param>
-        /// <param name="changeNotificaitonType">change notificaiton type</param>
-        /// <param name="queuesToBeNotified">queues to be notified</param>
-        /// <param name="changedValues">changed values</param>
-        void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> list);
+        /// <param name="assetId">the airingId</param>
+        /// <param name="changeNotifications">the changeNotifications</param>
+        void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> changeNotifications);
     }
 }

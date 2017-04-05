@@ -233,17 +233,7 @@ namespace OnDemandTools.API.v1.Routes
                         airings.Add(file.AiringId);
                     }
                 }
-                if (!String.IsNullOrWhiteSpace(file.MediaId) && (file.Video == video))
-                {
-                    airings.AddRange(airingSvc.GetByMediaId(file.MediaId).Select(c => c.AssetId).ToList<String>());
-                }
-                else
-                {
-                    if (!String.IsNullOrWhiteSpace(file.AiringId) && (file.Video == video))
-                    {
-                        airings.Add(file.AiringId);
-                    }
-                }
+                
             }
             return airings;
         }
