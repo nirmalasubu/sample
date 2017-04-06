@@ -45,7 +45,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 
                     _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);
 
-                    _reporter.Report(deliveryQueue, envelope.AiringId, envelope.Message.Action!= "Delete",
+                    _reporter.Report(deliveryQueue, envelope.AiringId, envelope.Message.Action != "Delete",
                         string.Format("Sent successfully to {0} Message: {1}", deliveryQueue.FriendlyName, message),
                         12);
 
@@ -98,7 +98,11 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 
         private void Deliver(Envelope envelope, string routingKey, DeliveryDetails details)
         {
-            var json = JsonConvert.SerializeObject(envelope.Message);
+            var json = JsonConvert.SerializeObject(envelope.Message, Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
 
             //Need to double serialize due to EasynetQ, and it can be removed on V2.
             json = JsonConvert.SerializeObject(json);
