@@ -12,6 +12,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
         {
             var queueAiring = new QueueAiring();
             queueAiring.AiringId = airing.AssetId;
+            queueAiring.DeliveredOn = DateTime.UtcNow;
             queueAiring.Action = action.ToString();
 
             if (notifications.Any())
@@ -31,14 +32,13 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
         {
             queueAiring.AiringChangeNotifications = new List<AiringChangeNotification>();
 
-            foreach (var notification in notifications.OrderByDescending(e => e.ChangedDateTime))
+            foreach (var notification in notifications)
             {
                 if (!queueAiring.AiringChangeNotifications.Any(e => e.ChangeNotificationType == notification.ChangeNotificationType.ToString()))
                 {
                     queueAiring.AiringChangeNotifications.Add(new AiringChangeNotification
                     {
-                        ChangeNotificationType = notification.ChangeNotificationType.ToString(),
-                        ChangedOn = notification.ChangedDateTime
+                        ChangeNotificationType = notification.ChangeNotificationType.ToString()
                     });
                 }
 
