@@ -29,21 +29,22 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
         /// <param name="notifications">notifications</param>
         private void ConsolidateAiringChangeNotification(QueueAiring queueAiring, List<BLAiring.ChangeNotification> notifications)
         {
-            queueAiring.AiringChangeNotification = new List<AiringChangeNotification>();
+            queueAiring.AiringChangeNotifications = new List<AiringChangeNotification>();
 
-            foreach (var notification in notifications)
+            foreach (var notification in notifications.OrderByDescending(e => e.ChangedDateTime))
             {
-                if (!queueAiring.AiringChangeNotification.Any(e => e.ChangeNotificationType == notification.ChangeNotificationType.ToString()))
+                if (!queueAiring.AiringChangeNotifications.Any(e => e.ChangeNotificationType == notification.ChangeNotificationType.ToString()))
                 {
-                    queueAiring.AiringChangeNotification.Add(new AiringChangeNotification
+                    queueAiring.AiringChangeNotifications.Add(new AiringChangeNotification
                     {
-                        ChangeNotificationType = notification.ChangeNotificationType.ToString()
+                        ChangeNotificationType = notification.ChangeNotificationType.ToString(),
+                        ChangedOn = notification.ChangedDateTime
                     });
                 }
 
                 if (notification.ChangedProperties != null && notification.ChangedProperties.Any())
                 {
-                    var airingNotification = queueAiring.AiringChangeNotification.First(e => e.ChangeNotificationType == notification.ChangeNotificationType.ToString());
+                    var airingNotification = queueAiring.AiringChangeNotifications.First(e => e.ChangeNotificationType == notification.ChangeNotificationType.ToString());
 
                     ConsolidateAiringChangeProperties(airingNotification, notification);
                 }

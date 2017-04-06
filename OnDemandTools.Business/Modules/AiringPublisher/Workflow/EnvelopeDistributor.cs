@@ -37,11 +37,15 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
                     continue;
                 }
 
-                var message = JsonConvert.SerializeObject(envelope.Message);
+                var message = JsonConvert.SerializeObject(envelope.Message, Formatting.None,
+                           new JsonSerializerSettings
+                           {
+                               NullValueHandling = NullValueHandling.Ignore
+                           });
 
                 try
                 {
-                    Deliver(envelope, deliveryQueue.RoutingKey, details);
+                    Deliver(envelope, message, deliveryQueue.RoutingKey, details);
 
                     _queueService.AddHistoricalMessage(envelope.AiringId, envelope.MediaId, message, deliveryQueue.Name, envelope.MessagePriority);
 
@@ -96,18 +100,12 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
             }
         }
 
-        private void Deliver(Envelope envelope, string routingKey, DeliveryDetails details)
+        private void Deliver(Envelope envelope, string jsonMessage, string routingKey, DeliveryDetails details)
         {
-            var json = JsonConvert.SerializeObject(envelope.Message, Formatting.None,
-                            new JsonSerializerSettings
-                            {
-                                NullValueHandling = NullValueHandling.Ignore
-                            });
-
             //Need to double serialize due to EasynetQ, and it can be removed on V2.
-            json = JsonConvert.SerializeObject(json);
+            jsonMessage = JsonConvert.SerializeObject(json);
 
-            byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(json);
+            byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(jsonMessage);
             IBasicProperties props = details.RabbitMqChannel.CreateBasicProperties();
             if (envelope.MessagePriority != null)
             {
