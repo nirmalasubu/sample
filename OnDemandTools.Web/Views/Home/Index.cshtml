@@ -5,25 +5,29 @@
 }
 
 
-@if (User.Identity.IsAuthenticated)
-{
-     <p>@User.Identity.Name</p>
-      <p>@Html.ActionLink("Log Out", "LogOff", "Account")</p>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
-}
-
 
 
 <div class="row">
     <div class="col-md-3">
-        <h2>ODT Web Application</h2>
+        <h2>ODT Portal</h2>
         <p>
-            Welcome!
+            
+            @if (User.Identity.IsAuthenticated)
+            {
+                <p>Welcome, @User.Identity.Name &nbsp;&nbsp;&nbsp;@Html.ActionLink("Log Out", "LogOff", "Account")</p>  
+
+                <div>Here are your claims</div>
+                @foreach (var item in User.Claims)
+                {
+                    <div>@item.Value</div>
+                }             
+            }
+            else
+            {
+                <p>
+                    <li>Welcome guest, @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                </p>
+            }
         </P>
     </div>   
 </div>

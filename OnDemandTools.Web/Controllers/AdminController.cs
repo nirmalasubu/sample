@@ -11,7 +11,7 @@ namespace OnDemandTools.Web.Controllers
     public class AdminController : Controller
     {
         [Authorize("Admin")]
-         public IActionResult Go()
+         public IActionResult Access()
         {           
             return View();
         }

@@ -56,13 +56,21 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
-        // GET: /Account/LogOff
+        // GET: /Account/Access
+        [HttpGet]
+
+        public IActionResult Access()
+        {
+            return Json("Good, you have access!");            
+        }
+
+         [Authorize]
+        // GET: /Account/AccessDenied
         [HttpGet]
 
         public IActionResult AccessDenied()
         {
-                  return Json("Access Denied");
-            
+            return Json("Sorry, your access is denied");            
         }
     }
 }
