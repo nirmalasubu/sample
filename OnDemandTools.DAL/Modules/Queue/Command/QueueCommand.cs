@@ -123,7 +123,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
             updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName)));
             updateValues.Add(Update.PullAllWrapped("IgnoredQueues", changeNotifications.Select(e => e.QueueName)));
-            updateValues.Add(Update.PushAllWrapped("ChangeNotifications", changeNotifications.AsEnumerable()));
+            updateValues.Add(Update.AddToSetEachWrapped("ChangeNotifications", changeNotifications.AsEnumerable()));
 
             IMongoUpdate update = Update.Combine(updateValues);
             _currentAirings.Update(query, update);
@@ -230,7 +230,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             List<UpdateBuilder> updateAiringProperties = new List<UpdateBuilder>();
             updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
             updateAiringProperties.Add(Update.PullAllWrapped("IgnoredQueues", queueName));
-            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications",
+            updateAiringProperties.Add(Update.AddToSetEachWrapped("ChangeNotifications",
                                         new ChangeNotification { QueueName = queueName, ChangeNotificationType = changeNotificationType }));
 
             IMongoUpdate update = Update.Combine(updateAiringProperties);

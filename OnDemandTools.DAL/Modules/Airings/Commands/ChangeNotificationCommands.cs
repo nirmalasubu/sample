@@ -26,7 +26,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
             List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
             updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName)));
             updateValues.Add(Update.PullAllWrapped("IgnoredQueues", changeNotifications.Select(e => e.QueueName)));
-            updateValues.Add(Update.PushAllWrapped("ChangeNotifications", changeNotifications));
+            updateValues.Add(Update.AddToSetEachWrapped("ChangeNotifications", changeNotifications));
          
 
             IMongoUpdate update = Update.Combine(updateValues);
