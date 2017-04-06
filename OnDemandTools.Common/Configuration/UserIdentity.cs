@@ -22,7 +22,7 @@ namespace OnDemandTools.Common.Configuration
         {
             get
             {
-                return base.Name;
+                return this.UserName;
             }
         }
 
