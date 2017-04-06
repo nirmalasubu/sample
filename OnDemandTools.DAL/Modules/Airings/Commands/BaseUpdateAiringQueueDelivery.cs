@@ -1,7 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
 using OnDemandTools.DAL.Modules.Airings.Model;
+using System.Collections.Generic;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
@@ -39,9 +41,25 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
         public void PushDeliveredTo(string airingId, string queueName)
         {
             var query = new QueryDocument { { "AssetId", airingId } };
-            DeleteField(queueName, query, "DeliverTo");
-            DeleteField(queueName, query, "IgnoredQueues");
-            UpdateField(queueName, query, "DeliveredTo");
+
+            var pullDeliverTo = Update.PullAllWrapped("DeliverTo", queueName);
+            var pullIgnoredQueues = Update.PullAllWrapped("IgnoredQueues", queueName);
+            var pushDeliveredTo = Update.PushAllWrapped("DeliveredTo", queueName);
+            var pullNotificaitionUpdate = Update.Pull("ChangeNotifications",
+                new BsonDocument() { { "QueueName", queueName } });
+
+            List<UpdateBuilder> updateValues = new List<UpdateBuilder>
+            {
+                pullDeliverTo,
+                pullIgnoredQueues,
+                pushDeliveredTo,
+                pullNotificaitionUpdate
+            };
+
+            IMongoUpdate allUpdate = Update.Combine(updateValues);
+
+            _airings.Update(query, allUpdate, UpdateFlags.Multi);
+
         }
 
         #endregion

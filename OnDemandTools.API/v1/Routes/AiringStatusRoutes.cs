@@ -113,7 +113,7 @@ namespace OnDemandTools.API.v1.Routes
             IList<string> queuesTobeNotified = new List<string>();
             List<string> airingStatusNames = airing.Status.Keys.ToList();
 
-            List<ChangeNotification> ChangeNotifcations = new List<ChangeNotification>();
+            List<ChangeNotification> changeNotifications = new List<ChangeNotification>();
             foreach (string statusname in airingStatusNames)
             {
                 var subscribedQueues = statusQueues.Where(x => x.StatusNames.Contains(statusname));
@@ -121,9 +121,9 @@ namespace OnDemandTools.API.v1.Routes
                 {
                     if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue)|| airing.ChangeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
                     {
-                        if (ChangeNotifcations.Select(x => x.QueueName).Contains(deliveryQueue))
+                        if (changeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
                         {
-                            var existingChangeNotification = ChangeNotifcations.Where(x => x.QueueName == deliveryQueue).FirstOrDefault();
+                            var existingChangeNotification = changeNotifications.Where(x => x.QueueName == deliveryQueue).FirstOrDefault();
                             existingChangeNotification.ChangedProperties.Add(statusname);
                         }
                         else
@@ -132,12 +132,13 @@ namespace OnDemandTools.API.v1.Routes
                             newChangeNotification.QueueName = deliveryQueue;
                             newChangeNotification.ChangeNotificationType = ChangeNotificationType.Status.ToString();
                             newChangeNotification.ChangedProperties.Add(statusname);
-                            ChangeNotifcations.Add(newChangeNotification);
+                            newChangeNotification.ChangedDateTime = DateTime.UtcNow;
+                            changeNotifications.Add(newChangeNotification);
                         }
                     }
                 }
             }
-            return ChangeNotifcations;
+            return changeNotifications;
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OnDemandTools.Business.Modules.Airing.Model
 {
@@ -14,5 +15,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
         public string ChangeNotificationType { get; set; }
 
         public List<string> ChangedProperties { get; set; }
+
+        public DateTime ChangedDateTime { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace OnDemandTools.DAL.Modules.Airings.Model
 {
@@ -15,6 +16,8 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
         public string ChangeNotificationType { get; set; }
 
         public List<string> ChangedProperties { get; set; }
+
+        public DateTime ChangedDateTime { get; set; }
 
         public bool ShouldSerializeChangedProperties()
         {
