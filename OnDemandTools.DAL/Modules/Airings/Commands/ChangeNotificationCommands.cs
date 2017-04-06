@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Airings.Commands
 {
-    public class ChangeNotificationCommands : IChangeNotificaitonCommands
+    public class ChangeNotificationCommands : IChangeNotificationCommands
     {
         private readonly MongoCollection<Airing> _collection;
 
@@ -34,7 +34,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Commands
         }
     }
 
-    public interface IChangeNotificaitonCommands
+    public interface IChangeNotificationCommands
     {
         void Save(string airingId, IEnumerable<ChangeNotification> changeNotifications);
     }

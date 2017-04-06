@@ -53,7 +53,7 @@ namespace OnDemandTools.Business.Modules.Airing
         IUpdateAiringQueueDelivery updateAiringQueueDelivery;
         IPackageCommand packagePersist;
         IPurgeAiringCommand purgeAiringCommand;
-        IChangeNotificaitonCommands changeNotificaitonCommands;
+        IChangeNotificationCommands changeNotificationCommand;
         private IApplicationContext cntx;
 
         public AiringService(IGetAiringQuery airingQueryHelper,
@@ -74,7 +74,7 @@ namespace OnDemandTools.Business.Modules.Airing
             IUpdateAiringQueueDelivery updateAiringQueueDelivery,
             IPackageCommand packagePersist,
             IPurgeAiringCommand purgeAiringCommand,
-            IChangeNotificaitonCommands changeNotificaitonCommands,
+            IChangeNotificationCommands changeNotificaitonCommands,
             IApplicationContext cntx
            )
         {
@@ -97,7 +97,7 @@ namespace OnDemandTools.Business.Modules.Airing
             this.updateDeletedAiringQueueDelivery = updateDeletedAiringQueueDelivery;
             this.packagePersist = packagePersist;
             this.purgeAiringCommand = purgeAiringCommand;
-            this.changeNotificaitonCommands = changeNotificaitonCommands;
+            this.changeNotificationCommand = changeNotificaitonCommands;
             this.cntx = cntx;
         }
 
@@ -457,7 +457,7 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="changeNotifications"></param>
         public void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> changeNotifications)
         {
-            changeNotificaitonCommands.Save(assetId, changeNotifications.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
+            changeNotificationCommand.Save(assetId, changeNotifications.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
               
         }
 
