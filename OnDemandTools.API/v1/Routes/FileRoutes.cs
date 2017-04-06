@@ -194,11 +194,11 @@ namespace OnDemandTools.API.v1.Routes
                 .Where(q => q.DetectImageChanges)
                 .Select(q => q.Name).ToList();
 
-            queueSvc.FlagForRedelivery(videoQueueNames, videoFileTitleIds);
-            queueSvc.FlagForRedelivery(imageQueueNames, imageFileTitleIds);
+            queueSvc.FlagForRedelivery(videoQueueNames, videoFileTitleIds, ChangeNotificationType.File);
+            queueSvc.FlagForRedelivery(imageQueueNames, imageFileTitleIds, ChangeNotificationType.File);
 
-            queueSvc.FlagForRedelivery(videoQueueNames, videoFileAiringIds);
-            queueSvc.FlagForRedelivery(imageQueueNames, imageFileAiringIds);
+            queueSvc.FlagForRedelivery(videoQueueNames, videoFileAiringIds, ChangeNotificationType.File);
+            queueSvc.FlagForRedelivery(imageQueueNames, imageFileAiringIds,ChangeNotificationType.File);
         }
 
         private List<int> GetTitleIdsFrom(IEnumerable<BLFileModel.File> files, bool video)

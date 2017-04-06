@@ -51,7 +51,7 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
 
             //"Preparing to send modified titles to queues"
             var queueNames = queues.Select(q => q.Name).ToList();
-            _resetDeliveryCommand.ResetFor(queueNames, titleIds);
+            _resetDeliveryCommand.ResetFor(queueNames, titleIds,ChangeNotificationType.Title);
 
             //"Deleting previously persisted modified titles in ODT"
             _titleIDsCommand.Delete(titleIds);

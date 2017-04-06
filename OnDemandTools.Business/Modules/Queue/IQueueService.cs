@@ -60,7 +60,8 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="queueNames">The queue names.</param>
         /// <param name="titleIds">The title ids.</param>
-        void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds);
+        /// <param name="changeNotificationType">the changenotification type file/title</param>
+        void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds, ChangeNotificationType changeNotificationType);
 
         /// <summary>
         /// Flags the given list of queues for redelivery. Assets selected for delivery
@@ -68,7 +69,8 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="queueNames">The queue names.</param>
         /// <param name="airingIds">The airing ids.</param>
-        void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds);
+        /// <param name="changeNotificationType">the changenotification type file/title</param>
+        void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds, ChangeNotificationType changeNotificationType);
 
         /// <summary>
         /// Gets queue by API key.

@@ -257,7 +257,7 @@ namespace OnDemandTools.API.v1.Routes
                  .Select(q => q.Name).ToList();
 
             // Publish notification
-            _queueSvc.FlagForRedelivery(videoQueueNames, airingIds);
+            _queueSvc.FlagForRedelivery(videoQueueNames, airingIds,ChangeNotificationType.File);
         }
 
      

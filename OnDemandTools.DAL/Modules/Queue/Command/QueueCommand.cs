@@ -32,9 +32,9 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         /// <summary>
         /// Reset package queues with titieIds
         /// </summary>
-        /// <param name="queueNames"></param>
-        /// <param name="titleIds"></param>
-        /// <param name="destinationCode"></param>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="titleIds">The title ids .</param>
+        /// <param name="destinationCode">The destination code</param>
         public void ResetFor(IList<string> queueNames, IList<int> titleIds, string destinationCode)
         {
             var titleIdsInString = titleIds.Select(titleId => titleId.ToString()).ToList();
@@ -44,7 +44,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                 IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
                                             Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
                                             Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
-                
+
                 query = titleIdsInString.Aggregate(query, (current, titleId) => Query.And(current, Query.EQ("Title.TitleIds.Value", BsonValue.Create(titleId))));
 
                 if (!string.IsNullOrEmpty(destinationCode))
@@ -62,16 +62,16 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                 {
                     ResetQueueInMongo(queueName, airingIdsQuery, ChangeNotificationType.Package.ToString(), false);
                 }
-                    
+
             }
         }
 
         /// <summary>
         ///reset package queues with contentIds 
         /// </summary>
-        /// <param name="queueNames"></param>
-        /// <param name="contentIds"></param>
-        /// <param name="destinationCode"></param>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="contentIds">The content ids .</param>
+        /// <param name="destinationCode">The destination code</param>
         public void ResetFor(IList<string> queueNames, IList<string> contentIds, string destinationCode)
         {
             var contentIdsInString = contentIds.Select(cid => cid).ToList();
@@ -80,8 +80,8 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             {
                 IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
                                             Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
-                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName }))); 
-               
+                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
+
 
                 query = contentIdsInString.Aggregate(query, (current, contentId) => Query.And(current, Query.EQ("Versions.ContentId", BsonValue.Create(contentId))));
 
@@ -104,12 +104,12 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         /// <summary>
         /// reset package queues with airingId
         /// </summary>
-        /// <param name="queueNames"></param>
-        /// <param name="airingId"></param>
-        /// <param name="destinationCode"></param>
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="airingId">The airing id.</param>
+        /// <param name="destinationCode">The destination code</param>
         public void ResetFor(IList<string> queueNames, string airingId, string destinationCode)
         {
-           var query = Query.EQ("AssetId", airingId);
+            IMongoQuery query = Query.EQ("AssetId", airingId);
 
             if (!string.IsNullOrEmpty(destinationCode))
             {
@@ -117,24 +117,25 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             }
 
             var currentAiring = _currentAirings.FindOne(query);
-            if (currentAiring==null) return;
-          
-            foreach (var queueName in queueNames)
-            {
-                if (currentAiring.DeliveredTo.Contains(queueName) || currentAiring.ChangeNotifications.Select(x => x.QueueName).Contains(queueName)
-                    || currentAiring.IgnoredQueues.Contains(queueName))
-                {
-                 ResetQueueInMongo(queueName, query, ChangeNotificationType.Package.ToString(),false);
-                }
-            }
+            if (currentAiring == null) return;
+
+            IList<ChangeNotification> changeNotifications =GetChangeNotifications(queueNames, currentAiring);
+            List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
+            updateValues.Add(Update.PullAllWrapped("DeliveredTo", changeNotifications.Select(e => e.QueueName)));
+            updateValues.Add(Update.PullAllWrapped("IgnoredQueues", changeNotifications.Select(e => e.QueueName)));
+            updateValues.Add(Update.PushAllWrapped("ChangeNotifications", changeNotifications.AsEnumerable()));
+
+            IMongoUpdate update = Update.Combine(updateValues);
+            _currentAirings.Update(query, update);
         }
-       
+
         /// <summary>
-        /// reset file queues with titleIds
+        /// reset queues with titleIds
         /// </summary>
-        /// <param name="queueNames"></param>
-        /// <param name="titleIds"></param>
-        public void ResetFor(IList<string> queueNames, IList<int> titleIds)
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="titleIds">The title ids.</param>
+        /// <param name="changeNotificationType">file/title</param>
+        public void ResetFor(IList<string> queueNames, IList<int> titleIds, ChangeNotificationType changeNotificationType)
         {
             if (!queueNames.Any() || !titleIds.Any())
                 return;
@@ -143,25 +144,27 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                     .GetNonExpiredBy(titleIds, queueNames.AsQueryable(), DateTime.Now.ToUniversalTime())
                     .Select(a => a.AssetId).ToList();
 
+
             foreach (var queueName in queueNames)
             {
-                ResetFor(queueName, airingIds);
+                ResetQueue(queueName, airingIds, changeNotificationType);
             }
         }
 
         /// <summary>
-        /// reset file queues with airingIds
+        /// reset queues with airingIds
         /// </summary>
-        /// <param name="queueNames"></param>
-        /// <param name="airingIds"></param>
-        public void ResetFor(IList<string> queueNames, IList<string> airingIds)
+        /// <param name="queueNames">The queue names.</param>
+        /// <param name="airingIds">The airing ids.</param>
+        /// <param name="changeNotificationType">file/title</param>
+        public void ResetFor(IList<string> queueNames, IList<string> airingIds, ChangeNotificationType changeNotificationType)
         {
             if (!queueNames.Any() || !airingIds.Any())
                 return;
 
             foreach (var queueName in queueNames)
             {
-                ResetFor(queueName, airingIds);
+                ResetQueue(queueName, airingIds, changeNotificationType);
             }
         }
 
@@ -194,22 +197,40 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
 
             return !airingIds.Any() ? null : Query.In("AssetId", new BsonArray(airingIds));
         }
-
-        private void ResetFor(string queueName, IList<string> airingIds)
+  
+        private IList<ChangeNotification> GetChangeNotifications(IList<string> queueNames, Airing currentAiring)
         {
-            IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
-                                             Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
-                                             Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
-            query = Query.And(query, Query.In("AssetId", new BsonArray(airingIds)));
-            ResetQueueInMongo(queueName, query, ChangeNotificationType.File.ToString());
+            IList<ChangeNotification> changeNotifications = new List<ChangeNotification>();
+            foreach (var queueName in queueNames)
+            {
+                if (currentAiring.DeliveredTo.Contains(queueName) || currentAiring.ChangeNotifications.Select(x => x.QueueName).Contains(queueName)
+                    || currentAiring.IgnoredQueues.Contains(queueName))
+                {
+                    ChangeNotification changenotification = new ChangeNotification();
+                    changenotification.QueueName = queueName;
+                    changenotification.ChangeNotificationType = ChangeNotificationType.Package.ToString();
+                    changeNotifications.Add(changenotification);
+                }
+            }
+
+            return changeNotifications;
         }
 
-        private void ResetQueueInMongo(string queueName, IMongoQuery filter,string changeNotificationType, bool resetDeletedAirings = true)
+        private void ResetQueue(string queueName, IList<string> airingIds, ChangeNotificationType changeNotificationType)
+        {
+            IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                         Query.In("ChangeNotifications.QueueName", new BsonArray(new List<string> { queueName })),
+                                         Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
+            query = Query.And(query, Query.In("AssetId", new BsonArray(airingIds)));
+            ResetQueueInMongo(queueName, query, changeNotificationType.ToString());
+        }
+
+        private void ResetQueueInMongo(string queueName, IMongoQuery filter, string changeNotificationType, bool resetDeletedAirings = true)
         {
             List<UpdateBuilder> updateAiringProperties = new List<UpdateBuilder>();
             updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
             updateAiringProperties.Add(Update.PullAllWrapped("IgnoredQueues", queueName));
-            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications", 
+            updateAiringProperties.Add(Update.PushAllWrapped("ChangeNotifications",
                                         new ChangeNotification { QueueName = queueName, ChangeNotificationType = changeNotificationType }));
 
             IMongoUpdate update = Update.Combine(updateAiringProperties);
