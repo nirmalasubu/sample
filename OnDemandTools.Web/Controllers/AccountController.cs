@@ -70,6 +70,7 @@ namespace OnDemandTools.Web.Controllers
 
         public IActionResult AccessDenied()
         {
+            
             return Json("Sorry, your access is denied");            
         }
     }

@@ -42,8 +42,8 @@ namespace OnDemandTools.DAL.Modules.User.Queries
         {
             var users = _database.GetCollection<Model.UserIdentity>("UserIdentity").AsQueryable();
 
-            var user = users.FirstOrDefault(a => a.UserName == userName) ??
-                       users.FirstOrDefault(a => a.UserName == Model.GuestUser.Name);
+            var user = users.FirstOrDefault(a => a.UserName.ToUpper() == userName.ToUpper()) ??
+                       users.FirstOrDefault(a => a.UserName.ToUpper() == Model.GuestUser.Name.ToUpper());
 
             return user ?? new Model.UserIdentity();
         }

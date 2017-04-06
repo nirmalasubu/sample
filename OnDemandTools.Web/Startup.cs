@@ -169,10 +169,8 @@ namespace OnDemandTools.Web
         // Once the user is successfully authenticated, add additional
         // claims that are specific to ODT and user context
         private Task TokenValidated(TokenValidatedContext n)
-        {                     
-           
-            n.Ticket.Principal.AddIdentity(container.GetInstance<IUserHelper>().GetByUserName( n.Ticket.Principal.Identity.Name).Identities.FirstOrDefault());
-            
+        {  
+            n.Ticket.Principal.AddIdentity(container.GetInstance<IUserHelper>().GetByUserName( n.Ticket.Principal.Identity.Name).Identities.FirstOrDefault());            
             n.Properties.RedirectUri = "/";
             return Task.FromResult(0);
         }
