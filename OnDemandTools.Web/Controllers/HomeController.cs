@@ -14,14 +14,22 @@ namespace OnDemandTools.Web.Controllers
         IPackageService svc;
         public HomeController(IHttpContextAccessor httpContextAccessor, IPackageService svc)
         {
-             this.httpContextAccessor = httpContextAccessor;
-             this.svc = svc;
+            this.httpContextAccessor = httpContextAccessor;
+            this.svc = svc;
         }
 
         [Route("")]
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return View("Login");
+            }
+
         }
 
         public IActionResult Error()
@@ -31,7 +39,7 @@ namespace OnDemandTools.Web.Controllers
 
         [Route("/healthcheck")]
         public JsonResult Healthcheck()
-        {           
+        {
             return Json("Healthy");
         }
 

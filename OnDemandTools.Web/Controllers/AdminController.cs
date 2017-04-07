@@ -13,7 +13,7 @@ namespace OnDemandTools.Web.Controllers
         [Authorize("Admin")]
          public IActionResult Access()
         {           
-            return View();
+            return View("Go");
         }
     }
 }

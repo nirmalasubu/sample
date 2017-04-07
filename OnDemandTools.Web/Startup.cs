@@ -118,7 +118,7 @@ namespace OnDemandTools.Web
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
             // Set logging based on enviroments
-            if (env.IsEnvironment("local"))
+            if (env.IsEnvironment("local") || env.IsEnvironment("development"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
@@ -127,7 +127,7 @@ namespace OnDemandTools.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error");                 
             }
 
             // server static files
