@@ -95,6 +95,68 @@ namespace OnDemandTools.API.v1.Routes
             });
 
 
+            Post("/airingstatus/mediaId/{mediaid}", _ =>
+             {
+                 // Verify that the user has permission to POST
+                 this.RequiresClaims(c => c.Type == HttpMethod.Post.Verb());
+
+                 var mediaId = (string)_.mediaid;
+
+                 if (string.IsNullOrWhiteSpace(mediaId))
+                 {
+                     return Negotiate.WithModel("MediaId is required.")
+                                     .WithStatusCode(HttpStatusCode.BadRequest);
+                 }
+
+                 var airingsByMediaId = airingSvc.GetByMediaId(mediaId);
+
+                 try
+                 {
+                     // Bind POST request to data contract
+                     var request = this.Bind<VMAiringRequestModel.AiringStatusRequest>();
+
+                     //Validates the airing status request
+                     var validationResults = ValidateRequest(request);
+
+                     if (validationResults.Any())
+                     {
+                         //returns validation results if there is any
+                         return Negotiate.WithModel(validationResults)
+                                .WithStatusCode(HttpStatusCode.BadRequest);
+                     }
+
+                     //Updates the airing status with the POST request
+
+                     foreach (var airing in airingsByMediaId)
+                     {
+                         foreach (var status in request.Status)
+                         {
+                             airing.Status[status.Key] = status.Value;
+                         }
+
+                         // get all active queues
+                         var statusQueues = queueService.GetByStatus(true);
+
+                         // Finally, persist the airing data
+                         airingSvc.Save(airing, false, true);
+
+                         //update the status notification
+                         airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing));
+
+                         logger.Information("Successfully updated the airing status. AiringId : {AiringId}", airing.AssetId);
+                     }
+
+                     return new { Result = "Successfully updated the airings status." };
+                 }
+                 catch (Exception e)
+                 {
+                     logger.Error(e, "Failure ingesting status to airings by mediaid. Mediaid:{@mediaId}", mediaId);
+                     throw;
+                 }
+
+             });
+
+
             #endregion
 
 
@@ -119,7 +181,7 @@ namespace OnDemandTools.API.v1.Routes
                 var subscribedQueues = statusQueues.Where(x => x.StatusNames.Contains(statusname));
                 foreach (var deliveryQueue in subscribedQueues.Select(e => e.Name))
                 {
-                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue)|| airing.ChangeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
+                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue) || airing.ChangeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
                     {
                         if (changeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
                         {
