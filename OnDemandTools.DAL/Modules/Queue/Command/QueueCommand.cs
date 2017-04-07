@@ -209,6 +209,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
                     ChangeNotification changenotification = new ChangeNotification();
                     changenotification.QueueName = queueName;
                     changenotification.ChangeNotificationType = ChangeNotificationType.Package.ToString();
+                    changenotification.ChangedDateTime = DateTime.UtcNow;
                     changeNotifications.Add(changenotification);
                 }
             }
@@ -231,7 +232,9 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             updateAiringProperties.Add(Update.PullAllWrapped("DeliveredTo", queueName));
             updateAiringProperties.Add(Update.PullAllWrapped("IgnoredQueues", queueName));
             updateAiringProperties.Add(Update.AddToSetEachWrapped("ChangeNotifications",
-                                        new ChangeNotification { QueueName = queueName, ChangeNotificationType = changeNotificationType }));
+                                        new ChangeNotification { QueueName = queueName,
+                                            ChangeNotificationType = changeNotificationType ,
+                                             ChangedDateTime=DateTime.UtcNow}));
 
             IMongoUpdate update = Update.Combine(updateAiringProperties);
             _currentAirings.Update(filter, update, UpdateFlags.Multi);

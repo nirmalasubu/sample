@@ -69,6 +69,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.ProductCode, BLModel.ProductCode>();
             CreateMap<DLModel.ProgramType, BLModel.ProgramType>();
             CreateMap<DLModel.Property, BLModel.Property>();
+            CreateMap<DLModel.Deliverable, BLModel.Deliverable>();
             CreateMap<DLModel.ProviderContentTier, BLModel.ProviderContentTier>();
             CreateMap<DLModel.Season, BLModel.Season>();
             CreateMap<DLModel.Series, BLModel.Series>();
@@ -117,6 +118,8 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.TitleId, BLAiringLongModel.TitleId>();
             CreateMap<DLModel.Version, BLAiringLongModel.Version>();
             CreateMap<DLModel.Destination, BLAiringLongModel.Destination>();
+            CreateMap<DLModel.Property, BLAiringLongModel.Property>();
+            CreateMap<DLModel.Deliverable, BLAiringLongModel.Deliverable>();
 
 
         }
