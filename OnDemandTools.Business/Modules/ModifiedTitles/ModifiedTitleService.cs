@@ -12,7 +12,7 @@ using OnDemandTools.DAL.Modules.Queue.Command;
 
 namespace OnDemandTools.Business.Modules.ModifiedTitles
 {
-    public class ModifiedTitleService: IModifiedTitlesService
+    public class ModifiedTitleService : IModifiedTitlesService
     {
         private IQueueCommand _resetDeliveryCommand;
         private readonly ITitleIdsQuery _titlIdsQuery;
@@ -51,14 +51,14 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
 
             //"Preparing to send modified titles to queues"
             var queueNames = queues.Select(q => q.Name).ToList();
-            _resetDeliveryCommand.ResetFor(queueNames, titleIds,ChangeNotificationType.Title);
+            _resetDeliveryCommand.ResetFor(queueNames, titleIds, ChangeNotificationType.Title);
 
             //"Deleting previously persisted modified titles in ODT"
             _titleIDsCommand.Delete(titleIds);
 
             return sinceTitleBSONId;
         }
-        
+
         public List<BLModel.UpdatedTitle> GetTitleIdsModifiedAfter(string titleId)
         {
             // Retrieve titles modified since the date on which the given
@@ -75,12 +75,12 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
                 {
                     updatedTitles.AddRange(rs);
                 }
-                                
+
             }).Wait();
 
             return updatedTitles;
         }
-        
+
         public string GetLastModifiedTitleIdOnOrBefore(DateTime lastTitleProcessedDateTime)
         {
             var utcDateTime = lastTitleProcessedDateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
@@ -113,7 +113,8 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
         private Task<List<BLModel.UpdatedTitle>> GetTitleIdsModifiedAfterAsync(RestClient theClient, RestRequest theRequest)
         {
             var tcs = new TaskCompletionSource<List<BLModel.UpdatedTitle>>();
-            theClient.ExecuteAsync<List<BLModel.UpdatedTitle>>(theRequest, response => {
+            theClient.ExecuteAsync<List<BLModel.UpdatedTitle>>(theRequest, response =>
+            {
                 tcs.SetResult(response.Data);
             });
             return tcs.Task;
@@ -122,7 +123,8 @@ namespace OnDemandTools.Business.Modules.ModifiedTitles
         private Task<List<BLModel.UpdatedTitle>> GetLastModifiedTitleIdOnOrBeforeAsync(RestClient theClient, RestRequest theRequest)
         {
             var tcs = new TaskCompletionSource<List<BLModel.UpdatedTitle>>();
-            theClient.ExecuteAsync<List<BLModel.UpdatedTitle>>(theRequest, response => {
+            theClient.ExecuteAsync<List<BLModel.UpdatedTitle>>(theRequest, response =>
+            {
                 tcs.SetResult(response.Data);
             });
             return tcs.Task;
