@@ -25,7 +25,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
         [Fact, Order(1)]
         public void GetAiringWithOptionStatus_PostAiringStatus_Test()
         {
-             AIRINGID = PostAiring();
+             AIRINGID = PostAiring("airingId");
             JObject req = new JObject();
             Dictionary<string, bool> dict = new Dictionary<string, bool>();
             dict["MEDIUM"] = true;
@@ -41,6 +41,27 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             }).Wait();
                 Assert.True(response.Contains("Successfully updated the airing status."));
+        }
+
+        [Fact, Order(1)]
+        public void PostAiringStatus_ByMediaId_Test()
+        {
+            string MediaID = PostAiring("mediaId");
+            JObject req = new JObject();
+            Dictionary<string, bool> dict = new Dictionary<string, bool>();
+            dict["MEDIUM"] = true;
+            req["status"] = JObject.FromObject(dict);
+
+            string response = null;
+            var request = new RestRequest("/v1/airingstatus/mediaId/" + MediaID, Method.POST);
+            request.AddParameter("application/json", req, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveString(request);
+
+            }).Wait();
+            Assert.True(response.Contains("Successfully updated the airings status."));
         }
 
         [Fact, Order(2)]
@@ -95,7 +116,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
         #region Private Mathods 
 
-        private string PostAiring()
+        private string PostAiring( string retValue)
         {
             JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("TBSAiringWithSingleFlight"));
             JArray jArray = (JArray)airingJson.SelectToken("Flights");
@@ -115,7 +136,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             }).Wait();
 
-            return response.SelectToken("airingId").Value<string>();
+            return retValue == "airingId" ? response.SelectToken("airingId").Value<string>() : response.SelectToken("mediaId").Value<string>();
         }
         #endregion
 
