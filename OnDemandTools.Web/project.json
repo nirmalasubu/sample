@@ -59,7 +59,8 @@
     "Microsoft.Extensions.Options": "1.1.1",
     "System.Runtime.InteropServices": "4.3.0",
     "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.1",
-    "Microsoft.AspNetCore.Authentication.Cookies": "1.1.1"
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.1.1",
+    "Microsoft.AspNetCore.Session":"1.1.1"
   },
 
   "tools": {

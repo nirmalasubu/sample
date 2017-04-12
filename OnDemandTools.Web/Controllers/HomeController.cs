@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Business.Modules.Package;
+using Microsoft.AspNetCore.Http;
 
 namespace OnDemandTools.Web.Controllers
 {
@@ -21,12 +22,18 @@ namespace OnDemandTools.Web.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
+            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="Read"))
             {
                 return View();
             }
             else
             {
+                if(HttpContext.User.Identity.IsAuthenticated)
+                {
+                    HttpContext.Session.SetString("NotAuthorized", "True");
+                    return Redirect("Account/Snapout");
+                }
+
                 return View("Login");
             }
 

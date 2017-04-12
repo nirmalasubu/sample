@@ -53,6 +53,8 @@ namespace OnDemandTools.Web
 
             // Add framework services.
             services.AddMvc();    
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
 
             // Predefine set of policies        
             services.AddAuthorization(options =>
@@ -157,6 +159,7 @@ namespace OnDemandTools.Web
                 }
             });
 
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

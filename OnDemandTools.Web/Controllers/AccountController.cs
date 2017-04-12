@@ -27,7 +27,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public async Task Login()
         {
-            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated || (HttpContext.User.Identity.IsAuthenticated && !HttpContext.User.HasClaim(c=>c.Value=="Read")))
                 await HttpContext.Authentication.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { });
         }
 
@@ -37,6 +37,22 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
 
         public async Task LogOff()
+        {
+            
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                await HttpContext.Authentication.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+                await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            }          
+            
+        }
+
+
+        [Authorize]
+        // GET: /Account/Snapout
+        [HttpGet]
+
+        public async Task Snapout()
         {
             
             if (HttpContext.User.Identity.IsAuthenticated)
