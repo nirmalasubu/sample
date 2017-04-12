@@ -558,7 +558,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)
         {
-            if (primaryTitle.TitleType != "Feature Film")
+            if (primaryTitle.TitleType.Name != "Feature Film")
             {
                 if (string.IsNullOrEmpty(airing.Title.Episode.Number))
                     airing.Title.Episode.Number = primaryTitle.EpisodeNumber;

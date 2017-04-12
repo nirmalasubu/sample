@@ -19,7 +19,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Title
         public string TitleName { get; set; }
         public string TitleNameSortable { get; set; }
         public string TitleTypeCode { get; set; }
-        public string TitleType { get; set; }
+        public TitleType TitleType { get; set; }
         public string SeriesTitleName { get; set; }
         public string SeriesTitleNameSortable { get; set; }
         public string EpisodeNumber { get; set; }

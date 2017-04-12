@@ -15,7 +15,8 @@ namespace OnDemandTools.API.Helpers.MappingRules.TitleProfile
             CreateMap<BLTitleModel.RatingDescriptor, VMTitleModel.RatingDescriptor>();
             CreateMap<BLTitleModel.OtherName, VMTitleModel.OtherName>();
             CreateMap<BLTitleModel.Storyline, VMTitleModel.Storyline>();
-            CreateMap<BLTitleModel.ExternalSource, VMTitleModel.ExternalSource>();                 
+            CreateMap<BLTitleModel.ExternalSource, VMTitleModel.ExternalSource>();
+            CreateMap<BLTitleModel.TitleType, VMTitleModel.TitleType>();
         }
     }
 }
