@@ -54,7 +54,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             var allAiringMessages = _queueTester.ProcessedAirings.Select(e => string.Join(", ", e.Messages));
 
-            Assert.True(!_queueTester.ProcessedAirings.Any(e => e.HasQueueDeliveryError), 
+            Assert.True(!_queueTester.ProcessedAirings.Any(e => e.HasQueueDeliveryError),
                 string.Join(", ", allAiringMessages));
         }
 
@@ -116,6 +116,10 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             Assert.True(!airing.DeliveredTo.Contains(_tbsQueueKey), "Delivered Queue not cleared for successfull Airing Status post.");
 
+            Assert.True(airing.ChangeNotifications.Any(), "Change notifications not added for the status change.");
+
+            Assert.True(airing.ChangeNotifications.Any(e => e.QueueName == _tbsQueueKey && e.ChangeNotificationType == ChangeNotificationType.Status.ToString()),
+                "Change notification not added for the queue: " + _tbsQueueKey);
         }
     }
 }
