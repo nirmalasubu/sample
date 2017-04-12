@@ -28,7 +28,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public async Task Login()
         {
-            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated || (HttpContext.User.Identity.IsAuthenticated && !HttpContext.User.HasClaim(c=>c.Value=="Read")))
                 await HttpContext.Authentication.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { });
         }
 
