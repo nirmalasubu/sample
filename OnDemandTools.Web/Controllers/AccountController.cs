@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Business.Modules.User;
 
 namespace OnDemandTools.Web.Controllers
 {
-     
+
     public class AccountController : Controller
     {
         IUserHelper userHelper;
@@ -27,42 +28,55 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public async Task Login()
         {
-            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated || (HttpContext.User.Identity.IsAuthenticated && !HttpContext.User.HasClaim(c=>c.Value=="Read")))
+            if (HttpContext.User == null || !HttpContext.User.Identity.IsAuthenticated)
                 await HttpContext.Authentication.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { });
         }
 
-       
+
         [Authorize]
         // GET: /Account/LogOff
         [HttpGet]
 
         public async Task LogOff()
         {
-            
+
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 await HttpContext.Authentication.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
                 await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }          
-            
+            }
+
         }
+
 
 
         [Authorize]
-        // GET: /Account/Snapout
+        // GET: /Account/Gatekeeper
         [HttpGet]
 
-        public async Task Snapout()
+        public IActionResult Gatekeeper()
         {
-            
-            if (HttpContext.User.Identity.IsAuthenticated)
+            // Authenticated & Authorized
+            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c => c.Value == "read"))
             {
-                await HttpContext.Authentication.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-                await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }          
-            
+                HttpContext.Session.Remove("NotAuthorized");
+                return Redirect("/Home/Dashboard");
+            }
+            else
+            {
+                // Authenticated but not Authorized
+                if (HttpContext.User.Identity.IsAuthenticated)
+                {
+                    HttpContext.Session.SetString("NotAuthorized", "True");
+                    return Redirect("/Account/LogOff");
+                }
+                else
+                {
+                    return Redirect("/");
+                }
+            }
         }
-    
+
         [Authorize]
         [HttpGet]
         public async Task EndSession()
@@ -77,17 +91,17 @@ namespace OnDemandTools.Web.Controllers
 
         public IActionResult Access()
         {
-            return Json("Good, you have access!");            
+            return Json("Good, you have access!");
         }
 
-         [Authorize]
+        [Authorize]
         // GET: /Account/AccessDenied
         [HttpGet]
 
         public IActionResult AccessDenied()
         {
-            
-            return Json("Sorry, your access is denied");            
+
+            return Json("Sorry, your access is denied");
         }
     }
 }

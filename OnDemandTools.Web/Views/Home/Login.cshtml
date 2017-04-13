@@ -50,8 +50,18 @@
                             <a class="btn btn-primary btn-lg btn-login" href="/Account/Login" role="button">Login</a> 
                     </div>
 
+                    @{    
+                        var state =  ViewData["NotAuthorized"] as String;    
+                       
+                        if (@state  == "True")
+                        {
+                            <div class="text-center lgn-msg">
+                                The email/password combination you entered does not match our records. Please try again or contact ODT support.
+                            </div>
+                        }  
+                     }
+
                  
-                   
 
                  
                 </div>

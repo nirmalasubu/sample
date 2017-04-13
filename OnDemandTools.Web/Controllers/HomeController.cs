@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Business.Modules.Package;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnDemandTools.Web.Controllers
 {
@@ -22,20 +23,26 @@ namespace OnDemandTools.Web.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="Read"))
+            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="read"))
             {
-                return View();
+                return View("Index");
             }
             else
             {
-                if(HttpContext.User.Identity.IsAuthenticated)
-                {
-                    HttpContext.Session.SetString("NotAuthorized", "True");
-                    return Redirect("Account/Snapout");
-                }
-
+                if(HttpContext.Session.Keys.Contains("NotAuthorized"))
+                    ViewData["NotAuthorized"] = HttpContext.Session.GetString("NotAuthorized");               
+                    
                 return View("Login");
             }
+        }
+
+
+        [Authorize(Policy = "READ")]
+        // GET: /Home/Dashboard
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View("Index");
 
         }
 

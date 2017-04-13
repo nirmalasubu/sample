@@ -174,7 +174,7 @@ namespace OnDemandTools.Web
         private Task TokenValidated(TokenValidatedContext n)
         {  
             n.Ticket.Principal.AddIdentity(container.GetInstance<IUserHelper>().GetByUserName( n.Ticket.Principal.Identity.Name).Identities.FirstOrDefault());            
-            n.Properties.RedirectUri = "/";
+            n.Properties.RedirectUri = "/Account/Gatekeeper";
             return Task.FromResult(0);
         }
 
