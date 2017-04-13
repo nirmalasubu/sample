@@ -41,7 +41,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
             JArray jTitleIds = response.First.SelectToken("title").Value<JArray>(@"titleIds");
             // Assert
             Assert.True(jTitleIds.First.Value<string>(@"value") == "2065580", string.Format("Title Id should be '2065580' and but the returned {0}", jTitleIds.First.Value<string>(@"value")));
-
+            Assert.True(response.First.Value<string>(@"mediaId") == "94ca5f6ac5222ef35a24ed05df0427ee33b32362", string.Format("Media Id should be '94ca5f6ac5222ef35a24ed05df0427ee33b32362' and but the returned {0}", response.First.Value<string>(@"mediaId")));
         }
 
         [Fact]
