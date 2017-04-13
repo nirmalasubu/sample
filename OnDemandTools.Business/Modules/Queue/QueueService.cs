@@ -12,7 +12,7 @@ using System;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
-    public class QueueService :IQueueService
+    public class QueueService : IQueueService
     {
 
         IQueueQuery queueQueryHelper;
@@ -124,7 +124,7 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="changeNotificationType">the file/title</param>
         public void FlagForRedelivery(IList<string> queueNames, IList<int> titleIds, ChangeNotificationType changeNotificationType)
         {
-            queueCommandHelper.ResetFor(queueNames, titleIds,changeNotificationType);
+            queueCommandHelper.ResetFor(queueNames, titleIds, changeNotificationType);
         }
 
         /// <summary>
@@ -133,10 +133,10 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="queueNames">The queue names.</param>
         /// <param name="airingIds">The airing ids.</param>
-       /// <param name="changeNotificationType">the file/title</param>
+        /// <param name="changeNotificationType">the file/title</param>
         public void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds, ChangeNotificationType changeNotificationType)
         {
-            queueCommandHelper.ResetFor(queueNames, airingIds,changeNotificationType);
+            queueCommandHelper.ResetFor(queueNames, airingIds, changeNotificationType);
         }
 
         public BLModel.Queue GetByApiKey(string apiKey)
@@ -218,7 +218,7 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="mediaId"></param>
         public void DeleteHistoricalMessage(string mediaId)
-        {            
+        {
             historyRecorder.Remove(mediaId);
         }
 
@@ -228,14 +228,16 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="airingId">media id to check</param>
         /// <param name="queueName">queue name to check</param>
-
-
         public BLModel.HistoricalMessage GetMessageDeliveredForAiringId(string airingId, string queueName)
         {
-           HistoricalMessage historicalMessage = queueMessages.GetBy(queueName, airingId).First();
-               return historicalMessage.ToBusinessModel<HistoricalMessage, BLModel.HistoricalMessage>();
+            HistoricalMessage historicalMessage = queueMessages.GetBy(queueName, airingId).First();
+            return historicalMessage.ToBusinessModel<HistoricalMessage, BLModel.HistoricalMessage>();
         }
 
-       
+        public List<BLModel.HistoricalMessage> GetAllMessagesDeliveredForAiringId(string airingId, string queueName)
+        {
+            var historicalMessages = queueMessages.GetBy(queueName, airingId).ToList();
+            return historicalMessages.ToBusinessModel<List<HistoricalMessage>, List<BLModel.HistoricalMessage>>();
+        }
     }
-    }
+}

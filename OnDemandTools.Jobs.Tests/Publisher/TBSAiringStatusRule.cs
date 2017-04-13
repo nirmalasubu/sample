@@ -2,6 +2,7 @@
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Jobs.Tests.Helpers;
 using Xunit;
+using OnDemandTools.Business.Modules.Queue;
 
 namespace OnDemandTools.Jobs.Tests.Publisher
 {
@@ -120,6 +121,30 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
             Assert.True(airing.ChangeNotifications.Any(e => e.QueueName == _tbsQueueKey && e.ChangeNotificationType == ChangeNotificationType.Status.ToString()),
                 "Change notification not added for the queue: " + _tbsQueueKey);
+        }
+
+        [Fact]
+        [Order(5)]
+        public void AiringStatus_StatusChange_ShouldDeliverToQueue()
+        {
+            _queueTester.VerifyClientQueueDelivery();
+
+            var allAiringMessages = _queueTester.ProcessedAirings.Select(e => string.Join(", ", e.Messages));
+
+            Assert.True(!_queueTester.ProcessedAirings.Any(e => e.HasQueueDeliveryError),
+                string.Join(", ", allAiringMessages));
+
+            var queueService = _fixture.Container.GetInstance<IQueueService>();
+
+            var messages = queueService.GetAllMessagesDeliveredForAiringId(_airingId, _tbsQueueKey);
+
+            var changeNotificationJson = "{\"ChangeNotificationType\":\"Status\",\"ChangedProperties\":[\"MEDIUM\"]}";
+
+            var lastNotification = messages.OrderBy(e => e.DateTime).Last();
+
+            Assert.True(lastNotification.Message.Contains(changeNotificationJson),
+                string.Format("Airing: {0} Status notification not sent to Cloud AMQP", _airingId));
+
         }
     }
 }

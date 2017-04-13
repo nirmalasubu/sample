@@ -136,7 +136,7 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="mediaId"></param>
         void DeleteHistoricalMessage(string mediaId);
-        
+
 
         /// <summary>
         ///  returns any message delived for given Queue and AiringId
@@ -144,5 +144,13 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="airingId">airing id to check</param>
         /// <param name="queueName">queue name to check</param>
         HistoricalMessage GetMessageDeliveredForAiringId(string airingId, string queueName);
+
+
+        /// <summary>
+        ///  returns all message's delived for given Queue and AiringId
+        /// </summary>
+        /// <param name="airingId">airing id to check</param>
+        /// <param name="queueName">queue name to check</param>
+        List<HistoricalMessage> GetAllMessagesDeliveredForAiringId(string airingId, string queueName);
     }
 }
