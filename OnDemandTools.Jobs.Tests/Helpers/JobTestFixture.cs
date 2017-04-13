@@ -17,6 +17,7 @@ using OnDemandTools.DAL.Modules.Airings.Queries;
 using RestSharp;
 using Serilog;
 using StructureMap;
+using OnDemandTools.Business.Modules.Airing;
 
 namespace OnDemandTools.Jobs.Tests.Helpers
 {
@@ -52,15 +53,8 @@ namespace OnDemandTools.Jobs.Tests.Helpers
 
         private void CleanupTestAirings(List<string> processedAiringIds)
         {
-            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(processedAiringIds);
-
-            var request = new RestRequest("/api/unittest/test");
-            request.AddParameter("text/json", jsonString, ParameterType.RequestBody);
-
-            Task.Run(async () =>
-            {
-                var response = await JobRestClient.RetrieveRecord(request);
-            }).Wait();
+            var airingService = Container.GetInstance<IAiringService>();
+            airingService.PurgeUnitTestAirings(processedAiringIds);
         }
 
 
