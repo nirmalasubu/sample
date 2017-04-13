@@ -155,6 +155,7 @@ namespace OnDemandTools.Web
                 PostLogoutRedirectUri = settings.AzureAd.PostLogoutRedirectUri,
                 Events = new OpenIdConnectEvents
                 {
+                    OnAuthenticationFailed = cx =>  AuthenticationFailed(cx),
                     OnRemoteFailure = cx=> RemoteFailure(cx),
                     OnTokenValidated = cx => TokenValidated(cx)
                 },             
@@ -184,7 +185,17 @@ namespace OnDemandTools.Web
         private Task RemoteFailure(FailureContext context)
         {
             context.HandleResponse();
-            context.Response.Redirect("/Home/Error?message=" + context.Failure.Message);
+           context.Response.Redirect("/");
+            //context.Response.Redirect("/Home/Error?message=" + context.Failure.Message);
+            return Task.FromResult(0);
+        }
+
+        // Handle sign-in errors differently than generic errors.
+        private Task AuthenticationFailed(AuthenticationFailedContext context)
+        {
+            context.HandleResponse();
+            context.Response.Redirect("/");
+            //context.Response.Redirect("/Home/Error?message=" + context.Response.ToString());
             return Task.FromResult(0);
         }
     }
