@@ -1,47 +1,19 @@
-@using System.Security.Principal
-@using System
-
 @{
-    ViewData["Title"] = "Home Page";
+    Layout = null;
 }
+<html>
+<head>
+    <title>React-Redux Example - Todo App</title>
+</head>
+<body>
+     <div id="app">
+        </div>
 
+          @{
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"></script>
+        <script src="@Url.Content("~/js/react.odtportal.bundle.js")"></script>
 
-
-
-<div class="row">
-    <div class="col-md-3">
-        <h2>ODT Portal</h2>
-        <p>
-            
-            @if (User.Identity.IsAuthenticated && !User.HasClaim(c=>c.Value=="guest"))
-            {
-                <p>Welcome, @User.Identity.Name &nbsp;&nbsp;&nbsp;@Html.ActionLink("Log Out", "LogOff", "Account")</p>  
-
-                <div>Here are your claims</div>
-               @foreach (var item in User.Claims.ToList().Skip((User.Claims.ToList().IndexOf(User.Claims.Where(c=>c.Type == "ver").First()))+1).Take(User.Claims.Count() - (User.Claims.ToList().IndexOf(User.Claims.Where(c=>c.Type == "ver").First())+1)))
-                    {
-                        <div>@item.Value</div>
-                    }             
-            }
-            else
-            {
-                 @if (User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="guest"))
-                 {
-                    <p>
-                        <li>Welcome, you are accessing ODT portal as a guest. Most of the features will be unaccessible. @Html.ActionLink("Log Out", "LogOff", "Account")</li>
-                    </p>
-                     <div>Here are your claims</div>
-                                    
-                    @foreach (var item in User.Claims.ToList().Skip((User.Claims.ToList().IndexOf(User.Claims.Where(c=>c.Type == "ver").First()))+1).Take(User.Claims.Count() - (User.Claims.ToList().IndexOf(User.Claims.Where(c=>c.Type == "ver").First())+1)))
-                    {
-                        <div>@item.Value</div>
-                    }  
-                 }
-                 else{
-                    <li>Welcome to ODT portal. @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) to begin</li>
-                 }
-                
-            }
-        </P>
-    </div>   
-</div>
+    }
+</body>
+</html>
