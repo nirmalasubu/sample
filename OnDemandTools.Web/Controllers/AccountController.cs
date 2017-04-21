@@ -60,7 +60,7 @@ namespace OnDemandTools.Web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c => c.Value == "read"))
             {
                 HttpContext.Session.Remove("NotAuthorized");
-                return Redirect("/Home/Dashboard");
+                return Redirect("/");
             }
             else
             {
