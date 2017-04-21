@@ -6,8 +6,8 @@ import {ListGroupItem} from 'react-bootstrap';
 const Menu = () => {
     return (
       <div>
-        <ListGroup componentClass="div" style={MenuStyles}>
-            <ListGroupItem ><Link to="/">Home</Link></ListGroupItem>
+        <ListGroup componentClass="div" >
+            <ListGroupItem  ><Link to="/">Home</Link></ListGroupItem>
             <ListGroupItem ><Link to="/destinations">Destinations</Link></ListGroupItem>
             <ListGroupItem ><Link to="/products">Products</Link></ListGroupItem>
             <ListGroupItem ><Link to="/pendingRequests">Pending Requests</Link></ListGroupItem>
@@ -16,7 +16,5 @@ const Menu = () => {
       </div>
   );
 };
-
-const MenuStyles = { margin: '30 auto 10px', float: 'left'};
 
 export default Menu
