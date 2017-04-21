@@ -13,18 +13,9 @@ RUN ["dotnet", "restore"]
 ## Switch to working directory
 WORKDIR /app/OnDemandTools.Web
 
-#RUN npm version
-#RUN npm i -g webpack@2.2.1
-#RUN npm install
-#RUN npm list
-#RUN ls -a
-
 RUN npm run portal
+RUN ["dotnet", "build"]
 
-# # #RUN ["npm", "portal"]
+EXPOSE 5000/tcp
 
-# # # RUN ["dotnet", "build"]
-
-# # EXPOSE 5000/tcp
-
-# # # CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
+CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
