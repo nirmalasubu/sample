@@ -1,6 +1,6 @@
 ﻿import { combineReducers } from 'redux';
 
-import {DeliveryQueueReducer} from './DeliveryQueue/DeliveryQueueReducer'
+import {DeliveryQueueReducer} from 'Reducers/DeliveryQueue/DeliveryQueueReducer'
 
 export default combineReducers({
    

@@ -1,4 +1,4 @@
-﻿import * as actionTypes from '../ActionTypes';
+﻿import * as actionTypes from 'Actions/ActionTypes';
 
 // Future  we get data through Axios or fetch
 const  queue= [

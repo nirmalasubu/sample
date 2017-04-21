@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as queueActions from '../../actions/deliveryQueue/deliveryQueueActions';
+import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
 
 
 class Queue extends React.Component{

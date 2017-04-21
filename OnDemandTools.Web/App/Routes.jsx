@@ -1,12 +1,12 @@
 import React  from 'react';
 import {Route, IndexRoute} from 'react-router';
-import Home from './components/common/HomePage'
-import Destinations from './components/Destinations/DestinationsPage'
-import Products from './components/Products/ProductsPage'
-import DeliveryQueues from './components/DeliveryQueues/DeliveryQueuesPage';
-import Permissions from './components/Permissions/PermissionsPage'
-import PendingRequests from './components/PendingRequests/PendingRequests'
-import App from './components/App'
+import Home from 'Components/Common/HomePage'
+import Destinations from 'Components/Destinations/DestinationsPage'
+import Products from 'Components/Products/ProductsPage'
+import DeliveryQueues from 'Components/DeliveryQueues/DeliveryQueuesPage';
+import Permissions from 'Components/Permissions/PermissionsPage'
+import PendingRequests from 'Components/PendingRequests/PendingRequests'
+import App from 'Components/App'
 
 export default (
   <Route path="/" component={App}>
