@@ -37,7 +37,8 @@
   "scripts": {
     "portal": "npm install && dotnet restore && webpack --display-error-details",
     "portaldebug": "npm install && bower prune && bower install && concurrently \"webpack --watch\" \"dotnet run\"",
-    "webpackdebug": "webpack --display-error-details"
+    "webpackdebug": "webpack --display-error-details",
+     "dev": "npm install && bower prune && bower install && concurrently \"webpack --watch\" \"dotnet run\""
   },
   "author": "",
   "license": "ISC"
