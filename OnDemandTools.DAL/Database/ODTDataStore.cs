@@ -11,17 +11,39 @@ namespace OnDemandTools.DAL.Database
     public class ODTDatastore : IODTDatastore
     {
         private readonly MongoDatabase _database;
+        private static MongoClient _client;
 
         public ODTDatastore(AppSettings appSettings)
         {
             _database = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
         }
 
+        public static MongoClient GetClient(MongoUrl url)
+        {
+            if((_client == null)){
+                _client = new MongoClient(url);
+                return _client;
+            }
+            else{
+                try
+                {
+                    string ms;
+                   _client.GetServer().IsDatabaseNameValid(url.DatabaseName, out ms);
+                   return _client;
+                }
+                catch (System.Exception ex)
+                {                    
+                     _client = new MongoClient(url);
+                    return _client;
+                }               
+            }
+        }
+
         private MongoDatabase GetDatabase(string connectionString, string options)
         {
             var url = new MongoUrl(connectionString + options);
 
-            var client = new MongoClient(url);
+            var client = GetClient(url);
             var server = client.GetServer();
             return server.GetDatabase(url.DatabaseName);
         }
