@@ -152,5 +152,11 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="airingId">airing id to check</param>
         /// <param name="queueName">queue name to check</param>
         List<HistoricalMessage> GetAllMessagesDeliveredForAiringId(string airingId, string queueName);
+
+        /// <summary>
+        /// Get all the queues
+        /// </summary>
+        /// <returns>list of queues</returns>
+        List<Model.Queue> GetQueues();
     }
 }

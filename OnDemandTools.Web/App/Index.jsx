@@ -7,6 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/font-awesome/css/font-awesome.css';
 import routes from 'Routes';
 import configureStore from 'Store/ConfigureStore';
+import '../wwwroot/css/site.css'
 
 const store = configureStore();
 render(

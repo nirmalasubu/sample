@@ -3,6 +3,11 @@ body {
     padding-bottom: 20px;
 }
 
+.nir{
+       color: blueviolet;
+}
+
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -35,4 +40,6 @@ textarea {
   .carousel-caption {
     display: none
   }
+
+
 }
