@@ -267,7 +267,8 @@ namespace OnDemandTools.Business.Modules.Airing
                     contentIds.Append(playList.Id);
                 }
             }
-            else
+
+            if (string.IsNullOrEmpty(contentIds.ToString()))
             {
                 foreach (var version in airing.Versions)
                 {
