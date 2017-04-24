@@ -1,21 +1,35 @@
 ﻿import React from 'react';
-import {Link} from 'react-router';
-import {ListGroup} from 'react-bootstrap';
-import {ListGroupItem} from 'react-bootstrap';
+import { Link } from 'react-router';
+import { ListGroup } from 'react-bootstrap';
+import { ListGroupItem, Nav, NavItem } from 'react-bootstrap';
+import { browserHistory } from 'react-router';
 
-const Menu = () => {
+
+class Menu extends React.Component {
+
+  constructor() {
+    super();
+    this.state = { activeKey: "home" };
+  }
+
+  handleSelect(selectedKey) {
+    browserHistory.push(selectedKey);
+    this.setState({ activeKey: selectedKey });
+  }
+  render() {
     return (
       <div>
-        <ListGroup componentClass="div" >
-            <ListGroupItem  ><Link to="/">Home</Link></ListGroupItem>
-            <ListGroupItem ><Link to="/deliveryQueues">Delivery Queues</Link></ListGroupItem>
-            <ListGroupItem ><Link to="/destinations">Destinations</Link></ListGroupItem>
-            <ListGroupItem ><Link to="/products">Products</Link></ListGroupItem>
-            <ListGroupItem ><Link to="/pendingRequests">Pending Requests</Link></ListGroupItem>
-            <ListGroupItem ><Link to="/permissions">Permissions</Link></ListGroupItem>
-        </ListGroup>
+        <Nav bsStyle="pills" stacked activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
+          <NavItem eventKey={"home"}>Home</NavItem>
+          <NavItem eventKey={"deliveryQueues"}>Delivery Queues</NavItem>
+          <NavItem eventKey={"destinations"}>Destinations</NavItem>
+          <NavItem eventKey={"products"}>Products</NavItem>
+          <NavItem eventKey={"pendingRequests"}>Pending Requests</NavItem>
+          <NavItem eventKey={"permissions"}>Permissions</NavItem>
+        </Nav>
       </div>
-  );
-};
+    );
+  }
+}
 
 export default Menu

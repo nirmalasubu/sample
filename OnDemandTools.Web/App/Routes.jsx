@@ -1,5 +1,5 @@
-import React  from 'react';
-import {Route, IndexRoute} from 'react-router';
+import React from 'react';
+import { Route, Router, hashHistory, IndexRoute } from 'react-router';
 import Home from 'Components/Common/HomePage'
 import Destinations from 'Components/Destinations/DestinationsPage'
 import Products from 'Components/Products/ProductsPage'
@@ -9,12 +9,15 @@ import PendingRequests from 'Components/PendingRequests/PendingRequests'
 import App from 'Components/App'
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={Home}></IndexRoute>
-    <Route path="/destinations" component={Destinations}></Route>
-    <Route path="/products" component={Products}></Route>
-    <Route path="/deliveryQueues" component={DeliveryQueues}></Route>
-    <Route path="/permissions" component={Permissions}></Route>
-    <Route path="/pendingRequests" component={PendingRequests}></Route>
-  </Route>
+  <Router history={hashHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={Home}></IndexRoute>
+      <Route path="home" component={Home}></Route>
+      <Route path="destinations" component={Destinations}></Route>
+      <Route path="products" component={Products}></Route>
+      <Route path="deliveryQueues" component={DeliveryQueues}></Route>
+      <Route path="permissions" component={Permissions}></Route>
+      <Route path="pendingRequests" component={PendingRequests}></Route>
+    </Route>
+  </Router>
 )
