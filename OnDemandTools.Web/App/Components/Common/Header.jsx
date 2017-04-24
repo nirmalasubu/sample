@@ -7,7 +7,7 @@ const Header = () => {
         <div >
             <Image src="../images/ODTLogo.png" rounded />
             <div style={alignLeft} >
-               <h4> Welcome Cea ! <a href="/account/logoff" >Logout</a></h4>
+               <h4> Welcome Cea! <a href="/account/logoff" >Logout</a></h4>
             </div>
             <hr/>
         </div>
