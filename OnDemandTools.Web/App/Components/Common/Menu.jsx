@@ -9,7 +9,14 @@ class Menu extends React.Component {
 
   constructor() {
     super();
-    this.state = { activeKey: "home" };
+    var currentRoute= window.location.pathname.replace("/","");
+    if(currentRoute.length<2)
+    {
+      currentRoute= "home";
+    }
+
+    this.state = { activeKey: currentRoute };
+    console.log();
   }
 
   handleSelect(selectedKey) {
