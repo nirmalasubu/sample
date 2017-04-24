@@ -5,8 +5,11 @@ import Destinations from 'Components/Destinations/DestinationsPage'
 import Products from 'Components/Products/ProductsPage'
 import DeliveryQueues from 'Components/DeliveryQueues/DeliveryQueuesPage';
 import Permissions from 'Components/Permissions/PermissionsPage'
-import PendingRequests from 'Components/PendingRequests/PendingRequests'
+import PendingRequests from 'Components/PendingRequests/PendingRequestsPage'
+import ContentTiers from 'Components/ContentTiers/ContentTiersPage'
+import WorkflowStatuses from 'Components/WorkflowStatuses/WorkflowStatusesPage'
 import App from 'Components/App'
+
 
 export default (
   <Router history={hashHistory}>
@@ -18,6 +21,8 @@ export default (
       <Route path="deliveryQueues" component={DeliveryQueues}></Route>
       <Route path="permissions" component={Permissions}></Route>
       <Route path="pendingRequests" component={PendingRequests}></Route>
+      <Route path="contentTiers" component={ContentTiers}></Route>
+      <Route path="workflowStatuses" component={WorkflowStatuses}></Route>
     </Route>
   </Router>
 )
