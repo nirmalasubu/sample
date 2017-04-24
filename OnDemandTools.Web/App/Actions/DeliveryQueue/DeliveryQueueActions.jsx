@@ -6,25 +6,33 @@ const  queue= [
                     queueName: 1,
                     advancedDeliery: 'List item 1',
                     email: 'List item 1',
-                    friendlyQueueName:'TBS'
+                    friendlyQueueName:'TBS',
+                    firstName:'TND',
+                    lastName:'dfds'
                 },
                 {
                     queueName: 2,
                     advancedDeliery: 'List item 2',
                     email: 'List item 2',
-                    friendlyQueueName:'MEDIUM'
+                    friendlyQueueName:'MEDIUM', 
+                    firstName:'TND',
+                    lastName:'dfds'
                 },
                 {
                     queueName: 3,
                     advancedDeliery: 'List item 3',
                     email: 'List item 3',
-                    friendlyQueueName:'CONOE'
+                    friendlyQueueName:'CONOE',
+                    firstName:'TND',
+                    lastName:'dfds'
                 },
                 {
                     queueName: 4,
                     advancedDeliery: 'List item 4',
                     email: 'List item 4',
-                    friendlyQueueName:'ENCODING'
+                    friendlyQueueName:'ENCODING',
+                    firstName:'TND',
+                    lastName:'dfds'
                 }
 ];
 

@@ -23,6 +23,7 @@
     "expose-loader": "0.7.3",
     "file-loader": "0.11.1",
     "jquery": "3.2.1",
+    "jquery-ui": "1.12.1",
     "react": "15.4.2",
     "react-bootstrap": "^0.30.9",
     "react-dom": "15.4.2",
@@ -31,14 +32,15 @@
     "redux": "3.6.0",
     "style-loader": "0.16.1",
     "url-loader": "0.5.8",
-    "webpack": "2.2.1"
+    "webpack": "2.2.1",
+    "font-awesome": "4.7.0"
   },
   "devDependencies": {},
   "scripts": {
     "portal": "npm install && dotnet restore && webpack --display-error-details",
     "portaldebug": "npm install && bower prune && bower install && concurrently \"webpack --watch\" \"dotnet run\"",
     "webpackdebug": "webpack --display-error-details",
-     "dev": "npm install && bower prune && bower install && concurrently \"webpack --watch\" \"dotnet run\""
+    "dev": "npm install && bower prune && bower install && concurrently \"webpack --watch\" \"dotnet run\""
   },
   "author": "",
   "license": "ISC"

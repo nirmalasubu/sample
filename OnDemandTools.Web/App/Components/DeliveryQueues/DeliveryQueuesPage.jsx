@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import $ from 'jquery';
 
 
 class Queue extends React.Component{
@@ -11,6 +12,7 @@ class Queue extends React.Component{
 
     //called on the page load
     componentDidMount() {
+     
         this.props.fetchQueue();
     }
 
@@ -25,7 +27,7 @@ class Queue extends React.Component{
                     <th>Queue Name</th>
                     <th>Advanced Delivery</th>
                     <th>Contact</th>
-                    <th>Remote Queue</th>
+                    <th >Remote Queue</th>
                     <th>Actions</th>
                     </tr>
               </thead>
@@ -35,12 +37,12 @@ class Queue extends React.Component{
              <tr key={index}>
                         <td>{item.friendlyQueueName}</td>
                         <td>{item.advancedDeliery}</td>
-                         <td>{item.email}</td>
+                         <td><p data-toggle="tooltip" title={item.email}>{item.firstName} {item.lastName}</p></td>
                         <td>{item.queueName}</td>
                         <td></td>
                       </tr>
                     );
-    })}
+                         })}
                 </tbody>
             </table>
       </div>
