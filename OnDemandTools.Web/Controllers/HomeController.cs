@@ -21,6 +21,14 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Route("")]
+        [Route("/home")]
+        [Route("/deliveryQueues")]
+        [Route("/products")]
+        [Route("/destinations")]
+        [Route("/permissions")]
+        [Route("/pendingRequests")]
+        [Route("/contentTiers")]
+        [Route("/workflowStatuses")]
         public IActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="read"))
