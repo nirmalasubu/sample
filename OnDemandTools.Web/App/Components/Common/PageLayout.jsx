@@ -11,7 +11,7 @@ import {Panel} from 'react-bootstrap';
 const Layout = (props) => {
     return (
       <div >          
-          <Grid >
+          <Grid fluid="true">
             <Row className="show-grid">
                 <Col><Header /></Col>
             </Row>
