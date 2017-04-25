@@ -48,9 +48,8 @@ export const fetchQueuesSuccess = (queues) => {
 
 export const fetchQueues = () => {
     return (dispatch) => {
-        return Axios.get('/api/deliveryqueue')
-          .then(response => {
-              console.log(response.data);
+        return Axios.get('/api/deliveryqueue')        
+          .then(response => { 
               dispatch(fetchQueuesSuccess(response.data))
           })
           .catch(error => {
