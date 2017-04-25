@@ -7,7 +7,25 @@ body {
        color: blueviolet;
 }
 
+.queue-table{
+    width:900px;
+}
 
+.queue-table-th-name{
+  width:50px;
+}
+.queue-table-th-advanceddevlivery{
+  width:50px;
+}
+.queue-table-th-email{
+  width:50px;
+}
+.queue-table-th-queue{
+  width:500px;
+}
+.queue-table-th-actions{
+  width:50px;
+}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

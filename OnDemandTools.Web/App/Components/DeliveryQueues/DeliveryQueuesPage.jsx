@@ -45,25 +45,45 @@ class Queue extends React.Component{
     render(){      
         return(
           <div>
-            <table id="myTable2" className="table table-hover table-striped table-bordered">
+            <table id="myTable2" className="table table-hover table-striped table-bordered queue-table">
                <thead >
               <tr>
-                    <th onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name</th>
-                    <th>Advanced Delivery</th>
-                    <th onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
-                    <th >Remote Queue</th>
-                    <th>Actions</th>
+                    <th  className="queue-table-th-name" onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name</th>
+                    <th  className="queue-table-th-advanceddevlivery">Advanced Delivery</th>
+                    <th  className="queue-table-th-email" onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
+                    <th  className="queue-table-th-queue">Remote Queue</th>
+                    <th  className="queue-table-th-actions">Actions</th>
                     </tr>
               </thead>
               <tbody>
             {this.state.statequeue.map((item, index) => {
            return (
              <tr key={index}>
-                        <td>{item.friendlyName}</td>
-                        <td>{item.hoursOut}</td>
-                         <td><p data-toggle="tooltip" title={item.contactEmailAddress}>{item.contactEmailAddress}</p></td>
-                        <td>{item.name}</td>
-                        <td></td>
+                        <td  className="queue-table-th-name">{item.friendlyName}</td>
+                        <td  className="queue-table-th-advanceddevlivery">{item.hoursOut}</td>
+                         <td  className="queue-table-th-email"><p data-toggle="tooltip" title={item.contactEmailAddress}>{item.contactEmailAddress}</p></td>
+
+                        <td  className="queue-table-th-queue">
+                            <p>
+                            {item.name}
+                        <br />
+                        <br />
+                        <i>Delivery</i>: 0
+                        <button class="btn-xs btn-link" title="clear pending deliveries to queue">
+                            Clear
+                        </button>
+                           <button class="btn-xs btn-link" title="clear pending deliveries to queue">
+                               Resend
+                           </button>
+                        <br />
+                        <i>Consumption</i>: 21
+                        <button class="btn-xs btn-link">
+                            Purge
+                        </button>
+                        <span class="small">-Apr 25, 2017 2:24 PM</span>
+                        </p>
+                         </td>
+                        <td  className="queue-table-th-actions"></td>
                       </tr>
                     );
                          })}
