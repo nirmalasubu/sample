@@ -24,9 +24,9 @@ class Menu extends React.Component {
     this.setState({ activeKey: selectedKey });
   }
   render() {
-    return (
-      <div>
-        <Nav bsStyle="pills" stacked activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
+      return (
+        <div>
+          <Nav bsStyle="pills" stacked={this.props.stacked} activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
           <NavItem eventKey={"home"}>Home</NavItem>
           <NavItem eventKey={"deliveryQueues"}>Delivery Queues</NavItem>
           <NavItem eventKey={"destinations"}>Destinations</NavItem>

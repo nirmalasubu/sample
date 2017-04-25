@@ -5,10 +5,10 @@ import { Image } from 'react-bootstrap';
 const Header = () => {
     return (
         <div >
-            <Image src="../images/ODTLogo.png" rounded />
-            <div style={alignLeft} >
-               <h4> Welcome Cea! <a href="/account/logoff" >Logout</a></h4>
-            </div>
+                <Image src="../images/ODTLogo.png" rounded />
+                <div style={alignLeft} >
+                   <h4> Welcome Cea! <a href="/account/logoff" >Logout</a></h4>
+                </div>
             <hr/>
         </div>
     );
