@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Router, hashHistory, IndexRoute } from 'react-router';
-import Home from 'Components/Common/HomePage'
+import Home from 'Components/Home/HomePage'
 import Destinations from 'Components/Destinations/DestinationsPage'
 import Products from 'Components/Products/ProductsPage'
 import DeliveryQueues from 'Components/DeliveryQueues/DeliveryQueuesPage';

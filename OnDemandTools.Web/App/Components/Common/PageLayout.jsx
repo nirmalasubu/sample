@@ -16,10 +16,10 @@ const Layout = (props) => {
                 <Col><Header /></Col>
             </Row>
             <Row>
-                <Col md={10} lg={10} mdHidden="true" lgHidden="true" ><Menu stacked={false} /></Col>
+                <Col md={10} lg={10} mdHidden={true} lgHidden={true} ><Menu stacked={false} /></Col>
             </Row>
             <Row className="show-grid" >
-              <Col md={2} lg={2} xsHidden="true" smHidden="true"><Menu stacked={true} /></Col>
+              <Col md={2} lg={2} xsHidden={true} smHidden={true}><Menu stacked={true} /></Col>
               <Col xs={14} md={10} lg={10} ><Well style={wellStyles} >{props.content.children}</Well></Col>
             </Row>
           </Grid>
