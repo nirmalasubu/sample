@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
 import $ from 'jquery';
 
 
@@ -123,11 +124,13 @@ class Queue extends React.Component {
 
             <div>
                   <h2 className="queue-head">Delivery Queue Page</h2>
+                <DeliveryQueueFilter />
+
                 <div className="row">
                    
                     <div className="col-xs-12">
                         <table id="queueTable" className="table table-hover table-striped table-bordered table-responsive">
-                            <thead >
+                            <thead>
                                 <tr>
                                     <th onClick={this.sortString.bind(this, 'friendlyName')}>Queue Name <i class={this.state.sortClass[0].friendlyName} /></th>
                                     <th onClick={this.sortNumber.bind(this, 'hoursOut')} className="queue-table-th-advanceddevlivery" >Advanced Delivery  <i class={this.state.sortClass[1].hoursOut} /></th>
