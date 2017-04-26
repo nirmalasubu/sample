@@ -30,7 +30,7 @@ class Header extends React.Component{
         <div >
                 <Image src="../images/ODTLogo.png" rounded />
                 <div style={alignLeft} >
-                   <h4> Welcome { this.state.name } ! <a href="/account/logoff" >Logout</a></h4>
+                   <h4> Welcome { this.state.name }! <a href="/account/logoff" >Logout</a>&nbsp;&nbsp;&nbsp;</h4>
                 </div>
             <hr/>
         </div>
