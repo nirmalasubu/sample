@@ -48,7 +48,7 @@ class Queue extends React.Component{
             <table id="myTable2" className="table table-hover table-striped table-bordered queue-table">
                <thead >
               <tr>
-                    <th  className="queue-table-th-name" onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name</th>
+                    <th  className="queue-table-th-name" onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name <i class="fa fa-sort" aria-hidden="true"></i></th>
                     <th  className="queue-table-th-advanceddevlivery">Advanced Delivery</th>
                     <th  className="queue-table-th-email" onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
                     <th  className="queue-table-th-queue">Remote Queue</th>

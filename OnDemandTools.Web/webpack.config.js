@@ -10,11 +10,12 @@ module.exports = {
         odtportal: './Index.jsx'
     },
     output: {
-        path: __dirname + '/wwwroot/js/',
-        filename: 'react.[name].bundle.js'
+        path: __dirname + '/wwwroot',
+        filename: './react.[name].bundle.js'
     },
     module: {
-        loaders: [{
+        loaders: [
+            {
                 test: /.jsx?$/,
                 loader: "babel-loader",
                 exclude: /node_modules/,
@@ -25,31 +26,31 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                loader: "style-loader!css-loader?&name=./js/wbassets/[hash].[ext]"
             },
             {
                 test: /\.png$/,
-                loader: "url-loader?limit=100000"
+                loader: "url-loader?limit=100000&name=./js/wbassets/[hash].[ext]"
             },
             {
                 test: /\.jpg$/,
-                loader: "file-loader"
+                loader: "file-loader?&name=./js/wbassets/[hash].[ext]"
             },
             {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+                loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=./js/wbassets/[hash].[ext]'
             },
             {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+                loader: 'url-loader?limit=10000&mimetype=application/octet-stream&name=./js/wbassets/[hash].[ext]'
             },
             {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader'
+                loader: 'file-loader?&name=./js/wbassets/[hash].[ext]'
             },
             {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+                loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=./js/wbassets/[hash].[ext]'
             }
         ]
     },
