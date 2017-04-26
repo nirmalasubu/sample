@@ -8,9 +8,12 @@ class Queue extends React.Component{
 
     constructor(props){
         super(props);
-       // this.sortColumn = this.sortColumn.bind(this);
+        // this.sortColumn = this.sortColumn.bind(this);
         this.state = {
-            statequeue:[]
+            stateQueue:[],
+            sortClass:[ {"friendlyName":"fa fa-sort"},
+                        {"hoursOut":"fa fa-sort"},
+                        {"contactEmailAddress":"fa fa-sort"}]
         }
       
     }
@@ -20,45 +23,118 @@ class Queue extends React.Component{
         let promise =  this.props.fetchQueue();
         promise.then(newqueue => {
             this.setState({
-                statequeue: this.props.queues
+                stateQueue: this.props.queues
             })
             });
       
     }
     
-    sortColumn(Name)  {
-        var queuearray=[];
-
-        queuearray= this.props.queues.sort((a, b) => {         
-            var nameA=a[Name].toLowerCase(), nameB=b[Name].toLowerCase()                     
-            if (nameA < nameB) //sort string ascending
-                return -1 
-            if (nameA > nameB)
-                return 1
-            return 0
+    sortString(Name)  {       
+        var queueArray=[];       
+        var sortDesc=false;        
+        this.state.sortClass.map(function(css) {
+            for (var key in css) {
+                if(key==Name)
+                {
+                    if(css[key]=="fa fa-sort-asc" )
+                    { 
+                        css[key]="fa fa-sort-desc"
+                        sortdesc=true;
+                    }
+                    else{
+                        css[key]="fa fa-sort-asc"
+                    }
+                }else{
+                    css[key]="fa fa-sort" 
+                }
+               
+            }
         })
+
+       if(sortDesc)
+       {
+           queueArray= this.props.queues.sort((a, b) => {         
+               var nameA=a[Name].toLowerCase(), nameB=b[Name].toLowerCase()                     
+               if (nameA > nameB) //sort string descending
+                   return -1 
+               if (nameA < nameB)
+                   return 1
+               return 0
+           }) 
+       }
+       else{
+           queueArray= this.props.queues.sort((a, b) => {         
+               var nameA=a[Name].toLowerCase(), nameB=b[Name].toLowerCase()                     
+               if (nameA < nameB) //sort string ascending
+                   return -1 
+               if (nameA > nameB)
+                   return 1
+               return 0
+           })
+       }
         this.setState({
-            statequeue: queuearray
+            stateQueue: queueArray
+           
+        })
+    }
+
+
+    sortNumber(Value)  {       
+        var queueArray=[];       
+        var sortDesc=false;        
+        this.state.sortClass.map(function(css) {
+            for (var key in css) {
+                if(key==Value)
+                {
+                    if(css[key]=="fa fa-sort-asc" )
+                    { 
+                        css[key]="fa fa-sort-desc"
+                        sortdesc=true;
+                    }
+                    else{
+                        css[key]="fa fa-sort-asc"
+                    }
+                }else{
+                    css[key]="fa fa-sort" 
+                }
+               
+            }
+        })
+
+        if(sortDesc)
+        {
+            queueArray= this.props.queues.sort((a, b) => {         
+                return a[Value]-b[Value]
+            }) 
+        }
+        else{
+            queueArray= this.props.queues.sort((a, b) => {         
+                return b[Value]-a[Value]
+            })
+        }
+        this.setState({
+            stateQueue: queueArray
+           
         })
     }
 
     render(){      
         return(
-                    <div>
+                <div>
                 <div className="row">
                <div className="col-xs-12">
                <table id="queueTable" className="table table-hover table-striped table-bordered table-responsive">
                <thead >
               <tr>
-                    <th  onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name<i class="fa fa-caret-square-o-down"/></th>
-                    <th  className="queue-table-th-advanceddevlivery" >Advanced Delivery</th>
-                    <th onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
+                    <th  onClick={this.sortString.bind(this,'friendlyName')}>Queue Name <i class={this.state.sortClass[0].friendlyName}/></th>
+                    <th onClick={this.sortNumber.bind(this,'hoursOut')}className="queue-table-th-advanceddevlivery" >Advanced Delivery  <i class={this.state.sortClass[1].hoursOut}/></th>
+                    <th onClick={this.sortString.bind(this,'contactEmailAddress')}>Contact  <i class={this.state.sortClass[2].contactEmailAddress}/></th>
                     <th  >Remote Queue</th>
                     <th >Actions</th>
                     </tr>
               </thead>
               <tbody>
-            {this.state.statequeue.map((item, index) => {
+                    {this.state.stateQueue.map((item, index) => {
            return (
              <tr key={index}>
                         <td  >{item.friendlyName}</td>
@@ -85,7 +161,7 @@ class Queue extends React.Component{
                         <span class="small">-Apr 25, 2017 2:24 PM</span>
                         </p>
                          </td>
-                        <td ></td>
+                        <td><i class="fa fa-search" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i></td>
                       </tr>
                     );
                          })}
