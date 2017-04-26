@@ -3,29 +3,73 @@ body {
     padding-bottom: 20px;
 }
 
-.nir{
-       color: blueviolet;
+/* bootrap table css modification starts */
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  table-layout: fixed;
 }
 
-.queue-table{
-    width:900px;
+
+.table-hover > tbody > tr:hover {
+  background-color:#D3D3D3;
 }
 
+
+.table > thead > tr > td.active,
+.table > tbody > tr > td.active,
+.table > tfoot > tr > td.active,
+.table > thead > tr > th.active,
+.table > tbody > tr > th.active,
+.table > tfoot > tr > th.active,
+.table > thead > tr.active > td,
+.table > tbody > tr.active > td,
+.table > tfoot > tr.active > td,
+.table > thead > tr.active > th,
+.table > tbody > tr.active > th,
+.table > tfoot > tr.active > th {
+  background-color: #f5f5f5;
+}
+
+.table-hover > tbody > tr > td.active:hover,
+.table-hover > tbody > tr > th.active:hover,
+.table-hover > tbody > tr.active:hover > td,
+.table-hover > tbody > tr:hover > .active,
+.table-hover > tbody > tr.active:hover > th {
+    background-color:#D3D3D3;
+}
+
+th { 
+  background:#778899; 
+  color: white; 
+  font-weight: bold; 
+  border: 1px solid #ddd !important;
+}
+
+tr,td{
+    word-wrap: break-word;
+}
+
+td, th { 
+  padding: 6px; 
+ border: 1px solid #ddd !important;
+  text-align: left; 
+}
+
+/* bootrap table css modification ends */
 .queue-table-th-name{
   width:50px;
 }
 .queue-table-th-advanceddevlivery{
-  width:50px;
+  width:100px;
 }
 .queue-table-th-email{
   width:50px;
 }
 .queue-table-th-queue{
-  width:500px;
+  width:300px;
 }
-.queue-table-th-actions{
-  width:50px;
-}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

@@ -44,26 +44,28 @@ class Queue extends React.Component{
 
     render(){      
         return(
-          <div>
-            <table id="myTable2" className="table table-hover table-striped table-bordered queue-table">
+                    <div>
+                <div className="row">
+               <div className="col-xs-12">
+               <table id="queueTable" className="table table-hover table-striped table-bordered table-responsive">
                <thead >
               <tr>
-                    <th  className="queue-table-th-name" onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name <i class="fa fa-sort" aria-hidden="true"></i></th>
-                    <th  className="queue-table-th-advanceddevlivery">Advanced Delivery</th>
-                    <th  className="queue-table-th-email" onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
-                    <th  className="queue-table-th-queue">Remote Queue</th>
-                    <th  className="queue-table-th-actions">Actions</th>
+                    <th  onClick={this.sortColumn.bind(this,'friendlyName')}>Queue Name<i class="fa fa-caret-square-o-down"/></th>
+                    <th  className="queue-table-th-advanceddevlivery" >Advanced Delivery</th>
+                    <th onClick={this.sortColumn.bind(this,'contactEmailAddress')}>Contact</th>
+                    <th  >Remote Queue</th>
+                    <th >Actions</th>
                     </tr>
               </thead>
               <tbody>
             {this.state.statequeue.map((item, index) => {
            return (
              <tr key={index}>
-                        <td  className="queue-table-th-name">{item.friendlyName}</td>
-                        <td  className="queue-table-th-advanceddevlivery">{item.hoursOut}</td>
-                         <td  className="queue-table-th-email"><p data-toggle="tooltip" title={item.contactEmailAddress}>{item.contactEmailAddress}</p></td>
+                        <td  >{item.friendlyName}</td>
+                        <td className="queue-table-th-advanceddevlivery">{item.hoursOut}</td>
+                         <td ><p data-toggle="tooltip" title={item.contactEmailAddress}>{item.contactEmailAddress}</p></td>
 
-                        <td  className="queue-table-th-queue">
+                        <td  >
                             <p>
                             {item.name}
                         <br />
@@ -83,34 +85,36 @@ class Queue extends React.Component{
                         <span class="small">-Apr 25, 2017 2:24 PM</span>
                         </p>
                          </td>
-                        <td  className="queue-table-th-actions"></td>
+                        <td ></td>
                       </tr>
                     );
                          })}
                 </tbody>
             </table>
+            </div>
+            </div>
       </div>
 
-                     )}
-                }               
+                    )}
+                    }
 
 
- // Maps state from store to props
-const mapStateToProps = (state, ownProps) => {   
-    return {
-        // You can now say this.props.queues
-        
-        queues: state.queues
-    }
-};
+                    // Maps state from store to props
+                    const mapStateToProps = (state, ownProps) => {
+                    return {
+                    // You can now say this.props.queues
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-    
-  return {
-    fetchQueue: () => dispatch(queueActions.fetchQueues())
- };
- };
+                    queues: state.queues
+                    }
+                    };
 
- // Use connect to put them together
-export default connect( mapStateToProps,mapDispatchToProps)(Queue);
+                    // Maps actions to props
+                    const mapDispatchToProps = (dispatch) => {
+
+                    return {
+                    fetchQueue: () => dispatch(queueActions.fetchQueues())
+                    };
+                    };
+
+                    // Use connect to put them together
+                    export default connect( mapStateToProps,mapDispatchToProps)(Queue);
