@@ -7,6 +7,7 @@ using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Web.Models.DeliveryQueue;
 using OnDemandTools.Common.Model;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +22,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc = queueSvc;
         }
         // GET: api/values
+        [Authorize]
         [HttpGet]
         public IEnumerable<DeliveryQueueModel> Get()
         {

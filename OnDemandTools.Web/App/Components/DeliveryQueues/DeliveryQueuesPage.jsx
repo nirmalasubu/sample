@@ -37,10 +37,13 @@ class Queue extends React.Component {
         var sortDesc = false;
         this.state.sortClass.map(function (css) {
             for (var key in css) {
-                if (key == Name) {
-                    if (css[key] == "fa fa-sort-asc") {
-                        css[key] = "fa fa-sort-desc"
-                        sortdesc = true;
+                if(key==Name)
+                {
+                    console.log(css[key]);
+                    if(css[key]=="fa fa-sort-asc" )
+                    { 
+                        css[key]="fa fa-sort-desc"
+                        sortDesc=true;
                     }
                     else {
                         css[key] = "fa fa-sort-asc"

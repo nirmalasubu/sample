@@ -6,7 +6,7 @@ body {
 /* bootrap table css modification starts */
 table { 
   width: 100%; 
-  border-collapse: collapse; 
+ border-collapse: collapse;
   table-layout: fixed;
 }
 
@@ -40,9 +40,10 @@ table {
 }
 
 th { 
-  background:#778899; 
+   background:#337ab7; 
    font-weight: bold; 
-  border: 1px solid #ddd !important;
+   border: 1px solid #ddd !important;
+
 }
 
 tr,td{
