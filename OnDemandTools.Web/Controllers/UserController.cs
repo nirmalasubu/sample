@@ -7,6 +7,7 @@ using OnDemandTools.Web.Models.User;
 using System.Security.Claims;
 using OnDemandTools.Common.Model;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +21,9 @@ namespace OnDemandTools.Web.Controllers
         {
             _userSvc = userSvc;
         }
+
         // GET: api/values
+        [Authorize]
         [HttpGet]
         public string Get()
         {
