@@ -1,12 +1,22 @@
 import React from 'react';
 
-const ContentTiers = () => {
-  return (
-    <div>
-      <h1>Content Tier Page</h1>
-      <p>Under construction</p>
-    </div>
-  );
-};
+class ContentTiers extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    document.title = "ODT - Content Tiers";
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Content Tiers Page</h1>
+        <p>Under construction</p>
+      </div>
+    )
+  }
+}
 
 export default ContentTiers

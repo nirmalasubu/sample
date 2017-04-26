@@ -10,7 +10,7 @@ class Header extends React.Component{
         super(props);
 
         this.state = {
-            name:"Testiung"
+            name:"Guest"
         } 
     }
     
