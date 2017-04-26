@@ -13,8 +13,12 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
         private readonly MongoDatabase _database;
         private readonly IApplicationContext _appContext;
         private readonly AppSettings _appSettings;
+
+        // Database connection that creates a new client for every request
+        private readonly MongoDatabase _databaseWithNewClient;
         public AiringIdSaveCommand(IODTDatastore connection, IApplicationContext appContext, AppSettings appSettings)
         {
+            _databaseWithNewClient = connection.GetDatabaseSingleClient();
             _database = connection.GetDatabase();
             _appContext = appContext;
             _appSettings = appSettings;
@@ -33,7 +37,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
 
         public CurrentAiringId Lock(string prefix)
         {
-            var currentAiringIds = _database.GetCollection<CurrentAiringId>("CurrentAiringId");
+            var currentAiringIds =  _databaseWithNewClient.GetCollection<CurrentAiringId>("CurrentAiringId");
 
             var query = Query.And(Query.EQ("Prefix", prefix), Query.NE("State", "locked"));
 
@@ -84,7 +88,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
 
         public void UnLock(string prefix)
         {
-            var currentAiringIds = _database.GetCollection<CurrentAiringId>("CurrentAiringId");
+            var currentAiringIds =  _databaseWithNewClient.GetCollection<CurrentAiringId>("CurrentAiringId");
 
             var query = Query.EQ("Prefix", prefix);
 
@@ -95,7 +99,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
 
         public void UpdateAndUnlock(CurrentAiringId currentAiringId)
         {
-            var currentAiringIds = _database.GetCollection<CurrentAiringId>("CurrentAiringId");
+            var currentAiringIds =  _databaseWithNewClient.GetCollection<CurrentAiringId>("CurrentAiringId");
 
             var query = Query.And(Query.EQ("Prefix", currentAiringId.Prefix), Query.EQ("State", "locked"));
 

@@ -57,6 +57,11 @@ namespace OnDemandTools.DAL.Database
         {
             return _database;
         }
+
+        public MongoDatabase GetDatabaseSingleClient()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -116,6 +121,9 @@ namespace OnDemandTools.DAL.Database
     public class ODTPrimaryDatastore : IODTDatastore, IODTPrimaryDatastore
     {
         private readonly MongoDatabase _primaryDatabase;
+
+        // Database connection that creates a new client for every request
+        private readonly MongoDatabase _primaryDatabaseWithNewClient;
          private static MongoClient _client;
 
 
@@ -142,6 +150,7 @@ namespace OnDemandTools.DAL.Database
 
         public ODTPrimaryDatastore(AppSettings appSettings)
         {
+            _primaryDatabaseWithNewClient = GetDatabaseAdhocClient(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
             _primaryDatabase = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
         }
 
@@ -155,20 +164,38 @@ namespace OnDemandTools.DAL.Database
             return server.GetDatabase(url.DatabaseName);
         }
 
+        private MongoDatabase GetDatabaseAdhocClient(string connectionString, string options)
+        {
+            var url = new MongoUrl(connectionString + options);
+
+            var client =  new MongoClient(url);
+            var server = client.GetServer();
+
+            return server.GetDatabase(url.DatabaseName);
+        }
+
         public MongoDatabase GetDatabase()
         {
             return _primaryDatabase;
+        }
+
+
+        public MongoDatabase GetDatabaseSingleClient()
+        {
+            return _primaryDatabaseWithNewClient;
         }
     }
 
     public interface IODTDatastore
     {
         MongoDatabase GetDatabase();
+          MongoDatabase GetDatabaseSingleClient();
     }
 
     public interface IODTPrimaryDatastore
     {
         MongoDatabase GetDatabase();
+      
     }
 
     public interface IHangfireDatastore
