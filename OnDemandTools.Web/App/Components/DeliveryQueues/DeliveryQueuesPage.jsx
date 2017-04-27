@@ -14,9 +14,57 @@ class Queue extends React.Component {
             stateQueue: [],
             sortClass: [{ "friendlyName": "fa fa-sort" },
             { "hoursOut": "fa fa-sort" },
-            { "contactEmailAddress": "fa fa-sort" }]
+            { "contactEmailAddress": "fa fa-sort" }],
+            filterValue : {
+                queueName : "",
+                contactName : "",
+                queueId : ""
+            }
         }
+    }
 
+    handleFilterUpdate(filtersValue, type) {
+            var valuess = this.state.filterValue;
+            if(type=="QN")
+                valuess.queueName = filtersValue;
+
+            if(type=="CN")
+                valuess.contactName = filtersValue;
+
+            if(type=="QI")
+                valuess.queueId = filtersValue;
+
+            if(type=="CL")
+            {
+                this.state.filterValue.queueName="";
+                this.state.filterValue.contactName="";
+                this.state.filterValue.queueId="";
+            }
+
+            this.setState({
+                filterValue: valuess
+            });
+
+            if(this.state.filterValue.queueName!="" || this.state.filterValue.contactName!="" || this.state.filterValue.queueId!="")
+            {
+                var frindlyName = this.state.filterValue.queueName;
+                var contactName = this.state.filterValue.contactName;
+                var queueId = this.state.filterValue.queueId;
+                
+                var queueArray = $.grep(this.props.queues, function(v) {
+                    return ((frindlyName!=""?v.friendlyName.toLowerCase().substr(0, (frindlyName.length)) === frindlyName.toLowerCase():true) 
+                        && (contactName!=""?v.contactEmailAddress.toLowerCase().substr(0, (contactName.length)) === contactName.toLowerCase():true)
+                        && (queueId!=""?v.name.toLowerCase().substr(0, (queueId.length)) === queueId.toLowerCase():true));                    
+                });
+                this.setState({
+                    stateQueue: queueArray
+                });
+            }
+            else
+                this.setState({
+                    stateQueue: this.props.queues
+                });
+        
     }
 
     //called on the page load
@@ -28,9 +76,6 @@ class Queue extends React.Component {
             })
         });
         document.title = "ODT - Delivery Queues";
-
-
-
     }
 
     sortString(Name) {
@@ -124,7 +169,7 @@ class Queue extends React.Component {
 
             <div>
                   <h2 className="queue-head">Delivery Queue Page</h2>
-                <DeliveryQueueFilter />
+                <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
 
                 <div className="row">
                    
