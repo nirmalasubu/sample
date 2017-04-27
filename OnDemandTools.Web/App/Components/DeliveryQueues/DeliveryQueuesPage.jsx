@@ -165,9 +165,8 @@ class Queue extends React.Component {
 
     render() {
         return (
-
             <div>
-                  <label className="queue-head">Delivery Queue Page</label>
+                  <label className="queue-head">Delivery Queues</label>
                   <hr/>
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
 

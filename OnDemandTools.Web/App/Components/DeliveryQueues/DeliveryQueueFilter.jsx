@@ -26,7 +26,7 @@ var DeliveryQueueFilter = React.createClass({
         return (
             <div>
                 <Form inline>
-                    <ControlLabel>Filter</ControlLabel>
+                    <ControlLabel>Filter by: </ControlLabel>
         {' '}
         <FormGroup controlId="queueName">
             <FormControl type="text" ref="filterInput" inputRef = {(input) => this.inputQueueName = input } onChange={this.handleChange} placeholder="Queue Name" />
