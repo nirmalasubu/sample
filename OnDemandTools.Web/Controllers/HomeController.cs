@@ -31,15 +31,17 @@ namespace OnDemandTools.Web.Controllers
         [Route("/workflowStatuses")]
         public IActionResult Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c=>c.Value=="read"))
+            if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c => c.Value == "read"))
             {
                 return View("Index");
             }
             else
             {
-                if(HttpContext.Session.Keys.Contains("NotAuthorized"))
-                    ViewData["NotAuthorized"] = HttpContext.Session.GetString("NotAuthorized");               
-                    
+                if (HttpContext.Session.Keys.Contains("NotAuthorized"))
+                    ViewData["NotAuthorized"] = HttpContext.Session.GetString("NotAuthorized");
+
+                HttpContext.Session.SetString("RedirectURL", HttpContext.Request.Path);
+
                 return View("Login");
             }
         }

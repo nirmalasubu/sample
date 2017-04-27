@@ -60,6 +60,14 @@ namespace OnDemandTools.Web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c => c.Value == "read"))
             {
                 HttpContext.Session.Remove("NotAuthorized");
+
+                if (HttpContext.Session.Keys.Contains("RedirectURL"))
+                {
+                    var redirectUrl = HttpContext.Session.GetString("RedirectURL");
+
+                    return Redirect(redirectUrl);
+                }
+
                 return Redirect("/");
             }
             else
