@@ -7,9 +7,10 @@ import { browserHistory } from 'react-router';
 
 class Menu extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     var currentRoute= window.location.pathname.replace("/","");
+    console.log(currentRoute);
     if(currentRoute.length<2)
     {
       currentRoute= "home";
