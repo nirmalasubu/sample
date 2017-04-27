@@ -90,7 +90,7 @@ class Queue extends React.Component {
                 if (key == Value) {
                     if (css[key] == "fa fa-sort-asc") {
                         css[key] = "fa fa-sort-desc"
-                        sortdesc = true;
+                        sortDesc = true;
                     }
                     else {
                         css[key] = "fa fa-sort-asc"
@@ -120,8 +120,11 @@ class Queue extends React.Component {
 
     render() {
         return (
+
             <div>
+                  <h2 className="queue-head">Delivery Queue Page</h2>
                 <div className="row">
+                   
                     <div className="col-xs-12">
                         <table id="queueTable" className="table table-hover table-striped table-bordered table-responsive">
                             <thead >

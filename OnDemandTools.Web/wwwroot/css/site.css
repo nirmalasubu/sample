@@ -14,7 +14,9 @@ table {
 .table-hover > tbody > tr:hover {
   background-color:#D3D3D3;
 }
-
+.queue-head{
+    margin-top:-10px;
+}
 
 .table > thead > tr > td.active,
 .table > tbody > tr > td.active,
@@ -41,9 +43,9 @@ table {
 
 th { 
    background:#337ab7; 
-   font-weight: bold; 
+  
    border: 1px solid #ddd !important;
-
+   color:white;
 }
 
 tr,td{
