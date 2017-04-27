@@ -3,6 +3,17 @@ body {
     padding-bottom: 20px;
 }
 
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color:#ddd; 
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}
 /* bootrap table css modification starts */
 table { 
   width: 100%; 
@@ -15,7 +26,9 @@ table {
   background-color:#D3D3D3;
 }
 .queue-head{
-    margin-top:-10px;
+    margin-top:-5px; 
+    font-size:20px;
+     margin-bottom:-5px; 
 }
 
 .table > thead > tr > td.active,
@@ -43,7 +56,8 @@ table {
 
 th { 
    background:#337ab7; 
-  
+   font-size: 16px;
+    font-weight: 400;
    border: 1px solid #ddd !important;
    color:white;
 }

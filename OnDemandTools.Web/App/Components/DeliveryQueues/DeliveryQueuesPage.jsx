@@ -47,14 +47,14 @@ class Queue extends React.Component {
 
             if(this.state.filterValue.queueName!="" || this.state.filterValue.contactName!="" || this.state.filterValue.queueId!="")
             {
-                var frindlyName = this.state.filterValue.queueName;
-                var contactName = this.state.filterValue.contactName;
-                var queueId = this.state.filterValue.queueId;
+                var friendlyName = this.state.filterValue.queueName.toLowerCase();
+                var contactName = this.state.filterValue.contactName.toLowerCase();
+                var queueId = this.state.filterValue.queueId.toLowerCase();
                 
                 var queueArray = $.grep(this.props.queues, function(v) {
-                    return ((frindlyName!=""?v.friendlyName.toLowerCase().substr(0, (frindlyName.length)) === frindlyName.toLowerCase():true) 
-                        && (contactName!=""?v.contactEmailAddress.toLowerCase().substr(0, (contactName.length)) === contactName.toLowerCase():true)
-                        && (queueId!=""?v.name.toLowerCase().substr(0, (queueId.length)) === queueId.toLowerCase():true));                    
+                    return ((friendlyName !=""?v.friendlyName.toLowerCase().indexOf(friendlyName) != -1:true) 
+                        && (contactName!=""?v.contactEmailAddress.toLowerCase().indexOf(contactName) != -1:true)
+                        && (queueId!=""?v.name.toLowerCase().indexOf(queueId) != -1:true));                    
                 });
                 this.setState({
                     stateQueue: queueArray
@@ -85,7 +85,6 @@ class Queue extends React.Component {
             for (var key in css) {
                 if(key==Name)
                 {
-                    console.log(css[key]);
                     if(css[key]=="fa fa-sort-asc" )
                     { 
                         css[key]="fa fa-sort-desc"
@@ -168,11 +167,11 @@ class Queue extends React.Component {
         return (
 
             <div>
-                  <h2 className="queue-head">Delivery Queue Page</h2>
+                  <label className="queue-head">Delivery Queue Page</label>
+                  <hr/>
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
 
-                <div className="row">
-                   
+                <div className="row">                   
                     <div className="col-xs-12">
                         <table id="queueTable" className="table table-hover table-striped table-bordered table-responsive">
                             <thead>
