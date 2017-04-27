@@ -101,7 +101,7 @@ class Queue extends React.Component {
         })
 
         if (sortDesc) {
-            queueArray = this.props.queues.sort((a, b) => {
+            queueArray = this.state.stateQueue.sort((a, b) => {
                 var nameA = a[Name].toLowerCase(), nameB = b[Name].toLowerCase()
                 if (nameA > nameB) //sort string descending
                     return -1
@@ -111,7 +111,7 @@ class Queue extends React.Component {
             })
         }
         else {
-            queueArray = this.props.queues.sort((a, b) => {
+            queueArray = this.state.stateQueue.sort((a, b) => {
                 var nameA = a[Name].toLowerCase(), nameB = b[Name].toLowerCase()
                 if (nameA < nameB) //sort string ascending
                     return -1
@@ -122,7 +122,6 @@ class Queue extends React.Component {
         }
         this.setState({
             stateQueue: queueArray
-
         })
     }
 
@@ -148,18 +147,17 @@ class Queue extends React.Component {
         })
 
         if (sortDesc) {
-            queueArray = this.props.queues.sort((a, b) => {
+            queueArray = this.state.stateQueue.sort((a, b) => {
                 return a[Value] - b[Value]
             })
         }
         else {
-            queueArray = this.props.queues.sort((a, b) => {
+            queueArray = this.state.stateQueue.sort((a, b) => {
                 return b[Value] - a[Value]
             })
         }
         this.setState({
             stateQueue: queueArray
-
         })
     }
 
