@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
-import DeliveryQueueTable from 'Components/DeliveryQueues/table';
+import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
 import $ from 'jquery';
 
 
@@ -26,7 +26,7 @@ class Queue extends React.Component {
                     {"label":"Remote Queue","dataField":"name","sort":false},
                     {"label":"Actions","dataField":"","sort":false}
             ],
-            RowData:[]
+            keyField:"friendlyName"
 
     }
     }
@@ -95,7 +95,7 @@ class Queue extends React.Component {
                   <label className="queue-head">Delivery Queues</label>
                   <hr/>
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable  RowData={this.state.stateQueue} ColumnData={this.state.columns}/>
+                <DeliveryQueueTable  RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField}/>
             </div>
 
         )

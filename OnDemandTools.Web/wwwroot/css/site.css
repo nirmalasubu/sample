@@ -74,6 +74,17 @@ th {
 
 tr,td{
     word-wrap: break-word;
+    max-width: 0;
+    overflow: auto;
+}
+
+.react-bs-table table td, 
+.react-bs-table table th {
+    overflow: auto; 
+    white-space:normal;
+    word-wrap: break-word !important;
+    word-break: break-word;
+    /* text-overflow: ellipsis; */
 }
 
 td, th { 
