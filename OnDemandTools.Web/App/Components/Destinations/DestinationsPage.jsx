@@ -1,4 +1,5 @@
 import React from 'react';
+import PageHeader from 'Components/Common/PageHeader';
 
 class Destinations extends React.Component {
 
@@ -12,7 +13,7 @@ class Destinations extends React.Component {
   render() {
     return (
       <div>
-        <h1>Destinations Page</h1>
+        <PageHeader pageName="Destinations"/>
         <p>Under construction</p>
       </div>
     )

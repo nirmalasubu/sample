@@ -1,4 +1,5 @@
 import React from 'react';
+import PageHeader from 'Components/Common/PageHeader';
 
 class Products extends React.Component {
 
@@ -12,7 +13,7 @@ class Products extends React.Component {
   render() {
     return (
       <div>
-        <h1>Products Page</h1>
+       <PageHeader pageName="Products"/>
         <p>Under construction</p>
       </div>
     )

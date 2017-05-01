@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PageHeader from 'Components/Common/PageHeader';
 class WorkflowStatuses extends React.Component {
 
   constructor(props) {
@@ -12,7 +12,7 @@ class WorkflowStatuses extends React.Component {
   render() {
     return (
       <div>
-        <h1>Workflow Statuses Page</h1>
+        <PageHeader pageName="Workflow Statuses"/>
         <p>Under construction</p>
       </div>
     )

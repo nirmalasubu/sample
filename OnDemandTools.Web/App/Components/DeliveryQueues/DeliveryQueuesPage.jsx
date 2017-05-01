@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
 import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
+import PageHeader from 'Components/Common/PageHeader';
 import $ from 'jquery';
 
 
@@ -14,55 +15,53 @@ class Queue extends React.Component {
         this.state = {
             stateQueue: [],
 
-            filterValue : {
-                queueName : "",
-                contactName : "",
-                queueId : ""
+            filterValue: {
+                queueName: "",
+                contactName: "",
+                queueId: ""
             },
-            
-            columns:[{"label":"Queue Name","dataField":"friendlyName","sort":true},
-                    {"label":"Advanced Delivery","dataField":"hoursOut","sort":true},
-                    {"label":"Contact","dataField":"contactEmailAddress","sort":true},
-                    {"label":"Remote Queue","dataField":"name","sort":false},
-                    {"label":"Actions","dataField":"","sort":false}
-            ],
-            keyField:"friendlyName"
 
-    }
+            columns: [{ "label": "Queue Name", "dataField": "friendlyName", "sort": true },
+            { "label": "Advanced Delivery", "dataField": "hoursOut", "sort": true },
+            { "label": "Contact", "dataField": "contactEmailAddress", "sort": true },
+            { "label": "Remote Queue", "dataField": "name", "sort": false },
+            { "label": "Actions", "dataField": "", "sort": false }
+            ],
+            keyField: "friendlyName"
+
+        }
     }
 
     handleFilterUpdate(filtersValue, type) {
         var valuess = this.state.filterValue;
-        if(type=="QN")
+        if (type == "QN")
             valuess.queueName = filtersValue;
 
-        if(type=="CN")
+        if (type == "CN")
             valuess.contactName = filtersValue;
 
-        if(type=="QI")
+        if (type == "QI")
             valuess.queueId = filtersValue;
 
-        if(type=="CL")
-        {
-            this.state.filterValue.queueName="";
-            this.state.filterValue.contactName="";
-            this.state.filterValue.queueId="";
+        if (type == "CL") {
+            this.state.filterValue.queueName = "";
+            this.state.filterValue.contactName = "";
+            this.state.filterValue.queueId = "";
         }
 
         this.setState({
             filterValue: valuess
         });
 
-        if(this.state.filterValue.queueName!="" || this.state.filterValue.contactName!="" || this.state.filterValue.queueId!="")
-        {
+        if (this.state.filterValue.queueName != "" || this.state.filterValue.contactName != "" || this.state.filterValue.queueId != "") {
             var friendlyName = this.state.filterValue.queueName.toLowerCase();
             var contactName = this.state.filterValue.contactName.toLowerCase();
             var queueId = this.state.filterValue.queueId.toLowerCase();
 
-            var queueArray = $.grep(this.props.queues, function(v) {
-                return ((friendlyName !=""?v.friendlyName.toLowerCase().indexOf(friendlyName) != -1:true)
-                    && (contactName!=""?v.contactEmailAddress.toLowerCase().indexOf(contactName) != -1:true)
-                    && (queueId!=""?v.name.toLowerCase().indexOf(queueId) != -1:true));
+            var queueArray = $.grep(this.props.queues, function (v) {
+                return ((friendlyName != "" ? v.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
+                    && (contactName != "" ? v.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
+                    && (queueId != "" ? v.name.toLowerCase().indexOf(queueId) != -1 : true));
             });
             this.setState({
                 stateQueue: queueArray
@@ -77,25 +76,24 @@ class Queue extends React.Component {
 
     //called on the page load
     componentDidMount() {
-       
+
         let promise = this.props.fetchQueue();
         promise.then(newqueue => {
             this.setState({
                 stateQueue: this.props.queues,
-                   
+
             })
         });
-                   
+
         document.title = "ODT - Delivery Queues";
     }
 
     render() {
         return (
             <div>
-                  <label className="queue-head">Delivery Queues</label>
-                  <hr/>
+                <PageHeader pageName="Delivery Queue" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable  RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField}/>
+                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
 
         )

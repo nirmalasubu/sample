@@ -1,4 +1,5 @@
 import React from 'react';
+import PageHeader from 'Components/Common/PageHeader';
 
 class Permissions extends React.Component {
 
@@ -13,7 +14,7 @@ class Permissions extends React.Component {
   render() {
     return (
       <div>
-        <h1>Permissions Page</h1>
+        <PageHeader pageName="Permissions"/>
         <p>Under construction</p>
       </div>
     )

@@ -1,4 +1,5 @@
 import React from 'react';
+import PageHeader from 'Components/Common/PageHeader';
 
 class PendingRequests extends React.Component {
 
@@ -12,7 +13,7 @@ class PendingRequests extends React.Component {
   render() {
     return (
       <div>
-        <h1>Pending Requests Page</h1>
+        <PageHeader pageName="Pending Requests"/>
         <p>Under construction</p>
       </div>
     )

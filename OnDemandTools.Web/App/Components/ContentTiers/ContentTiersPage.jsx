@@ -1,4 +1,5 @@
 import React from 'react';
+import PageHeader from 'Components/Common/PageHeader';
 
 class ContentTiers extends React.Component {
 
@@ -12,7 +13,7 @@ class ContentTiers extends React.Component {
   render() {
     return (
       <div>
-        <h1>Content Tiers Page</h1>
+        <PageHeader pageName="Content Tiers"/>
         <p>Under construction</p>
       </div>
     )
