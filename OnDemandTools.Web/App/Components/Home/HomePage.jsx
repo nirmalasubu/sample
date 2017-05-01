@@ -1,6 +1,13 @@
 import React from 'react';
 import PageHeader from 'Components/Common/PageHeader';
+import { connect } from "react-redux"
 
+
+@connect((store) => {
+  return {
+    user: store.user,
+  };
+})
 class Home extends React.Component {
 
   constructor(props) {
@@ -14,7 +21,7 @@ class Home extends React.Component {
     return (
       <div>
         <PageHeader pageName="Home"/>
-        <p>Under construction</p>
+        <p>Welcome {this.props.user}!</p>
       </div>
     )
   }
