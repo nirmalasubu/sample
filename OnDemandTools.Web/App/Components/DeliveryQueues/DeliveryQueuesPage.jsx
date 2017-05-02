@@ -27,7 +27,9 @@ class Queue extends React.Component {
             { "label": "Remote Queue", "dataField": "name", "sort": false },
             { "label": "Actions", "dataField": "", "sort": false }
             ],
-            keyField: "friendlyName"
+            keyField: "friendlyName",
+            chatHubs: $.connection.myChatHub,
+            helloMesasage: []
 
         }
     }
@@ -85,12 +87,35 @@ class Queue extends React.Component {
             })
         });
 
+        this.state.chatHubs.client.sayHello = this.sayHello.bind(this);
+        let chat = this.state.chatHubs;
+        $.connection.hub.start().done(function () {          
+            chat.server.hello()
+        });
+
         document.title = "ODT - Delivery Queues";
+    }
+
+    sayHello(msg){
+        var msgs = this.state.helloMesasage;
+        msgs.push(msg);
+        this.setState({
+            helloMessage: msgs
+        });
     }
 
     render() {
         return (
             <div>
+                 <div>
+          {this.state.helloMesasage.map((item, index) => {
+              return (
+                <div key={index}>
+                  <p> { item } </p>
+                </div>
+              );
+    })}
+          </div>
                 <PageHeader pageName="Delivery Queue" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} />

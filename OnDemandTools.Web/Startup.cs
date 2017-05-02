@@ -55,6 +55,7 @@ namespace OnDemandTools.Web
             services.AddMvc();    
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
+            services.AddSignalR();
 
             // Predefine set of policies        
             services.AddAuthorization(options =>
@@ -135,6 +136,7 @@ namespace OnDemandTools.Web
             // server static files
             app.UseStaticFiles();
 
+            app.UseSignalR();
 
             // Configure the OWIN pipeline to use cookie auth.
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
