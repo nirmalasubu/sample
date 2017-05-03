@@ -1,3 +1,6 @@
+general:
+  build_dir: Deployment
+
 machine:
   pre:
     # install newer docker and docker-compose
@@ -12,9 +15,6 @@ dependencies:
   override:
     # login to quay registry
     - docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io
-
-general:
-  build_dir: Deployment
 
 compile:
   override:
