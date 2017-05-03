@@ -73,6 +73,13 @@ namespace OnDemandTools.Business.Modules.Queue
         void FlagForRedelivery(IList<string> queueNames, IList<string> airingIds, ChangeNotificationType changeNotificationType);
 
         /// <summary>
+        /// Flags the given list of queue for redelivery. Assets selected for delivery
+        /// depends on 'queueName'
+        /// </summary>
+        /// <param name="queueName">The queue name.</param>
+        void FlagForRedelivery(string queueName);
+
+        /// <summary>
         /// Gets queue by API key.
         /// </summary>
         /// <param name="apiKey">The API key.</param>

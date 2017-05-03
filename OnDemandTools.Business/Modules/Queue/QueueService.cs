@@ -139,6 +139,16 @@ namespace OnDemandTools.Business.Modules.Queue
             queueCommandHelper.ResetFor(queueNames, airingIds, changeNotificationType);
         }
 
+        /// <summary>
+        /// Flags the given queue for redelivery. Assets selected for delivery
+        /// depends on 'queueName'
+        /// </summary>
+        /// <param name="queueName">The queue name.</param>
+        public void FlagForRedelivery(string queueName)
+        {
+            queueCommandHelper.ResetFor(queueName);
+        }
+
         public BLModel.Queue GetByApiKey(string apiKey)
         {
             return

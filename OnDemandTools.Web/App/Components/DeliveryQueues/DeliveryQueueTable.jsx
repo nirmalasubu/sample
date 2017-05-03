@@ -4,11 +4,24 @@ import $ from 'jquery';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 var ReactTable = React.createClass({
+    open: function(val) {
+        alert(val);
+    },
     actionFormat: function() {
         return '<i class="fa fa-search" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i>'
     },
     queueFormat: function(val) {
-        return   '<p>' +val+ '<br /> <br /><i>Delivery</i>: 0<button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button><button class="btn-xs btn-link" title="clear pending deliveries to queue">Resend</button><br /><i>Consumption</i>: 21<button class="btn-xs btn-link">Purge</button><br/><span class="small">-Apr 25, 2017 2:24 PM</span></p>'
+        return(
+                <div>
+                    <p>{val}</p>
+                    <i>Delivery</i>: 0
+                    <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
+                    <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(val, event)}>Resend</button><br />
+                    <i>Consumption</i>: 21
+                    <button class="btn-xs btn-link">Purge</button><br />
+                    <span class="small">-Apr 25, 2017 2:24 PM</span>
+                </div>
+            );        
     },
     contactFormat:function(val)
     {

@@ -168,6 +168,22 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             }
         }
 
+        /// <summary>
+        /// reset queues with queueName
+        /// </summary>
+        /// <param name="queueName">The queue name.</param>
+        public void ResetFor(string queueName)
+        {
+            if (string.IsNullOrEmpty(queueName))
+                return;
+
+            IMongoQuery query = Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName })));
+
+            _currentAirings.Update(query, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+            _deleteAirings.Update(query, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+        }
+
         public void UpdateQueueProcessedTime(string name)
         {
             _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));
