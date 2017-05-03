@@ -17,7 +17,7 @@ dependencies:
 
 compile:
   override:
-    - docker-compose build -f ./Deployment/docker-compose.yml
+    - docker-compose-f ./Deployment/docker-compose.yml build 
 
 test:
   override:
