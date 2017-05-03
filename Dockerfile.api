@@ -4,9 +4,9 @@ COPY . /app
 
 WORKDIR /app
 
-RUN bash dotnet.sh
+RUN bash dotnet.sh restore
 
-RUN ["dotnet", "restore"]
+#RUN ["dotnet", "restore"]
 
 WORKDIR /app/OnDemandTools.Business.Tests
 
