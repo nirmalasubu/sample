@@ -630,8 +630,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 }).Wait();
             }
 
-            return null;
-            //return titles;
+            return titles;
         }
 
         private Task<List<BLModel.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
