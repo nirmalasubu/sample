@@ -1,0 +1,71 @@
+general:
+  branches:
+    only:
+     - dev
+     - rc
+     - sandbox
+
+machine:
+  pre:  
+    
+  services:
+    - docker
+
+dependencies:
+  override:
+        
+    # Log into quay
+    - docker login -e="." -u="${DOCKER_USER}" -p="${DOCKER_PASS}" quay.io
+
+    # Prepare environment
+    - sh ApplicationSettings.sh
+
+compile:
+  override:
+    # Build image and verify API project  
+    - source envAPI; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.API/Dockerfile .
+    - source envAPI; sudo docker run -d --name odt-api-container -p 5000:5000 "${IMAGE}"; sleep 10    
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck
+    - source envAPI; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.API.Tests/Dockerfile .
+    
+    # Build image and verify for Job project
+    - source envJob; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Jobs/Dockerfile .
+    - source envJob; sudo docker run -d --name odt-job-container -p 5001:5000 "${IMAGE}"; sleep 10
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5001/healthcheck
+    - source envJob; sudo docker build --rm=false -t "${IMAGE}-test" -f OnDemandTools.Jobs.Tests/Dockerfile .
+
+    # Build image for Web project
+    - source envWeb; sudo docker build --rm=false -t "${IMAGE}" -f OnDemandTools.Web/Dockerfile .
+    - source envWeb; sudo docker run -d --name odt-web-container -p 5002:5000 "${IMAGE}"; sleep 10
+    - sudo curl --retry 1 --retry-delay 2 -v http://localhost:5002/healthcheck
+    - cat envWeb
+
+    
+test:
+  override:
+    # API testing
+    - source envAPI; sudo docker run -it --link odt-api-container:apihost --name odt-api-test-container "${IMAGE}-test"
+       
+    # Job testing
+    - source envJob; sudo docker run -it --link odt-api-container:apihost --link odt-job-container:jobhost --name odt-job-test-container "${IMAGE}-test"
+
+    - sudo docker stop odt-api-container
+    - sudo docker stop odt-api-test-container
+    - sudo docker stop odt-job-test-container
+
+
+deployment:
+  CI:   
+    branch: [dev, rc, sandbox]
+    commands:      
+      # Deploy API   
+      - source envAPI; sudo docker push "${IMAGE}"
+      - source envAPI; sudo docker run -it --env-file "envAPI" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+
+      # Deploy Job
+      - source envJob; sudo docker push "${IMAGE}"
+      - source envJob; sudo docker run -it --env-file "envJob" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true
+
+      # Deploy Web
+      - source envWeb; sudo docker push "${IMAGE}"
+      - source envWeb; sudo docker run -it --env-file "envWeb" quay.io/turner/harbor-deploy deploy --verbose=true --catalog=true

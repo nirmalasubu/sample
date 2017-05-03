@@ -3,11 +3,12 @@ version: '2'
 services:
   odtapi:
     env_file:
-      - api.env
+      - ./env/shared.env
+      - ./env/api.env
     build: 
       context: ../
       dockerfile: Dockerfile.api
-    image: quay.io/turner/odt-api:1.0.0.${BUILD_NUM}
+    image: quay.io/turner/odt-api:${VERSION}.${BUILD_NUM}
     ports:
       - "5000:5000"
     environment:
@@ -16,11 +17,12 @@ services:
     
   odtportal:
     env_file:
-      - portal.env
+      - ./env/shared.env
+      - ./env/portal.env
     build:
       context: ../
       dockerfile: Dockerfile.portal
-    image: quay.io/turner/odt-portal:1.0.0.${BUILD_NUM}
+    image: quay.io/turner/odt-portal:${VERSION}.${BUILD_NUM}
     ports:
       - "5001:5000"
     environment:
@@ -29,11 +31,12 @@ services:
 
   odtjobs:
     env_file:
-      - jobs.env
+      - ./env/shared.env
+      - ./env/jobs.env
     build:
       context: ../
       dockerfile: Dockerfile.jobs
-    image: quay.io/turner/odt-jobs:1.0.0.${BUILD_NUM}
+    image: quay.io/turner/odt-jobs:${VERSION}.${BUILD_NUM}
     ports:
       - "5002:5000"
     environment:
