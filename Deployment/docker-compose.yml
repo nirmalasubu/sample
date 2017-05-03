@@ -2,9 +2,40 @@ version: '2'
 
 services:
   odtapi:
-    image: quay.io/turner/odt:0.0.1-dev.63
+    env_file:
+      - api.env
+    build: 
+      context: ../
+      dockerfile: Dockerfile.api
+    image: quay.io/turner/odt-api:1.0.0.${BUILD_NUM}
     ports:
       - "5000:5000"
+    environment:
+        HEALTHCHECK: /v1/healthcheck
+        PORT: "5000"
+    
+  odtportal:
+    env_file:
+      - portal.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.portal
+    image: quay.io/turner/odt-portal:1.0.0.${BUILD_NUM}
+    ports:
+      - "5001:5000"
+    environment:
+        HEALTHCHECK: /v1/healthcheck
+        PORT: "5000"
+
+  odtjobs:
+    env_file:
+      - jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.jobs
+    image: quay.io/turner/odt-jobs:1.0.0.${BUILD_NUM}
+    ports:
+      - "5002:5000"
     environment:
         HEALTHCHECK: /v1/healthcheck
         PORT: "5000"

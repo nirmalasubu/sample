@@ -1,14 +1,14 @@
 version: "1"
 shipments:
-  odt:    
-    env: dev
+  sead-ondemandtools-api:    
+    env: rc
     barge: ent-prod
     containers:
       - odtapi   
     replicas: 1
     group: sead
-    property: turner
-    project: odt
-    product: odt
+    property: turner    
+    project: ondemandtools
+    product: sead-ondemandtools-api
     environment:
-        ASPNETCORE_ENVIRONMENT: development
+        ASPNETCORE_ENVIRONMENT: rc
