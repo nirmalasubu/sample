@@ -4,6 +4,8 @@ COPY . /app
 
 WORKDIR /app
 
+RUN ls | xargs echo
+
 RUN ["dotnet", "restore"]
 
 WORKDIR /app/OnDemandTools.Business.Tests
