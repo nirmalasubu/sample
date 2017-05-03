@@ -27,8 +27,8 @@ class Queue extends React.Component {
             { "label": "Actions", "dataField": "", "sort": false }
             ],
             keyField: "friendlyName",
-            chatHubs: $.connection.myChatHub,
-            helloMesasage: []
+            deliveryQueueHub: $.connection.deliveryQueueCountHub,
+            helloMesasage: {}
 
         }
     }
@@ -86,38 +86,33 @@ class Queue extends React.Component {
             })
         });
 
-        this.state.chatHubs.client.sayHello = this.sayHello.bind(this);
-        let chat = this.state.chatHubs;
+        this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
+        let deliveryQueueHub = this.state.deliveryQueueHub;
         $.connection.hub.start().done(function () {          
-            chat.server.hello()
+            deliveryQueueHub.server.fetchQueueDeliveryCounts()
         });
 
         document.title = "ODT - Delivery Queues";
     }
 
-    sayHello(msg){
+    GetQueueDeliveryCount(data){
+        console.log(data.name);
         var msgs = this.state.helloMesasage;
-        msgs.push(msg);
+        msgs=data;
+        console.log(msgs);
         this.setState({
             helloMessage: msgs
         });
+        console.log(this.state.helloMesasage);
     }
 
     render() {
         return (
             <div>
-                 <div>
-          {this.state.helloMesasage.map((item, index) => {
-              return (
-                <div key={index}>
-                  <p> { item } </p>
-                </div>
-              );
-    })}
-          </div>
+               
                 <PageHeader pageName="Delivery Queue" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.state.helloMesasage} />
             </div>
 
         )

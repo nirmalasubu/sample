@@ -25,7 +25,8 @@ namespace OnDemandTools.Common.Configuration
         public JobSchedules JobSchedules { get; set; }
         public CloudQueue CloudQueue { get; set; }  
         public bool EnableMediaIdGenrationByPlayList { get; set; }
-        public AzureAd AzureAd { get; set; }   
+        public AzureAd AzureAd { get; set; }
+        public Jobs Hangfire { get; set; }
     }
 
     public class CloudQueue
@@ -33,8 +34,8 @@ namespace OnDemandTools.Common.Configuration
         public string MqUrl { get; set; }
         public string MqExchange { get; set; }
         public string ReportingQueueID { get; set; }
+        public string AmqpUrl { get; set; }
     }
-
 
     public class Service
     {
@@ -113,7 +114,6 @@ namespace OnDemandTools.Common.Configuration
         public string ConnectionString { get; set; }
     }
 
-
     public class AzureAd {
         public string ClientId { get; set; }
         public string Tenant { get; set; }
@@ -121,5 +121,11 @@ namespace OnDemandTools.Common.Configuration
         public string AadInstance { get; set; }
 
         public string PostLogoutRedirectUri { get; set; }
+    }
+
+    public class Jobs
+    {
+        public string Url { get; set; }
+     
     }
 }

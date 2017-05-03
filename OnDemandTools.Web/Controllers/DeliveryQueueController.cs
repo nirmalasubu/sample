@@ -31,6 +31,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc = queueSvc;
             this.remoteQueueHandler = remoteQueueHandler;
         }
+
         // GET: api/values
         [Authorize]
         [HttpGet]
@@ -49,50 +50,6 @@ namespace OnDemandTools.Web.Controllers
             return deliveryQueueModel;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public string Post()
-        {
-            return "Success";
-        }
-
-        // POST api/values
-        [HttpPost("reset/{name}")]
-        public string ResendQueue(string name)
-        {
-            _queueSvc.FlagForRedelivery(name);
-            return "Success";
-        }
-
-        // POST api/values
-        [HttpPost("purge/{name}")]
-        public void PurgeQueue(string name)
-        {
-            var queues = _queueSvc.GetQueues();
-
-            var singleQueueAttached = queues.Count(q => q.Name == name) == 1;
-
-            if (singleQueueAttached)
-                remoteQueueHandler.Purge(name);
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+      
     }
 }
