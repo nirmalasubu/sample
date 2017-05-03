@@ -332,7 +332,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
             var titles = GetFlowTitlesFor(titleIds);
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
-            if (primaryTitleId != null)
+            if (primaryTitleId != null && titles != null)
             {
                 var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
                 UpdateTitleFieldsFor(ref airing, primaryTitle);
@@ -630,7 +630,8 @@ namespace OnDemandTools.Business.Modules.Airing
                 }).Wait();
             }
 
-            return titles;
+            return null;
+            //return titles;
         }
 
         private Task<List<BLModel.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
