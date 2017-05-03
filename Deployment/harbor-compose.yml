@@ -1,7 +1,7 @@
 version: "1"
 shipments:
   sead-ondemandtools-api:    
-    env: rc
+    env: dev
     barge: ent-prod
     containers:
       - odtapi   
@@ -11,4 +11,4 @@ shipments:
     project: ondemandtools
     product: sead-ondemandtools-api
     environment:
-        ASPNETCORE_ENVIRONMENT: rc
+        ASPNETCORE_ENVIRONMENT: dev
