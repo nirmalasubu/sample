@@ -4,7 +4,6 @@ import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
 import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
 import PageHeader from 'Components/Common/PageHeader';
-import $ from 'jquery';
 
 
 class Queue extends React.Component {
