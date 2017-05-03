@@ -19,7 +19,7 @@ dependencies:
 
 compile:
   override:
-    - docker-compose build --rm=false
+    - docker-compose build
 
 test:
   override:
