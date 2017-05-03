@@ -8,7 +8,7 @@ services:
     build: 
       context: ../
       dockerfile: Dockerfile.api
-    image: quay.io/turner/odt-api:${VERSION}.${BUILD_NUM}
+    image: quay.io/turner/odt-api:${VERSION}.${CIRCLE_BUILD_NUM}
     ports:
       - "5000:5000"
     environment:
@@ -22,7 +22,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.portal
-    image: quay.io/turner/odt-portal:${VERSION}.${BUILD_NUM}
+    image: quay.io/turner/odt-portal:${VERSION}.${CIRCLE_BUILD_NUM}
     ports:
       - "5001:5000"
     environment:
@@ -36,7 +36,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.jobs
-    image: quay.io/turner/odt-jobs:${VERSION}.${BUILD_NUM}
+    image: quay.io/turner/odt-jobs:${VERSION}.${CIRCLE_BUILD_NUM}
     ports:
       - "5002:5000"
     environment:
