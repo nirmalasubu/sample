@@ -4,7 +4,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ls | xargs echo
+RUN bash dotnet.sh
 
 RUN ["dotnet", "restore"]
 
