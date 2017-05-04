@@ -23,7 +23,7 @@ export const fetchQueues = () => {
 };
 
 export const resetQueues = (name) => {
-    return Axios.post('queue/reset/' + name)        
+    return Axios.post('/api/deliveryqueue/reset/' + name)        
           .then(response => { 
               
           })

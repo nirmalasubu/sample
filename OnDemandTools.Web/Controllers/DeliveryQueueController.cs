@@ -54,7 +54,7 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // POST api/values
-        [HttpPost("queue/reset/{name}")]
+        [HttpPost("reset/{name}")]
         public string ResendQueue(string name)
         {
             _queueSvc.FlagForRedelivery(name);
