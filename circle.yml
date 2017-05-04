@@ -4,7 +4,7 @@ general:
 machine:
   pre:
     # install newer docker and docker-compose
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+    #- curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
     - pip install docker-compose==1.11.2
 
     # install harbor-compose
