@@ -14,34 +14,5 @@ namespace OnDemandTools.Web.SignalR
     [HubName("deliveryQueueCountHub")]
     public class DeliveryQueueCountHub : Hub
     {
-        public IQueueService _queueSvc;
-        public IDeliveryQueueUpdater _deliveryQueueUpdater;
-        private readonly IGetHangireServers _jobLastRunQuery;
-        public DeliveryQueueCountHub(IQueueService queueSvc,
-            IDeliveryQueueUpdater deliveryQueueUpdater,
-            IGetHangireServers jobLastRunQuery)
-        {
-            _queueSvc = queueSvc;
-            _deliveryQueueUpdater = deliveryQueueUpdater;
-            _jobLastRunQuery =jobLastRunQuery;
-        }
-
-        public void FetchQueueDeliveryCounts()
-        {
-            List<Queue> deliveryqueues = _queueSvc.GetQueues();
-
-            List<Queue> queuesWithPendingDeliveryCount = _queueSvc.PopulateMessageCounts(deliveryqueues);
-            List<DeliveryQueueHubModel> updatedQueues = _deliveryQueueUpdater.PopulateMessageCounts(queuesWithPendingDeliveryCount).ToViewModel<List<Queue>, List<DeliveryQueueHubModel>>();
-
-            var jobStatus = _jobLastRunQuery.GetStatus();
-            QueuesHubModel queues = new QueuesHubModel
-            {
-                Queues = updatedQueues,
-                JobLastRun = jobStatus.LastHeartbeat,
-                JobCount = jobStatus.Count
-            };
-            
-            Clients.All.GetQueueDeliveryCount(queues);
-        }
     }
 }

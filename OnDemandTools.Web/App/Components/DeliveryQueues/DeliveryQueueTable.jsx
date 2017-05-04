@@ -47,7 +47,7 @@ var ReactTable = React.createClass({
     },
     contactFormat:function(val)
     {
-        return '<p data-toggle="tooltip" title="'+val +'">'+val +'</p>'
+        return '<p data-toggle="tooltip" title="'+val +'">'+ this.props.signalrData.jobCount +'</p>'
     },
     render: function() {
         var row;

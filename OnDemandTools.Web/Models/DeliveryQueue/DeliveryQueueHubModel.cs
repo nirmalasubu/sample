@@ -8,10 +8,10 @@ namespace OnDemandTools.Web.Models.DeliveryQueue
 {
     public class DeliveryQueueHubModel
     {
-        [JsonProperty("name")]
+        [JsonProperty("friendlyName")]
         public string FriendlyName { get; set; }
 
-        [JsonProperty("order")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("messageCount")]
