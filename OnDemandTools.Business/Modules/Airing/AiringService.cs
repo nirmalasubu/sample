@@ -332,7 +332,7 @@ namespace OnDemandTools.Business.Modules.Airing
 
             var titles = GetFlowTitlesFor(titleIds);
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
-            if (primaryTitleId != null && titles != null)
+            if (primaryTitleId != null && !titles.IsNullOrEmpty())
             {
                 var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
                 UpdateTitleFieldsFor(ref airing, primaryTitle);
