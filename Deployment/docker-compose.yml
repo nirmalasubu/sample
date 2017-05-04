@@ -15,4 +15,30 @@ services:
         HEALTHCHECK: /v1/healthcheck
         PORT: "5000"
     
-  
+  odtportal:
+    env_file:
+      - ./env/shared.env
+      - ./env/portal.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.portal
+    image: quay.io/turner/odt-portal:${VERSION}.${CIRCLE_BUILD_NUM}
+    ports:
+      - "5001:5000"
+    environment:
+        HEALTHCHECK: /v1/healthcheck
+        PORT: "5000"
+
+  odtjobs:
+    env_file:
+      - ./env/shared.env
+      - ./env/jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.jobs
+    image: quay.io/turner/odt-jobs:${VERSION}.${CIRCLE_BUILD_NUM}
+    ports:
+      - "5002:5000"
+    environment:
+        HEALTHCHECK: /v1/healthcheck
+        PORT: "5000"
