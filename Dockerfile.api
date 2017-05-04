@@ -4,15 +4,13 @@ COPY . /app
 
 WORKDIR /app
 
-RUN bash dotnet.sh restore
+RUN ["dotnet", "restore"]
 
-#RUN ["dotnet", "restore"]
+#WORKDIR /app/OnDemandTools.Business.Tests
 
-WORKDIR /app/OnDemandTools.Business.Tests
+#RUN ["dotnet", "build"]
 
-RUN ["dotnet", "build"]
-
-RUN ["dotnet", "test"]
+#RUN ["dotnet", "test"]
 
 
 WORKDIR /app/OnDemandTools.API
