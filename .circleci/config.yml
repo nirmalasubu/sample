@@ -44,6 +44,14 @@ jobs:
             docker-compose build
 
       - run:
+          name: Testing App
+          working_directory: ~/app/
+          command: |
+            docker-compose up -d
+            echo "tests run here"
+            docker-compose down
+
+      - run:
           name: Log into Quay          
           command: |
             docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io      
