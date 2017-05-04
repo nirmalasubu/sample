@@ -61,7 +61,8 @@
     "Microsoft.AspNetCore.Authentication.OpenIdConnect": "1.1.1",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.1",
     "Microsoft.AspNetCore.Session": "1.1.1",
-    "Gray.Microsoft.AspNetCore.SignalR.Server": "0.2.0-alpha1"
+    "Gray.Microsoft.AspNetCore.SignalR.Server": "0.2.0-alpha1",
+    "System.Threading.Timer": "4.3.0"
   },
 
   "tools": {

@@ -28,7 +28,7 @@ class Queue extends React.Component {
             ],
             keyField: "friendlyName",
             deliveryQueueHub: $.connection.deliveryQueueCountHub,
-            helloMesasage: {}
+            helloMesasage: []
 
         }
     }
@@ -96,10 +96,10 @@ class Queue extends React.Component {
     }
 
     GetQueueDeliveryCount(data){
-        console.log(data.name);
+        
         var msgs = this.state.helloMesasage;
-        msgs=data;
-        console.log(msgs);
+        msgs.push(data);
+        
         this.setState({
             helloMessage: msgs
         });

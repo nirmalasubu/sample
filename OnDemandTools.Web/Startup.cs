@@ -22,14 +22,18 @@ using System.Security.Claims;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
+using OnDemandTools.Web.SignalR;
 
 namespace OnDemandTools.Web
 {
     public class Startup
     {
         StructureMap.Container container;
+        public static IConnectionManager ConnectionManager;
 
         public Startup(IHostingEnvironment env)
+
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -171,6 +175,10 @@ namespace OnDemandTools.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ConnectionManager = provider.GetService<IConnectionManager>();
+            AutomaticViewRefresher automaticViewRefresher = new AutomaticViewRefresher();
+            automaticViewRefresher.Start(10);
         }
        
 
