@@ -44,7 +44,13 @@ jobs:
             docker-compose build
 
       - run:
+          name: Log into Quay          
+          command: |
+            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io      
+
+      - run:
           name: Deploy App
           working_directory: ~/app/Deployment
           command: |
+            docker-compose push
             harbor-compose deploy -e dev
