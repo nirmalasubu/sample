@@ -30,6 +30,6 @@ jobs:
 
       - run:
           name: Building App
-          working_directory: ~/Deployment
+          working_directory: ~/app/Deployment
           command: |
             docker-compose build
