@@ -11,6 +11,4 @@ jobs:
 
       - setup_remote_docker
 
-      - run: 
-        name: Docker Compose Building
-        command: docker-compose build
+      - run: docker-compose build
