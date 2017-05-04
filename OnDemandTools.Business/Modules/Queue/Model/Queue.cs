@@ -34,6 +34,7 @@ namespace OnDemandTools.Business.Modules.Queue.Model
         public bool IsPriorityQueue { get; set; }
         public bool IsProhibitResendMediaId { get; set; }
         public List<string> StatusNames { get; set; }
+        public DateTime ProcessedDateTime { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }

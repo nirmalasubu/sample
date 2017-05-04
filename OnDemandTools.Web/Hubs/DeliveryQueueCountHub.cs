@@ -29,15 +29,18 @@ namespace OnDemandTools.Web.SignalR
         public void FetchQueueDeliveryCounts()
         {
             List<Queue> deliveryqueues = _queueSvc.GetQueues();
-            List <DeliveryQueueHubModel> updatedQueues = _deliveryQueueUpdater.PopulateMessageCounts(deliveryqueues).ToViewModel<List<Queue>, List<DeliveryQueueHubModel>>();
+
+            List<Queue> queuesWithPendingDeliveryCount = _queueSvc.PopulateMessageCounts(deliveryqueues);
+            List<DeliveryQueueHubModel> updatedQueues = _deliveryQueueUpdater.PopulateMessageCounts(queuesWithPendingDeliveryCount).ToViewModel<List<Queue>, List<DeliveryQueueHubModel>>();
 
             var jobStatus = _jobLastRunQuery.GetStatus();
             QueuesHubModel queues = new QueuesHubModel
             {
-                Queues= updatedQueues,
+                Queues = updatedQueues,
                 JobLastRun = jobStatus.LastHeartbeat,
                 JobCount = jobStatus.Count
             };
+            
             Clients.All.GetQueueDeliveryCount(queues);
         }
     }

@@ -26,7 +26,7 @@ namespace OnDemandTools.Common.Configuration
         public CloudQueue CloudQueue { get; set; }  
         public bool EnableMediaIdGenrationByPlayList { get; set; }
         public AzureAd AzureAd { get; set; }
-        public Jobs Hangfire { get; set; }
+        public Jobs Jobs { get; set; }
     }
 
     public class CloudQueue
@@ -126,6 +126,6 @@ namespace OnDemandTools.Common.Configuration
     public class Jobs
     {
         public string Url { get; set; }
-     
+
     }
 }

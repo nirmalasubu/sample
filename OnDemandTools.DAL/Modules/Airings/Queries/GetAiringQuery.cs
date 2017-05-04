@@ -226,6 +226,13 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
             }
             return airings.ToList();
         }
+
+        public long GetPendingDeliveryCountBy(string queueName)
+        {
+            var query = Query.In("DeliverTo", new BsonArray() { queueName });
+
+            return _currentCollection.Count(query);
+        }
     }
 
  

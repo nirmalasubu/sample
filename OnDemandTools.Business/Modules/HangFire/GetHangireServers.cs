@@ -16,7 +16,7 @@ namespace OnDemandTools.Business.Modules.HangFire
 
         public GetHangireServers(AppSettings appsettings)
         {
-            _client = new RestClient(appsettings.Hangfire.Url);
+            _client = new RestClient(appsettings.Jobs.Url);
         }
 
         public List<HangfireServerModel> Get()
@@ -39,15 +39,16 @@ namespace OnDemandTools.Business.Modules.HangFire
         public HangFireStatusModel GetStatus()
         {
             var servers = Get();
-
+            
             var currentTime = DateTime.UtcNow.AddMinutes(-1);
 
             var activeServers = servers.Where(e => e.Heartbeat > currentTime).ToList();
 
+            //Todo Neeed to check  heart beat
             return new HangFireStatusModel
             {
                 Count = activeServers.Count,
-                LastHeartbeat = activeServers.Max(e => e.Heartbeat)
+                LastHeartbeat = activeServers.Count>0? activeServers.Max(e => e.Heartbeat):DateTime.MinValue
             };
         }
 

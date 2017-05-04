@@ -9,6 +9,7 @@ using OnDemandTools.DAL.Modules.QueueMessages;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using System;
+using OnDemandTools.DAL.Modules.Airings;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -20,20 +21,22 @@ namespace OnDemandTools.Business.Modules.Queue
         IQueueLocker queueLocker;
         IGetQueueMessagesQuery queueMessages;
         IQueueMessageRecorder historyRecorder;
-
+        IGetAiringQuery airingQueryHelper;
 
         public QueueService(
             IQueueQuery queueQueryHelper,
             IQueueCommand queueCommandHelper,
             IQueueLocker queueLocker,
             IGetQueueMessagesQuery queueMessages,
-            IQueueMessageRecorder historyRecorder)
+            IQueueMessageRecorder historyRecorder,
+            IGetAiringQuery airingQueryHelper)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
             this.queueLocker = queueLocker;
             this.queueMessages = queueMessages;
             this.historyRecorder = historyRecorder;
+            this.airingQueryHelper = airingQueryHelper;
         }
 
         /// <summary>
@@ -255,6 +258,15 @@ namespace OnDemandTools.Business.Modules.Queue
             return
             (queueQueryHelper.Get().ToList<DLModel.Queue>()
             .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());
+        }
+
+        public List<Model.Queue> PopulateMessageCounts(List<Model.Queue> queues)
+        {
+            foreach (var queue in queues)
+            {
+                queue.PendingDeliveryCount = airingQueryHelper.GetPendingDeliveryCountBy(queue.Name);
+            }
+             return queues;
         }
     }
 }

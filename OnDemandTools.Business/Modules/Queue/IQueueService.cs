@@ -165,5 +165,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <returns>list of queues</returns>
         List<Model.Queue> GetQueues();
+
+        /// <summary>
+        /// Get pendeng delivery count of queues
+        /// </summary>
+        /// <param name="queues"></param>
+        /// <returns></returns>
+        List<Model.Queue> PopulateMessageCounts(List<Model.Queue> queues);
     }
 }
