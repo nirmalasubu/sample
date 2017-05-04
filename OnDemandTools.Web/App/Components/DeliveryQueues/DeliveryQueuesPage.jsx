@@ -28,7 +28,7 @@ class Queue extends React.Component {
             ],
             keyField: "friendlyName",
             deliveryQueueHub: $.connection.deliveryQueueCountHub,
-            helloMesasage: []
+            deliveryQueueSignalRData: {}
 
         }
     }
@@ -87,23 +87,17 @@ class Queue extends React.Component {
         });
 
         this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
-        let deliveryQueueHub = this.state.deliveryQueueHub;
-        $.connection.hub.start().done(function () {          
-            deliveryQueueHub.server.fetchQueueDeliveryCounts()
-        });
+        $.connection.hub.start();
 
         document.title = "ODT - Delivery Queues";
     }
 
     GetQueueDeliveryCount(data){
-        
-        var msgs = this.state.helloMesasage;
-        msgs.push(data);
-        
+       
         this.setState({
-            helloMessage: msgs
+            deliveryQueueSignalRData: data
         });
-        console.log(this.state.helloMesasage);
+        console.log(this.state.deliveryQueueSignalRData);
     }
 
     render() {

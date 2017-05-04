@@ -18,10 +18,7 @@ using OnDemandTools.Common.Logzio;
 using OnDemandTools.Common.DIResolver.Resolvers;
 using OnDemandTools.Common.DIResolver;
 using OnDemandTools.Business.Modules.User;
-using System.Security.Claims;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using OnDemandTools.Web.SignalR;
 
@@ -118,7 +115,7 @@ namespace OnDemandTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData)
         {
             // Add serilog and catch any internal errors
             loggerFactory.AddSerilog();
@@ -175,9 +172,9 @@ namespace OnDemandTools.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
+          
             ConnectionManager = provider.GetService<IConnectionManager>();
-            AutomaticViewRefresher automaticViewRefresher = new AutomaticViewRefresher();
+            AutomaticViewRefresher automaticViewRefresher = new AutomaticViewRefresher(deliveryQueueData);
             automaticViewRefresher.Start(10);
         }
        

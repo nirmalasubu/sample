@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnDemandTools.Web.Models.DeliveryQueue;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,11 @@ namespace OnDemandTools.Web.SignalR
     {
         private Timer _timer;
         private int _intervalInMilliseconds;
+        public readonly IDeliveryQueueData viewformatter;
+        public AutomaticViewRefresher(IDeliveryQueueData viewformatter)
+        {
+            this.viewformatter = viewformatter;
+        }
 
         public void Start(int intervalInSeconds)
         {
@@ -30,12 +36,13 @@ namespace OnDemandTools.Web.SignalR
             try
             {
                 ViewRefresher _viewRefresher = new ViewRefresher();
-                _viewRefresher.Refresh();
+                QueuesHubModel dataToBroadCast = viewformatter.FetchQueueDeliveryCounts();
+                _viewRefresher.Refresh(dataToBroadCast);
                 _timer.Change(_intervalInMilliseconds, Timeout.Infinite);
             }
             catch (Exception ex)
             {
-                
+                throw ex;  
             }
 
 
