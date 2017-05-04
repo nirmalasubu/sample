@@ -21,3 +21,13 @@ export const fetchQueues = () => {
           });
     };
 };
+
+export const resetQueues = (name) => {
+    return Axios.post('queue/reset/' + name)        
+          .then(response => { 
+              
+          })
+          .catch(error => {
+              throw(error);
+          });
+};

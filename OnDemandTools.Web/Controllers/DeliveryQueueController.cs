@@ -48,17 +48,17 @@ namespace OnDemandTools.Web.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public string Post()
         {
+            return "Success";
         }
 
         // POST api/values
-        [HttpPost("/reset/{name}")]
-        public bool ResendQueue(string name)
+        [HttpPost("queue/reset/{name}")]
+        public string ResendQueue(string name)
         {
             _queueSvc.FlagForRedelivery(name);
-
-            return true;
+            return "Success";
         }
 
         // PUT api/values/5
