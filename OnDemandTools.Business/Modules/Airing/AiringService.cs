@@ -330,12 +330,22 @@ namespace OnDemandTools.Business.Modules.Airing
                 .Select(t => int.Parse(t.Value)).ToList();
             titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
 
+            // Find all title ids within the airing listed as Authority=Turner that exists in Flow
             var titles = GetFlowTitlesFor(titleIds);
+
+            // Get the first title listed as Primary from the airing
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
+           
             if (primaryTitleId != null && !titles.IsNullOrEmpty())
             {
-                var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
-                UpdateTitleFieldsFor(ref airing, primaryTitle);
+                // The assumption here is that 'primaryTitleId' will exist in 'titles'. If it doesn't then
+                // from a business perspective it is not valid. However, we don't want to throw any errors
+                // here but silently ignore it
+                if(titles.Exists(t => t.TitleId == int.Parse(primaryTitleId.Value)))
+                {
+                    var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
+                    UpdateTitleFieldsFor(ref airing, primaryTitle);
+                }               
             }
 
             airing.Options.Titles = titles;
