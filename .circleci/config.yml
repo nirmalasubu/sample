@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/cci-demo-docker-primary:0.0.2
 
-    working_directory: /Deployment
+    working_directory: /
 
     steps:
       - checkout
@@ -27,5 +27,9 @@ jobs:
             set -x
             curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
-            
-      - run: docker-compose build
+
+      - run:
+          name: Building App
+          working_directory: ~/Deployment
+          command: |
+            docker-compose build
