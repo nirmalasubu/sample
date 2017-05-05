@@ -9,12 +9,10 @@ import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 
 var ResendPurgeModal = React.createClass({
     resendQueue(id){ 
-        console.log("resend");
         queueAction.resetQueues(id);
         this.props.handleClose();        
     },
     purgeQueue(id){ 
-        console.log("purge");
         queueAction.purgeQueues(id);
         this.props.handleClose();        
     },
