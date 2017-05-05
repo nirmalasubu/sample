@@ -48,7 +48,7 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
             docker-compose up -d
-            echo "tests run here"
+            echo "tests running"
             docker-compose down
 
       - run:
