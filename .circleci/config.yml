@@ -54,6 +54,7 @@ jobs:
           name: Testing App
           working_directory: ~/app/Deployment
           command: |
+            set +e
             docker-compose run odt-api-tests dotnet test -xml results.xml
             docker-compose run odt-jobs-tests dotnet test -xml results.xml
             docker cp odt-api-tests:/results.xml $CIRCLE_TEST_REPORTS/junit/apiresults.xml
