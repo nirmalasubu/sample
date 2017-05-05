@@ -67,6 +67,9 @@ jobs:
             docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io            
 
   ci:
+    docker:
+      - image: circleci/cci-demo-docker-primary:0.0.2
+      
     branches:
       only:
         - rc
@@ -83,6 +86,9 @@ jobs:
             harbor-compose catalog
 
   cd:
+    docker:
+      - image: circleci/cci-demo-docker-primary:0.0.2
+
     branches:
       only:
         - dev
@@ -91,7 +97,7 @@ jobs:
     working_directory: ~/app/Deployment
 
     steps:
-    
+
       - run:
           name: Deploy App
           command: |
