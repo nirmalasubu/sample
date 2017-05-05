@@ -45,7 +45,7 @@ jobs:
 
       - run:
           name: Testing App
-          working_directory: ~/app/
+          working_directory: ~/app/Deployment
           command: |
             docker-compose up -d
             echo "tests run here"
