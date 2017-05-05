@@ -53,6 +53,6 @@ jobs:
       - store_artifacts:
           path: ~/app/output
         
-      - type: test-results-store
-        path: ~/app/output
+      - store_test_results:
+          path: ~/app/output
            
