@@ -74,6 +74,8 @@ jobs:
         
     working_directory: ~/app/Deployment
 
+    steps:
+
       - run:
           name: Catalog App
           command: |
@@ -88,6 +90,8 @@ jobs:
         
     working_directory: ~/app/Deployment
 
+    steps:
+    
       - run:
           name: Deploy App
           command: |
