@@ -24,7 +24,7 @@ class Queue extends React.Component {
             { "label": "Advanced Delivery", "dataField": "hoursOut", "sort": true },
             { "label": "Contact", "dataField": "contactEmailAddress", "sort": true },
             { "label": "Remote Queue", "dataField": "name", "sort": false },
-            { "label": "Actions", "dataField": "", "sort": false }
+            { "label": "Actions", "dataField": "name", "sort": false }
             ],
             keyField: "friendlyName",
             deliveryQueueHub: $.connection.deliveryQueueCountHub,

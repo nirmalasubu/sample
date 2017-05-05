@@ -4,15 +4,17 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import ResendPurgeModal from 'Components/DeliveryQueues/ResendPurgeModal';
+import ResetByDateRange from 'Components/DeliveryQueues/QueueResetByDateRange';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
-var ReactTable = React.createClass({    
-    
+var ReactTable = React.createClass({
+
     getInitialState() {
-        return { 
-            showModal: false, 
-            queueDetails : "", 
+        return {
+            showModal: false,
+            showDateRangeResetModel: false,
+            queueDetails: "",
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
             modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
@@ -20,18 +22,27 @@ var ReactTable = React.createClass({
         };
     },
    
+        this.setState({ showDateRangeResetModel: true, queueDetails: val });
+    },
+    closeDateRangeResetModel() {
+        this.setState({ showDateRangeResetModel: false });
+    },
     close() {
         this.setState({ showModal: false, queueDetails: "" });
     },
-
     open(val, type) {
         this.setState({ showModal: true, queueDetails: val, modalActionType: type });
     },
-    
-    actionFormat: function() {
-        return '<i class="fa fa-search" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i>'
+    actionFormat: function (val) {
+         var queueItem = $.grep(this.props.RowData, function (v) {
+            if (v.name == val) return v;
+        });
+        return (<div>
+             <i class="fa fa-search"  aria-hidden="true"></i> 
+             <i class="fa fa-calendar" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)} aria-hidden="true"></i>
+             </div>)
     },
-    queueFormat: function(val) {
+    queueFormat: function (val) {
         if(Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object)
         {
             return( <div>
@@ -72,39 +83,41 @@ var ReactTable = React.createClass({
         }
       
     },
+    contactFormat: function (val) {
+        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>'
     contactFormat:function(val)
     {
         return '<p data-toggle="tooltip" title="'+val +'">'+val +'</p>'
     },
-    render: function() {
+    render: function () {
         var row;
-        row = this.props.ColumnData.map(function(item, index) {
+        row = this.props.ColumnData.map(function (item, index) {
 
-            if(item.label == "Remote Queue"){
-                return  <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat}>{item.label}</TableHeaderColumn>
+            if (item.label == "Remote Queue") {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat}>{item.label}</TableHeaderColumn>
             }
-            else if(item.label == "Actions"){
-                return  <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat}>{item.label}</TableHeaderColumn>
+            else if (item.label == "Actions") {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat}>{item.label}</TableHeaderColumn>
             }
-            else if(item.label=="Contact")
-            {
-                return  <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contactFormat}>{item.label}</TableHeaderColumn>
+            else if (item.label == "Contact") {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contactFormat}>{item.label}</TableHeaderColumn>
             }
-            else{
-               return  <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort}>{item.label}</TableHeaderColumn>
+            else {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort}>{item.label}</TableHeaderColumn>
             }
-            
-            }.bind(this));
+
+        }.bind(this));
 
         return (
             <div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true}>
                     {row}
-                </BootstrapTable>           
-                <ResendPurgeModal data={this.state} handleClose={this.close}/>
+                </BootstrapTable>
+                <ResendPurgeModal data={this.state} handleClose={this.close} />
+                <ResetByDateRange data={this.state} handleClose={this.closeDateRangeResetModel} />
             </div>
-                  )
-        }
+        )
+    }
                 });
 
 
