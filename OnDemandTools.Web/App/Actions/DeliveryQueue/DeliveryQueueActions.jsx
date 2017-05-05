@@ -41,3 +41,13 @@ export const purgeQueues = (name) => {
               throw(error);
           });
 };
+
+//export function signalRStart(store: any, callback: Function) {
+//    _hub = $.connection.deliveryQueueCountHub;
+
+//    _hub.client.GetQueueDeliveryCount = (p1: any) => {
+//        store.dispatch({ type: "SERVER_CALLED_ME", a: p1 });
+//    }
+
+//    $.connection.hub.start(() => callback());
+//};

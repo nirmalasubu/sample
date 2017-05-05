@@ -28,7 +28,8 @@ class Queue extends React.Component {
             ],
             keyField: "friendlyName",
             deliveryQueueHub: $.connection.deliveryQueueCountHub,
-            deliveryQueueSignalRData: {}
+            deliveryQueueSignalRData: {"queues":[{"friendlyName":"","name":"","messageCount":0,"pendingDeliveryCount":0,"processedDateTime":"0001-01-01T00:00:00"}],
+                "jobcount":0,"jobLastRun":""}
 
         }
     }
@@ -78,6 +79,9 @@ class Queue extends React.Component {
     //called on the page load
     componentDidMount() {
 
+        this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
+        $.connection.hub.start();
+
         let promise = this.props.fetchQueue();
         promise.then(newqueue => {
             this.setState({
@@ -85,10 +89,6 @@ class Queue extends React.Component {
 
             })
         });
-
-        this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
-        $.connection.hub.start();
-
         document.title = "ODT - Delivery Queues";
     }
 
@@ -97,7 +97,7 @@ class Queue extends React.Component {
         this.setState({
             deliveryQueueSignalRData: data
         });
-        console.log(this.state.deliveryQueueSignalRData);
+        
     }
 
     render() {

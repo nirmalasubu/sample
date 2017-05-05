@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Moment from 'moment';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
@@ -33,21 +34,26 @@ var ReactTable = React.createClass({
         var queueItem = $.grep(this.props.RowData, function (v) {
             if(v.name==val) return v;
         });
+        var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
+            if(v.name==val) return v;
+        }); 
+        var showdate=ItemToRefresh[0].processedDateTime.indexOf('0001')==-1? true:false;
+        var datetoFormat=Moment(ItemToRefresh[0].processedDateTime).format('lll');
         return(
                 <div>
                     <p>{val}</p>
-                    <i>Delivery</i>: 0
+                    <i>Delivery:{ItemToRefresh[0].pendingDeliveryCount}</i> 
                     <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
                     <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
-                    <i>Consumption</i>: 21
+                    <i>Consumption:{ItemToRefresh[0].messageCount}</i>
                     <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
-                    <span class="small">-Apr 25, 2017 2:24 PM</span>
+                    {showdate? (<span class="small">(updated: {datetoFormat})</span>):(null)}
                 </div>
             );        
-    },
+                    },
     contactFormat:function(val)
     {
-        return '<p data-toggle="tooltip" title="'+val +'">'+ this.props.signalrData.jobCount +'</p>'
+        return '<p data-toggle="tooltip" title="'+val +'">'+val +'</p>'
     },
     render: function() {
         var row;
