@@ -47,43 +47,6 @@ jobs:
           command: |
             set +e
             docker-compose run --name apitest volume-tests
-            cp apitest:/app/finally.xml $CIRCLE_ARTIFACTS/finally.xml         
+            docker cp apitest:/app/finally.xml $CIRCLE_ARTIFACTS/finally.xml         
             docker-compose down
-            
-  ci:
-    docker:
-      - image: circleci/cci-demo-docker-primary:0.0.2
-      
-    branches:
-      only:
-        - rc
-        - newbuild
-        
-    working_directory: ~/app/Deployment
-
-    steps:
-
-      - run:
-          name: Catalog App
-          command: |
-            docker-compose push
-            harbor-compose catalog
-
-  cd:
-    docker:
-      - image: circleci/cci-demo-docker-primary:0.0.2
-
-    branches:
-      only:
-        - dev
-        - sandbox
-        
-    working_directory: ~/app/Deployment
-
-    steps:
-
-      - run:
-          name: Deploy App
-          command: |
-            docker-compose push
-            harbor-compose deploy -e ${CIRCLE_BRANCH}
+           
