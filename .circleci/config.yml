@@ -54,8 +54,8 @@ jobs:
           name: Testing App
           working_directory: ~/app/Deployment
           command: |
-            docker-compose run odt-api-tests
-            docker-compose run odt-jobs-tests
+            docker-compose run odt-api-tests dotnet test -xml $CIRCLE_TEST_REPORTS/reports/apiresults.xml
+            docker-compose run odt-jobs-tests dotnet test -xml $CIRCLE_TEST_REPORTS/reports/jobsresults.xml
             docker-compose down
 
       - run:
