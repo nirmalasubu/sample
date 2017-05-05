@@ -47,6 +47,6 @@ jobs:
           command: |
             set +e
             docker-compose run --name apitest volume-tests
-            docker cp apitest:/app/output $CIRCLE_ARTIFACTS         
+            docker cp apitest:/app/output ${CIRCLE_ARTIFACTS}
             docker-compose down
            
