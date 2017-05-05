@@ -1,0 +1,77 @@
+version: '2'
+
+services:
+  odt-api:
+    env_file:
+      - ./env/shared.env
+      - ./env/api.env
+    build: 
+      context: ../
+      dockerfile: Dockerfile.api
+    image: quay.io/turner/odt-api:${VERSION}.${CIRCLE_BUILD_NUM}
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: development
+      HEALTHCHECK: /healthcheck
+      PORT: "5000"
+    
+  odt-webapp:
+    env_file:
+      - ./env/shared.env
+      - ./env/portal.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.portal
+    image: quay.io/turner/odt-portal:${VERSION}.${CIRCLE_BUILD_NUM}
+    ports:
+      - "5001:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: development
+      HEALTHCHECK: /healthcheck
+      PORT: "5000"
+
+  odt-jobs:
+    env_file:
+      - ./env/shared.env
+      - ./env/jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.jobs
+    image: quay.io/turner/odt-jobs:${VERSION}.${CIRCLE_BUILD_NUM}
+    ports:
+      - "5002:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: development
+      HEALTHCHECK: /healthcheck
+      PORT: "5000"
+
+  odt-jobs-tests:
+    env_file:
+      - ./env/shared.env
+      - ./env/jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.jobs.tests  
+    links:
+      - odt-api:apihost
+      - odt-jobs:jobshost
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../output:/output
+
+  odt-api-tests:
+    stdin_open: true
+    tty: true
+    env_file:
+      - ./env/shared.env
+      - ./env/jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.api.tests  
+    links:
+      - odt-api:apihost  
+    volumes:
+      - ../output:/output
+    

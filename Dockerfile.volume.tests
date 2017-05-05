@@ -1,0 +1,7 @@
+FROM alpine
+
+COPY ./test.xml /app/test.xml
+
+WORKDIR /app
+
+CMD cp test.xml ../output/test.xml

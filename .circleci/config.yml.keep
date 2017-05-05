@@ -35,6 +35,15 @@ jobs:
             curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
 
+      # This should go into custom primary image, here's only for the sake of explanation
+      - run:
+          name: Install Harbor Compose
+          command: |
+            set -x
+            #curl -L https://github.com/turnerlabs/harbor-compose/releases/download/v0.11.0-pre-3-g3abb870/ncd_linux_amd64 > /usr/local/bin/harbor-compose
+            wget -O /usr/local/bin/harbor-compose https://github.com/turnerlabs/harbor-compose/releases/download/v0.11.0-pre-3-g3abb870/ncd_linux_amd64
+            chmod +x /usr/local/bin/harbor-compose
+
       - run:
           name: Building App
           working_directory: ~/app/Deployment
@@ -46,13 +55,20 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
             set +e
-            docker-compose run volume-tests
+            docker-compose run odt-api-tests dotnet test -xml /output/apiresults.xml
+            docker-compose run odt-jobs-tests dotnet test -xml /output/jobsresults.xml
             ls ~/
             ls ~/app
             ls ~/app/Deployment            
-            cp ~/app/output $CIRCLE_ARTIFACTS/junit/            
+            cp ~/app/output/apiresults.xml $CIRCLE_TEST_REPORTS/junit/apiresults.xml
+            cp ~/app/output/jobsresults.xml $CIRCLE_TEST_REPORTS/junit/jobsresults.xml
             docker-compose down
-            
+
+      - run:
+          name: Log into Quay          
+          command: |
+            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io            
+
   ci:
     docker:
       - image: circleci/cci-demo-docker-primary:0.0.2
