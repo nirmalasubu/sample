@@ -1,8 +1,14 @@
-FROM alpine
+FROM alpine:edge
+
+RUN apk --update add libxslt
 
 COPY ./test.xml /app/test.xml
+COPY ./xunit-to-junit.xslt /app/xunit-to-junit.xslt
 
 RUN mkdir /app/output
 RUN mkdir /app/output/junit
 
-CMD cp /app/test.xml /app/output/junit/finally.xml
+CMD cp /app/test.xml /app/output/junit/finally.xml && \
+    cp /app/test.xml /app/output/finally.xml && \
+    xsltproc --output /app/output/nunit.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/finally.xml && \
+    cp /app/output/nunit.xml /app/output/junit/nunit.xml

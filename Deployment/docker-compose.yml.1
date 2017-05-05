@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  volume-tests:
+    stdin_open: true
+    tty: true
+    env_file:
+      - ./env/shared.env
+      - ./env/jobs.env
+    build:
+      context: ../
+      dockerfile: Dockerfile.volume.tests  
+    
