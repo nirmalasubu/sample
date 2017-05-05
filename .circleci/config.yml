@@ -4,6 +4,13 @@ jobs:
     docker:
       - image: circleci/cci-demo-docker-primary:0.0.2
 
+    branches:
+      only:
+        - dev
+        - rc
+        - sandbox
+        - newbuild
+        
     working_directory: ~/app
 
     steps:
