@@ -64,11 +64,32 @@ jobs:
       - run:
           name: Log into Quay          
           command: |
-            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io      
+            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io            
+
+  ci:
+    branches:
+      only:
+        - rc
+        - newbuild
+        
+    working_directory: ~/app/Deployment
+
+      - run:
+          name: Catalog App
+          command: |
+            docker-compose push
+            harbor-compose catalog
+
+  cd:
+    branches:
+      only:
+        - dev
+        - sandbox
+        
+    working_directory: ~/app/Deployment
 
       - run:
           name: Deploy App
-          working_directory: ~/app/Deployment
           command: |
             docker-compose push
-            harbor-compose deploy -e dev
+            harbor-compose deploy -e ${CIRCLE_BRANCH}
