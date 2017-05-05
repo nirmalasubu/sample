@@ -57,6 +57,9 @@ jobs:
             set +e
             docker-compose run odt-api-tests dotnet test -xml /output/apiresults.xml
             docker-compose run odt-jobs-tests dotnet test -xml /output/jobsresults.xml
+            ls ~/
+            ls ~/app
+            ls ~/app/Deployment            
             cp ~/app/output/apiresults.xml $CIRCLE_TEST_REPORTS/junit/apiresults.xml
             cp ~/app/output/jobsresults.xml $CIRCLE_TEST_REPORTS/junit/jobsresults.xml
             docker-compose down
