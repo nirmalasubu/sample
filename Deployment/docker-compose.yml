@@ -10,6 +10,4 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.volume.tests  
-    volumes:
-      - ../output:/output
     

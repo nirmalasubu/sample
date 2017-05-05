@@ -46,11 +46,8 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
             set +e
-            docker-compose run volume-tests
-            ls ~/
-            ls ~/app
-            ls ~/app/Deployment            
-            cp ~/app/output $CIRCLE_ARTIFACTS/junit/            
+            docker-compose run --name apitest volume-tests
+            cp apitest:/app/finally.xml $CIRCLE_ARTIFACTS/finally.xml         
             docker-compose down
             
   ci:

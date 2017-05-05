@@ -57,9 +57,7 @@ services:
       - odt-api:apihost
       - odt-jobs:jobshost
     stdin_open: true
-    tty: true
-    volumes:
-      - ../output:/output
+    tty: true    
 
   odt-api-tests:
     stdin_open: true
@@ -71,7 +69,5 @@ services:
       context: ../
       dockerfile: Dockerfile.api.tests  
     links:
-      - odt-api:apihost  
-    volumes:
-      - ../output:/output
+      - odt-api:apihost      
     
