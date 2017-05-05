@@ -31,3 +31,13 @@ export const resetQueues = (name) => {
               throw(error);
           });
 };
+
+export const purgeQueues = (name) => {
+    return Axios.post('/api/deliveryqueue/purge/' + name)        
+          .then(response => { 
+              
+          })
+          .catch(error => {
+              throw(error);
+          });
+};

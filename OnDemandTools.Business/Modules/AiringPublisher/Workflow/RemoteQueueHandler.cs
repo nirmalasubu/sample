@@ -30,10 +30,21 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
             }
 
         }
+
+        public void Purge(string remoteQueueName)
+        {
+            using (var advancedBus = RabbitHutch.CreateBus(_connectionString).Advanced)
+            {
+                var existingQueue = new EasyNetQ.Topology.Queue(remoteQueueName, false);
+
+                advancedBus.QueuePurge(existingQueue);
+            }
+        }
     }
 
     public interface IRemoteQueueHandler
     {
         void Create(BLQueue.Queue queue);
+        void Purge(string remoteQueueName);
     }
 }

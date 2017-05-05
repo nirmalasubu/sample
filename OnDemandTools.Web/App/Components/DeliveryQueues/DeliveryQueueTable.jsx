@@ -1,33 +1,31 @@
 ﻿import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
-import { Modal } from 'react-bootstrap';
-import { ModalDialogue } from 'react-bootstrap';
-import { ModalBody } from 'react-bootstrap';
-import { ModalFooter } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { resetQueues } from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import ResendPurgeModal from 'Components/DeliveryQueues/ResendPurgeModal';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
 var ReactTable = React.createClass({    
     
     getInitialState() {
-        return { showModal: false, resendQueueDetails : "" };
+        return { 
+            showModal: false, 
+            queueDetails : "", 
+            modalActionType: "",
+            modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
+            modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
+        };
     },
 
     close() {
-        this.setState({ showModal: false, resendQueueDetails: "" });
+        this.setState({ showModal: false, queueDetails: "", modalActionType: "" });
     },
 
-    open(val) {
-        this.setState({ showModal: true, resendQueueDetails: val });
+    open(val, type) {
+        this.setState({ showModal: true, queueDetails: val, modalActionType: type });
     },
-    resendQueue(id){
-        resetQueues(id);
-        this.close();
-    },
+    
     actionFormat: function() {
         return '<i class="fa fa-search" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i>'
     },
@@ -40,9 +38,9 @@ var ReactTable = React.createClass({
                     <p>{val}</p>
                     <i>Delivery</i>: 0
                     <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
-                    <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], event)}>Resend</button><br />
+                    <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
                     <i>Consumption</i>: 21
-                    <button class="btn-xs btn-link">Purge</button><br />
+                    <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
                     <span class="small">-Apr 25, 2017 2:24 PM</span>
                 </div>
             );        
@@ -73,20 +71,10 @@ var ReactTable = React.createClass({
 
         return (
             <div>
-            <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true}>
-                {row}
-            </BootstrapTable>
-            
-                <Modal show={this.state.showModal} onHide={this.close}>          
-                    <Modal.Body>
-                    <p>If you continue, {this.state.resendQueueDetails.friendlyName} Queue will be reset and any notifications matching your criteria will be delivered again. 
-                    Do you wish to continue?</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                    <Button onClick={this.close}>Cancel</Button>  
-                    <Button onClick={(event) => this.resendQueue(this.state.resendQueueDetails.name, event)}>Continue</Button>
-                    </Modal.Footer>
-                </Modal>
+                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true}>
+                    {row}
+                </BootstrapTable>           
+                <ResendPurgeModal data={this.state} handleClose={this.close}/>
             </div>
                   )
         }
