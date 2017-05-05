@@ -47,8 +47,8 @@ jobs:
           name: Testing App
           working_directory: ~/app/Deployment
           command: |
-            docker-compose up -d
-            echo "tests running"
+            docker-compose run odt-api-tests
+            docker-compose run odt-jobs-tests
             docker-compose down
 
       - run:
