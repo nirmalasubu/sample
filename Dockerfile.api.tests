@@ -7,10 +7,12 @@ COPY . /app
 
 WORKDIR /app
 
+RUN mkdir output
+
 RUN ["dotnet", "restore"]
 
 WORKDIR /app/OnDemandTools.API.Tests
 
 RUN ["dotnet", "build"]
 
-CMD dotnet test -xml /output/results.xml
+CMD dotnet test -xml ../output/results.xml
