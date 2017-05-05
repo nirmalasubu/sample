@@ -2,6 +2,6 @@ FROM alpine
 
 COPY ./test.xml /app/test.xml
 
-RUN mkdir /app/output
+RUN mkdir /app/output/junit
 
-CMD cp /app/test.xml /app/output/finally.xml
+CMD cp /app/test.xml /app/output/junit/finally.xml
