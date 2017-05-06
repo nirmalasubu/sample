@@ -50,6 +50,25 @@ namespace OnDemandTools.Web.Controllers
             return deliveryQueueModel;
         }
 
-      
+        // POST api/values
+        [HttpPost("reset/{name}")]
+        public string ResendQueue(string name)
+        {
+            _queueSvc.FlagForRedelivery(name);
+            return "Success";
+        }
+
+        // POST api/values
+        [HttpPost("purge/{name}")]
+        public void PurgeQueue(string name)
+        {
+            var queues = _queueSvc.GetQueues();
+
+            var singleQueueAttached = queues.Count(q => q.Name == name) == 1;
+
+            if (singleQueueAttached)
+                remoteQueueHandler.Purge(name);
+        }
+
     }
 }
