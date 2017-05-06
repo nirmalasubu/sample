@@ -32,28 +32,45 @@ var ReactTable = React.createClass({
         return '<i class="fa fa-search" aria-hidden="true"></i> <i class="fa fa-calendar" aria-hidden="true"></i>'
     },
     queueFormat: function(val) {
-      
-        var queueItem = $.grep(this.props.RowData, function (v) {
-            if(v.name==val) return v;
-        });
+        if(Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object)
+        {
+            return( <div>
+                        <p>{val}</p>
+                        <i>Delivery:</i> 
+                        <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> 
+                        <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
+                        <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                        <i>Consumption:</i>
+                        <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+                        <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+            </div>);
+        }else
+        {
+            var queueItem = $.grep(this.props.RowData, function (v) {
+                if(v.name==val) return v;
+            });
 
-        var ItemToRefresh =$.grep(this.props.signalrData.queues, function (v) {
-            if(v.name==val) return v;
-        }); 
+            var ItemToRefresh =$.grep(this.props.signalrData.queues, function (v) {
+                if(v.name==val) return v;
+            }); 
 
             var showdate=ItemToRefresh[0].processedDateTime.indexOf('0001')==-1? true:false;
             var datetoFormat=Moment(ItemToRefresh[0].processedDateTime).format('lll');
             return(
                     <div>
                         <p>{val}</p>
-                        <i>Delivery:{ItemToRefresh[0].pendingDeliveryCount}</i> 
+                        <i>Delivery:</i>
+                        <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
                         <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
                         <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
-                        <i>Consumption:{ItemToRefresh[0].messageCount}</i>
+                        <i>Consumption:</i>
+                        <span class="badge">{ItemToRefresh[0].messageCount}</span>
                         <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
                         {showdate? (<span class="small">(updated: {datetoFormat})</span>):(null)}
                             </div>
                         ); 
+        }
+      
     },
     contactFormat:function(val)
     {
