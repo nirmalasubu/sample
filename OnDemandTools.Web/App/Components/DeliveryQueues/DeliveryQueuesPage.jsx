@@ -10,7 +10,7 @@ class Queue extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.sortColumn = this.sortColumn.bind(this);
+       
         this.state = {
             stateQueue: [],
 
@@ -30,7 +30,6 @@ class Queue extends React.Component {
             deliveryQueueHub: $.connection.deliveryQueueCountHub,
             deliveryQueueSignalRData: {"queues":[{"friendlyName":"","name":"","messageCount":0,"pendingDeliveryCount":0,"processedDateTime":"0001-01-01T00:00:00"}],
                 "jobcount":0,"jobLastRun":""}
-
         }
     }
 
@@ -78,7 +77,7 @@ class Queue extends React.Component {
 
     //called on the page load
     componentDidMount() {
-
+      
         this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
         $.connection.hub.start();
 
@@ -92,12 +91,9 @@ class Queue extends React.Component {
         document.title = "ODT - Delivery Queues";
     }
 
+
     GetQueueDeliveryCount(data){
-       
-        this.setState({
-            deliveryQueueSignalRData: data
-        });
-        
+        this.props.signal(data);
     }
 
     render() {
@@ -106,28 +102,26 @@ class Queue extends React.Component {
                
                 <PageHeader pageName="Delivery Queue" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.state.deliveryQueueSignalRData} />
+                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
             </div>
 
         )
     }
 }
 
-
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
     return {
-        // You can now say this.props.queues
-
-        queues: state.queues
+        queues: state.queues,
+        signalRQueueData:state.queueCountData
     }
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
-
     return {
-        fetchQueue: () => dispatch(queueActions.fetchQueues())
+        fetchQueue: () => dispatch(queueActions.fetchQueues()),
+        signal: (signalRdata) =>dispatch(queueActions.signalRStart(signalRdata))
     };
 };
 

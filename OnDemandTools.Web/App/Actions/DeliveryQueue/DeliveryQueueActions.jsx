@@ -1,8 +1,10 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 
+
 // Future  we get data through Axios or fetch
 const  queue= [];
+
 export const fetchQueuesSuccess = (queues) => {
     return {
         type: actionTypes.FETCH_QUEUES_SUCCESS,
@@ -42,12 +44,10 @@ export const purgeQueues = (name) => {
           });
 };
 
-//export function signalRStart(store: any, callback: Function) {
-//    _hub = $.connection.deliveryQueueCountHub;
+export const signalRStart=(signalRdata)=> {
+    return {
+            type: actionTypes.FETCH_SIGNALRQUEUES_SUCCESS,
+            queueCountData:signalRdata};
+  
+};
 
-//    _hub.client.GetQueueDeliveryCount = (p1: any) => {
-//        store.dispatch({ type: "SERVER_CALLED_ME", a: p1 });
-//    }
-
-//    $.connection.hub.start(() => callback());
-//};
