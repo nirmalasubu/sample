@@ -1,5 +1,8 @@
 FROM microsoft/dotnet:1.1.0-sdk-projectjson
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		xsltproc
+
 # inject hostnames needed within job test container
 ENV JobEndPoint http://jobhost:5000
 ENV APIEndPoint http://apihost:5000
@@ -17,5 +20,5 @@ WORKDIR /app/OnDemandTools.Jobs.Tests
 
 RUN ["dotnet", "build"]
 
-CMD dotnet test -xml ../output/xunit/jobrun.xml && \
+CMD dotnet test -xml /app/output/xunit/jobrun.xml && \
     xsltproc --output /app/output/xunit/jobresults.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/xunit/jobrun.xml
