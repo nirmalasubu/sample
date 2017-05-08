@@ -27,6 +27,8 @@ namespace OnDemandTools.Common.Configuration
         public bool EnableMediaIdGenrationByPlayList { get; set; }
         public AzureAd AzureAd { get; set; }
         public Jobs Jobs { get; set; }
+        public Redis Redis { get; set; }
+        
     }
 
     public class CloudQueue
@@ -127,5 +129,12 @@ namespace OnDemandTools.Common.Configuration
     {
         public string Url { get; set; }
 
+    }
+
+    public class Redis
+    {
+        public string Url { get; set; }
+        public string InstanceName { get; set; }
+        
     }
 }

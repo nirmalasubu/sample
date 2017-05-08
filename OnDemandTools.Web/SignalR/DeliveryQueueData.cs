@@ -11,7 +11,7 @@ namespace OnDemandTools.Web.SignalR
     {
         public IQueueService _queueSvc;
         public IDeliveryQueueUpdater _deliveryQueueUpdater;
-        static int i = 0;
+       
         private readonly IGetHangireServers _jobLastRunQuery;
         public DeliveryQueueData(IQueueService queueSvc,
             IDeliveryQueueUpdater deliveryQueueUpdater,
@@ -35,7 +35,7 @@ namespace OnDemandTools.Web.SignalR
             {
                 Queues = updatedQueues,
                 JobLastRun = jobStatus.LastHeartbeat,
-                JobCount =  i>100? i=0:i++
+                JobCount = jobStatus.Count
             };
 
             return queues;

@@ -21,6 +21,9 @@ using OnDemandTools.Business.Modules.User;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using OnDemandTools.Web.SignalR;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using OnDemandTools.Web.Utilities.Redis;
 
 namespace OnDemandTools.Web
 {
@@ -54,7 +57,15 @@ namespace OnDemandTools.Web
 
             // Add framework services.
             services.AddMvc();    
-            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            //services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+
+            // Using Redis as Memory cache
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = appSettings.Redis.Url;
+                options.InstanceName = appSettings.Redis.InstanceName;
+                options.ResolveDns();
+            });
             services.AddSession();
             services.AddSignalR();
 
@@ -115,8 +126,9 @@ namespace OnDemandTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache)
         {
+
             // Add serilog and catch any internal errors
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
