@@ -45,6 +45,7 @@ jobs:
           name: Testing API
           working_directory: ~/app/Deployment
           command: |
+            set +e
             docker-compose run --name apitest odt-api-tests
             docker cp apitest:/app/output ~/app/output
             docker-compose down
@@ -53,6 +54,7 @@ jobs:
           name: Testing Jobs
           working_directory: ~/app/Deployment
           command: |
+            set +e
             docker-compose run --name jobtest odt-jobs-tests
             docker cp jobtest:/app/output ~/app/output
             docker-compose down
