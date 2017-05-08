@@ -8,5 +8,7 @@ COPY ./xunit-to-junit.xslt /app/xunit-to-junit.xslt
 RUN mkdir /app/output
 RUN mkdir /app/output/junit
 
-CMD cp /app/test.xml /app/output/junit/finally.xml && \
-    xsltproc --output /app/output/junit/nunit.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/junit/finally.xml
+CMD cp /app/test.xml /app/output/junit/run1.xml && \
+    cp /app/test.xml /app/output/junit/run2.xml && \
+    xsltproc --output /app/output/junit/nunit.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/junit/run1.xml && \
+    xsltproc --output /app/output/junit/nunit2.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/junit/run2.xml
