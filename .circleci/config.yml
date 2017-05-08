@@ -39,7 +39,7 @@ jobs:
           name: Building App
           working_directory: ~/app/Deployment
           command: |
-            docker-compose build
+            docker-compose build volume-tests
 
       - run:
           name: Testing App
