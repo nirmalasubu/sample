@@ -21,7 +21,5 @@ WORKDIR /app/OnDemandTools.Jobs.Tests
 
 RUN ["dotnet", "build"]
 
-CMD curl --retry 1 --retry-delay 2 -v http://jobhost:5000/healthcheck && \
-    curl --retry 1 --retry-delay 2 -v http://apihost:5000/healthcheck && \
-    dotnet test -xml /app/testrun/jobrun.xml && \
+CMD dotnet test -xml /app/testrun/jobrun.xml && \
     xsltproc --output /app/output/xunit/jobresults.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/testrun/jobrun.xml
