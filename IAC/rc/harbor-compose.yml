@@ -1,0 +1,33 @@
+shipments:
+  sead-ondemandtools-api:
+    env: rc
+    barge: ent-prod
+    containers:
+    - odt-api
+    replicas: 0
+    group: sead
+    property: turner
+    project: ondemandtools
+    product: sead-ondemandtools-api
+
+  sead-ondemandtools-jobs:
+    env: rc
+    barge: corp-prod
+    containers:
+    - odt-jobs
+    replicas: 0
+    group: sead
+    property: turner
+    project: ondemandtools
+    product: sead-ondemandtools-jobs
+
+  sead-ondemandtools-webapp:
+    env: rc
+    barge: corp-prod
+    containers:
+    - odt-webapp
+    replicas: 0
+    group: sead
+    property: turner
+    project: ondemandtools
+    product: sead-ondemandtools-webapp
