@@ -55,7 +55,7 @@ services:
       dockerfile: Dockerfile.jobs.tests  
     links:
       - odt-api:apihost
-      - odt-jobs:jobshost
+      - odt-jobs:jobhost
     stdin_open: true
     tty: true    
 
