@@ -3,7 +3,7 @@ FROM microsoft/dotnet:1.1.0-sdk-projectjson
 #RUN apk --update add libxslt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		libxslt
+		libxslt-dev
 
 COPY ./test.xml /app/test.xml
 COPY ./xunit-to-junit.xslt /app/xunit-to-junit.xslt
