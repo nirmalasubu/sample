@@ -9,6 +9,4 @@ RUN mkdir /app/output
 RUN mkdir /app/output/junit
 
 CMD cp /app/test.xml /app/output/junit/finally.xml && \
-    cp /app/test.xml /app/output/finally.xml && \
-    xsltproc --output /app/output/nunit.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/finally.xml && \
-    cp /app/output/nunit.xml /app/output/junit/nunit.xml
+    xsltproc --output /app/output/junit/nunit.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/junit/finally.xml
