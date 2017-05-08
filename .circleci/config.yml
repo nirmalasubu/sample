@@ -54,7 +54,7 @@ jobs:
           command: |
             set +e
             docker-compose run --name apitest odt-api-tests
-            docker cp apitest:/app/output/xunit/apiresults.xml ~/app/output/xunit
+            docker cp apitest:/app/output/apiresults.xml ~/app/output/xunit
             docker-compose down
 
       - run:
@@ -63,7 +63,7 @@ jobs:
           command: |
             set +e
             docker-compose run --name jobtest odt-jobs-tests
-            docker cp jobtest:/app/output/xunit/jobresults.xml ~/app/output/xunit
+            docker cp jobtest:/app/output/jobresults.xml ~/app/output/xunit
             docker-compose down
       
       - store_artifacts:

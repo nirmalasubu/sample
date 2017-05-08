@@ -10,9 +10,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN mkdir testrun
 RUN mkdir output
-RUN mkdir output/xunit
 
 RUN ["dotnet", "restore"]
 
@@ -20,5 +18,5 @@ WORKDIR /app/OnDemandTools.API.Tests
 
 RUN ["dotnet", "build"]
 
-CMD dotnet test -xml /app/testrun/apirun.xml && \
-    xsltproc --output /app/output/xunit/apiresults.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/testrun/apirun.xml
+CMD dotnet test -xml /app/output/apirun.xml && \
+    xsltproc --output /app/output/apiresults.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/apirun.xml
