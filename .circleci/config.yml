@@ -45,7 +45,6 @@ jobs:
           name: Testing App
           working_directory: ~/app/Deployment
           command: |
-            set +e
             docker-compose run --name apitest volume-tests
             docker cp apitest:/app/output ~/app/output
             docker-compose down
