@@ -42,6 +42,13 @@ jobs:
             docker-compose build
 
       - run:
+          name: Make Testbed
+          working_directory: ~/app
+          command: |
+            mkdir output
+            mkdir output/xunit
+            
+      - run:
           name: Testing API
           working_directory: ~/app/Deployment
           command: |
