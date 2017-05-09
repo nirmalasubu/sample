@@ -44,10 +44,21 @@ export const purgeQueues = (name) => {
           });
 };
 
+export const clearQueues = (name) => {
+    return Axios.post('/api/deliveryqueue/clear/' + name)        
+          .then(response => { 
+              
+          })
+          .catch(error => {
+              throw(error);
+          });
+};
+
 export const signalRStart=(signalRdata)=> {
     return {
             type: actionTypes.FETCH_SIGNALRQUEUES_SUCCESS,
             queueCountData:signalRdata};
   
 };
+
 

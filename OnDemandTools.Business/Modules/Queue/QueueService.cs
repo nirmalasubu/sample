@@ -260,6 +260,11 @@ namespace OnDemandTools.Business.Modules.Queue
             .ToBusinessModel<List<DLModel.Queue>, List<BLModel.Queue>>());
         }
 
+        public void ClearPendingDeliveries(string queueName)
+        {
+            queueCommandHelper.CancelDeliverFor(queueName);
+        }
+
         public List<Model.Queue> PopulateMessageCounts(List<Model.Queue> queues)
         {
             foreach (var queue in queues)

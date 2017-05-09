@@ -184,6 +184,21 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
             _deleteAirings.Update(query, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
         }
 
+        /// <summary>
+        /// Clear the pending delivery queues with queueName
+        /// </summary>
+        /// <param name="queueName">The queue name.</param>
+        public void CancelDeliverFor(string queueName)
+        {
+            if (string.IsNullOrEmpty(queueName))
+                return;
+
+            var filter = Query.In("DeliverTo", new BsonArray(new List<string> { queueName }));
+
+            _currentAirings.Update(filter, Update.Pull("DeliverTo", queueName), UpdateFlags.Multi);
+            _deleteAirings.Update(filter, Update.Pull("DeliverTo", queueName), UpdateFlags.Multi);
+        }
+
         public void UpdateQueueProcessedTime(string name)
         {
             _queuesCollection.Update(Query.EQ("Name", name), Update.Set("ProcessedDateTime", DateTime.UtcNow));

@@ -172,5 +172,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queues"></param>
         /// <returns></returns>
         List<Model.Queue> PopulateMessageCounts(List<Model.Queue> queues);
+
+        /// <summary>
+        /// Clears pendeng delivery for queue name
+        /// </summary>
+        /// <param name="queueName"></param>
+        /// <returns></returns>
+        void ClearPendingDeliveries(string queueName);
     }
 }

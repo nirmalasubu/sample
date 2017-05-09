@@ -70,5 +70,12 @@ namespace OnDemandTools.Web.Controllers
                 remoteQueueHandler.Purge(name);
         }
 
+        // POST api/values
+        [HttpPost("clear/{name}")]
+        public void ClearQueue(string name)
+        {
+            _queueSvc.ClearPendingDeliveries(name);
+        }
+
     }
 }

@@ -15,13 +15,13 @@ var ReactTable = React.createClass({
             queueDetails : "", 
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
-            modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?"
-         
+            modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
+            modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?"         
         };
     },
    
     close() {
-        this.setState({ showModal: false, queueDetails: "", modalActionType: "" });
+        this.setState({ showModal: false, queueDetails: "" });
     },
 
     open(val, type) {
@@ -61,7 +61,7 @@ var ReactTable = React.createClass({
                         <p>{val}</p>
                         <i>Delivery:</i>
                         <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
-                        <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
+                        <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
                         <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
                         <i>Consumption:</i>
                         <span class="badge">{ItemToRefresh[0].messageCount}</span>
