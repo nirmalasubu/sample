@@ -18,10 +18,10 @@ var ReactTable = React.createClass({
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
             modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
-            modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?"         
+            modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?"
         };
     },
-   
+    openDateRangeResetModel(val) {
         this.setState({ showDateRangeResetModel: true, queueDetails: val });
     },
     closeDateRangeResetModel() {
@@ -34,60 +34,55 @@ var ReactTable = React.createClass({
         this.setState({ showModal: true, queueDetails: val, modalActionType: type });
     },
     actionFormat: function (val) {
-         var queueItem = $.grep(this.props.RowData, function (v) {
+        var queueItem = $.grep(this.props.RowData, function (v) {
             if (v.name == val) return v;
         });
         return (<div>
-             <i class="fa fa-search"  aria-hidden="true"></i> 
-             <i class="fa fa-calendar" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)} aria-hidden="true"></i>
-             </div>)
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <i class="fa fa-calendar" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)} aria-hidden="true"></i>
+        </div>)
     },
     queueFormat: function (val) {
-        if(Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object)
-        {
-            return( <div>
-                        <p>{val}</p>
-                        <i>Delivery:</i> 
-                        <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> 
-                        <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
-                        <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
-                        <i>Consumption:</i>
-                        <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-                        <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+        if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
+            return (<div>
+                <p>{val}</p>
+                <i>Delivery:</i>
+                <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+                <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
+                <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                <i>Consumption:</i>
+                <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+                <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
             </div>);
-        }else
-        {
+        } else {
             var queueItem = $.grep(this.props.RowData, function (v) {
-                if(v.name==val) return v;
+                if (v.name == val) return v;
             });
 
-            var ItemToRefresh =$.grep(this.props.signalrData.queues, function (v) {
-                if(v.name==val) return v;
-            }); 
+            var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
+                if (v.name == val) return v;
+            });
 
-            var showdate=ItemToRefresh[0].processedDateTime.indexOf('0001')==-1? true:false;
-            var datetoFormat=Moment(ItemToRefresh[0].processedDateTime).format('lll');
-            return(
-                    <div>
-                        <p>{val}</p>
-                        <i>Delivery:</i>
-                        <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
-                        <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
-                        <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
-                        <i>Consumption:</i>
-                        <span class="badge">{ItemToRefresh[0].messageCount}</span>
-                        <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
-                        {showdate? (<span class="small">(updated: {datetoFormat})</span>):(null)}
-                            </div>
-                        ); 
+            var showdate = ItemToRefresh[0].processedDateTime.indexOf('0001') == -1 ? true : false;
+            var datetoFormat = Moment(ItemToRefresh[0].processedDateTime).format('lll');
+            return (
+                <div>
+                    <p>{val}</p>
+                    <i>Delivery:</i>
+                    <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
+                    <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
+                    <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                    <i>Consumption:</i>
+                    <span class="badge">{ItemToRefresh[0].messageCount}</span>
+                    <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+                    {showdate ? (<span class="small">(updated: {datetoFormat})</span>) : (null)}
+                </div>
+            );
         }
-      
+
     },
     contactFormat: function (val) {
-        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>'
-    contactFormat:function(val)
-    {
-        return '<p data-toggle="tooltip" title="'+val +'">'+val +'</p>'
+        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>';
     },
     render: function () {
         var row;
@@ -118,10 +113,14 @@ var ReactTable = React.createClass({
             </div>
         )
     }
-                });
+});
 
 
-ReactTable.defaultProps = { signalrData:{"queues":[{"friendlyName":"","name":"","messageCount":0,"pendingDeliveryCount":0,"processedDateTime":"0001-01-01T00:00:00"}],
-                        "jobcount":0,"jobLastRun":""} };
+ReactTable.defaultProps = {
+    signalrData: {
+        "queues": [{ "friendlyName": "", "name": "", "messageCount": 0, "pendingDeliveryCount": 0, "processedDateTime": "0001-01-01T00:00:00" }],
+        "jobcount": 0, "jobLastRun": ""
+    }
+};
 
 export default ReactTable;
