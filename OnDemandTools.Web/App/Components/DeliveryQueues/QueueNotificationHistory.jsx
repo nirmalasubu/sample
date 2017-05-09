@@ -11,13 +11,13 @@ import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormC
 import DatePicker from "react-bootstrap-date-picker";
 
 var QueueNotificationHistory = React.createClass({
-    resetQueue(id) {
-        queueAction.resetQueues(id);
-        this.props.handleClose();
+    //called on the model load
+    resetGrid(id) {
+       console.log(id);
     },
     render: function () {
         return (
-            <Modal show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
+            <Modal onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <p>Notification History for {this.props.data.queueDetails.friendlyName}</p>
@@ -31,7 +31,7 @@ var QueueNotificationHistory = React.createClass({
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Close</Button>                  
+                    <Button onClick={this.props.handleClose}>Close</Button>
                 </Modal.Footer>
             </Modal>
         )
