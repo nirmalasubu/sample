@@ -63,7 +63,7 @@ var ResendPurgeModal = React.createClass({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button onClick={this.OnclickType.bind(this, this.props.data.queueDetails.name, this.props.data.modalActionType)}>Continue</Button>
+                    <Button bsStyle="primary" onClick={this.OnclickType.bind(this, this.props.data.queueDetails.name, this.props.data.modalActionType)}>Continue</Button>
                 </Modal.Footer>
            </Modal>
         )
