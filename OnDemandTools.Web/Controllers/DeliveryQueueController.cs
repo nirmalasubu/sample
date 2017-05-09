@@ -51,6 +51,7 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // POST api/values
+        [Authorize]
         [HttpPost("reset/{name}")]
         public string ResendQueue(string name)
         {
@@ -59,7 +60,8 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // POST api/values
-        [HttpPost("purge/{name}")]
+        [Authorize]
+        [HttpDelete("purge/{name}")]
         public void PurgeQueue(string name)
         {
             var queues = _queueSvc.GetQueues();
@@ -71,7 +73,8 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // POST api/values
-        [HttpPost("clear/{name}")]
+        [Authorize]
+        [HttpDelete("clear/{name}")]
         public void ClearQueue(string name)
         {
             _queueSvc.ClearPendingDeliveries(name);

@@ -35,7 +35,7 @@ export const resetQueues = (name) => {
 };
 
 export const purgeQueues = (name) => {
-    return Axios.post('/api/deliveryqueue/purge/' + name)        
+    return Axios.delete('/api/deliveryqueue/purge/' + name)        
           .then(response => { 
               
           })
@@ -45,7 +45,7 @@ export const purgeQueues = (name) => {
 };
 
 export const clearQueues = (name) => {
-    return Axios.post('/api/deliveryqueue/clear/' + name)        
+    return Axios.delete('/api/deliveryqueue/clear/' + name)        
           .then(response => { 
               
           })
