@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   odt-api:
@@ -15,6 +15,8 @@ services:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
       PORT: "5000"
+    healthcheck:
+      test: "CMD curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck"
     
   odt-webapp:
     env_file:
@@ -45,6 +47,8 @@ services:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
       PORT: "5000"
+    healthcheck:
+      test: "CMD curl --retry 1 --retry-delay 2 -v http://localhost:5000/healthcheck"
 
   odt-jobs-tests:
     env_file:
