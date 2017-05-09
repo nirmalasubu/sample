@@ -38,8 +38,15 @@ var ReactTable = React.createClass({
             if (v.name == val) return v;
         });
         return (<div>
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <i class="fa fa-calendar" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)} aria-hidden="true"></i>
+
+            <button class="btn-xs btn-link" title="Notification History" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+            
+            <button class="btn-xs btn-link" title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+            </button>
+
         </div>)
     },
     queueFormat: function (val) {
