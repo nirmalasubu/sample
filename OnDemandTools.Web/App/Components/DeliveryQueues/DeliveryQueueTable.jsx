@@ -5,6 +5,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import ResendPurgeModal from 'Components/DeliveryQueues/ResendPurgeModal';
 import ResetByDateRange from 'Components/DeliveryQueues/QueueResetByDateRange';
+import NotificationHistory from 'Components/DeliveryQueues/QueueNotificationHistory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
@@ -14,6 +15,7 @@ var ReactTable = React.createClass({
         return {
             showModal: false,
             showDateRangeResetModel: false,
+            showNotificationHistoryModel: false,
             queueDetails: "",
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
@@ -27,6 +29,12 @@ var ReactTable = React.createClass({
     closeDateRangeResetModel() {
         this.setState({ showDateRangeResetModel: false });
     },
+    openNotificationHistoryModel(val) {
+        this.setState({ showNotificationHistoryModel: true, queueDetails: val });
+    },
+    closeNotificationHistoryModel() {
+        this.setState({ showNotificationHistoryModel: false });
+    },
     close() {
         this.setState({ showModal: false, queueDetails: "" });
     },
@@ -39,10 +47,10 @@ var ReactTable = React.createClass({
         });
         return (<div>
 
-            <button class="btn-xs btn-link" title="Notification History" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+            <button class="btn-xs btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(queueItem[0], event)}>
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
-            
+
             <button class="btn-xs btn-link" title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
@@ -117,6 +125,7 @@ var ReactTable = React.createClass({
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close} />
                 <ResetByDateRange data={this.state} handleClose={this.closeDateRangeResetModel} />
+                <NotificationHistory data={this.state} handleClose={this.closeNotificationHistoryModel} />
             </div>
         )
     }
