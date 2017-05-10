@@ -21,7 +21,7 @@ namespace OnDemandTools.API.Tests
             this.client = this.fixture.restClient;
         }
 
-        Fact]
+        [Fact]
         public void JoesFakeTest()
         {  
             Assert.True(false);          
