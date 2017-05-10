@@ -24,40 +24,67 @@ var QueueResetByDateRange = React.createClass({
                     </Modal.Title>
                 </Modal.Header>         
                 <Modal.Body>
-                    <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. </ControlLabel>
-                    <Form inline>
-                        <ControlLabel>Delivery Airings where: </ControlLabel>
-                        <FormGroup>
-                            <InputGroup>
-                                <ControlLabel> &nbsp;&nbsp;</ControlLabel>
-                                <Radio name="dateAvailibilityWindow">
-                                    &nbsp; Start date falls in availability window
-                                </Radio>
-                                <ControlLabel> &nbsp;&nbsp;</ControlLabel>
-                                <Radio name="dateAvailibilityWindow">
-                                    &nbsp; Any Part of flight falls in availability window
-                                 </Radio>
-                            </InputGroup>
-                        </FormGroup>
+                    <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. <br/><br/> </ControlLabel>
+                    <Form >
+                        <Grid>
+                            <Row>
+                                <Col md={2} componentClass={ControlLabel}>
+                                    Delivery Airings where: 
+                                </Col>                            
+                                <Col md={4}>
+                                    <FormGroup>
+                                        <InputGroup>
+                                            <Radio name="dateAvailibilityWindow">
+                                                &nbsp; Start date falls in availability window
+                                            </Radio>
+                                            <Radio name="dateAvailibilityWindow">
+                                                &nbsp; Any Part of flight falls in availability window
+                                             </Radio>
+                                        </InputGroup>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Grid>
                     </Form>
-                    <Form inline>
-                        <ControlLabel>Starting Between: </ControlLabel>{'  '}
-                        <FormGroup >
-                            <DatePicker style={datePickerWidth} showClearButton={false} />
-                        </FormGroup>
-                        {'  AND  '}
-                        <FormGroup>
-                            <DatePicker style={datePickerWidth} showClearButton={false} />
-                        </FormGroup>
+                    <br/>
+                    <Form >
+                        <Grid>
+                            <Row>
+                                <Col md={2} componentClass={ControlLabel}>
+                                    Starting Between:  
+                                </Col>
+                                <Col md={2}>
+                                    <FormGroup >
+                                        <DatePicker style={datePickerWidth} showClearButton={false} />                                        
+                                    </FormGroup>
+                                </Col>
+                                <Col md={1} componentClass={ControlLabel}>AND</Col>
+                                <Col md={2}>
+                                    <FormGroup >
+                                        <DatePicker style={datePickerWidth} showClearButton={false} />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Grid>
                     </Form>
-
-                    <Form inline>
-                        <FormGroup controlId="queryInput">                            
-                            <FormControl componentClass="textarea" placeholder="Query" />
-                        </FormGroup>
-                        <FormGroup controlId="queryResults">                           
-                            <FormControl componentClass="textarea" placeholder="Results" />
-                        </FormGroup>
+                    <br/>
+                    <Form >
+                        <Grid>
+                            <Row>
+                                <Col md={4}>
+                                    <ControlLabel>Query Criteria</ControlLabel>
+                                    <FormGroup controlId="queryInput" >
+                                        <FormControl style={textAreaWidth} componentClass="textarea" placeholder="Query" />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={4}>
+                                    <ControlLabel>Syntax Checker</ControlLabel>
+                                    <FormGroup controlId="queryResults">
+                                        <FormControl style={textAreaWidth} componentClass="textarea" placeholder="Results" />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Grid>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -69,6 +96,8 @@ var QueueResetByDateRange = React.createClass({
     }
 });
 
-const datePickerWidth = { width: '400px' };
+const datePickerWidth = { maxWidth: '200px' };
+
+const textAreaWidth = { maxWidth: '400px', height: '100px' };
 
 export default QueueResetByDateRange;
