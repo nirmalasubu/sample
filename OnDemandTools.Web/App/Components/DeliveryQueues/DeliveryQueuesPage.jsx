@@ -6,6 +6,7 @@ import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
 import PageHeader from 'Components/Common/PageHeader';
 
 
+
 class Queue extends React.Component {
 
     constructor(props) {

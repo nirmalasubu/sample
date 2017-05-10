@@ -4,6 +4,7 @@ import Axios from 'axios';
 
 // Future  we get data through Axios or fetch
 const  queue= [];
+const  notificationHistory=[];
 
 export const fetchQueuesSuccess = (queues) => {
     return {
@@ -12,11 +13,32 @@ export const fetchQueuesSuccess = (queues) => {
     }
 };
 
+
 export const fetchQueues = () => {
     return (dispatch) => {
         return Axios.get('/api/deliveryqueue')        
           .then(response => { 
               dispatch(fetchQueuesSuccess(response.data))
+          })
+          .catch(error => {
+              throw(error);
+          });
+    };
+};
+
+
+export const fetchNotificationHistorySuccess = (notificationHistory) => {
+    return {
+        type: actionTypes.FETCH_NOTIFICATIONHISTORY_SUCCESS,
+        notificationHistory
+    }
+};
+
+export const fetchNotificationHistory = (name) => {
+    return (dispatch) => {
+        return Axios.get('/api/deliveryqueue')        
+          .then(response => { 
+              dispatch(fetchNotificationHistorySuccess(response.data))
           })
           .catch(error => {
               throw(error);
