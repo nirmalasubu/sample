@@ -46,6 +46,12 @@ export const fetchNotificationHistory = (name) => {
     };
 };
 
+export const clearNotificationHistory = (name) => {
+    return (dispatch) => {
+        fetchNotificationHistorySuccess(notificationHistory)         
+    };
+};
+
 export const resetQueues = (name) => {
     return Axios.post('/api/deliveryqueue/reset/' + name)        
           .then(response => { 

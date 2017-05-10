@@ -6,10 +6,11 @@ import { ModalBody } from 'react-bootstrap';
 import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
-import {fetchNotificationHistory} from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import { fetchNotificationHistory, clearNotificationHistory } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 @connect((store) => {
     return {
@@ -23,18 +24,10 @@ class QueueNotificationHistory extends React.Component {
     }
     //called on the model load
     resetGrid(id) {
-       console.log(id);
-       this.props.dispatch(fetchNotificationHistory(id));
+        this.props.dispatch(clearNotificationHistory(id));
+        this.props.dispatch(fetchNotificationHistory(id));
     }
-    render () {
-
-let myTest = null;
-if (this.props.notificationHistory.length>0) {
-      myTest = <p> {this.props.notificationHistory[0].airingId} </p>
-    } else {
-      myTest = <p> Not found </p>
-    }
-
+    render() {
         return (
             <Modal onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
@@ -45,11 +38,13 @@ if (this.props.notificationHistory.length>0) {
                 <Modal.Body>
                     <Form inline>
                         <FormGroup controlId="queueName">
-                            <FormControl type="text" ref="filterInput" placeholder="Search by one or more Airing IDs" />
+                            <FormControl type="text" style={textSearchStyle} ref="filterInput" placeholder="Search by one or more Airing IDs" />
                         </FormGroup>
                     </Form>
-
-                    <p>{myTest}</p>
+                    <BootstrapTable data={this.props.notificationHistory} striped hover>
+                        <TableHeaderColumn isKey dataField='airingId'>Airing Id</TableHeaderColumn>
+                        <TableHeaderColumn dataField='dateTime'>Processed Time</TableHeaderColumn>
+                    </BootstrapTable>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Close</Button>
@@ -58,4 +53,6 @@ if (this.props.notificationHistory.length>0) {
         )
     }
 }
+
+const textSearchStyle = { width: '400px' };
 export default QueueNotificationHistory;
