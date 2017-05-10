@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Nancy.Responses;
+using System.IO;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -75,6 +77,16 @@ namespace OnDemandTools.API.v1.Routes
 
                 // Return result
                 return Response.AsJson(jo);
+            });
+
+
+             Get("/loaderio-29b8309d28125600c3242fe032077dc3", x =>
+            {
+                var file = new FileStream("loaderio-29b8309d28125600c3242fe032077dc3.txt", FileMode.Open);
+                string fileName = "loaderio-29b8309d28125600c3242fe032077dc3.txt";
+
+                var response = new StreamResponse(() => file, MimeTypes.GetMimeType(fileName));
+                return response.AsAttachment(fileName);
             });
         }
 
