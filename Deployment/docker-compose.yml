@@ -75,7 +75,7 @@ services:
     links:
       - odt-api:apihost 
   
-  volume-tests:
+  quick-test:
     stdin_open: true
     tty: true
     env_file:
@@ -83,5 +83,5 @@ services:
       - ./env/jobs.env
     build:
       context: ../
-      dockerfile: Dockerfile.volume.tests      
+      dockerfile: Dockerfile.quick.test
     
