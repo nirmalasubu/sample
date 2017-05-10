@@ -11,10 +11,11 @@ import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormC
 import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import Moment from 'moment';
 
 @connect((store) => {
     return {
-        notificationHistory: store.notificationHistory,
+        notificationHistory: store.notificationHistory
     };
 })
 class QueueNotificationHistory extends React.Component {
@@ -27,9 +28,24 @@ class QueueNotificationHistory extends React.Component {
         this.props.dispatch(clearNotificationHistory(id));
         this.props.dispatch(fetchNotificationHistory(id));
     }
+    airingIdFormat(val, row) {
+        return <a href="" title={row.message} target="_blank"> {val} </a>
+    }
+
+    dateFormat(val, row) {
+        var formattedDate = Moment(val).format('lll');
+        return <div>{formattedDate}</div>
+    }
+    actionsFormat(val) {
+        return <div>
+            <Button class="btn-xs btn-link"
+                title="Airing will be reset and notifications will be delivered again"
+            >Resend</Button>
+        </div >
+    }
     render() {
         return (
-            <Modal onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
+            <Modal bsSize="large" onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <p>Notification History for {this.props.data.queueDetails.friendlyName}  <i title="The list contains the 50 most recent processed notifications over the last 7 days" class="fa fa-info-circle" aria-hidden="true"></i></p>
@@ -41,9 +57,10 @@ class QueueNotificationHistory extends React.Component {
                             <FormControl type="text" style={textSearchStyle} ref="filterInput" placeholder="Search by one or more Airing IDs" />
                         </FormGroup>
                     </Form>
-                    <BootstrapTable data={this.props.notificationHistory} striped hover>
-                        <TableHeaderColumn isKey dataField='airingId'>Airing Id</TableHeaderColumn>
-                        <TableHeaderColumn dataField='dateTime'>Processed Time</TableHeaderColumn>
+                    <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
+                        <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat} >Airing Id</TableHeaderColumn>
+                        <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat}>Processed Time</TableHeaderColumn>
+                        <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat}>Actions</TableHeaderColumn>
                     </BootstrapTable>
                 </Modal.Body>
                 <Modal.Footer>
