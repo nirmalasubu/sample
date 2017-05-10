@@ -32,7 +32,7 @@ class QueueNotificationHistory extends React.Component {
             <Modal onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <p>Notification History for {this.props.data.queueDetails.friendlyName}</p>
+                        <p>Notification History for {this.props.data.queueDetails.friendlyName}  <i title="The list contains the 50 most recent processed notifications over the last 7 days" class="fa fa-info-circle" aria-hidden="true"></i></p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
