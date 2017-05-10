@@ -41,10 +41,10 @@ class QueueNotificationHistory extends React.Component {
         console.log(val);
         console.log("fsdfsd");
     }
-    actionsFormat(val) {
+    actionsFormat(airingId) {
         return <div>
             <Button class="btn-xs btn-link"
-                title="Airing will be reset and notifications will be delivered again"  onClick={this.alertData.bind(this,'airingId')}
+                title="Airing will be reset and notifications will be delivered again"  onClick={this.alertData.bind(this,airingId)}
             >Resend</Button>
         </div >
     }
