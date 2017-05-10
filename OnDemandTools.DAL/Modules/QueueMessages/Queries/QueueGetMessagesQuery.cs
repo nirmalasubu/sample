@@ -41,6 +41,15 @@ namespace OnDemandTools.DAL.Modules.QueueMessages.Queries
             return messages.AsQueryable();
         }
 
+        public IQueryable<HistoricalMessage> GetBy(string remoteQueueName, int limit)
+        {
+            var query = Query.EQ("RemoteQueueName", remoteQueueName);
+            
+            var messages = _collection.Find(query);
+
+            return messages.AsQueryable().OrderByDescending(e=>e.AiringId).Take(limit);
+        }
+
         public IQueryable<HistoricalMessage> GetByMediaId(string mediaId, string remoteQueueName)
         {
             var query = Query.And(Query.EQ("RemoteQueueName", remoteQueueName), Query.EQ("MediaId", mediaId));

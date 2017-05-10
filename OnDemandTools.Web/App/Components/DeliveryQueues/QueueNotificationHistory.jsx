@@ -29,8 +29,8 @@ class QueueNotificationHistory extends React.Component {
     render () {
 
 let myTest = null;
-    if (this.props.notificationHistory.length>0) {
-      myTest = <p> {this.props.notificationHistory[0].name} </p>
+if (this.props.notificationHistory.length>0) {
+      myTest = <p> {this.props.notificationHistory[0].airingId} </p>
     } else {
       myTest = <p> Not found </p>
     }

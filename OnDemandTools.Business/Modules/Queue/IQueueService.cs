@@ -161,6 +161,14 @@ namespace OnDemandTools.Business.Modules.Queue
         List<HistoricalMessage> GetAllMessagesDeliveredForAiringId(string airingId, string queueName);
 
         /// <summary>
+        /// Get the top 50 Messages for the queue
+        /// </summary>
+        /// <param name="queueName"></param>
+        /// <returns></returns>
+        List<HistoricalMessage> GetTop50MessagesDeliveredForQueue(string queueName);
+
+
+        /// <summary>
         /// Get all the queues
         /// </summary>
         /// <returns>list of queues</returns>

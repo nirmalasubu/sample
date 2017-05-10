@@ -10,6 +10,7 @@ namespace OnDemandTools.DAL.Modules.QueueMessages
         long GetPendingDeliveryCountBy(string queueName);
 
         IQueryable<HistoricalMessage> GetBy(string remoteQueueName, DateTime since, int limit);
+        IQueryable<HistoricalMessage> GetBy(string remoteQueueName, int limit);
         IQueryable<HistoricalMessage> GetBy(string remoteQueueName, string airingId);
         IQueryable<HistoricalMessage> GetByMediaId(string remoteQueueName, string mediaId);
     }

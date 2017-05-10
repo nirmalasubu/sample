@@ -36,7 +36,7 @@ export const fetchNotificationHistorySuccess = (notificationHistory) => {
 
 export const fetchNotificationHistory = (name) => {
     return (dispatch) => {
-        return Axios.get('/api/deliveryqueue')        
+        return Axios.get('/api/deliveryqueue/notificationhistory/'+name)        
           .then(response => { 
               dispatch(fetchNotificationHistorySuccess(response.data))
           })

@@ -50,6 +50,14 @@ namespace OnDemandTools.Web.Controllers
             return deliveryQueueModel;
         }
 
+        [Authorize]
+        [HttpGet("notificationhistory/{name}")]
+        public IEnumerable<HistoricalMessage> GetNotificationHistory(string name)
+        {
+            List<HistoricalMessage> messages = _queueSvc.GetTop50MessagesDeliveredForQueue(name);
+            return messages;
+        }
+
         // POST api/values
         [Authorize]
         [HttpPost("reset/{name}")]
