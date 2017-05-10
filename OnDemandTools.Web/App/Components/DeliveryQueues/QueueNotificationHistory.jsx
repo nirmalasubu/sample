@@ -36,10 +36,15 @@ class QueueNotificationHistory extends React.Component {
         var formattedDate = Moment(val).format('lll');
         return <div>{formattedDate}</div>
     }
+    
+    alertData(val) {
+        console.log(val);
+        console.log("fsdfsd");
+    }
     actionsFormat(val) {
         return <div>
             <Button class="btn-xs btn-link"
-                title="Airing will be reset and notifications will be delivered again"
+                title="Airing will be reset and notifications will be delivered again"  onClick={this.alertData.bind(this,'airingId')}
             >Resend</Button>
         </div >
     }
@@ -60,7 +65,7 @@ class QueueNotificationHistory extends React.Component {
                     <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
                         <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat} >Airing Id</TableHeaderColumn>
                         <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat}>Processed Time</TableHeaderColumn>
-                        <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat}>Actions</TableHeaderColumn>
+                        <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
                     </BootstrapTable>
                 </Modal.Body>
                 <Modal.Footer>
