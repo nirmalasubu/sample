@@ -125,7 +125,7 @@ namespace OnDemandTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache, Serilog.ILogger logger)
         {
 
             // Add serilog and catch any internal errors
@@ -185,7 +185,7 @@ namespace OnDemandTools.Web
             });
           
             ConnectionManager = provider.GetService<IConnectionManager>();
-            AutomaticViewRefresher automaticViewRefresher = new AutomaticViewRefresher(deliveryQueueData);
+            AutomaticViewRefresher automaticViewRefresher = new AutomaticViewRefresher(deliveryQueueData,logger);
             automaticViewRefresher.Start(10);
         }
        

@@ -1,4 +1,5 @@
 ﻿using OnDemandTools.Web.Models.DeliveryQueue;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace OnDemandTools.Web.SignalR
         private Timer _timer;
         private int _intervalInMilliseconds;
         public readonly IDeliveryQueueData viewformatter;
-        public AutomaticViewRefresher(IDeliveryQueueData viewformatter)
+        ILogger _logger;
+        public AutomaticViewRefresher(IDeliveryQueueData viewformatter, ILogger logger)
         {
             this.viewformatter = viewformatter;
+            _logger = logger;
         }
 
         public void Start(int intervalInSeconds)
@@ -22,10 +25,11 @@ namespace OnDemandTools.Web.SignalR
             try
             {
                 _intervalInMilliseconds = intervalInSeconds * 60;
-                _timer = new Timer(Callback, null, _intervalInMilliseconds, Timeout.Infinite);
+                _timer = new Timer(Callback, null, _intervalInMilliseconds, Timeout.Infinite);               
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error in loading signalR ");
                 throw ex;
             }
         }
