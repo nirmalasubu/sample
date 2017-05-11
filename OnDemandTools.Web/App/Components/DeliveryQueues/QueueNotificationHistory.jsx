@@ -67,7 +67,7 @@ class QueueNotificationHistory extends React.Component {
                     </Form>
                     <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
                         <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat.bind(this)} >Airing Id</TableHeaderColumn>
-                        <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat.bind(this)}>Processed Time</TableHeaderColumn>
+                        <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat.bind(this)}>Processed Date Time</TableHeaderColumn>
                         <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
                     </BootstrapTable>
                 </Modal.Body>
