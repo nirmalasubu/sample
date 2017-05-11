@@ -3,6 +3,7 @@ import { PageHeader } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { fetchUser } from 'Actions/User/UserActions';
+import { fetchConfig } from 'Actions/Config/ConfigActions';
 import $ from 'jquery';
 
 @connect((store) => {
@@ -17,7 +18,8 @@ class Header extends React.Component {
 
     //called on the page load
     componentDidMount() {
-        this.props.dispatch(fetchUser())
+        this.props.dispatch(fetchUser());
+        this.props.dispatch(fetchConfig());
     }
 
     render() {

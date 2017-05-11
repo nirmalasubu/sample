@@ -15,7 +15,8 @@ import Moment from 'moment';
 
 @connect((store) => {
     return {
-        notificationHistory: store.notificationHistory
+        notificationHistory: store.notificationHistory,
+        config: store.config
     };
 })
 class QueueNotificationHistory extends React.Component {
@@ -23,10 +24,8 @@ class QueueNotificationHistory extends React.Component {
     constructor(props) {
         super(props);
     }
-    handleChange()
-    {
+    handleChange(){
         this.props.dispatch(fetchNotificationHistoryByAiringId(this.props.data.queueDetails.name,this.inputQueueName.value));
-
     }
     //called on the model load
     resetGrid(id) {
@@ -34,7 +33,7 @@ class QueueNotificationHistory extends React.Component {
         this.props.dispatch(fetchNotificationHistory(id));
     }
     airingIdFormat(val, row) {
-        return <a href={"http://digital-fulfillment-qa/?assetIds=" + val } title={row.message} target="_blank"> {val} </a>
+        return <a href={this.props.config.digitalFulfillmentUrl + "?assetIds=" + val } title={row.message} target="_blank"> {val} </a>
     }
 
     dateFormat(val, row) {
@@ -67,8 +66,8 @@ class QueueNotificationHistory extends React.Component {
                         </FormGroup>
                     </Form>
                     <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
-                        <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat} >Airing Id</TableHeaderColumn>
-                        <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat}>Processed Time</TableHeaderColumn>
+                        <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat.bind(this)} >Airing Id</TableHeaderColumn>
+                        <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat.bind(this)}>Processed Time</TableHeaderColumn>
                         <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
                     </BootstrapTable>
                 </Modal.Body>

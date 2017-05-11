@@ -28,7 +28,12 @@ namespace OnDemandTools.Common.Configuration
         public AzureAd AzureAd { get; set; }
         public Jobs Jobs { get; set; }
         public Redis Redis { get; set; }
-        
+        public PortalSettings PortalSettings { get; set; }
+    }
+
+    public class PortalSettings
+    {
+        public string DigitalFulfillmentUrl { get; set; }
     }
 
     public class CloudQueue
@@ -137,4 +142,6 @@ namespace OnDemandTools.Common.Configuration
         public string InstanceName { get; set; }
         
     }
+
+    
 }
