@@ -12,6 +12,7 @@ namespace OnDemandTools.DAL.Modules.QueueMessages
         IQueryable<HistoricalMessage> GetBy(string remoteQueueName, DateTime since, int limit);
         IQueryable<HistoricalMessage> GetBy(string remoteQueueName, int limit);
         IQueryable<HistoricalMessage> GetBy(string remoteQueueName, string airingId);
+        IQueryable<HistoricalMessage> GetBy(string remoteQueueName, List<string> airingIds);
         IQueryable<HistoricalMessage> GetByMediaId(string remoteQueueName, string mediaId);
     }
 

@@ -6,7 +6,7 @@ import { ModalBody } from 'react-bootstrap';
 import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
-import { fetchNotificationHistory, clearNotificationHistory,resetQueuesByAiringId } from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import { fetchNotificationHistory, clearNotificationHistory,resetQueuesByAiringId,fetchNotificationHistoryByAiringId } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
@@ -23,13 +23,18 @@ class QueueNotificationHistory extends React.Component {
     constructor(props) {
         super(props);
     }
+    handleChange()
+    {
+        this.props.dispatch(fetchNotificationHistoryByAiringId(this.props.data.queueDetails.name,this.inputQueueName.value));
+
+    }
     //called on the model load
     resetGrid(id) {
         this.props.dispatch(clearNotificationHistory(id));
         this.props.dispatch(fetchNotificationHistory(id));
     }
     airingIdFormat(val, row) {
-        return <a href="" title={row.message} target="_blank"> {val} </a>
+        return <a href={"http://digital-fulfillment-qa/?assetIds=" + val } title={row.message} target="_blank"> {val} </a>
     }
 
     dateFormat(val, row) {
@@ -58,7 +63,7 @@ class QueueNotificationHistory extends React.Component {
                 <Modal.Body>
                     <Form inline>
                         <FormGroup controlId="queueName">
-                            <FormControl type="text" style={textSearchStyle} ref="filterInput" placeholder="Search by one or more Airing IDs" />
+                            <FormControl type="text" inputRef = {(input) => this.inputQueueName = input } onChange={this.handleChange.bind(this)} style={textSearchStyle} ref="filterInput" placeholder="Search by one or more Airing IDs" />
                         </FormGroup>
                     </Form>
                     <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
@@ -75,5 +80,5 @@ class QueueNotificationHistory extends React.Component {
     }
 }
 
-const textSearchStyle = { width: '400px' };
+const textSearchStyle = { width: '835px', marginLeft:'10px', maxWidth: '835px' };
 export default QueueNotificationHistory;

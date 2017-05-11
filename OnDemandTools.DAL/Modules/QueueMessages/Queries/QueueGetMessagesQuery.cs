@@ -6,6 +6,7 @@ using OnDemandTools.DAL.Modules.Airings.Model;
 using System;
 using System.Linq;
 using OnDemandTools.DAL.Modules.QueueMessages.Model;
+using System.Collections.Generic;
 
 namespace OnDemandTools.DAL.Modules.QueueMessages.Queries
 {
@@ -35,6 +36,15 @@ namespace OnDemandTools.DAL.Modules.QueueMessages.Queries
         public IQueryable<HistoricalMessage> GetBy(string remoteQueueName, string airingId)
         {
             var query = Query.And(Query.EQ("RemoteQueueName", remoteQueueName), Query.EQ("AiringId", airingId));
+
+            var messages = _collection.Find(query);
+
+            return messages.AsQueryable();
+        }
+
+        public IQueryable<HistoricalMessage> GetBy(string remoteQueueName, List<string> airingIds)
+        {
+            var query = Query.And(Query.EQ("RemoteQueueName", remoteQueueName), Query.In("AiringId", new BsonArray(airingIds)));
 
             var messages = _collection.Find(query);
 

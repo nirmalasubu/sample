@@ -263,6 +263,12 @@ namespace OnDemandTools.Business.Modules.Queue
             return historicalMessages.ToBusinessModel<List<HistoricalMessage>, List<BLModel.HistoricalMessage>>();
         }
 
+        public List<BLModel.HistoricalMessage> GetAllMessagesDeliveredForAiringId(List<string> airingIds, string queueName)
+        {
+            var historicalMessages = queueMessages.GetBy(queueName, airingIds).ToList();
+            return historicalMessages.ToBusinessModel<List<HistoricalMessage>, List<BLModel.HistoricalMessage>>();
+        }
+
         public List<BLModel.HistoricalMessage> GetTop50MessagesDeliveredForQueue(string queueName)
         {
             var historicalMessages = queueMessages.GetBy(queueName, DateTime.UtcNow.AddDays(-7), 50).ToList();

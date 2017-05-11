@@ -10,6 +10,7 @@ using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Web.Models.DeliveryQueue;
 using OnDemandTools.Common.Model;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -57,6 +58,20 @@ namespace OnDemandTools.Web.Controllers
             List<HistoricalMessage> messages = _queueSvc.GetTop50MessagesDeliveredForQueue(name);
             return messages;
         }
+
+        [Authorize]
+        [HttpGet("notificationhistory/{name}/{airingids}")]
+        public IEnumerable<HistoricalMessage> GetNotificationHistory(string name, string airingids)
+        {
+            //clears the empty spaces
+            airingids = airingids.Replace(" ", string.Empty);
+
+            List<string> airingIdsRequest = Regex.Split(airingids, ",").ToList();
+
+            List<HistoricalMessage> messages = _queueSvc.GetAllMessagesDeliveredForAiringId(airingIdsRequest, name);
+            return messages;
+        }
+
 
         // POST api/values
         [Authorize]
