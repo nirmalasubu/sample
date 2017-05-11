@@ -41,8 +41,15 @@ class QueueNotificationHistory extends React.Component {
         return <div>{formattedDate}</div>
     }
     
-    resendAiringToQueue(val) {
-        this.props.dispatch(resetQueuesByAiringId(this.props.data.queueDetails.name, val));        
+    resendAiringToQueue(val,control) {
+        let promise =  resetQueuesByAiringId(this.props.data.queueDetails.name, val);  
+        
+        promise.then(newqueue => {
+            console.log("success");
+        })
+        .catch(error => {
+            console.log("error");
+        });
     }
     actionsFormat(airingId) {
         return <div>
