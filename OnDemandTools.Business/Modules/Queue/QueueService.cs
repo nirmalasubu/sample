@@ -152,6 +152,16 @@ namespace OnDemandTools.Business.Modules.Queue
             queueCommandHelper.ResetFor(queueName);
         }
 
+        /// <summary>
+        /// Flags re deliver for given queue name and airing id
+        /// </summary>
+        /// <param name="queueName">the queue name</param>
+        /// <param name="airingId">the airing Id</param>
+        public void FlagForRedelivery(string queueName, string airingId)
+        {
+            queueCommandHelper.ResetFor(queueName, airingId);
+        }
+
         public BLModel.Queue GetByApiKey(string apiKey)
         {
             return
@@ -255,7 +265,7 @@ namespace OnDemandTools.Business.Modules.Queue
 
         public List<BLModel.HistoricalMessage> GetTop50MessagesDeliveredForQueue(string queueName)
         {
-            var historicalMessages = queueMessages.GetBy(queueName, 50).ToList();
+            var historicalMessages = queueMessages.GetBy(queueName, DateTime.UtcNow.AddDays(-7), 50).ToList();
             return historicalMessages.ToBusinessModel<List<HistoricalMessage>, List<BLModel.HistoricalMessage>>();
         }
 
@@ -277,7 +287,7 @@ namespace OnDemandTools.Business.Modules.Queue
             {
                 queue.PendingDeliveryCount = airingQueryHelper.GetPendingDeliveryCountBy(queue.Name);
             }
-             return queues;
+            return queues;
         }
     }
 }

@@ -185,6 +185,24 @@ namespace OnDemandTools.DAL.Modules.Queue.Command
         }
 
         /// <summary>
+        /// reset queues with queueName
+        /// </summary>
+        /// <param name="queueName">The queue name.</param>
+        /// <param name="airingId">The airing Id.</param>
+        public void ResetFor(string queueName, string airingId)
+        {
+            if (string.IsNullOrEmpty(queueName))
+                return;
+
+            IMongoQuery query = Query.And(Query.EQ("AssetId", airingId), 
+                Query.Or(Query.In("DeliveredTo", new BsonArray(new List<string> { queueName })),
+                                            Query.In("IgnoredQueues", new BsonArray(new List<string> { queueName }))));
+
+            _currentAirings.Update(query, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+            _deleteAirings.Update(query, Update.Pull("DeliveredTo", queueName), UpdateFlags.Multi);
+        }
+
+        /// <summary>
         /// Clear the pending delivery queues with queueName
         /// </summary>
         /// <param name="queueName">The queue name.</param>

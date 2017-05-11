@@ -69,6 +69,15 @@ namespace OnDemandTools.Web.Controllers
 
         // POST api/values
         [Authorize]
+        [HttpPost("reset/{name}/{airingId}")]
+        public string ResendQueue(string name, string airingId)
+        {
+            _queueSvc.FlagForRedelivery(name, airingId);
+            return "Success";
+        }
+
+        // POST api/values
+        [Authorize]
         [HttpDelete("purge/{name}")]
         public void PurgeQueue(string name)
         {

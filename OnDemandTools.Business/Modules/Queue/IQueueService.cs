@@ -80,6 +80,13 @@ namespace OnDemandTools.Business.Modules.Queue
         void FlagForRedelivery(string queueName);
 
         /// <summary>
+        /// Flags redeliver for given Queue and AiringId
+        /// </summary>
+        /// <param name="queueName"></param>
+        /// <param name="airingId"></param>
+        void FlagForRedelivery(string queueName, string airingId);
+
+        /// <summary>
         /// Gets queue by API key.
         /// </summary>
         /// <param name="apiKey">The API key.</param>

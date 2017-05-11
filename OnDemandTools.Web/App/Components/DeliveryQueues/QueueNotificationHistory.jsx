@@ -6,7 +6,7 @@ import { ModalBody } from 'react-bootstrap';
 import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
-import { fetchNotificationHistory, clearNotificationHistory } from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import { fetchNotificationHistory, clearNotificationHistory,resetQueuesByAiringId } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
@@ -37,14 +37,13 @@ class QueueNotificationHistory extends React.Component {
         return <div>{formattedDate}</div>
     }
     
-    alertData(val) {
-        console.log(val);
-        console.log("fsdfsd");
+    resendAiringToQueue(val) {
+        this.props.dispatch(resetQueuesByAiringId(this.props.data.queueDetails.name, val));        
     }
     actionsFormat(airingId) {
         return <div>
             <Button class="btn-xs btn-link"
-                title="Airing will be reset and notifications will be delivered again"  onClick={this.alertData.bind(this,airingId)}
+                title="Airing will be reset and notifications will be delivered again"  onClick={this.resendAiringToQueue.bind(this,airingId)}
             >Resend</Button>
         </div >
     }
