@@ -4,7 +4,7 @@ import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
 import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
 import PageHeader from 'Components/Common/PageHeader';
-
+import 'react-notifications/lib/notifications.css';
 
 
 class Queue extends React.Component {

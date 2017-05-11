@@ -12,6 +12,7 @@ import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Moment from 'moment';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 @connect((store) => {
     return {
@@ -44,11 +45,11 @@ class QueueNotificationHistory extends React.Component {
     resendAiringToQueue(val,control) {
         let promise =  resetQueuesByAiringId(this.props.data.queueDetails.name, val);  
         
-        promise.then(newqueue => {
-            console.log("success");
+        promise.then(message => {
+            NotificationManager.success('Airing '+ val +' Successfully resent.', 'Success' );
         })
         .catch(error => {
-            console.log("error");
+            NotificationManager.error('Airing '+ val +' failed to resend. ' + error, 'Failure' );
         });
     }
     actionsFormat(airingId) {
@@ -77,6 +78,7 @@ class QueueNotificationHistory extends React.Component {
                         <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat.bind(this)}>Processed Date Time</TableHeaderColumn>
                         <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
                     </BootstrapTable>
+                    <NotificationContainer/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Close</Button>
