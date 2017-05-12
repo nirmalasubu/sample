@@ -27,6 +27,7 @@ using AutoMapper;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Exceptions;
 using OnDemandTools.Business.Modules.Destination;
+using System.Diagnostics;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -55,50 +56,111 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var options = GetOptionsFromQueryString();
 
-                var airing = airingSvc.GetBy((string)_.airingId);
-                var user = Context.User();
-                FilterDestinations(airing, user.Destinations.ToList());
-                ValidateRequest(airing, user.Brands);
+                Dictionary<string, object> k = new Dictionary<string, object>();
+                k.Add("apiKey",Context.User().ApiKey.ToString().Substring(Context.User().ApiKey.ToString().Length - 4));
+                double totalTime = 0;
 
-                var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
-
-                if (options.Contains(Appenders.File.ToString().ToLower()))
-                    airingSvc.AppendFile(ref airingLong);
-
-                if (options.Contains(Appenders.Title.ToString().ToLower()))
-                    airingSvc.AppendTitle(ref airingLong);
-
-                if (options.Contains(Appenders.Series.ToString().ToLower())
-                            && (options.Contains(Appenders.File.ToString().ToLower())))
+                try
                 {
-                    airingSvc.AppendSeries(ref airingLong);
+                    Stopwatch mainTimer = new Stopwatch();
+                    mainTimer.Start();  
+
+                    Stopwatch stepTimer = new Stopwatch();
+                    stepTimer.Start();                
+                    var airing = airingSvc.GetBy((string)_.airingId);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("airingRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    var user = Context.User();
+                    FilterDestinations(airing, user.Destinations.ToList());
+                    ValidateRequest(airing, user.Brands); 
+                    var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("transformationSmallToLongRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.File.ToString().ToLower()))
+                        airingSvc.AppendFile(ref airingLong);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("fileRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Title.ToString().ToLower()))
+                        airingSvc.AppendTitle(ref airingLong);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("titleRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Series.ToString().ToLower())
+                                && (options.Contains(Appenders.File.ToString().ToLower())))
+                    {
+                        airingSvc.AppendSeries(ref airingLong);
+                    }
+                    else if (options.Contains(Appenders.Series.ToString().ToLower()))
+                    {
+                        airingSvc.AppendSeries(ref airingLong);
+                        airingSvc.AppendFileBySeriesId(ref airingLong);
+                    }
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("seriesRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Destination.ToString().ToLower()))
+                        airingSvc.AppendDestinations(ref airingLong);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("destinationRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Change.ToString().ToLower()))
+                        airingSvc.AppendChanges(ref airingLong);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("changeRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    // Append status information if requested
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Status.ToString().ToLower()))
+                        airingSvc.AppendStatus(ref airingLong);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("statusRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    
+                    stepTimer.Restart();
+                    if (options.Contains(Appenders.Package.ToString().ToLower()))
+                        airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("packageRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    stepTimer.Restart();
+                    var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
+                    if (!options.Contains(Appenders.Package.ToString().ToLower()))
+                        model.Options.Packages = null;
+                    stepTimer.Stop();
+                    totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
+                    k.Add("transformationBLVMTime",stepTimer.Elapsed.TotalMilliseconds);
+
+                    mainTimer.Stop();
+                    k.Add("totalTime", mainTimer.Elapsed.TotalMilliseconds);
+                  
+                    logger.Information("airing/{airingId} {@e}", k);             
+          
+                    return model;
                 }
-                else if (options.Contains(Appenders.Series.ToString().ToLower()))
-                {
-                    airingSvc.AppendSeries(ref airingLong);
-                    airingSvc.AppendFileBySeriesId(ref airingLong);
+                catch (System.Exception e)
+                {             
+                    logger.Error(e, "Failure with airing/{airingId} {@e}", new Dictionary<string, object>()
+                                            {{ "apiKey", Context.User().ApiKey.ToString().Substring(Context.User().ApiKey.ToString().Length - 4)}, {"request", this.Request.Url}, { "error", e }   });             
+                    throw e;
                 }
-
-                if (options.Contains(Appenders.Destination.ToString().ToLower()))
-                    airingSvc.AppendDestinations(ref airingLong);
-
-
-                if (options.Contains(Appenders.Change.ToString().ToLower()))
-                    airingSvc.AppendChanges(ref airingLong);
-
-                // Append status information if requested
-                if (options.Contains(Appenders.Status.ToString().ToLower()))
-                    airingSvc.AppendStatus(ref airingLong);
-
-                if (options.Contains(Appenders.Package.ToString().ToLower()))
-                    airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
-
-                var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
-
-                if (!options.Contains(Appenders.Package.ToString().ToLower()))
-                    model.Options.Packages = null;
-
-                return model;
+                
             });
 
 

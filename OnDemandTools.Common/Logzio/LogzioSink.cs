@@ -79,6 +79,15 @@ namespace OnDemandTools.Common.Logzio
             if (curEvent.Exception != null)
                 expando.Exception = curEvent.Exception.StackTrace;
 
+            if(curEvent.Properties.Any())
+            {
+                foreach (KeyValuePair<string, LogEventPropertyValue> kvp in curEvent.Properties)
+                {
+                    Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value.Elements);
+                }
+              
+            }
+
             expando.properties = curEvent.Properties;
             return (JsonConvert.SerializeObject((object)expando, Formatting.None));
 
