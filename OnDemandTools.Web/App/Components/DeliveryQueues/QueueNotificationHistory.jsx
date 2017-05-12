@@ -8,7 +8,6 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { fetchNotificationHistory, clearNotificationHistory,resetQueuesByAiringId,fetchNotificationHistoryByAiringId } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
-import DatePicker from "react-bootstrap-date-picker";
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Moment from 'moment';
