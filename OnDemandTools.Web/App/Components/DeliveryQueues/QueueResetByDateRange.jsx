@@ -13,13 +13,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Moment from 'moment';
 
 var QueueResetByDateRange = React.createClass({
-    getInitialState() {  
+    getInitialState() {
         var iDate = new Moment();
-        return{
+        return {
             validationStartDateState: "",
             validationEndDateState: "",
             validationQueryState: "",
-            disableRunQuery:false,
             queryValue: "",
             deliverCriteria: {
                 name: "",
@@ -30,118 +29,135 @@ var QueueResetByDateRange = React.createClass({
             }
         };
     },
-    modelOpen(){
-        
-    },
-    resetQueue(criteria){ 
-        queueAction.resetQueueByCriteria(criteria);
-        this.props.handleClose();        
-    },
-    handleChangeStartDate(value) { 
-
+    modelOpen() {
+        var iDate = new Moment();
         var criteria = this.state.deliverCriteria;
-
-        criteria.startDateTime = value;
-
-        var mins = value.diff(this.state.endDateTime, 'hours');       
-        if (mins > 0) {
-            criteria.endDateTime = value;
-        }
+        criteria.startDateTime = iDate;
+        criteria.endDateTime = iDate;
+        criteria.query = this.props.data.queueDetails.query;
+        criteria.windowOption = 0;
 
         this.setState({
-            deliverCriteria: criteria
+            deliverCriteria: criteria,
+            validationStartDateState: "",
+            validationEndDateState: ""
         });
+
+        this.validateForm();
     },
-    handleChangeEndDate(value) {
-        var criteria = this.state.deliverCriteria;
-        var mins = value.diff(criteria.startDateTime, 'hours');
-        if (mins > 0) {
-            criteria.endDateTime = value;
+    resetQueue(criteria) {
+        queueAction.resetQueueByCriteria(criteria);
+        this.props.handleClose();
+    },
+    handleRawStartDateChange(value) {
+        this.setState({ validationStartDateState: 'error' });
+    },
+    handleChangeStartDate(value) {
+        if (value == null) {
+            this.setState({ validationStartDateState: 'error' });
+        }
+        else {
+            var criteria = this.state.deliverCriteria;
+            this.setState({ validationStartDateState: '' });
+            criteria.startDateTime = value;
+
+            var mins = value.diff(this.state.endDateTime, 'hours');
+            if (mins > 0) {
+                criteria.endDateTime = value;
+            }
+
             this.setState({
                 deliverCriteria: criteria
             });
         }
     },
-    _onOptionChange(val)
-    {
+    handleRawEndDateChange(value) {
+        this.setState({ validationEndDateState: 'error' });
+    },
+    handleChangeEndDate(value) {
+        if (value == null) {
+            this.setState({ validationEndDateState: 'error' });
+        }
+        else {
+            this.setState({ validationEndDateState: '' });
+
+            var criteria = this.state.deliverCriteria;
+            var mins = value.diff(criteria.startDateTime, 'hours');
+            if (mins > 0) {
+                criteria.endDateTime = value;
+                this.setState({
+                    deliverCriteria: criteria
+                });
+            }
+        }
+    },
+    _onOptionChange(val) {
         var valuess = this.state.deliverCriteria;
         valuess.windowOption = val;
         this.setState({
             deliverCriteria: valuess
         });
     },
-    onQueryChange(event)
-    {      
-        var value =  event.target.value;
+    onQueryChange(event) {
+        var value = event.target.value;
         var criteria = this.state.deliverCriteria;
         criteria.query = value;
         this.setState({
             deliverCriteria: criteria
         });
-        
+
         this.validateForm();
     },
-    validateForm()
-    {
-        var value =  this.state.deliverCriteria.query;
-        var hasError=false;
-        if(value=="") 
-        {
-            hasError=true;
+    validateForm() {
+        var value = this.state.deliverCriteria.query;
+        var hasError = false;
+        if (value == "") {
+            hasError = true;
         }
-        else
-        {
+        else {
             try {
-                JSON.parse(value);              
+                JSON.parse(value);
             } catch (e) {
-                hasError=true;
+                hasError = true;
             }
         }
-
-        this.setState({
-            validationQueryState: hasError ?  "error" : "",
-            disableRunQuery: hasError
-        });
-
+        this.setState({ validationQueryState: hasError ? 'error' : '' });
     },
-    _onSubmitForm()
-    {
-        if(this.state.validationStartDateState=="error"||this.state.validationEndDateState=="error"||this.state.validationQueryState=="error")
-        {
+    _onSubmitForm() {
+        if (this.state.validationStartDateState == "error" || this.state.validationEndDateState == "error" || this.state.validationQueryState == "error") {
             console.log("validation error");
             return false;
         }
-        else
-        {
+        else {
             var valuess = this.state.deliverCriteria;
             valuess.name = this.props.data.queueDetails.name;
-            valuess.query = valuess.query==="initialstage"?this.state.queryValue : valuess.query;
+            valuess.query = valuess.query === "initialstage" ? this.state.queryValue : valuess.query;
             this.setState({
                 deliverCriteria: valuess
             });
             this.resetQueue(this.state.deliverCriteria);
-        }            
+        }
     },
-render: function() {         
-    this.state.queryValue = this.props.data.queueDetails.query;
-    var dateLabel = (this.state.deliverCriteria.windowOption===0)?"Starting Between :":"Availability Between :";
+    render: function () {
+        this.state.queryValue = this.props.data.queueDetails.query;
+        var dateLabel = (this.state.deliverCriteria.windowOption === 0) ? "Starting Between :" : "Availability Between :";
 
-    return (
-       <Modal bsSize="large" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
-                 <Modal.Header closeButton>
+        return (
+            <Modal bsSize="large" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
+                <Modal.Header closeButton>
                     <Modal.Title>
                         <p>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</p>
                     </Modal.Title>
-                </Modal.Header> 
-                <Form>        
-                <Modal.Body>
-                    <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. <br/><br/> </ControlLabel>
-                    
+                </Modal.Header>
+                <Form>
+                    <Modal.Body>
+                        <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. <br /><br /> </ControlLabel>
+
                         <Grid>
                             <Row>
                                 <Col md={2} componentClass={ControlLabel}>
-                                    Delivery Airings where: 
-                                </Col>                            
+                                    Delivery Airings where:
+                                </Col>
                                 <Col md={4}>
                                     <FormGroup>
                                         <InputGroup>
@@ -156,7 +172,7 @@ render: function() {
                                 </Col>
                             </Row>
                         </Grid>
-                    <br/>
+                        <br />
                         <Grid>
                             <Row>
                                 <Col md={2} componentClass={ControlLabel}>
@@ -164,24 +180,29 @@ render: function() {
                                 </Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationStartDateState} >
-                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeStartDate} />                                        
+                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeStartDate}
+                                            onChangeRaw={(event) => this.handleRawStartDateChange(event.target.value)}
+                                            className={"form-control"}
+                                        />
                                     </FormGroup>
                                 </Col>
                                 <Col md={1} componentClass={ControlLabel}>AND</Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationEndDateState}>
-                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate} />                                        
+                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate}
+                                            onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
+                                            className={"form-control"} />
                                     </FormGroup>
                                 </Col>
                             </Row>
                         </Grid>
-                    <br/>
+                        <br />
                         <Grid>
                             <Row>
                                 <Col md={4}>
                                     <ControlLabel>Query Criteria <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
-                                        <FormControl style={textAreaWidth} onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query==="initialstage"?this.state.queryValue:this.state.deliverCriteria.query)} componentClass="textarea" />
+                                        <FormControl style={textAreaWidth} onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query === "initialstage" ? this.state.queryValue : this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
                                 </Col>
                                 <Col md={4}>
@@ -192,14 +213,15 @@ render: function() {
                                 </Col>
                             </Row>
                         </Grid>
-                    
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button disabled={this.state.disableRunQuery} onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
-                </Modal.Footer>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.props.handleClose}>Cancel</Button>
+                        <Button disabled={(this.state.validationEndDateState != '' || this.state.validationStartDateState != '' || this.state.validationQueryState != '')}
+                            onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
+                    </Modal.Footer>
                 </Form>
-           </Modal>
+            </Modal>
         )
     }
 });
