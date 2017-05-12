@@ -19,6 +19,7 @@ var QueueResetByDateRange = React.createClass({
             validationStartDateState: "",
             validationEndDateState: "",
             validationQueryState: "",
+            disableRunQuery:false,
             queryValue: "",
             deliverCriteria: {
                 name: "",
@@ -28,6 +29,9 @@ var QueueResetByDateRange = React.createClass({
                 endDateTime: iDate
             }
         };
+    },
+    modelOpen(){
+        
     },
     resetQueue(criteria){ 
         queueAction.resetQueueByCriteria(criteria);
@@ -68,31 +72,43 @@ var QueueResetByDateRange = React.createClass({
     },
     onQueryChange(event)
     {      
-        var valuess = this.state.deliverCriteria;
-        valuess.query = event.target.value;
+        var value =  event.target.value;
+        var criteria = this.state.deliverCriteria;
+        criteria.query = value;
         this.setState({
-            deliverCriteria: valuess
+            deliverCriteria: criteria
         });
+        
+        this.validateForm();
+    },
+    validateForm()
+    {
+        var value =  this.state.deliverCriteria.query;
+        var hasError=false;
+        if(value=="") 
+        {
+            hasError=true;
+        }
+        else
+        {
+            try {
+                JSON.parse(value);              
+            } catch (e) {
+                hasError=true;
+            }
+        }
+
+        this.setState({
+            validationQueryState: hasError ?  "error" : "",
+            disableRunQuery: hasError
+        });
+
     },
     _onSubmitForm()
     {
-        if(this.state.deliverCriteria.startDateTime=="")
-            this.state.validationStartDateState="error";
-        else
-            this.state.validationStartDateState="";
-
-        if(this.state.deliverCriteria.endDateTime=="")
-            this.state.validationEndDateState="error";
-        else
-            this.state.validationEndDateState="";
-
-        if(this.state.deliverCriteria.query=="")
-            this.state.validationQueryState="error";
-        else
-            this.state.validationQueryState="";
-
         if(this.state.validationStartDateState=="error"||this.state.validationEndDateState=="error"||this.state.validationQueryState=="error")
         {
+            console.log("validation error");
             return false;
         }
         else
@@ -106,12 +122,12 @@ var QueueResetByDateRange = React.createClass({
             this.resetQueue(this.state.deliverCriteria);
         }            
     },
-    render: function() {         
-        this.state.queryValue = this.props.data.queueDetails.query;
-        var dateLabel = (this.state.deliverCriteria.windowOption===0)?"Starting Between :":"Availability Between :";
+render: function() {         
+    this.state.queryValue = this.props.data.queueDetails.query;
+    var dateLabel = (this.state.deliverCriteria.windowOption===0)?"Starting Between :":"Availability Between :";
 
-        return (
-           <Modal bsSize="large" show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
+    return (
+       <Modal bsSize="large" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
                  <Modal.Header closeButton>
                     <Modal.Title>
                         <p>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</p>
@@ -180,7 +196,7 @@ var QueueResetByDateRange = React.createClass({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
+                    <Button disabled={this.state.disableRunQuery} onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
                 </Modal.Footer>
                 </Form>
            </Modal>
