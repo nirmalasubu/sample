@@ -47,7 +47,6 @@ export const fetchNotificationHistory = (name) => {
 };
 
 export const fetchNotificationHistoryByAiringId = (name, airingIds) => {
-    console.log(airingIds);
     return (dispatch) => {
         return Axios.get('/api/deliveryqueue/notificationhistory/'+name + '/' + airingIds)
             .then(response => {

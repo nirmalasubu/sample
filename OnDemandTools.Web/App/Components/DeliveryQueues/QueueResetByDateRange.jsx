@@ -76,7 +76,6 @@ var QueueResetByDateRange = React.createClass({
     },
     _onSubmitForm()
     {
-        console.log("submit");
         if(this.state.deliverCriteria.startDateTime=="")
             this.state.validationStartDateState="error";
         else
