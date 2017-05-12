@@ -85,6 +85,16 @@ export const resetQueuesByAiringId = (name, airingId) => {
         });
 };
 
+export const resetQueueByCriteria = (criteria) => {
+    return Axios.post('/api/deliveryqueue/queue/messages/deliver', criteria)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+
 export const purgeQueues = (name) => {
     return Axios.delete('/api/deliveryqueue/purge/' + name)
         .then(response => {
