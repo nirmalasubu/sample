@@ -74,8 +74,8 @@ namespace OnDemandTools.Web.Controllers
 
         // POST api/values
         [Authorize]
-        [HttpPost("/queue/messages/deliver")]
-        public bool ResendQueue([FromBody]DeliverCriteriaModel criteria)
+        [HttpPost("messages/deliver")]
+        public bool ResendQueueByCriteria([FromBody]DeliverCriteriaModel criteria)
         {
             return _queueSvc.FlagForRedeliveryByCriteria(criteria.ToBusinessModel<DeliverCriteriaModel, DeliverCriteria>());
         }

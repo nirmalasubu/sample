@@ -14,17 +14,15 @@ import Moment from 'moment';
 var QueueResetByDateRange = React.createClass({
     getInitialState() {  
         var iDate = new Date().toISOString();
-        var queueName = this.props.data.queueDetails.name;
-        var queryDetail = this.props.data.queueDetails.query;
-        console.log(this.props.data.queueDetails.query);
         return{
             validationStartDateState: "",
             validationEndDateState: "",
             validationQueryState: "",
+            queryValue: "",
             deliverCriteria: {
-                name: queueName,
-                query: queryDetail,
-                windowOption: 1,
+                name: "",
+                query: "initialstage",
+                windowOption: 0,
                 startDateTime: iDate,
                 endDateTime: iDate
             }
@@ -57,8 +55,7 @@ var QueueResetByDateRange = React.createClass({
         });
     },
     onQueryChange(event)
-    {
-        console.log(event.target.value);
+    {      
         var valuess = this.state.deliverCriteria;
         valuess.query = event.target.value;
         this.setState({
@@ -89,10 +86,19 @@ var QueueResetByDateRange = React.createClass({
         }
         else
         {
+            var valuess = this.state.deliverCriteria;
+            valuess.name = this.props.data.queueDetails.name;
+            valuess.query = valuess.query==="initialstage"?this.state.queryValue : valuess.query;
+            this.setState({
+                deliverCriteria: valuess
+            });
             this.resetQueue(this.state.deliverCriteria);
         }            
     },
-    render: function() {        
+    render: function() {         
+        this.state.queryValue = this.props.data.queueDetails.query;
+        var dateLabel = (this.state.deliverCriteria.windowOption===0)?"Starting Between :":"Availability Between :";
+
         return (
            <Modal bsSize="large" show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
                  <Modal.Header closeButton>
@@ -100,7 +106,7 @@ var QueueResetByDateRange = React.createClass({
                         <p>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</p>
                     </Modal.Title>
                 </Modal.Header> 
-                <Form onSubmit={this._onSubmitForm.bind(this)}>        
+                <Form>        
                 <Modal.Body>
                     <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. <br/><br/> </ControlLabel>
                     
@@ -112,10 +118,10 @@ var QueueResetByDateRange = React.createClass({
                                 <Col md={4}>
                                     <FormGroup>
                                         <InputGroup>
-                                            <Radio onClick={this._onOptionChange.bind(this, 1)} checked={this.state.deliverCriteria.windowOption === 1} name="dateAvailibilityWindow">
+                                            <Radio onClick={this._onOptionChange.bind(this, 1)} checked={this.state.deliverCriteria.windowOption === 0} name="dateAvailibilityWindow">
                                                 &nbsp; Start date falls in availability window
                                             </Radio>
-                                            <Radio onClick={this._onOptionChange.bind(this, 2)} checked={this.state.deliverCriteria.windowOption === 2} name="dateAvailibilityWindow">
+                                            <Radio onClick={this._onOptionChange.bind(this, 2)} checked={this.state.deliverCriteria.windowOption === 1} name="dateAvailibilityWindow">
                                                 &nbsp; Any Part of flight falls in availability window
                                             </Radio>
                                         </InputGroup>
@@ -127,7 +133,7 @@ var QueueResetByDateRange = React.createClass({
                         <Grid>
                             <Row>
                                 <Col md={2} componentClass={ControlLabel}>
-                                    Starting Between:  
+                                    {dateLabel}
                                 </Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationStartDateState} >
@@ -146,9 +152,9 @@ var QueueResetByDateRange = React.createClass({
                         <Grid>
                             <Row>
                                 <Col md={4}>
-                                    <ControlLabel>Query Criteria</ControlLabel>
+                                    <ControlLabel>Query Criteria <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
-                                        <FormControl style={textAreaWidth} onChange={this.onQueryChange.bind(this)} value={this.state.deliverCriteria.query} componentClass="textarea" />
+                                        <FormControl style={textAreaWidth} onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query==="initialstage"?this.state.queryValue:this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
                                 </Col>
                                 <Col md={4}>
@@ -163,7 +169,7 @@ var QueueResetByDateRange = React.createClass({
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button className="btn btn-primary btn-large" type="submit">Run Query</Button>
+                    <Button onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
                 </Modal.Footer>
                 </Form>
            </Modal>

@@ -2,6 +2,8 @@
 using MongoDB.Bson;
 using BLModel = OnDemandTools.Business.Modules.Queue.Model;
 using DLModel = OnDemandTools.DAL.Modules.Queue.Model;
+using DMModel = OnDemandTools.DAL.Modules.QueueMessages.Model;
+
 
 namespace OnDemandTools.Common.EntityMapping
 {
@@ -15,8 +17,9 @@ namespace OnDemandTools.Common.EntityMapping
 
             CreateMap<DLModel.Queue, BLModel.Queue>()
               .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));
-             
 
+            CreateMap<BLModel.DeliverCriteria, DLModel.DeliverCriteria>();
+            CreateMap<BLModel.DeliverCriteria, DMModel.DeliverCriteria>();
         }
     }
 }

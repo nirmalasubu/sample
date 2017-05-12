@@ -86,7 +86,7 @@ export const resetQueuesByAiringId = (name, airingId) => {
 };
 
 export const resetQueueByCriteria = (criteria) => {
-    return Axios.post('/api/deliveryqueue/queue/messages/deliver', criteria)
+    return Axios.post('/api/deliveryqueue/messages/deliver', criteria)
         .then(response => {
             console.log(response);
         })
