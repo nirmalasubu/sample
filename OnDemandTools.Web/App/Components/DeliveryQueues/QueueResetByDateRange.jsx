@@ -8,12 +8,13 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
-import DatePicker from "react-bootstrap-date-picker";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Moment from 'moment';
 
 var QueueResetByDateRange = React.createClass({
     getInitialState() {  
-        var iDate = new Date().toISOString();
+        var iDate = new Moment();
         return{
             validationStartDateState: "",
             validationEndDateState: "",
@@ -33,18 +34,29 @@ var QueueResetByDateRange = React.createClass({
         this.props.handleClose();        
     },
     handleChangeStartDate(value) { 
-        var valuess = this.state.deliverCriteria;
-        valuess.startDateTime = value;
+
+        var criteria = this.state.deliverCriteria;
+
+        criteria.startDateTime = value;
+
+        var mins = value.diff(this.state.endDateTime, 'hours');       
+        if (mins > 0) {
+            criteria.endDateTime = value;
+        }
+
         this.setState({
-            deliverCriteria: valuess
+            deliverCriteria: criteria
         });
     },
     handleChangeEndDate(value) {
-        var valuess = this.state.deliverCriteria;
-        valuess.endDateTime = value;
-        this.setState({
-            deliverCriteria: valuess
-        });
+        var criteria = this.state.deliverCriteria;
+        var mins = value.diff(criteria.startDateTime, 'hours');
+        if (mins > 0) {
+            criteria.endDateTime = value;
+            this.setState({
+                deliverCriteria: criteria
+            });
+        }
     },
     _onOptionChange(val)
     {
@@ -118,10 +130,10 @@ var QueueResetByDateRange = React.createClass({
                                 <Col md={4}>
                                     <FormGroup>
                                         <InputGroup>
-                                            <Radio onClick={this._onOptionChange.bind(this, 1)} checked={this.state.deliverCriteria.windowOption === 0} name="dateAvailibilityWindow">
+                                            <Radio onClick={this._onOptionChange.bind(this, 0)} checked={this.state.deliverCriteria.windowOption === 0} name="dateAvailibilityWindow">
                                                 &nbsp; Start date falls in availability window
                                             </Radio>
-                                            <Radio onClick={this._onOptionChange.bind(this, 2)} checked={this.state.deliverCriteria.windowOption === 1} name="dateAvailibilityWindow">
+                                            <Radio onClick={this._onOptionChange.bind(this, 1)} checked={this.state.deliverCriteria.windowOption === 1} name="dateAvailibilityWindow">
                                                 &nbsp; Any Part of flight falls in availability window
                                             </Radio>
                                         </InputGroup>
@@ -137,13 +149,13 @@ var QueueResetByDateRange = React.createClass({
                                 </Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationStartDateState} >
-                                        <DatePicker style={datePickerWidth} onChange={this.handleChangeStartDate} value={this.state.deliverCriteria.startDateTime} id="startDateCtrl" showClearButton={false} />                                        
+                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeStartDate} />                                        
                                     </FormGroup>
                                 </Col>
                                 <Col md={1} componentClass={ControlLabel}>AND</Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationEndDateState}>
-                                        <DatePicker style={datePickerWidth} onChange={this.handleChangeEndDate} value={this.state.deliverCriteria.endDateTime} id="endDateCtrl" showClearButton={false} />
+                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate} />                                        
                                     </FormGroup>
                                 </Col>
                             </Row>
