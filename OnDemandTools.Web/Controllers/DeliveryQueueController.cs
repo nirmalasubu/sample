@@ -72,8 +72,14 @@ namespace OnDemandTools.Web.Controllers
             return messages;
         }
 
-
         // POST api/values
+        [Authorize]
+        [HttpPost("/queue/messages/deliver")]
+        public bool ResendQueue([FromBody]DeliverCriteriaModel criteria)
+        {
+            return _queueSvc.FlagForRedeliveryByCriteria(criteria.ToBusinessModel<DeliverCriteriaModel, DeliverCriteria>());
+        }
+                
         [Authorize]
         [HttpPost("reset/{name}")]
         public string ResendQueue(string name)
@@ -81,8 +87,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc.FlagForRedelivery(name);
             return "Success";
         }
-
-        // POST api/values
+                
         [Authorize]
         [HttpPost("reset/{name}/{airingId}")]
         public string ResendQueue(string name, string airingId)
@@ -90,8 +95,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc.FlagForRedelivery(name, airingId);
             return "Success";
         }
-
-        // POST api/values
+        
         [Authorize]
         [HttpDelete("purge/{name}")]
         public void PurgeQueue(string name)
@@ -103,14 +107,13 @@ namespace OnDemandTools.Web.Controllers
             if (singleQueueAttached)
                 remoteQueueHandler.Purge(name);
         }
-
-        // POST api/values
+        
         [Authorize]
         [HttpDelete("clear/{name}")]
         public void ClearQueue(string name)
         {
             _queueSvc.ClearPendingDeliveries(name);
         }
-
+        
     }
 }

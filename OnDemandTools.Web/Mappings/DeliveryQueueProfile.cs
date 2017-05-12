@@ -30,8 +30,9 @@ namespace OnDemandTools.Web.Mappings
                      .ForSourceMember(d => d.CreatedDateTime, opt => opt.Ignore())
                      .ForSourceMember(d => d.ModifiedBy, opt => opt.Ignore())
                      .ForSourceMember(d => d.ModifiedDateTime, opt => opt.Ignore());
+            CreateMap<DeliverCriteriaModel, BLModel.DeliverCriteria>();
 
-                
-    }
+
+        }
     }
 }

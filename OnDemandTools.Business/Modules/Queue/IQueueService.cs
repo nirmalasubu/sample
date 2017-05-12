@@ -201,5 +201,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queueName"></param>
         /// <returns></returns>
         void ClearPendingDeliveries(string queueName);
+
+        /// <summary>
+        /// Flags the given queue for redelivery. Assets selected for delivery
+        /// depends on 'criteria'
+        /// </summary>
+        /// <param name="criteria">The Deliver Criteria.</param>
+        bool FlagForRedeliveryByCriteria(DeliverCriteria criteria);
     }
 }

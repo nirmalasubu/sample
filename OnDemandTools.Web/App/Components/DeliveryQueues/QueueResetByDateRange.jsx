@@ -8,12 +8,38 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
-import DatePicker from "react-bootstrap-date-picker";
+import DatePicker from "react-datepicker";
+import Moment from 'moment';
 
 var QueueResetByDateRange = React.createClass({
+    getInitialState() {  
+        var iDate = new Date().toISOString();
+        return{
+            startDate: iDate,
+            endDate: iDate,
+            queueDetails: ""
+        };
+    },
+    componentDidMount()
+    {
+        this.setState({
+            queueDetails: this.props.data.queueDetails
+        });
+        console.log(queueDetails.query);
+    },
     resetQueue(id){ 
         queueAction.resetQueues(id);
         this.props.handleClose();        
+    },
+    handleChangeStartDate(value) { 
+        this.setState({
+            startDate: value
+        });
+    },
+    handleChangeEndDate(value) {
+        this.setState({
+            endDate: value
+        });
     },
     render: function() {
         return (
@@ -55,13 +81,13 @@ var QueueResetByDateRange = React.createClass({
                                 </Col>
                                 <Col md={2}>
                                     <FormGroup >
-                                        <DatePicker style={datePickerWidth} showClearButton={false} />                                        
+                                        <DatePicker style={datePickerWidth} onChange={this.handleChangeStartDate} value={this.state.startDate} id="startDateCtrl" showClearButton={false} />                                        
                                     </FormGroup>
                                 </Col>
                                 <Col md={1} componentClass={ControlLabel}>AND</Col>
                                 <Col md={2}>
                                     <FormGroup >
-                                        <DatePicker style={datePickerWidth} showClearButton={false} />
+                                        <DatePicker style={datePickerWidth} onChange={this.handleChangeEndDate} value={this.state.endDate} id="endDateCtrl" showClearButton={false} />
                                     </FormGroup>
                                 </Col>
                             </Row>

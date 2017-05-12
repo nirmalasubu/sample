@@ -10,6 +10,7 @@ using OnDemandTools.DAL.Modules.QueueMessages.Model;
 using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using System;
 using OnDemandTools.DAL.Modules.Airings;
+using OnDemandTools.DAL.Helpers;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -22,6 +23,7 @@ namespace OnDemandTools.Business.Modules.Queue
         IGetQueueMessagesQuery queueMessages;
         IQueueMessageRecorder historyRecorder;
         IGetAiringQuery airingQueryHelper;
+        IAiringMessagePusherQueueApi messagePusher;
 
         public QueueService(
             IQueueQuery queueQueryHelper,
@@ -29,7 +31,8 @@ namespace OnDemandTools.Business.Modules.Queue
             IQueueLocker queueLocker,
             IGetQueueMessagesQuery queueMessages,
             IQueueMessageRecorder historyRecorder,
-            IGetAiringQuery airingQueryHelper)
+            IGetAiringQuery airingQueryHelper,
+            IAiringMessagePusherQueueApi messagePusher)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
@@ -37,6 +40,7 @@ namespace OnDemandTools.Business.Modules.Queue
             this.queueMessages = queueMessages;
             this.historyRecorder = historyRecorder;
             this.airingQueryHelper = airingQueryHelper;
+            this.messagePusher = messagePusher;
         }
 
         /// <summary>
@@ -294,6 +298,26 @@ namespace OnDemandTools.Business.Modules.Queue
                 queue.PendingDeliveryCount = airingQueryHelper.GetPendingDeliveryCountBy(queue.Name);
             }
             return queues;
+        }
+
+        /// <summary>
+        /// Flags the given queue for redelivery. Assets selected for delivery
+        /// depends on 'criteria'
+        /// </summary>
+        /// <param name="criteria">The Deliver Criteria.</param>
+        public bool FlagForRedeliveryByCriteria(BLModel.DeliverCriteria criteria)
+        {
+            try
+            {
+                messagePusher.PushBy(criteria.ToDataModel<BLModel.DeliverCriteria, DeliverCriteria>());
+
+                return true;
+            }
+            catch (QueryValidationException ex)
+            {
+                return false;
+            }
+                     
         }
     }
 }
