@@ -94,6 +94,17 @@ export const resetQueueByCriteria = (criteria) => {
         });
 };
 
+export const getResultsForQuery = (criteria) => {
+    return Axios.post('/api/deliveryqueue/syntaxChecker', criteria)
+        .then(response => {
+            console.log(response.data);
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+
 export const purgeQueues = (name) => {
     return Axios.delete('/api/deliveryqueue/purge/' + name)
         .then(response => {

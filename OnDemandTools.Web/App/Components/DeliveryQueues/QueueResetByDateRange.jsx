@@ -20,6 +20,7 @@ var QueueResetByDateRange = React.createClass({
             validationEndDateState: "",
             validationQueryState: "",
             queryValue: "",
+            syntaxCheckerResults: "",
             deliverCriteria: {
                 name: "",
                 query: "initialstage",
@@ -107,6 +108,25 @@ var QueueResetByDateRange = React.createClass({
         });
 
         this.validateForm();
+    },
+    syntaxChecker(event) {
+
+        this.setState({
+            syntaxCheckerResults: "please wait..."
+        });
+
+        let promise = queueAction.getResultsForQuery(this.state.deliverCriteria);
+
+        promise.then(message => {
+            this.setState({
+                syntaxCheckerResults: message
+            });
+        })
+            .catch(error => {
+                this.setState({
+                    syntaxCheckerResults: error
+                });
+            });
     },
     validateForm() {
         var value = this.state.deliverCriteria.query;
@@ -201,19 +221,20 @@ var QueueResetByDateRange = React.createClass({
                             <Row>
                                 <Col md={4}>
                                     <ControlLabel>Query Criteria <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
+                                    <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
                                         <FormControl style={textAreaWidth} onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query === "initialstage" ? this.state.queryValue : this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
+
                                 </Col>
                                 <Col md={4}>
                                     <ControlLabel>Syntax Checker</ControlLabel>
                                     <FormGroup controlId="queryResults">
-                                        <FormControl style={textAreaWidth} componentClass="textarea" placeholder="Results" />
+                                        <FormControl style={textAreaWidth} componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
                                     </FormGroup>
                                 </Col>
                             </Row>
                         </Grid>
-
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.props.handleClose}>Cancel</Button>

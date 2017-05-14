@@ -79,7 +79,14 @@ namespace OnDemandTools.Web.Controllers
         {
             return _queueSvc.FlagForRedeliveryByCriteria(criteria.ToBusinessModel<DeliverCriteriaModel, DeliverCriteria>());
         }
-                
+
+        [Authorize]
+        [HttpPost("syntaxChecker")]
+        public string QuerySyntaxChecker([FromBody]DeliverCriteriaModel criteria)
+        {
+            return "shanmuga";
+        }
+
         [Authorize]
         [HttpPost("reset/{name}")]
         public string ResendQueue(string name)
@@ -87,7 +94,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc.FlagForRedelivery(name);
             return "Success";
         }
-                
+
         [Authorize]
         [HttpPost("reset/{name}/{airingId}")]
         public string ResendQueue(string name, string airingId)
@@ -95,7 +102,7 @@ namespace OnDemandTools.Web.Controllers
             _queueSvc.FlagForRedelivery(name, airingId);
             return "Success";
         }
-        
+
         [Authorize]
         [HttpDelete("purge/{name}")]
         public void PurgeQueue(string name)
@@ -107,13 +114,13 @@ namespace OnDemandTools.Web.Controllers
             if (singleQueueAttached)
                 remoteQueueHandler.Purge(name);
         }
-        
+
         [Authorize]
         [HttpDelete("clear/{name}")]
         public void ClearQueue(string name)
         {
             _queueSvc.ClearPendingDeliveries(name);
         }
-        
+
     }
 }
