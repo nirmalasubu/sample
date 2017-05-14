@@ -41,7 +41,8 @@ var QueueResetByDateRange = React.createClass({
         this.setState({
             deliverCriteria: criteria,
             validationStartDateState: "",
-            validationEndDateState: ""
+            validationEndDateState: "",
+            syntaxCheckerResults: ""
         });
 
         this.validateForm();
@@ -119,7 +120,7 @@ var QueueResetByDateRange = React.createClass({
 
         promise.then(message => {
             this.setState({
-                syntaxCheckerResults: message
+                syntaxCheckerResults: JSON.stringify(message,null,2)
             });
         })
             .catch(error => {

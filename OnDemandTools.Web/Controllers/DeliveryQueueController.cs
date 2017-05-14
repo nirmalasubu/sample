@@ -11,6 +11,8 @@ using OnDemandTools.Web.Models.DeliveryQueue;
 using OnDemandTools.Common.Model;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using OnDemandTools.Business.Modules.Airing;
+using OnDemandTools.Business.Modules.Airing.Model;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,16 +22,20 @@ namespace OnDemandTools.Web.Controllers
     [Route("api/[controller]")]
     public class DeliveryQueueController : Controller
     {
-        public IQueueService _queueSvc;
-        public AppSettings appsettings;
-        public IRemoteQueueHandler remoteQueueHandler;
+        IQueueService _queueSvc;
+        AppSettings appsettings;
+        IRemoteQueueHandler remoteQueueHandler;
+        IAiringService _airingService;
 
         public DeliveryQueueController(IQueueService queueSvc,
             AppSettings appsettings,
-            IRemoteQueueHandler remoteQueueHandler)
+            IRemoteQueueHandler remoteQueueHandler,
+            IAiringService airingSvc
+            )
         {
             this.appsettings = appsettings;
             _queueSvc = queueSvc;
+            _airingService = airingSvc;
             this.remoteQueueHandler = remoteQueueHandler;
         }
 
@@ -82,9 +88,9 @@ namespace OnDemandTools.Web.Controllers
 
         [Authorize]
         [HttpPost("syntaxChecker")]
-        public string QuerySyntaxChecker([FromBody]DeliverCriteriaModel criteria)
+        public Airing QuerySyntaxChecker([FromBody]DeliverCriteriaModel criteria)
         {
-            return "shanmuga";
+            return _airingService.GetExampleBy(criteria.Query);
         }
 
         [Authorize]

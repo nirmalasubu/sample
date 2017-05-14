@@ -67,7 +67,7 @@ export const clearNotificationHistory = (name) => {
 export const resetQueues = (name) => {
     return Axios.post('/api/deliveryqueue/reset/' + name)
         .then(response => {
-
+            return (response.data);
         })
         .catch(error => {
             throw (error);
@@ -77,7 +77,7 @@ export const resetQueues = (name) => {
 export const resetQueuesByAiringId = (name, airingId) => {
     return Axios.post('/api/deliveryqueue/reset/' + name + "/" + airingId)
         .then(response => {
-
+            return (response.data);
         })
         .catch(error => {
             throw (error);
@@ -87,7 +87,7 @@ export const resetQueuesByAiringId = (name, airingId) => {
 export const resetQueueByCriteria = (criteria) => {
     return Axios.post('/api/deliveryqueue/messages/deliver', criteria)
         .then(response => {
-            console.log(response);
+            return (response.data);
         })
         .catch(error => {
             throw (error);
@@ -97,7 +97,6 @@ export const resetQueueByCriteria = (criteria) => {
 export const getResultsForQuery = (criteria) => {
     return Axios.post('/api/deliveryqueue/syntaxChecker', criteria)
         .then(response => {
-            console.log(response.data);
             return (response.data);
         })
         .catch(error => {
@@ -108,7 +107,7 @@ export const getResultsForQuery = (criteria) => {
 export const purgeQueues = (name) => {
     return Axios.delete('/api/deliveryqueue/purge/' + name)
         .then(response => {
-
+            return (response.data);
         })
         .catch(error => {
             throw (error);
@@ -118,7 +117,7 @@ export const purgeQueues = (name) => {
 export const clearQueues = (name) => {
     return Axios.delete('/api/deliveryqueue/clear/' + name)
         .then(response => {
-
+            return (response.data);
         })
         .catch(error => {
             throw (error);

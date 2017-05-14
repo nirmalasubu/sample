@@ -142,6 +142,13 @@ namespace OnDemandTools.Business.Modules.Airing
                 .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
         }
 
+        public BLModel.Airing GetExampleBy(string mongoQuery)
+        {
+            return
+            currentAiringsQuery.GetExampleBy(mongoQuery)
+                .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
+        }
+
         public IEnumerable<BLModel.Airing> GetDeliverToBy(string queueName, int limit, AiringCollection getFrom = AiringCollection.CurrentCollection)
         {
             IEnumerable<DLModel.Airing> airings = new List<DLModel.Airing>();

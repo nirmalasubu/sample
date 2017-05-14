@@ -41,6 +41,14 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <returns></returns>
         BLModel.Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection);
 
+
+        /// <summary>
+        /// Get's the Example Airing by Query
+        /// </summary>
+        /// <param name="mongoQuery">the mongo query</param>
+        /// <returns></returns>
+        BLModel.Airing GetExampleBy(string mongoQuery);
+
         /// <summary>
         /// Gets the airings by deliveredTo and Queue name
         /// </summary>
