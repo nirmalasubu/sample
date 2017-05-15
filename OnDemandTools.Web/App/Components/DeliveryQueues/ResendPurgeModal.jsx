@@ -9,7 +9,12 @@ import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 
-var ResendPurgeModal = React.createClass({
+class ResendPurgeModal extends React.Component
+{
+    constructor(props) {
+        super(props);
+    }
+
     OnclickType(id,type){
         if(type=="resend")
             this.resendQueue(id);
@@ -18,20 +23,24 @@ var ResendPurgeModal = React.createClass({
         else
             this.clearQueue(id);
 
-    },
+    }
+
     resendQueue(id){ 
         queueAction.resetQueues(id);
         this.props.handleClose();        
-    },
+    }
+
     purgeQueue(id){ 
         queueAction.purgeQueues(id);
         this.props.handleClose();        
-    },
+    }
+
     clearQueue(id){ 
         queueAction.clearQueues(id);
         this.props.handleClose();        
-    },
-    render: function() {
+    }
+
+    render(){
         var message, title;
         if(this.props.data.modalActionType=="resend")
         {
@@ -53,13 +62,13 @@ var ResendPurgeModal = React.createClass({
            <Modal show={this.props.data.showModal} onHide={this.props.handleClose}> 
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {title}
+           {title}
                     </Modal.Title>
                 </Modal.Header>        
                 <Modal.Body>
-                    {
+           {
                         <p>{message}</p>
-                    }
+           }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>  
@@ -68,6 +77,6 @@ var ResendPurgeModal = React.createClass({
            </Modal>
         )
     }
-});
+}
 
 export default ResendPurgeModal;
