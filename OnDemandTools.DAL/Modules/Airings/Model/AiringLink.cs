@@ -11,5 +11,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
         public int AiringId { get; set; }
 
         public bool Linked { get; set; }
+
+        public string Authority { get; set; }
     }
 }

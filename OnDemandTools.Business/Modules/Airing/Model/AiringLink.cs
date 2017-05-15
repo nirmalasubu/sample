@@ -9,5 +9,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
         public int AiringId { get; set; }
 
         public bool Linked { get; set; }
+
+        public string Authority { get; set; }
     }
 }

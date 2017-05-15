@@ -262,6 +262,15 @@ namespace OnDemandTools.API.Tests.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Our Other Cops Is On !, Part 2&quot;,&quot;Type&quot;:&quot;Episode (Non-Animated)&quot;,&quot;Brand&quot;:&quot;TBS&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2013-09-11T11:30:00Z&quot;,&quot;AiringId&quot;:7108144,&quot;Linked&quot;:true,&quot;Authority&quot;:&quot;Turniverse&quot;}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1223,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-14&quot;,&quot;Description&quot;:&quot;D,L,S,V&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;When Randy is about to turn off the prison TV, another Camden episode of \&quot;COPS\&quot; is shown, this time it evolves around the events on Independence Day.&quot;,&quot;Short&quot;:&quot;Wh [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TBSAiringHavingAuthority {
+            get {
+                return ResourceManager.GetString("TBSAiringHavingAuthority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to  {&quot;Name&quot;:&quot;Our Other Cops Is On !, Part 2&quot;,&quot;Type&quot;:&quot;Episode (Non-Animated)&quot;,&quot;Brand&quot;:&quot;TBS&quot;,&quot;Platform&quot;:&quot;Broadband&quot;,&quot;Airings&quot;:[{&quot;Date&quot;:&quot;2013-09-11T11:30:00Z&quot;,&quot;AiringId&quot;:7108144,&quot;Linked&quot;:true}],&quot;Duration&quot;:{&quot;LengthInSeconds&quot;:1223,&quot;DisplayMinutes&quot;:30},&quot;Title&quot;:{&quot;Rating&quot;:{&quot;Code&quot;:&quot;TV-14&quot;,&quot;Description&quot;:&quot;D,L,S,V&quot;},&quot;StoryLine&quot;:{&quot;Long&quot;:&quot;When Randy is about to turn off the prison TV, another Camden episode of \&quot;COPS\&quot; is shown, this time it evolves around the events on Independence Day.&quot;,&quot;Short&quot;:&quot;When Randy is about to turn [rest of string was truncated]&quot;;.
         /// </summary>
         public static string TBSAiringStackedFalse {

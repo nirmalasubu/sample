@@ -20,7 +20,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
             this.client = this.fixture.restClient;
         }
 
-        //[Fact]
+        [Fact]
         public void GetAiringBySeriesId_PassingWithValidId()
         {
 
@@ -41,7 +41,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
             JObject jSeries = response.First.SelectToken("title").Value<JObject>(@"series");
             
             Assert.True(jSeries.Value<string>(@"id") == "326558", string.Format("Series Id should be '326558' and but the returned {0}", jSeries.Value<string>(@"id")));
-            Assert.True(!string.IsNullOrEmpty(response.First.Value<string>(@"mediaId")), string.Format("Media Id should not be null or empty and but the returned Null "));
+            Assert.True(!string.IsNullOrEmpty(response.First.Value<string>(@"airingId")), string.Format("airing Id should not be null or empty and but the returned Null "));
         }
 
         [Fact]

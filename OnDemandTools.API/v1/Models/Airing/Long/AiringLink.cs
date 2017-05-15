@@ -9,5 +9,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
         public int AiringId { get; set; }
 
         public bool Linked { get; set; }
+
+        public string Authority { get; set; }
     }
 }
