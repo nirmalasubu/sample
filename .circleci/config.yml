@@ -82,14 +82,14 @@ jobs:
           name: Push Image into Quay
           command: docker-compose push            
 
-      - run:
+      - deploy:
           name: Continious Integration
           command: |
               if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ];
                 then harbor-compose catalog;
               fi
 
-      - run:
+      - deploy:
           name: Continious Integration
           command: |
               if [ "${CIRCLE_BRANCH}" == "dev" ] || [ "${CIRCLE_BRANCH}" == "sandbox" ];
