@@ -63,11 +63,11 @@ class DeliveryQueueTable extends React.Component {
         });
         return (<div>
 
-            <button class="btn-xs btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(queueItem[0], event)}>
+            <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(queueItem[0], event)}>
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
 
-            <button class="btn-xs btn-link" title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+            <button class="btn-link" title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
 

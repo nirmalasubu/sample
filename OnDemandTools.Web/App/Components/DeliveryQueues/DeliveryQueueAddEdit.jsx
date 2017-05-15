@@ -131,19 +131,19 @@ class DeliveryQueueAddEdit extends React.Component {
                             </Tab>
                             <Tab eventKey={2} title="Options">
                                 <FormGroup>
-                                    <Checkbox>Allow Airings/Assets with no version</Checkbox>
-                                    <Checkbox> BIM Required </Checkbox>
-                                    <Checkbox> Report Statuses</Checkbox>
-                                    <Checkbox> Priority Queue</Checkbox>
-                                    <Checkbox>Prohibit Resending MediaId to the Queue</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.bimRequired}> BIM Required </Checkbox>
+                                    <Checkbox checked={this.state.queueModel.report}> Report Statuses</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.isPriorityQueue}> Priority Queue</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue</Checkbox>
                                 </FormGroup>
                             </Tab>
                             <Tab eventKey={3} title="Notifications">
                                 <FormGroup>
-                                    <Checkbox>Title Change</Checkbox>
-                                    <Checkbox> Image Changes </Checkbox>
-                                    <Checkbox> Video Changes</Checkbox>
-                                    <Checkbox> Package Changes</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
+                                    <Checkbox checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
+                                    <Checkbox checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
                                     <ControlLabel>Status Changes</ControlLabel>
                                 </FormGroup>
                             </Tab>
