@@ -12,8 +12,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Moment from 'moment';
 
-class QueueResetByDateRange extends React.Component
-{
+class QueueResetByDateRange extends React.Component {
     constructor(props) {
         super(props);
         var iDate = new Moment();
@@ -131,7 +130,7 @@ class QueueResetByDateRange extends React.Component
 
         promise.then(message => {
             this.setState({
-                syntaxCheckerResults: JSON.stringify(message,null,2)
+                syntaxCheckerResults: JSON.stringify(message, null, 2)
             });
         })
             .catch(error => {
@@ -173,7 +172,7 @@ class QueueResetByDateRange extends React.Component
         }
     }
 
-    render(){
+    render() {
         this.state.queryValue = this.props.data.queueDetails.query;
         var dateLabel = (this.state.deliverCriteria.windowOption === 0) ? "Starting Between :" : "Availability Between :";
 
@@ -223,41 +222,41 @@ class QueueResetByDateRange extends React.Component
                                 </Col>
                                 <Col md={1} componentClass={ControlLabel}>AND</Col>
                                 <Col md={2}>
-                                        <FormGroup validationState={this.state.validationEndDateState}>
-                                            <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate}
-                                                onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
-                                    className={"form-control"} />
+                                    <FormGroup validationState={this.state.validationEndDateState}>
+                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate}
+                                            onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
+                                            className={"form-control"} />
                                     </FormGroup>
-                                    </Col>
-                                    </Row>
-                                    </Grid>
-                                    <br />
-                                    <Grid>
-                                    <Row>
-                                    <Col md={4}>
+                                </Col>
+                            </Row>
+                        </Grid>
+                        <br />
+                        <Grid>
+                            <Row>
+                                <Col md={4}>
                                     <ControlLabel>Query Criteria <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
                                     <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
                                         <FormControl bsClass="form-control form-control-modal" onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query === "initialstage" ? this.state.queryValue : this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
 
-                                    </Col>
-                                    <Col md={4}>
+                                </Col>
+                                <Col md={4}>
                                     <ControlLabel>Syntax Checker</ControlLabel>
                                     <FormGroup controlId="queryResults">
                                         <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
                                     </FormGroup>
-                                    </Col>
-                                    </Row>
-                                    </Grid>
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                    <Button onClick={this.props.handleClose}>Cancel</Button>
-                                    <Button disabled={(this.state.validationEndDateState != '' || this.state.validationStartDateState != '' || this.state.validationQueryState != '')}
-                                            onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
-                                    </Modal.Footer>
-                                    </Form>
-                                    </Modal>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.props.handleClose}>Cancel</Button>
+                        <Button disabled={(this.state.validationEndDateState != '' || this.state.validationStartDateState != '' || this.state.validationQueryState != '')}
+                            onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         )
     }
 }

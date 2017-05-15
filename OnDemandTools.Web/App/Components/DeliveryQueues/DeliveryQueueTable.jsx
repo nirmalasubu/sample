@@ -16,7 +16,7 @@ class DeliveryQueueTable extends React.Component {
             showModal: false,
             showDateRangeResetModel: false,
             showNotificationHistoryModel: false,
-            showAddEditModel: true,
+            showAddEditModel: false,
             queueDetails: "",
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
@@ -118,7 +118,7 @@ class DeliveryQueueTable extends React.Component {
     }
 
     queueNameFormat(val,rowData) {
-        return <button onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button>
+        return <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button>
     }
 
     render() {
