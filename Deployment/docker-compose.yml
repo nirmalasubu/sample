@@ -55,11 +55,6 @@ services:
       dockerfile: Dockerfile.jobs.tests      
     stdin_open: true
     tty: true  
-    depends_on:
-      odt-api:
-        condition: service_healthy
-      odt-jobs:
-        condition: service_healthy
     links:
       - odt-api:apihost
       - odt-jobs:jobhost
@@ -73,8 +68,5 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.api.tests      
-    depends_on:
-      odt-api:
-        condition: service_healthy
     links:
       - odt-api:apihost   
