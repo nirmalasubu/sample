@@ -40,14 +40,7 @@ jobs:
             BOMBED=$?
             docker cp apitest:/app/output/apiresults.xml ~/app/output/xunit
             docker-compose down
-            if [ -z "$BOMBED" ];
-            then
-                echo "no errors"
-                exit 0
-            else
-                echo "errors"
-                exit 1
-            fi;
+            exit $BOMBED
 
       - run:
           name: Testing Jobs
@@ -58,14 +51,7 @@ jobs:
             BOMBED=$?
             docker cp jobtest:/app/output/jobresults.xml ~/app/output/xunit
             docker-compose down
-            if [ -z "$BOMBED" ];
-            then
-                echo "no errors"
-                exit 0
-            else
-                echo "errors"
-                exit 1
-            fi;
+            exit $BOMBED
       
       - store_artifacts:
           path: ~/app/output
