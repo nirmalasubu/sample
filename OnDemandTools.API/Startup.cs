@@ -10,6 +10,8 @@ using Serilog;
 using OnDemandTools.API.Helpers;
 using Microsoft.AspNetCore.Http;
 using OnDemandTools.Common.Configuration;
+using Serilog.Events;
+using OnDemandTools.Common.Logzio;
 
 namespace OnDemandTools.API
 {
@@ -20,6 +22,7 @@ namespace OnDemandTools.API
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
+        Serilog.ILogger AppLogger { get; set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -30,6 +33,13 @@ namespace OnDemandTools.API
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+
+            // Log.Logger = new LoggerConfiguration()
+            //           .WriteTo.Logzio("PKzpHRkmGSdahHHIpeprYuKixClLUTRh",
+            //           application: "ODT_API",
+            //           reporterType: "Monitoring",
+            //           environment: "ODT_API_LOCAL")
+            //           .CreateLogger();
         }
 
 
@@ -39,10 +49,10 @@ namespace OnDemandTools.API
         {            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfigurationRoot>(Configuration);
-            services.Configure<AppSettings>(Configuration.GetSection("Application"));
+            services.Configure<AppSettings>(Configuration.GetSection("Application"));           
             services.AddSingleton<APIBootstrapper>();          
             services.InitializeAutoMapper();
-            services.InitializePersistantStorage();  
+            services.InitializePersistantStorage(); 
                  
         }
 
@@ -54,6 +64,8 @@ namespace OnDemandTools.API
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
                   
+            app.UseMiddleware<SerilogMiddleware>();
+
             // Specify request pipeline--strictly Nancy middleware
             app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = provider.GetService<APIBootstrapper>()));
         }

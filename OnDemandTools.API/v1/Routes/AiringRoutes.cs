@@ -28,6 +28,7 @@ using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Exceptions;
 using OnDemandTools.Business.Modules.Destination;
 using System.Diagnostics;
+using Serilog;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -70,7 +71,7 @@ namespace OnDemandTools.API.v1.Routes
                     var airing = airingSvc.GetBy((string)_.airingId);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("airingRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("airingRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     var user = Context.User();
@@ -79,21 +80,21 @@ namespace OnDemandTools.API.v1.Routes
                     var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("transformationSmallToLongRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("transformationSmallToLongRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     if (options.Contains(Appenders.File.ToString().ToLower()))
                         airingSvc.AppendFile(ref airingLong);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("fileRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("fileRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     if (options.Contains(Appenders.Title.ToString().ToLower()))
                         airingSvc.AppendTitle(ref airingLong);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("titleRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("titleRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     if (options.Contains(Appenders.Series.ToString().ToLower())
@@ -108,21 +109,21 @@ namespace OnDemandTools.API.v1.Routes
                     }
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("seriesRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("seriesRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     if (options.Contains(Appenders.Destination.ToString().ToLower()))
                         airingSvc.AppendDestinations(ref airingLong);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("destinationRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("destinationRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     if (options.Contains(Appenders.Change.ToString().ToLower()))
                         airingSvc.AppendChanges(ref airingLong);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("changeRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("changeRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     // Append status information if requested
                     stepTimer.Restart();
@@ -130,14 +131,14 @@ namespace OnDemandTools.API.v1.Routes
                         airingSvc.AppendStatus(ref airingLong);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("statusRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("statusRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
                     
                     stepTimer.Restart();
                     if (options.Contains(Appenders.Package.ToString().ToLower()))
                         airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("packageRetrievalTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("packageRetrievalTime1",stepTimer.Elapsed.TotalMilliseconds);
 
                     stepTimer.Restart();
                     var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
@@ -145,12 +146,13 @@ namespace OnDemandTools.API.v1.Routes
                         model.Options.Packages = null;
                     stepTimer.Stop();
                     totalTime = totalTime+stepTimer.Elapsed.TotalMilliseconds;
-                    k.Add("transformationBLVMTime",stepTimer.Elapsed.TotalMilliseconds);
+                    k.Add("transformationBLVMTime1",stepTimer.Elapsed.TotalMilliseconds);
 
+                    // k.Add("testing","started publisher job for queue dd699910-ccb2-46b5-b379-b1e33f695ca8 and processId thedeployment-3312873659-w4ohv  05/15/2017 15:26:08");
                     mainTimer.Stop();
-                    k.Add("totalTime", mainTimer.Elapsed.TotalMilliseconds);
+                    k.Add("totalTime1", mainTimer.Elapsed.TotalMilliseconds);
                   
-                    logger.Information("airing/{airingId} {@e}", k);             
+                    logger.Information("airingfromapijj {@tk}", k);                           
           
                     return model;
                 }
@@ -695,5 +697,11 @@ namespace OnDemandTools.API.v1.Routes
 
             return result;
         }
+    }
+
+    public class Data {
+      public String Name { get; set; }
+      public String Email { get; set; }
+      public String Password { get; set; }
     }
 }
