@@ -1,7 +1,6 @@
 FROM microsoft/dotnet:1.1.0-sdk-projectjson
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		xsltproc
+RUN apt-get update && apt-get install -y --no-install-recommends xsltproc
 
 # inject hostnames needed within job test container
 ENV JobEndPoint http://jobhost:5000
