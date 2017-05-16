@@ -23,13 +23,14 @@ class DeliveryQueueAddEdit extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = ({ queueModel: {},
-            options : [
-            { value: 'Edited', label: 'Edited' },
-            { value: 'Encoding', label: 'Encoding' },
-            { value: 'Medium', label: 'Medium' },
+        this.state = ({
+            queueModel: {},
+            options: [
+                { value: 'Edited', label: 'Edited' },
+                { value: 'Encoding', label: 'Encoding' },
+                { value: 'Medium', label: 'Medium' },
             ],
-            selectedOptions : []
+            selectedOptions: []
         });
     }
     resetForm(queueName) {
@@ -47,6 +48,12 @@ class DeliveryQueueAddEdit extends React.Component {
     handleRemoteNameChange(event) {
         var model = this.state.queueModel;
         model.name = event.target.value;
+        this.setState({ queueModel: model });
+    }
+
+    handleRoutingKeyChange(event) {
+        var model = this.state.queueModel;
+        model.routingKey = event.target.value;
         this.setState({ queueModel: model });
     }
 
@@ -72,6 +79,51 @@ class DeliveryQueueAddEdit extends React.Component {
         this.setState({ selectedOptions: values })
     }
 
+    handleCheckboxChange(event) {
+
+        var model = this.state.queueModel;
+        var checked = event.target.checked;
+
+        switch (event.target.name) {
+            case "active":
+                model.active = checked;
+                break;
+            case "allowAiringsWithNoVersion":
+                model.allowAiringsWithNoVersion = checked;
+                break;
+            case "bimRequired":
+                model.bimRequired = checked
+                break;
+            case "report":
+                model.report = checked
+                break;
+            case "isPriorityQueue":
+                model.isPriorityQueue = checked
+                break;
+            case "isProhibitResendMediaId":
+                model.isProhibitResendMediaId = checked
+                break;
+            case "detectTitleChanges":
+                model.detectTitleChanges = checked
+                break;
+            case "detectImageChanges":
+                model.detectImageChanges = checked
+                break;
+            case "detectVideoChanges":
+                model.detectVideoChanges = checked
+                break;
+            case "detectPackageChanges":
+                model.detectPackageChanges = checked
+                break;
+            default:
+                throw "Checkbox binding not found for control" + event.target.name;
+        }
+
+        this.setState({ queueModel: model });
+
+
+    }
+
     render() {
         return (
             <Modal bsSize="large" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
@@ -82,98 +134,128 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <Grid>
-                    <Form>
-                        <Row>
-                            <Col md={4} >
-                                <FormGroup
-                                    controlId="friendlyName">                            
-                                    <ControlLabel>Queue Name</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        value={this.state.queueModel.friendlyName}
-                                        placeholder="Enter Queue Friendly Name"
-                                        onChange={this.handleFriendlyNameChange.bind(this)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col md={4}>
-                                <FormGroup
-                                    controlId="contactEmail">
-                                    <ControlLabel>Contact Email</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        value={this.state.queueModel.contactEmailAddress}
-                                        placeholder="Enter Contact Email"
-                                        onChange={this.handleEmailAddressChange.bind(this)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={4} >
-                                <FormGroup
-                                    controlId="hoursOut">
-                                    <ControlLabel>Hours Out</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        value={this.state.queueModel.hoursOut}
-                                        placeholder="Enter Hours Out"
-                                        onChange={this.handleHoursOutChange.bind(this)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col md={4}>
-                                <FormGroup
-                                    controlId="remoteName">
-                                    <ControlLabel>Remote Name</ControlLabel>
-                                    <FormControl
-                                        type="text"
-                                        value={this.state.queueModel.name}
-                                        placeholder="Enter Remote Name"
-                                        onChange={this.handleRemoteNameChange.bind(this)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={9}>
-                                <Tabs defaultActiveKey={1} >
-                                    <Tab eventKey={1} title="Criteria">
-                                        <FormGroup
-                                            controlId="remoteName">
-                                            <ControlLabel>Query</ControlLabel>
-                                            <FormControl
-                                                type="text"
-                                                value={this.state.queueModel.query}
-                                                placeholder="{'Network':'TBS'}"
-                                                onChange={this.handleQueryChange.bind(this)}
-                                                componentClass="textarea"
-                                            />
-                                        </FormGroup>
-                                    </Tab>
-                                    <Tab eventKey={2} title="Options">
-                                        <FormGroup>
-                                            <Checkbox checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version</Checkbox>
-                                            <Checkbox checked={this.state.queueModel.bimRequired}> BIM Required </Checkbox>
-                                            <Checkbox checked={this.state.queueModel.report}> Report Statuses</Checkbox>
-                                            <Checkbox checked={this.state.queueModel.isPriorityQueue}> Priority Queue</Checkbox>
-                                            <Checkbox checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue</Checkbox>
-                                        </FormGroup>
-                                    </Tab>
-                                    <Tab eventKey={3} title="Notifications">
-                                        <FormGroup>
-                                            <Checkbox checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
-                                            <Checkbox checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
-                                            <Checkbox checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
-                                            <Checkbox checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
-                                            <ControlLabel>Status Changes</ControlLabel>
-                                            <Select multi simpleValue options={this.state.options}  onChange={ this.handleMultiChange.bind(this)} value={this.state.selectedOptions} />                                            
-                                        </FormGroup>
-                                    </Tab>
-                                </Tabs>
-                            </Col>
-                        </Row>
-                    </Form>
+                        <Form>
+                            <Row>
+                                <Col md={4} >
+                                    <FormGroup
+                                        controlId="friendlyName">
+                                        <ControlLabel>Queue Name</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            value={this.state.queueModel.friendlyName}
+                                            placeholder="Enter Queue Friendly Name"
+                                            onChange={this.handleFriendlyNameChange.bind(this)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={4}>
+                                    <FormGroup
+                                        controlId="contactEmail">
+                                        <ControlLabel>Contact Email</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            value={this.state.queueModel.contactEmailAddress}
+                                            placeholder="Enter Contact Email"
+                                            onChange={this.handleEmailAddressChange.bind(this)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={4} >
+                                    <FormGroup
+                                        controlId="hoursOut">
+                                        <ControlLabel>Hours Out</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            value={this.state.queueModel.hoursOut}
+                                            placeholder="Enter Hours Out"
+                                            onChange={this.handleHoursOutChange.bind(this)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={4}>
+                                    <FormGroup
+                                        controlId="remoteName">
+                                        <ControlLabel>Remote Name</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            value={this.state.queueModel.name}
+                                            placeholder="Enter Remote Name"
+                                            onChange={this.handleRemoteNameChange.bind(this)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={4} >
+                                    <FormGroup
+                                        controlId="isActive">
+                                        <Checkbox name="active" onChange={this.handleCheckboxChange.bind(this)}
+                                            checked={this.state.queueModel.active}> Activate Queue to receive notifications.</Checkbox>
+                                    </FormGroup>
+                                </Col>
+                                <Col md={4}>
+                                    <FormGroup
+                                        controlId="remoteName">
+                                        <ControlLabel>Routing Key</ControlLabel>
+                                        <FormControl
+                                            type="text"
+                                            value={this.state.queueModel.routingKey}
+                                            placeholder="Enter Routing key"
+                                            onChange={this.handleRoutingKeyChange.bind(this)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={9}>
+                                    <Tabs defaultActiveKey={1} >
+                                        <Tab eventKey={1} title="Criteria">
+                                            <FormGroup
+                                                controlId="remoteName">
+                                                <ControlLabel>Query</ControlLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    value={this.state.queueModel.query}
+                                                    placeholder="{'Network':'TBS'}"
+                                                    onChange={this.handleQueryChange.bind(this)}
+                                                    componentClass="textarea"
+                                                />
+                                            </FormGroup>
+                                        </Tab>
+                                        <Tab eventKey={2} title="Options">
+                                            <FormGroup>
+                                                <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version</Checkbox>
+                                                <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.bimRequired}> BIM Required </Checkbox>
+                                                <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.report}> Report Statuses</Checkbox>
+                                                <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.isPriorityQueue}> Priority Queue</Checkbox>
+                                                <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue</Checkbox>
+                                            </FormGroup>
+                                        </Tab>
+                                        <Tab eventKey={3} title="Notifications">
+                                            <FormGroup>
+                                                <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
+                                                <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
+                                                <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
+                                                <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
+                                                <ControlLabel>Status Changes</ControlLabel>
+                                                <Select multi simpleValue options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.selectedOptions} />
+                                            </FormGroup>
+                                        </Tab>
+                                    </Tabs>
+                                </Col>
+                            </Row>
+                        </Form>
                     </Grid>
                     <NotificationContainer />
                 </Modal.Body>
