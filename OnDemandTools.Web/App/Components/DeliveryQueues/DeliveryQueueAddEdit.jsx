@@ -7,6 +7,7 @@ import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { saveQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
@@ -37,6 +38,10 @@ class DeliveryQueueAddEdit extends React.Component {
         var model = $.extend(true, {}, this.props.data.queueDetails);
         this.setState({ queueModel: model });
         console.log(model);
+    }
+
+    handleSave(){        
+        saveQueue(this.state.queueModel);
     }
 
     handleFriendlyNameChange(event) {
@@ -261,7 +266,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>
-                    <Button>Save</Button>
+                    <Button onClick={this.handleSave.bind(this)}>Save</Button>
                 </Modal.Footer>
             </Modal>
         )

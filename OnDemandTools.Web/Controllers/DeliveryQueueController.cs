@@ -58,6 +58,17 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public DeliveryQueueModel Post([FromBody]DeliveryQueueModel viewModel)
+        {
+            Queue blModel = viewModel.ToBusinessModel<DeliveryQueueModel, Queue>();
+
+            blModel = _queueSvc.SaveQueue(blModel);
+
+            return blModel.ToViewModel<Queue, DeliveryQueueModel>();
+        }
+
+        [Authorize]
         [HttpGet("notificationhistory/{name}")]
         public IEnumerable<HistoricalMessage> GetNotificationHistory(string name)
         {

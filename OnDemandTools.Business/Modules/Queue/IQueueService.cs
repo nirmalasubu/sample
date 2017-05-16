@@ -208,5 +208,12 @@ namespace OnDemandTools.Business.Modules.Queue
         /// </summary>
         /// <param name="criteria">The Deliver Criteria.</param>
         bool FlagForRedeliveryByCriteria(DeliverCriteria criteria);
+
+        /// <summary>
+        /// Save's the queue
+        /// </summary>
+        /// <param name="queue">queue model to save</param>
+        /// <returns>Returns saved queue</returns>
+        Model.Queue SaveQueue(Model.Queue queue);
     }
 }

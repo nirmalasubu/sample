@@ -24,6 +24,7 @@ namespace OnDemandTools.Business.Modules.Queue
         IQueueMessageRecorder historyRecorder;
         IGetAiringQuery airingQueryHelper;
         IAiringMessagePusherQueueApi messagePusher;
+        IQueueSaveCommand queueSaveCommand;
 
         public QueueService(
             IQueueQuery queueQueryHelper,
@@ -32,7 +33,8 @@ namespace OnDemandTools.Business.Modules.Queue
             IGetQueueMessagesQuery queueMessages,
             IQueueMessageRecorder historyRecorder,
             IGetAiringQuery airingQueryHelper,
-            IAiringMessagePusherQueueApi messagePusher)
+            IAiringMessagePusherQueueApi messagePusher,
+            IQueueSaveCommand queueSaveCommand)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
@@ -41,6 +43,7 @@ namespace OnDemandTools.Business.Modules.Queue
             this.historyRecorder = historyRecorder;
             this.airingQueryHelper = airingQueryHelper;
             this.messagePusher = messagePusher;
+            this.queueSaveCommand = queueSaveCommand;
         }
 
         /// <summary>
@@ -317,7 +320,21 @@ namespace OnDemandTools.Business.Modules.Queue
             {
                 return false;
             }
-                     
+
+        }
+
+        /// <summary>
+        /// Save's the queue
+        /// </summary>
+        /// <param name="queue">queue model to save</param>
+        /// <returns>Returns saved queue</returns>
+        public Model.Queue SaveQueue(Model.Queue queue)
+        {
+            DLModel.Queue dataModel = queue.ToDataModel<Model.Queue, DLModel.Queue>();
+
+            dataModel = queueSaveCommand.Save(dataModel);
+
+            return dataModel.ToBusinessModel<DLModel.Queue, Model.Queue>();
         }
     }
 }

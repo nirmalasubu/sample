@@ -26,6 +26,16 @@ export const fetchQueues = () => {
     };
 };
 
+export const saveQueue = (model) => {
+    return Axios.post('/api/deliveryqueue', model)
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+
 
 export const fetchNotificationHistorySuccess = (notificationHistory) => {
     return {
