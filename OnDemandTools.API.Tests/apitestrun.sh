@@ -1,5 +1,7 @@
 #!/bin/bash
 
+curl --retry 1 --retry-delay 2 -f http://apihost:5000/healthcheck
+
 dotnet test -xml /app/output/apirun.xml
 
 BOMBED=$?

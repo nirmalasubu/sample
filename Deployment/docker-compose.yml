@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 services:
   odt-api:
@@ -15,12 +15,7 @@ services:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
       PORT: "5000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
-      interval: 10s
-      timeout: 10s
-      retries: 2
-    
+        
   odt-webapp:
     env_file:
       - ./env/shared.env
@@ -49,12 +44,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
-      PORT: "5000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 2
+      PORT: "5000"    
 
   odt-jobs-tests:
     env_file:
