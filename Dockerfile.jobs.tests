@@ -18,5 +18,4 @@ WORKDIR /app/OnDemandTools.Jobs.Tests
 
 RUN ["dotnet", "build"]
 
-CMD dotnet test -xml /app/output/jobrun.xml && \
-    xsltproc --output /app/output/jobresults.xml --stringparam use.extensions 0 /app/xunit-to-junit.xslt /app/output/jobrun.xml
+CMD ["/bin/bash", "./tests.sh"]
