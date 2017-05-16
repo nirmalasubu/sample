@@ -21,12 +21,6 @@ namespace OnDemandTools.API.Tests
             this.client = this.fixture.restClient;
         }
 
-        [Fact]
-        public void JoesFakeTest()
-        {  
-            Assert.True(false);          
-        }
-
         [Theory, Order(1)]
         [InlineData("ODTD")]
         public void DeleteAiringId(string prefix)

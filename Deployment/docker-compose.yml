@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 
 services:
   odt-api:
@@ -62,12 +62,17 @@ services:
       - ./env/jobs.env
     build:
       context: ../
-      dockerfile: Dockerfile.jobs.tests  
+      dockerfile: Dockerfile.jobs.tests      
+    stdin_open: true
+    tty: true  
+    depends_on:
+      odt-api:
+        condition: service_healthy
+      odt-jobs:
+        condition: service_healthy
     links:
       - odt-api:apihost
       - odt-jobs:jobhost
-    stdin_open: true
-    tty: true    
 
   odt-api-tests:
     stdin_open: true
@@ -77,9 +82,12 @@ services:
       - ./env/jobs.env
     build:
       context: ../
-      dockerfile: Dockerfile.api.tests  
+      dockerfile: Dockerfile.api.tests      
+    depends_on:
+      odt-api:
+        condition: service_healthy
     links:
-      - odt-api:apihost     
+      - odt-api:apihost   
   
   quick-test:
     stdin_open: true
