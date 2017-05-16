@@ -138,6 +138,8 @@ class DeliveryQueueAddEdit extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <div class="panel panel-default">
+                         <div class="panel-body">
                     <Grid>
                         <Form>
                             <Row>
@@ -262,6 +264,8 @@ class DeliveryQueueAddEdit extends React.Component {
                             </Row>
                         </Form>
                     </Grid>
+                    </div>
+                    </div>
                     <NotificationContainer />
                 </Modal.Body>
                 <Modal.Footer>
