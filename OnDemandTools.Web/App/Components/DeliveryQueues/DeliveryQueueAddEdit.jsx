@@ -216,7 +216,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col md={9}>
+                                <Col md={8}>
                                     <Tabs defaultActiveKey={1} >
                                         <Tab eventKey={1} title="Criteria">
                                             <FormGroup
