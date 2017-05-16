@@ -16,7 +16,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
     healthcheck:
-      test: ["CMD", "curl", "-v", "http://localhost:5000/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
       interval: 10s
       timeout: 10s
       retries: 2
@@ -51,7 +51,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
     healthcheck:
-      test: ["CMD", "curl", "-v", "http://localhost:5000/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
       interval: 1m30s
       timeout: 10s
       retries: 2
@@ -71,7 +71,7 @@ services:
 
   odt-api-tests:
     stdin_open: true
-    tty: true
+    tty: true    
     env_file:
       - ./env/shared.env
       - ./env/jobs.env
@@ -79,7 +79,7 @@ services:
       context: ../
       dockerfile: Dockerfile.api.tests  
     links:
-      - odt-api:apihost 
+      - odt-api:apihost     
   
   quick-test:
     stdin_open: true
