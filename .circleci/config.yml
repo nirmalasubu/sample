@@ -11,7 +11,7 @@ jobs:
         - sandbox
         - newbuild
         
-    working_directory: ~/app
+    working_directory: ~/app/Deployment
 
     steps:
       - checkout
@@ -78,10 +78,18 @@ jobs:
               fi
 
       - deploy:
-          name: Continious Integration
+          name: Continious Deployment to Dev
           working_directory: ~/app/Deployment
           command: |
-              if [ "${CIRCLE_BRANCH}" == "dev" ] || [ "${CIRCLE_BRANCH}" == "sandbox" ];
-                then harbor-compose deploy -e ${CIRCLE_BRANCH};
+              if [ "${CIRCLE_BRANCH}" == "dev" ];
+                then harbor-compose deploy -e dev;
+              fi
+
+      - deploy:
+          name: Continious Deployment to Sandbox
+          working_directory: ~/app/Deployment
+          command: |
+              if [ "${CIRCLE_BRANCH}" == "sandbox" ];
+                then harbor-compose deploy -e sandbox;
               fi
            
