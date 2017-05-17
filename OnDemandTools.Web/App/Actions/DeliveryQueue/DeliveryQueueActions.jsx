@@ -13,6 +13,13 @@ export const fetchQueuesSuccess = (queues) => {
     }
 };
 
+export const saveQueueSuccess = (queue) => {
+    return {
+        type: actionTypes.SAVE_QUEUE_SUCCESS,
+        queue
+    }
+};
+
 
 export const fetchQueues = () => {
     return (dispatch) => {
@@ -27,13 +34,15 @@ export const fetchQueues = () => {
 };
 
 export const saveQueue = (model) => {
-    return Axios.post('/api/deliveryqueue', model)
-        .then(response => {
-            return (response.data);
-        })
-        .catch(error => {
-            throw (error);
-        });
+    return (dispatch) => {
+        return Axios.post('/api/deliveryqueue', model)
+            .then(response => {
+                dispatch(saveQueueSuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
 };
 
 
@@ -58,7 +67,7 @@ export const fetchNotificationHistory = (name) => {
 
 export const fetchNotificationHistoryByAiringId = (name, airingIds) => {
     return (dispatch) => {
-        return Axios.get('/api/deliveryqueue/notificationhistory/'+name + '/' + airingIds)
+        return Axios.get('/api/deliveryqueue/notificationhistory/' + name + '/' + airingIds)
             .then(response => {
                 dispatch(fetchNotificationHistorySuccess(response.data))
             })

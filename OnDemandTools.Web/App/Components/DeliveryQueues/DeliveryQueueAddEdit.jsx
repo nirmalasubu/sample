@@ -37,11 +37,10 @@ class DeliveryQueueAddEdit extends React.Component {
     resetForm(queueName) {
         var model = $.extend(true, {}, this.props.data.queueDetails);
         this.setState({ queueModel: model });
-        console.log(model);
     }
 
     handleSave(){        
-        saveQueue(this.state.queueModel);
+       this.props.dispatch(saveQueue(this.state.queueModel));
     }
 
     handleFriendlyNameChange(event) {

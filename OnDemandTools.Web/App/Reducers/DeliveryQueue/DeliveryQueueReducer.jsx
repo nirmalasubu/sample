@@ -2,6 +2,15 @@
     switch (action.type) {
         case 'FETCH_QUEUES_SUCCESS':
             return action.queues;
+        case 'SAVE_QUEUE_SUCCESS':
+            var queueIndex = state.findIndex((obj => obj.id == action.queue.id));
+            if (queueIndex < 0) {
+                state.push(action.queue);
+            }
+            else {
+                state[queueIndex] = action.queue;
+            }
+            return state;
         default:
             return state;
     }
