@@ -74,7 +74,7 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
               if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ];
-                then harbor-compose catalog -e dev;
+                then harbor-compose catalog;
               fi
 
       - run:
@@ -82,7 +82,7 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
               if [ "${CIRCLE_BRANCH}" == "dev" ];
-                then harbor-compose deploy;
+                then harbor-compose deploy -e dev;
               fi
 
       - run:
