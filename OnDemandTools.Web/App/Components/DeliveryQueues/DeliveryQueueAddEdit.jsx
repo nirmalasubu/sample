@@ -52,7 +52,10 @@ class DeliveryQueueAddEdit extends React.Component {
     handleSave(){ 
         this.validateForm();
         if(this.state.validationStateName !="error" && this.state.validationStateEmail!="error" && this.state.validationQueryState!="error")
+        {
             this.props.dispatch(saveQueue(this.state.queueModel));
+            this.props.handleClose();
+        }
         else
             return false;
     }
