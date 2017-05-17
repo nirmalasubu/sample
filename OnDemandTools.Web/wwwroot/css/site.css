@@ -147,6 +147,10 @@ textarea.form-control-modal {
     height: 100px;
 }
 
+.select-control-width{
+    max-width: 300px;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

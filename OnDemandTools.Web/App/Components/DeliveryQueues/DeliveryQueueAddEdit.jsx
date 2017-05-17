@@ -330,7 +330,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                         </Col>
                                                         <Col md={4}>
                                                             <ControlLabel>Status Changes</ControlLabel>
-                                                            <Select multi simpleValue options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.queueModel.statusNames} />
+                                                            <Select multi simpleValue className="select-control-width" options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.queueModel.statusNames} />
                                                         </Col>
                                                     </Row>
                                                 </Grid>
