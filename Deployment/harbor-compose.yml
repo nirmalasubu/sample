@@ -1,6 +1,7 @@
 shipments:
   sead-ondemandtools-api:
     barge: ent-prod
+    env: dev
     containers:
     - odt-api
     group: sead
@@ -10,6 +11,7 @@ shipments:
 
   sead-ondemandtools-jobs:
     barge: corp-prod
+    env: dev
     containers:
     - odt-jobs
     group: sead
@@ -19,6 +21,7 @@ shipments:
 
   sead-ondemandtools-webapp:
     barge: corp-prod
+    env: dev
     containers:
     - odt-webapp
     group: sead
