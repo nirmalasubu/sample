@@ -187,7 +187,7 @@ class DeliveryQueueAddEdit extends React.Component {
 
     render() {
         return (
-            <Modal bsSize="large" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
+            <Modal bsSize="large" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <p>Edit Queue {this.props.data.queueDetails.friendlyName}</p>
