@@ -104,7 +104,7 @@ namespace OnDemandTools.Common.Logzio
                                 p.Add(items.ElementAt(0).Replace(@"""", "").Trim(),nr);
                             }
                             else{
-                                p.Add(items.ElementAt(0).Replace(@"""", "").Trim(), items.ElementAt(1).Trim());
+                                p.Add(items.ElementAt(0).Replace(@"""", "").Trim(), items.ElementAt(1).Replace(@"""", "").Trim());
                             }  
                         }
                       
@@ -112,11 +112,7 @@ namespace OnDemandTools.Common.Logzio
                 }
               
             }
-
-
-            // expando.properties = curEvent.Properties;
-            var dd = (JsonConvert.SerializeObject((object)expando, Formatting.None));
-
+            
             return (JsonConvert.SerializeObject((object)expando, Formatting.None));
 
         }

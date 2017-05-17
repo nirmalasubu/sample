@@ -13,17 +13,15 @@ using Serilog.Events;
 namespace OnDemandTools.API.Helpers
 {
 
-class SerilogMiddleware
+class InstrumentationMiddleware
     {
-        const string MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
-
         static Serilog.ILogger log;
 
         readonly RequestDelegate _next;
 
         AppSettings appSettings;
 
-        public SerilogMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public InstrumentationMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
             if (next == null) throw new ArgumentNullException(nameof(next));
             _next = next;
@@ -73,12 +71,13 @@ class SerilogMiddleware
                  info.Add("api",api.Substring(api.Length - 4));
             }
 
+            info.Add("context","Instrumentation");
             info.Add("requestMethod",httpContext.Request.Method);
             info.Add("path",httpContext.Request.Path.Value);
             info.Add("elapsedMs",elapsedMs);
             info.Add("status",500);
             info.Add("error", ex);
-            log.Information("jjRequest "+httpContext.Request.Path+" {@info}", info); 
+            log.Information("Request -"+httpContext.Request.Path+"{@info}", info); 
 
             return false;
         }
@@ -92,30 +91,16 @@ class SerilogMiddleware
                  info.Add("api",api.Substring(api.Length - 4));
             }
 
+            info.Add("context","Instrumentation");
             info.Add("requestMethod",httpContext.Request.Method);
             info.Add("path",httpContext.Request.Path.Value);
             info.Add("elapsedMs",elapsedMs);
             info.Add("status", statusCode.Value);           
-            log.Information("jjRequest "+httpContext.Request.Path+" {@info}", info); 
+            log.Information("Request -"+httpContext.Request.Path+"{@info}", info); 
 
         }
 
-        // static ILogger LogForErrorContext(HttpContext httpContext)
-        // {
-        //     var request = httpContext.Request;
-
-        //     var result = Log
-        //         .ForContext("RequestHeaders", request.Headers.ToDictionary(h => h.Key, h => h.Value.ToString()), destructureObjects: true)
-        //         .ForContext("RequestHost", request.Host)
-        //         .ForContext("RequestProtocol", request.Protocol);
-
-        //     if (request.HasFormContentType)
-        //         result = result.ForContext("RequestForm", request.Form.ToDictionary(v => v.Key, v => v.Value.ToString()));
-
-        //     return result;
-        // }
-
-        static double GetElapsedMilliseconds(long start, long stop)
+              static double GetElapsedMilliseconds(long start, long stop)
         {
             return (stop - start) * 1000 / (double)Stopwatch.Frequency;
         }

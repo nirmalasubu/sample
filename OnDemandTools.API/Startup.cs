@@ -33,13 +33,6 @@ namespace OnDemandTools.API
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-
-            // Log.Logger = new LoggerConfiguration()
-            //           .WriteTo.Logzio("PKzpHRkmGSdahHHIpeprYuKixClLUTRh",
-            //           application: "ODT_API",
-            //           reporterType: "Monitoring",
-            //           environment: "ODT_API_LOCAL")
-            //           .CreateLogger();
         }
 
 
