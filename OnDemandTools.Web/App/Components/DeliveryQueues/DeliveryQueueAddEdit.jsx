@@ -137,7 +137,7 @@ class DeliveryQueueAddEdit extends React.Component {
             model.statusNames = valArray;
 
         this.setState({ queueModel: model });
-        console.log(this.state.queueModel.statusName);
+        //console.log(this.state.queueModel.statusName);
     }
 
     handleCheckboxChange(event) {
