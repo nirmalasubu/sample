@@ -34,7 +34,8 @@ export const fetchQueues = () => {
 };
 
 export const saveQueue = (model) => {
-    return (dispatch) => {
+    console.log(model);
+    return (dispatch) => {        
         return Axios.post('/api/deliveryqueue', model)
             .then(response => {
                 dispatch(saveQueueSuccess(response.data))

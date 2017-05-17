@@ -13,6 +13,7 @@ import Moment from 'moment';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import validator from 'validator';
 
 @connect((store) => {
     return {
@@ -24,14 +25,23 @@ class DeliveryQueueAddEdit extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = ({
+            validationStateName : "",
+            validationStateEmail : "",
+            validationQueryState : "",
             queueModel: {},
             options: [
-                { value: 'Edited', label: 'Edited' },
-                { value: 'Encoding', label: 'Encoding' },
-                { value: 'Medium', label: 'Medium' },
+                { value: 'Select All', label: 'Select All' },
+                { value: 'EDITED', label: 'Edited' },
+                { value: 'ENCODING', label: 'Encoding' },
+                { value: 'MEDIUM', label: 'Medium' },
             ],
-            selectedOptions: []
+            selectAllArray : [
+                'EDITED',
+                'ENCODING',
+                'MEDIUM'
+            ]
         });
     }
     resetForm(queueName) {
@@ -39,14 +49,44 @@ class DeliveryQueueAddEdit extends React.Component {
         this.setState({ queueModel: model });
     }
 
-    handleSave(){        
-       this.props.dispatch(saveQueue(this.state.queueModel));
+    handleSave(){ 
+        this.validateForm();
+        if(this.state.validationStateName !="error" && this.state.validationStateEmail!="error" && this.state.validationQueryState!="error")
+            this.props.dispatch(saveQueue(this.state.queueModel));
+        else
+            return false;
+    }
+
+    validateForm()
+    {
+        var name = this.state.queueModel.friendlyName;
+        var email = this.state.queueModel.contactEmailAddress;
+        var value = this.state.queueModel.query;
+        var hasError = false;
+
+        if (value == "") {
+            hasError = true;
+        }
+        else {
+            try {
+                JSON.parse(value);
+            } catch (e) {
+                hasError = true;
+            }
+        }
+
+        this.setState({ 
+            validationStateName: (name == "") ? 'error' : '',
+            validationStateEmail: (email != "" && validator.isEmail(email)) ? '' : 'error',
+            validationQueryState: hasError ? 'error' : ''
+        });
     }
 
     handleFriendlyNameChange(event) {
         var model = this.state.queueModel;
         model.friendlyName = event.target.value;
         this.setState({ queueModel: model });
+        this.validateForm();
     }
 
     handleRemoteNameChange(event) {
@@ -65,6 +105,7 @@ class DeliveryQueueAddEdit extends React.Component {
         var model = this.state.queueModel;
         model.contactEmailAddress = event.target.value;
         this.setState({ queueModel: model });
+        this.validateForm();
     }
 
     handleHoursOutChange(event) {
@@ -77,10 +118,23 @@ class DeliveryQueueAddEdit extends React.Component {
         var model = this.state.queueModel;
         model.query = event.target.value;
         this.setState({ queueModel: model });
+        this.validateForm();
     }
 
     handleMultiChange(values) {
-        this.setState({ selectedOptions: values })
+        var valArray = values.split(',');
+        var found = jQuery.grep(valArray, function(value, i) {      
+            return value.indexOf("Select All") != -1
+        }).length;
+
+        var model = this.state.queueModel;        
+        if(found)
+            model.statusNames = this.state.selectAllArray;
+        else
+            model.statusNames = valArray;
+
+        this.setState({ queueModel: model });
+        console.log(this.state.queueModel.statusName);
     }
 
     handleCheckboxChange(event) {
@@ -144,7 +198,7 @@ class DeliveryQueueAddEdit extends React.Component {
                             <Row>
                                 <Col md={4} >
                                     <FormGroup
-                                        controlId="friendlyName">
+                                        controlId="friendlyName" validationState={this.state.validationStateName}>
                                         <ControlLabel>Queue Name</ControlLabel>
                                         <FormControl
                                             type="text"
@@ -156,8 +210,8 @@ class DeliveryQueueAddEdit extends React.Component {
                                 </Col>
                                 <Col md={4}>
                                     <FormGroup
-                                        controlId="contactEmail">
-                                        <ControlLabel>Contact Email</ControlLabel>
+                                    controlId="contactEmail" validationState={this.state.validationStateEmail}>
+                                        <ControlLabel>Contact Email &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Provide an alternate email only if the contact email is different than the requestor's email." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
                                         <FormControl
                                             type="text"
                                             value={this.state.queueModel.contactEmailAddress}
@@ -171,7 +225,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                 <Col md={4} >
                                     <FormGroup
                                         controlId="hoursOut">
-                                        <ControlLabel>Hours Out</ControlLabel>
+                                        <ControlLabel>Advanced Delivery &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Number of hours to be notified before flight start." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
                                         <FormControl
                                             type="text"
                                             value={this.state.queueModel.hoursOut}
@@ -186,6 +240,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <ControlLabel>Remote Name</ControlLabel>
                                         <FormControl
                                             type="text"
+                                            disabled
                                             value={this.state.queueModel.name}
                                             placeholder="Enter Remote Name"
                                             onChange={this.handleRemoteNameChange.bind(this)}
@@ -198,7 +253,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                     <FormGroup
                                         controlId="isActive">
                                         <Checkbox name="active" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.queueModel.active}> Activate Queue to receive notifications.</Checkbox>
+                                    checked={this.state.queueModel.active}> Activate Queue to receive notifications. &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Queue will receive notifications only if this is checked." class="glyphicon glyphicon-info-sign"></span></Checkbox>
                                     </FormGroup>
                                 </Col>
                                 <Col md={4}>
@@ -219,7 +274,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                     <Tabs defaultActiveKey={1} >
                                         <Tab eventKey={1} title="Criteria">
                                             <FormGroup
-                                                controlId="remoteName">
+                                            controlId="query" validationState={this.state.validationQueryState}>
                                                 <ControlLabel>Query</ControlLabel>
                                                 <FormControl
                                                     type="text"
@@ -232,30 +287,53 @@ class DeliveryQueueAddEdit extends React.Component {
                                         </Tab>
                                         <Tab eventKey={2} title="Options">
                                             <FormGroup>
-                                                <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version</Checkbox>
-                                                <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.bimRequired}> BIM Required </Checkbox>
-                                                <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.report}> Report Statuses</Checkbox>
-                                                <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.isPriorityQueue}> Priority Queue</Checkbox>
-                                                <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue</Checkbox>
+                                                <Grid>
+                                                    <Row>
+                                                        <Col md={4}>
+                                                            <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)}
+                                                            checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications even if an airing doesn't have a version number" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                            <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)}
+                                                            checked={this.state.queueModel.bimRequired}> BIM Required &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications only if the airing is in BIM" class="glyphicon glyphicon-info-sign"></span> </Checkbox>
+                                                            <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)}
+                                                            checked={this.state.queueModel.report}> Report Statuses &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, a status will be sent to Digital Fulfillment before a notification is sent to the queue" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                        </Col>
+                                                        <Col md={5}>
+                                                            <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)}
+                                                            checked={this.state.queueModel.isPriorityQueue}> Priority Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, notifications for airings with the closest flight window to current timestamp will be listed first" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                            <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)}
+                                                            checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will prohibit sending notifications with the media ID if the media ID has already been posted in a previous notification" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                        </Col>
+                                                    </Row>
+                                                </Grid>
                                             </FormGroup>
                                         </Tab>
                                         <Tab eventKey={3} title="Notifications">
                                             <FormGroup>
-                                                <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
-                                                <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
-                                                <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
-                                                <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                    checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
-                                                <ControlLabel>Status Changes</ControlLabel>
-                                                <Select multi simpleValue options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.selectedOptions} />
+                                                <Grid>
+                                                    <Row>
+                                                        <Col md={8}>
+                                                            <p>When the following updates are made, if checked and the Queue is active, a notification will be sent to the Queue</p>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col md={2}>
+                                                            <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
+                                                            <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
+                                                        </Col>
+                                                        <Col md={2}>
+                                                            <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
+                                                            <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
+                                                        </Col>
+                                                        <Col md={4}>
+                                                            <ControlLabel>Status Changes</ControlLabel>
+                                                            <Select multi simpleValue options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.queueModel.statusNames} />
+                                                        </Col>
+                                                    </Row>
+                                                </Grid>
                                             </FormGroup>
                                         </Tab>
                                     </Tabs>
@@ -269,7 +347,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>
-                    <Button onClick={this.handleSave.bind(this)}>Save</Button>
+                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateEmail != '' || this.state.validationQueryState != '')} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">Save</Button>
                 </Modal.Footer>
             </Modal>
         )
