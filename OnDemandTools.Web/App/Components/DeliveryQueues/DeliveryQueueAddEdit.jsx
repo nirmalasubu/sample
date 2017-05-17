@@ -27,9 +27,9 @@ class DeliveryQueueAddEdit extends React.Component {
         super(props);
 
         this.state = ({
-            validationStateName : "",
-            validationStateEmail : "",
-            validationQueryState : "",
+            validationStateName: "",
+            validationStateEmail: "",
+            validationQueryState: "",
             queueModel: {},
             options: [
                 { value: 'Select All', label: 'Select All' },
@@ -37,7 +37,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 { value: 'ENCODING', label: 'Encoding' },
                 { value: 'MEDIUM', label: 'Medium' },
             ],
-            selectAllArray : [
+            selectAllArray: [
                 'EDITED',
                 'ENCODING',
                 'MEDIUM'
@@ -49,19 +49,19 @@ class DeliveryQueueAddEdit extends React.Component {
         this.setState({ queueModel: model });
     }
 
-    handleSave(){ 
+    handleSave() {
         this.validateForm();
-        if(this.state.validationStateName !="error" && this.state.validationStateEmail!="error" && this.state.validationQueryState!="error")
-        {
-            this.props.dispatch(saveQueue(this.state.queueModel));
-            this.props.handleClose();
+        if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
+            this.props.dispatch(saveQueue(this.state.queueModel))
+                .then(() => {
+                    this.props.handleClose();
+                });
         }
         else
             return false;
     }
 
-    validateForm()
-    {
+    validateForm() {
         var name = this.state.queueModel.friendlyName;
         var email = this.state.queueModel.contactEmailAddress;
         var value = this.state.queueModel.query;
@@ -78,7 +78,7 @@ class DeliveryQueueAddEdit extends React.Component {
             }
         }
 
-        this.setState({ 
+        this.setState({
             validationStateName: (name == "") ? 'error' : '',
             validationStateEmail: (email != "" && validator.isEmail(email)) ? '' : 'error',
             validationQueryState: hasError ? 'error' : ''
@@ -126,12 +126,12 @@ class DeliveryQueueAddEdit extends React.Component {
 
     handleMultiChange(values) {
         var valArray = values.split(',');
-        var found = jQuery.grep(valArray, function(value, i) {      
+        var found = jQuery.grep(valArray, function (value, i) {
             return value.indexOf("Select All") != -1
         }).length;
 
-        var model = this.state.queueModel;        
-        if(found)
+        var model = this.state.queueModel;
+        if (found)
             model.statusNames = this.state.selectAllArray;
         else
             model.statusNames = valArray;
@@ -195,156 +195,156 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <div class="panel panel-default">
-                         <div class="panel-body">
-                    <Grid>
-                        <Form>
-                            <Row>
-                                <Col md={4} >
-                                    <FormGroup
-                                        controlId="friendlyName" validationState={this.state.validationStateName}>
-                                        <ControlLabel>Queue Name</ControlLabel>
-                                        <FormControl
-                                            type="text"
-                                            value={this.state.queueModel.friendlyName}
-                                            placeholder="Enter Queue Friendly Name"
-                                            onChange={this.handleFriendlyNameChange.bind(this)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={4}>
-                                    <FormGroup
-                                    controlId="contactEmail" validationState={this.state.validationStateEmail}>
-                                        <ControlLabel>Contact Email &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Provide an alternate email only if the contact email is different than the requestor's email." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
-                                        <FormControl
-                                            type="text"
-                                            value={this.state.queueModel.contactEmailAddress}
-                                            placeholder="Enter Contact Email"
-                                            onChange={this.handleEmailAddressChange.bind(this)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={4} >
-                                    <FormGroup
-                                        controlId="hoursOut">
-                                        <ControlLabel>Advanced Delivery &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Number of hours to be notified before flight start." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
-                                        <FormControl
-                                            type="text"
-                                            value={this.state.queueModel.hoursOut}
-                                            placeholder="Enter Hours Out"
-                                            onChange={this.handleHoursOutChange.bind(this)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={4}>
-                                    <FormGroup
-                                        controlId="remoteName">
-                                        <ControlLabel>Remote Name</ControlLabel>
-                                        <FormControl
-                                            type="text"
-                                            disabled
-                                            value={this.state.queueModel.name}
-                                            placeholder="Enter Remote Name"
-                                            onChange={this.handleRemoteNameChange.bind(this)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={4} >
-                                    <FormGroup
-                                        controlId="isActive">
-                                        <Checkbox name="active" onChange={this.handleCheckboxChange.bind(this)}
-                                    checked={this.state.queueModel.active}> Activate Queue to receive notifications. &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Queue will receive notifications only if this is checked." class="glyphicon glyphicon-info-sign"></span></Checkbox>
-                                    </FormGroup>
-                                </Col>
-                                <Col md={4}>
-                                    <FormGroup
-                                        controlId="remoteName">
-                                        <ControlLabel>Routing Key</ControlLabel>
-                                        <FormControl
-                                            type="text"
-                                            value={this.state.queueModel.routingKey}
-                                            placeholder="Enter Routing key"
-                                            onChange={this.handleRoutingKeyChange.bind(this)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={8}>
-                                    <Tabs defaultActiveKey={1} >
-                                        <Tab eventKey={1} title="Criteria">
+                        <div class="panel-body">
+                            <Grid>
+                                <Form>
+                                    <Row>
+                                        <Col md={4} >
                                             <FormGroup
-                                            controlId="query" validationState={this.state.validationQueryState}>
-                                                <ControlLabel>Query</ControlLabel>
+                                                controlId="friendlyName" validationState={this.state.validationStateName}>
+                                                <ControlLabel>Queue Name</ControlLabel>
                                                 <FormControl
                                                     type="text"
-                                                    value={this.state.queueModel.query}
-                                                    placeholder="{'Network':'TBS'}"
-                                                    onChange={this.handleQueryChange.bind(this)}
-                                                    componentClass="textarea"
+                                                    value={this.state.queueModel.friendlyName}
+                                                    placeholder="Enter Queue Friendly Name"
+                                                    onChange={this.handleFriendlyNameChange.bind(this)}
                                                 />
                                             </FormGroup>
-                                        </Tab>
-                                        <Tab eventKey={2} title="Options">
-                                            <FormGroup>
-                                                <Grid>
-                                                    <Row>
-                                                        <Col md={4}>
-                                                            <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)}
-                                                            checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications even if an airing doesn't have a version number" class="glyphicon glyphicon-info-sign"></span></Checkbox>
-                                                            <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)}
-                                                            checked={this.state.queueModel.bimRequired}> BIM Required &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications only if the airing is in BIM" class="glyphicon glyphicon-info-sign"></span> </Checkbox>
-                                                            <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)}
-                                                            checked={this.state.queueModel.report}> Report Statuses &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, a status will be sent to Digital Fulfillment before a notification is sent to the queue" class="glyphicon glyphicon-info-sign"></span></Checkbox>
-                                                        </Col>
-                                                        <Col md={5}>
-                                                            <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)}
-                                                            checked={this.state.queueModel.isPriorityQueue}> Priority Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, notifications for airings with the closest flight window to current timestamp will be listed first" class="glyphicon glyphicon-info-sign"></span></Checkbox>
-                                                            <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)}
-                                                            checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will prohibit sending notifications with the media ID if the media ID has already been posted in a previous notification" class="glyphicon glyphicon-info-sign"></span></Checkbox>
-                                                        </Col>
-                                                    </Row>
-                                                </Grid>
+                                        </Col>
+                                        <Col md={4}>
+                                            <FormGroup
+                                                controlId="contactEmail" validationState={this.state.validationStateEmail}>
+                                                <ControlLabel>Contact Email &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Provide an alternate email only if the contact email is different than the requestor's email." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    value={this.state.queueModel.contactEmailAddress}
+                                                    placeholder="Enter Contact Email"
+                                                    onChange={this.handleEmailAddressChange.bind(this)}
+                                                />
                                             </FormGroup>
-                                        </Tab>
-                                        <Tab eventKey={3} title="Notifications">
-                                            <FormGroup>
-                                                <Grid>
-                                                    <Row>
-                                                        <Col md={8}>
-                                                            <p>When the following updates are made, if checked and the Queue is active, a notification will be sent to the Queue</p>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md={2}>
-                                                            <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                                checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
-                                                            <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                                checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
-                                                        </Col>
-                                                        <Col md={2}>
-                                                            <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                                checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
-                                                            <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                                checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
-                                                        </Col>
-                                                        <Col md={4}>
-                                                            <ControlLabel>Status Changes</ControlLabel>
-                                                            <Select multi simpleValue className="select-control-width" options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.queueModel.statusNames} />
-                                                        </Col>
-                                                    </Row>
-                                                </Grid>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={4} >
+                                            <FormGroup
+                                                controlId="hoursOut">
+                                                <ControlLabel>Advanced Delivery &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Number of hours to be notified before flight start." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    value={this.state.queueModel.hoursOut}
+                                                    placeholder="Enter Hours Out"
+                                                    onChange={this.handleHoursOutChange.bind(this)}
+                                                />
                                             </FormGroup>
-                                        </Tab>
-                                    </Tabs>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Grid>
-                    </div>
+                                        </Col>
+                                        <Col md={4}>
+                                            <FormGroup
+                                                controlId="remoteName">
+                                                <ControlLabel>Remote Name</ControlLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    disabled
+                                                    value={this.state.queueModel.name}
+                                                    placeholder="Enter Remote Name"
+                                                    onChange={this.handleRemoteNameChange.bind(this)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={4} >
+                                            <FormGroup
+                                                controlId="isActive">
+                                                <Checkbox name="active" onChange={this.handleCheckboxChange.bind(this)}
+                                                    checked={this.state.queueModel.active}> Activate Queue to receive notifications. &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Queue will receive notifications only if this is checked." class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md={4}>
+                                            <FormGroup
+                                                controlId="remoteName">
+                                                <ControlLabel>Routing Key</ControlLabel>
+                                                <FormControl
+                                                    type="text"
+                                                    value={this.state.queueModel.routingKey}
+                                                    placeholder="Enter Routing key"
+                                                    onChange={this.handleRoutingKeyChange.bind(this)}
+                                                />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={8}>
+                                            <Tabs defaultActiveKey={1} >
+                                                <Tab eventKey={1} title="Criteria">
+                                                    <FormGroup
+                                                        controlId="query" validationState={this.state.validationQueryState}>
+                                                        <ControlLabel>Query</ControlLabel>
+                                                        <FormControl
+                                                            type="text"
+                                                            value={this.state.queueModel.query}
+                                                            placeholder="{'Network':'TBS'}"
+                                                            onChange={this.handleQueryChange.bind(this)}
+                                                            componentClass="textarea"
+                                                        />
+                                                    </FormGroup>
+                                                </Tab>
+                                                <Tab eventKey={2} title="Options">
+                                                    <FormGroup>
+                                                        <Grid>
+                                                            <Row>
+                                                                <Col md={4}>
+                                                                    <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications even if an airing doesn't have a version number" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                                    <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.bimRequired}> BIM Required &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will send notifications only if the airing is in BIM" class="glyphicon glyphicon-info-sign"></span> </Checkbox>
+                                                                    <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.report}> Report Statuses &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, a status will be sent to Digital Fulfillment before a notification is sent to the queue" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                                </Col>
+                                                                <Col md={5}>
+                                                                    <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.isPriorityQueue}> Priority Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="If checked, notifications for airings with the closest flight window to current timestamp will be listed first" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                                    <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue &nbsp; <span tooltip data-toggle="tooltip" data-placement="right" title="This will prohibit sending notifications with the media ID if the media ID has already been posted in a previous notification" class="glyphicon glyphicon-info-sign"></span></Checkbox>
+                                                                </Col>
+                                                            </Row>
+                                                        </Grid>
+                                                    </FormGroup>
+                                                </Tab>
+                                                <Tab eventKey={3} title="Notifications">
+                                                    <FormGroup>
+                                                        <Grid>
+                                                            <Row>
+                                                                <Col md={8}>
+                                                                    <p>When the following updates are made, if checked and the Queue is active, a notification will be sent to the Queue</p>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row>
+                                                                <Col md={2}>
+                                                                    <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
+                                                                    <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
+                                                                </Col>
+                                                                <Col md={2}>
+                                                                    <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
+                                                                    <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)}
+                                                                        checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
+                                                                </Col>
+                                                                <Col md={4}>
+                                                                    <ControlLabel>Status Changes</ControlLabel>
+                                                                    <Select multi simpleValue className="select-control-width" options={this.state.options} onChange={this.handleMultiChange.bind(this)} value={this.state.queueModel.statusNames} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Grid>
+                                                    </FormGroup>
+                                                </Tab>
+                                            </Tabs>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </Grid>
+                        </div>
                     </div>
                     <NotificationContainer />
                 </Modal.Body>
