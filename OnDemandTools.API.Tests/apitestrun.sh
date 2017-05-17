@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --retry 1 --retry-delay 2 -f http://apihost:5000/healthcheck
+curl --retry 1 --retry-delay 2 -v http://apihost:5000/healthcheck
 
 dotnet test -xml /app/output/apirun.xml
 

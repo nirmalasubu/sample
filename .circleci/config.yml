@@ -82,7 +82,7 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
               if [ "${CIRCLE_BRANCH}" == "dev" ];
-                then harbor-compose deploy -e dev;
+                then harbor-compose deploy;
               fi
 
       - run:
