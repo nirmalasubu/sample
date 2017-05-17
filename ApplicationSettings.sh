@@ -24,13 +24,13 @@ fi;
 
 if [ $CIRCLE_BRANCH = 'sandbox' ];
 then
- STATE="REF"
- echo "ENVIRONMENT=ref" > envAPI
- echo "ENVIRONMENT=ref" > envJob
- echo "ENVIRONMENT=ref" > envWeb
- echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_REF"" >> envAPI
- echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_REF"" >> envJob
- echo "TOKEN="$WEBAPP_SHIPMENT_BUILD_TOKEN_REF"" >> envWeb
+ STATE="SANDBOX"
+ echo "ENVIRONMENT=sandbox" > envAPI
+ echo "ENVIRONMENT=sandbox" > envJob
+ echo "ENVIRONMENT=sandbox" > envWeb
+ echo "TOKEN="$API_SHIPMENT_BUILD_TOKEN_SANDBOX"" >> envAPI
+ echo "TOKEN="$JOB_SHIPMENT_BUILD_TOKEN_SANDBOX"" >> envJob
+ echo "TOKEN="$WEBAPP_SHIPMENT_BUILD_TOKEN_SANDBOX"" >> envWeb
 fi;
 
 if [ $CIRCLE_BRANCH = 'rc' ];
