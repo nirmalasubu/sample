@@ -73,8 +73,9 @@ jobs:
           name: Continious Integration
           working_directory: ~/app/Deployment
           command: |
-              if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ];
-                then harbor-compose catalog;
+              if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ]; then
+                cat harbor-compose.yml;
+                harbor-compose catalog;
               fi
 
       - run:
