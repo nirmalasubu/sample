@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { fetchUser } from 'Actions/User/UserActions';
 import { fetchConfig } from 'Actions/Config/ConfigActions';
+import { fetchStatus } from 'Actions/Status/StatusActions';
 import $ from 'jquery';
 
 @connect((store) => {
@@ -20,6 +21,7 @@ class Header extends React.Component {
     componentDidMount() {
         this.props.dispatch(fetchUser());
         this.props.dispatch(fetchConfig());
+        this.props.dispatch(fetchStatus());
     }
 
     render() {

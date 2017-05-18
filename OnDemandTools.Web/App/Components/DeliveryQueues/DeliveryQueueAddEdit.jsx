@@ -18,7 +18,8 @@ import validator from 'validator';
 @connect((store) => {
     return {
         notificationHistory: store.notificationHistory,
-        config: store.config
+        config: store.config,
+        statuses: store.statuses
     };
 })
 class DeliveryQueueAddEdit extends React.Component {
@@ -31,30 +32,55 @@ class DeliveryQueueAddEdit extends React.Component {
             validationStateEmail: "",
             validationQueryState: "",
             queueModel: {},
-            options: [
-                { value: 'Select All', label: 'Select All' },
-                { value: 'EDITED', label: 'Edited' },
-                { value: 'ENCODING', label: 'Encoding' },
-                { value: 'MEDIUM', label: 'Medium' },
-            ],
-            selectAllArray: [
-                'EDITED',
-                'ENCODING',
-                'MEDIUM'
-            ]
+            options: [],
+            selectAllArray: []
         });
     }
+
+    getStatusNames(statusesObjects) {
+        console.log(this.props.statuses);
+        var names = [];
+
+        for (var x = 0; x < statusesObjects.length; x++) {
+            names.push(statusesObjects[x].name);
+        }
+
+        return names;
+    }
+
+    getOptions(statusesObjects) {
+        var options = [
+            { value: 'Select All', label: 'Select All' },
+        ];
+
+        for (var x = 0; x < statusesObjects.length; x++) {
+            var optionValue = {value: statusesObjects[x].name, label: statusesObjects[x].name};
+            options.push(optionValue);
+        }
+
+        return options;
+    }
+
     resetForm(queueName) {
         var model = $.extend(true, {}, this.props.data.queueDetails);
-        this.setState({ queueModel: model });
+        var optionValues = this.getOptions(this.props.statuses);
+        var statusNames = this.getStatusNames(this.props.statuses);
+        this.setState({ queueModel: model, options: optionValues, selectAllArray: statusNames});
     }
 
     handleSave() {
+        var elem = this;
         this.validateForm();
         if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
             this.props.dispatch(saveQueue(this.state.queueModel))
-                .then(() => {
-                    this.props.handleClose();
+                .then(() => {                   
+                    NotificationManager.success('Queue updated Successfully.');                    
+                    setTimeout(function() 
+                    {
+                        elem.props.handleClose();
+                    }, 1000);
+                }).catch(error => {
+                        NotificationManager.error('Queue update failed. ' + error, 'Failure' );
                 });
         }
         else
