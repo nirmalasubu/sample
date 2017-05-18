@@ -185,7 +185,7 @@ class QueueResetByDateRange extends React.Component {
                 </Modal.Header>
                 <Form>
                     <Modal.Body>
-                        <ControlLabel>This query does not permanently override the query in the Queue nor does it persists once this window is closed and the delivery is made. <br /><br /> </ControlLabel>
+                        <ControlLabel>This query does not permanently override the query in the Queue nor does it persist once this window is closed and the delivery is made. <br /><br /> </ControlLabel>
 
                         <Grid>
                             <Row>
