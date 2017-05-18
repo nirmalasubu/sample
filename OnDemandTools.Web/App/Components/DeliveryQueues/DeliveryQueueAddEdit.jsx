@@ -33,6 +33,7 @@ class DeliveryQueueAddEdit extends React.Component {
             validationStateEmail: "",
             validationQueryState: "",
             syntaxCheckerResults: "",
+            isProcessing: false,
             queueModel: {},
             options: [],
             selectAllArray: []
@@ -56,7 +57,7 @@ class DeliveryQueueAddEdit extends React.Component {
         ];
 
         for (var x = 0; x < statusesObjects.length; x++) {
-            var optionValue = {value: statusesObjects[x].name, label: statusesObjects[x].name};
+            var optionValue = { value: statusesObjects[x].name, label: statusesObjects[x].name };
             options.push(optionValue);
         }
 
@@ -72,9 +73,10 @@ class DeliveryQueueAddEdit extends React.Component {
             validationStartDateState: "",
             validationEndDateState: "",
             syntaxCheckerResults: "",
-            queueModel: model, 
-            options: optionValues, 
-            selectAllArray: statusNames
+            queueModel: model,
+            options: optionValues,
+            selectAllArray: statusNames,
+            isProcessing: false
         });
     }
 
@@ -84,7 +86,7 @@ class DeliveryQueueAddEdit extends React.Component {
         });
 
         var iDate = new Moment();
-        var deliverCriteria= {
+        var deliverCriteria = {
             name: "",
             query: this.state.queueModel.query,
             windowOption: 0,
@@ -110,15 +112,18 @@ class DeliveryQueueAddEdit extends React.Component {
         var elem = this;
         this.validateForm();
         if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
+
+            this.setState({ isProcessing: true });
+
             this.props.dispatch(saveQueue(this.state.queueModel))
-                .then(() => {                   
-                    NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated Successfully.');                    
-                    setTimeout(function() 
-                    {
+                .then(() => {
+                    NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated Successfully.', '', 2000);
+                    setTimeout(function () {
                         elem.props.handleClose();
-                    }, 1000);
+                    }, 3000);
                 }).catch(error => {
-                    NotificationManager.error(this.state.queueModel.friendlyName + ' queue update failed. ' + error, 'Failure' );
+                    NotificationManager.error(this.state.queueModel.friendlyName + ' queue update failed. ' + error, 'Failure');
+                    this.setState({ isProcessing: false });
                 });
         }
         else
@@ -340,31 +345,31 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <Col md={8}>
                                             <Tabs defaultActiveKey={1} >
                                                 <Tab eventKey={1} title="Criteria">
-                                                <Grid>
-                                                    <Row>
-                                                        <Col md={4}>
-                                                            <FormGroup
-                                                                controlId="query" validationState={this.state.validationQueryState}>
-                                                                <ControlLabel>Query <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
-                                                                <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
-                                                                <FormControl
-                                                                    bsClass="form-control form-control-modal-Edit"
-                                                                    type="text"
-                                                                    value={this.state.queueModel.query}
-                                                                    placeholder="{'Network':'TBS'}"
-                                                                    onChange={this.handleQueryChange.bind(this)}
-                                                                    componentClass="textarea"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md={4}>
-                                                            <ControlLabel>Syntax Checker</ControlLabel>
-                                                            <FormGroup controlId="queryResults">
-                                                                <FormControl bsClass="form-control form-control-modal-Edit" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                </Grid>
+                                                    <Grid>
+                                                        <Row>
+                                                            <Col md={4}>
+                                                                <FormGroup
+                                                                    controlId="query" validationState={this.state.validationQueryState}>
+                                                                    <ControlLabel>Query <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
+                                                                    <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
+                                                                    <FormControl
+                                                                        bsClass="form-control form-control-modal-Edit"
+                                                                        type="text"
+                                                                        value={this.state.queueModel.query}
+                                                                        placeholder="{'Network':'TBS'}"
+                                                                        onChange={this.handleQueryChange.bind(this)}
+                                                                        componentClass="textarea"
+                                                                    />
+                                                                </FormGroup>
+                                                            </Col>
+                                                            <Col md={4}>
+                                                                <ControlLabel>Syntax Checker</ControlLabel>
+                                                                <FormGroup controlId="queryResults">
+                                                                    <FormControl bsClass="form-control form-control-modal-Edit" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+                                                    </Grid>
                                                 </Tab>
                                                 <Tab eventKey={2} title="Options">
                                                     <FormGroup>
@@ -428,7 +433,9 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Cancel</Button>
-                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateEmail != '' || this.state.validationQueryState != '')} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">Save</Button>
+                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateEmail != '' || this.state.validationQueryState != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                        {this.state.isProcessing ? "Processing" : "Save"}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         )
