@@ -12,7 +12,8 @@ namespace OnDemandTools.Business.Adapters.Hangfire
 
         public HangfireRecurringJobCommand(AppSettings settings)
         {
-            _client = new RestClient(settings.PortalSettings.HangFireUrl);
+            if (settings.PortalSettings != null && settings.PortalSettings.HangFireUrl != null)
+                _client = new RestClient(settings.PortalSettings.HangFireUrl);
         }
 
         public void CreatePublisherJob(string queueName)

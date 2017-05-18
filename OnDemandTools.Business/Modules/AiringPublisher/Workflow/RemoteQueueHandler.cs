@@ -14,8 +14,11 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 
         public RemoteQueueHandler(AppSettings appsettings)
         {
-            _connectionString = appsettings.CloudQueue.MqUrl;
-            _exchangeName = appsettings.CloudQueue.MqExchange;
+            if (appsettings.CloudQueue != null && appsettings.CloudQueue.MqUrl != null)
+            {
+                _connectionString = appsettings.CloudQueue.MqUrl;
+                _exchangeName = appsettings.CloudQueue.MqExchange;
+            }
         }
 
         public void Create(BLQueue.Queue queue, bool prioritySelectionChanged = false)
