@@ -147,6 +147,11 @@ textarea.form-control-modal {
     height: 100px;
 }
 
+textarea.form-control-modal-Edit {
+    max-width: 325px;
+    height: 100px;
+}
+
 .select-control-width{
     max-width: 300px;
 }

@@ -8,6 +8,7 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { saveQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
+import { getResultsForQuery } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
@@ -31,6 +32,7 @@ class DeliveryQueueAddEdit extends React.Component {
             validationStateName: "",
             validationStateEmail: "",
             validationQueryState: "",
+            syntaxCheckerResults: "",
             queueModel: {},
             options: [],
             selectAllArray: []
@@ -65,7 +67,43 @@ class DeliveryQueueAddEdit extends React.Component {
         var model = $.extend(true, {}, this.props.data.queueDetails);
         var optionValues = this.getOptions(this.props.statuses);
         var statusNames = this.getStatusNames(this.props.statuses);
-        this.setState({ queueModel: model, options: optionValues, selectAllArray: statusNames});
+
+        this.setState({
+            validationStartDateState: "",
+            validationEndDateState: "",
+            syntaxCheckerResults: "",
+            queueModel: model, 
+            options: optionValues, 
+            selectAllArray: statusNames
+        });
+    }
+
+    syntaxChecker(event) {
+        this.setState({
+            syntaxCheckerResults: "please wait..."
+        });
+
+        var iDate = new Moment();
+        var deliverCriteria= {
+            name: "",
+            query: this.state.queueModel.query,
+            windowOption: 0,
+            startDateTime: iDate,
+            endDateTime: iDate
+        }
+
+        let promise = getResultsForQuery(deliverCriteria);
+
+        promise.then(message => {
+            this.setState({
+                syntaxCheckerResults: JSON.stringify(message, null, 2)
+            });
+        })
+            .catch(error => {
+                this.setState({
+                    syntaxCheckerResults: error
+                });
+            });
     }
 
     handleSave() {
@@ -74,13 +112,13 @@ class DeliveryQueueAddEdit extends React.Component {
         if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
             this.props.dispatch(saveQueue(this.state.queueModel))
                 .then(() => {                   
-                    NotificationManager.success('Queue updated Successfully.');                    
+                    NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated Successfully.');                    
                     setTimeout(function() 
                     {
                         elem.props.handleClose();
                     }, 1000);
                 }).catch(error => {
-                        NotificationManager.error('Queue update failed. ' + error, 'Failure' );
+                    NotificationManager.error(this.state.queueModel.friendlyName + ' queue update failed. ' + error, 'Failure' );
                 });
         }
         else
@@ -302,17 +340,31 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <Col md={8}>
                                             <Tabs defaultActiveKey={1} >
                                                 <Tab eventKey={1} title="Criteria">
-                                                    <FormGroup
-                                                        controlId="query" validationState={this.state.validationQueryState}>
-                                                        <ControlLabel>Query</ControlLabel>
-                                                        <FormControl
-                                                            type="text"
-                                                            value={this.state.queueModel.query}
-                                                            placeholder="{'Network':'TBS'}"
-                                                            onChange={this.handleQueryChange.bind(this)}
-                                                            componentClass="textarea"
-                                                        />
-                                                    </FormGroup>
+                                                <Grid>
+                                                    <Row>
+                                                        <Col md={4}>
+                                                            <FormGroup
+                                                                controlId="query" validationState={this.state.validationQueryState}>
+                                                                <ControlLabel>Query <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
+                                                                <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
+                                                                <FormControl
+                                                                    bsClass="form-control form-control-modal-Edit"
+                                                                    type="text"
+                                                                    value={this.state.queueModel.query}
+                                                                    placeholder="{'Network':'TBS'}"
+                                                                    onChange={this.handleQueryChange.bind(this)}
+                                                                    componentClass="textarea"
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                                        <Col md={4}>
+                                                            <ControlLabel>Syntax Checker</ControlLabel>
+                                                            <FormGroup controlId="queryResults">
+                                                                <FormControl bsClass="form-control form-control-modal-Edit" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
+                                                            </FormGroup>
+                                                        </Col>
+                                                    </Row>
+                                                </Grid>
                                                 </Tab>
                                                 <Tab eventKey={2} title="Options">
                                                     <FormGroup>
