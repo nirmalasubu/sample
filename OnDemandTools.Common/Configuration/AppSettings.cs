@@ -34,6 +34,8 @@ namespace OnDemandTools.Common.Configuration
     public class PortalSettings
     {
         public string DigitalFulfillmentUrl { get; set; }
+
+        public string HangFireUrl { get; set; }
     }
 
     public class CloudQueue

@@ -11,6 +11,9 @@ using OnDemandTools.DAL.Modules.QueueMessages.Commands;
 using System;
 using OnDemandTools.DAL.Modules.Airings;
 using OnDemandTools.DAL.Helpers;
+using OnDemandTools.DAL.Modules.Airings.Queries;
+using OnDemandTools.Business.Adapters.Hangfire;
+using OnDemandTools.Business.Modules.AiringPublisher.Workflow;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -25,6 +28,9 @@ namespace OnDemandTools.Business.Modules.Queue
         IGetAiringQuery airingQueryHelper;
         IAiringMessagePusherQueueApi messagePusher;
         IQueueSaveCommand queueSaveCommand;
+        CurrentAiringsQuery currentAiringQuery;
+        IHangfireRecurringJobCommand hangfireCommand;
+        IRemoteQueueHandler remoteQueueHandler;
 
         public QueueService(
             IQueueQuery queueQueryHelper,
@@ -34,7 +40,10 @@ namespace OnDemandTools.Business.Modules.Queue
             IQueueMessageRecorder historyRecorder,
             IGetAiringQuery airingQueryHelper,
             IAiringMessagePusherQueueApi messagePusher,
-            IQueueSaveCommand queueSaveCommand)
+            IQueueSaveCommand queueSaveCommand,
+            CurrentAiringsQuery currentAiringQuery,
+            IHangfireRecurringJobCommand hangfireCommand,
+            IRemoteQueueHandler remoteQueueHandler)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
@@ -44,6 +53,9 @@ namespace OnDemandTools.Business.Modules.Queue
             this.airingQueryHelper = airingQueryHelper;
             this.messagePusher = messagePusher;
             this.queueSaveCommand = queueSaveCommand;
+            this.currentAiringQuery = currentAiringQuery;
+            this.hangfireCommand = hangfireCommand;
+            this.remoteQueueHandler = remoteQueueHandler;
         }
 
         /// <summary>
@@ -324,15 +336,63 @@ namespace OnDemandTools.Business.Modules.Queue
         }
 
         /// <summary>
+        /// Defaults RoutingKey and Queue Name if it not exists
+        /// </summary>
+        /// <param name="queue">the queue to reset</param>
+        private void DefaultQueueKeyFields(Model.Queue queue)
+        {
+            if (string.IsNullOrWhiteSpace(queue.RoutingKey))
+                queue.RoutingKey = Guid.NewGuid().ToString();
+
+            if (string.IsNullOrWhiteSpace(queue.Name))
+                queue.Name = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
         /// Save's the queue
         /// </summary>
         /// <param name="queue">queue model to save</param>
         /// <returns>Returns saved queue</returns>
         public Model.Queue SaveQueue(Model.Queue queue)
         {
+            DefaultQueueKeyFields(queue);
+
             DLModel.Queue dataModel = queue.ToDataModel<Model.Queue, DLModel.Queue>();
 
+            var prioritySelectionChanged = false;
+            var versionSelectionChanged = false;
+            var prohibitResendMediaIdChanged = false;
+
+            if (!string.IsNullOrEmpty(dataModel.Name))
+            {
+                var existingQueueSettings = queueQueryHelper.GetByApiKey(dataModel.Name);
+
+                if (existingQueueSettings != null)
+                {
+                    prioritySelectionChanged = existingQueueSettings.IsPriorityQueue != dataModel.IsPriorityQueue;
+                    versionSelectionChanged = !existingQueueSettings.AllowAiringsWithNoVersion && dataModel.AllowAiringsWithNoVersion;
+                    prohibitResendMediaIdChanged = existingQueueSettings.IsProhibitResendMediaId &&
+                                               !dataModel.IsProhibitResendMediaId;
+                }
+            }
+
             dataModel = queueSaveCommand.Save(dataModel);
+
+            remoteQueueHandler.Create(queue, prioritySelectionChanged);
+
+            if (dataModel.Active)
+            {
+                hangfireCommand.CreatePublisherJob(dataModel.Name);
+            }
+            else
+            {
+                hangfireCommand.DeletePublisherJob(dataModel.Name);
+            }
+
+            if (versionSelectionChanged || prohibitResendMediaIdChanged)
+            {
+                currentAiringQuery.DeleteIgnoredQueue(dataModel.Name);
+            }
 
             return dataModel.ToBusinessModel<DLModel.Queue, Model.Queue>();
         }

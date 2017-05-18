@@ -15,7 +15,14 @@ public static class RestClientExtension
         {
             if (response.IsSuccessful())
             {
-                tcs.SetResult(JObject.Parse(response.Content));
+                if (string.IsNullOrWhiteSpace(response.Content))
+                {
+                    var jsonObject = new JObject();
+                    jsonObject.Add("StatusCode", response.StatusCode.ToString());
+                    tcs.SetResult(jsonObject);
+                }
+                else
+                    tcs.SetResult(JObject.Parse(response.Content));
             }
             else
             {
@@ -53,18 +60,18 @@ public static class RestClientExtension
         var tcs = new TaskCompletionSource<JObject>();
         client.ExecuteAsync(request, response =>
         {
-           
-                if (response.IsSuccessful())
-                {
-                    tcs.SetResult(JObject.Parse(response.Content));
-                }
-                else
-                {
-                    var jsonObject = new JObject();
-                    jsonObject.Add("StatusCode", response.StatusCode.ToString());
-                    jsonObject.Add("ErrorMessage", response.Content.ToString());
-                    tcs.SetResult(jsonObject);
-                }
+
+            if (response.IsSuccessful())
+            {
+                tcs.SetResult(JObject.Parse(response.Content));
+            }
+            else
+            {
+                var jsonObject = new JObject();
+                jsonObject.Add("StatusCode", response.StatusCode.ToString());
+                jsonObject.Add("ErrorMessage", response.Content.ToString());
+                tcs.SetResult(jsonObject);
+            }
         });
 
         return tcs.Task;

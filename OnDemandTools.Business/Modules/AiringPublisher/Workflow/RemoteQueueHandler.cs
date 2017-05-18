@@ -2,6 +2,7 @@
 using BLQueue = OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Common.Configuration;
 using RabbitMQ.Client;
+using System;
 
 namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 {
@@ -17,8 +18,12 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
             _exchangeName = appsettings.CloudQueue.MqExchange;
         }
 
-        public void Create(BLQueue.Queue queue)
+        public void Create(BLQueue.Queue queue, bool prioritySelectionChanged = false)
         {
+            if (prioritySelectionChanged)
+            {
+                Delete(queue.Name);
+            }
 
             using (var advancedBus = RabbitHutch.CreateBus(_connectionString).Advanced)
             {
@@ -29,6 +34,30 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
                 advancedBus.Bind(exchange, newQueue, queue.RoutingKey);
             }
 
+        }
+
+        public void Delete(string remoteQueueName, bool isPriorityQueue = false)
+        {
+            try
+            {
+                using (var advancedBus = RabbitHutch.CreateBus(_connectionString).Advanced)
+                {
+                    var existingQueue = isPriorityQueue ? advancedBus.QueueDeclare(remoteQueueName, maxPriority: 10) : advancedBus.QueueDeclare(remoteQueueName);
+
+                    advancedBus.QueueDelete(existingQueue);
+                }
+            }
+            catch (Exception)
+            {
+                if (!isPriorityQueue)
+                {
+                    Delete(remoteQueueName, true);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public void Purge(string remoteQueueName)
@@ -44,7 +73,7 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
 
     public interface IRemoteQueueHandler
     {
-        void Create(BLQueue.Queue queue);
+        void Create(BLQueue.Queue queue, bool prioritySelectionChanged = false);
         void Purge(string remoteQueueName);
     }
 }
