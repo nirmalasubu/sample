@@ -74,7 +74,6 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
               if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ]; then
-                cat harbor-compose.yml;
                 harbor-compose catalog;
               fi
 
@@ -82,15 +81,15 @@ jobs:
           name: Continious Deployment to Dev
           working_directory: ~/app/Deployment
           command: |
-              if [ "${CIRCLE_BRANCH}" == "dev" ];
-                then harbor-compose deploy -e dev;
+              if [ "${CIRCLE_BRANCH}" == "dev" ]; then
+                harbor-compose deploy -e dev;
               fi
 
       - run:
           name: Continious Deployment to Sandbox
           working_directory: ~/app/Deployment
           command: |
-              if [ "${CIRCLE_BRANCH}" == "sandbox" ];
-                then harbor-compose deploy -e sandbox;
+              if [ "${CIRCLE_BRANCH}" == "sandbox" ]; then
+                harbor-compose deploy -e sandbox;
               fi
            
