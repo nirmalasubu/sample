@@ -119,9 +119,25 @@ class DeliveryQueueTable extends React.Component {
 
     queueNameFormat(val,rowData) {
         return <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button>
-    }
+        }
+
 
     render() {
+            const options = {
+                defaultSortName: 'friendlyName',
+                      defaultSortOrder: 'asc',
+                      
+                      sizePerPageList: [ {
+                          text: '10 ', value: 10
+                      }, {
+                          text: '25 ', value: 25
+                      }, {
+                          text: '50 ', value: 50
+                      },
+                      {
+                          text: 'All ', value: this.props.RowData.length
+                      } ]
+            };
         var row;
         row = this.props.ColumnData.map(function (item, index) {
 
@@ -144,7 +160,7 @@ class DeliveryQueueTable extends React.Component {
         }.bind(this));
         return (
             <div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true}>
+                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={ options }>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />
@@ -157,3 +173,4 @@ class DeliveryQueueTable extends React.Component {
 }
 
 export default DeliveryQueueTable;
+

@@ -128,6 +128,11 @@ td, th {
 .queue-table-th-queue{
   width:300px;
 }
+.react-bootstrap-table-page-btns-ul {
+    float: left;
+    margin-left: -150px;
+    margin-top: 0;
+}
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
