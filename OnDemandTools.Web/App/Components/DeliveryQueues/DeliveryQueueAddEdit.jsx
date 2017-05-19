@@ -432,7 +432,7 @@ class DeliveryQueueAddEdit extends React.Component {
                     <NotificationContainer />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Cancel</Button>
+                    <Button disabled={this.state.isProcessing} onClick={this.props.handleClose}>Cancel</Button>
                     <Button disabled={(this.state.validationStateName != '' || this.state.validationStateEmail != '' || this.state.validationQueryState != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
