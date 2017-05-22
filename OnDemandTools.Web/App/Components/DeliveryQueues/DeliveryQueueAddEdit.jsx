@@ -116,7 +116,7 @@ class DeliveryQueueAddEdit extends React.Component {
             this.props.dispatch(saveQueue(this.state.queueModel))
                 .then(() => {
                     if (this.props.data.queueDetails.id == null) {
-                        NotificationManager.success(this.state.queueModel.friendlyName + ' successfully created.', '', 2000);
+                        NotificationManager.success(this.state.queueModel.friendlyName + ' queue successfully created.', '', 2000);
                     }
                     else {
                         NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated successfully.', '', 2000);
