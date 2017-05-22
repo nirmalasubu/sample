@@ -67,7 +67,9 @@ jobs:
       - run:
           name: Push Image into Quay
           working_directory: ~/app/Deployment
-          command: docker-compose push            
+          command: |
+            export COMPOSE_HTTP_TIMEOUT=120
+            docker-compose push --verbose            
 
       - run:
           name: Continious Integration
