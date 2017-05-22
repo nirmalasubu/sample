@@ -23,7 +23,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
         [Fact]
         public void GetAiringByTitleId_PassingWithValidId()
         {
-
+            bool postairing = PostAiring();
             JArray response = new JArray();
             var request = new RestRequest("/v1/airings/titleId/2065580", Method.GET);
             Task.Run(async () =>
@@ -41,7 +41,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
             JArray jTitleIds = response.First.SelectToken("title").Value<JArray>(@"titleIds");
             // Assert
             Assert.True(jTitleIds.First.Value<string>(@"value") == "2065580", string.Format("Title Id should be '2065580' and but the returned {0}", jTitleIds.First.Value<string>(@"value")));
-            Assert.True(!string.IsNullOrEmpty(response.First.Value<string>(@"mediaId")), string.Format("Media Id should not be null or empty and but the returned Null "));
+           
         }
 
         [Fact]
@@ -57,5 +57,32 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             Assert.True((response.First == null), "1111 is has no airings");
         }
+
+        #region Private Mathods 
+
+        private bool PostAiring()
+        {
+            JObject airingJson = JObject.Parse(Resources.Resources.ResourceManager.GetString("TBSAiringwithSeriesIdandTitleId"));
+            JArray jArray = (JArray)airingJson.SelectToken("Flights");
+
+            foreach (JObject obj in jArray)
+            {
+                obj["Start"] = DateTime.UtcNow.AddDays(2);
+                obj["End"] = DateTime.Now.AddDays(3);
+            }
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/TBSE", Method.POST);
+            request.AddParameter("application/json", airingJson, ParameterType.RequestBody);
+
+            Task.Run(async () =>
+            {
+                response = await client.RetrieveRecord(request);
+
+            }).Wait();
+
+            return response.SelectToken("airingId").Value<string>() != "" ? true : false;
+        }
+        #endregion
     }
+
 }
