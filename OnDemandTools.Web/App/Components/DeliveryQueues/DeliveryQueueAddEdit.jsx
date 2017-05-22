@@ -18,8 +18,6 @@ import validator from 'validator';
 
 @connect((store) => {
     return {
-        notificationHistory: store.notificationHistory,
-        config: store.config,
         statuses: store.statuses
     };
 })
@@ -117,12 +115,22 @@ class DeliveryQueueAddEdit extends React.Component {
 
             this.props.dispatch(saveQueue(this.state.queueModel))
                 .then(() => {
-                    NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated Successfully.', '', 2000);
+                    if (this.props.data.queueDetails.id == null) {
+                        NotificationManager.success(this.state.queueModel.friendlyName + ' successfully created.', '', 2000);
+                    }
+                    else {
+                        NotificationManager.success(this.state.queueModel.friendlyName + ' queue updated successfully.', '', 2000);
+                    }
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
                 }).catch(error => {
-                    NotificationManager.error(this.state.queueModel.friendlyName + ' queue update failed. ' + error, 'Failure');
+                    if (this.props.data.queueDetails.id == null) {
+                        NotificationManager.error(this.state.queueModel.friendlyName + ' queue creation failed. ' + error, 'Failure');
+                    }
+                    else {
+                        NotificationManager.error(this.state.queueModel.friendlyName + ' queue update failed. ' + error, 'Failure');
+                    }
                     this.setState({ isProcessing: false });
                 });
         }
