@@ -312,7 +312,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                 <ControlLabel>Remote Name</ControlLabel>
                                                 <FormControl
                                                     type="text"
-                                                    disabled={this.props.data.queueDetails.id === null ? true : false}
+                                                    disabled={this.props.data.queueDetails.id == null ? false : true}
                                                     value={this.state.queueModel.name}
                                                     placeholder="If blank, guid will be generated."
                                                     onChange={this.handleRemoteNameChange.bind(this)}
