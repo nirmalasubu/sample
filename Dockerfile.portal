@@ -2,8 +2,4 @@ FROM odt-build
 
 WORKDIR /app/OnDemandTools.Web
 
-RUN npm run portal
-
-RUN ["dotnet", "build"]
-
 CMD ["dotnet", "run", "--server.urls", "http://*:5000"]

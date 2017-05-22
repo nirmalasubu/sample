@@ -4,6 +4,4 @@ ENV APIEndPoint http://apihost:5000
 
 WORKDIR /app/OnDemandTools.API.Tests
 
-RUN ["dotnet", "build"]
-
 CMD ["/bin/bash", "./apitestrun.sh"]

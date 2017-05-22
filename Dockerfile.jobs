@@ -2,6 +2,4 @@ FROM odt-build
 
 WORKDIR /app/OnDemandTools.Jobs
 
-RUN ["dotnet", "build"]
-
 CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
