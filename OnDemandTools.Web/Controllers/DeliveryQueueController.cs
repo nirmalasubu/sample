@@ -58,10 +58,28 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("newqueue")]
+        public DeliveryQueueModel GetEmptyModel()
+        {
+            return new DeliveryQueueModel { MessageCount = "0", PendingDeliveryCount = "0" };
+        }
+
+        [Authorize]
         [HttpPost]
         public DeliveryQueueModel Post([FromBody]DeliveryQueueModel viewModel)
         {
             Queue blModel = viewModel.ToBusinessModel<DeliveryQueueModel, Queue>();
+
+            if (string.IsNullOrEmpty(blModel.Id))
+            {
+                blModel.CreatedDateTime = DateTime.UtcNow;
+                blModel.CreatedBy = HttpContext.User.Identity.Name;
+            }
+            else
+            {
+                blModel.ModifiedDateTime= DateTime.UtcNow;
+                blModel.ModifiedBy = HttpContext.User.Identity.Name;
+            }
 
             blModel = _queueSvc.SaveQueue(blModel);
 

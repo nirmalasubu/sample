@@ -7,13 +7,16 @@ import ResendPurgeModal from 'Components/DeliveryQueues/ResendPurgeModal';
 import ResetByDateRange from 'Components/DeliveryQueues/QueueResetByDateRange';
 import NotificationHistory from 'Components/DeliveryQueues/QueueNotificationHistory';
 import DeliveryQueueAddEdit from 'Components/DeliveryQueues/DeliveryQueueAddEdit';
+import { getNewQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+
 
 class DeliveryQueueTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showModal: false,
+            newQueueModel: {},
             showDateRangeResetModel: false,
             showNotificationHistoryModel: false,
             showAddEditModel: false,
@@ -23,6 +26,23 @@ class DeliveryQueueTable extends React.Component {
             modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
             modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?"
         }
+    }
+    componentDidMount() {
+        let promise = getNewQueue();
+        promise.then(message => {
+            console.log(message);
+            this.setState({
+                newQueueModel: message
+            });
+        }).catch(error => {
+            this.setState({
+                newQueueModel: {}
+            });
+        });
+    }
+
+    openCreateNewQueueModel() {
+        this.setState({ showAddEditModel: true, queueDetails: this.state.newQueueModel });
     }
 
     openAddEditModel(val) {
@@ -117,27 +137,27 @@ class DeliveryQueueTable extends React.Component {
         return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>';
     }
 
-    queueNameFormat(val,rowData) {
+    queueNameFormat(val, rowData) {
         return <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button>
-        }
+    }
 
 
     render() {
-            const options = {
-                defaultSortName: 'friendlyName',
-                      defaultSortOrder: 'asc',
-                      
-                      sizePerPageList: [ {
-                          text: '10 ', value: 10
-                      }, {
-                          text: '25 ', value: 25
-                      }, {
-                          text: '50 ', value: 50
-                      },
-                      {
-                          text: 'All ', value: this.props.RowData.length
-                      } ]
-            };
+        const options = {
+            defaultSortName: 'friendlyName',
+            defaultSortOrder: 'asc',
+
+            sizePerPageList: [{
+                text: '10 ', value: 10
+            }, {
+                text: '25 ', value: 25
+            }, {
+                text: '50 ', value: 50
+            },
+            {
+                text: 'All ', value: this.props.RowData.length
+            }]
+        };
         var row;
         row = this.props.ColumnData.map(function (item, index) {
 
@@ -160,7 +180,10 @@ class DeliveryQueueTable extends React.Component {
         }.bind(this));
         return (
             <div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={ options }>
+                <div>
+                    <button class="btn-link pull-right addMarginRight" onClick={(event) => this.openCreateNewQueueModel(event)}>Create New Queue</button>
+                </div>
+                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={options}>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />

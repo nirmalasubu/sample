@@ -13,6 +13,8 @@ export const fetchQueuesSuccess = (queues) => {
     }
 };
 
+
+
 export const saveQueueSuccess = (queue) => {
     return {
         type: actionTypes.SAVE_QUEUE_SUCCESS,
@@ -31,6 +33,16 @@ export const fetchQueues = () => {
                 throw (error);
             });
     };
+};
+
+export const getNewQueue = () => {
+    return Axios.get('/api/deliveryqueue/newqueue')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
 };
 
 export const saveQueue = (model) => {

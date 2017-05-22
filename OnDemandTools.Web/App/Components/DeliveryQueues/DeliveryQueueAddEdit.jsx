@@ -259,7 +259,7 @@ class DeliveryQueueAddEdit extends React.Component {
             <Modal bsSize="large" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <p>Edit Queue {this.props.data.queueDetails.friendlyName}</p>
+                        <p> {this.props.data.queueDetails.id == null ? "New Queue" : "Edit Queue " + this.props.data.queueDetails.friendlyName}</p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -312,9 +312,9 @@ class DeliveryQueueAddEdit extends React.Component {
                                                 <ControlLabel>Remote Name</ControlLabel>
                                                 <FormControl
                                                     type="text"
-                                                    disabled
+                                                    disabled={this.props.data.queueDetails.id === null ? true : false}
                                                     value={this.state.queueModel.name}
-                                                    placeholder="Enter Remote Name"
+                                                    placeholder="If blank, guid will be generated."
                                                     onChange={this.handleRemoteNameChange.bind(this)}
                                                 />
                                             </FormGroup>
@@ -335,7 +335,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                 <FormControl
                                                     type="text"
                                                     value={this.state.queueModel.routingKey}
-                                                    placeholder="Enter Routing key"
+                                                    placeholder="If blank, guid will be generated."
                                                     onChange={this.handleRoutingKeyChange.bind(this)}
                                                 />
                                             </FormGroup>
@@ -356,7 +356,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                         bsClass="form-control form-control-modal-Edit"
                                                                         type="text"
                                                                         value={this.state.queueModel.query}
-                                                                        placeholder="{'Network':'TBS'}"
+                                                                        placeholder='{"Network" : "TBS"}'
                                                                         onChange={this.handleQueryChange.bind(this)}
                                                                         componentClass="textarea"
                                                                     />
@@ -404,7 +404,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                             <Row>
                                                                 <Col md={2}>
                                                                     <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)}
-                                                                        checked={this.state.queueModel.detectTitleChanges}>Title Change</Checkbox>
+                                                                        checked={this.state.queueModel.detectTitleChanges}>Title Changes</Checkbox>
                                                                     <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)}
                                                                         checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
                                                                 </Col>
