@@ -39,7 +39,6 @@ jobs:
             docker-compose run --name apitest odt-api-tests
             BOMBED=$?
             docker cp apitest:/app/output/apiresults.xml ~/app/output/xunit
-            docker-compose down
             exit $BOMBED
 
       - run:
@@ -50,8 +49,14 @@ jobs:
             docker-compose run --name jobtest odt-jobs-tests
             BOMBED=$?
             docker cp jobtest:/app/output/jobresults.xml ~/app/output/xunit
-            docker-compose down
             exit $BOMBED
+
+      - run:
+          name: Spin down Test Harness
+          working_directory: ~/app/Deployment
+          command: |
+            set +e
+            docker-compose down            
       
       - store_artifacts:
           path: ~/app/output
