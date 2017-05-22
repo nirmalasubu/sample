@@ -1,6 +1,11 @@
 version: '2'
 
 services:
+  odt-build:
+    build:
+      context: ../
+      dockerfile: Dockerfile.build
+
   odt-api:
     env_file:
       - ./env/shared.env
@@ -15,6 +20,8 @@ services:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
       PORT: "5000"
+    links:
+      - odt-build:build   
         
   odt-webapp:
     env_file:
@@ -30,6 +37,8 @@ services:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
       PORT: "5000"
+    links:
+      - odt-build:build
 
   odt-jobs:
     env_file:
@@ -44,7 +53,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: development
       HEALTHCHECK: /healthcheck
-      PORT: "5000"    
+      PORT: "5000"   
+    links:
+      - odt-build:build
 
   odt-jobs-tests:
     env_file:
@@ -58,6 +69,7 @@ services:
     links:
       - odt-api:apihost
       - odt-jobs:jobhost
+      - odt-build:build
 
   odt-api-tests:
     stdin_open: true
@@ -70,3 +82,4 @@ services:
       dockerfile: Dockerfile.api.tests      
     links:
       - odt-api:apihost   
+      - odt-build:build

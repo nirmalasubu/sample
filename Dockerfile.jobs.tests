@@ -12,8 +12,6 @@ WORKDIR /app
 
 RUN mkdir output
 
-RUN ["dotnet", "restore"]
-
 WORKDIR /app/OnDemandTools.Jobs.Tests
 
 RUN ["dotnet", "build"]

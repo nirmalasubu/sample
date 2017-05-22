@@ -1,0 +1,11 @@
+FROM microsoft/dotnet:1.1.0-sdk-projectjson
+
+RUN apt-get update && apt-get install -y --no-install-recommends xsltproc
+
+COPY . /app
+
+WORKDIR /app
+
+RUN mkdir output
+
+RUN ["dotnet", "restore"]
