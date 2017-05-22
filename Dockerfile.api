@@ -1,7 +1,5 @@
 FROM odt-build
 
-WORKDIR /app
-
 WORKDIR /app/OnDemandTools.API
 
 RUN ["dotnet", "build"]

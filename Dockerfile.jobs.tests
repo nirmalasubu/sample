@@ -3,10 +3,6 @@ FROM odt-build
 ENV JobEndPoint http://jobhost:5000
 ENV APIEndPoint http://apihost:5000
 
-WORKDIR /app
-
-RUN mkdir output
-
 WORKDIR /app/OnDemandTools.Jobs.Tests
 
 RUN ["dotnet", "build"]
