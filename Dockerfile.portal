@@ -4,10 +4,13 @@ FROM josephbulger/dotnetnode:1.1.0-sdk-projectjson-6.5.0-node
 COPY . /app
 WORKDIR /app
 
+RUN ["dotnet", "restore"]
+
 ## Switch to working directory
 WORKDIR /app/OnDemandTools.Web
 
 RUN npm run portal
+
 RUN ["dotnet", "build"]
 
 CMD ["dotnet", "run", "--server.urls", "http://*:5000"]

@@ -49,7 +49,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "portal": "npm install && dotnet restore && webpack --display-error-details",
+    "portal": "npm install && webpack --display-error-details",
     "portaldebug": "npm install && concurrently \"webpack --watch\" \"dotnet run\"",
     "webpackdebug": "webpack --display-error-details",
     "dev": "npm install && concurrently \"webpack --display-error-details --watch\" \"dotnet run\""
