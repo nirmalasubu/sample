@@ -16,7 +16,6 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.22.0",
     "bootstrap": "3.3.7",
-    "bower": "1.8.0",
     "case-sensitive-paths-webpack-plugin": "2.0.0",
     "concurrently": "3.4.0",
     "css-loader": "0.28.0",

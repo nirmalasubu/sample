@@ -14,20 +14,30 @@ WORKDIR /app/OnDemandTools.API
 
 RUN ["dotnet", "build"]
 
+RUN ["dotnet", "publish"]
+
 WORKDIR /app/OnDemandTools.API.Tests
 
 RUN ["dotnet", "build"]
 
-WORKDIR /app/OnDemandTools.Jobs
+RUN ["dotnet", "publish"]
 
-RUN ["dotnet", "build"]
+#WORKDIR /app/OnDemandTools.Jobs
 
-WORKDIR /app/OnDemandTools.Jobs.Tests
+#RUN ["dotnet", "build"]
 
-RUN ["dotnet", "build"]
+#RUN ["dotnet", "publish"]
 
-WORKDIR /app/OnDemandTools.Web
+#WORKDIR /app/OnDemandTools.Jobs.Tests
 
-RUN npm run portal
+#RUN ["dotnet", "build"]
 
-RUN ["dotnet", "build"]
+#RUN ["dotnet", "publish"]
+
+#WORKDIR /app/OnDemandTools.Web
+
+#RUN npm run portal
+
+#RUN ["dotnet", "build"]
+
+#RUN ["dotnet", "publish"]

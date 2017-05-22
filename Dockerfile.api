@@ -1,5 +1,5 @@
-FROM odt-build
+FROM microsoft/dotnet:1.1-runtime
 
-WORKDIR /app/OnDemandTools.API
+COPY ./output /app
 
-CMD ["dotnet", "run", "--server.urls", "http://*:5000"]
+CMD dotnet /app/OnDemandTools.API/bin/Debug/netcoreapp1.1/publish/OnDemandTools.API.dll --server.urls http://*:5000
