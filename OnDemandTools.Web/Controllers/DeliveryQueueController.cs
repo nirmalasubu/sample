@@ -61,7 +61,14 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("newqueue")]
         public DeliveryQueueModel GetEmptyModel()
         {
-            return new DeliveryQueueModel { MessageCount = "0", PendingDeliveryCount = "0" };
+            return new DeliveryQueueModel
+            {
+                MessageCount = "0",
+                PendingDeliveryCount = "0",
+                ContactEmailAddress = string.Empty,
+                Query = string.Empty,
+                Name = string.Empty
+            };
         }
 
         [Authorize]
@@ -77,7 +84,7 @@ namespace OnDemandTools.Web.Controllers
             }
             else
             {
-                blModel.ModifiedDateTime= DateTime.UtcNow;
+                blModel.ModifiedDateTime = DateTime.UtcNow;
                 blModel.ModifiedBy = HttpContext.User.Identity.Name;
             }
 
