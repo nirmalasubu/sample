@@ -1,7 +1,7 @@
 #!/bin/bash
 
-curl --retry 2 --retry-delay 10 -f http://apihost:5000/healthcheck
-curl --retry 2 --retry-delay 10 -f http://jobhost:5000/healthcheck
+sleep 10 && curl --retry 2 --retry-delay 10 -v http://apihost:5000/healthcheck
+sleep 10 && curl --retry 2 --retry-delay 10 -v http://jobhost:5000/healthcheck
 
 dotnet test -xml /app/output/jobrun.xml
 

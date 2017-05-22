@@ -68,7 +68,7 @@ jobs:
           name: Push Image into Quay
           working_directory: ~/app/Deployment
           command: |
-            export COMPOSE_HTTP_TIMEOUT=120
+            export COMPOSE_HTTP_TIMEOUT=600
             docker-compose push --verbose            
 
       - run:
