@@ -69,7 +69,7 @@ jobs:
           working_directory: ~/app/Deployment
           command: |
             export COMPOSE_HTTP_TIMEOUT=600
-            docker-compose push --verbose            
+            docker-compose push          
 
       - run:
           name: Continious Integration
