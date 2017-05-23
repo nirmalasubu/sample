@@ -87,7 +87,7 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
 
-            <button class="btn-link" title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+            <button class="btn-link" disabled={!queueItem[0].active} title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
 
@@ -95,21 +95,22 @@ class DeliveryQueueTable extends React.Component {
     }
 
     queueFormat(val) {
+        var queueItem = $.grep(this.props.RowData, function (v) {
+            if (v.name == val) return v;
+        });
+
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
                 <p>{val}</p>
                 <i>Delivery:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-                <button class="btn-xs btn-link" title="clear pending deliveries to queue">Clear</button>
-                <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
+                <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
                 <i>Consumption:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-                <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+                <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
             </div>)
-        } else {
-            var queueItem = $.grep(this.props.RowData, function (v) {
-                if (v.name == val) return v;
-            });
+        } else {           
 
             var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
                 if (v.name == val) return v;
@@ -122,11 +123,11 @@ class DeliveryQueueTable extends React.Component {
                     <p>{val}</p>
                     <i>Delivery:</i>
                     <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
-                    <button class="btn-xs btn-link" title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
-                    <button class="btn-xs btn-link" title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
+                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
                     <i>Consumption:</i>
                     <span class="badge">{ItemToRefresh[0].messageCount}</span>
-                    <button class="btn-xs btn-link" onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
                     {showdate ? (<span class="small">(updated: {datetoFormat})</span>) : (null)}
                 </div>
             )

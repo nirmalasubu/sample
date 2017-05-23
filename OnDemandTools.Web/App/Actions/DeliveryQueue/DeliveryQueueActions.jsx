@@ -1,5 +1,6 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
+import $ from 'jquery';
 
 
 // Future  we get data through Axios or fetch
@@ -13,7 +14,12 @@ export const fetchQueuesSuccess = (queues) => {
     }
 };
 
-
+export const filterQueuesSuccess= (filterValue) => {
+    return {
+        type: actionTypes.FILTER_QUEUES_SUCCESS,
+        filterValue
+    }
+ };
 
 export const saveQueueSuccess = (queue) => {
     return {
@@ -32,6 +38,12 @@ export const fetchQueues = () => {
             .catch(error => {
                 throw (error);
             });
+    };
+};
+
+export const filterQueues = (filterValue) => {
+    return (dispatch) => {
+        dispatch(filterQueuesSuccess(filterValue));
     };
 };
 

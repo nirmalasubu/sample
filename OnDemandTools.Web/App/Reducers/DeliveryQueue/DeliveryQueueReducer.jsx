@@ -33,3 +33,12 @@ export const SignalRQueueDataReducer = (state = {}, action) => {
             return state;
     }
 };
+
+export const FilterQueueDataReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'FILTER_QUEUES_SUCCESS':
+            return action.filterValue;
+        default:
+            return state;
+    }
+};

@@ -53,7 +53,7 @@ class QueueNotificationHistory extends React.Component {
     }
     actionsFormat(airingId) {
         return <div>
-            <Button class="btn-xs btn-link"
+            <Button class="btn-xs btn-link" disabled={!this.props.data.queueDetails.active}
                 title="Airing will be reset and notifications will be delivered again"  onClick={this.resendAiringToQueue.bind(this,airingId)}
             >Resend</Button>
         </div >

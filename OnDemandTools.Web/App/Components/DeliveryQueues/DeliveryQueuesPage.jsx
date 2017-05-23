@@ -18,7 +18,8 @@ class Queue extends React.Component {
             filterValue: {
                 queueName: "",
                 contactName: "",
-                queueId: ""
+                queueId: "",
+                isInActive: true
             },
 
             columns: [{ "label": "Queue Name", "dataField": "friendlyName", "sort": true },
@@ -45,34 +46,25 @@ class Queue extends React.Component {
         if (type == "QI")
             valuess.queueId = filtersValue;
 
+        if (type == "CB")
+            valuess.isInActive = filtersValue;
+
         if (type == "CL") {
-            this.state.filterValue.queueName = "";
-            this.state.filterValue.contactName = "";
-            this.state.filterValue.queueId = "";
+            valuess.queueName = "";
+            valuess.contactName = "";
+            valuess.queueId = "";
+            valuess.isInActive = true;            
         }
 
         this.setState({
             filterValue: valuess
         });
 
-        if (this.state.filterValue.queueName != "" || this.state.filterValue.contactName != "" || this.state.filterValue.queueId != "") {
-            var friendlyName = this.state.filterValue.queueName.toLowerCase();
-            var contactName = this.state.filterValue.contactName.toLowerCase();
-            var queueId = this.state.filterValue.queueId.toLowerCase();
+        this.props.filterQueue(this.state.filterValue);
 
-            var queueArray = $.grep(this.props.queues, function (v) {
-                return ((friendlyName != "" ? v.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
-                    && (contactName != "" ? v.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
-                    && (queueId != "" ? v.name.toLowerCase().indexOf(queueId) != -1 : true));
-            });
-            this.setState({
-                stateQueue: queueArray
-            });
-        }
-        else
-            this.setState({
-                stateQueue: this.props.queues
-            });
+        this.setState({
+            stateQueue: this.props.filteredQueues,
+        });
 
     }
 
@@ -82,11 +74,12 @@ class Queue extends React.Component {
         this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
         $.connection.hub.start();
 
+        this.props.filterQueue(this.state.filterValue);
+
         let promise = this.props.fetchQueue();
         promise.then(newqueue => {
             this.setState({
-                stateQueue: this.props.queues,
-
+                stateQueue: this.props.filteredQueues
             })
         });
         document.title = "ODT - Delivery Queues";
@@ -103,18 +96,37 @@ class Queue extends React.Component {
                
                 <PageHeader pageName="Delivery Queue" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable RowData={this.state.stateQueue} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
+                <DeliveryQueueTable RowData={this.props.filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
             </div>
 
         )
     }
 }
 
+const getFilterVal = (queues, filterVal) => {
+    if(filterVal.queueName!=undefined)
+    {
+        var friendlyName = filterVal.queueName.toLowerCase();
+        var contactName = filterVal.contactName.toLowerCase();
+        var queueId = filterVal.queueId.toLowerCase();
+        var inActive = filterVal.isInActive;
+        
+        return queues.filter(obj=> ((friendlyName != "" ? obj.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
+                && (contactName != "" ? obj.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
+                && (queueId != "" ? obj.name.toLowerCase().indexOf(queueId) != -1 : true) 
+                && (!inActive?obj.active:true)));
+    }
+    else
+        queues;
+};
+
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
+    var arr = getFilterVal(state.queues, state.filterValue);
     return {
         queues: state.queues,
-        signalRQueueData:state.queueCountData
+        signalRQueueData:state.queueCountData,
+        filteredQueues: (arr!=undefined?arr:state.queues)
     }
 };
 
@@ -122,7 +134,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchQueue: () => dispatch(queueActions.fetchQueues()),
-        signal: (signalRdata) =>dispatch(queueActions.signalRStart(signalRdata))
+        signal: (signalRdata) =>dispatch(queueActions.signalRStart(signalRdata)),
+        filterQueue: (filterVal) =>dispatch(queueActions.filterQueues(filterVal))
     };
 };
 
