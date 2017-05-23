@@ -24,10 +24,10 @@ jobs:
           command: |
             docker-compose build odt-build
             docker-compose run -d --name built odt-build
-            mkdir output
-            mkdir output/API
-            mkdir output/JOBS
-            mkdir output/WEB            
+            mkdir ~/app/output
+            mkdir ~/app/output/API
+            mkdir ~/app/output/JOBS
+            mkdir ~/app/output/WEB            
             docker cp built:/app/OnDemandTools.API/bin/Release/netcoreapp1.1/publish ~/app/output/API
             docker cp built:/app/OnDemandTools.Jobs/bin/Release/netcoreapp1.1/publish ~/app/output/JOBS
             docker cp built:/app/OnDemandTools.Web/bin/Release/netcoreapp1.1/publish ~/app/output/WEB
