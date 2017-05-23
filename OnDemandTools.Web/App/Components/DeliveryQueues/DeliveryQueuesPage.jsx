@@ -62,10 +62,6 @@ class Queue extends React.Component {
 
         this.props.filterQueue(this.state.filterValue);
 
-        this.setState({
-            stateQueue: this.props.filteredQueues,
-        });
-
     }
 
     //called on the page load
@@ -76,12 +72,8 @@ class Queue extends React.Component {
 
         this.props.filterQueue(this.state.filterValue);
 
-        let promise = this.props.fetchQueue();
-        promise.then(newqueue => {
-            this.setState({
-                stateQueue: this.props.filteredQueues
-            })
-        });
+        this.props.fetchQueue();
+
         document.title = "ODT - Delivery Queues";
     }
 
