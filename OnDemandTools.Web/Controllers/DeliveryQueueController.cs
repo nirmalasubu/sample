@@ -67,7 +67,9 @@ namespace OnDemandTools.Web.Controllers
                 PendingDeliveryCount = "0",
                 ContactEmailAddress = string.Empty,
                 Query = string.Empty,
-                Name = string.Empty
+                Name = string.Empty,
+                RoutingKey= string.Empty,
+                FriendlyName = string.Empty
             };
         }
 
