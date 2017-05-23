@@ -58,7 +58,6 @@ export const getNewQueue = () => {
 };
 
 export const saveQueue = (model) => {
-    //console.log(model);
     return (dispatch) => {        
         return Axios.post('/api/deliveryqueue', model)
             .then(response => {

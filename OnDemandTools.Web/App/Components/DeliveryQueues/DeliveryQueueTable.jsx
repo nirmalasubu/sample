@@ -30,7 +30,6 @@ class DeliveryQueueTable extends React.Component {
     componentDidMount() {
         let promise = getNewQueue();
         promise.then(message => {
-            console.log(message);
             this.setState({
                 newQueueModel: message
             });

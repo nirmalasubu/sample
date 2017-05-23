@@ -39,7 +39,6 @@ class DeliveryQueueAddEdit extends React.Component {
     }
 
     getStatusNames(statusesObjects) {
-        console.log(this.props.statuses);
         var names = [];
 
         for (var x = 0; x < statusesObjects.length; x++) {
@@ -213,8 +212,7 @@ class DeliveryQueueAddEdit extends React.Component {
         else
             model.statusNames = valArray;
 
-        this.setState({ queueModel: model });
-        //console.log(this.state.queueModel.statusName);
+        this.setState({ queueModel: model });        
     }
 
     handleCheckboxChange(event) {
@@ -291,7 +289,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <Col md={4}>
                                             <FormGroup
                                                 controlId="contactEmail" validationState={this.state.validationStateEmail}>
-                                                <ControlLabel>Contact Email &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Provide an alternate email only if the contact email is different than the requestor's email." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
+                                                <ControlLabel>Contact Email &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Queue owner email address." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
                                                 <FormControl
                                                     type="text"
                                                     value={this.state.queueModel.contactEmailAddress}

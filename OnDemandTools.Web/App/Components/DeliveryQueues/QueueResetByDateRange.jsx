@@ -158,7 +158,6 @@ class QueueResetByDateRange extends React.Component {
 
     _onSubmitForm() {
         if (this.state.validationStartDateState == "error" || this.state.validationEndDateState == "error" || this.state.validationQueryState == "error") {
-            //console.log("validation error");
             return false;
         }
         else {
