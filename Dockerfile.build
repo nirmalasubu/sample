@@ -8,36 +8,26 @@ WORKDIR /app
 
 RUN mkdir output
 
-RUN ["dotnet", "restore"]
+RUN dotnet restore
 
 WORKDIR /app/OnDemandTools.API
 
-RUN ["dotnet", "build"]
-
-RUN ["dotnet", "publish"]
+RUN dotnet publish -c Release
 
 WORKDIR /app/OnDemandTools.API.Tests
 
-RUN ["dotnet", "build"]
+RUN dotnet build
 
-RUN ["dotnet", "publish"]
+WORKDIR /app/OnDemandTools.Jobs
 
-#WORKDIR /app/OnDemandTools.Jobs
+RUN dotnet publish -c Release
 
-#RUN ["dotnet", "build"]
+WORKDIR /app/OnDemandTools.Jobs.Tests
 
-#RUN ["dotnet", "publish"]
+RUN dotnet build
 
-#WORKDIR /app/OnDemandTools.Jobs.Tests
+WORKDIR /app/OnDemandTools.Web
 
-#RUN ["dotnet", "build"]
+RUN npm run portal
 
-#RUN ["dotnet", "publish"]
-
-#WORKDIR /app/OnDemandTools.Web
-
-#RUN npm run portal
-
-#RUN ["dotnet", "build"]
-
-#RUN ["dotnet", "publish"]
+RUN dotnet publish -c Release

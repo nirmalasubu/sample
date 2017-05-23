@@ -19,17 +19,26 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: Building App
-          working_directory: ~/app/Deployment
-          command: |
-            docker-compose build
-
-      - run:
-          name: Make Testbed
+          name: Make folders for build
           working_directory: ~/app
           command: |
             mkdir output
+            mkdir output/API
+            mkdir output/JOBS
+            mkdir output/WEB
             mkdir output/xunit
+
+      - run:
+          name: Building App
+          working_directory: ~/app/Deployment
+          command: |
+            docker-compose build odt-build
+            docker-compose run -d --name built odt-build
+            docker cp built:/app/OnDemandTools.API/bin/Release/netcoreapp1.1/publish ~/app/output/API
+            docker cp built:/app/OnDemandTools.Jobs/bin/Release/netcoreapp1.1/publish ~/app/output/JOBS
+            docker cp built:/app/OnDemandTools.Web/bin/Release/netcoreapp1.1/publish ~/app/output/WEB
+            docker-compose down
+            docker-compose build odt-api odt-webapp odt-jobs odt-api-tests odt-jobs-tests
 
       - run:
           name: Testing API
