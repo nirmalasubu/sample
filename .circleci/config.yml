@@ -38,7 +38,8 @@ jobs:
           name: Make Test Harness
           working_directory: ~/app
           command: |
-            mkdir output/xunit
+            mkdir ~/app/tests
+            mkdir ~/app/tests/xunit
 
       - run:
           name: Testing API
@@ -47,7 +48,7 @@ jobs:
             set +e
             docker-compose run --name apitest odt-api-tests
             BOMBED=$?
-            docker cp apitest:/app/output/apiresults.xml ~/app/output/xunit
+            docker cp apitest:/app/output/apiresults.xml ~/app/tests/xunit
             exit $BOMBED
 
       - run:
@@ -57,7 +58,7 @@ jobs:
             set +e
             docker-compose run --name jobtest odt-jobs-tests
             BOMBED=$?
-            docker cp jobtest:/app/output/jobresults.xml ~/app/output/xunit
+            docker cp jobtest:/app/output/jobresults.xml ~/app/tests/xunit
             exit $BOMBED
 
       - run:
@@ -68,10 +69,10 @@ jobs:
             docker-compose down            
       
       - store_artifacts:
-          path: ~/app/output
+          path: ~/app/tests
         
       - store_test_results:
-          path: ~/app/output
+          path: ~/app/tests
 
       - run:
           name: Log into Quay          
