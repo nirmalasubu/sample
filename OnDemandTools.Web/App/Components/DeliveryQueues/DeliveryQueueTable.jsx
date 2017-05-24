@@ -24,7 +24,22 @@ class DeliveryQueueTable extends React.Component {
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
             modalResendMessage: "If you continue, <queue name> Queue will be reset and any notifications matching your criteria will be delivered again. Do you wish to continue?",
-            modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?"
+            modalClearMessage: "You are about to clear all undelivered notifications to the <queue name> queue. Do you wish to continue?",
+            options: {
+                defaultSortName: 'friendlyName',
+                defaultSortOrder: 'asc',
+
+                sizePerPageList: [{
+                    text: '10 ', value: 10
+                }, {
+                    text: '25 ', value: 25
+                }, {
+                    text: '50 ', value: 50
+                },
+                {
+                    text: 'All ', value: 10000000
+                }]
+            }
         }
     }
     componentDidMount() {
@@ -149,21 +164,7 @@ class DeliveryQueueTable extends React.Component {
 
 
     render() {
-        const options = {
-            defaultSortName: 'friendlyName',
-            defaultSortOrder: 'asc',
-
-            sizePerPageList: [{
-                text: '10 ', value: 10
-            }, {
-                text: '25 ', value: 25
-            }, {
-                text: '50 ', value: 50
-            },
-            {
-                text: 'All ', value: this.props.RowData.length
-            }]
-        };
+        
         var row;
         row = this.props.ColumnData.map(function (item, index) {
 
@@ -189,7 +190,7 @@ class DeliveryQueueTable extends React.Component {
                 <div>
                     <button class="btn-link pull-right addMarginRight" onClick={(event) => this.openCreateNewQueueModel(event)}>Create New Queue</button>
                 </div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={options}>
+                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />
