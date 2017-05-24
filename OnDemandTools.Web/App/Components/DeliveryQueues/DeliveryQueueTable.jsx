@@ -139,7 +139,12 @@ class DeliveryQueueTable extends React.Component {
     }
 
     queueNameFormat(val, rowData) {
-        return <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button>
+        return (
+            <div>
+                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button><br/>
+                {!rowData.active ? (<span class="label label-danger">Disabled</span>) : (null)}
+            </div>
+            )
     }
 
 
