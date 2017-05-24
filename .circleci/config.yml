@@ -32,7 +32,7 @@ jobs:
             docker cp built:/app/OnDemandTools.Jobs/bin/Release/netcoreapp1.1/publish ~/app/output/JOBS
             docker cp built:/app/OnDemandTools.Web/bin/Release/netcoreapp1.1/publish ~/app/output/WEB
             docker-compose down
-            docker-compose build odt-api odt-webapp odt-jobs odt-api-tests odt-jobs-tests
+            docker-compose build odtapi odtwebapp odtjobs odt-api-tests odt-jobs-tests
 
       - run:
           name: Make Test Harness
