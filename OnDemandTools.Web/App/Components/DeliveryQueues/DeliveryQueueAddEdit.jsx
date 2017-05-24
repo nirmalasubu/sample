@@ -219,7 +219,7 @@ class DeliveryQueueAddEdit extends React.Component {
         else
             model.statusNames = valArray;
 
-        this.setState({ queueModel: model });        
+        this.setState({ queueModel: model });
     }
 
     handleCheckboxChange(event) {
@@ -364,8 +364,14 @@ class DeliveryQueueAddEdit extends React.Component {
                                                             <Col md={4}>
                                                                 <FormGroup
                                                                     controlId="query" validationState={this.state.validationQueryState}>
-                                                                    <ControlLabel>Query <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
-                                                                    <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
+                                                                    <ControlLabel>Query 
+                                                                        &nbsp;
+                                                                        <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/">
+                                                                            <span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
+                                                                        </a>
+                                                                        &nbsp;&nbsp;
+                                                                        <span>{this.state.validationQueryState != '' ? "Please provide valid query" : ""}</span>
+                                                                    </ControlLabel>
                                                                     <FormControl
                                                                         bsClass="form-control form-control-modal-Edit"
                                                                         type="text"
@@ -377,7 +383,9 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                 </FormGroup>
                                                             </Col>
                                                             <Col md={4}>
-                                                                <ControlLabel>Syntax Checker</ControlLabel>
+                                                                <ControlLabel>
+                                                                    <Button disabled={this.state.validationQueryState != ''} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query</Button>
+                                                                </ControlLabel>
                                                                 <FormGroup controlId="queryResults">
                                                                     <FormControl bsClass="form-control form-control-modal-Edit" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
                                                                 </FormGroup>

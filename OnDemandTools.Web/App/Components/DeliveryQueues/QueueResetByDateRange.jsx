@@ -233,15 +233,21 @@ class QueueResetByDateRange extends React.Component {
                         <Grid>
                             <Row>
                                 <Col md={4}>
-                                    <ControlLabel>Query Criteria <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/"><span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span></a></ControlLabel>
-                                    <Button disabled={this.state.validationQueryState != ''} class="btn-xs btn-link" onClick={(event) => this.syntaxChecker(event)}>Query Syntax Documentation</Button>
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
+                                        <ControlLabel>Query Criteria &nbsp;
+                                        <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/">
+                                                <span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
+                                            </a>
+                                            &nbsp;&nbsp;
+                                        <span>{this.state.validationQueryState != '' ? "Please provide valid query criteria" : ""}</span>
+                                        </ControlLabel>
                                         <FormControl bsClass="form-control form-control-modal" onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query === "initialstage" ? this.state.queryValue : this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
-
                                 </Col>
                                 <Col md={4}>
-                                    <ControlLabel>Syntax Checker</ControlLabel>
+                                    <ControlLabel>
+                                        <Button disabled={this.state.validationQueryState != ''} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query Criteria</Button>
+                                    </ControlLabel>
                                     <FormGroup controlId="queryResults">
                                         <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
                                     </FormGroup>

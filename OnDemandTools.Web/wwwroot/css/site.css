@@ -172,6 +172,11 @@ textarea.form-control-modal-Edit {
     margin-right: 20px;
 }
 
+.noPadding
+{
+    padding: 0px;
+}
+
 .btn-link[disabled] {
     font-weight: normal;
     border-radius: 0;
