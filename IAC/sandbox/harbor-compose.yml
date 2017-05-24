@@ -3,8 +3,8 @@ shipments:
     env: sandbox
     barge: ent-prod
     containers:
-    - odt-api
-    replicas: 0
+    - odtapi
+    replicas: 1
     group: sead
     property: turner
     project: ondemandtools
@@ -14,7 +14,7 @@ shipments:
     env: sandbox
     barge: corp-prod
     containers:
-    - odt-jobs
+    - odtjobs
     replicas: 0
     group: sead
     property: turner
@@ -25,7 +25,7 @@ shipments:
     env: sandbox
     barge: corp-prod
     containers:
-    - odt-webapp
+    - odtwebapp
     replicas: 0
     group: sead
     property: turner

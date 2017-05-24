@@ -1,6 +1,6 @@
 version: "2"
 services:
-  odt-api:
+  odtapi:
     image: quay.io/turner/odt-api:1.0.0.1758    
     ports:
     - 80:5000
@@ -10,7 +10,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
 
-  odt-jobs:
+  odtjobs:
     image: quay.io/turner/odt-jobs:1.0.0.1758
     ports:
     - 80:5000
@@ -19,7 +19,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
 
-  odt-webapp:
+  odtwebapp:
     image: quay.io/turner/odt-webapp:1.0.0.1758
     ports:
     - 80:5000

@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.build
     image: odt-build
 
-  odt-api:
+  odtapi:
     env_file:
       - ./env/shared.env
       - ./env/api.env
@@ -22,7 +22,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"    
         
-  odt-webapp:
+  odtwebapp:
     env_file:
       - ./env/shared.env
       - ./env/portal.env
@@ -37,7 +37,7 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"    
 
-  odt-jobs:
+  odtjobs:
     env_file:
       - ./env/shared.env
       - ./env/jobs.env

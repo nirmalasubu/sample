@@ -3,7 +3,7 @@ shipments:
     barge: ent-prod
     env: dev
     containers:
-    - odt-api
+    - odtapi
     group: sead
     property: turner
     project: ondemandtools
@@ -13,7 +13,7 @@ shipments:
     barge: corp-prod
     env: dev
     containers:
-    - odt-jobs
+    - odtjobs
     group: sead
     property: turner
     project: ondemandtools
@@ -23,7 +23,7 @@ shipments:
     barge: corp-prod
     env: dev
     containers:
-    - odt-webapp
+    - odtwebapp
     group: sead
     property: turner
     project: ondemandtools

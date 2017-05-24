@@ -1,7 +1,7 @@
 version: "2"
 services:
-  odt-api:
-    image: quay.io/turner/odt-api:1.0.0.1490
+  odtapi:
+    image: quay.io/turner/odt-api:1.0.0.1866
     ports:
     - 80:5000
     - 443:5000
@@ -10,8 +10,8 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
 
-  odt-jobs:
-    image: quay.io/turner/odt-jobs:1.0.0.1490
+  odtjobs:
+    image: quay.io/turner/odt-jobs:1.0.0.1866
     ports:
     - 80:5000
     environment:
@@ -19,8 +19,8 @@ services:
       HEALTHCHECK: /healthcheck
       PORT: "5000"
 
-  odt-webapp:
-    image: quay.io/turner/odt-webapp:1.0.0.1490
+  odtwebapp:
+    image: quay.io/turner/odt-webapp:1.0.0.1866
     ports:
     - 80:5000
     environment:

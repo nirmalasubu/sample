@@ -3,7 +3,7 @@ shipments:
     env: qa
     barge: ent-prod
     containers:
-    - odt-api
+    - odtapi
     replicas: 5
     group: sead
     property: turner
@@ -14,7 +14,7 @@ shipments:
     env: qa
     barge: corp-prod
     containers:
-    - odt-jobs
+    - odtjobs
     replicas: 3
     group: sead
     property: turner
@@ -25,7 +25,7 @@ shipments:
     env: qa
     barge: corp-prod
     containers:
-    - odt-webapp
+    - odtwebapp
     replicas: 1
     group: sead
     property: turner
