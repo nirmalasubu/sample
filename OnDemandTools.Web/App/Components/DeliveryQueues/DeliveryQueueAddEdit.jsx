@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { Modal } from 'react-bootstrap';
 import { ModalDialogue } from 'react-bootstrap';
@@ -75,6 +76,12 @@ class DeliveryQueueAddEdit extends React.Component {
             selectAllArray: statusNames,
             isProcessing: false
         });
+
+        //set the focus
+        let node = ReactDOM.findDOMNode(this.refs.inputFriendlyName);
+        if (node && node.focus instanceof Function) {
+            node.focus();
+        }
     }
 
     syntaxChecker(event) {
@@ -281,6 +288,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                 <FormControl
                                                     type="text"
                                                     value={this.state.queueModel.friendlyName}
+                                                    ref="inputFriendlyName"
                                                     placeholder="Enter Queue Friendly Name"
                                                     onChange={this.handleFriendlyNameChange.bind(this)}
                                                 />
