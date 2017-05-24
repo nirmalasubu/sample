@@ -27,6 +27,7 @@ using AutoMapper;
 using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Exceptions;
 using OnDemandTools.Business.Modules.Destination;
+using System.Diagnostics;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -55,18 +56,26 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var options = GetOptionsFromQueryString();
 
+                Dictionary<string, object> routeStats = new Dictionary<string, object>();
+                long start = Stopwatch.GetTimestamp();                
                 var airing = airingSvc.GetBy((string)_.airingId);
+                routeStats.Add("rtAiring_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+
                 var user = Context.User();
                 FilterDestinations(airing, user.Destinations.ToList());
                 ValidateRequest(airing, user.Brands);
 
                 var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
 
+                start = Stopwatch.GetTimestamp(); 
                 if (options.Contains(Appenders.File.ToString().ToLower()))
                     airingSvc.AppendFile(ref airingLong);
+                routeStats.Add("appendFile_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Title.ToString().ToLower()))
                     airingSvc.AppendTitle(ref airingLong);
+                routeStats.Add("appendTitle_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
                 if (options.Contains(Appenders.Series.ToString().ToLower())
                             && (options.Contains(Appenders.File.ToString().ToLower())))
@@ -79,24 +88,38 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.AppendFileBySeriesId(ref airingLong);
                 }
 
+                start = Stopwatch.GetTimestamp();                
                 if (options.Contains(Appenders.Destination.ToString().ToLower()))
                     airingSvc.AppendDestinations(ref airingLong);
+                routeStats.Add("appendDestination_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
-
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Change.ToString().ToLower()))
                     airingSvc.AppendChanges(ref airingLong);
+                routeStats.Add("appendChanges_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
                 // Append status information if requested
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Status.ToString().ToLower()))
                     airingSvc.AppendStatus(ref airingLong);
+                routeStats.Add("appendStatus_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Package.ToString().ToLower()))
                     airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
+                routeStats.Add("appendPackage_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
+                start = Stopwatch.GetTimestamp();
                 var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
+                routeStats.Add("BLtoVM_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
                 if (!options.Contains(Appenders.Package.ToString().ToLower()))
                     model.Options.Packages = null;
+
+                routeStats.Add("context","Instrumentation-GET-Airing-Route");
+                routeStats.Add("requestMethod",this.Request.Method);
+                routeStats.Add("path", this.Request.Path);                                               
+                logger.Information("Request -"+this.Request.Path+"{@info}", routeStats); 
 
                 return model;
             });
@@ -632,6 +655,12 @@ namespace OnDemandTools.API.v1.Routes
             }
 
             return result;
+        }
+
+
+        double GetElapsedMilliseconds(long start, long stop)
+        {
+            return (stop - start) * 1000 / (double)Stopwatch.Frequency;
         }
     }
 }

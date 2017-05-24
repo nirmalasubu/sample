@@ -53,7 +53,9 @@ namespace OnDemandTools.API
             loggerFactory.AddSerilog();
             Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 
-                  
+                 
+            app.UseMiddleware<InstrumentationMiddleware>();
+
             // Specify request pipeline--strictly Nancy middleware
             app.UseOwin(x => x.UseNancy(opt => opt.Bootstrapper = provider.GetService<APIBootstrapper>()));
         }

@@ -13,6 +13,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
+using OnDemandTools.Common.Extensions;
 
 namespace OnDemandTools.Common.Logzio
 {
@@ -69,17 +72,47 @@ namespace OnDemandTools.Common.Logzio
         private string FormatLogEvent(LogEvent curEvent)
         {
 
-            dynamic expando = new ExpandoObject();
-            expando.application = this.application;
-            expando.type = this.reporterType;
-            expando.environment = this.environment;
-            expando.level = curEvent.Level.ToString();
-            expando.message = curEvent.MessageTemplate.Text;
+           dynamic expando = new ExpandoObject();
+            var p = expando as IDictionary<string,object>;
+            p.Add("application", this.application);
+            p.Add("type", this.reporterType);
+            p.Add("environment", this.environment);
+            p.Add("level", curEvent.Level.ToString());
+            p.Add("message", curEvent.MessageTemplate.Tokens.FirstOrDefault().ToString());
 
             if (curEvent.Exception != null)
-                expando.Exception = curEvent.Exception.StackTrace;
+                p.Add("exception", curEvent.Exception.StackTrace);                
 
-            expando.properties = curEvent.Properties;
+            if(curEvent.Properties.Any())
+            {
+                foreach (KeyValuePair<string, LogEventPropertyValue> kvp in curEvent.Properties)
+                {
+                    List<string> lst = kvp.Value.ToString().Replace("[", "").Replace("]", "").Replace("(", "").Replace(")", "")
+                            .Split(',')
+                            .Select(c=>c)
+                            .ToList();
+
+                    foreach (var item in lst)
+                    {                        
+                        Regex splitter = new Regex(@"^(.+""\s*):(\s*.+)$");
+                        var items = splitter.Split(item).Where(s => s!= String.Empty);
+                        if(!items.IsNullOrEmpty() & (items.Count() == 2))
+                        {
+                            double nr;
+                            if(Double.TryParse(items.ElementAt(1).Replace(@"""", "").Trim(), out nr))
+                            {
+                                p.Add(items.ElementAt(0).Replace(@"""", "").Trim(),nr);
+                            }
+                            else{
+                                p.Add(items.ElementAt(0).Replace(@"""", "").Trim(), items.ElementAt(1).Replace(@"""", "").Trim());
+                            }  
+                        }
+                      
+                    }
+                }
+              
+            }
+            
             return (JsonConvert.SerializeObject((object)expando, Formatting.None));
 
         }
