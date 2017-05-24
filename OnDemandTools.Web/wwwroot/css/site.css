@@ -172,6 +172,13 @@ textarea.form-control-modal-Edit {
     margin-right: 20px;
 }
 
+.btn-link[disabled] {
+    font-weight: normal;
+    border-radius: 0;
+    color: #777;
+    text-decoration: none;
+}
+
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"]
 {

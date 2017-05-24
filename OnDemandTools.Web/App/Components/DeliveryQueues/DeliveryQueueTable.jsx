@@ -30,9 +30,10 @@ class DeliveryQueueTable extends React.Component {
     componentDidMount() {
         let promise = getNewQueue();
         promise.then(message => {
+            console.log(message);
             this.setState({
                 newQueueModel: message
-            });        
+            });
         }).catch(error => {
             this.setState({
                 newQueueModel: {}
@@ -41,8 +42,7 @@ class DeliveryQueueTable extends React.Component {
     }
 
     openCreateNewQueueModel() {
-        var model = $.extend(true, {}, this.state.newQueueModel);      
-        this.setState({ showAddEditModel: true, queueDetails: model});
+        this.setState({ showAddEditModel: true, queueDetails: this.state.newQueueModel });
     }
 
     openAddEditModel(val) {
