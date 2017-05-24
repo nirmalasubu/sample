@@ -157,7 +157,7 @@ class DeliveryQueueTable extends React.Component {
         return (
             <div>
                 <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button><br/>
-                {!rowData.active ? (<span class="label label-danger">Disabled</span>) : (null)}
+                {!rowData.active ? (<span class="label label-danger">Inactive</span>) : (null)}
             </div>
             )
     }
