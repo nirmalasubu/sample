@@ -213,7 +213,7 @@ class QueueResetByDateRange extends React.Component {
                                 </Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationStartDateState} >
-                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeStartDate}
+                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeStartDate(event)}
                                             onChangeRaw={(event) => this.handleRawStartDateChange(event.target.value)}
                                             className={"form-control"}
                                         />
@@ -222,7 +222,7 @@ class QueueResetByDateRange extends React.Component {
                                 <Col md={1} componentClass={ControlLabel}>AND</Col>
                                 <Col md={2}>
                                     <FormGroup validationState={this.state.validationEndDateState}>
-                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={this.handleChangeEndDate}
+                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeEndDate(event)}
                                             onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
                                             className={"form-control"} />
                                     </FormGroup>
