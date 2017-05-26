@@ -32,7 +32,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
 
         #region "MediaId Generation test in Post Airing Route"
 
-        [Fact, Order(1)]
+        [Fact(Skip="Temporarily"), Order(1)]
         public void MediaIdGeneration_PostAiringWithOutVersion_MediaIdNonGenerationTest()
         {
             //JSON string with out version
@@ -69,7 +69,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             Assert.True(!string.IsNullOrEmpty(response.Value<string>(@"mediaId")), string.Format("Media Id {0} is generated", response.Value<string>(@"mediaId")));
         }
 
-        [Fact, Order(1)]
+        [Fact(Skip="Temporarily"), Order(1)]
         public void MediaIdGeneration_PostAiringWithContentIdsInDifferntOrder_returns_SameMediaIdTest()
         {
             //JSON string with version with out AiringId, MediaID
@@ -87,7 +87,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             Assert.Equal(MEDIAID, response.Value<string>(@"mediaId"));
         }
 
-        [Fact, Order(2)]
+        [Fact(Skip="Temporarily"), Order(2)]
         public void MediaIdGeneration_PostAiringWithdifferentPlaylist_returns_NewMediaIdTest()
         {
             //JSON string with version with  AiringId
@@ -133,7 +133,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
 
         #region "MediaId Generation test in Post playlist Route"
 
-        [Fact, Order(4)]
+        [Fact(Skip="Temporarily"), Order(4)]
         public void MediaIdGeneration_PostPlaylistWithNewPlaylist_returns_NewMediaIdTest()
         {
             //post a playlist 
@@ -192,7 +192,7 @@ namespace OnDemandTools.API.Tests.AiringRoute.PostAiring
             Assert.Equal(MEDIAID, response.Value<string>(@"mediaId"));
         }
 
-        [Fact, Order(6)]
+        [Fact(Skip="Temporarily"), Order(6)]
         public void MediaIdGeneration_PostPlaylistWithDifferentPlaylist_returns_NewMediaIdTest()
         {
             // post a playlist
