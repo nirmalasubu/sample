@@ -57,13 +57,20 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: false });
     }
 
-    contentFormat(val) {
+    contentFormat(val, rowData) {
         var content=[];
-        content.push(val.highDefinition?"HD":"");
-        content.push(val.standardDefinition?"SD":"");
-        content.push(val.cx?"C3":"");
-        content.push(val.nonCx?"C3":"");
-        return '<p data-toggle="tooltip">' + val.toString() + '</p>';
+        if(rowData.content)
+        {
+            if(rowData.content.highDefinition)
+                content.push("HD");
+            if(rowData.content.standardDefinition)
+                content.push("SD");
+            if(rowData.content.cx)
+                content.push("C(X)");
+            if(rowData.content.nonCx)
+                content.push("Non-C(X)");
+        }
+        return '<p data-toggle="tooltip">' + content.toString() + '</p>';
     }
 
     descriptionFormat(val) {
