@@ -7,8 +7,7 @@ services:
     - 443:5000
     environment:
       ASPNETCORE_ENVIRONMENT: sandbox
-      HEALTHCHECK: /healthcheck
-      PORT: "5000"
+      HEALTHCHECK: /healthcheck      
 
   odtjobs:
     image: quay.io/turner/odt-jobs:1.0.0.1866
@@ -16,14 +15,12 @@ services:
     - 80:5000
     environment:
       ASPNETCORE_ENVIRONMENT: sandbox
-      HEALTHCHECK: /healthcheck
-      PORT: "5000"
+      HEALTHCHECK: /healthcheck      
 
   odtwebapp:
-    image: quay.io/turner/odt-webapp:1.0.0.1866
+    image: quay.io/turner/odt-portal:1.0.0.1866
     ports:
     - 80:5000
     environment:
       ASPNETCORE_ENVIRONMENT: sandbox
-      HEALTHCHECK: /healthcheck
-      PORT: "5000"
+      HEALTHCHECK: /healthcheck      

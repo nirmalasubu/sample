@@ -15,7 +15,7 @@ shipments:
     barge: corp-prod
     containers:
     - odtjobs
-    replicas: 0
+    replicas: 1
     group: sead
     property: turner
     project: ondemandtools
@@ -26,7 +26,7 @@ shipments:
     barge: corp-prod
     containers:
     - odtwebapp
-    replicas: 0
+    replicas: 1
     group: sead
     property: turner
     project: ondemandtools

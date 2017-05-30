@@ -20,7 +20,7 @@ services:
       PORT: "5000"
 
   odtwebapp:
-    image: quay.io/turner/odt-webapp:1.0.0.1758
+    image: quay.io/turner/odt-portal:1.0.0.1758
     ports:
     - 80:5000
     environment:
