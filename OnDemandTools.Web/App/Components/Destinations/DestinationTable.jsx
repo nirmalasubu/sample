@@ -105,7 +105,7 @@ class DestinationTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" >Create New Queue</button>
+                    <button class="btn-link pull-right addMarginRight" >Create New Destination</button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}

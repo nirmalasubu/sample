@@ -32,9 +32,8 @@ export const fetchDestinations = () => {
 };
 
 export const filterDestinations = (filterDestination) => {
-    console.log(filterDestination);
     return (dispatch) => {
-        dispatch(filterDestinationSuccess(filterDestination));
+       dispatch(filterDestinationSuccess(filterDestination))
     };
 };
 

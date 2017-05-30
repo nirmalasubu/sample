@@ -6,8 +6,15 @@ import DestinationTable from 'Components/Destinations/DestinationTable';
 import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
+@connect((store) => {
+    var arr = getFilterVal(store.destinations, store.filterDestination);
+    return {
+        destinations: store.destinations,
+        filteredDestinations: (arr!=undefined?arr:store.destinations)
+    };
+})
 
-class Destinations extends React.Component {
+class DestinationPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -50,15 +57,17 @@ class Destinations extends React.Component {
             filterValue: valuess
         });
 
-        this.props.filterDestination(this.state.filterValue);
+        this.props.dispatch(destinationActions.filterDestinations(this.state.filterValue));
+        this.props.dispatch(destinationActions.fetchDestinations());
 
     }
 
     //called on the page load
     componentDidMount() {
-        this.props.filterDestination(this.state.filterValue);
 
-        this.props.fetchDestination();
+        this.props.dispatch(destinationActions.filterDestinations(this.state.filterValue));
+
+        this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Destinations";
     }
@@ -76,7 +85,7 @@ class Destinations extends React.Component {
 }
 
 const getFilterVal = (destinations, filterVal) => {
-    console.log("getfilter");
+    console.log(filterVal);
     if(filterVal.code!=undefined)
     {        
         var code = filterVal.code.toLowerCase();
@@ -90,28 +99,10 @@ const getFilterVal = (destinations, filterVal) => {
             )));
     }
     else
-        destinations;
+        return destinations;
 };
 
-// Maps state from store to props
-const mapStateToProps = (state, ownProps) => {
-    
-    var arr = getFilterVal(state.destinations, state.filterDestination);
-    return {
-        destinations: state.destinations,
-        filteredDestinations: (arr!=undefined?arr:state.destinations)
-    }
-};
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchDestination: () => dispatch(destinationActions.fetchDestinations()),
-        filterDestination: (filterVal) =>dispatch(destinationActions.filterDestinationSuccess(filterVal))
-    };
-};
-
-// Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(Destinations);
+export default DestinationPage;
 
 

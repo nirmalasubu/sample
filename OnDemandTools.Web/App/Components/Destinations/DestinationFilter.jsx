@@ -69,7 +69,7 @@ class DestinationFilter extends React.Component
         </FormGroup>
         {' '}
         <FormGroup controlId="content">
-            <Select simpleValue options={this.state.options} onChange={this.handleSelectChange.bind(this)} value={this.state.contentValue} placeholder="Content" />
+            <Select simpleValue className="destination-select-control" options={this.state.options} onChange={this.handleSelectChange.bind(this)} value={this.state.contentValue} placeholder="Content" />
         </FormGroup>
         {' '}
         <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
