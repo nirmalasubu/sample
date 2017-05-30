@@ -6,3 +6,12 @@
             return state;
     }
 };
+
+export const FilterDestinationDataReducer = (state = [], action) => {
+    switch (action.type) {
+        case 'FILTER_DESTINATION_SUCCESS':
+            return action.filterDestination;
+        default:
+            return state;
+    }
+};

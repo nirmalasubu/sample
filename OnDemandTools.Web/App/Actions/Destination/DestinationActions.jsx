@@ -4,12 +4,18 @@ import $ from 'jquery';
 
 
 // Future  we get data through Axios or fetch
-const destinations = [];
 
 export const fetchDestinationSuccess = (destinations) => {
     return {
         type: actionTypes.FETCH_DESTINATIONS_SUCCESS,
         destinations
+    }
+};
+
+export const filterDestinationSuccess= (filterDestination) => {
+    return {
+        type: actionTypes.FILTER_DESTINATION_SUCCESS,
+        filterDestination
     }
 };
 
@@ -22,6 +28,13 @@ export const fetchDestinations = () => {
             .catch(error => {
                 throw (error);
             });
+    };
+};
+
+export const filterDestinations = (filterDestination) => {
+    console.log(filterDestination);
+    return (dispatch) => {
+        dispatch(filterDestinationSuccess(filterDestination));
     };
 };
 

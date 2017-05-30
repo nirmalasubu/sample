@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as destinationActions from 'Actions/Destination/DestinationActions';
-//import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
+import DestinationFilter from 'Components/Destinations/DestinationFilter';
 import DestinationTable from 'Components/Destinations/DestinationTable';
 import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
@@ -18,12 +18,7 @@ class Destinations extends React.Component {
             filterValue: {
                 code: "",
                 description: "",
-                content: {
-                    hd: true,
-                    sd: true,
-                    cx: true,
-                    nonCx: true
-                }
+                content: ""
             },
 
             columns: [{ "label": "Code", "dataField": "name", "sort": true },
@@ -36,37 +31,32 @@ class Destinations extends React.Component {
 
     handleFilterUpdate(filtersValue, type) {
         var valuess = this.state.filterValue;
-        if (type == "QN")
-            valuess.queueName = filtersValue;
+        if (type == "CD")
+            valuess.code = filtersValue;
+
+        if (type == "DS")
+            valuess.description = filtersValue;
 
         if (type == "CN")
-            valuess.contactName = filtersValue;
-
-        if (type == "QI")
-            valuess.queueId = filtersValue;
-
-        if (type == "CB")
-            valuess.isInActive = filtersValue;
+            valuess.content = filtersValue;
 
         if (type == "CL") {
-            valuess.queueName = "";
-            valuess.contactName = "";
-            valuess.queueId = "";
-            valuess.isInActive = true;            
+            valuess.code = "";
+            valuess.description = "";
+            valuess.content = "";
         }
 
         this.setState({
             filterValue: valuess
         });
 
-        this.props.filterQueue(this.state.filterValue);
+        this.props.filterDestination(this.state.filterValue);
 
     }
 
     //called on the page load
     componentDidMount() {
-
-        //this.props.filterQueue(this.state.filterValue);
+        this.props.filterDestination(this.state.filterValue);
 
         this.props.fetchDestination();
 
@@ -78,36 +68,38 @@ class Destinations extends React.Component {
             <div>
                
                 <PageHeader pageName="Destinations" />
-                <DestinationTable RowData={this.props.destinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <DestinationFilter updateFilter={this.handleFilterUpdate.bind(this)} />
+                <DestinationTable RowData={this.props.filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
-
         )
     }
 }
 
-const getFilterVal = (queues, filterVal) => {
-    if(filterVal.queueName!=undefined)
-    {
-        var friendlyName = filterVal.queueName.toLowerCase();
-        var contactName = filterVal.contactName.toLowerCase();
-        var queueId = filterVal.queueId.toLowerCase();
-        var inActive = filterVal.isInActive;
+const getFilterVal = (destinations, filterVal) => {
+    console.log("getfilter");
+    if(filterVal.code!=undefined)
+    {        
+        var code = filterVal.code.toLowerCase();
+        var description = filterVal.description.toLowerCase();
+        var content = filterVal.content;
         
-        return queues.filter(obj=> ((friendlyName != "" ? obj.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
-                && (contactName != "" ? obj.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
-                && (queueId != "" ? obj.name.toLowerCase().indexOf(queueId) != -1 : true) 
-                && (!inActive?obj.active:true)));
+        return (destinations.filter(obj=> ((code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
+                && (description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
+                && (content != "" ? ((content=="HD"?obj.content.highDefinition:false) || (content=="SD"?obj.content.standardDefinition:false)
+                                       || (content=="C3"?obj.content.cx:false) || (content=="NonC3"?obj.content.nonCx:false)) : true)
+            )));
     }
     else
-        queues;
+        destinations;
 };
 
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
-    //var arr = getFilterVal(state.queues, state.filterValue);
+    
+    var arr = getFilterVal(state.destinations, state.filterDestination);
     return {
         destinations: state.destinations,
-        //filteredQueues: (arr!=undefined?arr:state.queues)
+        filteredDestinations: (arr!=undefined?arr:state.destinations)
     }
 };
 
@@ -115,7 +107,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchDestination: () => dispatch(destinationActions.fetchDestinations()),
-        //filterQueue: (filterVal) =>dispatch(queueActions.filterQueues(filterVal))
+        filterDestination: (filterVal) =>dispatch(destinationActions.filterDestinationSuccess(filterVal))
     };
 };
 
