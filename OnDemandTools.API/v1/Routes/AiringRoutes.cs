@@ -56,6 +56,8 @@ namespace OnDemandTools.API.v1.Routes
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var options = GetOptionsFromQueryString();
 
+                // These timers are added for instrumentation and will be removed
+                // in the future
                 Dictionary<string, object> routeStats = new Dictionary<string, object>();
                 long start = Stopwatch.GetTimestamp();                
                 var airing = airingSvc.GetBy((string)_.airingId);
@@ -109,9 +111,16 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
                 routeStats.Add("appendPackage_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
 
+
+                start = Stopwatch.GetTimestamp();
+                if (options.Contains(Appenders.Premiere.ToString().ToLower()))
+                    airingSvc.AppendPremiere(ref airingLong);
+                routeStats.Add("appendPremiere_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+
+
                 start = Stopwatch.GetTimestamp();
                 var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
-                routeStats.Add("BLtoVM_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("BLtoVM_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));                
 
                 if (!options.Contains(Appenders.Package.ToString().ToLower()))
                     model.Options.Packages = null;

@@ -358,6 +358,22 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Titles = titles;
         }
 
+
+        public void AppendPremiere(ref BLModel.Alternate.Long.Airing airing)
+        {
+            List<int> titleIds = airing.Title.TitleIds
+                .Where(t => t.Authority == "Turner" && t.Value != null)
+                .Select(t => int.Parse(t.Value)).ToList();
+            titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
+
+            // Find permiere information for all title ids within the airing listed as Authority=Turner that exists in Flow
+            JArray premieres = GetPremiereData(titleIds);
+
+            airing.Options.Premieres = premieres;
+        }
+
+
+
         public void AppendSeries(ref BLModel.Alternate.Long.Airing airing)
         {
             if (airing.Title.Series == null || airing.Title.Series.Id == null)
@@ -400,7 +416,6 @@ namespace OnDemandTools.Business.Modules.Airing
             var changes = Find(ref airing);
 
             airing.Options.Changes = changes.ToList();
-
         }
 
         public void AppendStatus(ref BLModel.Alternate.Long.Airing airing)
@@ -650,6 +665,41 @@ namespace OnDemandTools.Business.Modules.Airing
             return titles;
         }
 
+
+
+        private JArray GetPremiereData(IEnumerable<int> titleIds)
+        {
+            // The Distinct() here is neccessary because of a limitation we discovered.
+            // The titles API returns only distinct FlowTitle objects per request.
+            // If there are more then 5 titles (because of the partition), you can potentially
+            // end up with duplicates. (Titles API limits us to 25. Consult titles api wiki.)
+            var listsOfTitleIds = titleIds.Distinct().Partition(25).ToList();
+            RestClient client = new RestClient(appSettings.GetExternalService("Flow").Url);
+            var premieres = new JArray();
+
+            foreach (var list in listsOfTitleIds)
+            {
+                var request = new RestRequest("/v2/schedules/firstairing/{ids}?api_key={api_key}", Method.GET);
+                request.AddUrlSegment("ids", string.Join(",", list));
+                request.AddUrlSegment("api_key", appSettings.GetExternalService("Flow").ApiKey);
+
+                Task.Run(async () =>
+                {
+
+                    var rs = await client.RetrieveRecords(request);
+                    premieres = rs;
+                    // var rs = await GetPremiereDataAsync(client, request) as List<JObject>;
+                    // if (!rs.IsNullOrEmpty())
+                    // {
+                    //     premieres.AddRange(rs);
+                    // }
+
+                }).Wait();
+            }
+
+            return premieres;
+        }
+
         private Task<List<BLModel.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
         {
             var tcs = new TaskCompletionSource<List<BLModel.Alternate.Title.Title>>();
@@ -659,6 +709,23 @@ namespace OnDemandTools.Business.Modules.Airing
             });
             return tcs.Task;
         }
+
+
+        // private Task<List<JObject>> GetPremiereDataAsync(RestClient theClient, RestRequest theRequest)
+        // {
+        //     var tcs = new TaskCompletionSource<List<JObject>>();
+
+        //     theClient.ExecuteAsync<List<string>>(theRequest, response =>
+        //     {
+        //         var kk = response.Data[0] as JObject;
+        //     });
+
+        //     theClient.ExecuteAsync<List<JObject>>(theRequest, response =>
+        //     {
+        //         tcs.SetResult(response.Data);
+        //     });
+        //     return tcs.Task;
+        // }
 
         private List<string> ExtractVersionIdsFrom(BLModel.Alternate.Long.Airing airing)
         {

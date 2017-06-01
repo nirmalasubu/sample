@@ -13,6 +13,7 @@ namespace OnDemandTools.API.Helpers
         Change,
         Series,
         Status,
-        Package
+        Package,
+        Premiere        
     }
 }

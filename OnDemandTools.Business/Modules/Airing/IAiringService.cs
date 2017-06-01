@@ -191,6 +191,13 @@ namespace OnDemandTools.Business.Modules.Airing
         void AppendTitle(ref BLModel.Alternate.Long.Airing airing);
 
         /// <summary>
+        /// Get premiere information from Flow and appends it to the airing
+        /// </summary>
+        /// <param name="titleId">The title identifier.</param>
+        /// <returns></returns>
+        void AppendPremiere(ref BLModel.Alternate.Long.Airing airing);
+
+        /// <summary>
         /// Gets series information from Flow and appends it to the
         /// airing
         /// </summary>

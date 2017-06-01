@@ -5,6 +5,7 @@ using VMPackageModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Pac
 using VMDestinationModel = OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination;
 using System.Xml.Serialization;
 using OnDemandTools.Common;
+using Newtonsoft.Json.Linq;
 
 namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 {
@@ -19,9 +20,13 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
             Destinations = new List<VMDestinationModel.Destination>();
             Changes = new List<VMChangeModel.Change>();
             Status = new SerializableDictionary<string, bool>();
+            Premieres = new JArray();
         }
       
         public List<File> Files { get; set; }
+
+
+        public JArray Premieres { get; set; }
 
         public List<VMTitleModel.Title> Titles { get; set; }
 

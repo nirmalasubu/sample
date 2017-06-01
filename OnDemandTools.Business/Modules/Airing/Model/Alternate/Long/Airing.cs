@@ -2,6 +2,7 @@
 using OnDemandTools.Common;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 {
@@ -57,7 +58,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
             WebFlags = new List<string>();
             Duration = new Duration();
             Title = new Title();
-            Flags = new Flags();
+            Flags = new Flags();          
           
             Options = new Options();
             Properties = new SerializableDictionary<string, object>();

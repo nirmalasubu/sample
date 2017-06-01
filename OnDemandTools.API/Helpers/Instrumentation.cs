@@ -77,7 +77,7 @@ class InstrumentationMiddleware
             info.Add("elapsedMs",elapsedMs);
             info.Add("status",500);
             info.Add("error", ex);
-            log.Information("Request -"+httpContext.Request.Path+"{@info}", info); 
+            log.Information("Request -"+GetAbsoluteUri(httpContext)+"{@info}", info); 
 
             return false;
         }
@@ -96,13 +96,20 @@ class InstrumentationMiddleware
             info.Add("path",httpContext.Request.Path.Value);
             info.Add("elapsedMs",elapsedMs);
             info.Add("status", statusCode.Value);           
-            log.Information("Request -"+httpContext.Request.Path+"{@info}", info); 
+            log.Information("Request -"+GetAbsoluteUri(httpContext)+"{@info}", info); 
 
         }
 
-              static double GetElapsedMilliseconds(long start, long stop)
+        static double GetElapsedMilliseconds(long start, long stop)
         {
             return (stop - start) * 1000 / (double)Stopwatch.Frequency;
+        }
+
+
+        private string GetAbsoluteUri(HttpContext httpContext)
+        {
+            String uri = string.Format("{0}://{1}{2}{3}", httpContext.Request.Scheme, httpContext.Request.Host, httpContext.Request.Path, httpContext.Request.QueryString);
+           return uri;
         }
     }
 }

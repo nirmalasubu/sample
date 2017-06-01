@@ -17,6 +17,7 @@ namespace OnDemandTools.API.Helpers.MappingRules.TitleProfile
             CreateMap<BLTitleModel.Storyline, VMTitleModel.Storyline>();
             CreateMap<BLTitleModel.ExternalSource, VMTitleModel.ExternalSource>();
             CreateMap<BLTitleModel.TitleType, VMTitleModel.TitleType>();
+            CreateMap<BLTitleModel.Genre, VMTitleModel.Genre>();
         }
     }
 }

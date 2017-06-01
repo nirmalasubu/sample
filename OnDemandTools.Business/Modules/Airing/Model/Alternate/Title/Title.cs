@@ -9,6 +9,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Title
             Ratings = new List<Rating>();
             Participants = new List<Participant>();
             Storylines = new List<Storyline>();
+            Genres = new List<Genre>();
         }
 
         public int TitleId { get; set; }
@@ -26,6 +27,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Title
         public string SeasonEpisodeNumber { get; set; }
         public string SeriesItemNumber { get; set; }
 
+        public List<Genre> Genres {get; set;}
         public List<Rating> Ratings { get; set; }
         public List<Participant> Participants { get; set; }
         public List<Storyline> Storylines { get; set; }
