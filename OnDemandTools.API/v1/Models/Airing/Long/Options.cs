@@ -24,6 +24,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
             Premieres = new JArray();
         }
 
+        [XmlIgnoreAttribute]
         public JArray Premieres { get; set; }
         public List<File> Files { get; set; }
 
