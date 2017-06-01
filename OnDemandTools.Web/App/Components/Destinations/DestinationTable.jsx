@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { getNewQueue } from 'Actions/Destination/DestinationActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 
 
 class DestinationTable extends React.Component {
@@ -33,16 +34,7 @@ class DestinationTable extends React.Component {
         }
     }
     componentDidMount() {
-        //let promise = getNewDestination();
-        //promise.then(message => {
-        //    this.setState({
-        //        newDestinationModel: message
-        //    });
-        //}).catch(error => {
-        //    this.setState({
-        //        newDestinationModel: {}
-        //    });
-        //});
+
     }
 
     openCreateNewDestinationModel() {
@@ -80,7 +72,7 @@ class DestinationTable extends React.Component {
     codeFormat(val, rowData) {
         return (
             <div>
-                <button class="btn-link" > {val} </button><br/>
+                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button><br/>
             </div>
             );
     }
@@ -110,6 +102,8 @@ class DestinationTable extends React.Component {
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
+
+                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
             </div>)
     }
 
