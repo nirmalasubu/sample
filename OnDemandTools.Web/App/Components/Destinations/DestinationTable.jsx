@@ -13,7 +13,7 @@ class DestinationTable extends React.Component {
         this.state = {
             showModal: false,
             newDestinationModel: {},
-            showAddEditModel: false,
+            showAddEditModel: true,
             destinationDetails: "",
             modalActionType: "",
             options: {

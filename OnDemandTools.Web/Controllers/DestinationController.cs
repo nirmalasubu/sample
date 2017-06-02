@@ -31,7 +31,7 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // GET: api/values
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public IEnumerable<DestinationViewModel> Get()
         {
