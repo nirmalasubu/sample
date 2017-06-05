@@ -77,8 +77,12 @@ class DestinationTable extends React.Component {
     actionFormat(val, rowData) {
         return (
             <div>
-                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o"></i>
+                </button>
+
+                <button class="btn-link" title="Delete Destination" >
+                    <i class="fa fa-trash"></i>
                 </button>
             </div>
         );
@@ -97,7 +101,7 @@ class DestinationTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px"  dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contentFormat.bind(this)}>{item.label}</TableHeaderColumn>
@@ -107,7 +111,7 @@ class DestinationTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" tooltip="Create New Destination" > <i class="fa fa-plus-square fa-2x"  ></i> </button>
+                    <button class="btn-link pull-right addMarginRight" title="Create New Destination" > <i class="fa fa-plus-square fa-2x"  ></i> </button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}

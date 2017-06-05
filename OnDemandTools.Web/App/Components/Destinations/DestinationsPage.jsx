@@ -75,8 +75,7 @@ class DestinationPage extends React.Component {
 
     render() {
         return (
-            <div>
-               
+            <div>               
                 <PageHeader pageName="Destinations" />
                 <DestinationFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <DestinationTable RowData={this.props.filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />

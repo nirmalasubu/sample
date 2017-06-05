@@ -11,16 +11,12 @@ class AddEditDestinationBasic extends React.Component {
 
   }
 
-  handleTextChange(event)
-  {
+  handleTextChange(event) {
     var value = event.target.value;
-
-
-
   }
 
   handleCheckboxChange(event) {
-   var checked = event.target.checked;
+    var checked = event.target.checked;
 
     var model = this.props.data;
 
@@ -47,7 +43,7 @@ class AddEditDestinationBasic extends React.Component {
 
     this.props.data = model;
 
-        console.log(this.props.data);
+    console.log(this.props.data);
   }
 
   render() {
