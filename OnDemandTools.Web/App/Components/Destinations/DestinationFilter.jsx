@@ -27,13 +27,12 @@ class DestinationFilter extends React.Component
 
         var ds = this.inputDescription.value;
         this.props.updateFilter(ds, "DS");
-
-        var cn
+        
         if(typeof val == "string")
-            cn = val;
+            this.props.updateFilter(val, "CN");
         else
-            cn = "";
-        this.props.updateFilter(cn, "CN");
+            this.props.updateFilter(this.state.contentValue, "CN");
+        
     }
 
     handleSelectChange(value){

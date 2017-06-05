@@ -85,6 +85,7 @@ class DestinationPage extends React.Component {
 }
 
 const getFilterVal = (destinations, filterVal) => {
+    console.log(filterVal);
     if(filterVal.code!=undefined)
     {        
         var code = filterVal.code.toLowerCase();
@@ -93,8 +94,8 @@ const getFilterVal = (destinations, filterVal) => {
         
         return (destinations.filter(obj=> ((code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
                 && (description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
-                && (content != "" ? ((content=="HD"?obj.content.highDefinition:false) || (content=="SD"?obj.content.standardDefinition:false)
-                                       || (content=="C3"?obj.content.cx:false) || (content=="NonC3"?obj.content.nonCx:false)) : true)
+                && (obj.content!=null?(content != "" ? ((content=="HD"?obj.content.highDefinition:false) || (content=="SD"?obj.content.standardDefinition:false)
+                                       || (content=="C3"?obj.content.cx:false) || (content=="NonC3"?obj.content.nonCx:false)) : true):false)
             )));
     }
     else
