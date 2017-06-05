@@ -50,16 +50,15 @@ class DestinationTable extends React.Component {
     }
 
     contentFormat(val, rowData) {
-        var content=[];
-        if(rowData.content)
-        {
-            if(rowData.content.highDefinition)
+        var content = [];
+        if (rowData.content) {
+            if (rowData.content.highDefinition)
                 content.push("HD");
-            if(rowData.content.standardDefinition)
+            if (rowData.content.standardDefinition)
                 content.push("SD");
-            if(rowData.content.cx)
+            if (rowData.content.cx)
                 content.push("C(X)");
-            if(rowData.content.nonCx)
+            if (rowData.content.nonCx)
                 content.push("Non-C(X)");
         }
         return '<p data-toggle="tooltip">' + content.toString() + '</p>';
@@ -71,23 +70,34 @@ class DestinationTable extends React.Component {
 
     codeFormat(val, rowData) {
         return (
+            '<p data-toggle="tooltip" class="shortDesc">' + val + '</p>'
+        );
+    }
+
+    actionFormat(val, rowData) {
+        return (
             <div>
-                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button><br/>
+                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
             </div>
-            );
+        );
     }
 
 
     render() {
-        
+
         var row;
         row = this.props.ColumnData.map(function (item, index) {
 
             if (item.label == "Code") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.codeFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="150px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.codeFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Description") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+            }
+            else if (item.label == "Action") {
+                return <TableHeaderColumn width="100px"  dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contentFormat.bind(this)}>{item.label}</TableHeaderColumn>
@@ -97,7 +107,7 @@ class DestinationTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" >Create New Destination</button>
+                    <button class="btn-link pull-right addMarginRight" tooltip="Create New Destination" > <i class="fa fa-plus-square fa-2x"  ></i> </button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
