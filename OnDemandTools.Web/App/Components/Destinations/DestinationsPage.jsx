@@ -31,7 +31,7 @@ class DestinationPage extends React.Component {
             columns: [{ "label": "Code", "dataField": "name", "sort": true },
             { "label": "Description", "dataField": "description", "sort": true },
             { "label": "Content", "dataField": "content", "sort": true },
-            { "label": "Action", "dataField": "name", "sort": false }
+            { "label": "Actions", "dataField": "name", "sort": false }
             ],
             keyField: "name"
         }

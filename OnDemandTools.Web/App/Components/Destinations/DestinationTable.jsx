@@ -96,7 +96,7 @@ class DestinationTable extends React.Component {
             else if (item.label == "Description") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
-            else if (item.label == "Action") {
+            else if (item.label == "Actions") {
                 return <TableHeaderColumn width="100px"  dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
