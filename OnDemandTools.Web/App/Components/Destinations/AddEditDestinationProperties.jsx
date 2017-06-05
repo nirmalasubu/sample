@@ -1,5 +1,5 @@
 import React from 'react';
-import PageHeader from 'Components/Common/PageHeader';
+import DestinationPropertiesForm from 'Components/Destinations/DestinationPropertiesForm';
 
 class AddEditDestinationProperties extends React.Component {
 
@@ -13,6 +13,17 @@ class AddEditDestinationProperties extends React.Component {
   textFormat(val, row) {
     return <div>{val}</div>
   }
+
+  isExpandableRow(row) {
+    return true;
+  }
+
+  expandComponent(row) {
+    return (
+      <DestinationPropertiesForm data={row} />
+    );
+  }
+
 
   actionFormat(val, rowData) {
     return (
@@ -31,7 +42,11 @@ class AddEditDestinationProperties extends React.Component {
   render() {
     return (
       <div>
-        <BootstrapTable data={this.props.data.properties} striped hover>
+        <BootstrapTable
+          data={this.props.data.properties}
+          striped hover
+          expandableRow={this.isExpandableRow}
+          expandComponent={this.expandComponent}>
           <TableHeaderColumn isKey dataField="name" dataSort={true} dataFormat={this.textFormat.bind(this)}>Name</TableHeaderColumn>
           <TableHeaderColumn dataField="value" dataSort={true} dataFormat={this.textFormat.bind(this)}>Value</TableHeaderColumn>
           <TableHeaderColumn width="100px" dataField="value" dataSort={false} dataFormat={this.actionFormat.bind(this)}>Actions</TableHeaderColumn>
