@@ -39,13 +39,13 @@ class AddEditDestinationModel extends React.Component {
                 <Modal.Body>
                     <Tabs defaultActiveKey={1} >
                         <Tab eventKey={1} title="Basic">
-                            <AddEditDestinationBasic />
+                            <AddEditDestinationBasic data={this.props.data.destinationDetails} />
                         </Tab>
                         <Tab eventKey={2} title="Properties">
-                            <AddEditDestinationProperties />
+                            <AddEditDestinationProperties data={this.props.data.destinationDetails} />
                         </Tab>
                         <Tab eventKey={3} title="Deliverables">
-                            <AddEditDestinationDeliverables />
+                            <AddEditDestinationDeliverables data={this.props.data.destinationDetails} />
                         </Tab>
                     </Tabs>
                     <NotificationContainer />
