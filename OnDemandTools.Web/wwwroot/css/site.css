@@ -188,6 +188,23 @@ textarea.form-control-modal-Edit {
     text-decoration: none;
 }
 
+p.shortDesc {
+    width: auto;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.shortDesc:hover{
+    overflow: visible; 
+    white-space: normal; 
+    width: auto;
+    max-width: 335px;
+    position: absolute;
+    background-color:#D3D3D3;
+}
+
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"]
 {

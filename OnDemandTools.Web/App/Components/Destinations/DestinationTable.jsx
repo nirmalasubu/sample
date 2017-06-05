@@ -66,7 +66,7 @@ class DestinationTable extends React.Component {
     }
 
     descriptionFormat(val) {
-        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>';
+        return '<p data-toggle="tooltip" class="shortDesc">' + val + '</p>';
     }
 
     codeFormat(val, rowData) {
