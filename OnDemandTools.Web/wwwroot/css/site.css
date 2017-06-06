@@ -176,6 +176,11 @@ textarea.form-control-modal-Edit {
     margin-right: 20px;
 }
 
+.addMarginRight:hover
+{
+    text-decoration: none;
+}
+
 .addVertialAlign
 {
     vertical-align: super;
