@@ -119,7 +119,7 @@ class DeliveryQueueTable extends React.Component {
 
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
-                <p>{val}</p>
+                <p>Remote ID: {val}</p>
                 <i>Delivery:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
                 <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
@@ -138,7 +138,7 @@ class DeliveryQueueTable extends React.Component {
             var datetoFormat = Moment(ItemToRefresh[0].processedDateTime).format('lll');
             return (
                 <div>
-                    <p>{val}</p>
+                    <p>Remote ID: {val}</p>
                     <i>Delivery:</i>
                     <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
                     <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
@@ -178,7 +178,7 @@ class DeliveryQueueTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Remote Queue") {
-                return <TableHeaderColumn width="400px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="410px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
                 return <TableHeaderColumn width="150px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
