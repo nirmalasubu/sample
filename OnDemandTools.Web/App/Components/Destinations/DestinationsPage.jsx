@@ -85,7 +85,6 @@ class DestinationPage extends React.Component {
 }
 
 const getFilterVal = (destinations, filterVal) => {
-    console.log(filterVal);
     if(filterVal.code!=undefined)
     {        
         var code = filterVal.code.toLowerCase();

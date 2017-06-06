@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,12 @@ namespace OnDemandTools.Business.Modules.Destination
         /// </summary>
         /// <param name="airing">airing</param>
         void TransformAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing);
+
+        /// <summary>
+        /// Remove destnation from collection using ObjectID
+        /// </summary>
+        /// <param name="id">Object Id</param>
+        void Delete(string id);
 
      }
 }

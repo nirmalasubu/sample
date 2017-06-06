@@ -5,7 +5,14 @@ import { connect } from 'react-redux';
 import { getNewQueue } from 'Actions/Destination/DestinationActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
+import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
+import { fetchProducts } from 'Actions/Product/ProductActions';
 
+@connect((store) => {
+    return {
+        products: store.products
+    };
+})
 
 class DestinationTable extends React.Component {
     constructor(props) {
@@ -34,11 +41,19 @@ class DestinationTable extends React.Component {
         }
     }
     componentDidMount() {
-
+        this.props.dispatch(fetchProducts());
     }
 
     openCreateNewDestinationModel() {
         this.setState({ showAddEditModel: true, destinationDetails: this.state.newDestinationModel });
+    }
+
+    openModel(val) {
+        this.setState({ showModal: true, destinationDetails: val });
+    }
+
+    closeModel() {
+        this.setState({ showModal: false });
     }
 
     openAddEditModel(val) {
@@ -81,7 +96,7 @@ class DestinationTable extends React.Component {
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Destination" >
+                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -118,6 +133,7 @@ class DestinationTable extends React.Component {
                 </BootstrapTable>
 
                 <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <RemoveDestinationModal data={this.state} handleClose={this.closeModel.bind(this)} />
             </div>)
     }
 

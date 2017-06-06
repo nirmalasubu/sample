@@ -5,6 +5,7 @@ import {DestinationReducer, FilterDestinationDataReducer} from 'Reducers/Destina
 import {UserReducer} from 'Reducers/User/UserReducer';
 import {ConfigReducer} from 'Reducers/Config/ConfigReducer';
 import {StatusReducer} from 'Reducers/Status/StatusReducer';
+import {ProductReducer} from 'Reducers/Product/ProductReducer';
 
 export default combineReducers({   
     queues:DeliveryQueueReducer,
@@ -15,7 +16,8 @@ export default combineReducers({
     queueCountData:SignalRQueueDataReducer,
     notificationHistory:NotificationHistoryQueueReducer,
     config: ConfigReducer,
-    statuses: StatusReducer
+    statuses: StatusReducer,
+    products:ProductReducer
     // More reducers if there are
     // can go here
 });

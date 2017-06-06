@@ -19,6 +19,13 @@ export const filterDestinationSuccess= (filterDestination) => {
     }
 };
 
+export const deleteDestinationSuccess = (objectId) => {
+    return {
+        type: actionTypes.DELETE_DESTINATION_SUCCESS,
+        objectId
+    }
+};
+
 export const fetchDestinations = () => {
     return (dispatch) => {
         return Axios.get('/api/destination')
@@ -45,6 +52,18 @@ export const getNewDestination = () => {
         .catch(error => {
             throw (error);
         });
+};
+
+export const deleteDestination = (id) => {
+    return (dispatch) => {        
+        return Axios.delete('/api/destination', id)
+            .then(response => {
+                dispatch(deleteDestinationSuccess(id))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
 };
 
 

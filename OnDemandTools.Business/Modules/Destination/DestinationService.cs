@@ -12,6 +12,8 @@ using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Extensions;
 using System.Threading.Tasks;
 using OnDemandTools.DAL.Modules.Destination.Comparer;
+using MongoDB.Bson;
+using OnDemandTools.DAL.Modules.Destination.Command;
 
 namespace OnDemandTools.Business.Modules.Destination
 {
@@ -22,6 +24,7 @@ namespace OnDemandTools.Business.Modules.Destination
     public class DestinationService : IDestinationService
     {
         IDestinationQuery destinationHelper;
+        IDestinationCommand destinationCommand;
         AppSettings appSettings;
 
 
@@ -31,9 +34,10 @@ namespace OnDemandTools.Business.Modules.Destination
         private const string AiringStorylineShort = "{AIRING_STORYLINE_SHORT}";
         private const string TitleStorylinePattern = @"{TITLE_STORYLINE([\w\W\d ]+)}";
 
-        public DestinationService(IDestinationQuery destinationHelper, AppSettings appSettings)
+        public DestinationService(IDestinationQuery destinationHelper, IDestinationCommand destinationCommand, AppSettings appSettings)
         {
             this.destinationHelper = destinationHelper;
+            this.destinationCommand = destinationCommand;
             this.appSettings = appSettings;
         }
 
@@ -196,6 +200,15 @@ namespace OnDemandTools.Business.Modules.Destination
                     destination.Deliverables = destination.Deliverables.Where(x => x.Value != string.Empty).ToList(); // remove the empty tokens
                 }
             }
+        }
+
+        /// <summary>
+        /// Remove destnation from collection using ObjectID
+        /// </summary>
+        /// <param name="id">Object Id</param>
+        public void Delete(string id)
+        {
+            destinationCommand.Delete(id);
         }
 
         #region PRIVATE METHODS

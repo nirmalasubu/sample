@@ -42,8 +42,6 @@ class AddEditDestinationBasic extends React.Component {
 
 
     this.props.data = model;
-
-    console.log(this.props.data);
   }
 
   render() {

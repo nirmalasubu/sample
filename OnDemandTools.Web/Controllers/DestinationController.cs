@@ -40,5 +40,12 @@ namespace OnDemandTools.Web.Controllers
 
             return destinationModel;
         }
+        
+        [Authorize]
+        [HttpDelete]
+        public void Delete(string id)
+        {
+            _destinationSvc.Delete(id);
+        }
     }
 }
