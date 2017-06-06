@@ -348,6 +348,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                 <ControlLabel>Routing Key</ControlLabel>
                                                 <FormControl
                                                     type="text"
+                                                    disabled={this.props.data.queueDetails.id == null ? false : true}
                                                     value={this.state.queueModel.routingKey}
                                                     placeholder="If blank, guid will be generated."
                                                     onChange={this.handleRoutingKeyChange.bind(this)}
