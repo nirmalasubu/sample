@@ -42,7 +42,7 @@ namespace OnDemandTools.Web.Controllers
         }
         
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public void Delete(string id)
         {
             _destinationSvc.Delete(id);

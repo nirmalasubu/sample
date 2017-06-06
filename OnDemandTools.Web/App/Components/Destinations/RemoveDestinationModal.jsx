@@ -9,6 +9,7 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 @connect((store) => {
     return {
@@ -59,8 +60,8 @@ class RemoveDestinationModal extends React.Component
         var elem = this;
         if(!this.state.inProduct)
         {
-            this.setState({ isProcessing: true });
-            this.props.dispatch(destinationAction.deleteDestination())
+            this.setState({ isProcessing: true });            
+            this.props.dispatch(destinationAction.deleteDestination(this.props.data.destinationDetails.id))
                 .then(() => {
                     NotificationManager.success(this.props.data.destinationDetails.name + ' Destination deleted successfully.', '', 2000);
                     setTimeout(function () {

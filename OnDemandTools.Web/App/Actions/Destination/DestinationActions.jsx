@@ -56,7 +56,7 @@ export const getNewDestination = () => {
 
 export const deleteDestination = (id) => {
     return (dispatch) => {        
-        return Axios.delete('/api/destination', id)
+        return Axios.delete('/api/destination/' + id)
             .then(response => {
                 dispatch(deleteDestinationSuccess(id))
             })
