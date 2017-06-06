@@ -311,7 +311,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <Col md={4} >
                                             <FormGroup
                                                 controlId="hoursOut">
-                                                <ControlLabel>Advanced Delivery &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Number of hours to be notified before flight start." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
+                                                <ControlLabel>Advanced Delivery (hours) &nbsp;<span tooltip data-toggle="tooltip" data-placement="right" title="Number of hours to be notified before flight start." class="glyphicon glyphicon-info-sign"></span></ControlLabel>
                                                 <FormControl
                                                     type="text"
                                                     value={this.state.queueModel.hoursOut}
@@ -323,7 +323,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                         <Col md={4}>
                                             <FormGroup
                                                 controlId="remoteName">
-                                                <ControlLabel>Remote Name</ControlLabel>
+                                                <ControlLabel>Queue ID</ControlLabel>
                                                 <FormControl
                                                     type="text"
                                                     disabled={this.props.data.queueDetails.id == null ? false : true}

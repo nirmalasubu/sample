@@ -230,3 +230,14 @@ p.shortDesc {
 
 
 }
+
+.modal-header
+{
+ background-color: rgb(51, 122, 183);
+ color: rgb(255, 255, 255); 
+}
+
+.modal-header .close
+{
+    color: rgb(255, 255, 255); 
+}

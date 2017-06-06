@@ -56,7 +56,7 @@ class DeliveryQueueFilter extends React.Component
         </FormGroup>
         {' '}
         <FormGroup controlId="queueId">
-            <FormControl type="text" inputRef = {(input) => this.inputQueueId = input } onChange={this.handleChange.bind(this) }  placeholder="Queue Id" />
+            <FormControl type="text" inputRef = {(input) => this.inputQueueId = input } onChange={this.handleChange.bind(this) }  placeholder="Queue ID" />
         </FormGroup>
             {' '}
         <FormGroup

@@ -119,7 +119,7 @@ class DeliveryQueueTable extends React.Component {
 
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
-                <p>Remote ID: {val}</p>
+                <p>Queue ID: {val}</p>
                 <i>Delivery:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
                 <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
@@ -138,7 +138,7 @@ class DeliveryQueueTable extends React.Component {
             var datetoFormat = Moment(ItemToRefresh[0].processedDateTime).format('lll');
             return (
                 <div>
-                    <p>Remote ID: {val}</p>
+                    <p>Queue ID: {val}</p>
                     <i>Delivery:</i>
                     <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
                     <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
