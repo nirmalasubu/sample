@@ -9,7 +9,7 @@ class DeliveryQueueFilter extends React.Component
         super(props);
 
         this.state = {
-            isInActive: true
+            isInActive: false
         };
       
     }
@@ -36,7 +36,7 @@ class DeliveryQueueFilter extends React.Component
         this.inputQueueName.value = "";
         this.inputContactName.value = "";
         this.inputQueueId.value = "";
-        this.state.isInActive=true;
+        this.state.isInActive=false;
 
         this.props.updateFilter("", "CL");
     }

@@ -23,8 +23,8 @@ class Queue extends React.Component {
             },
 
             columns: [{ "label": "Queue Name", "dataField": "friendlyName", "sort": true },
-            { "label": "Advanced Delivery", "dataField": "hoursOut", "sort": true },
-            { "label": "Contact", "dataField": "contactEmailAddress", "sort": true },
+            { "label": "Advanced Delivery", "dataField": "hoursOut", "sort": false },
+            { "label": "Contact", "dataField": "contactEmailAddress", "sort": false },
             { "label": "Remote Queue", "dataField": "name", "sort": false },
             { "label": "Actions", "dataField": "name", "sort": false }
             ],
@@ -84,9 +84,8 @@ class Queue extends React.Component {
 
     render() {
         return (
-            <div>
-               
-                <PageHeader pageName="Delivery Queue" />
+            <div>               
+                <PageHeader pageName="Delivery Queues" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <DeliveryQueueTable RowData={this.props.filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
             </div>

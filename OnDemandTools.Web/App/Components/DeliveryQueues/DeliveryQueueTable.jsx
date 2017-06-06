@@ -171,16 +171,16 @@ class DeliveryQueueTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Remote Queue") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="400px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Contact") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contactFormat}>{item.label}</TableHeaderColumn>
             }
             else {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="160px" dataField={item.dataField} key={index++} dataSort={item.sort}>{item.label}</TableHeaderColumn>
             }
 
         }.bind(this));
