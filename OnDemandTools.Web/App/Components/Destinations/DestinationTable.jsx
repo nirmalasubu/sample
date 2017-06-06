@@ -126,7 +126,10 @@ class DestinationTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="Create New Destination" > <i class="fa fa-plus-square fa-2x"  ></i> </button>
+                    <button class="btn-link pull-right addMarginRight" title="New Destination" >
+                        <i class="fa fa-plus-square fa-2x"></i> 
+                        <span class="addVertialAlign"> New Destination</span>
+                    </button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}

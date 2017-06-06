@@ -176,6 +176,11 @@ textarea.form-control-modal-Edit {
     margin-right: 20px;
 }
 
+.addVertialAlign
+{
+    vertical-align: super;
+}
+
 .noPadding
 {
     padding: 0px;

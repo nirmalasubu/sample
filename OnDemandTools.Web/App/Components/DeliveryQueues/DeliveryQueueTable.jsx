@@ -44,7 +44,7 @@ class DeliveryQueueTable extends React.Component {
     }
     componentDidMount() {
         let promise = getNewQueue();
-        promise.then(message => {            
+        promise.then(message => {
             this.setState({
                 newQueueModel: message
             });
@@ -91,20 +91,24 @@ class DeliveryQueueTable extends React.Component {
         this.setState({ showModal: true, queueDetails: val, modalActionType: type });
     }
 
-    actionFormat(val) {
-        var queueItem = $.grep(this.props.RowData, function (v) {
-            if (v.name == val) return v;
-        });
+    actionFormat(val, rowData) {
         return (<div>
 
-            <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(queueItem[0], event)}>
-                <i class="fa fa-search" aria-hidden="true"></i>
+            <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-pencil-square-o"></i>
             </button>
 
-            <button class="btn-link" disabled={!queueItem[0].active} title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(queueItem[0], event)}>
+            <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(rowData, event)}>
+                <i class="fa fa-history" aria-hidden="true"></i>
+            </button>
+
+            <button class="btn-link" disabled={!rowData.active} title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(rowData, event)}>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
 
+            <button class="btn-link" title="Delete Queue">
+                <i class="fa fa-trash"></i>
+            </button>
         </div>)
     }
 
@@ -124,7 +128,7 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
                 <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
             </div>)
-        } else {           
+        } else {
 
             var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
                 if (v.name == val) return v;
@@ -155,18 +159,21 @@ class DeliveryQueueTable extends React.Component {
     queueNameFormat(val, rowData) {
         return (
             <div>
-                <button class="btn-link" onClick={(event) => this.openAddEditModel(rowData, event)} > {val} </button><br/>
-                {!rowData.active ? (<span class="label label-danger">Inactive</span>) : (null)}
+                {val} {!rowData.active ? (<span class="label label-danger">Inactive</span>) : (null)}
             </div>
-            )
+        )
+    }
+
+    advanceDeliveryFormat(val, rowData) {
+        return (
+            <div> {val} {val > 1 ? "hours" : "hour"} </div>
+        );
     }
 
 
     render() {
-        
         var row;
         row = this.props.ColumnData.map(function (item, index) {
-
             if (item.label == "Queue Name") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
@@ -174,20 +181,22 @@ class DeliveryQueueTable extends React.Component {
                 return <TableHeaderColumn width="400px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.queueFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="150px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Contact") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contactFormat}>{item.label}</TableHeaderColumn>
             }
             else {
-                return <TableHeaderColumn width="160px" dataField={item.dataField} key={index++} dataSort={item.sort}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="160px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.advanceDeliveryFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
-
         }.bind(this));
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" onClick={(event) => this.openCreateNewQueueModel(event)}>Create New Queue</button>
+                    <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
+                        <i class="fa fa-plus-square fa-2x"></i>
+                        <span class="addVertialAlign"> New Queue</span>
+                    </button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
