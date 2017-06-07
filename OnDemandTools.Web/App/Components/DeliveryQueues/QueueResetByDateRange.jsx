@@ -211,21 +211,21 @@ class QueueResetByDateRange extends React.Component {
                                 <Col md={2} componentClass={ControlLabel}>
                                     {dateLabel}
                                 </Col>
-                                <Col md={2}>
-                                    <FormGroup validationState={this.state.validationStartDateState} >
-                                        <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeStartDate(event)}
-                                            onChangeRaw={(event) => this.handleRawStartDateChange(event.target.value)}
-                                            className={"form-control"}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col md={1} componentClass={ControlLabel}>AND</Col>
-                                <Col md={2}>
-                                    <FormGroup validationState={this.state.validationEndDateState}>
-                                        <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeEndDate(event)}
-                                            onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
-                                            className={"form-control"} />
-                                    </FormGroup>
+                                <Col md={8}>
+                                    <Form inline>
+                                        <FormGroup validationState={this.state.validationStartDateState} >
+                                            <DatePicker id="startDateCtrl" selected={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeStartDate(event)}
+                                                onChangeRaw={(event) => this.handleRawStartDateChange(event.target.value)}
+                                                className={"form-control"}
+                                            />
+                                        </FormGroup>
+                                        <ControlLabel className="marginLeftRight">AND</ControlLabel>
+                                        <FormGroup validationState={this.state.validationEndDateState}>
+                                            <DatePicker id="endDateCtrl" selected={this.state.deliverCriteria.endDateTime} minDate={this.state.deliverCriteria.startDateTime} dateFormat="MM/DD/YYYY" onChange={(event) => this.handleChangeEndDate(event)}
+                                                onChangeRaw={(event) => this.handleRawEndDateChange(event.target.value)}
+                                                className={"form-control"} />
+                                        </FormGroup>
+                                    </Form>
                                 </Col>
                             </Row>
                         </Grid>

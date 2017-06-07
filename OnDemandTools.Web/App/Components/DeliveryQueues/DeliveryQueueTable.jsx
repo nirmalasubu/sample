@@ -106,7 +106,7 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
 
-            <button class="btn-link" title="Delete Queue">
+            <button class="btn-link" title="Delete Delivery Queue">
                 <i class="fa fa-trash"></i>
             </button>
         </div>)

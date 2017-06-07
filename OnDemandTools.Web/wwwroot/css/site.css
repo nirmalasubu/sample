@@ -256,3 +256,9 @@ p.shortDesc {
 {
     max-width: 700px;
 }
+
+.marginLeftRight
+{
+    margin-left: 10px;
+    margin-right: 10px;
+}
