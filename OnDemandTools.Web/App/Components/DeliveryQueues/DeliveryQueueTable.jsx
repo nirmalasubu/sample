@@ -187,7 +187,7 @@ class DeliveryQueueTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contactFormat}>{item.label}</TableHeaderColumn>
             }
             else {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.advanceDeliveryFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.advanceDeliveryFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
         }.bind(this));
         return (
