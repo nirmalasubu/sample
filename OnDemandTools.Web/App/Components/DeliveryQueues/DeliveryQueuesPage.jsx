@@ -19,7 +19,7 @@ class Queue extends React.Component {
                 queueName: "",
                 contactName: "",
                 queueId: "",
-                isInActive: true
+                isInActive: false
             },
 
             columns: [{ "label": "Queue Name", "dataField": "friendlyName", "sort": true },
