@@ -49,7 +49,8 @@ class AddEditDestinationModel extends React.Component {
                     <NotificationContainer />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Close</Button> <Button onClick={this.props.handleClose}>Save</Button>
+                    <Button onClick={this.props.handleClose}>Close</Button> 
+                    <Button onClick={this.props.handleClose} className="btn btn-primary btn-large" >Save</Button>
                 </Modal.Footer>
             </Modal>
         )
