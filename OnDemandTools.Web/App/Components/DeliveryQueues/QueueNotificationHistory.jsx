@@ -60,7 +60,7 @@ class QueueNotificationHistory extends React.Component {
     }
     render() {
         return (
-            <Modal bsSize="large" onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
+            <Modal bsSize="large" className="queueNotificationHistoryModel" onEntering={this.resetGrid.bind(this, this.props.data.queueDetails.name)} show={this.props.data.showNotificationHistoryModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>Notification History for {this.props.data.queueDetails.friendlyName}  <i title="The list contains the 50 most recent processed notifications over the last 7 days" class="fa fa-info-circle" aria-hidden="true"></i></div>
@@ -75,7 +75,7 @@ class QueueNotificationHistory extends React.Component {
                     <BootstrapTable data={this.props.notificationHistory} striped hover pagination={true}>
                         <TableHeaderColumn isKey dataSort={true} dataField="airingId" dataFormat={this.airingIdFormat.bind(this)} >Airing Id</TableHeaderColumn>
                         <TableHeaderColumn dataField="dateTime" dataSort={false} dataFormat={this.dateFormat.bind(this)}>Processed Date Time</TableHeaderColumn>
-                        <TableHeaderColumn dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
+                        <TableHeaderColumn width="100px" dataField="airingId" dataSort={false} dataFormat={this.actionsFormat.bind(this)}>Actions</TableHeaderColumn>
                     </BootstrapTable>
                     <NotificationContainer/>
                 </Modal.Body>
@@ -87,5 +87,5 @@ class QueueNotificationHistory extends React.Component {
     }
 }
 
-const textSearchStyle = { width: '835px', marginLeft:'10px', maxWidth: '835px' };
+const textSearchStyle = { width: '650px', marginLeft:'10px', maxWidth: '650px' };
 export default QueueNotificationHistory;

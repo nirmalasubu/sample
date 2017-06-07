@@ -176,7 +176,7 @@ class QueueResetByDateRange extends React.Component {
         var dateLabel = (this.state.deliverCriteria.windowOption === 0) ? "Starting Between :" : "Availability Between :";
 
         return (
-            <Modal bsSize="large" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
+            <Modal bsSize="large" className="queueResetByDateRangeModel" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</div>

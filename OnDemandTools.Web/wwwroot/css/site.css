@@ -241,3 +241,18 @@ p.shortDesc {
 {
     color: rgb(255, 255, 255); 
 }
+
+.addEditQueueModel .modal-lg
+{
+    max-width: 840px;
+}
+
+.queueResetByDateRangeModel .modal-lg
+{
+    max-width: 810px;
+}
+
+.queueNotificationHistoryModel .modal-lg
+{
+    max-width: 700px;
+}
