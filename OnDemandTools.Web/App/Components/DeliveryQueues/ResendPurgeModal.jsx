@@ -9,72 +9,68 @@ import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 
-class ResendPurgeModal extends React.Component
-{
+class ResendPurgeModal extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    OnclickType(id,type){
-        if(type=="resend")
+    OnclickType(id, type) {
+        if (type == "resend")
             this.resendQueue(id);
-        else if(type=="purge")
+        else if (type == "purge")
             this.purgeQueue(id);
         else
             this.clearQueue(id);
 
     }
 
-    resendQueue(id){ 
+    resendQueue(id) {
         queueAction.resetQueues(id);
-        this.props.handleClose();        
+        this.props.handleClose();
     }
 
-    purgeQueue(id){ 
+    purgeQueue(id) {
         queueAction.purgeQueues(id);
-        this.props.handleClose();        
+        this.props.handleClose();
     }
 
-    clearQueue(id){ 
+    clearQueue(id) {
         queueAction.clearQueues(id);
-        this.props.handleClose();        
+        this.props.handleClose();
     }
 
-    render(){
+    render() {
         var message, title;
-        if(this.props.data.modalActionType=="resend")
-        {
+        if (this.props.data.modalActionType == "resend") {
             title = "Resend";
             message = this.props.data.modalResendMessage.replace('<queue name>', this.props.data.queueDetails.friendlyName);
         }
-        else if(this.props.data.modalActionType=="clear")
-        {
+        else if (this.props.data.modalActionType == "clear") {
             title = "Clear undelivered notification to " + this.props.data.queueDetails.friendlyName;
             message = this.props.data.modalClearMessage.replace('<queue name>', this.props.data.queueDetails.friendlyName);
         }
-        else
-        {
+        else {
             title = "Purge";
             message = this.props.data.modalPurgeMessage.replace('<queue name>', this.props.data.queueDetails.friendlyName);
         }
 
         return (
-           <Modal show={this.props.data.showModal} onHide={this.props.handleClose}> 
+            <Modal show={this.props.data.showModal} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-           {title}
+                        {title}
                     </Modal.Title>
-                </Modal.Header>        
+                </Modal.Header>
                 <Modal.Body>
-           {
+                    {
                         <p>{message}</p>
-           }
+                    }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Cancel</Button>  
+                    <Button onClick={this.props.handleClose}>Cancel</Button>
                     <Button bsStyle="primary" onClick={this.OnclickType.bind(this, this.props.data.queueDetails.name, this.props.data.modalActionType)}>Continue</Button>
                 </Modal.Footer>
-           </Modal>
+            </Modal>
         )
     }
 }

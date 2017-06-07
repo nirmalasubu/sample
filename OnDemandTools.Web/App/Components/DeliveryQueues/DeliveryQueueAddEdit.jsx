@@ -272,7 +272,7 @@ class DeliveryQueueAddEdit extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <p> {this.props.data.queueDetails.id == null ? "New Queue" : "Edit Queue " + this.props.data.queueDetails.friendlyName}</p>
+                       <div> {this.props.data.queueDetails.id == null ? "New Queue" : "Edit Queue " + this.props.data.queueDetails.friendlyName}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

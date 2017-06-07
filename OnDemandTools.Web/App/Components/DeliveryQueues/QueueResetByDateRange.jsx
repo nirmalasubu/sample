@@ -179,7 +179,7 @@ class QueueResetByDateRange extends React.Component {
             <Modal bsSize="large" onEntered={this.modelOpen.bind(this)} show={this.props.data.showDateRangeResetModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <p>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</p>
+                        <div>Delivery by Date Range to {this.props.data.queueDetails.friendlyName}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Form>
