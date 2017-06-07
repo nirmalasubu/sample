@@ -64,37 +64,35 @@ class AddEditDestinationBasic extends React.Component {
                 </FormGroup>
               </Col>
               <Col md={4}>
-                <FormGroup
-                  controlId="contactEmail">
-                  <ControlLabel>Destination Description</ControlLabel>
-                  <FormControl
-                    type="text"
-                    value={this.props.data.description}
-                    placeholder="Enter Destination Description"
-                    onChange={this.handleTextChange.bind(this)}
-                  />
-                </FormGroup>
+
               </Col>
             </Row>
             <Row>
               <Col md={4} >
                 <FormGroup
-                  controlId="contents">
-                  <ControlLabel>Content</ControlLabel>
-                  <Checkbox name="hd" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.props.data.content.highDefinition}>HD</Checkbox>
-                  <Checkbox name="sd" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.props.data.content.standardDefinition}> SD </Checkbox>
-                  <Checkbox name="cx" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.props.data.content.cx}>C(X)</Checkbox>
-                  <Checkbox name="nonCx" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.props.data.content.nonCx}> Non-C(X)</Checkbox>
+                  controlId="destinationDescription">
+                  <ControlLabel>Destination Description</ControlLabel>
+                  <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.props.data.description} placeholder="Results" />
                 </FormGroup>
               </Col>
               <Col md={4}>
+                <ControlLabel>Content</ControlLabel>
+                <Form inline>
+                  <FormGroup
+                    controlId="contents">
+                    <Checkbox name="hd" onChange={this.handleCheckboxChange.bind(this)}
+                      checked={this.props.data.content.highDefinition}>HD</Checkbox>
+                    <Checkbox name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                      checked={this.props.data.content.standardDefinition}> SD </Checkbox>
+                    <Checkbox name="cx" onChange={this.handleCheckboxChange.bind(this)}
+                      checked={this.props.data.content.cx}>C(X)</Checkbox>
+                    <Checkbox name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                      checked={this.props.data.content.nonCx}> Non-C(X)</Checkbox>
+                  </FormGroup>
+                </Form>
+                 <ControlLabel>Options</ControlLabel>
                 <FormGroup
-                  controlId="options">
-                  <ControlLabel>Options</ControlLabel>
+                  controlId="options">                 
                   <Checkbox name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
                     checked={this.props.data.auditDelivery}> Audit Delivery</Checkbox>
                 </FormGroup>
