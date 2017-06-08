@@ -20,6 +20,9 @@ using System.Linq;
 using System.Net.Http;
 using BLFileModel = OnDemandTools.Business.Modules.File.Model;
 using BLPathModel = OnDemandTools.Business.Modules.Pathing.Model;
+using OnDemandTools.Business.Modules.Airing.Model;
+using OnDemandTools.Business.Modules.Queue.Model;
+using OnDemandTools.Common.Extensions;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -29,7 +32,7 @@ namespace OnDemandTools.API.v1.Routes
     public class HandlerRoutes : NancyModule
     {
         #region PROPERTIES 
-        
+
         // Digital fufillment codes
         private readonly int DF_COMPLETED_STATUS_CODE = 2;
         private readonly int DF_ERROR_STATUS_CODE = 4;
@@ -43,14 +46,14 @@ namespace OnDemandTools.API.v1.Routes
         private IQueueService _queueSvc;
         private IReportingService _reporterSvc;
         private EncodingFileContentValidator _encodingFileValidator;
-        public Serilog.ILogger _logger{ get; }
+        public Serilog.ILogger _logger { get; }
 
         #endregion
 
         public HandlerRoutes(
             IAiringService airingSvc,
             IDestinationService destinationSvc,
-            IPathingService pathingSvc, 
+            IPathingService pathingSvc,
             IFileService fileSvc,
             IHandlerHistoryService handlerHistorySvc,
             IQueueService queueSvc,
@@ -66,7 +69,7 @@ namespace OnDemandTools.API.v1.Routes
             _pathingSvc = pathingSvc;
             _fileSvc = fileSvc;
             _handlerHistorySvc = handlerHistorySvc;
-            _queueSvc = queueSvc;           
+            _queueSvc = queueSvc;
             _encodingFileValidator = encodingFileValidator;
             _reporterSvc = reporterSvc;
             _logger = logger;
@@ -96,7 +99,7 @@ namespace OnDemandTools.API.v1.Routes
                     // Persist encoding raw JSON data before proceeding
                     this.Request.Body.Seek(0, SeekOrigin.Begin);
                     _handlerHistorySvc.Save(this.Request.Body.AsString(), encodingPayLoad.MediaId);
-                   
+
                     // Validate provided data contract. If validation errors are found
                     // then inform user, else continue
                     var validationResult = _encodingFileValidator.Validate(encodingPayLoad);
@@ -122,9 +125,8 @@ namespace OnDemandTools.API.v1.Routes
                     // Perform CRUD
                     _fileSvc.PersistVideoFile(file);
 
-                    // Inform the subscriber queues that are registered
-                    // to be notified of any change (new/updates) in video file content
-                    PublishVideoNotification(file);
+                    // Send notification to all subscribed consumers
+                    SendNotification(file);
 
                     // Report completed status (for Encoding destination) to monitoring system 
                     ReportStatusToMonitoringSystem(file.MediaId, "Successfully ingested encoding data", DF_COMPLETED_STATUS_CODE, DF_ENCOM_DESTINATION_CODE);
@@ -139,7 +141,7 @@ namespace OnDemandTools.API.v1.Routes
                 catch (Exception ex)
                 {
                     // Log error
-                    logger.Error(ex, ex.Message);                    
+                    logger.Error(ex, ex.Message);
                     throw;
                 }
 
@@ -147,6 +149,113 @@ namespace OnDemandTools.API.v1.Routes
         }
 
         #region PRIVATE METHODS        
+
+        /// <summary>
+        // Send notifications to all subscribed consumers
+        /// </summary>
+        private void SendNotification(BLFileModel.File file)
+        {
+            List<string> statusList = file.Contents.FirstOrDefault().MediaCollection.Select(c => c.Type.Replace("_", "").Replace("-", "").ToUpper()).ToList();
+            List<Airing> airingIds = _airingSvc.GetByMediaId(file.MediaId);
+
+            // For each airing associated with the media id, do the following
+            foreach (Airing airing in airingIds)
+            {
+                // Persist statuses
+                foreach (string status in statusList)
+                {
+                    airing.Status[status] = true;
+                }
+
+                // Finally, persist the airing data
+                _airingSvc.Save(airing, false, true);
+
+                // Retrieve full list of notification changes
+                List<ChangeNotification> notifications = GetNotificationList(airing, statusList);
+
+                // Update the status notification
+                _airingSvc.CreateNotificationForStatusChange(airing.AssetId, notifications);
+            }
+        }
+
+
+        /// <summary>
+        /// Retrieve status notifications for both file/video and filetype/status. Both
+        /// are based on queue settings
+        /// </summary>
+        /// <param name="statusQueues"></param>
+        /// <param name="airing"></param>
+        /// <returns>list of status change notifications</returns>
+        private List<ChangeNotification> GetNotificationList(Airing airing, List<string> statuses)
+        {
+            List<Queue> activeQueues = _queueSvc.GetByStatus(true);
+            IList<string> queuesTobeNotified = new List<string>();
+            List<string> notifiableStatuses = statuses;
+            List<ChangeNotification> changeNotifications = new List<ChangeNotification>();
+
+            // Prepare for file/video notification
+            // Find all queues that are subscribed for video change notification
+            // and prepare for notification
+            List<string> videoQueueNames = activeQueues
+                 .Where(q => q.DetectVideoChanges)
+                 .Select(q => q.Name).ToList();
+
+            foreach (string queue in videoQueueNames)
+            {
+                if (airing.DeliveredTo.Contains(queue) || airing.IgnoredQueues.Contains(queue) ||
+                         airing.ChangeNotifications.Select(x => x.QueueName).Contains(queue))
+                {
+                    ChangeNotification newChangeNotification = new ChangeNotification();
+                    newChangeNotification.QueueName = queue;
+                    newChangeNotification.ChangeNotificationType = ChangeNotificationType.File.ToString();
+                    newChangeNotification.ChangedDateTime = DateTime.UtcNow;
+                    changeNotifications.Add(newChangeNotification);
+                }
+
+            }
+
+
+            // Prepare for filetype/status notifications
+            foreach (string statusname in notifiableStatuses)
+            {
+                List<Queue> subscribedQueues = activeQueues.Where(x => x.StatusNames.Contains(statusname)).ToList();
+
+                foreach (string deliveryQueue in subscribedQueues.Select(e => e.Name))
+                {
+                    if (airing.DeliveredTo.Contains(deliveryQueue) || airing.IgnoredQueues.Contains(deliveryQueue) || airing.ChangeNotifications.Select(x => x.QueueName).Contains(deliveryQueue))
+                    {
+                        if (!changeNotifications
+                                .Where(c =>
+                                {
+                                    return c.QueueName.Contains(deliveryQueue) &&
+                                    c.ChangeNotificationType == ChangeNotificationType.Status.ToString();
+                                }).IsNullOrEmpty())
+                        {
+                            ChangeNotification existingChangeNotification = changeNotifications.Where(c =>
+                            {
+                                return c.QueueName.Contains(deliveryQueue) &&
+                                c.ChangeNotificationType == ChangeNotificationType.Status.ToString();
+                            }).FirstOrDefault();
+                            existingChangeNotification.ChangedProperties.Add(statusname);
+                        }
+                        else
+                        {
+                            ChangeNotification newChangeNotification = new ChangeNotification();
+                            newChangeNotification.QueueName = deliveryQueue;
+                            newChangeNotification.ChangeNotificationType = ChangeNotificationType.Status.ToString();
+                            newChangeNotification.ChangedProperties.Add(statusname);
+                            newChangeNotification.ChangedDateTime = DateTime.UtcNow;
+                            changeNotifications.Add(newChangeNotification);
+                        }
+                    }
+                }
+            }
+
+            return changeNotifications;
+        }
+
+
+
 
         /// <summary>
         /// Reports the status to monitoring system. For each airing/asset
@@ -214,7 +323,7 @@ namespace OnDemandTools.API.v1.Routes
                             pathings.AddRange(_pathingSvc.GetBySourceBaseUrl(bucketUrl.Host));
                             List<BLPathModel.PathTranslation> distinctPathings = pathings.Distinct<BLPathModel.PathTranslation>(new BLPathModel.PathTranslationEqualityComparer()).ToList();
 
-                            foreach (BLPathModel.PathTranslation pt in pathings.Distinct< BLPathModel.PathTranslation>(new BLPathModel.PathTranslationEqualityComparer()))
+                            foreach (BLPathModel.PathTranslation pt in pathings.Distinct<BLPathModel.PathTranslation>(new BLPathModel.PathTranslationEqualityComparer()))
                             {
                                 // Construct and add akamai url information
                                 String host = pt.Target.BaseUrl;
@@ -257,10 +366,10 @@ namespace OnDemandTools.API.v1.Routes
                  .Select(q => q.Name).ToList();
 
             // Publish notification
-            _queueSvc.FlagForRedelivery(videoQueueNames, airingIds,ChangeNotificationType.File);
+            _queueSvc.FlagForRedelivery(videoQueueNames, airingIds, ChangeNotificationType.File);
         }
 
-     
+
         #endregion
 
     }
