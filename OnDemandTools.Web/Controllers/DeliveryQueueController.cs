@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using OnDemandTools.Business.Modules.Airing;
 using OnDemandTools.Business.Modules.Airing.Model;
+using OnDemandTools.Business.Adapters.Hangfire;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -26,17 +27,20 @@ namespace OnDemandTools.Web.Controllers
         AppSettings appsettings;
         IRemoteQueueHandler remoteQueueHandler;
         IAiringService _airingService;
+        IHangfireRecurringJobCommand hangfireCommand;
 
         public DeliveryQueueController(IQueueService queueSvc,
             AppSettings appsettings,
             IRemoteQueueHandler remoteQueueHandler,
-            IAiringService airingSvc
+            IAiringService airingSvc,
+            IHangfireRecurringJobCommand hangfireCommand
             )
         {
             this.appsettings = appsettings;
             _queueSvc = queueSvc;
             _airingService = airingSvc;
             this.remoteQueueHandler = remoteQueueHandler;
+            this.hangfireCommand = hangfireCommand;
         }
 
         // GET: api/values
@@ -164,6 +168,24 @@ namespace OnDemandTools.Web.Controllers
         public void ClearQueue(string name)
         {
             _queueSvc.ClearPendingDeliveries(name);
+        }
+
+        [Authorize]
+        [HttpDelete("{id}/{name}")]
+        public bool Delete(string id, string name)
+        {
+            var queues = _queueSvc.GetQueues();
+
+            var singleQueueAttached = queues.Count(q => q.Name == name) == 1;
+
+            hangfireCommand.DeletePublisherJob(name);
+
+            if (singleQueueAttached)
+                remoteQueueHandler.Delete(name);
+
+            _queueSvc.DeleteQueue(id);
+
+            return true;
         }
 
     }

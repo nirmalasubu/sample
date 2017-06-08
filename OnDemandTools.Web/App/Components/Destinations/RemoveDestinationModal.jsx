@@ -57,18 +57,14 @@ class RemoveDestinationModal extends React.Component
     }
 
     onContinue(){
-        var elem = this;
         if(!this.state.inProduct)
         {
             this.setState({ isProcessing: true });            
             this.props.dispatch(destinationAction.deleteDestination(this.props.data.destinationDetails.id))
                 .then(() => {
-                    NotificationManager.success(this.props.data.destinationDetails.name + ' Destination deleted successfully.', '', 2000);
-                    setTimeout(function () {
-                        elem.props.handleClose();
-                    }, 3000);
+                    this.props.dispatch(destinationAction.fetchDestinations());
+                    this.props.handleClose();
                 }).catch(error => {
-                    NotificationManager.error(this.props.data.destinationDetails.name + ' delete failed. ' + error, 'Failure');
                     this.setState({ isProcessing: false });
                 });
         }
@@ -91,8 +87,8 @@ class RemoveDestinationModal extends React.Component
            }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button bsStyle="primary" onClick={(event) => this.onContinue(event)}>Continue</Button>
+                    <Button  onClick={this.props.handleClose}>Cancel</Button>  
+                    <Button disabled={this.state.isProcessing} bsStyle="primary" onClick={(event) => this.onContinue(event)}>{this.state.isProcessing ? "Processing" : "Continue"}</Button>
                 </Modal.Footer>
            </Modal>
         )

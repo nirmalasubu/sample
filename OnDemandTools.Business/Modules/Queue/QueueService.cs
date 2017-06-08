@@ -14,6 +14,7 @@ using OnDemandTools.DAL.Helpers;
 using OnDemandTools.DAL.Modules.Airings.Queries;
 using OnDemandTools.Business.Adapters.Hangfire;
 using OnDemandTools.Business.Modules.AiringPublisher.Workflow;
+using MongoDB.Bson;
 
 namespace OnDemandTools.Business.Modules.Queue
 {
@@ -31,6 +32,7 @@ namespace OnDemandTools.Business.Modules.Queue
         CurrentAiringsQuery currentAiringQuery;
         IHangfireRecurringJobCommand hangfireCommand;
         IRemoteQueueHandler remoteQueueHandler;
+        IQueueDeleteCommand queueDeleteCommand;
 
         public QueueService(
             IQueueQuery queueQueryHelper,
@@ -43,7 +45,8 @@ namespace OnDemandTools.Business.Modules.Queue
             IQueueSaveCommand queueSaveCommand,
             CurrentAiringsQuery currentAiringQuery,
             IHangfireRecurringJobCommand hangfireCommand,
-            IRemoteQueueHandler remoteQueueHandler)
+            IRemoteQueueHandler remoteQueueHandler,
+            IQueueDeleteCommand queueDeleteCommand)
         {
             this.queueQueryHelper = queueQueryHelper;
             this.queueCommandHelper = queueCommandHelper;
@@ -56,6 +59,7 @@ namespace OnDemandTools.Business.Modules.Queue
             this.currentAiringQuery = currentAiringQuery;
             this.hangfireCommand = hangfireCommand;
             this.remoteQueueHandler = remoteQueueHandler;
+            this.queueDeleteCommand = queueDeleteCommand;
         }
 
         /// <summary>
@@ -395,6 +399,15 @@ namespace OnDemandTools.Business.Modules.Queue
             }
 
             return dataModel.ToBusinessModel<DLModel.Queue, Model.Queue>();
+        }
+
+        /// <summary>
+        /// Delete's the queue
+        /// </summary>
+        /// <param name="id">Object Id to delete</param>
+        public void DeleteQueue(string id)
+        {
+            queueDeleteCommand.Delete(new ObjectId(id));
         }
     }
 }

@@ -7,6 +7,7 @@ import ResendPurgeModal from 'Components/DeliveryQueues/ResendPurgeModal';
 import ResetByDateRange from 'Components/DeliveryQueues/QueueResetByDateRange';
 import NotificationHistory from 'Components/DeliveryQueues/QueueNotificationHistory';
 import DeliveryQueueAddEdit from 'Components/DeliveryQueues/DeliveryQueueAddEdit';
+import RemoveQueueModal from 'Components/DeliveryQueues/RemoveQueueModal';
 import { getNewQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
@@ -20,6 +21,7 @@ class DeliveryQueueTable extends React.Component {
             showDateRangeResetModel: false,
             showNotificationHistoryModel: false,
             showAddEditModel: false,
+            showDeleteModal: false,
             queueDetails: "",
             modalActionType: "",
             modalPurgeMessage: "You are about to purge all notifications to the <queue name> queue. Do you wish to continue?",
@@ -91,6 +93,14 @@ class DeliveryQueueTable extends React.Component {
         this.setState({ showModal: true, queueDetails: val, modalActionType: type });
     }
 
+    openDeleteModel(val) {
+        this.setState({ showDeleteModal: true, queueDetails: val });
+    }
+
+    closeDeleteModel() {
+        this.setState({ showDeleteModal: false });
+    }
+
     actionFormat(val, rowData) {
         return (<div>
 
@@ -106,7 +116,7 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </button>
 
-            <button class="btn-link" title="Delete Delivery Queue">
+            <button class="btn-link" title="Delete Delivery Queue" onClick={(event) => this.openDeleteModel(rowData, event)}>
                 <i class="fa fa-trash"></i>
             </button>
         </div>)
@@ -205,6 +215,7 @@ class DeliveryQueueTable extends React.Component {
                 <ResetByDateRange data={this.state} handleClose={this.closeDateRangeResetModel.bind(this)} />
                 <NotificationHistory data={this.state} handleClose={this.closeNotificationHistoryModel.bind(this)} />
                 <DeliveryQueueAddEdit data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <RemoveQueueModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }
 

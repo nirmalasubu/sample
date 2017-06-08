@@ -28,6 +28,12 @@ export const saveQueueSuccess = (queue) => {
     }
 };
 
+export const deleteQueueSuccess = (objectId) => {
+    return {
+        type: actionTypes.DELETE_QUEUE_SUCCESS,
+        objectId
+    }
+};
 
 export const fetchQueues = () => {
     return (dispatch) => {
@@ -165,6 +171,18 @@ export const clearQueues = (name) => {
         .catch(error => {
             throw (error);
         });
+};
+
+export const deleteQueues = (id, name) => {
+    return (dispatch) => {        
+        return Axios.delete('/api/deliveryqueue/' + id + '/' + name)
+            .then(response => {
+                dispatch(deleteQueueSuccess(id))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
 };
 
 export const signalRStart = (signalRdata) => {

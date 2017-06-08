@@ -78,5 +78,6 @@ namespace OnDemandTools.Business.Modules.AiringPublisher.Workflow
     {
         void Create(BLQueue.Queue queue, bool prioritySelectionChanged = false);
         void Purge(string remoteQueueName);
+        void Delete(string remoteQueueName, bool isPriorityQueue = false);
     }
 }

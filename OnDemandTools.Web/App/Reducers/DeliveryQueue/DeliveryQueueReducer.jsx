@@ -11,6 +11,11 @@
                 state[queueIndex] = action.queue;
             }
             return state;
+        case 'DELETE_QUEUE_SUCCESS':
+            var dIndex = state.findIndex((obj => obj.id == action.objectId));
+            if (dIndex >= 0)
+                state.splice(dIndex,1);
+            return state;
         default:
             return state;
     }

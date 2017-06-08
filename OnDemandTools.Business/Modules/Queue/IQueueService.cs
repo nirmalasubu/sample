@@ -215,5 +215,11 @@ namespace OnDemandTools.Business.Modules.Queue
         /// <param name="queue">queue model to save</param>
         /// <returns>Returns saved queue</returns>
         Model.Queue SaveQueue(Model.Queue queue);
+
+        /// <summary>
+        /// Delete's the queue
+        /// </summary>
+        /// <param name="id">object id to delete</param>
+        void DeleteQueue(string id);
     }
 }
