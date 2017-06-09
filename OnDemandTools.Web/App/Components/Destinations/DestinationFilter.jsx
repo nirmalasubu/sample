@@ -36,6 +36,8 @@ class DestinationFilter extends React.Component
     }
 
     handleSelectChange(value){
+        if(value == undefined)
+            value ="";
         this.setState({
             contentValue: value
         });
@@ -71,7 +73,8 @@ class DestinationFilter extends React.Component
             <Select simpleValue className="destination-select-control" options={this.state.options} 
             onChange={this.handleSelectChange.bind(this)} 
             clearable={false}
-            value={this.state.contentValue} 
+            value={this.state.contentValue}
+            searchable={false}
             placeholder="Content" />
         </FormGroup>
         {' '}
