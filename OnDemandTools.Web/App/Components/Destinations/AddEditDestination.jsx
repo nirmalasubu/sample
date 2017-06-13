@@ -26,7 +26,10 @@ class AddEditDestinationModel extends React.Component {
         super(props);
 
         this.state = ({
-            isProcessing: false
+            isProcessing: false,
+            validationStateName: "",
+            validationStateDescription: "",
+            validationStateExternalId: ""
         });
     }
     //called on the model load
@@ -35,35 +38,43 @@ class AddEditDestinationModel extends React.Component {
     }
 
     handleSave() {
+        console.log(this.state);
         var elem = this;
-        //this.validateForm();
-        //if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
+        if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
 
             this.setState({ isProcessing: true });
 
-        this.props.dispatch(saveDestination(this.props.data.destinationDetails))
-                .then(() => {
-                    if (this.props.data.destinationDetails.id == null) {
-                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination successfully created.', '', 2000);
-                    }
-                    else {
-                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
-                    }
-                    setTimeout(function () {
-                        elem.props.handleClose();
-                    }, 3000);
-                }).catch(error => {
-                    if (this.props.data.destinationDetails.id == null) {
-                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
-                    }
-                    else {
-                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
-                    }
-                    this.setState({ isProcessing: false });
-                });
-        //}
-        //else
-        //    return false;
+            this.props.dispatch(saveDestination(this.props.data.destinationDetails))
+                    .then(() => {
+                        if (this.props.data.destinationDetails.id == null) {
+                            NotificationManager.success(this.props.data.destinationDetails.name + ' destination successfully created.', '', 2000);
+                        }
+                        else {
+                            NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
+                        }
+                        setTimeout(function () {
+                            elem.props.handleClose();
+                        }, 3000);
+                    }).catch(error => {
+                        if (this.props.data.destinationDetails.id == null) {
+                            NotificationManager.error(this.props.data.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
+                        }
+                        else {
+                            NotificationManager.error(this.props.data.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
+                        }
+                        this.setState({ isProcessing: false });
+                    });
+        }
+        else
+            return false;
+    }
+
+    updateValidations(name, description)
+    {
+        this.setState({
+            validationStateName : (name!=undefined && (name == "" || name.length < 3 || name.length > 5)) ? 'error' : '',
+            validationStateDescription : (description == "") ? 'error' : ''
+        });
     }
 
     render() {
@@ -75,7 +86,7 @@ class AddEditDestinationModel extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AddEditDestinationBasic data={this.props.data.destinationDetails} />
+                    <AddEditDestinationBasic data={this.props.data.destinationDetails} validationStates={this.updateValidations.bind(this)} />
                     <Tabs defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
                             <AddEditDestinationProperties data={this.props.data.destinationDetails} />
@@ -88,8 +99,7 @@ class AddEditDestinationModel extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Close</Button> 
-                    <Button onClick={this.props.handleClose} className="btn btn-primary btn-large" >Save</Button>
-                    <Button  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateDescription != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>

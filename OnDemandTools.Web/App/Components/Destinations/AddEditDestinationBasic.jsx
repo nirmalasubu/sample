@@ -15,14 +15,32 @@ class AddEditDestinationBasic extends React.Component {
         super(props);
 
         this.state = ({
-            destinationModel: {}
+            destinationModel: {},
+            validationStateName: "",
+            validationStateDescription: "",
+            validationStateExternalId: ""
         });
+    }
+
+    validateForm() {
+        var name = this.state.destinationModel.name;
+        var description = this.state.destinationModel.description;
+        var hasError = false;
+
+        this.setState({
+            validationStateName: (name!=undefined && (name == "" || name.length < 3 || name.length > 5)) ? 'error' : '',
+            validationStateDescription: (description == "") ? 'error' : ''
+        });
+
+        this.props.validationStates(name, description);
     }
 
     componentWillMount() {
         this.setState({
             destinationModel:this.props.data
         });
+
+        this.validateForm();
     }
 
     getUnusedExternalId() {
@@ -50,13 +68,17 @@ class AddEditDestinationBasic extends React.Component {
         return false;
     }
 
-    handleTextChange(event) {
+    handleTextChange(event) {       
+
         var model = this.state.destinationModel;
-        model.name = event.target.value;
+                
+        model.name = event.target.value.toUpperCase();
 
         this.setState({
             destinationModel:model
         });
+
+        this.validateForm();
 
         this.props.data = this.state.destinationModel;
     }
@@ -68,6 +90,8 @@ class AddEditDestinationBasic extends React.Component {
         this.setState({
             destinationModel:model
         });
+
+        this.validateForm();
 
         this.props.data = this.state.destinationModel;
     }
@@ -101,6 +125,8 @@ class AddEditDestinationBasic extends React.Component {
             destinationModel:model
         });
 
+        this.validateForm();
+
         this.props.data = this.state.destinationModel;
     }
 
@@ -112,14 +138,14 @@ class AddEditDestinationBasic extends React.Component {
                 <Row>
                   <Col md={4} >
                 <FormGroup
-                  controlId="destinationCode">
+                  controlId="destinationCode" validationState={this.state.validationStateName}>
                   <ControlLabel>Destination Code</ControlLabel>
                   <FormControl
                     type="text"
                     value={this.state.destinationModel.name}
                     ref="inputFriendlyName"
                     placeholder="Enter Destination Code"
-                    onChange={this.handleTextChange.bind(this)}
+                    onChange={this.handleTextChange.bind(this)}                     
                   />
                     </FormGroup>
                   </Col>
@@ -130,10 +156,10 @@ class AddEditDestinationBasic extends React.Component {
                 <Row>
                   <Col md={4} >
                     <FormGroup
-                    controlId="destinationDescription">
+                  controlId="destinationDescription" validationState={this.state.validationStateDescription}>
                     <ControlLabel>Destination Description</ControlLabel>
                     <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.state.destinationModel.description} placeholder="Results"
-                    onChange={this.handleDescriptionChange.bind(this)} />
+                    onChange={this.handleDescriptionChange.bind(this)}  />
                   </FormGroup>
                 </Col>
                 <Col md={4}>
