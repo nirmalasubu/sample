@@ -165,11 +165,26 @@ textarea.form-control-modal-Edit {
     width: 300px;
 }
 
+.destination-properties-addnew{
+   background-color: white;
+    border: 1px solid #555;
+    color: #337ab7;
+    margin-left: 13px;
+    margin-bottom: 5px
+}
+.destination-properties-label{
+    color: #337ab7;
+}
+
+.destination-properties-RowMargin{
+   margin-bottom:5px
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
+
 
 .addMarginRight
 {
