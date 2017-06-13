@@ -12,6 +12,7 @@ namespace OnDemandTools.Web.Models.Destination
         {
             Deliverables = new List<Deliverable>();
             Properties = new List<Property>();
+            Content = new Content();
 
             this.UpdateCreatedBy();
         }

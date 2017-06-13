@@ -52,7 +52,7 @@ export const filterDestinations = (filterDestination) => {
 };
 
 export const getNewDestination = () => {
-    return Axios.get('/api/deliveryqueue/newqueue')
+    return Axios.get('/api/destination/newdestination')
         .then(response => {
             return (response.data);
         })

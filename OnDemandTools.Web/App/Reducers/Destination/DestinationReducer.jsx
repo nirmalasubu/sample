@@ -4,7 +4,7 @@
             return action.destinations;
         case 'SAVE_DESTINATION_SUCCESS':
             var destinationIndex = state.findIndex((obj => obj.id == action.destination.id));
-            if (destinationIndex < 0) {
+            if (destinationIndex < 0) {                
                 state.push(action.destination);
             }
             else {

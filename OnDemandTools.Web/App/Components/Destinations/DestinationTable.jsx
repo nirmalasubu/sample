@@ -2,7 +2,7 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { getNewQueue } from 'Actions/Destination/DestinationActions';
+import { getNewDestination } from 'Actions/Destination/DestinationActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
@@ -40,8 +40,20 @@ class DestinationTable extends React.Component {
             }
         }
     }
+
     componentDidMount() {
         this.props.dispatch(fetchProducts());
+
+        let promise = getNewDestination();
+        promise.then(message => {
+            this.setState({
+                newDestinationModel: message
+            });
+        }).catch(error => {
+            this.setState({
+                newDestinationModel: {}
+            });
+        });
     }
 
     openCreateNewDestinationModel() {
@@ -60,8 +72,7 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: true, destinationDetails: val });
     }
 
-    closeAddEditModel() {
-        console.log(this.state.destinationDetails);
+    closeAddEditModel() {        
         this.setState({ showAddEditModel: false });
     }
 
@@ -127,7 +138,7 @@ class DestinationTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Destination" >
+                    <button class="btn-link pull-right addMarginRight" title="New Destination" onClick={(event) => this.openCreateNewDestinationModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i> 
                         <span class="addVertialAlign"> New Destination</span>
                     </button>

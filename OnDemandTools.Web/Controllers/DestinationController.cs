@@ -41,6 +41,18 @@ namespace OnDemandTools.Web.Controllers
             return destinationModel;
         }
 
+        [Authorize]
+        [HttpGet("newdestination")]
+        public DestinationViewModel GetEmptyModel()
+        {
+            return new DestinationViewModel
+            {
+                Name = string.Empty,
+                Description = string.Empty,
+                ExternalId = 0                
+            };
+        }
+
         //save destination details
         [Authorize]
         [HttpPost]

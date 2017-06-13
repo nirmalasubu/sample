@@ -14,6 +14,7 @@ import AddEditDestinationBasic from 'Components/Destinations/AddEditDestinationB
 import AddEditDestinationDeliverables from 'Components/Destinations/AddEditDestinationDeliverables';
 import AddEditDestinationProperties from 'Components/Destinations/AddEditDestinationProperties';
 import { saveDestination } from 'Actions/Destination/DestinationActions';
+import * as destinationAction from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {
     return {
@@ -38,7 +39,6 @@ class AddEditDestinationModel extends React.Component {
     }
 
     handleSave() {
-        console.log(this.state);
         var elem = this;
         if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
 
@@ -52,6 +52,7 @@ class AddEditDestinationModel extends React.Component {
                         else {
                             NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
                         }
+                        this.props.dispatch(destinationAction.fetchDestinations());
                         setTimeout(function () {
                             elem.props.handleClose();
                         }, 3000);

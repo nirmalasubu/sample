@@ -38,7 +38,17 @@ class AddEditDestinationBasic extends React.Component {
     componentWillMount() {
         this.setState({
             destinationModel:this.props.data
-        });
+        });        
+    }
+
+    componentDidMount() {
+        var model = this.state.destinationModel;
+        if(this.state.destinationModel.id==null)
+        {
+            model.externalId = this.getUnusedExternalId();
+
+            this.setState({ destinationModel : model });
+        }
 
         this.validateForm();
     }
@@ -48,7 +58,7 @@ class AddEditDestinationBasic extends React.Component {
 
         while (true) {
 
-            if (!isExternaldUsed(externalId)) {
+            if (!this.isExternaldUsed(externalId)) {
                 break;
             }
 
@@ -60,7 +70,7 @@ class AddEditDestinationBasic extends React.Component {
 
     isExternaldUsed(externalId) {
         for (var x = 0; x < this.props.destinations.length; x++) {
-            if (externalId == destinations[x].externalId) {
+            if (externalId == this.props.destinations[x].externalId) {
                 return true;
             }
         }

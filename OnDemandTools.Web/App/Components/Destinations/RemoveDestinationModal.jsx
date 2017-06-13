@@ -34,13 +34,15 @@ class RemoveDestinationModal extends React.Component
         {
             this.setState({
                 inProduct:true,
-                message:"This destination is being used by product(s). Remove the destination from all products before deleting."
+                message:"This destination is being used by product(s). Remove the destination from all products before deleting.",
+                isProcessing: false
             });
         }
         else{
             this.setState({
                 inProduct:false,
-                message:"If you continue, the destination '" + this.props.data.destinationDetails.name + "' will be completely deleted which could cause a problem if this destination has been used."
+                message:"If you continue, the destination '" + this.props.data.destinationDetails.name + "' will be completely deleted which could cause a problem if this destination has been used.",
+                isProcessing: false
             });
         }
     }
