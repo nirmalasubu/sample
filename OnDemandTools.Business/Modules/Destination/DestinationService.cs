@@ -203,6 +203,19 @@ namespace OnDemandTools.Business.Modules.Destination
         }
 
         /// <summary>
+        /// Save destnation to collection
+        /// </summary>
+        /// <param name="model">destination model</param>
+        public BLModel.Destination Save(BLModel.Destination model)
+        {
+            DLModel.Destination dataModel = model.ToDataModel<BLModel.Destination, DLModel.Destination>();
+
+            dataModel = destinationCommand.Save(dataModel);
+
+            return dataModel.ToBusinessModel<DLModel.Destination, BLModel.Destination>();
+        }
+
+        /// <summary>
         /// Remove destnation from collection using ObjectID
         /// </summary>
         /// <param name="id">Object Id</param>

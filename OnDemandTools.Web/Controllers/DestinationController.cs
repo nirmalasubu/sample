@@ -40,7 +40,30 @@ namespace OnDemandTools.Web.Controllers
 
             return destinationModel;
         }
-        
+
+        //save destination details
+        [Authorize]
+        [HttpPost]
+        public DestinationViewModel Post([FromBody]DestinationViewModel viewModel)
+        {
+            Destination blModel = viewModel.ToBusinessModel<DestinationViewModel, Destination>();
+
+            if (string.IsNullOrEmpty(blModel.Id))
+            {
+                blModel.CreatedDateTime = DateTime.UtcNow;
+                blModel.CreatedBy = HttpContext.User.Identity.Name;
+            }
+            else
+            {
+                blModel.ModifiedDateTime = DateTime.UtcNow;
+                blModel.ModifiedBy = HttpContext.User.Identity.Name;
+            }
+
+            blModel = _destinationSvc.Save(blModel);
+
+            return blModel.ToViewModel<Destination, DestinationViewModel>();
+        }
+
         [Authorize]
         [HttpDelete("{id}")]
         public void Delete(string id)

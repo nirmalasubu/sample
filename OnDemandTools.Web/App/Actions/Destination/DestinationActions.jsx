@@ -12,6 +12,13 @@ export const fetchDestinationSuccess = (destinations) => {
     }
 };
 
+export const saveDestinationSuccess = (destination) => {
+    return {
+        type: actionTypes.SAVE_DESTINATION_SUCCESS,
+        destination
+    }
+};
+
 export const filterDestinationSuccess= (filterDestination) => {
     return {
         type: actionTypes.FILTER_DESTINATION_SUCCESS,
@@ -52,6 +59,18 @@ export const getNewDestination = () => {
         .catch(error => {
             throw (error);
         });
+};
+
+export const saveDestination = (model) => {
+    return (dispatch) => {        
+        return Axios.post('/api/destination', model)
+            .then(response => {
+                dispatch(saveDestinationSuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
 };
 
 export const deleteDestination = (id) => {

@@ -67,5 +67,11 @@ namespace OnDemandTools.Business.Modules.Destination
         /// <param name="id">Object Id</param>
         void Delete(string id);
 
+        /// <summary>
+        /// Save destnation to collection
+        /// </summary>
+        /// <param name="model">destination model</param>
+        Model.Destination Save(Model.Destination model);
+
      }
 }

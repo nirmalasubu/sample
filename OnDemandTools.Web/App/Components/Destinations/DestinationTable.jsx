@@ -61,6 +61,7 @@ class DestinationTable extends React.Component {
     }
 
     closeAddEditModel() {
+        console.log(this.state.destinationDetails);
         this.setState({ showAddEditModel: false });
     }
 

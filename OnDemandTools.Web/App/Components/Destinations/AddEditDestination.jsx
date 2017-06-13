@@ -10,9 +10,10 @@ import { Tabs, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormG
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import AddEditDestinationBasic from 'Components/Destinations/AddEditDestinationBasic'
-import AddEditDestinationDeliverables from 'Components/Destinations/AddEditDestinationDeliverables'
-import AddEditDestinationProperties from 'Components/Destinations/AddEditDestinationProperties'
+import AddEditDestinationBasic from 'Components/Destinations/AddEditDestinationBasic';
+import AddEditDestinationDeliverables from 'Components/Destinations/AddEditDestinationDeliverables';
+import AddEditDestinationProperties from 'Components/Destinations/AddEditDestinationProperties';
+import { saveDestination } from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {
     return {
@@ -23,11 +24,48 @@ class AddEditDestinationModel extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = ({
+            isProcessing: false
+        });
     }
     //called on the model load
     onOpenModel(destination) {
-
+        this.setState({ isProcessing: false });
     }
+
+    handleSave() {
+        var elem = this;
+        //this.validateForm();
+        //if (this.state.validationStateName != "error" && this.state.validationStateEmail != "error" && this.state.validationQueryState != "error") {
+
+            this.setState({ isProcessing: true });
+
+        this.props.dispatch(saveDestination(this.props.data.destinationDetails))
+                .then(() => {
+                    if (this.props.data.destinationDetails.id == null) {
+                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination successfully created.', '', 2000);
+                    }
+                    else {
+                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
+                    }
+                    setTimeout(function () {
+                        elem.props.handleClose();
+                    }, 3000);
+                }).catch(error => {
+                    if (this.props.data.destinationDetails.id == null) {
+                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
+                    }
+                    else {
+                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
+                    }
+                    this.setState({ isProcessing: false });
+                });
+        //}
+        //else
+        //    return false;
+    }
+
     render() {
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
@@ -51,10 +89,13 @@ class AddEditDestinationModel extends React.Component {
                 <Modal.Footer>
                     <Button onClick={this.props.handleClose}>Close</Button> 
                     <Button onClick={this.props.handleClose} className="btn btn-primary btn-large" >Save</Button>
+                    <Button  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                        {this.state.isProcessing ? "Processing" : "Save"}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         )
-    }
-}
+            }
+            }
 
 export default AddEditDestinationModel;

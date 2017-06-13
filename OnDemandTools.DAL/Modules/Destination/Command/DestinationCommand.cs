@@ -15,6 +15,15 @@ namespace OnDemandTools.DAL.Modules.Destination.Command
             _database = connection.GetDatabase();
         }
 
+        public DAL.Modules.Destination.Model.Destination Save(DAL.Modules.Destination.Model.Destination destination)
+        {
+            var collection = _database.GetCollection<DAL.Modules.Destination.Model.Destination>("Destination");
+
+            collection.Save(destination);
+
+            return destination;
+        }
+
         public void Delete(string id)
         {
             var collection = _database.GetCollection<CurrentAiringId>("Destination");
