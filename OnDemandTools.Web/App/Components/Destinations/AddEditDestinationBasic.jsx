@@ -3,12 +3,7 @@ import PageHeader from 'Components/Common/PageHeader';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-@connect((store) => {
-    return {
-        config: store.config,
-        destinations:store.destinations
-    };
-})
+
 class AddEditDestinationBasic extends React.Component {
 
     constructor(props) {

@@ -16,11 +16,6 @@ import AddEditDestinationProperties from 'Components/Destinations/AddEditDestina
 import { saveDestination } from 'Actions/Destination/DestinationActions';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 
-@connect((store) => {
-    return {
-        config: store.config
-    };
-})
 class AddEditDestinationModel extends React.Component {
 
     constructor(props) {
