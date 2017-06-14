@@ -13,7 +13,7 @@ class AddEditDestinationProperties extends React.Component {
       });
   }
     componentDidMount() {
-        
+          
       this.setState({
           destinationProperties:this.props.data});
   }
@@ -35,58 +35,56 @@ class AddEditDestinationProperties extends React.Component {
                  
               }
 
-             
-
-
               render() {
- 
-                  var row;
+                  let row =null;
                   if (Object.keys(this.state.destinationProperties).length != 0 && this.state.destinationProperties != Object) 
                   {
                      
                       row = this.state.destinationProperties.properties.map(function (item, index) {
-                          
+                         
                           return (<div class="destination-properties-RowMargin"><Row >
                          <Col sm={3} > <input type="text" id={index} defaultValue={item.name} onChange={this.handlePropertyNameChange.bind(this)} /> </Col>
                          <Col sm={3} ><input type="text"  id={index} defaultValue={item.value}  onChange={this.handlePropertyValueChange.bind(this)} /></Col>
                          <Col sm={4} >
-                        {item.brands.map(function(name, index){
-                            return <span>{name}</span>
-                        })}
-                         
+                                {item.brands.map(function(name, index){
+                                    var path="images/brands/"+name+".gif"
+                                    return ( <img src={path} />);
+                                })}
+                     
+                                {item.titles.map(function(title, index){
+                                     return (<span>{title.name}</span>  );
+                                })}
                          </Col>
-                         
-                         <Col sm={2} > <button class="btn-link" title="Edit Properties" >
+                         <Col sm={2} > 
+                             <button class="btn-link" title="Edit Properties" >
                                       <i class="fa fa-pencil-square-o"></i>
-                                    </button>
-
-                                    <button class="btn-link" title="Delete Properties" >
+                              </button>
+                              <button class="btn-link" title="Delete Properties" >
                                       <i class="fa fa-trash"></i></button>
                            </Col>
                          </Row></div>);
                              }.bind(this));
-                             }
-    return (
-      <div>
-            <div>
-                    <button class="destination-properties-addnew" title="Add New"  onClick={(event) => this.openCreateNewQueueModel(event)}>
+                        }
+                             
+                        return (
+                          <div>
+                          <div>
+                        <button class="destination-properties-addnew" title="Add New"  onClick={(event) => this.openCreateNewQueueModel(event)}>
                         Add  New
-                    </button>
-               </div>
-          <Grid fluid={true}>
+                        </button>
+                        </div>
+                <Grid fluid={true}>
               <Row>
-                  <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
-                      <Col sm={3} ><label class="destination-properties-label">Value</label></Col>
-                          <Col sm={4} ><label class="destination-properties-label">Filter</label></Col>
-                              <Col sm={2} ><label class="destination-properties-label">Actions</label></Col>
+                   <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
+                   <Col sm={3} ><label class="destination-properties-label">Value</label></Col>
+                   <Col sm={4} ><label class="destination-properties-label">Filter</label></Col>
+                   <Col sm={2} ><label class="destination-properties-label">Actions</label></Col>
               </Row>
-              {row}
+             {row}
               </Grid>
-
-       
       </div>
     )
-                              }
+              }
                     }
 
 export default AddEditDestinationProperties

@@ -224,6 +224,17 @@ namespace OnDemandTools.Business.Modules.Destination
             destinationCommand.Delete(id);
         }
 
+        /// <summary>
+        /// Get title  names for titleIds from flow
+        /// </summary>
+        /// <param name="titleIds"> title Ids</param>
+        /// <returns>titles</returns>
+        public List<Airing.Model.Alternate.Title.Title> GetTitlesNameFor(List<int> titleIds)
+        {
+            var titles = GetFlowTitlesFor(titleIds);
+            return titles;
+        }
+
         #region PRIVATE METHODS
         private void GetFlowValuesforAiring(ref Airing.Model.Airing airing)
         {
@@ -270,6 +281,7 @@ namespace OnDemandTools.Business.Modules.Destination
 
             return titles;
         }
+        
 
         private Task<List<Airing.Model.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
         {

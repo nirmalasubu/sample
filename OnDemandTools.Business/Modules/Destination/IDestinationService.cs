@@ -73,5 +73,12 @@ namespace OnDemandTools.Business.Modules.Destination
         /// <param name="model">destination model</param>
         Model.Destination Save(Model.Destination model);
 
+        /// <summary>
+        /// Get title  names for titleIds from flow
+        /// </summary>
+        /// <param name="titleIds"> title Ids</param>
+        /// <returns>titles</returns>
+        List<Airing.Model.Alternate.Title.Title> GetTitlesNameFor(List<int> titleIds);
+
      }
 }

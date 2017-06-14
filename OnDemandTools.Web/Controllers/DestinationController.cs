@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using OnDemandTools.Business.Modules.Destination.Model;
 using OnDemandTools.Web.Models.Destination;
 using OnDemandTools.Business.Modules.Destination;
+using OnDemandTools.Business.Modules.Airing.Model;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,9 +36,30 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public IEnumerable<DestinationViewModel> Get()
         {
-            List<Destination> destinations = _destinationSvc.GetAll();
-            List<DestinationViewModel> destinationModel = destinations.ToViewModel<List<Destination>, List<DestinationViewModel>>();
-
+            List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+            List<DestinationViewModel> destinationModel = destinations.ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>();
+           foreach(DestinationViewModel destination in destinationModel)
+            {
+                if(destination.Properties.Any())
+                {
+                    foreach(Web.Models.Destination.Property property in destination.Properties)
+                    {
+                        if(property.TitleIds.Any())
+                        {
+                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles =  _destinationSvc.GetTitlesNameFor(property.TitleIds);
+                            property.Titles = titles.ToViewModel <List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
+                        }
+                        if (property.SeriesIds.Any())
+                        {
+                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(property.SeriesIds);
+                            if(property.Titles.Any())
+                                property.Titles.AddRange(titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>());
+                            else
+                                property.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
+                        }
+                    }
+                }
+            }
             return destinationModel;
         }
 
@@ -58,7 +80,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpPost]
         public DestinationViewModel Post([FromBody]DestinationViewModel viewModel)
         {
-            Destination blModel = viewModel.ToBusinessModel<DestinationViewModel, Destination>();
+            Business.Modules.Destination.Model.Destination blModel = viewModel.ToBusinessModel<DestinationViewModel, Business.Modules.Destination.Model.Destination>();
 
             if (string.IsNullOrEmpty(blModel.Id))
             {
@@ -73,7 +95,7 @@ namespace OnDemandTools.Web.Controllers
 
             blModel = _destinationSvc.Save(blModel);
 
-            return blModel.ToViewModel<Destination, DestinationViewModel>();
+            return blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>();
         }
 
         [Authorize]
