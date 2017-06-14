@@ -7,7 +7,7 @@ using OnDemandTools.DAL.Modules.Brands.Comparer;
 
 namespace OnDemandTools.DAL.Modules.Brands.Queries
 {
-    public class BrandsQuery : INameBrandQuery, IGetBrandByNameQuery
+    public class BrandsQuery : IBrandQuery, IGetBrandByNameQuery
     {
         private readonly MongoDatabase _database;
 

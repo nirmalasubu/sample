@@ -2,7 +2,7 @@
 
 namespace OnDemandTools.DAL.Modules.Brands.Queries
 {
-    public interface INameBrandQuery
+    public interface IBrandQuery
     {
         IQueryable<string> Get();
     }
