@@ -7,7 +7,13 @@ import { ModalBody } from 'react-bootstrap';
 import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
+@connect((store) => {
+    return {
+        config: store.config
+    };
+})
 class DestinationPropertiesForm extends React.Component {
 
   constructor(props) {
@@ -22,6 +28,12 @@ class DestinationPropertiesForm extends React.Component {
   }
 
   render() {
+
+    var rows = [];
+    for (var i = 0; i < this.props.config.brands.length; i++) {
+        rows.push(<img class="brandImage" alt={this.props.config.brands[i]} src={"../images/brands/" + this.props.config.brands[i] + ".gif"} />);
+    }
+
     return (
       <Modal className="destinationPropertiesFilterModel" bsSize="large" 
         backdrop="static"
@@ -35,7 +47,8 @@ class DestinationPropertiesForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div class="propFilterContainer">
-            
+           <ControlLabel> Brands</ControlLabel>
+           {rows}
           </div>
         </Modal.Body>
         <Modal.Footer>
