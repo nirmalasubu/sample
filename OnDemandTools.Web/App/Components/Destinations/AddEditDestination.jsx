@@ -92,7 +92,7 @@ class AddEditDestinationModel extends React.Component {
 
     render() {
         return (
-            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
+            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>Edit Destination {this.props.data.destinationDetails.name}</div>

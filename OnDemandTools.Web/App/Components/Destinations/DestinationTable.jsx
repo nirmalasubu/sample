@@ -60,7 +60,7 @@ class DestinationTable extends React.Component {
     }
 
     openCreateNewDestinationModel() {
-        this.setState({ showAddEditModel: true, destinationDetails: this.state.newDestinationModel });
+        this.setState({ showAddEditModel: true, destinationDetails: jQuery.extend(true, {}, this.state.newDestinationModel) });
     }
 
     openModel(val) {
@@ -80,7 +80,7 @@ class DestinationTable extends React.Component {
     }
 
     closeAddEditModel() {        
-        this.setState({ showAddEditModel: false });
+        this.setState({ showAddEditModel: false, destinationDetails: this.state.newDestinationModel });
         this.props.dispatch(destinationAction.fetchDestinations());
     }
 
