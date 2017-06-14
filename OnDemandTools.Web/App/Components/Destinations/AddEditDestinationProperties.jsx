@@ -66,7 +66,7 @@ class AddEditDestinationProperties extends React.Component {
             })}
           </Col>
           <Col sm={2} >
-            <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(row, event)} >
+            <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
               <i class="fa fa-pencil-square-o"></i>
             </button>
             <button class="btn-link" title="Delete Property" >

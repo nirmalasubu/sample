@@ -18,7 +18,7 @@ class DestinationPropertiesForm extends React.Component {
   }
 
   resetForm() {
-    
+    console.log(this.props.data);
   }
 
   render() {

@@ -278,8 +278,6 @@ p.shortDesc {
     margin-right: 10px;
 }
 
-.destinationPropertiesFilterModel .model-lg
+.destinationPropertiesFilterModel .modal-lg
 {
-    width: 800px;
-    height: 700px;
 }
