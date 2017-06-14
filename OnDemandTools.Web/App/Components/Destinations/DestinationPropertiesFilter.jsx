@@ -18,7 +18,7 @@ class DestinationPropertiesForm extends React.Component {
   }
 
   resetForm() {
-    console.log(this.props.data);
+    
   }
 
   render() {
@@ -34,8 +34,8 @@ class DestinationPropertiesForm extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <h1>Properties</h1>
+          <div class="propFilterContainer">
+            
           </div>
         </Modal.Body>
         <Modal.Footer>

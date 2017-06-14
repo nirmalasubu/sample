@@ -281,3 +281,7 @@ p.shortDesc {
 .destinationPropertiesFilterModel .modal-lg
 {
 }
+.propFilterContainer
+{
+    height: 600px;
+}
