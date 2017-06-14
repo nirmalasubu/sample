@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button,OverlayTrigger,Popover } from 'react-bootstrap';
 import DestinationPropertiesForm from 'Components/Destinations/DestinationPropertiesForm';
 
 
@@ -18,23 +18,12 @@ class AddEditDestinationProperties extends React.Component {
           destinationProperties:this.props.data});
   }
 
-  actionFormat(val, rowData) {
-    return (
-      <div>
-        <button class="btn-link" title="Edit Properties" >
-          <i class="fa fa-pencil-square-o"></i>
-        </button>
 
-        <button class="btn-link" title="Delete Properties" >
-          <i class="fa fa-trash"></i>
-        </button>
-      </div>
-    );
-  }
               handlePropertyNameChange(event) {
                   var model = this.state.destinationProperties;
                   model.properties[event.target.id].name = event.target.value;
                   this.setState({ destinationProperties: model });
+                  this.props.data=this.state.destinationProperties;
                  
               }
 
@@ -42,20 +31,32 @@ class AddEditDestinationProperties extends React.Component {
                   var model = this.state.destinationProperties;
                   model.properties[event.target.id].value = event.target.value;
                   this.setState({ destinationProperties: model });
+                  this.props.data=this.state.destinationProperties;
                  
               }
 
+             
+
+
               render() {
+ 
                   var row;
                   if (Object.keys(this.state.destinationProperties).length != 0 && this.state.destinationProperties != Object) 
                   {
                      
                       row = this.state.destinationProperties.properties.map(function (item, index) {
+                          
                           return (<div class="destination-properties-RowMargin"><Row >
                          <Col sm={3} > <input type="text" id={index} defaultValue={item.name} onChange={this.handlePropertyNameChange.bind(this)} /> </Col>
                          <Col sm={3} ><input type="text"  id={index} defaultValue={item.value}  onChange={this.handlePropertyValueChange.bind(this)} /></Col>
-                         <Col sm={3} ><label class="destination-properties-label">Filter</label></Col>
-                         <Col sm={3} > <button class="btn-link" title="Edit Properties" >
+                         <Col sm={4} >
+                        {item.brands.map(function(name, index){
+                            return <span>{name}</span>
+                        })}
+                         
+                         </Col>
+                         
+                         <Col sm={2} > <button class="btn-link" title="Edit Properties" >
                                       <i class="fa fa-pencil-square-o"></i>
                                     </button>
 
@@ -76,8 +77,8 @@ class AddEditDestinationProperties extends React.Component {
               <Row>
                   <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
                       <Col sm={3} ><label class="destination-properties-label">Value</label></Col>
-                          <Col sm={3} ><label class="destination-properties-label">Filter</label></Col>
-                              <Col sm={3} ><label class="destination-properties-label">Actions</label></Col>
+                          <Col sm={4} ><label class="destination-properties-label">Filter</label></Col>
+                              <Col sm={2} ><label class="destination-properties-label">Actions</label></Col>
               </Row>
               {row}
               </Grid>
