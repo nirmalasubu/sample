@@ -6,7 +6,9 @@ import { getNewDestination } from 'Actions/Destination/DestinationActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
+import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
 import { fetchProducts } from 'Actions/Product/ProductActions';
+import * as destinationAction from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {
     return {
@@ -21,6 +23,7 @@ class DestinationTable extends React.Component {
             showModal: false,
             newDestinationModel: {},
             showAddEditModel: false,
+            showWarningModel: false,
             destinationDetails: "",
             modalActionType: "",
             options: {
@@ -72,8 +75,17 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: true, destinationDetails: val });
     }
 
+    openWarningModel() {
+        this.setState({ showWarningModel: true });
+    }
+
     closeAddEditModel() {        
         this.setState({ showAddEditModel: false });
+        this.props.dispatch(destinationAction.fetchDestinations());
+    }
+
+    closeWarningModel() {        
+        this.setState({ showWarningModel: false });
     }
 
     contentFormat(val, rowData) {
@@ -147,8 +159,9 @@ class DestinationTable extends React.Component {
                     {row}
                 </BootstrapTable>
 
-                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} handleCancelWarning={this.openWarningModel.bind(this)} />
                 <RemoveDestinationModal data={this.state} handleClose={this.closeModel.bind(this)} />
+                <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.closeAddEditModel.bind(this)} />
             </div>)
     }
 

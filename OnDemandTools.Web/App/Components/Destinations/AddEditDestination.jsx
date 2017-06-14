@@ -28,6 +28,7 @@ class AddEditDestinationModel extends React.Component {
 
         this.state = ({
             isProcessing: false,
+            destinationUnModifiedData:"",
             validationStateName: "",
             validationStateDescription: "",
             validationStateExternalId: ""
@@ -35,7 +36,10 @@ class AddEditDestinationModel extends React.Component {
     }
     //called on the model load
     onOpenModel(destination) {
-        this.setState({ isProcessing: false });
+        this.setState({ 
+            isProcessing: false,
+            destinationUnModifiedData: jQuery.extend(true, {}, this.props.data.destinationDetails)
+        });
     }
 
     handleSave() {
@@ -70,6 +74,14 @@ class AddEditDestinationModel extends React.Component {
             return false;
     }
 
+    handleClose(){
+        if (JSON.stringify(this.state.destinationUnModifiedData)==JSON.stringify(this.props.data.destinationDetails)) {
+            this.props.handleClose();
+        }
+        else
+            this.props.handleCancelWarning();
+    }
+
     updateValidations(name, description)
     {
         this.setState({
@@ -99,7 +111,7 @@ class AddEditDestinationModel extends React.Component {
                     <NotificationContainer />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.handleClose}>Close</Button> 
+                    <Button onClick={this.handleClose.bind(this)}>Cancel</Button> 
                     <Button disabled={(this.state.validationStateName != '' || this.state.validationStateDescription != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
