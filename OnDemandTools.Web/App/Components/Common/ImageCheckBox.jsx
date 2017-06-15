@@ -10,7 +10,9 @@ class ImageCheckBox extends React.Component {
             <img className={this.props.selected ? "imageCheckbox imageSelected" : "imageCheckbox" } 
             onClick={this.props.handleBrandChange.bind(this, this.props.brandName)} 
             src={"../images/brands/" + this.props.brandName + ".gif"} 
-            alt={this.props.brandName} />
+            alt={this.props.brandName}
+            title={this.props.brandName}
+             />
         )
     }
 }
