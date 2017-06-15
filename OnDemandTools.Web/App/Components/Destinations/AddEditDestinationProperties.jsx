@@ -47,6 +47,17 @@ class AddEditDestinationProperties extends React.Component {
       this.setState({ showPropertiesDeleteModal: false});
 
   }
+  AddNewProperty()
+  {
+      var newProperty={name:"",value:"", brands:[],titleIds:[],seriesIds:[],titles:[]}
+      var array=[];
+      array = this.state.destinationDetails;
+      array.properties.push(newProperty);
+      array.properties.reverse();
+      this.setState({destinationDetails: array });
+      this.props.data = this.state.destinationDetails;
+      
+  }
 
   openPropertiesDeleteModel(item) {
       this.setState({ showPropertiesDeleteModal: true, propertyIndexToRemove: item });
@@ -115,7 +126,7 @@ class AddEditDestinationProperties extends React.Component {
     return (
       <div>
         <div>
-          <button class="destination-properties-addnew" title="Add New" onClick={(event) => this.openCreateNewQueueModel(event)}>
+          <button class="destination-properties-addnew" title="Add New" onClick={(event) => this.AddNewProperty(event)}>
             Add  New
                         </button>
         </div>
