@@ -31,8 +31,9 @@ class DestinationPropertiesForm extends React.Component {
 
     var rows = [];
     for (var i = 0; i < this.props.config.brands.length; i++) {
-        rows.push(<img class="brandImage" alt={this.props.config.brands[i]} src={"../images/brands/" + this.props.config.brands[i] + ".gif"} />);
-    }
+        //rows.push(<img class="brandImage" alt={this.props.config.brands[i]} src={"../images/brands/" + this.props.config.brands[i] + ".gif"} />);
+        rows.push(<div className="brands"><input type="checkbox" name={"checkboxG"+i} id={"checkboxG"+i} class={"css-checkbox-"+this.props.config.brands[i]} /><label for={"checkboxG"+i} class={"css-label-"+this.props.config.brands[i]}></label></div>);
+        }
 
     return (
       <Modal className="destinationPropertiesFilterModel" bsSize="large" 
@@ -48,7 +49,7 @@ class DestinationPropertiesForm extends React.Component {
         <Modal.Body>
           <div class="propFilterContainer">
            <ControlLabel> Brands</ControlLabel>
-           {rows}
+            {rows}
           </div>
         </Modal.Body>
         <Modal.Footer>

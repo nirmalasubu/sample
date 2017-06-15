@@ -37,6 +37,10 @@ module.exports = {
                 loader: "file-loader?&name=./js/wbassets/[hash].[ext]"
             },
             {
+                test: /\.gif$/,
+                loader: "url-loader?limit=100000&name=./js/wbassets/[hash].[ext]"
+            },
+            {
                 test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
                 loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=./js/wbassets/[hash].[ext]'
             },
