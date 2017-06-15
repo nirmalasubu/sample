@@ -1,5 +1,5 @@
 import React from 'react';
-import PageHeader from 'Components/Common/PageHeader';
+import ImageCheckBox from 'Components/Common/ImageCheckBox';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import { ModalDialogue } from 'react-bootstrap';
@@ -10,33 +10,42 @@ import { ModalTitle } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 @connect((store) => {
-    return {
-        config: store.config
-    };
+  return {
+    config: store.config
+  };
 })
 class DestinationPropertiesForm extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state= {
+      brandsSelection:{}
+    }
   }
   componentDidMount() {
 
   }
 
   resetForm() {
-    
+   console.log(this.props.data);
+  }
+
+  handleBrandChange(brandName)
+  {
+    console.log(brandName);
   }
 
   render() {
 
     var rows = [];
     for (var i = 0; i < this.props.config.brands.length; i++) {
-        //rows.push(<img class="brandImage" alt={this.props.config.brands[i]} src={"../images/brands/" + this.props.config.brands[i] + ".gif"} />);
-        rows.push(<div className="brands"><input type="checkbox" name={"checkboxG"+i} id={"checkboxG"+i} class={"css-checkbox-"+this.props.config.brands[i]} /><label for={"checkboxG"+i} class={"css-label-"+this.props.config.brands[i]}></label></div>);
-        }
+      var brand = this.props.config.brands[i];
+      rows.push(<ImageCheckBox brandName={brand} selected={true} handleBrandChange={this.handleBrandChange.bind(this)} />);
+    }
 
     return (
-      <Modal className="destinationPropertiesFilterModel" bsSize="large" 
+      <Modal className="destinationPropertiesFilterModel" bsSize="large"
         backdrop="static"
         onEntering={this.resetForm.bind(this)}
         show={this.props.data.showAddEditPropertiesFilter}
@@ -48,7 +57,7 @@ class DestinationPropertiesForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div class="propFilterContainer">
-           <ControlLabel> Brands</ControlLabel>
+            <ControlLabel> Brands</ControlLabel><br/>
             {rows}
           </div>
         </Modal.Body>

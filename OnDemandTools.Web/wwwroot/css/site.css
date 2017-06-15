@@ -292,93 +292,15 @@ p.shortDesc {
     height: 600px;
 }
 
-.brandImage
+.imageCheckbox
 {
-    margin-left: 10px;
+    padding: 3px;
+    margin: 5px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
 }
-
-input[type=checkbox].css-checkbox-AS {  
-  position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
-}
-
-input[type=checkbox].css-checkbox-AS + label.css-label-AS {    
-    padding-left:29px;
-    height:40px; 
-    display:inline-block;
-    line-height:24px;
-    background-image:url("../images/Brands/AS.gif");
-    background-size: 40px 30px;
-    background-repeat:no-repeat;
-    background-position: 0 0;
-    font-size:24px;
-    vertical-align:middle;
-    cursor:pointer;
-}
-
-input[type=checkbox].css-checkbox-AS:checked + label.css-label-AS {
-    padding-left:29px;
-    height:40px; 
-    display:inline-block;
-    line-height:24px;
-    background-image:url("../images/Brands/AS.gif");
-    background-size: 40px 30px;
-    background-repeat:no-repeat;
-    background-position: 0 0;
-    font-size:24px;
-    vertical-align:middle;
-    cursor:pointer;
-    border:2px solid #ff0000;
-}
-
-label.css-label-AS
+.imageSelected
 {
-    margin-right: 20px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-     user-select: none;
-}
-
-input[type=checkbox].css-checkbox-MPO {  
-  position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
-}
-
-input[type=checkbox].css-checkbox-MPO + label.css-label-MPO {    
-    padding-left:29px;
-    height:40px; 
-    display:inline-block;
-    line-height:34px;
-    background-image:url("../images/Brands/MPO.gif");
-    background-size: 40px 30px;
-    background-repeat:no-repeat;
-    background-position: 0 0;
-    font-size:24px;
-    vertical-align:middle;
-    cursor:pointer;
-}
-
-input[type=checkbox].css-checkbox-MPO:checked + label.css-label-MPO {
-    padding-left:29px;
-    height:40px; 
-    display:inline-block;
-    line-height:24px;
-    background-image:url("../images/Brands/MPO.gif");
-    background-size: 40px 30px;
-    background-repeat:no-repeat;
-    background-position: 0 0;
-    font-size:24px;
-    vertical-align:middle;
-    cursor:pointer;
-    border:2px solid #ff0000;
-}
-
-label.css-label-MPO
-{
-    margin-right: 20px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-     user-select: none;
+    background-color: yellow;
 }
