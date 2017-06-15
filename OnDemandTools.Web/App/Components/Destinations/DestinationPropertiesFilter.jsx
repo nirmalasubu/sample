@@ -8,6 +8,7 @@ import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 
 @connect((store) => {
   return {
@@ -19,8 +20,8 @@ class DestinationPropertiesForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state= {
-      brandsSelection:{}
+    this.state = {
+      brandsSelection: {}
     }
   }
   componentDidMount() {
@@ -28,20 +29,40 @@ class DestinationPropertiesForm extends React.Component {
   }
 
   resetForm() {
-   console.log(this.props.data);
+
+    var brands = [];
+
+    for (var i = 0; i < this.props.config.brands.length; i++) {
+      var brandName = this.props.config.brands[i];
+      var brandObject = {};
+      brandObject.brandName = brandName;
+
+      brandObject.selected = $.inArray(brandName, this.props.data.destinationPropertiesRow.brands) > -1;
+      brands.push(brandObject);
+    }   
+    
+    this.setState({ brandsSelection: brands });
   }
 
-  handleBrandChange(brandName)
-  {
-    console.log(brandName);
+  handleBrandChange(brandName) {
+
+    var brands = this.state.brandsSelection;
+
+    for (var i = 0; i < brands.length; i++) {
+      if (brands[i].brandName == brandName) {
+          brands[i].selected = !brands[i].selected;
+      }
+    }
+
+    this.setState({ brandsSelection: brands });
   }
 
   render() {
 
     var rows = [];
-    for (var i = 0; i < this.props.config.brands.length; i++) {
-      var brand = this.props.config.brands[i];
-      rows.push(<ImageCheckBox brandName={brand} selected={true} handleBrandChange={this.handleBrandChange.bind(this)} />);
+    for (var i = 0; i < this.state.brandsSelection.length; i++) {
+      var brand = this.state.brandsSelection[i];
+      rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} />);
     }
 
     return (
@@ -57,7 +78,7 @@ class DestinationPropertiesForm extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div class="propFilterContainer">
-            <ControlLabel> Brands</ControlLabel><br/>
+            <ControlLabel> Brands</ControlLabel><br />
             {rows}
           </div>
         </Modal.Body>
