@@ -179,6 +179,12 @@ textarea.form-control-modal-Edit {
 .destination-properties-RowMargin{
    margin-bottom:5px
 }
+.destination-height{
+    max-height:200px;
+    overflow-y:auto;
+    overflow-x: hidden;
+
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
