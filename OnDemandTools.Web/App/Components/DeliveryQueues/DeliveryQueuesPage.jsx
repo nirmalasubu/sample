@@ -53,7 +53,7 @@ class Queue extends React.Component {
             valuess.queueName = "";
             valuess.contactName = "";
             valuess.queueId = "";
-            valuess.isInActive = true;            
+            valuess.isInActive = false;            
         }
 
         this.setState({
