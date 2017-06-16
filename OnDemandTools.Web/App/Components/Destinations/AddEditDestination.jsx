@@ -32,7 +32,8 @@ class AddEditDestinationModel extends React.Component {
             destinationUnModifiedData:"",
             validationStateName: "",
             validationStateDescription: "",
-            validationStateExternalId: ""
+            validationStateExternalId: "",
+            validationStatePropertyName:""
         });
     }
     //called on the model load
@@ -88,8 +89,15 @@ class AddEditDestinationModel extends React.Component {
         this.setState({
             validationStateName : (name!=undefined && (name == "" || name.length < 3 || name.length > 5)) ? 'error' : '',
             validationStateDescription : (description == "") ? 'error' : ''
+            
         });
     }
+
+    updatePropertyNameValidation(IspropertyNameRequired)
+    {
+        this.setState({validationStatePropertyName:(IspropertyNameRequired == true) ? 'error' : ''});
+    }
+
 
     render() {
         return (
@@ -103,7 +111,7 @@ class AddEditDestinationModel extends React.Component {
                     <AddEditDestinationBasic data={this.props.data.destinationDetails} validationStates={this.updateValidations.bind(this)} />
                     <Tabs defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
-                            <AddEditDestinationProperties data={this.props.data.destinationDetails} />
+                            <AddEditDestinationProperties data={this.props.data.destinationDetails}  validationStates={this.updatePropertyNameValidation.bind(this)} />
                         </Tab>
                         <Tab eventKey={2} title="Deliverables">
                             <AddEditDestinationDeliverables data={this.props.data.destinationDetails} />
@@ -113,7 +121,7 @@ class AddEditDestinationModel extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.handleClose.bind(this)}>Cancel</Button> 
-                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateDescription != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateDescription != '' || this.state.validationStatePropertyName!='' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>

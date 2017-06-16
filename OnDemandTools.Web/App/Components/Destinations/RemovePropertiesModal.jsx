@@ -22,7 +22,7 @@ class RemovePropertiesModal extends React.Component
 
     onOpenModal(){        
         this.setState({
-            message:" Would you like to Remove the property?"
+            message:" If this property is removed, it will be deleted when destination changes are saved?"
         });
     }
 

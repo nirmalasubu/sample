@@ -11,7 +11,8 @@ class AddEditDestinationProperties extends React.Component {
     this.state = ({
       destinationDetails: {},
       showAddEditPropertiesFilter: false,
-      showPropertiesDeleteModal: false,
+      showPropertiesDeleteModal:false,
+      isPropertyNameRequired:false,
       destinationPropertiesRow: {},
       propertyIndexToRemove: -1
     });
@@ -37,24 +38,30 @@ class AddEditDestinationProperties extends React.Component {
     this.setState({ showAddEditPropertiesFilter: false });
   }
 
-  RemovePropertiesModel(value) {
-    var array = [];
-    array = this.state.destinationDetails;
-    array.properties.splice(value, 1);
-    this.setState({ destinationDetails: array });
-    this.props.data = this.state.destinationDetails;
-    this.setState({ showPropertiesDeleteModal: false });
+  RemovePropertiesModel(value)
+  {
+      var array=[];
+      array = this.state.destinationDetails;
+      array.properties.splice(value, 1);
+      this.setState({destinationDetails: array });
+      this.props.data = this.state.destinationDetails;
+      this.setState({ showPropertiesDeleteModal: false});
+      this.CheckPropertyNameIsEmpty();
 
   }
-  AddNewProperty() {
-    var newProperty = { name: "", value: "", brands: [], titleIds: [], seriesIds: [], titles: [] }
-    var array = [];
-    array = this.state.destinationDetails;
-    array.properties.push(newProperty);
-    array.properties.reverse();
-    this.setState({ destinationDetails: array });
-    this.props.data = this.state.destinationDetails;
-
+  AddNewProperty()
+  {
+      var newProperty={name:"",value:"", brands:[],titleIds:[],seriesIds:[],titles:[]}
+      var array=[];
+    
+      array = this.state.destinationDetails;
+      array.properties.reverse();
+      array.properties.push(newProperty);
+      array.properties.reverse();
+      this.setState({destinationDetails: array });
+      this.props.data = this.state.destinationDetails;
+      
+      this.CheckPropertyNameIsEmpty();
   }
 
   openPropertiesDeleteModel(item) {
@@ -70,7 +77,7 @@ class AddEditDestinationProperties extends React.Component {
     model.properties[event.target.id].name = event.target.value;
     this.setState({ destinationDetails: model });
     this.props.data = this.state.destinationDetails;
-
+    this.CheckPropertyNameIsEmpty();
   }
 
   handlePropertyValueChange(event) {
@@ -81,6 +88,22 @@ class AddEditDestinationProperties extends React.Component {
 
   }
 
+  CheckPropertyNameIsEmpty()
+  {
+      var properties=this.state.destinationDetails.properties;
+      if(properties.length>0)
+      {
+          for(var i=0;i<=properties.length-1;i++)
+          {
+              if(!(properties[i].name))
+              {
+                  this.props.validationStates(true);
+                  return;
+              }
+          }
+      }
+      this.props.validationStates(false);
+  }
 
 
   render() {
