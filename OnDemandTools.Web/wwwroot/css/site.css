@@ -170,14 +170,19 @@ textarea.form-control-modal-Edit {
     border: 1px solid #555;
     color: #337ab7;
     margin-left: 13px;
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    font-weight:700;
 }
 .destination-properties-label{
     color: #337ab7;
 }
 
-.destination-properties-RowMargin{
-   margin-bottom:5px
+.destination-properties-actionmargin{
+   margin-left:-7px
+}
+
+.destination-properties-filtermargin{
+   margin-left:75px
 }
 .destination-height{
     max-height:200px;
