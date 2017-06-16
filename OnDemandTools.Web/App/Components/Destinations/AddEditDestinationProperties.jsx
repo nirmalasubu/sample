@@ -107,38 +107,52 @@ class AddEditDestinationProperties extends React.Component {
 
 
   render() {
-    let row = null;
-    if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
-      if (Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object) {
-        row = this.state.destinationDetails.properties.map(function (item, index) {
-          return (<div class="destination-properties-RowMargin"><Row >
-            <Col sm={3} > <input type="text" id={index} value={item.name} onChange={this.handlePropertyNameChange.bind(this)} /> </Col>
-            <Col sm={3} ><input type="text" id={index} value={item.value} onChange={this.handlePropertyValueChange.bind(this)} /></Col>
-            <Col sm={4} >
-              {item.brands.map(function (name, index) {
-                var path = "images/brands/" + name + ".gif"
-                return (<img src={path} />);
-              })}
+      let row = null;
+      
+      if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
+          if(Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object)
+          {
+              row = this.state.destinationDetails.properties.map(function (item, index) {
+                 var nameValidation=item.name?"":"error"
+                  return (<div class="destination-properties-RowMargin"><Row >
+                 <Form>
+                 <Col sm={3} >
+                      <FormGroup controlId="Name" validationState={nameValidation}>
+                     <FormControl type="text" id={index} value={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
+                     </FormGroup></Col>
+                 <Col sm={3}> 
+                     <FormGroup controlId="Value" >
+                     <FormControl type="text" id={index} value={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
+                     </FormGroup></Col>
+                  </Form>
+                 <Col sm={4} >
+                   {item.brands.map(function (name, index) {
+                       var path = "images/brands/" + name + ".gif"
+                       return (<img src={path} />);
+                     })}
 
-              {item.titles.map(function (title, index) {
-                return (<span>{title.name}</span>);
-              })}
-            </Col>
-            <Col sm={2} >
-              <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
-                <i class="fa fa-pencil-square-o"></i>
-              </button>
-              <button class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} >
-                <i class="fa fa-trash"></i></button>
-            </Col>
-          </Row></div>);
-        }.bind(this));
-      }
-      else {
-        row = <Row><Col sm={12}><p>No properties available</p></Col></Row>
-
-      }
-    }
+                {item.titles.map(function (title, index) {
+                    return (<span>{title.name}</span>);
+                 })}
+              </Col>
+              <Col sm={2} >
+                <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >  
+                  <i class="fa fa-pencil-square-o"></i>
+                </button>
+                <button class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} >
+                  <i class="fa fa-trash"></i></button>
+              </Col>
+            </Row></div>);
+                  }.bind(this));
+                  }
+                else
+                {
+                row =<Row><Col sm={12}><p>No properties available</p></Col></Row>
+               
+                }
+                }
+         
+         
 
     return (
       <div>
