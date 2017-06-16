@@ -36,7 +36,6 @@ class DestinationPropertiesForm extends React.Component {
       var brandName = this.props.config.brands[i];
       var brandObject = {};
       brandObject.brandName = brandName;
-
       brandObject.selected = $.inArray(brandName, this.props.data.destinationPropertiesRow.brands) > -1;
       brands.push(brandObject);
     }   
@@ -55,6 +54,21 @@ class DestinationPropertiesForm extends React.Component {
     }
 
     this.setState({ brandsSelection: brands });
+  }
+
+  onClickSave()
+  {
+      var brands = this.state.brandsSelection
+      var array = [];
+      for (var i = 0; i < brands.length; i++) {
+          if (brands[i].selected) {
+              array.push(brands[i].brandName);
+          }
+      }
+      this.props.data.destinationPropertiesRow.brands=[];
+      this.props.data.destinationPropertiesRow.brands=array;
+
+      this.props.handleClose();
   }
 
   render() {
@@ -84,7 +98,7 @@ class DestinationPropertiesForm extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.handleClose}>Close</Button>
-          <Button className="btn btn-primary btn-large">Save</Button>
+          <Button className="btn btn-primary btn-large" onClick={this.onClickSave.bind(this)}>Save</Button>
         </Modal.Footer>
       </Modal>
     )
