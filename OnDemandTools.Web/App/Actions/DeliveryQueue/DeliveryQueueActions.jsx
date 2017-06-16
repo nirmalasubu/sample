@@ -53,6 +53,8 @@ export const filterQueues = (filterValue) => {
     };
 };
 
+// Asynchronously retrieve an empty queue model
+// from API service
 export const getNewQueue = () => {
     return Axios.get('/api/deliveryqueue/newqueue')
         .then(response => {

@@ -11,10 +11,14 @@ import RemoveQueueModal from 'Components/DeliveryQueues/RemoveQueueModal';
 import { getNewQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
-
+// Sub component used within Delivery queues page to display
+// detailed queue information 
 class DeliveryQueueTable extends React.Component {
+
+    // Define default component state information. 
     constructor(props) {
         super(props);
+
         this.state = {
             showModal: false,
             newQueueModel: {},
@@ -44,7 +48,11 @@ class DeliveryQueueTable extends React.Component {
             }
         }
     }
+
+    // Invoked immediately after queue component is mounted.
     componentDidMount() {
+
+        // Asychrnously retrieve an empty queue model
         let promise = getNewQueue();
         promise.then(message => {
             this.setState({
@@ -101,6 +109,7 @@ class DeliveryQueueTable extends React.Component {
         this.setState({ showDeleteModal: false });
     }
 
+    // Format for displaying the action column details within grid
     actionFormat(val, rowData) {
         return (<div>
 
@@ -122,6 +131,7 @@ class DeliveryQueueTable extends React.Component {
         </div>)
     }
 
+    // Format for displaying remote queue column details
     queueFormat(val) {
         var queueItem = $.grep(this.props.RowData, function (v) {
             if (v.name == val) return v;
@@ -182,6 +192,7 @@ class DeliveryQueueTable extends React.Component {
 
 
     render() {
+
         var row;
         row = this.props.ColumnData.map(function (item, index) {
             if (item.label == "Queue Name") {
@@ -200,6 +211,8 @@ class DeliveryQueueTable extends React.Component {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.advanceDeliveryFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
         }.bind(this));
+
+        
         return (
             <div>
                 <div>
