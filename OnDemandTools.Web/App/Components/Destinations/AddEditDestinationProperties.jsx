@@ -146,13 +146,7 @@ class AddEditDestinationProperties extends React.Component {
             if(Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object)
         {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
-                   
                     var nameValidation=item.name?"":"error"
-                    var titleName=[]
-                    item.titles.map(function (title, index) {titleName.push(title.name)})
-                    var  firstTitle=titleName[0]
-                    var titlestring=titleName.toString()
-
                     return (<Row >
                    <Form>
                    <Col sm={3} >
@@ -165,7 +159,6 @@ class AddEditDestinationProperties extends React.Component {
                        </FormGroup></OverlayTrigger></Col>
                     </Form>
                    <Col sm={2} >
-
         {item.brands.map(function (name, index) {
                       var path = "images/brands/" + name + ".gif"
                       return (<img src={path} />);
@@ -192,8 +185,6 @@ class AddEditDestinationProperties extends React.Component {
       }
 
       }
-
-
 
                     return (
                       <div>
