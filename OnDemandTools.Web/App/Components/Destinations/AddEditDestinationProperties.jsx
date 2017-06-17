@@ -16,7 +16,8 @@ class AddEditDestinationProperties extends React.Component {
             destinationPropertiesRow: {},
             propertyIndexToRemove:-1,
             titleopen:false,
-            imageopen:false
+            imageopen:false,
+            propertyTitles:[]
         });
     }
 
@@ -108,6 +109,22 @@ class AddEditDestinationProperties extends React.Component {
     }
 
 
+    PropertyTitleConstruct(item,index)
+    {
+        if(item.titles.length==1)
+        {
+            return(<div>{item.titles[0].name}</div>);
+        }
+        else{
+            if(item.titles.length>1){
+            var titleName=[];
+            item.titles.map(function (title, index) {titleName.push(title.name)});
+            var titletext=titleName.toString();
+            return (<div>{titletext}</div>);
+        }
+        }
+    }
+
 
 
     render() {
@@ -129,13 +146,12 @@ class AddEditDestinationProperties extends React.Component {
             if(Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object)
         {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
+                   
                     var nameValidation=item.name?"":"error"
                     var titleName=[]
                     item.titles.map(function (title, index) {titleName.push(title.name)})
                     var  firstTitle=titleName[0]
                     var titlestring=titleName.toString()
-
-
 
                     return (<Row >
                    <Form>
@@ -155,17 +171,10 @@ class AddEditDestinationProperties extends React.Component {
                       return (<img src={path} />);
       })}
 
-
                   </Col>
+                 
                   <Col sm={2} >
-            <div onClick={ ()=> this.setState({ titleopen: !this.state.titleopen })}>
-      {firstTitle}
-                </div>
-                <Collapse in={this.state.titleopen}>
-                  <div>
-      {titlestring}
-                   </div>
-                </Collapse>
+                  {this.PropertyTitleConstruct(item,index)}
                             </Col>
                             <Col sm={2} >
                               <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
@@ -179,7 +188,7 @@ class AddEditDestinationProperties extends React.Component {
       }
       else
       {
-                                row =<Row><Col sm={12}></Col></Row>
+                                row =<Row><Col sm={12}>No Properties  Available</Col></Row>
       }
 
       }
