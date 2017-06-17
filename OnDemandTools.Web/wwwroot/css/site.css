@@ -182,7 +182,10 @@ textarea.form-control-modal-Edit {
 }
 
 .destination-properties-filtermargin{
-   margin-left:75px
+   margin-left:75px;
+}
+.destination-properties-popovermargin{
+    margin-bottom:3px;
 }
 .destination-height{
     max-height:200px;
