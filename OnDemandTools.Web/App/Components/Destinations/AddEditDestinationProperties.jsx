@@ -15,7 +15,7 @@ class AddEditDestinationProperties extends React.Component {
             isPropertyNameRequired:false,
             destinationPropertiesRow: {},
             propertyIndexToRemove:-1,
-            titleopen:false,
+            titleopen:[],
             imageopen:false,
             propertyTitles:[]
         });
@@ -107,23 +107,51 @@ class AddEditDestinationProperties extends React.Component {
         }
         this.props.validationStates(false);
     }
+    OpenTitleDetails(event,index)
+    {
+        var array=this.state.titleopen;
+        array[index]=!this.state.titleopen[index];
+        console.log("arrayIndex :"+array[index]);
+        this.setState({titleopen:array});
+    }
 
+    oo(index)
+    {
+        var array=this.state.titleopen;
+        array[index]=!this.state.titleopen[index];
+        this.setState({titleopen:array});
+        
+        console.log("inside indexe"+ this.state.titleopen[index]);
+        return  (<div>gfhfgfg</div>);
+        
+    }
 
     PropertyTitleConstruct(item,index)
     {
+        
         if(item.titles.length==1)
         {
             return(<div>{item.titles[0].name}</div>);
         }
-        else{
-            if(item.titles.length>1){
+              
+        if(item.titles.length>1)
+        {
+            if(this.state.titleopen[index]==undefined)
+            {
+                var array=this.state.titleopen;
+                array[index]=false;
+                this.setState({titleopen:array});
+            }
+                        
             var titleName=[];
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
-            return (<div>{titletext}</div>);
-        }
-        }
+            var firstTitle=titleName[0]+"...";
+            var title=(<p data-toggle="tooltip" title={titletext}>{firstTitle}</p>);
+       
+            return title;
     }
+}
 
 
 
@@ -165,11 +193,11 @@ class AddEditDestinationProperties extends React.Component {
       })}
 
                   </Col>
-                 
+
                   <Col sm={2} >
                   {this.PropertyTitleConstruct(item,index)}
-                            </Col>
-                            <Col sm={2} >
+                                  </Col>
+                                  <Col sm={2} >
                               <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
                                 <i class="fa fa-pencil-square-o"></i>
                               </button>
@@ -181,7 +209,17 @@ class AddEditDestinationProperties extends React.Component {
       }
       else
       {
-                                row =<Row><Col sm={12}>No Properties  Available</Col></Row>
+                                row =<Row><Col sm={12} ><div onMouseOver={ ()=> this.setState({ imageopen: !this.state.imageopen })}>
+      click
+    </div>
+    <Collapse in={this.state.imageopen}>
+      <div>
+        <Well>
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+          Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+        </Well>
+      </div>
+    </Collapse></Col></Row>
       }
 
       }
