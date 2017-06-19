@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageCheckBox from 'Components/Common/ImageCheckBox';
+import TitleFilter from 'Components/Common/TitleFilter';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import { ModalDialogue } from 'react-bootstrap';
@@ -38,8 +39,8 @@ class DestinationPropertiesForm extends React.Component {
       brandObject.brandName = brandName;
       brandObject.selected = $.inArray(brandName, this.props.data.destinationPropertiesRow.brands) > -1;
       brands.push(brandObject);
-    }   
-    
+    }
+
     this.setState({ brandsSelection: brands });
   }
 
@@ -49,34 +50,33 @@ class DestinationPropertiesForm extends React.Component {
 
     for (var i = 0; i < brands.length; i++) {
       if (brands[i].brandName == brandName) {
-          brands[i].selected = !brands[i].selected;
+        brands[i].selected = !brands[i].selected;
       }
     }
 
     this.setState({ brandsSelection: brands });
   }
 
-  onClickSave()
-  {
-      var brands = this.state.brandsSelection
-      var array = [];
-      for (var i = 0; i < brands.length; i++) {
-          if (brands[i].selected) {
-              array.push(brands[i].brandName);
-          }
+  onClickSave() {
+    var brands = this.state.brandsSelection
+    var array = [];
+    for (var i = 0; i < brands.length; i++) {
+      if (brands[i].selected) {
+        array.push(brands[i].brandName);
       }
-      this.props.data.destinationPropertiesRow.brands=[];
-      this.props.data.destinationPropertiesRow.brands=array;
+    }
+    this.props.data.destinationPropertiesRow.brands = [];
+    this.props.data.destinationPropertiesRow.brands = array;
 
-      this.props.handleClose();
+    this.props.handleClose();
   }
 
   render() {
 
     var rows = [];
     for (var i = 0; i < this.state.brandsSelection.length; i++) {
-        var brand = this.state.brandsSelection[i];
-        rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /> );        
+      var brand = this.state.brandsSelection[i];
+      rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} />);
     }
 
     return (
@@ -94,6 +94,9 @@ class DestinationPropertiesForm extends React.Component {
           <div class="propFilterContainer">
             <ControlLabel> Brands</ControlLabel><br />
             {rows}
+            <hr />
+            <ControlLabel>Title/Series Associations</ControlLabel>
+            <TitleFilter />
           </div>
         </Modal.Body>
         <Modal.Footer>
