@@ -1,5 +1,4 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using OnDemandTools.Business.Modules.User;
@@ -9,8 +8,9 @@ using OnDemandTools.Common.Model;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using OnDemandTools.Business.Adapters.Titles;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using OnDemandTools.Web.Models.TitleSearch;
+using AutoMapper;
+using OnDemandTools.Business.Modules.Airing.Model.Alternate.Title;
 
 namespace OnDemandTools.Web.Controllers
 {
@@ -26,10 +26,23 @@ namespace OnDemandTools.Web.Controllers
         // GET: api/values
         [Authorize]
         [HttpGet("{searchterm}")]
-        public string SearchTitles(string searchterm)
+        public TitleSearchResults SearchTitles(string searchterm)
         {
-            _titleFinder.Find(searchterm);
-            return string.Empty;
+            TitleSearchResults results = new TitleSearchResults();
+
+            results.Titles = _titleFinder.Find(searchterm).Select(e=> e.ToViewModel<Title, TitleShort>()).ToList();
+            
+            results.TitleTypeFilterParameters = results.Titles.GroupBy(e => e.TitleType.Name)
+                 .Select(y => new TitleFilterParameter { Name = y.Key.ToString(), Count = y.Count() })
+                 .OrderByDescending(e => e.Count)
+                 .ToList();
+
+            results.SeriesNameFilterParameters = results.Titles.Where(e => e.SeriesTitleName != null).GroupBy(e => e.SeriesTitleName)
+                .Select(y => new TitleFilterParameter { Name = y.Key.ToString(), Count = y.Count() })
+                .OrderByDescending(e => e.Count)
+                .ToList();
+
+            return results;
         }
     }
 }

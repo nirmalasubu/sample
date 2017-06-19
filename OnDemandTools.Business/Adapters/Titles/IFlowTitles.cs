@@ -1,10 +1,13 @@
 ﻿using OnDemandTools.Business.Modules.Airing.Model.Alternate.Title;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnDemandTools.Business.Adapters.Titles
 {
-    public interface ITitleFinder
+    public interface IFlowTitles
     {
-        IList<Title> Find(string terms);
+        List<Title> GetFlowTitlesFor(IEnumerable<int> titleIds);
     }
 }
