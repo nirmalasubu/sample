@@ -19,3 +19,5 @@ export const DELETE_DESTINATION_SUCCESS = 'DELETE_DESTINATION_SUCCESS';
 //product Action Reducer Name
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 
+//Title Search Action Reducer Name
+export const TITLE_SEARCH_SUCCESS = 'TITLE_SEARCH_SUCCESS';
