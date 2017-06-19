@@ -12,12 +12,37 @@ class TitleFilter extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            processing: false,
+            searchPromise: {}
+        }
+
     }
 
     handleChange(val) {
         var searchParam = this.inputTitleSearch.value;
-        if (searchParam.length > 2)
-            this.props.dispatch(titleSearch(searchParam));
+        if (searchParam.length > 2) {
+
+            if (this.state.processing) {
+
+                //Action abort will go here.
+                //this.setState({ processing: false });
+            }
+
+            this.setState({ processing: true });
+
+            this.searchPromise = this.props.dispatch(titleSearch(searchParam));
+
+            this.searchPromise.then(message => {
+                this.setState({ processing: false });
+            })
+            this.searchPromise.catch(error => {
+                this.setState({ processing: false });
+            });
+        }
+        else {
+            //clear grid action goes here
+        }
 
     }
 
@@ -54,12 +79,14 @@ class TitleFilter extends React.Component {
 
         return (
             <div>
-                <FormGroup controlId="code">
-                    <FormControl type="text" inputRef={(input) => this.inputTitleSearch = input}
-                        placeholder="Search..."
-                        onChange={this.handleChange.bind(this)}
-                    />
-                </FormGroup>
+                <Form inline>
+                    <FormGroup controlId="code">
+                        <FormControl type="text" inputRef={(input) => this.inputTitleSearch = input}
+                            placeholder="Search..."
+                            onChange={this.handleChange.bind(this)} />
+                        {this.state.processing ? " Processing" : ""}
+                    </FormGroup>
+                </Form>
                 <Grid>
                     <Row>
                         <Col md={2}>
