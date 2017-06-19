@@ -3,11 +3,21 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 class TitleFilter extends React.Component {
     constructor(props) {
         super(props);
+
+    }
+
+    handleChange(val) {
+        var searchParam = this.inputTitleSearch.value;
     }
 
     render() {
         return (
             <div>
+            <FormGroup controlId="code">
+                <FormControl type="text" inputRef = {(input) => this.inputTitleSearch = input } 
+                    onChange={this.handleChange.bind(this) }  
+                    placeholder="Search..." />
+            </FormGroup>
                 <Grid>
                     <Row>
                         <Col md={2}>
