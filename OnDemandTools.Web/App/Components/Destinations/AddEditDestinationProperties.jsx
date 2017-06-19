@@ -107,28 +107,26 @@ class AddEditDestinationProperties extends React.Component {
         }
         this.props.validationStates(false);
     }
-    OpenTitleDetails(event,index)
-    {
+   
+
+    TitleDetailClick(index)
+    { 
         var array=this.state.titleopen;
         array[index]=!this.state.titleopen[index];
-        console.log("arrayIndex :"+array[index]);
         this.setState({titleopen:array});
+        
     }
 
-    oo(index)
-    {
-        var array=this.state.titleopen;
-        array[index]=!this.state.titleopen[index];
-        this.setState({titleopen:array});
-        
-        console.log("inside indexe"+ this.state.titleopen[index]);
-        return  (<div>gfhfgfg</div>);
-        
+    TitledetailConstruct(item,index){
+        if(this.state.titleopen[index]){
+            var titleName=[];
+            item.titles.map(function (title, index) {titleName.push(title.name)});
+            var titletext=titleName.toString();
+            return(<div>{titletext}</div>);}
     }
 
     PropertyTitleConstruct(item,index)
-    {
-        
+    { 
         if(item.titles.length==1)
         {
             return(<div>{item.titles[0].name}</div>);
@@ -137,21 +135,24 @@ class AddEditDestinationProperties extends React.Component {
         if(item.titles.length>1)
         {
             if(this.state.titleopen[index]==undefined)
-            {
+            { 
                 var array=this.state.titleopen;
-                array[index]=false;
+                array[index]=false; //making true
                 this.setState({titleopen:array});
+                this.props.titleopen=this.state.titleopen;
             }
                         
             var titleName=[];
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
             var firstTitle=titleName[0]+"...";
-            var title=(<p data-toggle="tooltip" title={titletext}>{firstTitle}</p>);
+            var title=(<div onClick={(event) => this.TitleDetailClick(index, event)}>{firstTitle}</div>);
        
             return title;
     }
 }
+
+
 
 
 
@@ -196,6 +197,7 @@ class AddEditDestinationProperties extends React.Component {
 
                   <Col sm={2} >
                   {this.PropertyTitleConstruct(item,index)}
+                  {this.state.titleopen[index]?this.TitledetailConstruct(item,index):null}
                                   </Col>
                                   <Col sm={2} >
                               <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >

@@ -33,7 +33,8 @@ class AddEditDestinationModel extends React.Component {
             validationStateName: "",
             validationStateDescription: "",
             validationStateExternalId: "",
-            validationStatePropertyName:""
+            validationStatePropertyName:"",
+            titleopen:[]
         });
     }
     //called on the model load
@@ -110,7 +111,7 @@ class AddEditDestinationModel extends React.Component {
                     <AddEditDestinationBasic data={this.props.data.destinationDetails} validationStates={this.updateValidations.bind(this)} />
                     <Tabs defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
-                            <AddEditDestinationProperties data={this.props.data.destinationDetails}  validationStates={this.updatePropertyNameValidation.bind(this)} />
+                            <AddEditDestinationProperties data={this.props.data.destinationDetails}  validationStates={this.updatePropertyNameValidation.bind(this)} titleopen={this.state.titleopen} />
                         </Tab>
                         <Tab eventKey={2} title="Deliverables">
                             <AddEditDestinationDeliverables data={this.props.data.destinationDetails} />
