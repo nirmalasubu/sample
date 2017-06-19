@@ -16,7 +16,7 @@ class AddEditDestinationProperties extends React.Component {
             destinationPropertiesRow: {},
             propertyIndexToRemove:-1,
             titleopen:[],
-            imageopen:false,
+            imageopen:[],
             propertyTitles:[]
         });
     }
@@ -152,6 +152,38 @@ class AddEditDestinationProperties extends React.Component {
     }
 }
 
+ImageDetailClick(index){
+   
+    var array=this.state.imageopen;
+    array[index]=!this.state.imageopen[index];
+    this.setState({imageopen:array});
+   
+}
+
+
+PropertyBrandImageConstruct(item,index)
+{ 
+    if(item.brands.length==1)
+    {
+        var path = "images/brands/" + name + ".gif";
+       return (<img src={path} />);
+    }
+              
+if(item.brands.length>1)
+{
+    if(this.state.imageopen[index]==undefined)
+    { 
+        var array=this.state.imageopen;
+        array[index]=false; 
+        this.setState({imageopen:array});
+        this.props.imageopen=this.state.imageopen;
+    }
+    var path = "images/brands/" + item.brands[0] + ".gif";
+    var image=(<img onMouseOver={(event) => this.ImageDetailClick(index, event)} src={path} />);
+       
+        return image;
+}
+}
 
 
 
@@ -173,7 +205,7 @@ class AddEditDestinationProperties extends React.Component {
 
         if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if(Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object)
-        {
+            {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
                     var nameValidation=item.name?"":"error"
                     return (<Row >
@@ -188,10 +220,13 @@ class AddEditDestinationProperties extends React.Component {
                        </FormGroup></OverlayTrigger></Col>
                     </Form>
                    <Col sm={2} >
-        {item.brands.map(function (name, index) {
-                      var path = "images/brands/" + name + ".gif"
-                      return (<img src={path} />);
-      })}
+     {this.PropertyBrandImageConstruct(item,index)}
+            {this.state.imageopen[index]? item.brands.map(function (name, index)
+            {
+                var path = "images/brands/" + name + ".gif";
+                return (<img src={path} />);
+            
+            }):null}
 
                   </Col>
 
@@ -211,17 +246,7 @@ class AddEditDestinationProperties extends React.Component {
       }
       else
       {
-                                row =<Row><Col sm={12} ><div onMouseOver={ ()=> this.setState({ imageopen: !this.state.imageopen })}>
-      click
-    </div>
-    <Collapse in={this.state.imageopen}>
-      <div>
-        <Well>
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-          Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-        </Well>
-      </div>
-    </Collapse></Col></Row>
+                                row =<Row><Col sm={12} ><p> No properties available</p></Col></Row>
       }
 
       }
