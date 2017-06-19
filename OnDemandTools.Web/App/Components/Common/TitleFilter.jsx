@@ -16,8 +16,9 @@ class TitleFilter extends React.Component {
 
     handleChange(val) {
         var searchParam = this.inputTitleSearch.value;
-        this.props.dispatch(titleSearch(searchParam));
-        console.log(this.props.titleSearchResults);
+        if (searchParam.length > 2)
+            this.props.dispatch(titleSearch(searchParam));
+
     }
 
     render() {
@@ -55,11 +56,9 @@ class TitleFilter extends React.Component {
             <div>
                 <FormGroup controlId="code">
                     <FormControl type="text" inputRef={(input) => this.inputTitleSearch = input}
-                        placeholder="Search..." />
-                    {' '}
-                    <Button onClick={this.handleChange.bind(this)} bsStyle="primary">
-                        Search
-                    </Button>
+                        placeholder="Search..."
+                        onChange={this.handleChange.bind(this)}
+                    />
                 </FormGroup>
                 <Grid>
                     <Row>
@@ -80,11 +79,9 @@ class TitleFilter extends React.Component {
                             {seriesRows}
                         </Col>
                         <Col md={4}>
-
                         </Col>
 
                         <Col md={4}>
-
                         </Col>
                     </Row>
                 </Grid>
