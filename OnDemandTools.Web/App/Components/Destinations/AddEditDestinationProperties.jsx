@@ -137,7 +137,7 @@ class AddEditDestinationProperties extends React.Component {
             if(this.state.titleopen[index]==undefined)
             { 
                 var array=this.state.titleopen;
-                array[index]=false; //making true
+                array[index]=false; 
                 this.setState({titleopen:array});
                 this.props.titleopen=this.state.titleopen;
             }
@@ -146,7 +146,7 @@ class AddEditDestinationProperties extends React.Component {
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
             var firstTitle=titleName[0]+"...";
-            var title=(<div onClick={(event) => this.TitleDetailClick(index, event)}>{firstTitle}</div>);
+            var title=(<div onMouseOver={(event) => this.TitleDetailClick(index, event)}>{firstTitle}</div>);
        
             return title;
     }
