@@ -82,9 +82,12 @@ class TitleFilter extends React.Component {
                 <Form inline>
                     <FormGroup controlId="code">
                         <FormControl type="text" inputRef={(input) => this.inputTitleSearch = input}
-                            placeholder="Search..."
-                            onChange={this.handleChange.bind(this)} />
-                        {this.state.processing ? " Processing" : ""}
+                            placeholder="Search..." />
+                        {' '}
+                        <Button onClick={this.handleChange.bind(this)} bsStyle="primary" disabled={this.state.processing} >
+                            {this.state.processing ? " Processing" : "Search"}
+                        </Button>
+
                     </FormGroup>
                 </Form>
                 <Grid>
