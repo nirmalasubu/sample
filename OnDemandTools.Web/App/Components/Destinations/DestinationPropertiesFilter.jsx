@@ -75,8 +75,10 @@ class DestinationPropertiesForm extends React.Component {
 
     var rows = [];
     for (var i = 0; i < this.state.brandsSelection.length; i++) {
-      var brand = this.state.brandsSelection[i];
-      rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} />);
+        var brand = this.state.brandsSelection[i];
+        var nextRow = (((i+1)%3)==0)?<br/>:"";
+        rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /> );
+        rows.push(nextRow);
     }
 
     return (

@@ -87,9 +87,8 @@ class AddEditDestinationModel extends React.Component {
     updateValidations(name, description)
     {
         this.setState({
-            validationStateName : (name!=undefined && (name == "" || name.length < 3 || name.length > 5)) ? 'error' : '',
-            validationStateDescription : (description == "") ? 'error' : ''
-            
+            validationStateName : name ? 'error' : '',
+            validationStateDescription : description ? 'error' : ''
         });
     }
 
@@ -104,7 +103,7 @@ class AddEditDestinationModel extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>Edit Destination {this.props.data.destinationDetails.name}</div>
+                        <div>{this.props.data.destinationDetails.id == null ? "Add Destination" :"Edit Destination " + this.props.data.destinationDetails.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

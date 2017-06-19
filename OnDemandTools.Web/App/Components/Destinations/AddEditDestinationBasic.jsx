@@ -3,8 +3,13 @@ import PageHeader from 'Components/Common/PageHeader';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+@connect((store) => {
+    return {
+        destinations: store.destinations
+    };
+})
 
-class AddEditDestinationBasic extends React.Component {
+class AddEditDestinationBasic extends React.Component {    
 
     constructor(props) {
         super(props);
@@ -13,21 +18,46 @@ class AddEditDestinationBasic extends React.Component {
             destinationModel: {},
             validationStateName: "",
             validationStateDescription: "",
-            validationStateExternalId: ""
+            validationStateExternalId: "",
+            showError: false
         });
+    }
+
+    isCodeUnique(currentDestination) {
+        for (var x = 0; x < this.props.destinations.length; x++)
+            if (this.props.destinations[x].id != currentDestination.id)
+                if (this.props.destinations[x].name == currentDestination.name ||
+                    this.props.destinations[x].externalId == currentDestination.externalId)
+                {            
+                    this.setState({
+                        showError: true
+                    });
+
+                    return false;
+                }
+                else
+                {
+                    this.setState({
+                        showError: false
+                    });
+                }
+
+        return true;
     }
 
     validateForm() {
         var name = this.state.destinationModel.name;
         var description = this.state.destinationModel.description;
         var hasError = false;
+        var hasNameError = (name!=undefined && (name == "" || name.length < 3 || name.length > 5 || !this.isCodeUnique(this.state.destinationModel)));
+        var hasDesError = (description == "");
 
         this.setState({
-            validationStateName: (name!=undefined && (name == "" || name.length < 3 || name.length > 5)) ? 'error' : '',
-            validationStateDescription: (description == "") ? 'error' : ''
+            validationStateName: hasNameError  ? 'error' : '',
+            validationStateDescription: hasDesError ? 'error' : ''
         });
 
-        this.props.validationStates(name, description);
+        this.props.validationStates(hasNameError, hasDesError);
     }
 
     componentWillMount() {
@@ -136,10 +166,20 @@ class AddEditDestinationBasic extends React.Component {
     }
 
     render() {
+
+        var msg ="";
+        if(this.state.showError)
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Destination already exists. Please use a unique destination code. To view external ids in use, visit the <a href='http://eawiki/display/turniverse/Enumerations' target='wiki'>Enumerations</a> page.</label>);
+
         return (
           <div>
             <Grid>
               <Form>
+                <Row>
+                    <Col md={8}>
+                        {msg}
+                    </Col>
+                </Row>
                 <Row>
                   <Col md={4} >
                 <FormGroup
@@ -147,6 +187,7 @@ class AddEditDestinationBasic extends React.Component {
                   <ControlLabel>Destination Code</ControlLabel>
                   <FormControl
                     type="text"
+                    disabled={this.state.destinationModel.id == null ? false : true}
                     value={this.state.destinationModel.name}
                     ref="inputFriendlyName"
                     placeholder="Enter Destination Code"
