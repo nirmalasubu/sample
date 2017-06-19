@@ -25,7 +25,7 @@ namespace OnDemandTools.Web.Controllers
 
         // GET: api/values
         [Authorize]
-        [HttpGet("{searchterm}")]
+        [HttpGet("search/{searchterm}")]
         public TitleSearchResults SearchTitles(string searchterm)
         {
             TitleSearchResults results = new TitleSearchResults();
@@ -37,7 +37,7 @@ namespace OnDemandTools.Web.Controllers
                  .OrderByDescending(e => e.Count)
                  .ToList();
 
-            results.SeriesNameFilterParameters = results.Titles.Where(e => e.SeriesTitleName != null).GroupBy(e => e.SeriesTitleName)
+            results.SeriesFilterParameters = results.Titles.Where(e => e.SeriesTitleName != null).GroupBy(e => e.SeriesTitleName)
                 .Select(y => new TitleFilterParameter { Name = y.Key.ToString(), Count = y.Count() })
                 .OrderByDescending(e => e.Count)
                 .ToList();

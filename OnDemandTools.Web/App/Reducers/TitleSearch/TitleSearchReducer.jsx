@@ -1,7 +1,7 @@
-﻿export const TitleSearchReducer = (state = [], action) => {
+﻿export const TitleSearchReducer = (state = {}, action) => {
     switch (action.type) {
         case 'TITLE_SEARCH_SUCCESS':
-            return action;
+            return action.titles;
         default:
             return state;
     }

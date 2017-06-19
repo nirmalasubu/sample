@@ -8,6 +8,6 @@ namespace OnDemandTools.Web.Models.TitleSearch
 
         public List<TitleFilterParameter> TitleTypeFilterParameters { get; set; }
         
-        public List<TitleFilterParameter> SeriesNameFilterParameters { get; set; }
+        public List<TitleFilterParameter> SeriesFilterParameters { get; set; }
     }
 }
