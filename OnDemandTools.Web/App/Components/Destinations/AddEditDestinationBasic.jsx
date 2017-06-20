@@ -214,20 +214,20 @@ class AddEditDestinationBasic extends React.Component {
                     <FormGroup
                     controlId="contents">
                     <Checkbox name="hd" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.state.destinationModel.content.highDefinition}>HD</Checkbox>
+                  checked={this.state.destinationModel.content.highDefinition}> HD <a href="#"><span tooltip data-toggle="tooltip" data-placement="right" title="High definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
                 <Checkbox name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.state.destinationModel.content.standardDefinition}> SD </Checkbox>
+                  checked={this.state.destinationModel.content.standardDefinition}> SD <a href="#"><span tooltip data-toggle="tooltip" data-placement="right" title="Standard definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
                 <Checkbox name="cx" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.state.destinationModel.content.cx}>C(X)</Checkbox>
+                  checked={this.state.destinationModel.content.cx}> C(X) <a href="#"><span tooltip data-toggle="tooltip" data-placement="right" title="C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
                 <Checkbox name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.state.destinationModel.content.nonCx}> Non-C(X)</Checkbox>
+                      checked={this.state.destinationModel.content.nonCx}> Non-C(X) <a href="#"><span tooltip data-toggle="tooltip" data-placement="right" title="Non-C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
               </FormGroup>
             </Form>
              <ControlLabel>Options</ControlLabel>
             <FormGroup
                     controlId="options">                 
                     <Checkbox name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
-                    checked={this.state.destinationModel.auditDelivery}> Audit Delivery</Checkbox>
+                          checked={this.state.destinationModel.auditDelivery}> Audit Delivery <a href="#"><span tooltip data-toggle="tooltip" data-placement="right" title="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
                 </FormGroup>
               </Col>
             </Row>
