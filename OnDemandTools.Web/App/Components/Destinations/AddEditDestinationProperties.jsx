@@ -3,7 +3,7 @@ import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLa
 import DestinationPropertiesFilter from 'Components/Destinations/DestinationPropertiesFilter';
 import RemovePropertiesModal from 'Components/Destinations/RemovePropertiesModal';
 
-
+// Sub component of destination page to  add ,edit and delete  destination properties
 class AddEditDestinationProperties extends React.Component {
 
     constructor(props) {
@@ -27,11 +27,6 @@ class AddEditDestinationProperties extends React.Component {
         });
     }
 
-    componentWillMount() {
-        this.setState({
-            destinationDetails: this.props.data
-        });
-    }
 
     openPropertiesFilter(row) {
         this.setState({ showAddEditPropertiesFilter: true, destinationPropertiesRow: row });
@@ -41,6 +36,7 @@ class AddEditDestinationProperties extends React.Component {
         this.setState({ showAddEditPropertiesFilter: false });
     }
 
+    //To delete  a property of destination
     RemovePropertiesModel(value)
     {
         var array=[];
@@ -52,6 +48,8 @@ class AddEditDestinationProperties extends React.Component {
         this.CheckPropertyNameIsEmpty();
 
     }
+
+    //To add a new property of destination
     AddNewProperty()
     {
         var newProperty={name:"",value:"", brands:[],titleIds:[],seriesIds:[],titles:[]}
@@ -83,6 +81,7 @@ class AddEditDestinationProperties extends React.Component {
         this.CheckPropertyNameIsEmpty();
     }
 
+    // called when a property value is edited
     handlePropertyValueChange(event) {
         var model = this.state.destinationDetails;
         model.properties[event.target.id].value = event.target.value;
@@ -91,6 +90,7 @@ class AddEditDestinationProperties extends React.Component {
 
     }
 
+    // validation for the name property . To verify  name text is empty
     CheckPropertyNameIsEmpty()
     {
         var properties=this.state.destinationDetails.properties;
@@ -108,15 +108,25 @@ class AddEditDestinationProperties extends React.Component {
         this.props.validationStates(false);
     }
    
-
-    TitleDetailClick(index)
+// MouseOver to show titles . when total titles are greater than zero
+    TitleDetailMouseOver(index)
     { 
         var array=this.state.titleopen;
-        array[index]=!this.state.titleopen[index];
+        array[index]=true;
         this.setState({titleopen:array});
         
     }
 
+    // MouseOver to hide titles . when total titles are greater than zero
+    TitleDetailMouseOut(index)
+    { 
+        var array=this.state.titleopen;
+        array[index]=false;
+        this.setState({titleopen:array});
+        
+    }
+
+    //To show all titles. when count is greater than zero
     TitledetailConstruct(item,index){
         if(this.state.titleopen[index]){
             var titleName=[];
@@ -125,6 +135,7 @@ class AddEditDestinationProperties extends React.Component {
             return(<div>{titletext}</div>);}
     }
 
+    //To construct titles. when titles are greater than 1 hide the titles.
     PropertyTitleConstruct(item,index)
     { 
         if(item.titles.length==1)
@@ -145,13 +156,14 @@ class AddEditDestinationProperties extends React.Component {
             var titleName=[];
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
-            var firstTitle=titleName[0]+"...";
-            var title=(<div onMouseOver={(event) => this.TitleDetailClick(index, event)}>{firstTitle}</div>);
+            var firstTitle=titleName[0]+" ...";
+            var title=(<div onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} >{firstTitle}</div>);
        
             return title;
     }
 }
 
+//To show/hide brands. when brands greater than 1
 ImageDetailClick(index){
    
     var array=this.state.imageopen;
@@ -160,7 +172,7 @@ ImageDetailClick(index){
    
 }
 
-
+//To construct brands. like hide the brands when brand count greater than 1
 PropertyBrandImageConstruct(item,index)
 { 
     if(item.brands.length==1)
@@ -179,7 +191,9 @@ if(item.brands.length>1)
         this.props.imageopen=this.state.imageopen;
     }
     var path = "images/brands/" + item.brands[0] + ".gif";
-    var image=(<img onMouseOver={(event) => this.ImageDetailClick(index, event)} src={path} />);
+    var image=(<div><img  src={path} />
+        <button class="btn-link" title="click for other brands"  onClick={(event) => this.ImageDetailClick(index, event)} >
+                                <i class="fa fa-plus-square-o"></i></button></div>);
        
         return image;
 }
@@ -187,8 +201,9 @@ if(item.brands.length>1)
 
 
 
+    //properties construct  of a destination
+        render() {
 
-    render() {
         const popoverValueClickRootClose = (
       <Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
       <span><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_ID&#125;</button></span>
@@ -219,22 +234,20 @@ if(item.brands.length>1)
                        <FormControl type="text" id={index} value={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
                        </FormGroup></OverlayTrigger></Col>
                     </Form>
-                   <Col sm={2} >
-     {this.PropertyBrandImageConstruct(item,index)}
-            {this.state.imageopen[index]? item.brands.map(function (name, index)
-            {
-                var path = "images/brands/" + name + ".gif";
-                return (<img src={path} />);
+                           <Col sm={2} >
+                    {this.PropertyBrandImageConstruct(item,index)}
+                    {this.state.imageopen[index]? item.brands.map(function (name, index)
+                    {
+                        var path = "images/brands/" + name + ".gif";
+                        return (<img src={path} />);
             
-            }):null}
-
+                    }):null}
                   </Col>
-
                   <Col sm={2} >
                   {this.PropertyTitleConstruct(item,index)}
                   {this.state.titleopen[index]?this.TitledetailConstruct(item,index):null}
-                                  </Col>
-                                  <Col sm={2} >
+                   </Col>
+                    <Col sm={2} >
                               <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
                                 <i class="fa fa-pencil-square-o"></i>
                               </button>
@@ -249,7 +262,9 @@ if(item.brands.length>1)
                                 row =<Row><Col sm={12} ><p> No properties available</p></Col></Row>
       }
 
-      }
+       }
+
+
 
                     return (
                       <div>
@@ -267,8 +282,8 @@ if(item.brands.length>1)
                           <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>
                         <div class="destination-height">
-      {row}
-                            </div>
+                        {row}
+                         </div>
                       </Grid>
                           </div>
                      <DestinationPropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
