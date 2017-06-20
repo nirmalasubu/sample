@@ -2,6 +2,7 @@ import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { titleSearch } from 'Actions/TitleSearch/TitleSearchActions';
 import { connect } from 'react-redux';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 @connect((store) => {
     return {
@@ -13,37 +14,28 @@ class TitleFilter extends React.Component {
         super(props);
 
         this.state = {
-            processing: false,
-            searchPromise: {}
+            processing: false
         }
 
     }
 
     handleChange(val) {
         var searchParam = this.inputTitleSearch.value;
-        if (searchParam.length > 2) {
 
-            if (this.state.processing) {
+        this.setState({ processing: true });
 
-                //Action abort will go here.
-                //this.setState({ processing: false });
-            }
+        this.searchPromise = this.props.dispatch(titleSearch(searchParam));
 
-            this.setState({ processing: true });
+        this.searchPromise.then(message => {
+            this.setState({ processing: false });
+        })
+        this.searchPromise.catch(error => {
+            this.setState({ processing: false });
+        });
+    }
 
-            this.searchPromise = this.props.dispatch(titleSearch(searchParam));
-
-            this.searchPromise.then(message => {
-                this.setState({ processing: false });
-            })
-            this.searchPromise.catch(error => {
-                this.setState({ processing: false });
-            });
-        }
-        else {
-            //clear grid action goes here
-        }
-
+    titleIdFormat(val, row) {
+        return <p> {val} </p>
     }
 
     render() {
@@ -51,7 +43,6 @@ class TitleFilter extends React.Component {
         var titleTypeRows = [];
 
         if (this.props.titleSearchResults.titleTypeFilterParameters != null) {
-
             var maxRowsToDisplay = 7;
 
             if (this.props.titleSearchResults.titleTypeFilterParameters.length < 7)
@@ -109,6 +100,10 @@ class TitleFilter extends React.Component {
                             {seriesRows}
                         </Col>
                         <Col md={4}>
+
+                            <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Title Id</TableHeaderColumn>                                
+                            </BootstrapTable>
                         </Col>
 
                         <Col md={4}>
