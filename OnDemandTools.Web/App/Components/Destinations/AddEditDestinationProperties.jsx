@@ -130,9 +130,9 @@ class AddEditDestinationProperties extends React.Component {
     TitledetailConstruct(item,index){
         if(this.state.titleopen[index]){
             var titleName=[];
-            item.titles.map(function (title, index) {titleName.push(title.name)});
+            item.titles.map(function (title, index) {if(index>0){titleName.push(title.name)}});
             var titletext=titleName.toString();
-            return(<div>{titletext}</div>);}
+            return(<div><p title="series/title">{titletext}</p></div>);}
     }
 
     //To construct titles. when titles are greater than 1 hide the titles.
@@ -140,7 +140,7 @@ class AddEditDestinationProperties extends React.Component {
     { 
         if(item.titles.length==1)
         {
-            return(<div>{item.titles[0].name}</div>);
+            return(<div> <p title="title/series">{item.titles[0].name}</p></div>);
         }
               
         if(item.titles.length>1)
@@ -157,7 +157,7 @@ class AddEditDestinationProperties extends React.Component {
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
             var firstTitle=titleName[0]+" ...";
-            var title=(<div onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} >{firstTitle}</div>);
+            var title=(<div onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} ><p title="title/series">{firstTitle}</p></div>);
        
             return title;
     }
@@ -239,7 +239,8 @@ if(item.brands.length>1)
                     {this.state.imageopen[index]? item.brands.map(function (name, index)
                     {
                         var path = "images/brands/" + name + ".gif";
-                        return (<img src={path} />);
+
+                        return ( index>0?<img src={path} />:null);
             
                     }):null}
                   </Col>
