@@ -59,6 +59,26 @@ namespace OnDemandTools.Web.Controllers
                         }
                     }
                 }
+
+                if (destination.Categories.Any())
+                {
+                    foreach (Web.Models.Destination.Category category in destination.Categories)
+                    {
+                        if (category.TitleIds.Any())
+                        {
+                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(category.TitleIds);
+                            category.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
+                        }
+                        if (category.SeriesIds.Any())
+                        {
+                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(category.SeriesIds);
+                            if (category.Titles.Any())
+                                category.Titles.AddRange(titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>());
+                            else
+                                category.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
+                        }
+                    }
+                }
             }
             return destinationModel;
         }

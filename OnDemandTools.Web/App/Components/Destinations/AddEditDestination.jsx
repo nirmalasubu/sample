@@ -13,6 +13,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import AddEditDestinationBasic from 'Components/Destinations/AddEditDestinationBasic';
 import AddEditDestinationDeliverables from 'Components/Destinations/AddEditDestinationDeliverables';
 import AddEditDestinationProperties from 'Components/Destinations/AddEditDestinationProperties';
+import AddEditDestinationCategories from 'Components/Destinations/AddEditDestinationCategories';
 import { saveDestination } from 'Actions/Destination/DestinationActions';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
@@ -133,6 +134,9 @@ class AddEditDestinationModel extends React.Component {
                         </Tab>
                         <Tab eventKey={2} title="Deliverables">
                             <AddEditDestinationDeliverables data={this.props.data.destinationDetails} />
+                        </Tab>
+                        <Tab eventKey={3} title="Categories">
+                            <AddEditDestinationCategories data={this.props.data.destinationDetails} />
                         </Tab>
                     </Tabs>
                     <NotificationContainer />

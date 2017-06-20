@@ -12,6 +12,7 @@ namespace OnDemandTools.DAL.Modules.Destination.Model
         {
             Deliverables = new List<Deliverable>();
             Properties = new List<Property>();
+            Categories = new List<Category>();
         }
 
         public ObjectId Id { get; set; }
@@ -25,6 +26,8 @@ namespace OnDemandTools.DAL.Modules.Destination.Model
         public List<Property> Properties { get; set; }
 
         public List<Deliverable> Deliverables { get; set; }
+
+        public List<Category> Categories { get; set; }
 
         public Content Content { get; set; }
 

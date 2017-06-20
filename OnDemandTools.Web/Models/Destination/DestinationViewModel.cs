@@ -12,6 +12,7 @@ namespace OnDemandTools.Web.Models.Destination
         {
             Deliverables = new List<Deliverable>();
             Properties = new List<Property>();
+            Categories = new List<Category>();
             Content = new Content();
 
             this.UpdateCreatedBy();
@@ -28,6 +29,8 @@ namespace OnDemandTools.Web.Models.Destination
         public IEnumerable<Property> Properties { get; set; }
 
         public IEnumerable<Deliverable> Deliverables { get; set; }
+
+        public IEnumerable<Category> Categories { get; set; }
 
         public Content Content { get; set; }
 

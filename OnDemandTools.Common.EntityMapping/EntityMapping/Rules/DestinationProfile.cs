@@ -17,12 +17,14 @@ namespace OnDemandTools.Common.EntityMapping
               .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
             CreateMap<BLModel.Property, DLModel.Property>();
             CreateMap<BLModel.Deliverable, DLModel.Deliverable>();
+            CreateMap<BLModel.Category, DLModel.Category>();
             CreateMap<BLModel.Content, DLModel.Content>();
 
             CreateMap<DLModel.Destination, BLModel.Destination>()
              .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));
             CreateMap<DLModel.Property, BLModel.Property>();
             CreateMap<DLModel.Deliverable, BLModel.Deliverable>();
+            CreateMap<DLModel.Category, BLModel.Category>();
             CreateMap<DLModel.Content, BLModel.Content>();
 
 
