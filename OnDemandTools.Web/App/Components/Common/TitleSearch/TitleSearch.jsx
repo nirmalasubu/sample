@@ -3,29 +3,25 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import { titleSearch } from 'Actions/TitleSearch/TitleSearchActions';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import TitleSearchParameter from 'Components/Common/TitleSearch/TitleSearchParameter';
 
 @connect((store) => {
     return {
         titleSearchResults: store.titleSearch
     };
 })
-class TitleFilter extends React.Component {
+class TitleSearch extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             processing: false
         }
-
     }
 
     handleChange(val) {
         var searchParam = this.inputTitleSearch.value;
-
         this.setState({ processing: true });
-
         this.searchPromise = this.props.dispatch(titleSearch(searchParam));
-
         this.searchPromise.then(message => {
             this.setState({ processing: false });
         })
@@ -38,36 +34,11 @@ class TitleFilter extends React.Component {
         return <p> {val} </p>
     }
 
+    titleTypeFormat(val, row) {
+        return <p> {row.titleType.name} </p>
+    }
+
     render() {
-
-        var titleTypeRows = [];
-
-        if (this.props.titleSearchResults.titleTypeFilterParameters != null) {
-            var maxRowsToDisplay = 7;
-
-            if (this.props.titleSearchResults.titleTypeFilterParameters.length < 7)
-                maxRowsToDisplay = this.props.titleSearchResults.titleTypeFilterParameters.length;
-
-            for (var i = 0; i < maxRowsToDisplay; i++) {
-                var filter = this.props.titleSearchResults.titleTypeFilterParameters[i];
-                titleTypeRows.push(<span> {filter.name + " (" + filter.count + ")"} <br /></span>);
-            }
-        }
-
-        var seriesRows = [];
-
-        if (this.props.titleSearchResults.seriesFilterParameters != null) {
-            var maxRowsToDisplay = 7;
-
-            if (this.props.titleSearchResults.seriesFilterParameters.length < 7)
-                maxRowsToDisplay = this.props.titleSearchResults.seriesFilterParameters.length;
-
-            for (var i = 0; i < maxRowsToDisplay; i++) {
-                var filter = this.props.titleSearchResults.seriesFilterParameters[i];
-                seriesRows.push(<span> {filter.name + " (" + filter.count + ")"}<br /></span>);
-            }
-        }
-
         return (
             <div>
                 <Form inline>
@@ -94,19 +65,26 @@ class TitleFilter extends React.Component {
                     </Row>
                     <Row>
                         <Col md={2}>
-                            <ControlLabel>Title Type</ControlLabel><br />
-                            {titleTypeRows}
-                            <ControlLabel>Series</ControlLabel><br />
-                            {seriesRows}
+                            <TitleSearchParameter name="Title Type" parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
+                            <TitleSearchParameter name="Series" parameters={this.props.titleSearchResults.seriesFilterParameters} />
                         </Col>
                         <Col md={4}>
-
                             <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
-                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Title Id</TableHeaderColumn>                                
+                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
-
                         <Col md={4}>
+                            <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                            </BootstrapTable>
                         </Col>
                     </Row>
                 </Grid>
@@ -115,4 +93,4 @@ class TitleFilter extends React.Component {
     }
 }
 
-export default TitleFilter
+export default TitleSearch
