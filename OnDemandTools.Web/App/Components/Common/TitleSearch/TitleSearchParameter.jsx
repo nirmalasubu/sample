@@ -17,14 +17,16 @@ class PageHeader extends React.Component {
 
             for (var i = 0; i < maxRowsToDisplay; i++) {
                 var filter = this.props.parameters[i];
-                filterRows.push(<span> {filter.name + " (" + filter.count + ")"} <br /></span>);
+                filterRows.push(<Radio name={this.props.name}> {filter.name + " (" + filter.count + ")"} <br /></Radio>);
             }
         }
 
         return (
             <div>
                 <ControlLabel>{this.props.name}</ControlLabel>
-                {filterRows}
+                <FormGroup>
+                    {filterRows}
+                </FormGroup>
             </div>
         )
     }
