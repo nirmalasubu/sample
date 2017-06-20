@@ -2,6 +2,7 @@ import React from 'react';
 import PageHeader from 'Components/Common/PageHeader';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import validator from 'validator';
 
 @connect((store) => {
     return {
@@ -49,7 +50,7 @@ class AddEditDestinationBasic extends React.Component {
         var name = this.state.destinationModel.name;
         var description = this.state.destinationModel.description;
         var hasError = false;
-        var hasNameError = (name!=undefined && (name == "" || name.length < 3 || name.length > 5 || !this.isCodeUnique(this.state.destinationModel)));
+        var hasNameError = (name!=undefined && (name == "" || name.length < 3 || name.length > 5 || !validator.isAlpha(name) || !this.isCodeUnique(this.state.destinationModel)));
         var hasDesError = (description == "");
 
         this.setState({
