@@ -15,6 +15,8 @@ class TitleSearchParameter extends React.Component {
         this.setState({
             contentValue: value
         });
+
+        this.props.onValueChange(value);
     }
 
     render() {

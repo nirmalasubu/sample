@@ -38,6 +38,16 @@ class TitleSearch extends React.Component {
         return <p> {row.titleType.name} </p>
     }
 
+    onTitleTypeChanged(value)
+    {
+       
+    }
+
+    onSeriesChanged(value)
+    {
+        
+    }
+
     render() {
 
         const selectRowProp = {
@@ -55,9 +65,15 @@ class TitleSearch extends React.Component {
                             {this.state.processing ? " Processing" : "Search"}
                         </Button>
                         {' '}
-                        <TitleSearchParameter inline name="Title Type" parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
+                        <TitleSearchParameter 
+                        name="Title Type" 
+                        onValueChange={this.onTitleTypeChanged.bind(this)}  
+                        parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
                         {' '}
-                        <TitleSearchParameter inline name="Series" parameters={this.props.titleSearchResults.seriesFilterParameters} />
+                        <TitleSearchParameter 
+                        name="Series" 
+                        onValueChange={this.onSeriesChanged.bind(this)} 
+                        parameters={this.props.titleSearchResults.seriesFilterParameters} />
                     </FormGroup>
                 </Form>
                 <Grid>
