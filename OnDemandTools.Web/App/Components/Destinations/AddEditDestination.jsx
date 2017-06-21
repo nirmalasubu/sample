@@ -15,6 +15,7 @@ import AddEditDestinationDeliverables from 'Components/Destinations/AddEditDesti
 import AddEditDestinationProperties from 'Components/Destinations/AddEditDestinationProperties';
 import { saveDestination } from 'Actions/Destination/DestinationActions';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
+import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
 
 @connect((store) => {
     return {
@@ -33,7 +34,8 @@ class AddEditDestinationModel extends React.Component {
             validationStateName: "",
             validationStateDescription: "",
             validationStateExternalId: "",
-            validationStatePropertyName:""
+            validationStatePropertyName:"",
+            showWarningModel: false
         });
     }
     //called on the model load
@@ -42,6 +44,14 @@ class AddEditDestinationModel extends React.Component {
             isProcessing: false,
             destinationUnModifiedData: jQuery.extend(true, {}, this.props.data.destinationDetails)
         });
+    }
+
+    openWarningModel() {
+        this.setState({ showWarningModel: true });
+    }
+
+    closeWarningModel() {        
+        this.setState({ showWarningModel: false });
     }
 
     handleSave() {
@@ -76,12 +86,21 @@ class AddEditDestinationModel extends React.Component {
             return false;
     }
 
+    handleAddEditClose()
+    {
+        var model = this.state.destinationUnModifiedData;
+        //this.props.data.destinationDetails = this.state.destinationUnModifiedData;
+        jQuery.extend(this.props.data.destinationDetails, this.state.destinationUnModifiedData);
+        this.props.handleClose();
+    }
+
     handleClose(){
         if (JSON.stringify(this.state.destinationUnModifiedData)==JSON.stringify(this.props.data.destinationDetails)) {
             this.props.handleClose();
         }
-        else
-            this.props.handleCancelWarning();
+        else {
+            this.openWarningModel();
+        }
     }
 
     updateValidations(name, description)
@@ -117,6 +136,7 @@ class AddEditDestinationModel extends React.Component {
                         </Tab>
                     </Tabs>
                     <NotificationContainer />
+                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.handleAddEditClose.bind(this)} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.handleClose.bind(this)}>Cancel</Button> 
@@ -125,6 +145,7 @@ class AddEditDestinationModel extends React.Component {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         )
             }
             }

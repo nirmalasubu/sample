@@ -29,6 +29,7 @@ class DestinationTable extends React.Component {
             options: {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
+                noDataText: this._setLoadingOption(),
 
                 sizePerPageList: [{
                     text: '10 ', value: 10
@@ -42,6 +43,13 @@ class DestinationTable extends React.Component {
                 }]
             }
         }
+    }
+
+    _setLoadingOption()
+    {
+        console.log(this.props.RowData.length);
+        if(this.props.RowData.length<=-1)
+            return (<i class="fa fa-spinner fa-pulse fa-fw margin-bottom">Loading...</i>);
     }
 
     componentDidMount() {
@@ -75,17 +83,8 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: true, destinationDetails: val });
     }
 
-    openWarningModel() {
-        this.setState({ showWarningModel: true });
-    }
-
     closeAddEditModel() {        
         this.setState({ showAddEditModel: false, destinationDetails: this.state.newDestinationModel });
-        this.props.dispatch(destinationAction.fetchDestinations());
-    }
-
-    closeWarningModel() {        
-        this.setState({ showWarningModel: false });
     }
 
     contentFormat(val, rowData) {
@@ -127,7 +126,6 @@ class DestinationTable extends React.Component {
         );
     }
 
-
     render() {
 
         var row;
@@ -159,9 +157,8 @@ class DestinationTable extends React.Component {
                     {row}
                 </BootstrapTable>
 
-                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} handleCancelWarning={this.openWarningModel.bind(this)} />
-                <RemoveDestinationModal data={this.state} handleClose={this.closeModel.bind(this)} />
-                <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.closeAddEditModel.bind(this)} />
+                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <RemoveDestinationModal data={this.state} handleClose={this.closeModel.bind(this)} />                
             </div>)
     }
 

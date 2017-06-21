@@ -191,7 +191,7 @@ class AddEditDestinationBasic extends React.Component {
                     disabled={this.state.destinationModel.id == null ? false : true}
                     value={this.state.destinationModel.name}
                     ref="inputFriendlyName"
-                    placeholder="Enter Destination Code"
+                    placeholder="Enter 3 to 5 alphabetical letter for destination code"
                     onChange={this.handleTextChange.bind(this)}                     
                   />
                     </FormGroup>
