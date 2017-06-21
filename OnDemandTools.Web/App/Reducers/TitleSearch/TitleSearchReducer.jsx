@@ -8,7 +8,10 @@ export const TitleSearchReducer = (state = {}, action) => {
             return action.titles;
         case 'FILTER_TITLE_SUCCESS':
             var existingData = $.extend(true, {}, state);
-            if (action.filter.isTitleType) {
+            if (action.filter.value == "") {
+                existingData.titles = $.extend(true, [], existingData.titlesBackup);
+            }
+            else if (action.filter.isTitleType) {
                 var filteredData = $.grep(existingData.titlesBackup, function (e) { return e.titleType.name == action.filter.value; });
                 existingData.titles = filteredData;
             }

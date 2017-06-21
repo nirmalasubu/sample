@@ -4,17 +4,11 @@ import { FormGroup } from 'react-bootstrap';
 class TitleSearchParameter extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            contentValue: ""
-        };
     }
 
     handleSelectChange(value){
         if(value == undefined)
             value ="";
-        this.setState({
-            contentValue: value
-        });
 
         this.props.onValueChange(value);
     }
@@ -36,7 +30,7 @@ class TitleSearchParameter extends React.Component {
                 <Select simpleValue className="destination-select-control" options={options}
                     clearable={true}
                     searchable={true}
-                    value={this.state.contentValue}
+                    value={this.props.selectedItem}
                     onChange={this.handleSelectChange.bind(this)}
                     placeholder={this.props.name} />
             </FormGroup>

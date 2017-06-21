@@ -15,7 +15,9 @@ class TitleSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            processing: false
+            processing: false,
+            selectedTitleTypeFilter: "",
+            selectedSeriesFilter: ""
         }
     }
 
@@ -42,19 +44,19 @@ class TitleSearch extends React.Component {
         return <p> {row.titleType.name} </p>
     }
 
-    onTitleTypeChanged(value)
-    {
-       var filter={};
-        filter.isTitleType=true;
-        filter.value=value;
+    onTitleTypeChanged(value) {
+        this.setState({ selectedTitleTypeFilter: value, selectedSeriesFilter: "" });
+        var filter = {};
+        filter.isTitleType = true;
+        filter.value = value;
         this.props.dispatch(filterTitles(filter));
     }
 
-    onSeriesChanged(value)
-    {
-        var filter={};
-        filter.isTitleType=false;
-        filter.value=value;
+    onSeriesChanged(value) {
+        this.setState({ selectedSeriesFilter: value, selectedTitleTypeFilter: "" });
+        var filter = {};
+        filter.isTitleType = false;
+        filter.value = value;
         this.props.dispatch(filterTitles(filter));
     }
 
@@ -75,15 +77,17 @@ class TitleSearch extends React.Component {
                             {this.state.processing ? " Processing" : "Search"}
                         </Button>
                         {' '}
-                        <TitleSearchParameter 
-                        name="Title Type" 
-                        onValueChange={this.onTitleTypeChanged.bind(this)}  
-                        parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
+                        <TitleSearchParameter
+                            name="Title Type"
+                            onValueChange={this.onTitleTypeChanged.bind(this)}
+                            parameters={this.props.titleSearchResults.titleTypeFilterParameters}
+                            selectedItem={this.state.selectedTitleTypeFilter} />
                         {' '}
-                        <TitleSearchParameter 
-                        name="Series" 
-                        onValueChange={this.onSeriesChanged.bind(this)} 
-                        parameters={this.props.titleSearchResults.seriesFilterParameters} />
+                        <TitleSearchParameter
+                            name="Series"
+                            onValueChange={this.onSeriesChanged.bind(this)}
+                            parameters={this.props.titleSearchResults.seriesFilterParameters}
+                            selectedItem={this.state.selectedSeriesFilter} />
                     </FormGroup>
                 </Form>
                 <Grid>
