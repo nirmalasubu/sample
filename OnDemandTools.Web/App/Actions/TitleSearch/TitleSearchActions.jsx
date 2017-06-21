@@ -24,6 +24,13 @@ export const clearTitleSuccess = (titles) => {
     }
 };
 
+export const filterTitleSuccess = (filter) => {
+    return {
+        type: actionTypes.FILTER_TITLE_SUCCESS,
+        filter
+    }
+};
+
 export const titleSearch = (param) => {
     return (dispatch) => {
         return Axios.get('/api/titles/search/' + param)
@@ -40,5 +47,11 @@ export const titleSearch = (param) => {
 export const clearTitles = () => {
     return (dispatch) => {        
        dispatch(clearTitleSuccess(emptyTitles));
+    };
+};
+
+export const filterTitles = (filter) => {
+    return (dispatch) => {        
+       dispatch(filterTitleSuccess(filter));
     };
 };

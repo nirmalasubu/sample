@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
-import { titleSearch } from 'Actions/TitleSearch/TitleSearchActions';
+import { titleSearch, filterTitles } from 'Actions/TitleSearch/TitleSearchActions';
 import { clearTitles } from 'Actions/TitleSearch/TitleSearchActions';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -44,12 +44,18 @@ class TitleSearch extends React.Component {
 
     onTitleTypeChanged(value)
     {
-       
+       var filter={};
+        filter.isTitleType=true;
+        filter.value=value;
+        this.props.dispatch(filterTitles(filter));
     }
 
     onSeriesChanged(value)
     {
-        
+        var filter={};
+        filter.isTitleType=false;
+        filter.value=value;
+        this.props.dispatch(filterTitles(filter));
     }
 
     render() {
