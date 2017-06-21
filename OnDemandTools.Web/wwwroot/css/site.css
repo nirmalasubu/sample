@@ -209,6 +209,24 @@ textarea.form-control-modal-Edit {
         float: left;
     margin-left: -50px;
 }
+
+
+.destination-label-title{
+    width:120px;
+    height: 2em; 
+    line-height: 1em; 
+    text-overflow: ellipsis;
+    margin-bottom: 12px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+}
+.destination-label-title:hover{
+    overflow: visible; 
+    white-space: normal;
+    height:auto;  /* just added this line */
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

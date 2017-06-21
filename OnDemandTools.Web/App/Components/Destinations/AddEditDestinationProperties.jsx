@@ -107,66 +107,18 @@ class AddEditDestinationProperties extends React.Component {
         }
         this.props.validationStates(false);
     }
-   
-// MouseOver to show titles . when total titles are greater than zero
-    TitleDetailMouseOver(index)
-    { 
-        var array=this.state.titleopen;
-        array[index]=true;
-        this.setState({titleopen:array});
-        
-    }
+  
 
-    // MouseOver to hide titles . when total titles are greater than zero
-    TitleDetailMouseOut(index)
-    { 
-        var array=this.state.titleopen;
-        array[index]=false;
-        this.setState({titleopen:array});
-        
-    }
-
-    //To show all titles. when count is greater than zero
+    //To show all titles. 
     TitledetailConstruct(item,index){
-        if(this.state.titleopen[index]){
-            var titleName=[];
-            item.titles.map(function (title, index) {if(index>0){titleName.push(title.name)}});
-            var titletext=titleName.toString();
-            var title=(<div id="detail" onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} ><p title="title/series">{titletext}</p></div>);
        
-        return title;
-           
-    }
-    }
-
-    //To construct titles. when titles are greater than 1 hide the titles.
-    PropertyTitleConstruct(item,index)
-    { 
-        if(item.titles.length==1)
-        {
-            return(<div> <p title="title/series">{item.titles[0].name}</p></div>);
-        }
-              
-        if(item.titles.length>1)
-        {
-            if(this.state.titleopen[index]==undefined)
-            { 
-                var array=this.state.titleopen;
-                array[index]=false; 
-                this.setState({titleopen:array});
-                this.props.titleopen=this.state.titleopen;
-            }
-                        
             var titleName=[];
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
-            var firstTitle=titleName[0]+" ...";
-            var title=(<div id="title" onMouseOver={(event) => this.TitleDetailMouseOver(index, event)}  ><p title="title/series">{firstTitle}</p></div>);
-       
-            return title;
+            var title=(<p class="destination-label-title" title="title/series">{titletext}</p>);
+        return title;
     }
-}
-
+ 
 //To show/hide brands. when brands greater than 1
 ImageDetailClick(index){
    
@@ -203,26 +155,35 @@ if(item.brands.length>1)
 }
 }
 
+ popoverValueClickRootClose(index)
+ {
+            return (<Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
+                  <span><button class="btn btn-primary btn-xs destination-properties-popovermargin"type="button" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
+                  <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
+                  <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
+                   <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
+                   <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
+                    <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
+                    <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
+                    <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index,event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
+                  </Popover>);
+                    }
 
+//To subsitute the token values  in the text box  
+SubsitutionTokenClick(index,event){
+                           
+     var model = this.state.destinationDetails;
+    var oldValue= model.properties[index].value;
+    model.properties[index].value = oldValue+event.target.value;
+     this.setState({ destinationDetails: model });
+    this.props.data = this.state.destinationDetails;
+}
 
     //properties construct  of a destination
         render() {
-
-        const popoverValueClickRootClose = (
-      <Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
-      <span><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_ID&#125;</button></span>
-      <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_NAME&#125;</button></span>
-      <div><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;BRAND&#125;</button></div>
-       <div><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
-       <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;TITLE_STORYLINE&#125;</button></div>
-      </Popover>
-    );
-        let row = null;
-
-        if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
+        
+            let row = null;
+            if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if(Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object)
             {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
@@ -231,11 +192,11 @@ if(item.brands.length>1)
                    <Form>
                    <Col sm={3} >
                         <FormGroup controlId="Name" validationState={nameValidation}>
-                       <FormControl type="text" id={index} value={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
+                       <FormControl type="text" id={index} value={item.name} title={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
                        </FormGroup></Col>
-                   <Col sm={3}> <OverlayTrigger trigger="click" rootClose placement="left" overlay={popoverValueClickRootClose}>
+                   <Col sm={3}> <OverlayTrigger trigger="click" rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
                        <FormGroup controlId="Value" >
-                       <FormControl type="text" id={index} value={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
+                       <FormControl type="text" id={index} value={item.value} title={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
                        </FormGroup></OverlayTrigger></Col>
                     
                            <Col sm={2} >
@@ -249,8 +210,8 @@ if(item.brands.length>1)
                     }):null}
                   </Col>
                   <Col sm={2} >
-                  {this.PropertyTitleConstruct(item,index)}
-                  {this.state.titleopen[index]?this.TitledetailConstruct(item,index):null}
+                  {this.TitledetailConstruct(item,index)}
+                  
                    </Col>
                     <Col sm={2} >
                               <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
