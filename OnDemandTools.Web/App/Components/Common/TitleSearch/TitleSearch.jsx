@@ -1,6 +1,7 @@
 import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { titleSearch } from 'Actions/TitleSearch/TitleSearchActions';
+import { clearTitles } from 'Actions/TitleSearch/TitleSearchActions';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TitleSearchParameter from 'Components/Common/TitleSearch/TitleSearchParameter';
@@ -19,6 +20,9 @@ class TitleSearch extends React.Component {
     }
 
     handleChange(val) {
+
+        this.props.dispatch(clearTitles());
+
         var searchParam = this.inputTitleSearch.value;
         this.setState({ processing: true });
         this.searchPromise = this.props.dispatch(titleSearch(searchParam));
