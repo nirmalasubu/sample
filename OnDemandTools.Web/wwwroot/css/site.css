@@ -193,6 +193,22 @@ textarea.form-control-modal-Edit {
     overflow-x: hidden;
 
 }
+.destination-container { 
+    width: 40px;
+    float:left;
+    
+}
+.destination-container img { 
+    width: 100%;
+}
+.destination-plusbutton{
+    margin-top:15px;
+}
+
+.destination-title{
+        float: left;
+    margin-left: -50px;
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

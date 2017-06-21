@@ -132,7 +132,11 @@ class AddEditDestinationProperties extends React.Component {
             var titleName=[];
             item.titles.map(function (title, index) {if(index>0){titleName.push(title.name)}});
             var titletext=titleName.toString();
-            return(<div><p title="series/title">{titletext}</p></div>);}
+            var title=(<div id="detail" onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} ><p title="title/series">{titletext}</p></div>);
+       
+        return title;
+           
+    }
     }
 
     //To construct titles. when titles are greater than 1 hide the titles.
@@ -157,7 +161,7 @@ class AddEditDestinationProperties extends React.Component {
             item.titles.map(function (title, index) {titleName.push(title.name)});
             var titletext=titleName.toString();
             var firstTitle=titleName[0]+" ...";
-            var title=(<div onMouseOver={(event) => this.TitleDetailMouseOver(index, event)} onMouseOut={(event) => this.TitleDetailMouseOut(index, event)} ><p title="title/series">{firstTitle}</p></div>);
+            var title=(<div id="title" onMouseOver={(event) => this.TitleDetailMouseOver(index, event)}  ><p title="title/series">{firstTitle}</p></div>);
        
             return title;
     }
@@ -177,8 +181,8 @@ PropertyBrandImageConstruct(item,index)
 { 
     if(item.brands.length==1)
     {
-        var path = "images/brands/" + name + ".gif";
-       return (<img src={path} />);
+        var path = "images/brands/" + item.brands[0] + ".gif";
+        return (<div class="destination-container"><img src={path} title={item.brands[0]} alt={item.brands[0]}/></div>);
     }
               
 if(item.brands.length>1)
@@ -191,8 +195,8 @@ if(item.brands.length>1)
         this.props.imageopen=this.state.imageopen;
     }
     var path = "images/brands/" + item.brands[0] + ".gif";
-    var image=(<div><img  src={path} />
-        <button class="btn-link" title="click for other brands"  onClick={(event) => this.ImageDetailClick(index, event)} >
+    var image=(<div><span class="destination-container"><img  src={path}  title={item.brands[0]} alt={item.brands[0]}/></span>
+        <button class="btn-link destination-plusbutton" type= "button" title="click for other brands"  onClick={(event) => this.ImageDetailClick(index, event)}  >
                                 <i class="fa fa-plus-square-o"></i></button></div>);
        
         return image;
@@ -233,14 +237,14 @@ if(item.brands.length>1)
                        <FormGroup controlId="Value" >
                        <FormControl type="text" id={index} value={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
                        </FormGroup></OverlayTrigger></Col>
-                    </Form>
+                    
                            <Col sm={2} >
                     {this.PropertyBrandImageConstruct(item,index)}
-                    {this.state.imageopen[index]? item.brands.map(function (name, index)
-                    {
-                        var path = "images/brands/" + name + ".gif";
+                           {this.state.imageopen[index]? item.brands.map(function (name, index)
+                           {
+                               var path = "images/brands/" + name + ".gif";
 
-                        return ( index>0?<img src={path} />:null);
+                               return ( index>0?<div class="destination-container"><img  src={path} title={name} alt={name} /></div>:null);
             
                     }):null}
                   </Col>
@@ -249,12 +253,13 @@ if(item.brands.length>1)
                   {this.state.titleopen[index]?this.TitledetailConstruct(item,index):null}
                    </Col>
                     <Col sm={2} >
-                              <button class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
+                              <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} >
                                 <i class="fa fa-pencil-square-o"></i>
                               </button>
-                              <button class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} >
+                              <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} >
                                 <i class="fa fa-trash"></i></button>
                             </Col>
+                            </Form>
                           </Row>)
       }.bind(this));
       }
