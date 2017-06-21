@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
-class PageHeader extends React.Component {
+class TitleSearchParameter extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -32,4 +32,4 @@ class PageHeader extends React.Component {
     }
 }
 
-export default PageHeader
+export default TitleSearchParameter

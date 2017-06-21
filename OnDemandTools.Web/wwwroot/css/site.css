@@ -310,11 +310,12 @@ p.shortDesc {
 
 .destinationPropertiesFilterModel .modal-lg
 {
-
+    width: 1200px;
 }
 .propFilterContainer
 {
-    height: 600px;
+    min-height: 700px;
+    width: 1180px;
 }
 
 .imageCheckbox
@@ -328,4 +329,17 @@ p.shortDesc {
 .imageSelected
 {
     background-color: yellow;
+}
+.SearchTableColumn
+{
+font-size: small;
+}
+
+.SearchTableHeader
+{
+font-size: small;
+background-color: white;
+color: black;
+padding: 0px;
+margin: 0px;
 }
