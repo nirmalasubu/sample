@@ -1,33 +1,30 @@
 import React from 'react';
-import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
+import Select from 'react-select';
+import { FormGroup } from 'react-bootstrap';
 class TitleSearchParameter extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
-
-        var filterRows = [];
-
+        var options = [];
         if (this.props.parameters != null && this.props.parameters.length > 0) {
-            var maxRowsToDisplay = 7;
-
-            if (this.props.parameters.length < 7)
-                maxRowsToDisplay = this.props.parameters.length;
-
-            for (var i = 0; i < maxRowsToDisplay; i++) {
+            for (var i = 0; i < this.props.parameters.length; i++) {
                 var filter = this.props.parameters[i];
-                filterRows.push(<Radio name={this.props.name}> {filter.name + " (" + filter.count + ")"} <br /></Radio>);
+                var option = {};
+                option.value = filter.name;
+                option.label = filter.name + " (" + filter.count + ")";
+                options.push(option);
             }
         }
 
         return (
-            <div>
-                <ControlLabel>{this.props.name}</ControlLabel>
-                <FormGroup>
-                    {filterRows}
-                </FormGroup>
-            </div>
+            <FormGroup controlId="content">
+                <Select simpleValue className="destination-select-control" options={options}
+                    clearable={true}
+                    searchable={true}
+                    placeholder={this.props.name} />
+            </FormGroup>
         )
     }
 }

@@ -39,6 +39,11 @@ class TitleSearch extends React.Component {
     }
 
     render() {
+
+        const selectRowProp = {
+            mode: 'checkbox'
+        };
+
         return (
             <div>
                 <Form inline>
@@ -49,41 +54,50 @@ class TitleSearch extends React.Component {
                         <Button onClick={this.handleChange.bind(this)} bsStyle="primary" disabled={this.state.processing} >
                             {this.state.processing ? " Processing" : "Search"}
                         </Button>
-
+                        {' '}
+                        <TitleSearchParameter inline name="Title Type" parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
+                        {' '}
+                        <TitleSearchParameter inline name="Series" parameters={this.props.titleSearchResults.seriesFilterParameters} />
                     </FormGroup>
                 </Form>
                 <Grid>
                     <Row>
-                        <Col md={2}>
-                            <ControlLabel>Filter</ControlLabel>
-                        </Col>
-                        <Col md={5}>
+                        <Col md={5} >
                             <ControlLabel>Available Title/Series</ControlLabel>
-                        </Col><Col md={5}>
+                        </Col>
+                        <Col md={1} >
+
+                        </Col>
+                        <Col md={5} >
                             <ControlLabel>Selected Title/Series</ControlLabel>
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={2}>
-                            <TitleSearchParameter name="Title Type" parameters={this.props.titleSearchResults.titleTypeFilterParameters} />
-                            <TitleSearchParameter name="Series" parameters={this.props.titleSearchResults.seriesFilterParameters} />
-                        </Col>
-                        <Col md={5}>
-                            <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                        <Col md={5} >
+                            <BootstrapTable selectRow={selectRowProp} data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
+                        <Col md={1}>
+                            <Button bsStyle="primary" >
+                                Add >
+                        </Button>
+                            <br /><br />
+                            <Button bsStyle="primary" >
+                                Remove
+                        </Button>
+                        </Col>
                         <Col md={5}>
                             <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn columnClassName="SearchTableColumn" className="SearchTableHeader" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
                     </Row>
