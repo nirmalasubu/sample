@@ -47,9 +47,8 @@ class DestinationTable extends React.Component {
 
     _setLoadingOption()
     {
-        console.log(this.props.RowData.length);
-        if(this.props.RowData.length<=-1)
-            return (<i class="fa fa-spinner fa-pulse fa-fw margin-bottom">Loading...</i>);
+        if(this.props.RowData.length>-1)
+            return (<div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>);
     }
 
     componentDidMount() {
