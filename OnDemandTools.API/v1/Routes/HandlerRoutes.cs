@@ -316,14 +316,16 @@ namespace OnDemandTools.API.v1.Routes
         }
 
         private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt, Airing airing) {
-            var result = "";
+            var result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
             if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
-                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+                return result;
             }
             else if (string.IsNullOrEmpty(pt.Source.Brand)) {
-                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+                return result;
             }
-            return result;
+            else {
+                return string.Empty;
+            }            
         }
 
         /// <summary>
