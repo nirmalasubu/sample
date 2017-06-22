@@ -17,6 +17,13 @@ namespace OnDemandTools.Business.Modules.Pathing
             this.translationQueryHelper = translationQueryHelper;
         }
 
+        public List<BLModel.PathTranslation> GetAll()
+        {
+            return 
+            translationQueryHelper.GetAll()
+                .ToList<DLModel.PathTranslation>()
+                .ToBusinessModel<List<DLModel.PathTranslation>,List<BLModel.PathTranslation>>();            
+        }
 
         public List<BLModel.PathTranslation> GetBySourceBaseUrl(string sourceBaseUrl)
         {

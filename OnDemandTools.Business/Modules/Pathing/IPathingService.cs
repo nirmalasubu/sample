@@ -7,6 +7,8 @@ namespace OnDemandTools.Business.Modules.Pathing
 {
     public interface IPathingService
     {
+        List<BLModel.PathTranslation> GetAll();
+
         /// <summary>
         /// Gets path translations by source base URL and brand.
         /// </summary>

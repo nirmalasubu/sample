@@ -79,7 +79,7 @@ namespace OnDemandTools.API.Helpers.MappingRules
         {
             mapping.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
             mapping.ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
-            mapping.ForMember(dest => dest.Urls, opt => opt.ResolveUsing<EncodingBucketURLResolver>());
+            mapping.ForMember(dest => dest.Urls, opt => opt.ResolveUsing<EncodingURLResolver>());
             mapping.ForMember(dest => dest.Properties, opt => opt.ResolveUsing<EncodingPropertiesResolver>());
             return mapping;
         }
@@ -197,28 +197,38 @@ namespace OnDemandTools.API.Helpers.MappingRules
     /// </summary>
     /// <seealso cref="AutoMapper.ValueResolver{,}" />
     ///     
-    public class EncodingBucketURLResolver : IValueResolver<RQModel.PlayListViewModel, BLModel.PlayList, List<Dictionary<String, BLModel.Url>>>
+    public class EncodingURLResolver : IValueResolver<RQModel.PlayListViewModel, BLModel.PlayList, List<Dictionary<String, BLModel.Url>>>
     {
         public List<Dictionary<String, BLModel.Url>> Resolve(RQModel.PlayListViewModel source, BLModel.PlayList des, List<Dictionary<String, BLModel.Url>> d, ResolutionContext context)
         {
             List<Dictionary<String, BLModel.Url>> urls = new List<Dictionary<String, BLModel.Url>>();
             Regex regex = new Regex(@"^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$");
-            Match matches = regex.Match(source.BucketURL);
+            
+            var u = new Dictionary<String, BLModel.Url>();
 
-            // Parse Bucket URL
-            String host = matches.Groups[1].ToString() + @"/" + matches.Groups[3].ToString();
-            String path = matches.Groups[4].ToString();
-            String fileName = matches.Groups[6].ToString();
-            BLModel.Url url = new BLModel.Url() { Host = host, Path = path, FileName = fileName };
-
-            // Create url dictionary entry
-            Dictionary<String, BLModel.Url> u = new Dictionary<String, BLModel.Url>();
+            var matches = regex.Match(source.BucketURL);
+            
+            var url = BuildUrlFor(matches);
+           
             u.Add("bucketUrl", url);
+
+            var matches = regex.Match(source.AkamaiURL);
+            
+            var url = BuildUrlFor(matches);
+           
+            u.Add("akamaiUrl", url);
 
             // Add url to dictionary
             urls.Add(u);
 
             return urls;
+        }
+
+        private BLModel.Url BuildUrlFor(Match matches) {
+            var host = matches.Groups[1].ToString() + @"/" + matches.Groups[3].ToString();
+            var path = matches.Groups[4].ToString();
+            var fileName = matches.Groups[6].ToString();
+            return new BLModel.Url() { Host = host, Path = path, FileName = fileName };            
         }
     }
 }

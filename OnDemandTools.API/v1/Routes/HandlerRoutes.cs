@@ -114,13 +114,10 @@ namespace OnDemandTools.API.v1.Routes
                     }
 
 
+                    ApplyPathTranslationInformation(encodingPayLoad);
 
                     // Translate DataContracts to Business Models
                     file = encodingPayLoad.ToBusinessModel<EncodingFileContentViewModel, BLFileModel.File>();
-
-                    // Apply business rules
-                    // => perform path translation
-                    ApplyPathTranslationInformation(file);
 
                     // Perform CRUD
                     _fileSvc.PersistVideoFile(file);
@@ -296,52 +293,38 @@ namespace OnDemandTools.API.v1.Routes
         /// </summary>
         /// <param name="file"></param>
         /// <param name="pathTranslationQuery"></param>
-        private void ApplyPathTranslationInformation(BLFileModel.File file)
+        private void ApplyPathTranslationInformation(EncodingFileContentViewModel file)
         {
             // Get an asset (the first one in the list) with the given media id
             var airing = _airingSvc.GetByMediaId(file.MediaId).FirstOrDefault();
 
-            foreach (BLFileModel.Content c in file.Contents)
+            foreach (var media in file.MediaCollection)
             {
-                foreach (BLFileModel.Media bm in c.MediaCollection)
+                foreach (var playlist in media.Playlists)
                 {
-                    foreach (BLFileModel.PlayList pl in bm.Playlists)
-                    {
-                        // If bucketUrl exists, translate it to corresponding target as defined in the path translation                     
-                        var urlEntry = pl.Urls.Where(d => d.ContainsKey("bucketUrl")).FirstOrDefault();
-                        if (urlEntry != null)
+                    var sourceUrl = playlist.BucketURL;                    
+                        if (!string.IsNullOrEmpty(sourceUrl))
                         {
-                            // Retrieve details of bucketUrl
-                            BLFileModel.Url bucketUrl = urlEntry.Values.FirstOrDefault();
-
-                            // Find all translations that match:
-                            // a combination of bucketUrl.Host and asset brand/network, or
-                            // bucketUrl.Host
-                            // If any match exists, do the translation; else, do nothing
-                            List<BLPathModel.PathTranslation> pathings = new List<BLPathModel.PathTranslation>();
-                            pathings.AddRange(_pathingSvc.GetBySourceBaseUrlAndBrand(bucketUrl.Host, airing.Network));
-                            pathings.AddRange(_pathingSvc.GetBySourceBaseUrl(bucketUrl.Host));
-                            List<BLPathModel.PathTranslation> distinctPathings = pathings.Distinct<BLPathModel.PathTranslation>(new BLPathModel.PathTranslationEqualityComparer()).ToList();
-
-                            foreach (BLPathModel.PathTranslation pt in pathings.Distinct<BLPathModel.PathTranslation>(new BLPathModel.PathTranslationEqualityComparer()))
+                            var pathings = _pathingSvc.GetAll();                            
+                            
+                            foreach (var pt in pathings)
                             {
-                                // Construct and add akamai url information
-                                String host = pt.Target.BaseUrl;
-                                String path = bucketUrl.Path;
-                                String fileName = bucketUrl.FileName;
-                                BLFileModel.Url url = new BLFileModel.Url() { Host = host, Path = path, FileName = fileName };
-                                Dictionary<String, BLFileModel.Url> u = new Dictionary<String, BLFileModel.Url>();
-                                u.Add("akamaiUrl", url);
-                                pl.Urls.Add(u);
-
-                                // Add protectionType to properties if it doesn't already exist
-                                if (!pl.Properties.ContainsKey("protectionType"))
-                                    pl.Properties.Add("protectionType", pt.Target.ProtectionType);
+                                if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
+                                    playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
+                                }
+                                else {
+                                    playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
+                                }
                             }
                         }
-                    }
                 }
             }
+        }
+
+        private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt) {
+            var result = sourceUrl;
+            result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+            return result;
         }
 
         /// <summary>
