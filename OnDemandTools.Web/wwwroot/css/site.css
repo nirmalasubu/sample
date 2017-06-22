@@ -373,3 +373,8 @@ p.shortDesc {
     margin: 0px 0px 0px 0px;
     width:105%;
 }
+
+.filterButton
+{
+    width: 90px;
+}

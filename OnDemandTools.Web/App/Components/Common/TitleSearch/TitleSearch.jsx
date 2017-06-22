@@ -188,11 +188,11 @@ class TitleSearch extends React.Component {
                             </BootstrapTable>
                         </Col>
                         <Col md={1} className="filterButtons">
-                            <Button bsStyle="primary" disabled={this.state.titlesToAdd == 0} onClick={this.onAddTitleButtonClick.bind(this)}>
+                            <Button bsStyle="primary" className="filterButton" disabled={this.state.titlesToAdd == 0} onClick={this.onAddTitleButtonClick.bind(this)}>
                                 Add >
                         </Button>
                             <br /><br />
-                            <Button bsStyle="primary" disabled={this.state.titlesToRemove == 0} onClick={this.onRemoveTitleButtonClick.bind(this)} >
+                            <Button bsStyle="primary" className="filterButton" disabled={this.state.titlesToRemove == 0} onClick={this.onRemoveTitleButtonClick.bind(this)} >
                                 Remove
                         </Button>
                         </Col>
