@@ -65,7 +65,6 @@ class RemoveDestinationModal extends React.Component
             this.setState({ isProcessing: true });            
             this.props.dispatch(destinationAction.deleteDestination(this.props.data.destinationDetails.id))
                 .then(() => {
-                    console.log(this.props.destinations);
                     this.props.handleClose();
                 }).catch(error => {
                     this.setState({ isProcessing: false });

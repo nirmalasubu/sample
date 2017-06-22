@@ -40,7 +40,6 @@ class DestinationPropertiesForm extends React.Component {
     var titleIds = this.props.data.destinationPropertiesRow.titleIds;
     titleIds = titleIds.concat(this.props.data.destinationPropertiesRow.seriesIds);
 
-    console.log(titleIds);
     if (titleIds.length > 0) {
 
       let searchPromise = searchByTitleIds(titleIds);
@@ -112,8 +111,6 @@ class DestinationPropertiesForm extends React.Component {
     this.props.data.destinationPropertiesRow.titles = titles;
     this.props.data.destinationPropertiesRow.seriesIds = seriesIds;
 
-    console.log(this.props.data.destinationPropertiesRow);
-
     this.props.handleClose();
   }
 
@@ -135,9 +132,6 @@ class DestinationPropertiesForm extends React.Component {
   }
 
   onAddTitles(titles) {
-
-    console.log(titles);
-
     var titlesToUpdate = this.state.selectedTitles;
 
     for (var t = 0; t < titles.length; t++) {

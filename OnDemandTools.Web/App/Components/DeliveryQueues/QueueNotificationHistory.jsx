@@ -32,8 +32,7 @@ class QueueNotificationHistory extends React.Component {
         this.props.dispatch(clearNotificationHistory(id));
         this.props.dispatch(fetchNotificationHistory(id));
     }
-    airingIdFormat(val, row) {
-        console.log(this.props.config);
+    airingIdFormat(val, row) {        
         return <a href={this.props.config.portalSettings.digitalFulfillmentUrl + "?assetIds=" + val } title={row.message} target="_blank"> {val} </a>
     }
 
