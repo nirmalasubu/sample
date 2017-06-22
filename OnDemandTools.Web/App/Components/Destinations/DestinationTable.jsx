@@ -12,7 +12,8 @@ import * as destinationAction from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {
     return {
-        products: store.products
+        products: store.products,
+        filterDestination: store.filterDestination
     };
 })
 
@@ -47,8 +48,10 @@ class DestinationTable extends React.Component {
 
     _setLoadingOption()
     {
-        if(this.props.RowData.length>-1)
+        if(this.props.RowData.length<=0 && this.props.filterDestination.length<=0)
             return (<div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>);
+        else
+            return(<i>There is no data to display</i>);
     }
 
     componentDidMount() {
@@ -126,6 +129,11 @@ class DestinationTable extends React.Component {
     }
 
     render() {
+        
+        if(this.props.RowData.length<=0 && this.props.filterDestination.length<=0)
+            this.state.options.noDataText = <div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>;
+        else
+            this.state.options.noDataText = <i>There is no data to display</i>;
 
         var row;
         row = this.props.ColumnData.map(function (item, index) {

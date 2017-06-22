@@ -7,7 +7,6 @@ import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
-    console.log(store.filterDestination);
     var arr = getFilterVal(store.destinations, store.filterDestination);
     return {
         destinations: store.destinations,
@@ -82,6 +81,7 @@ class DestinationPage extends React.Component {
     }
 }
 
+//filter the states using filterval
 const getFilterVal = (destinations, filterVal) => {
     if(filterVal.code!=undefined)
     {        
