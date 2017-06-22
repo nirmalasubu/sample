@@ -19,8 +19,9 @@ class AddEditDestinationDeliverables extends React.Component {
     });
   }
 
-  //
+  /// <summary>
   // Invoked immediately after this component is mounted
+  /// <summary>
   componentDidMount() {
 
     // Before starting out, record parent component's data within this 
@@ -29,6 +30,7 @@ class AddEditDestinationDeliverables extends React.Component {
       destinationDetails: this.props.data
     });
   }
+
 
   /// <summary>
   /// Add a new row for entering new deliverable info   
@@ -58,7 +60,7 @@ class AddEditDestinationDeliverables extends React.Component {
   /// <summary>
   /// Handler to close deliverable delete modal window
   /// </summary>
-  closeDeliverableDeleteModal() {
+  closeDeliverableDeleteModal = () => {
     this.setState({ showDeliverableDeleteModal: false });
   }
 
@@ -67,13 +69,6 @@ class AddEditDestinationDeliverables extends React.Component {
   /// Handler to remove deliverable at the indicated index and close deliverable delete modal window
   /// </summary>
   removeDeliverableAndCloseDeliverableDeleteModal = (index) => {
-    // var array = [];
-    // array = this.state.destinationDetails;
-    // array.properties.splice(value, 1);
-    // this.setState({ destinationDetails: array });
-    // this.props.data = this.state.destinationDetails;
-    // this.setState({ showPropertiesDeleteModal: false });
-    // this.CheckPropertyNameIsEmpty();
 
     // Remove deliverable at the indicated index and update local state
     var model = this.state.destinationDetails;
@@ -86,20 +81,8 @@ class AddEditDestinationDeliverables extends React.Component {
 
     // Bubble up validation state change to parent
     this.updateValidationStates();
-
-
-
-    // var model = this.state.destinationDetails;
-    // ;
-    // this.setState({ destinationDetails: model});
-
-    // model.deliverables[event.target.id].value = event.target.value;
-
-
-    // Bubble up validation state change to parent. State propogated depends on whether value is empty or not 
-    // event.target.value ? this.props.validationStates(false) : this.props.validationStates(true)
-
   }
+
 
   /// <summary>
   /// The idea here is to iterate through the full list of deliverables and if
@@ -107,15 +90,14 @@ class AddEditDestinationDeliverables extends React.Component {
   /// to parent
   /// </summary>
   updateValidationStates = () => {
-    this.state.destinationDetails.deliverables.forEach((deliverable) => {
 
+    var stateChanged = this.state.destinationDetails.deliverables.some((deliverable) => {
       if (!deliverable.value) {
-        this.props.validationStates(true);
-        return;
+        return true;
       }
     });
 
-    this.props.validationStates(false);
+    this.props.validationStates(stateChanged);
   }
 
 
@@ -144,20 +126,36 @@ class AddEditDestinationDeliverables extends React.Component {
       this.updateValidationStates();
     }
 
+    // Handle substitution token click
+    const subsitutionTokenClick = (index, event) => {
+
+      // Render the selected token and append it to existing value
+      var model = this.state.destinationDetails;
+      var oldValue = model.deliverables[index].value;
+      model.deliverables[index].value = oldValue + event.target.value;
+      this.setState({ destinationDetails: model });
+     
+      // Bubble up validation state change to parent. 
+      this.updateValidationStates();
+
+      // Hide the overlay
+      this.refs.overlay.hide();
+    }
+
 
     // Define the set of substitution tokens that will be available within each deliverable text box
-    const popoverValueClickRootClose = (
-      <Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
-        <span><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_ID&#125;</button></span>
-        <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_NAME&#125;</button></span>
-        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;BRAND&#125;</button></div>
-        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin">&#123;TITLE_STORYLINE&#125;</button></div>
-      </Popover>
-    );
+    const popoverValueClickRootClose = (index) => {
+      return (<Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
+        <span><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
+        <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
+        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
+        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
+      </Popover>);
+    }
 
     // Verfiy whether destination details (and related information like deliverables) are available before rendering
     if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object
@@ -172,7 +170,7 @@ class AddEditDestinationDeliverables extends React.Component {
         return (<Row key={index.toString()}>
           <Col sm={10} >
             <Form>
-              <OverlayTrigger trigger="click" rootClose placement="left" overlay={popoverValueClickRootClose}>
+              <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
                 <FormGroup validationState={isValueValid}>
                   <FormControl type="text" id={index.toString()} value={item.value} placeholder="Value" onChange={handleDeliverableValueChange.bind(this)} />
                 </FormGroup>
