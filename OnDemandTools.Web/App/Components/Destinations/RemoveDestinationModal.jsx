@@ -72,7 +72,7 @@ class RemoveDestinationModal extends React.Component
                 });
         }
         else
-            elem.props.handleClose();
+            this.props.handleClose();
     }
 
     render(){
