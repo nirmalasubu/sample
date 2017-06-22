@@ -368,3 +368,8 @@ p.shortDesc {
 {
     background-color: yellow;
 }
+
+.react-bs-table_filter {
+    margin: 0px 0px 0px 0px;
+    width:105%;
+}

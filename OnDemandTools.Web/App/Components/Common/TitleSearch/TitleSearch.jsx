@@ -90,7 +90,7 @@ class TitleSearch extends React.Component {
                             selectedItem={this.state.selectedSeriesFilter} />
                     </FormGroup>
                 </Form>
-                <Grid>
+                <Grid fluid={true}>
                     <Row>
                         <Col md={5} >
                             <ControlLabel>Available Title/Series</ControlLabel>
@@ -104,7 +104,7 @@ class TitleSearch extends React.Component {
                     </Row>
                     <Row>
                         <Col md={5} >
-                            <BootstrapTable selectRow={selectRowProp} data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' selectRow={selectRowProp} data={this.props.titleSearchResults.titles} striped hover pagination={true}>
                                 <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
@@ -122,7 +122,7 @@ class TitleSearch extends React.Component {
                         </Button>
                         </Col>
                         <Col md={5}>
-                            <BootstrapTable data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' data={this.props.titleSearchResults.titles} striped hover pagination={true}>
                                 <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
