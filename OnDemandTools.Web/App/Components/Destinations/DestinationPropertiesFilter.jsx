@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageCheckBox from 'Components/Common/ImageCheckBox';
 import TitleSearch from 'Components/Common/TitleSearch/TitleSearch';
+import { clearTitles } from 'Actions/TitleSearch/TitleSearchActions';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import { ModalDialogue } from 'react-bootstrap';
@@ -31,6 +32,7 @@ class DestinationPropertiesForm extends React.Component {
 
   resetForm() {
 
+    this.props.dispatch(clearTitles());
     var brands = [];
 
     for (var i = 0; i < this.props.config.brands.length; i++) {
