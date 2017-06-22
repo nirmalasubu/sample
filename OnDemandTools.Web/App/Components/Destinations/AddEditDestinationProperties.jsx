@@ -15,8 +15,6 @@ class AddEditDestinationProperties extends React.Component {
             isPropertyNameRequired:false,
             destinationPropertiesRow: {},
             propertyIndexToRemove:-1,
-            titleopen:[],
-            imageopen:[],
             propertyTitles:[]
         });
     }
@@ -119,40 +117,37 @@ class AddEditDestinationProperties extends React.Component {
         return title;
     }
  
-//To show/hide brands. when brands greater than 1
-ImageDetailClick(index){
-   
-    var array=this.state.imageopen;
-    array[index]=!this.state.imageopen[index];
-    this.setState({imageopen:array});
-   
-}
 
-//To construct brands. like hide the brands when brand count greater than 1
+
+//To construct brands. 
 PropertyBrandImageConstruct(item,index)
 { 
-    if(item.brands.length==1)
+    if(item.brands.length>1 && item.brands.length<=3)
     {
-        var path = "images/brands/" + item.brands[0] + ".gif";
-        return (<div class="destination-container"><img src={path} title={item.brands[0]} alt={item.brands[0]}/></div>);
+        var image=[];
+        item.brands.map(function (name, index) {
+            var path = "images/brands/" + name + ".gif";
+            image.push(<div class="destination-container"><img  src={path}  title={name} alt={name}/></div>)});
+     
+        var tag=(<div>{image}</div>);
+        return tag;
     }
-              
-if(item.brands.length>1)
-{
-    if(this.state.imageopen[index]==undefined)
-    { 
-        var array=this.state.imageopen;
-        array[index]=false; 
-        this.setState({imageopen:array});
-        this.props.imageopen=this.state.imageopen;
+
+    if(item.brands.length>3)
+    {
+        var image=[];
+        item.brands.map(function (name, index) {
+            var path = "images/brands/" + name + ".gif";
+            image.push(<div class="destination-container"><img  src={path}  title={name} alt={name}/></div>)
+            if(index==1)
+            { 
+                image.push(<div class="destination-container"><button class="btn-link destination-img-btn" type="button"> <i class="fa fa-ellipsis-h" /></button></div>)
+            }
+        });
+     
+        var tag=(<div class="destination-img">{image}</div>);
+        return tag;
     }
-    var path = "images/brands/" + item.brands[0] + ".gif";
-    var image=(<div><span class="destination-container"><img  src={path}  title={item.brands[0]} alt={item.brands[0]}/></span>
-        <button class="btn-link destination-plusbutton" type= "button" title="click for other brands"  onClick={(event) => this.ImageDetailClick(index, event)}  >
-                                <i class="fa fa-plus-square-o"></i></button></div>);
-       
-        return image;
-}
 }
 
  popoverValueClickRootClose(index)
@@ -201,13 +196,7 @@ SubsitutionTokenClick(index,event){
                     
                            <Col sm={2} >
                     {this.PropertyBrandImageConstruct(item,index)}
-                           {this.state.imageopen[index]? item.brands.map(function (name, index)
-                           {
-                               var path = "images/brands/" + name + ".gif";
-
-                               return ( index>0?<div class="destination-container"><img  src={path} title={name} alt={name} /></div>:null);
-            
-                    }):null}
+                           
                   </Col>
                   <Col sm={2} >
                   {this.TitledetailConstruct(item,index)}

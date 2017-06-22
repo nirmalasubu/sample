@@ -227,6 +227,26 @@ textarea.form-control-modal-Edit {
     white-space: normal;
     height:auto;  /* just added this line */
 }
+.destination-img-btn{
+ height: 2em;
+ margin-bottom: 11px;
+}
+.destination-img{
+    width:120px;
+    height: 2.8em; 
+    line-height: 1em; 
+    text-overflow: ellipsis;
+    margin-bottom: 12px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+}
+.destination-img:hover{
+    overflow: visible; 
+    white-space: normal;
+    height:auto;  /* just added this line */
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
