@@ -3986,18 +3986,18 @@ Routes and operations related to encoding handler resource
 
 
 
-# Message Queue
+# Group Message Queue
 
 Operations for utilizing your message queue.
 
-## Retrieve a message from your queue
+## Retrieve a message from your queue [/]
 
 ### GET [GET]
 
 Retrieving a message from your queue can be done in many ways. Please consult rabbit mq documentation on the proper way to consume your queue (https://www.rabbitmq.com/getstarted.html). Please note, that as a consumer of an ODT queue, you must **not declare** your queue, but rather simply connect to it and grab messages from it. This is important as depending on the features we set up for you as our customer, the definition of you queue may change over time.
              
     
-+ Response for an Airing you may or may not already have
++ Response 200 (application/json)
 
     + Body
     
@@ -4006,7 +4006,7 @@ Retrieving a message from your queue can be done in many ways. Please consult ra
               "Action":"Modify"
             }
 
-+ Response for an Airing you are being told to delete/remove/take down
++ Response 201 (application/json)
 
     + Body
     
