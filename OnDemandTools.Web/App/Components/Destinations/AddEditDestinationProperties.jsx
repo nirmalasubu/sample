@@ -122,7 +122,7 @@ class AddEditDestinationProperties extends React.Component {
 //To construct brands. 
 PropertyBrandImageConstruct(item,index)
 { 
-    if(item.brands.length>1 && item.brands.length<=3)
+    if(item.brands.length>=1 && item.brands.length<3)
     {
         var image=[];
         item.brands.map(function (name, index) {
@@ -133,7 +133,7 @@ PropertyBrandImageConstruct(item,index)
         return tag;
     }
 
-    if(item.brands.length>3)
+    if(item.brands.length>=3)
     {
         var image=[];
         item.brands.map(function (name, index) {
