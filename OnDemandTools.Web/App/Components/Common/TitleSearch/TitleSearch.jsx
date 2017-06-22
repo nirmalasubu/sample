@@ -17,7 +17,8 @@ class TitleSearch extends React.Component {
         this.state = {
             processing: false,
             selectedTitleTypeFilter: "",
-            selectedSeriesFilter: ""
+            selectedSeriesFilter: "",
+            titlesToRemove: []
         }
     }
 
@@ -60,10 +61,54 @@ class TitleSearch extends React.Component {
         this.props.dispatch(filterTitles(filter));
     }
 
+    onSelectedTitlesRowSelect(row, isSelected, e) {
+
+        var titlesToRemoveTemp = this.state.titlesToRemove;
+        var titleSelected = null;
+
+        for (var i = 0; i < titlesToRemoveTemp.length; i++) {
+            if (titlesToRemoveTemp[i].titleId == row.titleId) {
+                titleSelected = titlesToRemoveTemp[i];
+            }
+        }
+
+        if (isSelected) {
+            if (titleSelected == null) {
+                titlesToRemoveTemp.push(row);
+            }
+        }
+        else {
+            if (titleSelected != null) {
+                titlesToRemoveTemp.pop(titleSelected);
+            }
+        }
+        this.setState({ titlesToRemove: titlesToRemoveTemp });
+    }
+
+    onAddTitleButtonClick() {
+
+    }
+
+    onRemoveTitleButtonClick() {        
+        this.props.onRemoveTitles(this.state.titlesToRemove);
+        this.setState({titlesToRemove:[]});
+    }
+
     render() {
 
-        const selectRowProp = {
-            mode: 'checkbox'
+        const availableGridProps = {
+            mode: 'checkbox',
+            bgColor: 'yellow', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
+            hideSelectColumn: true,  // enable hide selection column.
+            clickToSelect: true  // you should enable clickToSelect, otherwise, you can't select column.
+        };
+
+        const selectedGridProps = {
+            mode: 'checkbox',
+            bgColor: 'yellow', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
+            hideSelectColumn: true,  // enable hide selection column.
+            clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
+            onSelect: this.onSelectedTitlesRowSelect.bind(this)
         };
 
         return (
@@ -104,7 +149,12 @@ class TitleSearch extends React.Component {
                     </Row>
                     <Row>
                         <Col md={5} >
-                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' selectRow={selectRowProp} data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                            <BootstrapTable
+                                containerStyle={{ margin: 0 }}
+                                tableContainerClass='react-bs-table_filter'
+                                selectRow={availableGridProps}
+                                data={this.props.titleSearchResults.titles}
+                                striped hover pagination={true}>
                                 <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
@@ -113,16 +163,21 @@ class TitleSearch extends React.Component {
                             </BootstrapTable>
                         </Col>
                         <Col md={1}>
-                            <Button bsStyle="primary" >
+                            <Button bsStyle="primary">
                                 Add >
                         </Button>
                             <br /><br />
-                            <Button bsStyle="primary" >
+                            <Button bsStyle="primary" onClick={this.onRemoveTitleButtonClick.bind(this)} >
                                 Remove
                         </Button>
                         </Col>
                         <Col md={5}>
-                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' data={this.props.selectedTitles} striped hover pagination={true}>
+                            <BootstrapTable
+                                containerStyle={{ margin: 0 }}
+                                tableContainerClass='react-bs-table_filter'
+                                selectRow={selectedGridProps}
+                                data={this.props.selectedTitles}
+                                striped hover pagination={true}>
                                 <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>

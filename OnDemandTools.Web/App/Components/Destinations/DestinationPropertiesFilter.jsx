@@ -86,6 +86,29 @@ class DestinationPropertiesForm extends React.Component {
     this.props.handleClose();
   }
 
+  onRemoveTitles(titles) {
+
+    var titlesToUpdate = this.state.selectedTitles;
+
+    for (var t = 0; t < titles.length; t++) {
+      var titleToRemove = null;
+      for (var titleIdx = 0; titleIdx < titlesToUpdate.length; titleIdx++) {
+        if (titlesToUpdate[titleIdx].titleId == titles[t].titleId) {
+          titleToRemove = titlesToUpdate[titleIdx];
+        }
+      }
+      if (titleToRemove != null) {
+        titlesToUpdate.pop(titleToRemove);
+      }
+    }
+
+    this.setState({selectedTitles: titlesToUpdate});
+  }
+
+  onAddTitles(titles) {
+
+  }
+
   render() {
 
     var rows = [];
@@ -111,7 +134,11 @@ class DestinationPropertiesForm extends React.Component {
             {rows}
             <hr />
             <ControlLabel>Title/Series Associations</ControlLabel>
-            <TitleSearch selectedTitles={this.state.selectedTitles} />
+            <TitleSearch
+              selectedTitles={this.state.selectedTitles}
+              onAddTitles={this.onAddTitles.bind(this)}
+              onRemoveTitles={this.onRemoveTitles.bind(this)}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>
