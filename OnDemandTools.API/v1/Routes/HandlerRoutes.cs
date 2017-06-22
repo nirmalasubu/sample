@@ -308,20 +308,22 @@ namespace OnDemandTools.API.v1.Routes
                         {   
                             foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
                             {
-                                if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
-                                    playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
-                                }
-                                else if (string.IsNullOrEmpty(pt.Source.Brand)) {
-                                    playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
-                                }
+                                playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt, airing);
                             }
                         }
                 }
             }
         }
 
-        private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt) {
-            return sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+        private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt, Airing airing) {
+            var result = "";
+            if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
+                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+            }
+            else if (string.IsNullOrEmpty(pt.Source.Brand)) {
+                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+            }
+            return result;
         }
 
         /// <summary>
