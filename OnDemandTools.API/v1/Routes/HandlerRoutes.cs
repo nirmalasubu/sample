@@ -297,6 +297,7 @@ namespace OnDemandTools.API.v1.Routes
         {
             // Get an asset (the first one in the list) with the given media id
             var airing = _airingSvc.GetByMediaId(file.MediaId).FirstOrDefault();
+            var pathings = _pathingSvc.GetAll();                            
 
             foreach (var media in file.MediaCollection)
             {
@@ -304,10 +305,8 @@ namespace OnDemandTools.API.v1.Routes
                 {
                     var sourceUrl = playlist.BucketURL;                    
                         if (!string.IsNullOrEmpty(sourceUrl))
-                        {
-                            var pathings = _pathingSvc.GetAll();                            
-                            
-                            foreach (var pt in pathings)
+                        {   
+                            foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
                             {
                                 if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
                                     playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
@@ -322,11 +321,7 @@ namespace OnDemandTools.API.v1.Routes
         }
 
         private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt) {
-            var result = "";
-            if (sourceUrl.StartsWith(pt.Source.BaseUrl)) {
-                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
-            }            
-            return result;
+            return sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
         }
 
         /// <summary>
