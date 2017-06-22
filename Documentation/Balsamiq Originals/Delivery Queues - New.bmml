@@ -1,0 +1,168 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1038" measuredH="779" mockupW="1024" mockupH="768">
+  <controls>
+    <control controlID="294" controlTypeID="com.balsamiq.mockups::Label" x="168" y="241" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Requestor%3A%20Cea%20Mosley</text>
+      </controlProperties>
+    </control>
+    <control controlID="295" controlTypeID="com.balsamiq.mockups::Label" x="168" y="261" w="256" h="-1" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Requestor%20Email%3A%20Cea.Mosley@Turner.com</text>
+      </controlProperties>
+    </control>
+    <control controlID="300" controlTypeID="com.balsamiq.mockups::Label" x="562" y="241" w="150" h="-1" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Client%20Remote%20Name%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="301" controlTypeID="com.balsamiq.mockups::Label" x="694" y="241" w="260" h="-1" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>cf687428-c1ab-4874-9aa0-34afe550ddf0</text>
+      </controlProperties>
+    </control>
+    <control controlID="302" controlTypeID="com.balsamiq.mockups::Label" x="562" y="261" w="197" h="-1" measuredW="0" measuredH="0" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ODT%20Remote%20Routing%20Key%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="303" controlTypeID="com.balsamiq.mockups::Label" x="727" y="261" w="271" h="-1" measuredW="0" measuredH="0" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>9b48dda0-2d88-44d9-b938-a6e79ba256e3</text>
+      </controlProperties>
+    </control>
+    <control controlID="311" controlTypeID="com.balsamiq.mockups::TabBar" x="162" y="413" w="839" h="265" measuredW="0" measuredH="0" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Criteria%2C%20Options%2C%20Notifications</text>
+      </controlProperties>
+    </control>
+    <control controlID="322" controlTypeID="__group__" x="168" y="302" w="366" h="42" measuredW="0" measuredH="0" zOrder="9" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="194" h="-1" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="322">
+          <controlProperties>
+            <text>Queue%20Name%3A*</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::TextInput" x="0" y="18" w="366" h="-1" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="322">
+          <controlProperties>
+            <text/>
+            <textColor>0</textColor>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="323" controlTypeID="com.balsamiq.mockups::Label" x="562" y="357" w="366" h="-1" measuredW="0" measuredH="0" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Advanced%20Delivery%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="324" controlTypeID="com.balsamiq.mockups::TextInput" x="562" y="375" w="366" h="-1" measuredW="0" measuredH="0" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <textColor>0</textColor>
+      </controlProperties>
+    </control>
+    <control controlID="325" controlTypeID="com.balsamiq.mockups::Icon" x="675" y="359" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>info-circle%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="326" controlTypeID="__group__" x="562" y="302" w="366" h="42" measuredW="0" measuredH="0" zOrder="13" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="193" h="-1" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="326">
+          <controlProperties>
+            <text>Contact%20Email%3A</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::TextInput" x="0" y="18" w="366" h="-1" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="326">
+          <controlProperties>
+            <text>Cea.Mosley@Turner.com</text>
+            <textColor>0</textColor>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="327" controlTypeID="com.balsamiq.mockups::Icon" x="650" y="303" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>info-circle%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="328" controlTypeID="com.balsamiq.mockups::CheckBox" x="168" y="367" w="297" h="22" measuredW="0" measuredH="0" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Activate%20queue%20to%20receive%20notifications</text>
+      </controlProperties>
+    </control>
+    <control controlID="329" controlTypeID="com.balsamiq.mockups::Icon" x="416" y="370" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>info-circle%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="333" controlTypeID="__group__" x="856" y="686" w="141" h="24" measuredW="0" measuredH="0" zOrder="17" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Button" x="0" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="333">
+          <controlProperties>
+            <text>Cancel</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Button" x="70" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="333">
+          <controlProperties>
+            <text>Request</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="335" controlTypeID="com.balsamiq.mockups::Canvas" x="240" y="416" w="52" h="22" measuredW="0" measuredH="0" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="336" controlTypeID="com.balsamiq.mockups::Canvas" x="301" y="416" w="73" h="22" measuredW="0" measuredH="0" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="337" controlTypeID="com.balsamiq.mockups::Component" x="14" y="11" w="1024" h="768" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20DeliveryQueues</src>
+      </controlProperties>
+    </control>
+    <control controlID="338" controlTypeID="com.balsamiq.mockups::Component" x="31" y="123" w="981" h="74" measuredW="0" measuredH="0" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="1">
+          <text>ODT%20-%20Request%20New%20Delivery%20Queue</text>
+        </override>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Deliver%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="339" controlTypeID="com.balsamiq.mockups::Component" x="36" y="225" w="981" h="515" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="340" controlTypeID="com.balsamiq.mockups::Component" x="185" y="473" w="792" h="176" measuredW="0" measuredH="0" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="15" w="792" h="161">
+          <text/>
+        </override>
+        <override controlID="1" x="0" y="1" w="93" h="21"/>
+        <override controlID="2" x="776" y="15" w="16" h="161"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Query%20Syntax%20Tester</src>
+      </controlProperties>
+    </control>
+    <control controlID="341" controlTypeID="com.balsamiq.mockups::CallOut" x="385" y="95" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TIED%20TO%20STORY%20%235%20LINK%20FROM%20MAIN%20GRID</text>
+      </controlProperties>
+    </control>
+    <control controlID="342" controlTypeID="com.balsamiq.mockups::CallOut" x="448" y="399" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>40463</color>
+        <text>19%20-%20gives%20empty%20fields%20except%20email</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,34 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1151" measuredH="767" mockupW="1029" mockupH="675">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="122" y="92" w="1029" h="675" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>36</bottomheight>
+        <size>20</size>
+        <text>%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20ODT%20Home%20</text>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Image" x="130" y="99" w="114" h="66" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/ODT%25202.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::VRule" x="258" y="169" w="-1" h="566" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Paragraph" x="276" y="143" w="209" h="22" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ODT%20Manager%20Dashboard%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::DateChooser" x="449" y="137" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%20%20/%20%20/%20%20%20%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::TextArea" x="268" y="178" w="386" h="250" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <italic>false</italic>
+        <text>Status%20of%20Requests%3A%0A%09New%20Destination%20Request%20-%20JSmith%20-%20In%20Process%0A%09%0A%09New%20Prduct%20Request%20-%20JDoe%20-%20Complete</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,93 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1024" measuredH="781" mockupW="1024" mockupH="768">
+  <controls>
+    <control controlID="231" controlTypeID="com.balsamiq.mockups::Component" x="0" y="13" w="1024" h="768" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20Permission</src>
+      </controlProperties>
+    </control>
+    <control controlID="232" controlTypeID="com.balsamiq.mockups::Component" x="30" y="102" w="934" h="74" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Permissions</src>
+      </controlProperties>
+    </control>
+    <control controlID="233" controlTypeID="com.balsamiq.mockups::Component" x="22" y="231" w="981" h="515" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="981" h="515"/>
+        <override controlID="2" x="0" y="134" w="98" h="22"/>
+        <override controlID="3" x="0" y="108" w="99" h="22"/>
+        <override controlID="4" x="0" y="79" w="99" h="22"/>
+        <override controlID="5" x="0" y="50" w="102" h="22"/>
+        <override controlID="1" x="1" y="23" w="102" h="22"/>
+        <override controlID="10" x="0" y="136" w="116" h="22"/>
+        <override controlID="11" x="0" y="110" w="116" h="22"/>
+        <override controlID="12" x="0" y="81" w="116" h="22"/>
+        <override controlID="13" x="0" y="52" w="116" h="22"/>
+        <override controlID="14" x="0" y="22" w="116" h="22"/>
+        <override controlID="9" x="2" y="166" w="114" h="22"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="234" controlTypeID="com.balsamiq.mockups::Component" x="128" y="174" w="875" h="46" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="59" h="21"/>
+        <override controlID="2" x="828" y="25" w="47" h="21"/>
+        <override controlID="3" x="72" y="19" w="227" h="24"/>
+        <override controlID="4" x="567" y="0" w="108" h="21"/>
+        <override controlID="5" x="567" y="19" w="237" h="24"/>
+        <override controlID="6" x="317" y="0" w="75" h="21"/>
+        <override controlID="7" x="317" y="19" w="227" h="24"/>
+        <override controlID="1" x="72" y="0" w="73" h="21"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Filter%20-%20Permissions</src>
+      </controlProperties>
+    </control>
+    <control controlID="235" controlTypeID="__group__" x="320" y="304" w="478" h="228" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::ModalScreen" x="0" y="0" w="478" h="228" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="235"/>
+        <control controlID="1" controlTypeID="__group__" x="16" y="26" w="446" h="165" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="235">
+          <groupChildrenDescriptors>
+            <control controlID="0" controlTypeID="com.balsamiq.mockups::TextArea" x="0" y="0" w="446" h="165" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="1">
+              <controlProperties>
+                <text>%20%0AYou%20are%20about%20to%20deactivate%20the%20user%20%22Marco%20Botton%22.%20Do%20you%20wish%20to%20continue%3F</text>
+              </controlProperties>
+            </control>
+            <control controlID="1" controlTypeID="com.balsamiq.mockups::Button" x="114" y="113" w="97" h="24" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="1">
+              <controlProperties>
+                <text>Cancel</text>
+              </controlProperties>
+            </control>
+            <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="235" y="113" w="130" h="24" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="1">
+              <controlProperties>
+                <href>Destination%20-%20Main%26bm%3BDestination%20-%20Main.bmml%26bm%3BDestination%20-%20Main.bmml%26bm%3BDestination%20-%20Main.bmml</href>
+                <text>Deactivate</text>
+              </controlProperties>
+            </control>
+          </groupChildrenDescriptors>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="236" controlTypeID="com.balsamiq.mockups::Component" x="148" y="260" w="833" h="317" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="833" h="317"/>
+        <override controlID="-1"/>
+        <override controlID="0:0" x="747" y="0" w="83" h="21"/>
+        <override controlID="0:4" x="786" y="137" w="16" h="16"/>
+        <override controlID="0:10" x="804" y="164" w="24" h="24"/>
+        <override controlID="0:1" x="0" y="21" w="833" h="275"/>
+        <override controlID="0:8" x="804" y="73" w="24" h="24"/>
+        <override controlID="0:9" x="804" y="134" w="24" h="24"/>
+        <override controlID="0:7" x="786" y="48" w="16" h="16"/>
+        <override controlID="0:14" x="0" y="296" w="132" h="21"/>
+        <override controlID="0:13" x="804" y="103" w="24" h="24"/>
+        <override controlID="0:5" x="786" y="168" w="16" h="16"/>
+        <override controlID="0:2" x="786" y="76" w="16" h="16"/>
+        <override controlID="0:11" x="804" y="194" w="24" h="24"/>
+        <override controlID="0:3" x="786" y="107" w="16" h="16"/>
+        <override controlID="0:6" x="786" y="198" w="16" h="16"/>
+        <override controlID="0:12" x="804" y="43" w="24" h="24"/>
+        <src>./assets/Project%20Symbols.bmml#Grid%20-%20Permissions</src>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,265 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1062" measuredH="780" mockupW="1024" mockupH="768">
+  <controls>
+    <control controlID="216" controlTypeID="com.balsamiq.mockups::Label" x="810" y="569" w="57" h="-1" measuredW="10" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>10066329</color>
+        <text>2</text>
+      </controlProperties>
+    </control>
+    <control controlID="294" controlTypeID="__group__" x="880" y="691" w="122" h="24" measuredW="122" measuredH="24" zOrder="4" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Button" x="0" y="0" w="-1" h="-1" measuredW="62" measuredH="24" zOrder="0" locked="false" isInGroup="294">
+          <controlProperties>
+            <text>Cancel</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Button" x="72" y="0" w="-1" h="-1" measuredW="50" measuredH="24" zOrder="1" locked="false" isInGroup="294">
+          <controlProperties>
+            <href>Destination%20-%20Main%26bm%3BDestination%20-%20Main.bmml%26bm%3BDestination%20-%20Main.bmml%26bm%3BDestination%20-%20Main.bmml</href>
+            <text>Save</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="308" controlTypeID="__group__" x="678" y="302" w="331" h="132" measuredW="331" measuredH="132" zOrder="6" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="85" h="-1" measuredW="76" measuredH="21" zOrder="0" locked="false" isInGroup="308">
+          <controlProperties>
+            <text>Description%3A*</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::TextArea" x="0" y="21" w="331" h="111" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="308">
+          <controlProperties>
+            <text>AND%20Comcast%20boxes%20</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="309" controlTypeID="__group__" x="206" y="302" w="201" h="42" measuredW="201" measuredH="42" zOrder="7" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="127" h="-1" measuredW="41" measuredH="21" zOrder="0" locked="false" isInGroup="309">
+          <controlProperties>
+            <text>Code%3A*</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::TextInput" x="0" y="18" w="201" h="-1" measuredW="47" measuredH="24" zOrder="1" locked="false" isInGroup="309">
+          <controlProperties>
+            <text>ANDC</text>
+            <textColor>0</textColor>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="310" controlTypeID="com.balsamiq.mockups::Label" x="206" y="244" w="138" h="-1" measuredW="138" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Requestor%3A%20Cea%20Mosley</text>
+      </controlProperties>
+    </control>
+    <control controlID="311" controlTypeID="com.balsamiq.mockups::Label" x="206" y="267" w="249" h="-1" measuredW="249" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Requestor%20Email%3A%20Cea.Mosley@Turner.com</text>
+      </controlProperties>
+    </control>
+    <control controlID="319" controlTypeID="com.balsamiq.mockups::Canvas" x="222" y="448" w="73" h="19" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="351" controlTypeID="com.balsamiq.mockups::Link" x="883" y="484" w="-1" h="-1" measuredW="111" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Add%20New%20Category</text>
+      </controlProperties>
+    </control>
+    <control controlID="362" controlTypeID="__group__" x="206" y="385" w="102" h="22" measuredW="102" measuredH="22" zOrder="10" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::CheckBox" x="0" y="0" w="-1" h="-1" measuredW="102" measuredH="22" zOrder="0" locked="false" isInGroup="362">
+          <controlProperties>
+            <text>Audit%20Delivery</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="3" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="362">
+          <controlProperties>
+            <icon>check-square-o%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="363" controlTypeID="com.balsamiq.mockups::TextInput" x="227" y="513" w="615" h="-1" measuredW="79" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <textColor>0</textColor>
+      </controlProperties>
+    </control>
+    <control controlID="364" controlTypeID="com.balsamiq.mockups::Label" x="227" y="496" w="66" h="-1" measuredW="38" measuredH="21" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Name%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="367" controlTypeID="com.balsamiq.mockups::TextInput" x="227" y="544" w="615" h="-1" measuredW="79" measuredH="24" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <textColor>0</textColor>
+      </controlProperties>
+    </control>
+    <control controlID="370" controlTypeID="com.balsamiq.mockups::TextInput" x="227" y="575" w="615" h="-1" measuredW="79" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <textColor>0</textColor>
+      </controlProperties>
+    </control>
+    <control controlID="373" controlTypeID="com.balsamiq.mockups::TextInput" x="227" y="606" w="615" h="-1" measuredW="79" measuredH="24" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <textColor>0</textColor>
+      </controlProperties>
+    </control>
+    <control controlID="376" controlTypeID="com.balsamiq.mockups::StickyNote" x="211" y="691" w="530" h="71" measuredW="109" measuredH="123" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>Since%20we%20already%20know%20the%20destination%20code%20associated%20with%20the%20properties%20and%20deliverables%20in%20the%20DB%2C%20we%20can%20show%20them%20here%20dynamically.%20%20User%20has%20the%20ability%20to%20add%20or%20remove%20from%20this%20area.</text>
+      </controlProperties>
+    </control>
+    <control controlID="386" controlTypeID="__group__" x="473" y="302" w="126" h="39" measuredW="126" measuredH="39" zOrder="18" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="0" y="0" w="126" h="-1" measuredW="51" measuredH="21" zOrder="0" locked="false" isInGroup="386">
+          <controlProperties>
+            <text>Content%3A</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="21" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="386">
+          <controlProperties>
+            <icon>television%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="23" y="18" w="-1" h="-1" measuredW="64" measuredH="21" zOrder="2" locked="false" isInGroup="386">
+          <controlProperties>
+            <text>2%20selected</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="393" controlTypeID="__group__" x="416" y="326" w="137" h="87" measuredW="137" measuredH="87" zOrder="19" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="21" w="137" h="66" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="393">
+          <controlProperties>
+            <color>15658734</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="49" y="0" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="393">
+          <controlProperties>
+            <icon>angle-up%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="9" y="32" w="42" h="40" measuredW="42" measuredH="39" zOrder="2" locked="false" isInGroup="393">
+          <controlProperties>
+            <text>%5B%20%5D%20HD%20%0A%5B%20%5D%20SD</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="67" y="32" w="66" h="49" measuredW="66" measuredH="61" zOrder="3" locked="false" isInGroup="393">
+          <controlProperties>
+            <text>%5B%20%5D%20C3%20%0A%5B%20%5D%20Non-C3%0A%20%20</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="9" y="31" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="4" locked="false" isInGroup="393">
+          <controlProperties>
+            <icon>check%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="9" y="54" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="5" locked="false" isInGroup="393">
+          <controlProperties>
+            <icon>check%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="403" controlTypeID="com.balsamiq.mockups::Component" x="38" y="12" w="1024" h="768" measuredW="1024" measuredH="768" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20Destination</src>
+      </controlProperties>
+    </control>
+    <control controlID="404" controlTypeID="com.balsamiq.mockups::Component" x="59" y="228" w="981" h="515" measuredW="981" measuredH="515" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="981" h="515"/>
+        <override controlID="2" x="0" y="134" w="98" h="22"/>
+        <override controlID="3" x="0" y="108" w="99" h="22"/>
+        <override controlID="4" x="2" y="24" w="99" h="22"/>
+        <override controlID="5" x="0" y="50" w="102" h="22"/>
+        <override controlID="6" x="0" y="192" w="116" h="22"/>
+        <override controlID="7" x="0" y="22" w="116" h="22"/>
+        <override controlID="1" x="2" y="164" w="115" h="22"/>
+        <override controlID="10" x="0" y="136" w="116" h="22"/>
+        <override controlID="11" x="0" y="110" w="116" h="22"/>
+        <override controlID="12" x="0" y="22" w="116" h="22"/>
+        <override controlID="13" x="0" y="52" w="116" h="22"/>
+        <override controlID="14" x="0" y="194" w="116" h="22"/>
+        <override controlID="9" x="2" y="166" w="114" h="22"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="405" controlTypeID="com.balsamiq.mockups::Component" x="59" y="109" w="978" h="80" measuredW="978" measuredH="80" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="1">
+          <text>ODT%20-%20Edit%20Destination%20%3Cdestination%20name%3E</text>
+        </override>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Destinations</src>
+      </controlProperties>
+    </control>
+    <control controlID="406" controlTypeID="com.balsamiq.mockups::Component" x="852" y="610" w="144" h="17" measuredW="144" measuredH="17" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Widget%20-%20Content%20Tier</src>
+      </controlProperties>
+    </control>
+    <control controlID="407" controlTypeID="com.balsamiq.mockups::Component" x="852" y="579" w="144" h="17" measuredW="144" measuredH="17" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Widget%20-%20Content%20Tier</src>
+      </controlProperties>
+    </control>
+    <control controlID="408" controlTypeID="com.balsamiq.mockups::Component" x="852" y="548" w="144" h="17" measuredW="144" measuredH="17" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Widget%20-%20Content%20Tier</src>
+      </controlProperties>
+    </control>
+    <control controlID="409" controlTypeID="com.balsamiq.mockups::Component" x="852" y="517" w="144" h="17" measuredW="144" measuredH="17" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Widget%20-%20Content%20Tier</src>
+      </controlProperties>
+    </control>
+    <control controlID="410" controlTypeID="com.balsamiq.mockups::Component" x="200" y="444" w="802" h="241" measuredW="802" measuredH="241" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Destination%20Tabs</src>
+      </controlProperties>
+    </control>
+    <control controlID="411" controlTypeID="com.balsamiq.mockups::Canvas" x="299" y="448" w="73" h="19" measuredW="100" measuredH="70" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>13421772</color>
+      </controlProperties>
+    </control>
+    <control controlID="412" controlTypeID="com.balsamiq.mockups::StickyNote" x="1078" y="30" w="705" h="339" measuredW="109" measuredH="123" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <size>16</size>
+        <text>should%20we%20check%20if%20rights%20has%20been%20taken%20care%20of%20when%20the%20%5BRequest%5D%20action%20has%20been%20clicked%3F%0AUpon%20approval%2C%20we%20can%20let%20Guardian%20know%20it%20has%20been%20approved%20for%20Rights%20needs.%20do%20We%20have%20to%20make%20sure%20the%20mapping%20is%20taking%20place%20during%20the%20approval%20process%20or%20that%20is%20what%20the%20approval%20process%20does%20at%20the%20detail%20level.%0A%20%0AWe%20can%27t%20approve%20the%20product%20content%20tiers%20along%20with%20the%20product.%20The%20notification%20for%20a%20pending%20approval%20will%20not%20be%20sent%20JUST%20for%20the%20content%20tier%20area%20since%20we%20are%20trying%20to%20hand%20over%20control%20of%20that%20area%20to%20TCD.%0A%20%0AIf%20a%20destination%20is%20inactive%20and%20it%20is%20being%20removed%20from%20the%20mapping%2C%20thats%20all%20Guardian%20is%20worried%20about.%20Guardian%20doesn%27t%20really%20care%20what%20changed.%20They%20just%20need%20a%20queue%20message%20saying%20something%20has%20changed.</text>
+      </controlProperties>
+    </control>
+    <control controlID="413" controlTypeID="com.balsamiq.mockups::StickyNote" x="1069" y="407" w="496" h="123" measuredW="109" measuredH="123" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>I%20need%20to%20create%20the%20category%20main%20grid%2C%20edit%2C%20new%20and%20put%20those%20into%20destination.%0AFigure%20out%20a%20way%20to%20add%20more%20than%20one%20and%20build%20the%20category%20string%20before%20adding%20it%20to%20the%20grid.%0ACategory%20strings%20do%20not%20need%20approval%2C%20just%20like%20content%20tiers%20doesn%27t%20need%20to%20be%20approved</text>
+      </controlProperties>
+    </control>
+    <control controlID="414" controlTypeID="com.balsamiq.mockups::CallOut" x="496" y="477" w="-1" h="-1" measuredW="287" measuredH="39" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>13%20-%20add%20categories%20tab%20content%20WITH%20filters</text>
+      </controlProperties>
+    </control>
+    <control controlID="415" controlTypeID="com.balsamiq.mockups::StickyNote" x="678" y="548" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>add%20scroll%20bar%0Aadd%20search%20functionality</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

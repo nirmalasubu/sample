@@ -1,0 +1,76 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1060" measuredH="792" mockupW="1024" mockupH="768">
+  <controls>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::CallOut" x="1087" y="67" w="632" h="234" measuredW="0" measuredH="0" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13576743</color>
+        <text>For%20every%20process%20that%20is%20considered%20a%20request%2C%20we%20need%20to%20have%20an%20administrative%20area%20for%20the%20ODT%20team%20to%20use%20in%20order%20to%20process%20those%20requests.%20%0AFor%20example%3A%20if%20someone%20requests%20a%20new%20destination%20that%20should%20go%20to%20privileged%20users%2C%20like%20data%20city%2C%20we%20should%20have%20a%20way%20in%20the%20UI%20to%20programmatically%20kicked%20that%20process%20off%20so%20that%20the%20privileged%20users%20don%27t%20have%20to%20manually%20add%20those%20items.%20In%20the%20past%2C%20they%20have%20been%20forgotten.%0AI%20am%20building%20a%20list%20of%20admin%20functional%20areas%20that%20we%20will%20need%20so%20I%20can%20start%20figuring%20out%20how%20to%20tackle%20them%20in%20the%20UI.%20So%20based%20on%20the%20conversation%20we%20had%20yesterday%20about%20the%20admin%20area%20for%20the%20portal%20while%20you%20were%20in%20Cea%27s%20office....%0AThe%20following%20areas%20will%20need%20to%20be%20accounted%20for%3A%0A1.%20A%20request%20by%20a%20user%20to%20create%20a%20destination%0A2.%20A%20request%20by%20a%20user%20to%20create%20a%20product%0A3.%20A%20way%20to%20kickoff%20a%20process%20for%20adding%20a%20new%20destination%20to%20a%20privileged%20users%20group%20of%20destination%0A4.%20A%20request%20by%20a%20user%20to%20create%20a%20new%20delivery%20queue%0A5.%20A%20request%20by%20a%20user%20to%20create%20a%20workflow%20status</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::Component" x="36" y="24" w="1024" h="768" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20Pending%20Requests</src>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Component" x="58" y="117" w="981" h="74" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Pending%20Requests</src>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Component" x="58" y="221" w="981" h="515" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="981" h="515"/>
+        <override controlID="9" x="3" y="23" w="114" h="22"/>
+        <override controlID="10" x="0" y="136" w="116" h="22"/>
+        <override controlID="11" x="0" y="110" w="116" h="22"/>
+        <override controlID="12" x="0" y="81" w="116" h="22"/>
+        <override controlID="13" x="0" y="52" w="116" h="22"/>
+        <override controlID="14" x="0" y="194" w="116" h="22">
+          <backgroundAlpha>0.75</backgroundAlpha>
+        </override>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="69" controlTypeID="com.balsamiq.mockups::Component" x="199" y="242" w="817" h="471" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="817" h="471"/>
+        <override controlID="1" x="106" y="2" w="59" h="25"/>
+        <override controlID="2" x="22" y="2" w="81" h="25"/>
+        <override controlID="3" x="170" y="2" w="73" h="22"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Requests%20tabs</src>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::Component" x="436" y="666" w="342" h="25" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Pagination</src>
+      </controlProperties>
+    </control>
+    <control controlID="83" controlTypeID="com.balsamiq.mockups::Icon" x="222" y="319" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13576743</color>
+        <icon>arrow-down%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="85" controlTypeID="com.balsamiq.mockups::Component" x="222" y="305" w="766" h="322" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0">
+          <text>Status%20Name%2C%20Contact%20Name%20%5E%2C%20Contact%20Email%2C%20Date%20Requested%20%5Ev%0A%2C%20Sharon%20Chestnut%2C%20sharon.chestnut@turner.com%2C%2003/20/2017%207%3A02%3A12%20AM%20%0A%2C%20Dianne%20Soimers%2C%20dsoimer@encode.com%2C%2003/20/2017%207%3A09%3A12%20AM%20%0A%2C%20Lacy%20Cartwright%2C%20lcartwright@encode.com%2C%2003/21/2017%207%3A09%3A12%20AM%20%0A%2C%20John%20Snow%2C%20john.snow@turner.com%2C%2003/21/2017%207%3A19%3A12%20AM%20%0A%2C%20Rick%20Grimes%2C%20thangsNStuff@turner.com%2C%2003/21/2017%207%3A29%3A12%20AM%0A%2C%20Walter%20White%2C%20ww@encode.com%2C%2003/22/2017%202%3A09%3A12%20PM%20%20%0A%2C%20Dean%20Winchester%2C%20eye_of_the_tiger@turner.com%2C%2003/23/2017%207%3A09%3A12%20AM%20%0A%2C%20Sam%20Winchester%2C%20horribleActing@turner.com%2C%2003/23/2017%207%3A10%3A13%20AM%20%0A%2C%20Jax%20Teller%2C%20jackson.teller@samcro.com%2C%2003/23/2017%207%3A11%3A12%20AM%0A%2C%20Gemma%20Teller%2C%20stage4clinger@samcro.com%2C%2003/23/2017%207%3A29%3A12%20AM%20%20%0A%7B20%2C40%2C%2050%2C%200%7D</text>
+        </override>
+        <override controlID="2">
+          <text>MEDIUM</text>
+        </override>
+        <override controlID="3">
+          <text>ENCODE</text>
+        </override>
+        <override controlID="4">
+          <text>CMA</text>
+        </override>
+        <override controlID="5">
+          <text>TBS</text>
+        </override>
+        <src>./assets/Project%20Symbols.bmml#Request%20Grid%20-%20generic</src>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

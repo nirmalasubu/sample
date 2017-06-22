@@ -1,0 +1,181 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1042" measuredH="790" mockupW="1024" mockupH="768">
+  <controls>
+    <control controlID="332" controlTypeID="com.balsamiq.mockups::Icon" x="946" y="286" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13576743</color>
+        <icon>arrow-down%7Clarge</icon>
+      </controlProperties>
+    </control>
+    <control controlID="336" controlTypeID="com.balsamiq.mockups::Component" x="18" y="22" w="1024" h="768" measuredW="1024" measuredH="768" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20DeliveryQueues</src>
+      </controlProperties>
+    </control>
+    <control controlID="337" controlTypeID="com.balsamiq.mockups::Component" x="147" y="176" w="805" h="45" measuredW="805" measuredH="45" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Filter%20-%20Delivery%20Queues</src>
+      </controlProperties>
+    </control>
+    <control controlID="339" controlTypeID="com.balsamiq.mockups::Component" x="167" y="254" w="827" h="435" measuredW="827" measuredH="435" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Grid%20-%20Delivery%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="340" controlTypeID="com.balsamiq.mockups::Component" x="930" y="334" w="48" h="16" measuredW="48" measuredH="16" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Grid%20Actions%20-%20Delivery%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="341" controlTypeID="com.balsamiq.mockups::Component" x="930" y="424" w="48" h="16" measuredW="48" measuredH="16" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Grid%20Actions%20-%20Delivery%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="342" controlTypeID="com.balsamiq.mockups::Component" x="930" y="499" w="48" h="16" measuredW="48" measuredH="16" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Grid%20Actions%20-%20Delivery%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="343" controlTypeID="com.balsamiq.mockups::Component" x="930" y="575" w="48" h="16" measuredW="48" measuredH="16" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Grid%20Actions%20-%20Delivery%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="349" controlTypeID="__group__" x="673" y="598" w="123" h="24" measuredW="123" measuredH="24" zOrder="8" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Button" x="0" y="0" w="-1" h="-1" measuredW="62" measuredH="24" zOrder="0" locked="false" isInGroup="349">
+          <controlProperties>
+            <text>Cancel</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Button" x="73" y="0" w="-1" h="-1" measuredW="50" measuredH="24" zOrder="1" locked="false" isInGroup="349">
+          <controlProperties>
+            <text>Save</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="352" controlTypeID="com.balsamiq.mockups::Component" x="31" y="105" w="978" h="80" measuredW="978" measuredH="80" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Deliver%20Queue</src>
+      </controlProperties>
+    </control>
+    <control controlID="353" controlTypeID="com.balsamiq.mockups::Component" x="31" y="237" w="981" h="515" measuredW="981" measuredH="515" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="355" controlTypeID="com.balsamiq.mockups::Component" x="383" y="696" w="342" h="25" measuredW="342" measuredH="25" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Pagination</src>
+      </controlProperties>
+    </control>
+    <control controlID="370" controlTypeID="com.balsamiq.mockups::CallOut" x="524" y="102" w="-1" h="-1" measuredW="264" measuredH="39" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TIED%20TO%20STORY%20%2313%20LINK%20FROM%20MAIN%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="373" controlTypeID="com.balsamiq.mockups::Button" x="725" y="679" w="-1" h="-1" measuredW="85" measuredH="24" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Run%20Query</text>
+      </controlProperties>
+    </control>
+    <control controlID="374" controlTypeID="com.balsamiq.mockups::Button" x="653" y="680" w="-1" h="-1" measuredW="62" measuredH="24" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cancel</text>
+      </controlProperties>
+    </control>
+    <control controlID="377" controlTypeID="com.balsamiq.mockups::ModalScreen" x="293" y="260" w="565" h="462" measuredW="318" measuredH="240" zOrder="13" locked="false" isInGroup="-1"/>
+    <control controlID="378" controlTypeID="com.balsamiq.mockups::Canvas" x="313" y="285" w="513" h="427" measuredW="100" measuredH="70" zOrder="14" locked="false" isInGroup="-1"/>
+    <control controlID="379" controlTypeID="com.balsamiq.mockups::Label" x="324" y="445" w="127" h="-1" measuredW="106" measuredH="21" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Starting%20between%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="380" controlTypeID="__group__" x="451" y="443" w="130" h="24" measuredW="130" measuredH="24" zOrder="16" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::TextInput" x="0" y="0" w="111" h="-1" measuredW="79" measuredH="24" zOrder="0" locked="false" isInGroup="380">
+          <controlProperties>
+            <text/>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="114" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="380">
+          <controlProperties>
+            <icon>calendar%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="381" controlTypeID="com.balsamiq.mockups::Label" x="607" y="445" w="41" h="-1" measuredW="27" measuredH="21" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AND</text>
+      </controlProperties>
+    </control>
+    <control controlID="382" controlTypeID="__group__" x="659" y="443" w="151" h="24" measuredW="151" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::TextInput" x="0" y="0" w="133" h="-1" measuredW="79" measuredH="24" zOrder="0" locked="false" isInGroup="382">
+          <controlProperties>
+            <text/>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="135" y="4" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="382">
+          <controlProperties>
+            <icon>calendar%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="383" controlTypeID="__group__" x="327" y="295" w="488" h="69" measuredW="488" measuredH="69" zOrder="19" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Label" x="4" y="0" w="-1" h="-1" measuredW="232" measuredH="23" zOrder="0" locked="false" isInGroup="383">
+          <controlProperties>
+            <size>15</size>
+            <text>Deliver%20by%20Date%20Range%20to%20%22Canoe%22</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::HRule" x="0" y="22" w="485" h="-1" measuredW="100" measuredH="10" zOrder="1" locked="false" isInGroup="383"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Paragraph" x="4" y="32" w="484" h="37" measuredW="275" measuredH="80" zOrder="2" locked="false" isInGroup="383">
+          <controlProperties>
+            <text>This%20query%20does%20not%20permanently%20override%20the%20query%20in%20the%20Queue%20nor%20does%20it%20persist%20once%20this%20window%20is%20closed%20and%20the%20delivery%20is%20made.</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="385" controlTypeID="com.balsamiq.mockups::Label" x="333" y="373" w="-1" h="-1" measuredW="131" measuredH="21" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Deliver%20airings%20where%3A%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="386" controlTypeID="com.balsamiq.mockups::Icon" x="462" y="375" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>info-circle%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="387" controlTypeID="com.balsamiq.mockups::CallOut" x="581" y="291" w="-1" h="-1" measuredW="232" measuredH="39" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>40463</color>
+        <text>21%20-%20popup%20for%20query%20by%20date%20range</text>
+      </controlProperties>
+    </control>
+    <control controlID="388" controlTypeID="com.balsamiq.mockups::RadioButton" x="511" y="371" w="-1" h="-1" measuredW="237" measuredH="24" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Start%20date%20falls%20in%20availability%20window%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="389" controlTypeID="com.balsamiq.mockups::RadioButton" x="511" y="390" w="-1" h="-1" measuredW="272" measuredH="24" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Any%20part%20of%20flight%20falls%20in%20availability%20window</text>
+      </controlProperties>
+    </control>
+    <control controlID="390" controlTypeID="com.balsamiq.mockups::Icon" x="511" y="375" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>bullseye%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="396" controlTypeID="com.balsamiq.mockups::Component" x="327" y="502" w="486" h="160" measuredW="486" measuredH="160" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Query%20Criteria</src>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

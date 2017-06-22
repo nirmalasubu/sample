@@ -1,0 +1,164 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1227" measuredH="785" mockupW="1214" mockupH="768">
+  <controls>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::DataGrid" x="172" y="265" w="827" h="371" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Name%20V%2C%20Product%20V%2C%20Brand%20V%2C%20Series/Title%20V%2C%20Stacked%20V%2C%20C%28x%29%20V%2C%20Fast%20Forward%20V%0A%20%20%20%20%20%2C%20Plus%20%2C%20Adult%20Swim%20%5C%2CBoom%2C%20%2C%20Both%2C%20C3%2C%20Yes%0A%20%20%20%20%20%2C%20Gold%2C%20Adult%20Swim%2C%20Robot%20Chicken%2C%20Yes%2C%20Non-C3%2C%20No%0A%20%20%20%20%20%2C%20Plus%2C%20Adult%20Swim%2C%20%2C%20No%2C%20C3%5C%2CNon-C3%2C%20No%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2C%20Silver%2C%20Adult%20Swim%2C%20%2C%20No%2C%20C3%2C%20No%20%0A%20%2C%20Plus%2C%20TBS%2C%20Bob%27s%20Burgers%2C%20Both%2C%20C3%2C%20Both%0A%20%2C%20Silver%2C%20TBS%2C%20%2C%20Both%2C%20C3%2C%20Both%0A%20%2C%20Silver%2C%20TBS%2C%20%2C%20No%2C%20C3%2C%20Yes%0A%20%2C%20Plus%2C%20TBS%2C%20%2C%20Yes%2C%20C3%2C%20Yes%0A%20%2C%20Gold%2C%20Cartoon%2C%20%2C%20Yes%2C%20C3%2C%20Both%0A%20%2C%20Silver%2C%20Cartoon%2C%20%2C%20Yes%2C%20Non-C3%2C%20No%0A%20%2C%20Gold%2C%20Cartoon%2C%20%2C%20Yes%2C%20Non-C3%2C%20No%0A%20%2C%20Plus%2C%20Cartoon%2C%20Sponge%20Bob%2C%20Yes%2C%20C3%2C%20No%0A%7B1%2C1%2C1%2C0%2C0%2C0%2C0%7D</text>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Link" x="850" y="244" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>Products%20-%20Request%20New%26bm%3BProducts%20-%20Request%20New.bmml%26bm%3BProducts%20-%20Request%20New.bmml%26bm%3BProducts%20-%20Request%20New.bmml</href>
+        <text>Create%20New%20Content%20Tier</text>
+      </controlProperties>
+    </control>
+    <control controlID="219" controlTypeID="com.balsamiq.mockups::Link" x="178" y="285" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AS_Plus</text>
+      </controlProperties>
+    </control>
+    <control controlID="220" controlTypeID="com.balsamiq.mockups::Link" x="178" y="315" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AS_Plus</text>
+      </controlProperties>
+    </control>
+    <control controlID="221" controlTypeID="com.balsamiq.mockups::Link" x="178" y="346" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AS_Plus.C3</text>
+      </controlProperties>
+    </control>
+    <control controlID="222" controlTypeID="com.balsamiq.mockups::Link" x="178" y="376" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AS_Plus.C3-HD</text>
+      </controlProperties>
+    </control>
+    <control controlID="223" controlTypeID="com.balsamiq.mockups::Link" x="178" y="407" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TBS_Plus</text>
+      </controlProperties>
+    </control>
+    <control controlID="224" controlTypeID="com.balsamiq.mockups::Link" x="178" y="437" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TBS_Plus.HD</text>
+      </controlProperties>
+    </control>
+    <control controlID="225" controlTypeID="com.balsamiq.mockups::Link" x="178" y="468" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TBS_Plus.C3</text>
+      </controlProperties>
+    </control>
+    <control controlID="226" controlTypeID="com.balsamiq.mockups::Link" x="178" y="498" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TBS_Plus.C3-HD</text>
+      </controlProperties>
+    </control>
+    <control controlID="227" controlTypeID="com.balsamiq.mockups::Link" x="178" y="529" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>CN_Plus</text>
+      </controlProperties>
+    </control>
+    <control controlID="228" controlTypeID="com.balsamiq.mockups::Link" x="178" y="559" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>CN_Plus.HD</text>
+      </controlProperties>
+    </control>
+    <control controlID="229" controlTypeID="com.balsamiq.mockups::Link" x="178" y="585" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>CN_Plus.C3</text>
+      </controlProperties>
+    </control>
+    <control controlID="230" controlTypeID="com.balsamiq.mockups::Link" x="178" y="616" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>CN_Plus.C3-HD</text>
+      </controlProperties>
+    </control>
+    <control controlID="241" controlTypeID="__group__" x="1083" y="67" w="144" h="16" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="241">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <icon>globe%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="22" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>video-camera%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Icon" x="67" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>clock-o%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Icon" x="89" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>television%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Icon" x="128" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>minus-square-o%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Icon" x="44" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>server%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Icon" x="108" y="0" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="6" locked="false" isInGroup="241">
+          <controlProperties>
+            <icon>angle-double-right%7Cxsmall</icon>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="252" controlTypeID="com.balsamiq.mockups::Component" x="13" y="17" w="1024" h="768" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Web%20ContentTiers</src>
+      </controlProperties>
+    </control>
+    <control controlID="253" controlTypeID="com.balsamiq.mockups::Component" x="37" y="234" w="981" h="515" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <override controlID="0" x="0" y="0" w="981" h="515"/>
+        <override controlID="2" x="3" y="24" w="98" h="22"/>
+        <override controlID="3" x="0" y="108" w="99" h="22"/>
+        <override controlID="4" x="0" y="79" w="99" h="22"/>
+        <override controlID="5" x="0" y="50" w="102" h="22"/>
+        <override controlID="1" x="2" y="164" w="102" h="22"/>
+        <override controlID="10" x="0" y="22" w="116" h="22"/>
+        <override controlID="11" x="0" y="110" w="116" h="22"/>
+        <override controlID="12" x="0" y="81" w="116" h="22"/>
+        <override controlID="13" x="0" y="52" w="116" h="22"/>
+        <override controlID="14" x="0" y="194" w="116" h="22"/>
+        <override controlID="9" x="2" y="166" w="114" h="22"/>
+        <override controlID="-1"/>
+        <src>./assets/Project%20Symbols.bmml#Navigation</src>
+      </controlProperties>
+    </control>
+    <control controlID="255" controlTypeID="com.balsamiq.mockups::Component" x="30" y="103" w="976" h="80" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Header%20-%20Content%20Tiers</src>
+      </controlProperties>
+    </control>
+    <control controlID="257" controlTypeID="com.balsamiq.mockups::Component" x="147" y="176" w="864" h="45" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Filter%20-%20Content%20Tiers</src>
+      </controlProperties>
+    </control>
+    <control controlID="258" controlTypeID="com.balsamiq.mockups::Component" x="409" y="671" w="342" h="25" measuredW="0" measuredH="0" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/Project%20Symbols.bmml#Pagination</src>
+      </controlProperties>
+    </control>
+    <control controlID="260" controlTypeID="com.balsamiq.mockups::CallOut" x="1076" y="171" w="496" h="287" measuredW="0" measuredH="0" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13576743</color>
+        <text>For%20every%20process%20that%20is%20considered%20a%20request%2C%20we%20need%20to%20have%20an%20administrative%20area%20for%20the%20ODT%20team%20to%20use%20in%20order%20to%20process%20those%20requests.%20%0AFor%20example%3A%20if%20someone%20requests%20a%20new%20destination%20that%20should%20go%20to%20privileged%20users%2C%20like%20data%20city%2C%20we%20should%20have%20a%20way%20in%20the%20UI%20to%20programmatically%20kicked%20that%20process%20off%20so%20that%20the%20privileged%20users%20don%27t%20have%20to%20manually%20add%20those%20items.%20In%20the%20past%2C%20they%20have%20been%20forgotten.%0AI%20am%20building%20a%20list%20of%20admin%20functional%20areas%20that%20we%20will%20need%20so%20I%20can%20start%20figuring%20out%20how%20to%20tackle%20them%20in%20the%20UI.%20So%20based%20on%20the%20conversation%20we%20had%20yesterday%20about%20the%20admin%20area%20for%20the%20portal%20while%20you%20were%20in%20Cea%27s%20office....%0AThe%20following%20areas%20will%20need%20to%20be%20accounted%20for%3A%0A1.%20A%20request%20by%20a%20user%20to%20create%20a%20destination%0A2.%20A%20request%20by%20a%20user%20to%20create%20a%20product%0A3.%20A%20way%20to%20kickoff%20a%20process%20for%20adding%20a%20new%20destination%20to%20a%20privileged%20users%20group%20of%20destination%0A4.%20A%20request%20by%20a%20user%20to%20create%20a%20new%20delivery%20queue%0A5.%20A%20request%20by%20a%20user%20to%20create%20a%20workflow%20status</text>
+      </controlProperties>
+    </control>
+    <control controlID="261" controlTypeID="com.balsamiq.mockups::StickyNote" x="431" y="468" w="496" h="123" measuredW="0" measuredH="0" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>I%20need%20to%20create%20the%20category%20main%20grid%2C%20edit%2C%20new%20and%20put%20those%20into%20destination.%0AFigure%20out%20a%20way%20to%20add%20more%20than%20one%20and%20build%20the%20category%20string%20before%20adding%20it%20to%20the%20grid.%0ACategory%20strings%20do%20not%20need%20approval%2C%20just%20like%20content%20tiers%20doesn%27t%20need%20to%20be%20approved</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

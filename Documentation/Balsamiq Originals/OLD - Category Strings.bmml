@@ -1,0 +1,81 @@
+<mockup version="1.0" skin="wireframe" fontFace="Balsamiq Sans" measuredW="1151" measuredH="770" mockupW="1029" mockupH="675">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="122" y="95" w="1029" h="675" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>36</bottomheight>
+        <size>20</size>
+        <text>%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20ODT%20Category%20Strings</text>
+        <topheight>77</topheight>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Image" x="130" y="99" w="114" h="66" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/ODT%25202.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::Link" x="138" y="281" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Destinations</text>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Link" x="138" y="318" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Content%20Tiers</text>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::Link" x="138" y="355" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Category%20Strings</text>
+      </controlProperties>
+    </control>
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1072" y="214" w="-1" h="112" measuredW="0" measuredH="0" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Link" x="140" y="244" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Products</text>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::DataGrid" x="410" y="214" w="662" h="112" measuredW="0" measuredH="0" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Folder%2C%20Category%20String%0AAmerican%20Dad%2C%20Adult%20Swim/American%20Dad%3ACOMCAST/TV%20Shows/Shows%20A-C/American%20Dad/Past%20Seasons%0AAqua%20Teen%2C%20Adult%20Swim/Aqua%20Teen%3ACOMCAST/TV%20Shows/Shows%20A-C/Aqua%20Teen%0ABob%27s%20Burgers%2C%20Adult%20Swim/Bob%27s%20Burgers</text>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::VRule" x="258" y="169" w="-1" h="566" measuredW="0" measuredH="0" zOrder="8" locked="false" isInGroup="-1"/>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::Link" x="138" y="396" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Title%20Metadata</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::LinkBar" x="329" y="132" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>1</selectedIndex>
+        <text>Add%2C%20Edit%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="274" y="214" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>BRAND%0A%5B%20%5D%20TBS%0A%5B%20%5D%20TNT%0A%5B%20%5D%20Adult%20Swim%0A%5B%20%5D%20Cartoon%20Network%0A%5B%20%5D%20Boomerang%0A%5B%20%5D%20TCM%0A%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Paragraph" x="274" y="180" w="57" h="22" measuredW="0" measuredH="0" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <text>Filter%20By%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::SearchBox" x="410" y="178" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>search</text>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="274" y="214" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>BRAND%0A%5B%20%5D%20TBS%0A%5B%20%5D%20TNT%0A%5B%20%5D%20Adult%20Swim%0A%5B%20%5D%20Cartoon%20Network%0A%5B%20%5D%20Boomerang%0A%5B%20%5D%20TCM%0A%20%0AELEMENT%0A%5B%20%5D%20COMCAST%0A%5B%20%5D%20TV%20Shows%0A%5B%20%5D%20Shows%20A-C%0A%5B%20%5D%20Shows%20D-F%0A%5B%20%5D%20Shows%20G-I%0A%5B%20%5D%20Shows%20J-L%0A%5B%20%5D%20Shows%20M-P%0A%5B%20%5D%20Shows%20Q-S%0A%5B%20%5D%20Shows%20T-Z</text>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Link" x="140" y="433" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Delivery%20Queues</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
