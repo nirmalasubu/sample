@@ -107,6 +107,23 @@ class DestinationPropertiesForm extends React.Component {
 
   onAddTitles(titles) {
 
+    console.log(titles);
+
+    var titlesToUpdate = this.state.selectedTitles;
+
+    for (var t = 0; t < titles.length; t++) {
+      var titlesToAdd = null;
+      for (var titleIdx = 0; titleIdx < titlesToUpdate.length; titleIdx++) {
+        if (titlesToUpdate[titleIdx].titleId == titles[t].titleId) {
+          titlesToAdd = titlesToUpdate[titleIdx];
+        }
+      }
+      if (titlesToAdd == null) {
+        titlesToUpdate.push(titles[t]);
+      }
+    }
+
+    this.setState({selectedTitles: titlesToUpdate});
   }
 
   render() {

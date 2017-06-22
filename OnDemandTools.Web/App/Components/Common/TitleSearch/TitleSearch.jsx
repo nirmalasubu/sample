@@ -18,7 +18,8 @@ class TitleSearch extends React.Component {
             processing: false,
             selectedTitleTypeFilter: "",
             selectedSeriesFilter: "",
-            titlesToRemove: []
+            titlesToRemove: [],
+            titlesToAdd: []
         }
     }
 
@@ -83,15 +84,43 @@ class TitleSearch extends React.Component {
             }
         }
         this.setState({ titlesToRemove: titlesToRemoveTemp });
+
+        console.log(this.state.titlesToRemove);
+    }
+
+    onAvailableTitlesRowSelect(row, isSelected, e) {
+        var titlesToAddTemp = this.state.titlesToAdd;
+        var titleSelected = null;
+
+        for (var i = 0; i < titlesToAddTemp.length; i++) {
+            if (titlesToAddTemp[i].titleId == row.titleId) {
+                titleSelected = titlesToAddTemp[i];
+            }
+        }
+
+        if (isSelected) {
+            if (titleSelected == null) {
+                titlesToAddTemp.push(row);
+            }
+        }
+        else {
+            if (titleSelected != null) {
+                titlesToAddTemp.pop(titleSelected);
+            }
+        }
+        this.setState({ titlesToAdd: titlesToAddTemp });
+
+        console.log(this.state.titlesToAdd);
     }
 
     onAddTitleButtonClick() {
-
+        this.props.onAddTitles(this.state.titlesToAdd);
+        this.setState({ titlesToAdd: [] })
     }
 
-    onRemoveTitleButtonClick() {        
+    onRemoveTitleButtonClick() {
         this.props.onRemoveTitles(this.state.titlesToRemove);
-        this.setState({titlesToRemove:[]});
+        this.setState({ titlesToRemove: [] })
     }
 
     render() {
@@ -100,7 +129,8 @@ class TitleSearch extends React.Component {
             mode: 'checkbox',
             bgColor: 'yellow', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
             hideSelectColumn: true,  // enable hide selection column.
-            clickToSelect: true  // you should enable clickToSelect, otherwise, you can't select column.
+            clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
+            onSelect: this.onAvailableTitlesRowSelect.bind(this)
         };
 
         const selectedGridProps = {
@@ -163,11 +193,11 @@ class TitleSearch extends React.Component {
                             </BootstrapTable>
                         </Col>
                         <Col md={1}>
-                            <Button bsStyle="primary">
+                            <Button bsStyle="primary" disabled={this.state.titlesToAdd == 0} onClick={this.onAddTitleButtonClick.bind(this)}>
                                 Add >
                         </Button>
                             <br /><br />
-                            <Button bsStyle="primary" onClick={this.onRemoveTitleButtonClick.bind(this)} >
+                            <Button bsStyle="primary" disabled={this.state.titlesToRemove == 0} onClick={this.onRemoveTitleButtonClick.bind(this)} >
                                 Remove
                         </Button>
                         </Col>
