@@ -180,14 +180,14 @@ class TitleSearch extends React.Component {
                                 selectRow={availableGridProps}
                                 data={this.props.titleSearchResults.titles}
                                 striped hover pagination={true}>
-                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn width="80px"  isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                                <TableHeaderColumn width="70px" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
-                        <Col md={1}>
+                        <Col md={1} className="filterButtons">
                             <Button bsStyle="primary" disabled={this.state.titlesToAdd == 0} onClick={this.onAddTitleButtonClick.bind(this)}>
                                 Add >
                         </Button>
@@ -203,11 +203,11 @@ class TitleSearch extends React.Component {
                                 selectRow={selectedGridProps}
                                 data={this.props.selectedTitles}
                                 striped hover pagination={true}>
-                                <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                                <TableHeaderColumn width="70px" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
                     </Row>
