@@ -311,7 +311,7 @@ namespace OnDemandTools.API.v1.Routes
                                 if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
                                     playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
                                 }
-                                else {
+                                else if (string.IsNullOrEmpty(pt.Source.Brand)) {
                                     playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt);
                                 }
                             }
