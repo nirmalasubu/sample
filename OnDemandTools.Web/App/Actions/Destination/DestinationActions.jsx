@@ -45,12 +45,6 @@ export const fetchDestinations = () => {
     };
 };
 
-export const filterDestinations = (filterDestination) => {
-    return (dispatch) => {
-       dispatch(filterDestinationSuccess(filterDestination))
-    };
-};
-
 export const getNewDestination = () => {
     return Axios.get('/api/destination/newdestination')
         .then(response => {

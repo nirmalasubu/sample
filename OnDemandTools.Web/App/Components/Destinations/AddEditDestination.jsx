@@ -69,7 +69,6 @@ class AddEditDestinationModel extends React.Component {
                         else {
                             NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
                         }
-                        this.props.dispatch(destinationAction.fetchDestinations());
                         setTimeout(function () {
                             elem.props.handleClose();
                         }, 3000);
@@ -90,7 +89,6 @@ class AddEditDestinationModel extends React.Component {
     handleAddEditClose()
     {
         var model = this.state.destinationUnModifiedData;
-        //this.props.data.destinationDetails = this.state.destinationUnModifiedData;
         jQuery.extend(this.props.data.destinationDetails, this.state.destinationUnModifiedData);
         this.props.handleClose();
     }
