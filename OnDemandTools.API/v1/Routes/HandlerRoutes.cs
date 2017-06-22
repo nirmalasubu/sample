@@ -322,8 +322,10 @@ namespace OnDemandTools.API.v1.Routes
         }
 
         private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt) {
-            var result = sourceUrl;
-            result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+            var result = "";
+            if (sourceUrl.StartsWith(pt.Source.BaseUrl)) {
+                result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
+            }            
             return result;
         }
 

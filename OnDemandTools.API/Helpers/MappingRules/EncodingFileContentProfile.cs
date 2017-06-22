@@ -204,31 +204,24 @@ namespace OnDemandTools.API.Helpers.MappingRules
             List<Dictionary<String, BLModel.Url>> urls = new List<Dictionary<String, BLModel.Url>>();
             Regex regex = new Regex(@"^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$");
             
-            var u = new Dictionary<String, BLModel.Url>();
-
             var matches = regex.Match(source.BucketURL);
+
+            urls.Add(BuildUrlFor(matches, "bucketUrl"));
+
+            matches = regex.Match(source.AkamaiURL);
             
-            var url = BuildUrlFor(matches);
+            urls.Add(BuildUrlFor(matches, "akamaiUrl"));            
            
-            u.Add("bucketUrl", url);
-
-            var matches = regex.Match(source.AkamaiURL);
-            
-            var url = BuildUrlFor(matches);
-           
-            u.Add("akamaiUrl", url);
-
-            // Add url to dictionary
-            urls.Add(u);
-
             return urls;
         }
 
-        private BLModel.Url BuildUrlFor(Match matches) {
+        private Dictionary<String, BLModel.Url> BuildUrlFor(Match matches, string key) {
+            var result = new Dictionary<String, BLModel.Url>();
             var host = matches.Groups[1].ToString() + @"/" + matches.Groups[3].ToString();
             var path = matches.Groups[4].ToString();
             var fileName = matches.Groups[6].ToString();
-            return new BLModel.Url() { Host = host, Path = path, FileName = fileName };            
+            result.Add(key, new BLModel.Url() { Host = host, Path = path, FileName = fileName });
+            return result;
         }
     }
 }
