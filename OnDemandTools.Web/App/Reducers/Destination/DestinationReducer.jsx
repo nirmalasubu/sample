@@ -12,10 +12,12 @@
             }
             return state;
         case 'DELETE_DESTINATION_SUCCESS':
-            var dIndex = state.findIndex((obj => obj.id == action.objectId));
-            if (dIndex >= 0)
-                state.splice(dIndex,1);
-            return state;
+            const newState = Object.assign([], state);
+            const indexOfDestination = state.findIndex(obj => {
+                return obj.id == action.objectId
+            })
+            newState.splice(indexOfDestination, 1);
+            return newState;
         default:
             return state;
     }
