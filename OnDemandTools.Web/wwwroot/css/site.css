@@ -313,3 +313,10 @@ p.shortDesc {
 {
     background-color: yellow;
 }
+
+
+/*****************************************************/
+/******** Destination Deliverables tab styling ******/
+#deliverable-grid {
+    padding-top: 18px;
+}
