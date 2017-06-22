@@ -24,112 +24,48 @@ class AddEditDestinationCategories extends React.Component {
         this.setState({
             destinationDetails: this.props.data
         });
-    }
+    } 
 
-    handlePropertyNameChange(event) {
-        var model = this.state.destinationDetails;
-        model.properties[event.target.id].name = event.target.value;
-        this.setState({ destinationDetails: model });
-        this.props.data = this.state.destinationDetails;
-        this.CheckPropertyNameIsEmpty();
-    }
-
-    CheckPropertyNameIsEmpty()
-    {
-        var properties=this.state.destinationDetails.properties;
-        if(properties.length>0)
-        {
-            for(var i=0;i<=properties.length-1;i++)
-            {
-                if(!(properties[i].name))
-                {
-                    this.props.validationStates(true);
-                    return;
-                }
-            }
-        }
-        this.props.validationStates(false);
-    }
-   
-
-    TitleDetailClick(index)
-    { 
-        var array=this.state.titleopen;
-        array[index]=!this.state.titleopen[index];
-        this.setState({titleopen:array});
-        
-    }
-
+    //To show all titles. 
     TitledetailConstruct(item,index){
-        if(this.state.titleopen[index]){
-            var titleName=[];
-            item.titles.map(function (title, index) {titleName.push(title.name)});
-            var titletext=titleName.toString();
-            return(<div>{titletext}</div>);}
+       
+        var titleName=[];
+        item.titles.map(function (title, index) {titleName.push(title.name)});
+        var titletext=titleName.toString();
+        var title=(<p class="destination-label-title" title="title/series">{titletext}</p>);
+        return title;
     }
 
-    CategoryTitleConstruct(item,index)
+    //To construct brands. 
+    CategoryBrandImageConstruct(item,index)
     { 
-        if(item.titles.length==1)
+        if(item.brands.length>1 && item.brands.length<=4)
         {
-            return(<div>{item.titles[0].name}</div>);
+            var image=[];
+            item.brands.map(function (name, index) {
+                var path = "images/brands/" + name + ".gif";
+                image.push(<div class="destination-container"><img  src={path}  title={name} alt={name}/></div>)});
+     
+            var tag=(<div>{image}</div>);
+            return tag;
         }
-              
-        if(item.titles.length>1)
+
+        if(item.brands.length>4)
         {
-            if(this.state.titleopen[index]==undefined)
-            { 
-                var array=this.state.titleopen;
-                array[index]=false; 
-                this.setState({titleopen:array});
-                this.props.titleopen=this.state.titleopen;
+            var image=[];
+            item.brands.map(function (name, index) {
+                var path = "images/brands/" + name + ".gif";
+                image.push(<div class="destination-container"><img  src={path}  title={name} alt={name}/></div>)
+                if(index==1)
+                { 
+                    image.push(<div class="destination-container"><button class="btn-link destination-img-btn" type="button"> <i class="fa fa-ellipsis-h" /></button></div>)
+                }
+            });
+     
+                    var tag=(<div class="destination-img">{image}</div>);
+                    return tag;
+        }
             }
-                        
-            var titleName=[];
-            item.titles.map(function (title, index) {titleName.push(title.name)});
-            var titletext=titleName.toString();
-            var firstTitle=titleName[0]+"...";
-            var title=(<div onMouseOver={(event) => this.TitleDetailClick(index, event)}>{firstTitle}</div>);
-       
-            return title;
-    }
-}
-
-ImageDetailClick(index){
-   
-    var array=this.state.imageopen;
-    array[index]=!this.state.imageopen[index];
-    this.setState({imageopen:array});
-   
-}
-
-
-CategoryBrandImageConstruct(item,index)
-{ 
-    if(item.brands.length==1)
-    {
-        var path = "images/brands/" + name + ".gif";
-       return (<img src={path} />);
-    }
-              
-if(item.brands.length>1)
-{
-    if(this.state.imageopen[index]==undefined)
-    { 
-        var array=this.state.imageopen;
-        array[index]=false; 
-        this.setState({imageopen:array});
-        this.props.imageopen=this.state.imageopen;
-    }
-    var path = "images/brands/" + item.brands[0] + ".gif";
-    var image=(<img onMouseOver={(event) => this.ImageDetailClick(index, event)} src={path} />);
-       
-        return image;
-}
-}
-
-
-
 
     render() {
         let row = null;
@@ -141,26 +77,19 @@ if(item.brands.length>1)
                     var nameValidation=item.name?"":"error"
                     return (<Row >
                    <Form>
-                   <Col sm={3} >
+                   <Col sm={3} md={5} >
                         <FormGroup controlId="Name" validationState={nameValidation}>
-                       <FormControl type="text" id={index} value={item.name} ref="Name"  placeholder="Name" disabled="true" onChange={this.handlePropertyNameChange.bind(this)}  />
+                       <FormControl type="text" id={index} value={item.name} ref="Name"  placeholder="Name" disabled="true" />
                        </FormGroup></Col>
                     </Form>
-                   <Col sm={2} >
-     {this.CategoryBrandImageConstruct(item,index)}
-            {this.state.imageopen[index]? item.brands.map(function (name, index)
-            {
-                var path = "images/brands/" + name + ".gif";
-                return (<img src={path} />);
-            
-            }):null}
-
+                   <Col sm={2} md={3} >
+                    {this.CategoryBrandImageConstruct(item,index)}
+                           
                   </Col>
-
                   <Col sm={2} >
-                  {this.CategoryTitleConstruct(item,index)}
-                  {this.state.titleopen[index]?this.TitledetailConstruct(item,index):null}
-                                  </Col>
+                   {this.TitledetailConstruct(item,index)}
+                  
+                   </Col>
                           </Row>)
       }.bind(this));
       }
@@ -176,7 +105,7 @@ if(item.brands.length>1)
                               <div >
                               <Grid fluid={true}>
                         <Row>
-                          <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
+                          <Col sm={3} md={5} ><label class="destination-properties-label">Name</label></Col>
                           <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filter</label></Col>
                         </Row>
                         <div class="destination-height">
