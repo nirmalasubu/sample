@@ -63,54 +63,49 @@ class TitleSearch extends React.Component {
     }
 
     onSelectedTitlesRowSelect(row, isSelected, e) {
-
         var titlesToRemoveTemp = this.state.titlesToRemove;
-        var titleSelected = null;
+        var titleFoundIdx = -1;
 
         for (var i = 0; i < titlesToRemoveTemp.length; i++) {
             if (titlesToRemoveTemp[i].titleId == row.titleId) {
-                titleSelected = titlesToRemoveTemp[i];
+                titleFoundIdx = i;
             }
         }
 
         if (isSelected) {
-            if (titleSelected == null) {
+            if (titleFoundIdx == -1) {
                 titlesToRemoveTemp.push(row);
             }
         }
         else {
-            if (titleSelected != null) {
-                titlesToRemoveTemp.pop(titleSelected);
+            if (titleFoundIdx > -1) {
+                titlesToRemoveTemp.splice(titleFoundIdx, 1);
             }
         }
         this.setState({ titlesToRemove: titlesToRemoveTemp });
-
-        console.log(this.state.titlesToRemove);
     }
 
     onAvailableTitlesRowSelect(row, isSelected, e) {
         var titlesToAddTemp = this.state.titlesToAdd;
-        var titleSelected = null;
+        var titleFoundIdx = -1;
 
         for (var i = 0; i < titlesToAddTemp.length; i++) {
             if (titlesToAddTemp[i].titleId == row.titleId) {
-                titleSelected = titlesToAddTemp[i];
+                titleFoundIdx = i;
             }
         }
 
         if (isSelected) {
-            if (titleSelected == null) {
+            if (titleFoundIdx == -1) {
                 titlesToAddTemp.push(row);
             }
         }
         else {
-            if (titleSelected != null) {
-                titlesToAddTemp.pop(titleSelected);
+            if (titleFoundIdx > -1) {
+                titlesToAddTemp.splice(titleFoundIdx, 1);
             }
         }
         this.setState({ titlesToAdd: titlesToAddTemp });
-
-        console.log(this.state.titlesToAdd);
     }
 
     onAddTitleButtonClick() {

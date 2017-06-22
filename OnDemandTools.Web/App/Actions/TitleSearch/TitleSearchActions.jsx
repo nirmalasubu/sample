@@ -60,7 +60,7 @@ export const searchByTitleIds = (titleIds) => {
     var queryString = "?";
 
     for (var i = 0; i < titleIds.length; i++) {
-        queryString += "ids=" + titleIds[i].id + "&";
+        queryString += "ids=" + titleIds[i] + "&";
     }
 
     return Axios.get('/api/titles/searchByTitleIds/' + queryString)

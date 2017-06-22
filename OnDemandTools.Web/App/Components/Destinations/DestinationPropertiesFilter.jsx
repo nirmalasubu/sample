@@ -37,8 +37,13 @@ class DestinationPropertiesForm extends React.Component {
     var brands = [];
     var titles = [];
 
-    if (this.props.data.destinationPropertiesRow.titles.length > 0) {
-      let searchPromise = searchByTitleIds(this.props.data.destinationPropertiesRow.titles);
+    var titleIds = this.props.data.destinationPropertiesRow.titleIds;
+    titleIds = titleIds.concat(this.props.data.destinationPropertiesRow.seriesIds);
+
+    console.log(titleIds);
+    if (titleIds.length > 0) {
+
+      let searchPromise = searchByTitleIds(titleIds);
       searchPromise.then(message => {
         this.setState({ selectedTitles: message });
       })
@@ -83,6 +88,32 @@ class DestinationPropertiesForm extends React.Component {
     this.props.data.destinationPropertiesRow.brands = [];
     this.props.data.destinationPropertiesRow.brands = array;
 
+    var titles = []
+    var titleIds = [];
+    var seriesIds = [];
+
+    for (var t = 0; t < this.state.selectedTitles.length; t++) {
+
+      var selectedTitle = this.state.selectedTitles[t];
+
+      if (selectedTitle.titleType.name == "Series") {
+        seriesIds.push(selectedTitle.titleId);
+      }
+      else {
+        var title = {};
+        title.titleId = selectedTitle.titleId;
+        title.name = selectedTitle.titleName;
+        titles.push(title);
+        titleIds.push(selectedTitle.titleId);
+      }
+    }
+
+    this.props.data.destinationPropertiesRow.titleIds = titleIds;
+    this.props.data.destinationPropertiesRow.titles = titles;
+    this.props.data.destinationPropertiesRow.seriesIds = seriesIds;
+
+    console.log(this.props.data.destinationPropertiesRow);
+
     this.props.handleClose();
   }
 
@@ -102,7 +133,7 @@ class DestinationPropertiesForm extends React.Component {
       }
     }
 
-    this.setState({selectedTitles: titlesToUpdate});
+    this.setState({ selectedTitles: titlesToUpdate });
   }
 
   onAddTitles(titles) {
@@ -123,7 +154,7 @@ class DestinationPropertiesForm extends React.Component {
       }
     }
 
-    this.setState({selectedTitles: titlesToUpdate});
+    this.setState({ selectedTitles: titlesToUpdate });
   }
 
   render() {
