@@ -11,16 +11,19 @@ using OnDemandTools.Business.Adapters.Titles;
 using OnDemandTools.Web.Models.TitleSearch;
 using AutoMapper;
 using OnDemandTools.Business.Modules.Airing.Model.Alternate.Title;
+using System.Collections.Generic;
 
 namespace OnDemandTools.Web.Controllers
 {
     [Route("api/[controller]")]
     public class TitlesController : Controller
     {
-        public ITitleFinder _titleFinder;
-        public TitlesController(ITitleFinder titleFinder)
+        ITitleFinder _titleFinder;
+        IFlowTitles _flowTitles;
+        public TitlesController(ITitleFinder titleFinder, IFlowTitles flowTitles)
         {
             _titleFinder = titleFinder;
+            _flowTitles = flowTitles;
         }
 
         // GET: api/values
@@ -30,8 +33,8 @@ namespace OnDemandTools.Web.Controllers
         {
             TitleSearchResults results = new TitleSearchResults();
 
-            results.Titles = _titleFinder.Find(searchterm).Select(e=> e.ToViewModel<Title, TitleShort>()).ToList();
-            
+            results.Titles = _titleFinder.Find(searchterm).Select(e => e.ToViewModel<Title, TitleShort>()).ToList();
+
             results.TitleTypeFilterParameters = results.Titles.GroupBy(e => e.TitleType.Name)
                  .Select(y => new TitleFilterParameter { Name = y.Key.ToString(), Count = y.Count() })
                  .OrderByDescending(e => e.Count)
@@ -43,6 +46,14 @@ namespace OnDemandTools.Web.Controllers
                 .ToList();
 
             return results;
+        }
+
+        [Authorize]
+        [HttpGet("searchByTitleIds")]
+        public List<TitleShort> SearchByTitleIds([FromQuery]int[] ids)
+        {
+            var titles = _flowTitles.GetFlowTitlesFor(ids);
+            return titles.Select(e => e.ToViewModel<Title, TitleShort>()).ToList();
         }
     }
 }

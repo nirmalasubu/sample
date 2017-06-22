@@ -122,7 +122,7 @@ class TitleSearch extends React.Component {
                         </Button>
                         </Col>
                         <Col md={5}>
-                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' data={this.props.titleSearchResults.titles} striped hover pagination={true}>
+                            <BootstrapTable containerStyle={ { margin: 0 } } tableContainerClass='react-bs-table_filter' data={this.props.selectedTitles} striped hover pagination={true}>
                                 <TableHeaderColumn isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>

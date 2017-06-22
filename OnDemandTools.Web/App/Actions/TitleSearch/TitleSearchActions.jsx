@@ -4,10 +4,10 @@ import $ from 'jquery';
 
 // Future  we get data through Axios or fetch
 const emptyTitles = {
-    titles:[],
-    titlesBackup:[],
-    titleTypeFilterParameters:[],
-    seriesFilterParameters:[]
+    titles: [],
+    titlesBackup: [],
+    titleTypeFilterParameters: [],
+    seriesFilterParameters: []
 };
 
 export const titleSearchSuccess = (titles) => {
@@ -35,7 +35,7 @@ export const titleSearch = (param) => {
     return (dispatch) => {
         return Axios.get('/api/titles/search/' + param)
             .then(response => {
-                response.data.titlesBackup= $.extend(true, [], response.data.titles);
+                response.data.titlesBackup = $.extend(true, [], response.data.titles);
                 dispatch(titleSearchSuccess(response.data))
             })
             .catch(error => {
@@ -45,13 +45,29 @@ export const titleSearch = (param) => {
 };
 
 export const clearTitles = () => {
-    return (dispatch) => {        
-       dispatch(clearTitleSuccess(emptyTitles));
+    return (dispatch) => {
+        dispatch(clearTitleSuccess(emptyTitles));
     };
 };
 
 export const filterTitles = (filter) => {
-    return (dispatch) => {        
-       dispatch(filterTitleSuccess(filter));
+    return (dispatch) => {
+        dispatch(filterTitleSuccess(filter));
     };
+};
+
+export const searchByTitleIds = (titleIds) => {
+    var queryString = "?";
+
+    for (var i = 0; i < titleIds.length; i++) {
+        queryString += "ids=" + titleIds[i].id + "&";
+    }
+
+    return Axios.get('/api/titles/searchByTitleIds/' + queryString)
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageCheckBox from 'Components/Common/ImageCheckBox';
 import TitleSearch from 'Components/Common/TitleSearch/TitleSearch';
-import { clearTitles } from 'Actions/TitleSearch/TitleSearchActions';
+import { clearTitles, searchByTitleIds } from 'Actions/TitleSearch/TitleSearchActions';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import { ModalDialogue } from 'react-bootstrap';
@@ -23,7 +23,8 @@ class DestinationPropertiesForm extends React.Component {
     super(props);
 
     this.state = {
-      brandsSelection: {}
+      brandsSelection: {},
+      selectedTitles: []
     }
   }
   componentDidMount() {
@@ -34,6 +35,18 @@ class DestinationPropertiesForm extends React.Component {
 
     this.props.dispatch(clearTitles());
     var brands = [];
+    var titles = [];
+
+    if (this.props.data.destinationPropertiesRow.titles.length > 0) {
+      let searchPromise = searchByTitleIds(this.props.data.destinationPropertiesRow.titles);
+      searchPromise.then(message => {
+        this.setState({ selectedTitles: message });
+      })
+      searchPromise.catch(error => {
+        console.error(error);
+        this.setState({ selectedTitles: [] });
+      });
+    }
 
     for (var i = 0; i < this.props.config.brands.length; i++) {
       var brandName = this.props.config.brands[i];
@@ -43,7 +56,7 @@ class DestinationPropertiesForm extends React.Component {
       brands.push(brandObject);
     }
 
-    this.setState({ brandsSelection: brands });
+    this.setState({ brandsSelection: brands, selectedTitles: titles });
   }
 
   handleBrandChange(brandName) {
@@ -98,7 +111,7 @@ class DestinationPropertiesForm extends React.Component {
             {rows}
             <hr />
             <ControlLabel>Title/Series Associations</ControlLabel>
-            <TitleSearch />
+            <TitleSearch selectedTitles={this.state.selectedTitles} />
           </div>
         </Modal.Body>
         <Modal.Footer>
