@@ -30,13 +30,14 @@ class DestinationPage extends React.Component {
 
             columns: [{ "label": "Code", "dataField": "name", "sort": true },
             { "label": "Description", "dataField": "description", "sort": true },
-            { "label": "Content", "dataField": "content", "sort": true },
+            { "label": "Content", "dataField": "content", "sort": false },
             { "label": "Actions", "dataField": "name", "sort": false }
             ],
             keyField: "name"
         }
     }
 
+    //callback function to get the filter value from filter component
     handleFilterUpdate(filtersValue, type) {
         var valuess = this.state.filterValue;
         if (type == "CD")
@@ -64,7 +65,7 @@ class DestinationPage extends React.Component {
 
     //called on the page load
     componentDidMount() {
-
+        this.props.dispatch(destinationActions.filterDestinationSuccess(this.state.filterValue));
         this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Destinations";
@@ -81,7 +82,7 @@ class DestinationPage extends React.Component {
     }
 }
 
-//filter the states using filterval
+//filter the states using filter values
 const getFilterVal = (destinations, filterVal) => {
     if(filterVal.code!=undefined)
     {        

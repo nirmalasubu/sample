@@ -7,12 +7,10 @@ require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
 import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
-import { fetchProducts } from 'Actions/Product/ProductActions';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {
     return {
-        products: store.products,
         filterDestination: store.filterDestination
     };
 })
@@ -48,15 +46,13 @@ class DestinationTable extends React.Component {
 
     _setLoadingOption()
     {
-        if(this.props.RowData.length<=0 && this.props.filterDestination.length<=0)
+        if(this.props.RowData.length<=0 && (this.props.filterDestination.length<=0 || (this.props.filterDestination.code=="" && this.props.filterDestination.description=="" && this.props.filterDestination.content=="")))
             return (<div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>);
         else
             return(<i>There is no data to display</i>);
     }
 
     componentDidMount() {
-        this.props.dispatch(fetchProducts());
-
         let promise = getNewDestination();
         promise.then(message => {
             this.setState({
@@ -89,6 +85,21 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: false, destinationDetails: this.state.newDestinationModel });
     }
 
+    contentSortFormat(val, rowData) {
+        var content = [];
+        if (rowData.content) {
+            if (rowData.content.highDefinition)
+                content.push("HD");
+            if (rowData.content.standardDefinition)
+                content.push("SD");
+            if (rowData.content.cx)
+                content.push("C(X)");
+            if (rowData.content.nonCx)
+                content.push("Non-C(X)");
+        }
+        return content.toString();
+    }
+
     contentFormat(val, rowData) {
         var content = [];
         if (rowData.content) {
@@ -102,6 +113,16 @@ class DestinationTable extends React.Component {
                 content.push("Non-C(X)");
         }
         return '<p data-toggle="tooltip">' + content.toString() + '</p>';
+    }
+
+    revertSortFunc(a, b, order) {   // order is desc or asc
+        //if (order === 'desc') {
+        //    return a.price - b.price;
+        //} else {
+        //    return b.price - a.price;
+        //}
+        console.log(a.content.highDefinition + " " + b.content.highDefinition + "/n" +
+                    a.name + " " + b.name);
     }
 
     descriptionFormat(val) {
@@ -129,8 +150,7 @@ class DestinationTable extends React.Component {
     }
 
     render() {
-        
-        if(this.props.RowData.length<=0 && this.props.filterDestination.length<=0)
+        if(this.props.RowData.length<=0 && (this.props.filterDestination.length<=0 || (this.props.filterDestination.code=="" && this.props.filterDestination.description=="" && this.props.filterDestination.content=="")))
             this.state.options.noDataText = <div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>;
         else
             this.state.options.noDataText = <i>There is no data to display</i>;
@@ -148,7 +168,7 @@ class DestinationTable extends React.Component {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contentFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} sortFunc={ this.revertSortFunc.bind(this) } dataFormat={this.contentSortFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
 
         }.bind(this));

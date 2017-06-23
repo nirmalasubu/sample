@@ -20,7 +20,7 @@ import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
 
 @connect((store) => {
     return {
-        config: store.config
+        
     };
 })
 

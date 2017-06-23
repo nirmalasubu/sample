@@ -10,6 +10,7 @@ import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { fetchProducts } from 'Actions/Product/ProductActions';
 
 @connect((store) => {
     return {
@@ -26,11 +27,12 @@ class RemoveDestinationModal extends React.Component
         this.state = ({
             message: "",
             isProcessing: false,
-            inProduct:false
+            inProduct:false,
+            products:[]
         });
     }
 
-    onOpenModal(){
+    onEnteredModal(){
         if(this.isDestinationBeingUsed(this.props.data.destinationDetails.name))
         {
             this.setState({
@@ -48,14 +50,17 @@ class RemoveDestinationModal extends React.Component
         }
     }
 
-    isDestinationBeingUsed(destination) {
+    onOpenModal(){
+        this.props.dispatch(fetchProducts());
+    }
+
+    isDestinationBeingUsed(destination) {        
         var prod = this.props.products;
         for (var p = 0; p < prod.length; p++) {
             if (prod[p].destinations.indexOf(destination) > -1) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -77,7 +82,7 @@ class RemoveDestinationModal extends React.Component
     render(){
 
         return (
-           <Modal show={this.props.data.showModal} onEntering={this.onOpenModal.bind(this)} onHide={this.props.handleClose}> 
+           <Modal show={this.props.data.showModal} onEntering={this.onOpenModal.bind(this)} onEntered={this.onEnteredModal.bind(this)} onHide={this.props.handleClose}> 
                 <Modal.Header closeButton>
                     <Modal.Title>
            Remove {this.props.data.destinationDetails.name}

@@ -66,7 +66,7 @@ class DestinationFilter extends React.Component
             </FormGroup>
         {' '}
         <FormGroup controlId="description">
-            <FormControl type="text" inputRef = {(input) => this.inputDescription = input } onChange={this.handleChange.bind(this) }  placeholder="Descritpion" />
+            <FormControl type="text" inputRef = {(input) => this.inputDescription = input } onChange={this.handleChange.bind(this) }  placeholder="Description" />
         </FormGroup>
         {' '}
         <FormGroup controlId="content">
