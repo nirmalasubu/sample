@@ -20,13 +20,12 @@ class TitleSearch extends React.Component {
             selectedSeriesFilter: "",
             titlesToRemove: [],
             titlesToAdd: [],
-            unselectableTitles: [],
-            selectedTitles: []
+            selectedTitleIds: []
         }
     }
 
     handleChange(val) {
-        this.setState({ selectedTitleTypeFilter: "", selectedSeriesFilter: "", titlesToAdd: [], selectedTitles: [] });
+        this.setState({ selectedTitleTypeFilter: "", selectedSeriesFilter: "", titlesToAdd: [], selectedTitleIds: [] });
         this.props.dispatch(clearTitles());
 
         var searchParam = this.inputTitleSearch.value;
@@ -49,7 +48,7 @@ class TitleSearch extends React.Component {
     }
 
     onTitleTypeChanged(value) {
-        this.setState({ selectedTitleTypeFilter: value, selectedSeriesFilter: "", titlesToAdd: [], selectedTitles: [] });
+        this.setState({ selectedTitleTypeFilter: value, selectedSeriesFilter: "", titlesToAdd: [], selectedTitleIds: [] });
         var filter = {};
         filter.isTitleType = true;
         filter.value = value;
@@ -57,7 +56,7 @@ class TitleSearch extends React.Component {
     }
 
     onSeriesChanged(value) {
-        this.setState({ selectedSeriesFilter: value, selectedTitleTypeFilter: "", titlesToAdd: [], selectedTitles: [] });
+        this.setState({ selectedSeriesFilter: value, selectedTitleTypeFilter: "", titlesToAdd: [], selectedTitleIds: [] });
         var filter = {};
         filter.isTitleType = false;
         filter.value = value;
@@ -93,7 +92,7 @@ class TitleSearch extends React.Component {
         var titlesToAddTemp = this.state.titlesToAdd;
         var titleFoundIdx = -1;
 
-        var selectedTitles = this.state.selectedTitles;
+        var selectedTitleIds = this.state.selectedTitleIds;
 
         for (var i = 0; i < titlesToAddTemp.length; i++) {
             if (titlesToAddTemp[i].titleId == row.titleId) {
@@ -104,21 +103,21 @@ class TitleSearch extends React.Component {
         if (isSelected) {
             if (titleFoundIdx == -1) {
                 titlesToAddTemp.push(row);
-                selectedTitles.push(row.titleId);
+                selectedTitleIds.push(row.titleId);
             }
         }
         else {
             if (titleFoundIdx > -1) {
                 titlesToAddTemp.splice(titleFoundIdx, 1);
-                selectedTitles.splice(selectedTitles.indexOf(row.titleId), 1);
+                selectedTitleIds.splice(selectedTitleIds.indexOf(row.titleId), 1);
             }
         }
-        this.setState({ titlesToAdd: titlesToAddTemp, selectedTitles: selectedTitles });
+        this.setState({ titlesToAdd: titlesToAddTemp, selectedTitleIds: selectedTitleIds });
     }
 
     onAddTitleButtonClick() {
         this.props.onAddTitles(this.state.titlesToAdd);
-        this.setState({ titlesToAdd: [], selectedTitles: [] })
+        this.setState({ titlesToAdd: [], selectedTitleIds: [] })
     }
 
     onRemoveTitleButtonClick() {

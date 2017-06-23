@@ -11,24 +11,44 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
 
 @connect((store) => {
   return {
     config: store.config
   };
 })
-class DestinationPropertiesForm extends React.Component {
+class DestinationPropertiesFilter extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       brandsSelection: {},
-      selectedTitles: []
+      selectedTitles: [],
+      hasChange: false,
+      showWarningModel: false
     }
   }
   componentDidMount() {
 
+  }
+
+  openWarningModel() {
+    this.setState({ showWarningModel: true });
+  }
+
+  closeWarningModel() {
+    this.setState({ showWarningModel: false });
+  }
+
+  handleClose() {
+    if (!this.state.hasChange) {
+      this.props.handleClose();
+    }
+    else {
+      this.openWarningModel();
+    }
   }
 
   resetForm() {
@@ -60,7 +80,7 @@ class DestinationPropertiesForm extends React.Component {
       brands.push(brandObject);
     }
 
-    this.setState({ brandsSelection: brands, selectedTitles: titles });
+    this.setState({ brandsSelection: brands, selectedTitles: titles, hasChange: false });
   }
 
   handleBrandChange(brandName) {
@@ -73,7 +93,7 @@ class DestinationPropertiesForm extends React.Component {
       }
     }
 
-    this.setState({ brandsSelection: brands });
+    this.setState({ brandsSelection: brands, hasChange: true });
   }
 
   onClickSave() {
@@ -128,7 +148,7 @@ class DestinationPropertiesForm extends React.Component {
       }
     }
 
-    this.setState({ selectedTitles: titlesToUpdate });
+    this.setState({ selectedTitles: titlesToUpdate, hasChange: true });
   }
 
   onAddTitles(titles) {
@@ -146,7 +166,7 @@ class DestinationPropertiesForm extends React.Component {
       }
     }
 
-    this.setState({ selectedTitles: titlesToUpdate });
+    this.setState({ selectedTitles: titlesToUpdate, hasChange: true });
   }
 
   render() {
@@ -180,9 +200,10 @@ class DestinationPropertiesForm extends React.Component {
               onRemoveTitles={this.onRemoveTitles.bind(this)}
             />
           </div>
+          <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.props.handleClose.bind(this)} />
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.props.handleClose}>Cancel</Button>
+          <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
           <Button className="btn btn-primary btn-large" onClick={this.onClickSave.bind(this)}>Save</Button>
         </Modal.Footer>
       </Modal>
@@ -190,4 +211,4 @@ class DestinationPropertiesForm extends React.Component {
   }
 }
 
-export default DestinationPropertiesForm
+export default DestinationPropertiesFilter
