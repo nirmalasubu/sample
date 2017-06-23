@@ -119,7 +119,7 @@ namespace OnDemandTools.API.v1.Models.Handler
         [JsonProperty(PropertyName = "bucket-url")]
         public String BucketURL { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty(Ignored = true)]
         public String AkamaiURL { get; set; }
 
         [JsonProperty(PropertyName = "asset-id")]
