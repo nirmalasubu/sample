@@ -19,12 +19,14 @@ class TitleSearch extends React.Component {
             selectedTitleTypeFilter: "",
             selectedSeriesFilter: "",
             titlesToRemove: [],
-            titlesToAdd: []
+            titlesToAdd: [],
+            unselectableTitles:[],
+            selectedTitles:[]
         }
     }
 
     handleChange(val) {
-
+        this.setState({ selectedTitleTypeFilter: "", selectedSeriesFilter: "", titlesToAdd:[], selectedTitles:[] });
         this.props.dispatch(clearTitles());
 
         var searchParam = this.inputTitleSearch.value;
@@ -47,7 +49,7 @@ class TitleSearch extends React.Component {
     }
 
     onTitleTypeChanged(value) {
-        this.setState({ selectedTitleTypeFilter: value, selectedSeriesFilter: "" });
+        this.setState({ selectedTitleTypeFilter: value, selectedSeriesFilter: "", titlesToAdd:[], selectedTitles:[] });
         var filter = {};
         filter.isTitleType = true;
         filter.value = value;
@@ -55,7 +57,7 @@ class TitleSearch extends React.Component {
     }
 
     onSeriesChanged(value) {
-        this.setState({ selectedSeriesFilter: value, selectedTitleTypeFilter: "" });
+        this.setState({ selectedSeriesFilter: value, selectedTitleTypeFilter: "", titlesToAdd:[], selectedTitles:[] });
         var filter = {};
         filter.isTitleType = false;
         filter.value = value;
@@ -64,6 +66,7 @@ class TitleSearch extends React.Component {
 
     onSelectedTitlesRowSelect(row, isSelected, e) {
         var titlesToRemoveTemp = this.state.titlesToRemove;
+
         var titleFoundIdx = -1;
 
         for (var i = 0; i < titlesToRemoveTemp.length; i++) {
@@ -82,12 +85,15 @@ class TitleSearch extends React.Component {
                 titlesToRemoveTemp.splice(titleFoundIdx, 1);
             }
         }
-        this.setState({ titlesToRemove: titlesToRemoveTemp });
+        this.setState({ titlesToRemove: titlesToRemoveTemp  });
+
     }
 
     onAvailableTitlesRowSelect(row, isSelected, e) {
         var titlesToAddTemp = this.state.titlesToAdd;
         var titleFoundIdx = -1;
+
+        var selectedTitles = this.state.selectedTitles;
 
         for (var i = 0; i < titlesToAddTemp.length; i++) {
             if (titlesToAddTemp[i].titleId == row.titleId) {
@@ -98,14 +104,18 @@ class TitleSearch extends React.Component {
         if (isSelected) {
             if (titleFoundIdx == -1) {
                 titlesToAddTemp.push(row);
+                selectedTitles.push(row.titleId);
             }
         }
         else {
             if (titleFoundIdx > -1) {
                 titlesToAddTemp.splice(titleFoundIdx, 1);
+                selectedTitles.splice(selectedTitles.indexOf(row.titleId),1);
             }
         }
-        this.setState({ titlesToAdd: titlesToAddTemp });
+        this.setState({ titlesToAdd: titlesToAddTemp, selectedTitles: selectedTitles });
+
+        console.log(this.state.selectedTitles);
     }
 
     onAddTitleButtonClick() {
@@ -120,12 +130,21 @@ class TitleSearch extends React.Component {
 
     render() {
 
+        var unselectableTitles=[];
+
+        for(var i=0;i<this.props.selectedTitles.length;i++)
+        {
+            unselectableTitles.push(this.props.selectedTitles[i].titleId);
+        }
+
         const availableGridProps = {
             mode: 'checkbox',
             bgColor: 'yellow', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
             hideSelectColumn: true,  // enable hide selection column.
             clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
-            onSelect: this.onAvailableTitlesRowSelect.bind(this)
+            onSelect: this.onAvailableTitlesRowSelect.bind(this),
+            unselectable: unselectableTitles,
+            selected: this.state.selectedTitles
         };
 
         const selectedGridProps = {
