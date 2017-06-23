@@ -208,9 +208,10 @@ namespace OnDemandTools.API.Helpers.MappingRules
 
             urls.Add(BuildUrlFor(matches, "bucketUrl"));
 
-            matches = regex.Match(source.AkamaiURL);
-            
-            urls.Add(BuildUrlFor(matches, "akamaiUrl"));            
+            if (!string.IsNullOrEmpty(source.AkamaiURL)) {
+                matches = regex.Match(source.AkamaiURL);            
+                urls.Add(BuildUrlFor(matches, "akamaiUrl"));            
+            }           
            
             return urls;
         }
