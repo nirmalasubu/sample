@@ -9,7 +9,9 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
-
+/// <summary>
+// Sub component for display deliverable delete confirmation
+/// <summary>
 class RemoveDeliverablesModal extends React.Component
 {
     constructor(props) {

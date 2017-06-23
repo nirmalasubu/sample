@@ -16,7 +16,8 @@ class AddEditDestinationDeliverables extends React.Component {
     this.state = ({
       destinationDetails: {},
       showDeliverableDeleteModal: false,
-      deliverableIndexToRemove: -1
+      deliverableIndexToRemove: -1,
+      cursorPosition:0
     });
   }
 
@@ -123,17 +124,21 @@ class AddEditDestinationDeliverables extends React.Component {
       model.deliverables[event.target.id].value = event.target.value;
       this.setState({ destinationDetails: model });
 
+      // set the current cursor location
+      this.setState({ cursorPosition: event.target.selectionStart });
+
       // Bubble up validation state change to parent. 
       this.updateValidationStates();
     }
 
     // Handle substitution token click event
     const subsitutionTokenClick = (index, event) => {
-
-      // Render the selected token and append it to existing value
+      
+      // Render the selected token and append it to existing value at the cursorPosition
       var model = this.state.destinationDetails;
       var oldValue = model.deliverables[index].value;
-      model.deliverables[index].value = oldValue + event.target.value;
+      var newValue = oldValue.slice(0, this.state.cursorPosition) + event.target.value + oldValue.slice(this.state.cursorPosition);
+      model.deliverables[index].value = newValue;
       this.setState({ destinationDetails: model });
 
       // Bubble up validation state change to parent. 
@@ -143,15 +148,19 @@ class AddEditDestinationDeliverables extends React.Component {
       this.refs.overlay.hide();
     }
 
+    // Handle click event to record cursor position
+    const handleDeliverableValueClick = (event) => {
+      this.setState({ cursorPosition: event.target.selectionStart });       
+    }
 
     // Define the set of substitution tokens that will be available within each deliverable text box
     const popoverValueClickRootClose = (index) => {
       return (<Popover id="popover-trigger-click-root-close" title="Substitution Tokens">
-        <span><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
-        <span> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
-        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
-        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
+        <span><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
+        <span> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
+        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
+        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
         <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
         <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
         <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
@@ -173,7 +182,8 @@ class AddEditDestinationDeliverables extends React.Component {
             <Form>
               <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
                 <FormGroup validationState={isValueValid}>
-                  <FormControl type="text" id={index.toString()} value={item.value} placeholder="Value" onChange={handleDeliverableValueChange.bind(this)} />
+                  <FormControl type="text" id={index.toString()} value={item.value} ref="input" placeholder="Value" onChange={handleDeliverableValueChange.bind(this)}
+                   onClick={handleDeliverableValueClick}/>
                 </FormGroup>
               </OverlayTrigger>
             </Form>
@@ -191,7 +201,7 @@ class AddEditDestinationDeliverables extends React.Component {
         <Grid fluid={true} id="deliverable-grid">
           <Row>
             <Col sm={10} ><label class="destination-properties-label">Value</label></Col>
-            <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
+            <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin"></label></Col>
           </Row>
           <div class="destination-height">
             {deliverableRows}
@@ -214,8 +224,7 @@ class AddEditDestinationDeliverables extends React.Component {
         <div>
           {this.generateDeliverableTable()}
         </div>
-        <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />
-
+        <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />       
       </div>
     )
   }
