@@ -171,7 +171,11 @@ SubsitutionTokenClick(index,event){
     var oldValue= model.properties[index].value;
     model.properties[index].value = oldValue+event.target.value;
      this.setState({ destinationDetails: model });
-    this.props.data = this.state.destinationDetails;
+     this.props.data = this.state.destinationDetails;
+     var overlayIndex="overlay"+index;
+     
+     //hide the overlay after selecting token
+     this.refs[overlayIndex].hide();
 }
 
     //properties construct  of a destination
@@ -183,13 +187,14 @@ SubsitutionTokenClick(index,event){
             {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
                     var nameValidation=item.name?"":"error"
+                    var overlay="overlay"+index
                     return (<Row >
                    <Form>
                    <Col sm={3} >
                         <FormGroup controlId="Name" validationState={nameValidation}>
                        <FormControl type="text" id={index} value={item.name} title={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
                        </FormGroup></Col>
-                   <Col sm={3}> <OverlayTrigger trigger="click" rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
+                   <Col sm={3}> <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
                        <FormGroup controlId="Value" >
                        <FormControl type="text" id={index} value={item.value} title={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
                        </FormGroup></OverlayTrigger></Col>
