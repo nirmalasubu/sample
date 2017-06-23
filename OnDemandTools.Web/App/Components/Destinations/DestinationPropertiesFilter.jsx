@@ -182,7 +182,7 @@ class DestinationPropertiesForm extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.props.handleClose}>Close</Button>
+          <Button onClick={this.props.handleClose}>Cancel</Button>
           <Button className="btn btn-primary btn-large" onClick={this.onClickSave.bind(this)}>Save</Button>
         </Modal.Footer>
       </Modal>
