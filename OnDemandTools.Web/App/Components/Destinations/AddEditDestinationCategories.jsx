@@ -39,7 +39,7 @@ class AddEditDestinationCategories extends React.Component {
     //To construct brands. 
     CategoryBrandImageConstruct(item,index)
     { 
-        if(item.brands.length>1 && item.brands.length<=4)
+        if(item.brands.length>=1 && item.brands.length<=4)
         {
             var image=[];
             item.brands.map(function (name, index) {
@@ -50,7 +50,7 @@ class AddEditDestinationCategories extends React.Component {
             return tag;
         }
 
-        if(item.brands.length>4)
+        if(item.brands.length>=4)
         {
             var image=[];
             item.brands.map(function (name, index) {
