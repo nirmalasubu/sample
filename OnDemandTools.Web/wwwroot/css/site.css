@@ -374,12 +374,18 @@ p.shortDesc {
     width:105%;
 }
 
+.filterButton
+{
+    width: 90px;
+}
+
 /*****************************************************/
 /******** Destination Deliverables tab styling ******/
 #deliverable-grid {
     padding-top: 18px;
 }
-.filterButton
-{
-    width: 90px;
+
+
+.destination-deliverables-popovermargin{
+    margin-bottom:3px;
 }

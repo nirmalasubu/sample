@@ -4,8 +4,9 @@ import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLa
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import RemoveDeliverablesModal from 'Components/Destinations/RemoveDeliverablesModal';
 
-//
+/// <summary>
 // Sub component for all things related to destination deliverables
+/// <summary>
 class AddEditDestinationDeliverables extends React.Component {
 
   // Define default component state information.
@@ -107,9 +108,9 @@ class AddEditDestinationDeliverables extends React.Component {
   generateDeliverableTable = () => {
 
 
-    // Open confirmation window and if confirmed, remove item from 'deliverables' list at 'index'
+    // Open model window to confirm delete action
     const openDeleteDeliverableModal = (index) => {
-      // open state
+      // Setting the state here triggers the event within 'RemoveDeliverablesModal' sub component
       this.setState({ showDeliverableDeleteModal: true, deliverableIndexToRemove: index });
     }
 
@@ -126,7 +127,7 @@ class AddEditDestinationDeliverables extends React.Component {
       this.updateValidationStates();
     }
 
-    // Handle substitution token click
+    // Handle substitution token click event
     const subsitutionTokenClick = (index, event) => {
 
       // Render the selected token and append it to existing value
@@ -134,7 +135,7 @@ class AddEditDestinationDeliverables extends React.Component {
       var oldValue = model.deliverables[index].value;
       model.deliverables[index].value = oldValue + event.target.value;
       this.setState({ destinationDetails: model });
-     
+
       // Bubble up validation state change to parent. 
       this.updateValidationStates();
 
@@ -145,15 +146,15 @@ class AddEditDestinationDeliverables extends React.Component {
 
     // Define the set of substitution tokens that will be available within each deliverable text box
     const popoverValueClickRootClose = (index) => {
-      return (<Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
-        <span><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
-        <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
-        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
-        <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
-        <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
+      return (<Popover id="popover-trigger-click-root-close" title="Substitution Tokens">
+        <span><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
+        <span> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
+        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
+        <div><button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" type="button" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
+        <div> <button class="btn btn-primary btn-xs destination-deliverables-popovermargin" onClick={(event) => subsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
       </Popover>);
     }
 
