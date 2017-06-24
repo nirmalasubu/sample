@@ -3,43 +3,6 @@ var webpack = require('webpack');
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 
-var isProd = (process.env.NODE_ENV === 'production');
-
-// Conditionally return a list of plugins to use based on the current environment.
-// Repeat this pattern for any other config key (ie: loaders, etc).
-function getPlugins() {
-  var plugins = [];
-
-  // Always expose NODE_ENV to webpack, you can now use `process.env.NODE_ENV`
-  // inside your code for any environment checks
-  plugins.push(new webpack.DefinePlugin({
-    'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }
-  }));
-
-  // Add common plugins
-  plugins.push(new CaseSensitivePathsPlugin());
-
-  // Conditionally add plugins for Production builds.
-  if (isProd) {
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
-            minimize: true,
-            compress: {
-                warnings: false
-            }
-        }));
-
-    plugins.push(new webpack.optimize.AggressiveMergingPlugin());
-  }
-
-  // Conditionally add plugins for Development
-  else {
-    
-  }
-
-  return plugins;
-}
 
 module.exports = {
     context: path.resolve(__dirname, './App'),
@@ -103,5 +66,20 @@ module.exports = {
         ]
 
     },
-    plugins: getPlugins(),
+    plugins: [
+        new CaseSensitivePathsPlugin(),
+        new webpack.DefinePlugin({ 
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            compress: {
+                warnings: false
+            }
+        }),
+        new webpack.optimize.AggressiveMergingPlugin()
+        
+    ],
 };
