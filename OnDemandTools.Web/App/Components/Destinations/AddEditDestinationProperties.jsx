@@ -53,11 +53,8 @@ class AddEditDestinationProperties extends React.Component {
     {
         var newProperty={name:"",value:"", brands:[],titleIds:[],seriesIds:[],titles:[]}
         var array=[];
-
-        array = this.state.destinationDetails;
-        array.properties.reverse();
-        array.properties.push(newProperty);
-        array.properties.reverse();
+        array = this.state.destinationDetails;        
+        array.properties.unshift(newProperty);
         this.setState({destinationDetails: array });
 
         this.CheckPropertyNameIsEmpty();
