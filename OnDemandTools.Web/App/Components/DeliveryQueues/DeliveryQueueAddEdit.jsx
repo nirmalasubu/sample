@@ -360,7 +360,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col md={8}>
-                                            <Tabs defaultActiveKey={1} >
+                                            <Tabs id="deliveryQueueTabs" defaultActiveKey={1} >
                                                 <Tab eventKey={1} title="Criteria">
                                                     <Grid>
                                                         <Row>
