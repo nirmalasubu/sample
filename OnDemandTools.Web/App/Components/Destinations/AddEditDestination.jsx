@@ -31,7 +31,8 @@ class AddEditDestinationModel extends React.Component {
 
         this.state = ({
             isProcessing: false,
-            destinationUnModifiedData: "",
+            destinationUnModifiedData: {},
+            destinationDetails: {},
             validationStateName: "",
             validationStateDescription: "",
             validationStateExternalId: "",
@@ -42,9 +43,12 @@ class AddEditDestinationModel extends React.Component {
     }
     //called on the model load
     onOpenModel(destination) {
+        var model = $.extend(true, {}, this.props.data.destinationDetails);
+
         this.setState({
             isProcessing: false,
-            destinationUnModifiedData: jQuery.extend(true, {}, this.props.data.destinationDetails)
+            destinationUnModifiedData: model,
+            destinationDetails: model
         });
     }
 
@@ -134,7 +138,10 @@ class AddEditDestinationModel extends React.Component {
 
     render() {
         return (
-            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static" 
+            onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} 
+            show={this.props.data.showAddEditModel} 
+            onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.destinationDetails.id == null ? "Add Destination" : "Edit Destination " + this.props.data.destinationDetails.name}</div>

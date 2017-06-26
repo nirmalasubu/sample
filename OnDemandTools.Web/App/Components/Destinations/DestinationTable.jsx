@@ -22,7 +22,7 @@ class DestinationTable extends React.Component {
             newDestinationModel: {},
             showAddEditModel: false,
             showWarningModel: false,
-            destinationDetails: "",
+            destinationDetails: {},
             modalActionType: "",
             options: {
                 defaultSortName: 'name',
@@ -68,16 +68,16 @@ class DestinationTable extends React.Component {
         this.setState({ showAddEditModel: true, destinationDetails: jQuery.extend(true, {}, this.state.newDestinationModel) });
     }
 
-    openModel(val) {
+    openDeleteModel(val) {
         this.setState({ showModal: true, destinationDetails: val });
     }
 
-    closeModel() {
+    closeDeleteModel() {
         this.setState({ showModal: false });
     }
 
     openAddEditModel(val) {
-        this.setState({ showAddEditModel: true, destinationDetails: val });
+        this.setState({ showAddEditModel: true, destinationDetails: val });        
     }
 
     closeAddEditModel() {        
@@ -141,7 +141,7 @@ class DestinationTable extends React.Component {
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openModel(rowData, event)} >
+                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -184,7 +184,7 @@ class DestinationTable extends React.Component {
                 </BootstrapTable>
 
                 <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
-                <RemoveDestinationModal data={this.state} handleClose={this.closeModel.bind(this)} />                
+                <RemoveDestinationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />                
             </div>)
     }
 
