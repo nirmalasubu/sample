@@ -44,9 +44,13 @@ class AddEditDestinationDeliverables extends React.Component {
     // down from the parent component
     var destination = this.state.destinationDetails;
 
+    destination.deliverables.reverse();
+
     // Next, access deliverables (array defined in destination)
     // and add a placeholder for new deliverable
     destination.deliverables.push(newDeliverable);
+
+    destination.deliverables.reverse();
 
     // Reflect the desination changes in global store by initiating
     // redux action
