@@ -236,7 +236,7 @@ class QueueResetByDateRange extends React.Component {
                                     <FormGroup controlId="queryInput" validationState={this.state.validationQueryState}>
                                         <ControlLabel>Query Criteria &nbsp;
                                         <a target="_mongo" href="http://docs.mongodb.org/master/tutorial/query-documents/">
-                                                <span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
+                                                <span data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
                                             </a>
                                             &nbsp;&nbsp;
                                         <span>{this.state.validationQueryState != '' ? "Please provide valid query criteria" : ""}</span>
