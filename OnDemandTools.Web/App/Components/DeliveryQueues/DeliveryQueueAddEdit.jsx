@@ -30,9 +30,9 @@ class DeliveryQueueAddEdit extends React.Component {
         super(props);
 
         this.state = ({
-            validationStateName: "",
-            validationStateEmail: "",
-            validationQueryState: "",
+            validationStateName: null,
+            validationStateEmail: null,
+            validationQueryState: null,
             syntaxCheckerResults: "",
             isProcessing: false,
             queueModel: {},
@@ -70,8 +70,8 @@ class DeliveryQueueAddEdit extends React.Component {
         var statusNames = this.getStatusNames(this.props.statuses);
 
         this.setState({
-            validationStartDateState: "",
-            validationEndDateState: "",
+            validationStartDateState: null,
+            validationEndDateState: null,
             syntaxCheckerResults: "",
             queueModel: model,
             options: optionValues,
@@ -164,9 +164,9 @@ class DeliveryQueueAddEdit extends React.Component {
         }
 
         this.setState({
-            validationStateName: (name == "") ? 'error' : '',
-            validationStateEmail: (email != "" && validator.isEmail(email)) ? '' : 'error',
-            validationQueryState: hasError ? 'error' : ''
+            validationStateName: (name == "") ? 'error' : null,
+            validationStateEmail: (email != "" && validator.isEmail(email)) ? null : 'error',
+            validationQueryState: hasError ? 'error' : null
         });
     }
 
@@ -373,7 +373,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                             <span tooltip data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
                                                                         </a>
                                                                         &nbsp;&nbsp;
-                                                                        <span>{this.state.validationQueryState != '' ? "Please provide valid query" : ""}</span>
+                                                                        <span>{this.state.validationQueryState != null ? "Please provide valid query" : ""}</span>
                                                                     </ControlLabel>
                                                                     <FormControl
                                                                         bsClass="form-control form-control-modal-Edit"
@@ -387,7 +387,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                             </Col>
                                                             <Col md={4}>
                                                                 <ControlLabel>
-                                                                    <Button disabled={this.state.validationQueryState != ''} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query</Button>
+                                                                    <Button disabled={this.state.validationQueryState != null} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query</Button>
                                                                 </ControlLabel>
                                                                 <FormGroup controlId="queryResults">
                                                                     <FormControl bsClass="form-control form-control-modal-Edit" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
@@ -458,7 +458,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.props.handleClose}>Cancel</Button>
-                    <Button disabled={(this.state.validationStateName != '' || this.state.validationStateEmail != '' || this.state.validationQueryState != '' || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                    <Button disabled={(this.state.validationStateName != null || this.state.validationStateEmail != null || this.state.validationQueryState != null || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>

@@ -17,9 +17,9 @@ class QueueResetByDateRange extends React.Component {
         super(props);
         var iDate = new Moment();
         this.state = {
-            validationStartDateState: "",
-            validationEndDateState: "",
-            validationQueryState: "",
+            validationStartDateState: null,
+            validationEndDateState: null,
+            validationQueryState: null,
             queryValue: "",
             syntaxCheckerResults: "",
             deliverCriteria: {
@@ -42,8 +42,8 @@ class QueueResetByDateRange extends React.Component {
 
         this.setState({
             deliverCriteria: criteria,
-            validationStartDateState: "",
-            validationEndDateState: "",
+            validationStartDateState: null,
+            validationEndDateState: null,
             syntaxCheckerResults: ""
         });
 
@@ -65,7 +65,7 @@ class QueueResetByDateRange extends React.Component {
         }
         else {
             var criteria = this.state.deliverCriteria;
-            this.setState({ validationStartDateState: '' });
+            this.setState({ validationStartDateState: null });
             criteria.startDateTime = value;
 
             var mins = value.diff(this.state.endDateTime, 'hours');
@@ -88,7 +88,7 @@ class QueueResetByDateRange extends React.Component {
             this.setState({ validationEndDateState: 'error' });
         }
         else {
-            this.setState({ validationEndDateState: '' });
+            this.setState({ validationEndDateState: null });
 
             var criteria = this.state.deliverCriteria;
             var mins = value.diff(criteria.startDateTime, 'hours');
@@ -153,7 +153,7 @@ class QueueResetByDateRange extends React.Component {
                 hasError = true;
             }
         }
-        this.setState({ validationQueryState: hasError ? 'error' : '' });
+        this.setState({ validationQueryState: hasError ? 'error' : null });
     }
 
     _onSubmitForm() {
@@ -257,7 +257,7 @@ class QueueResetByDateRange extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.props.handleClose}>Cancel</Button>
-                        <Button disabled={(this.state.validationEndDateState != '' || this.state.validationStartDateState != '' || this.state.validationQueryState != '')}
+                        <Button disabled={(this.state.validationEndDateState != null || this.state.validationStartDateState != null || this.state.validationQueryState != null)}
                             onClick={this._onSubmitForm.bind(this)} className="btn btn-primary btn-large">Run Query</Button>
                     </Modal.Footer>
                 </Form>
