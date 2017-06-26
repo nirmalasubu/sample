@@ -182,12 +182,12 @@ SubsitutionTokenClick(index,event){
        return (<Row >
          <Form>
          <Col sm={3} >
-        <FormGroup controlId="Name" validationState={nameValidation}>
-        <FormControl type="text" id={index} value={item.name} title={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
+        <FormGroup controlId={index} validationState={nameValidation}>
+        <FormControl type="text" value={item.name} title={item.name} ref="Name"  placeholder="Name"  onChange={this.handlePropertyNameChange.bind(this)}  />
         </FormGroup></Col>
         <Col sm={3}> <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
-        <FormGroup controlId="Value" >
-        <FormControl type="text" id={index} value={item.value} title={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
+        <FormGroup controlId={index} >
+        <FormControl type="text" value={item.value} title={item.value} ref="Value"  placeholder="Value"  onChange={this.handlePropertyValueChange.bind(this)}  />
         </FormGroup></OverlayTrigger></Col>
         <Col sm={2} >{this.PropertyBrandImageConstruct(item,index)}</Col>
         <Col sm={2} >{this.TitledetailConstruct(item,index)}</Col>
