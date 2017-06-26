@@ -182,7 +182,7 @@ class DestinationPropertiesFilter extends React.Component {
         backdrop="static"
         onEntering={this.resetForm.bind(this)}
         show={this.props.data.showAddEditPropertiesFilter}
-        onHide={this.props.handleClose}>
+        onHide={this.handleClose.bind(this)}>
         <Modal.Header closeButton>
           <Modal.Title>
             <div>Filters</div>

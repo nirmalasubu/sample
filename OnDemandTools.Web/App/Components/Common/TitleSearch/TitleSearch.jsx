@@ -209,11 +209,11 @@ class TitleSearch extends React.Component {
                                 selectRow={availableGridProps}
                                 data={this.props.titleSearchResults.titles}
                                 striped hover pagination={true}>
-                                <TableHeaderColumn width="80px" isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
-                                <TableHeaderColumn width="80px" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
-                                <TableHeaderColumn width="70px" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" isKey dataSort={false} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={false} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" dataSort={false} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                                <TableHeaderColumn width="70px" dataSort={false} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={false} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
                         <Col md={1} className="filterButtons">
@@ -232,11 +232,11 @@ class TitleSearch extends React.Component {
                                 selectRow={selectedGridProps}
                                 data={this.props.selectedTitles}
                                 striped hover pagination={true}>
-                                <TableHeaderColumn width="80px" isKey dataSort={true} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
-                                <TableHeaderColumn width="80px" dataSort={true} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
-                                <TableHeaderColumn width="70px" dataSort={true} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
-                                <TableHeaderColumn dataSort={true} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" isKey dataSort={false} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={false} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
+                                <TableHeaderColumn width="80px" dataSort={false} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>
+                                <TableHeaderColumn width="70px" dataSort={false} dataField="releaseYear" dataFormat={this.titleIdFormat.bind(this)} >Year</TableHeaderColumn>
+                                <TableHeaderColumn dataSort={false} dataField="seriesTitleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Series</TableHeaderColumn>
                             </BootstrapTable>
                         </Col>
                     </Row>
