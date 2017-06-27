@@ -12,6 +12,7 @@ class ImageCheckBox extends React.Component {
             src={"../images/brands/" + this.props.brandName + ".gif"} 
             alt={this.props.brandName}
             title={this.props.brandName}
+            key={this.props.brandName}
              />
         )
     }

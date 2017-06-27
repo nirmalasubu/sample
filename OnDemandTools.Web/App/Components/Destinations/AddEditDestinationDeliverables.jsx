@@ -17,7 +17,16 @@ class AddEditDestinationDeliverables extends React.Component {
       destinationDetails: {},
       showDeliverableDeleteModal: false,
       deliverableIndexToRemove: -1,
-      cursorPosition:0
+      cursorPosition: 0
+    });
+  }
+
+  /// <summary>
+  // Invoked immediately when there is any change in props
+  /// <summary>
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      destinationDetails: nextProps.data
     });
   }
 
@@ -133,7 +142,7 @@ class AddEditDestinationDeliverables extends React.Component {
 
     // Handle substitution token click event
     const subsitutionTokenClick = (index, event) => {
-      
+
       // Render the selected token and append it to existing value at the cursorPosition
       var model = this.state.destinationDetails;
       var oldValue = model.deliverables[index].value;
@@ -150,7 +159,7 @@ class AddEditDestinationDeliverables extends React.Component {
 
     // Handle click event to record cursor position
     const handleDeliverableValueClick = (event) => {
-      this.setState({ cursorPosition: event.target.selectionStart });       
+      this.setState({ cursorPosition: event.target.selectionStart });
     }
 
     // Define the set of substitution tokens that will be available within each deliverable text box
@@ -183,7 +192,7 @@ class AddEditDestinationDeliverables extends React.Component {
               <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
                 <FormGroup validationState={isValueValid}>
                   <FormControl type="text" id={index.toString()} value={item.value} ref="input" placeholder="Value" onChange={handleDeliverableValueChange.bind(this)}
-                   onClick={handleDeliverableValueClick}/>
+                    onClick={handleDeliverableValueClick} />
                 </FormGroup>
               </OverlayTrigger>
             </Form>
@@ -224,7 +233,7 @@ class AddEditDestinationDeliverables extends React.Component {
         <div>
           {this.generateDeliverableTable()}
         </div>
-        <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />       
+        <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />
       </div>
     )
   }

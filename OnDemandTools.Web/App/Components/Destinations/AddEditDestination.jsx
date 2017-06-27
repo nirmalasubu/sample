@@ -20,7 +20,7 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
-        
+
     };
 })
 
@@ -31,23 +31,27 @@ class AddEditDestinationModel extends React.Component {
 
         this.state = ({
             isProcessing: false,
-            destinationUnModifiedData: {},
-            destinationDetails: {},
-            validationStateName: "",
-            validationStateDescription: "",
-            validationStateExternalId: "",
-            validationStatePropertyName: "",
-            validationStateDeliverables: "",
+            destinationDetails: {
+                name: "",
+                description: "",
+                deliverables: [],
+                properties: [],
+                categories: [],
+                content: { cx: false, highDefinition: false, nonCx: false, standardDefinition: false }
+            },
+            validationStateName: null,
+            validationStateDescription: null,
+            validationStateExternalId: null,
+            validationStatePropertyName: null,
+            validationStateDeliverables: null,
             showWarningModel: false
         });
     }
     //called on the model load
     onOpenModel(destination) {
-        var model = $.extend(true, {}, this.props.data.destinationDetails);
-
+        var model = $.extend(true, {}, destination);        
         this.setState({
             isProcessing: false,
-            destinationUnModifiedData: model,
             destinationDetails: model
         });
     }
@@ -66,24 +70,24 @@ class AddEditDestinationModel extends React.Component {
 
             this.setState({ isProcessing: true });
 
-            this.props.dispatch(saveDestination(this.props.data.destinationDetails))
+            this.props.dispatch(saveDestination(this.state.destinationDetails))
                 .then(() => {
-                    if (this.props.data.destinationDetails.id == null) {
-                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination successfully created.', '', 2000);
+                    if (this.state.destinationDetails.id == null) {
+                        NotificationManager.success(this.state.destinationDetails.name + ' destination successfully created.', '', 2000);
                     }
                     else {
-                        NotificationManager.success(this.props.data.destinationDetails.name + ' destination updated successfully.', '', 2000);
+                        NotificationManager.success(this.state.destinationDetails.name + ' destination updated successfully.', '', 2000);
                     }
                     this.props.dispatch(destinationAction.fetchDestinations());
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
                 }).catch(error => {
-                    if (this.props.data.destinationDetails.id == null) {
-                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
+                    if (this.state.destinationDetails.id == null) {
+                        NotificationManager.error(this.state.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
                     }
                     else {
-                        NotificationManager.error(this.props.data.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
+                        NotificationManager.error(this.state.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
                     }
                     this.setState({ isProcessing: false });
                 });
@@ -93,13 +97,11 @@ class AddEditDestinationModel extends React.Component {
     }
 
     handleAddEditClose() {
-        var model = this.state.destinationUnModifiedData;
-        jQuery.extend(this.props.data.destinationDetails, this.state.destinationUnModifiedData);
         this.props.handleClose();
     }
 
     handleClose() {
-        if (JSON.stringify(this.state.destinationUnModifiedData) == JSON.stringify(this.props.data.destinationDetails)) {
+        if (JSON.stringify(this.state.destinationDetails) == JSON.stringify(this.props.data.destinationDetails)) {
             this.props.handleClose();
         }
         else {
@@ -109,13 +111,13 @@ class AddEditDestinationModel extends React.Component {
 
     updateValidations(name, description) {
         this.setState({
-            validationStateName: name ? 'error' : '',
-            validationStateDescription: description ? 'error' : ''
+            validationStateName: name ? 'error' : null,
+            validationStateDescription: description ? 'error' : null
         });
     }
 
     updatePropertyNameValidation(IspropertyNameRequired) {
-        this.setState({ validationStatePropertyName: (IspropertyNameRequired == true) ? 'error' : '' });
+        this.setState({ validationStatePropertyName: (IspropertyNameRequired == true) ? 'error' : null });
     }
 
 
@@ -125,43 +127,61 @@ class AddEditDestinationModel extends React.Component {
     /// to adjust the rendering of its controls
     /// </summary>
     updateDeliverablesValidation(HasStateChanged) {
-        this.setState({ validationStateDeliverables: (HasStateChanged == true) ? 'changed' : '' });
+        this.setState({ validationStateDeliverables: (HasStateChanged == true) ? 'changed' : null });
     }
 
     /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateName != '' || this.state.validationStateDescription != ''
-            || this.state.validationStatePropertyName != '' || this.state.isProcessing || this.state.validationStateDeliverables != '');
+        return (this.state.validationStateName != null || this.state.validationStateDescription != null
+            || this.state.validationStatePropertyName != null || this.state.isProcessing || this.state.validationStateDeliverables != null);
+    }
+
+    updateDestination(destination) {
+        this.setState({ destinationDetails: destination });
     }
 
     render() {
         return (
-            <Modal bsSize="large" backdrop="static" 
-            onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)} 
-            show={this.props.data.showAddEditModel} 
-            onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static"
+                onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)}
+                show={this.props.data.showAddEditModel}
+                onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.destinationDetails.id == null ? "Add Destination" : "Edit Destination " + this.props.data.destinationDetails.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AddEditDestinationBasic data={this.props.data.destinationDetails} validationStates={this.updateValidations.bind(this)} />
-                    <Tabs defaultActiveKey={1} >
+                    <AddEditDestinationBasic
+                        updateDestination={this.updateDestination.bind(this)}
+                        data={this.state.destinationDetails}
+                        validationStates={this.updateValidations.bind(this)} />
+                    <Tabs id="addeditdestination" defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
-                            <AddEditDestinationProperties data={this.props.data.destinationDetails} validationStates={this.updatePropertyNameValidation.bind(this)} />
+                            <AddEditDestinationProperties
+                                updateDestination={this.updateDestination.bind(this)}
+                                data={this.state.destinationDetails}
+                                validationStates={this.updatePropertyNameValidation.bind(this)} />
                         </Tab>
                         <Tab eventKey={2} title="Deliverables">
-                            <AddEditDestinationDeliverables data={this.props.data.destinationDetails} validationStates={this.updateDeliverablesValidation.bind(this)} />
+                            <AddEditDestinationDeliverables
+                                updateDestination={this.updateDestination.bind(this)}
+                                data={this.state.destinationDetails}
+                                validationStates={this.updateDeliverablesValidation.bind(this)} />
                         </Tab>
                         <Tab eventKey={3} title="Categories">
-                            <AddEditDestinationCategories data={this.props.data.destinationDetails} />
+                            <AddEditDestinationCategories
+                                updateDestination={this.updateDestination.bind(this)}
+                                data={this.state.destinationDetails} />
                         </Tab>
                     </Tabs>
                     <NotificationContainer />
-                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
+                    <CancelWarningModal
+                        data={this.state}
+                        handleClose={this.closeWarningModel.bind(this)}
+                        handleAddEditDestinationClose={this.handleAddEditClose.bind(this)} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
