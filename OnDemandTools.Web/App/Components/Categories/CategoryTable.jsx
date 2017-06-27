@@ -2,6 +2,7 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
@@ -47,7 +48,7 @@ class CategoryTable extends React.Component {
     openAddEditModel(val) {
     }
 
-    closeAddEditModel() { 
+    closeAddEditModel() {
     }
 
     descriptionFormat(val) {
@@ -57,6 +58,20 @@ class CategoryTable extends React.Component {
         return (
             '<p data-toggle="tooltip">' + val + ' ( <a href="#">' + rowData.destinations.length + '</a> ) ' + '</p>'
         );
+    }
+
+    destinationFormat(val, rowData) {
+        var rows = [];
+
+        for (var idx = 0; idx < rowData.destinations.length; idx++) {
+            rows.push(<Button> {rowData.destinations[idx].name} </Button>);
+        }
+        return (
+            <div>
+                {rows}
+            </div>
+        );
+
     }
 
     actionFormat(val, rowData) {
@@ -81,8 +96,8 @@ class CategoryTable extends React.Component {
             if (item.label == "Name") {
                 return <TableHeaderColumn width="250px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.categoryNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
-            else if (item.label == "Description") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
+            else if (item.label == "Destinations") {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
@@ -96,13 +111,13 @@ class CategoryTable extends React.Component {
             <div>
                 <div>
                     <button class="btn-link pull-right addMarginRight" title="New Category" onClick={(event) => this.openCreateNewDestinationModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i> 
+                        <i class="fa fa-plus-square fa-2x"></i>
                         <span class="addVertialAlign"> New Category</span>
                     </button>
                 </div>
                 <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
-                </BootstrapTable>               
+                </BootstrapTable>
             </div>)
     }
 

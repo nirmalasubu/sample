@@ -10,7 +10,6 @@ import 'react-notifications/lib/notifications.css';
         categories: store.categories
     };
 })
-
 class CategoriesPage extends React.Component {
 
     constructor(props) {
@@ -26,8 +25,7 @@ class CategoriesPage extends React.Component {
             },
 
             columns: [{ "label": "Name", "dataField": "name", "sort": true },
-            { "label": "Destination", "dataField": "destination", "sort": false },
-            { "label": "Description", "dataField": "description", "sort": false },
+            { "label": "Destinations", "dataField": "destinations", "sort": false },
             { "label": "Actions", "dataField": "name", "sort": false }
             ],
             keyField: "name"

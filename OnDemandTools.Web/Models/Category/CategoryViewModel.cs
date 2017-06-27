@@ -12,9 +12,6 @@ namespace OnDemandTools.Web.Models.Destination
         {
             Destinations = new List<DestinationViewModel>();
         }
-
-        public string Id { get; set; }
-
         public string Name { get; set; }
 
         public IEnumerable<DestinationViewModel> Destinations { get; set; }
