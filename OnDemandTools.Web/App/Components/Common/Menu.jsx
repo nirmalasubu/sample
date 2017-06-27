@@ -31,6 +31,7 @@ class Menu extends React.Component {
           <NavItem eventKey={"home"}>Home</NavItem>
           <NavItem eventKey={"deliveryQueues"}>Delivery Queues</NavItem>
           <NavItem eventKey={"destinations"}>Destinations</NavItem>
+          <NavItem eventKey={"categories"}>Categories</NavItem>
           <NavItem eventKey={"products"}>Products</NavItem>
           <NavItem eventKey={"contentTiers"}>Content Tiers</NavItem>          
           <NavItem eventKey={"pendingRequests"}>Pending Requests</NavItem>

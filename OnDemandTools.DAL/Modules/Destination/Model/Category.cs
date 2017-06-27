@@ -1,9 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace OnDemandTools.DAL.Modules.Destination.Model
 {
@@ -16,6 +14,8 @@ namespace OnDemandTools.DAL.Modules.Destination.Model
             TitleIds = new List<int>();
             SeriesIds = new List<int>();
         }
+
+        public ObjectId Id { get; set; }
 
         public string Name { get; set; }
 

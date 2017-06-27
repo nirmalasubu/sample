@@ -2,6 +2,7 @@
 
 import { DeliveryQueueReducer, SignalRQueueDataReducer, NotificationHistoryQueueReducer, FilterQueueDataReducer } from 'Reducers/DeliveryQueue/DeliveryQueueReducer';
 import { DestinationReducer, FilterDestinationDataReducer } from 'Reducers/Destination/DestinationReducer';
+import { CategoryReducer } from 'Reducers/Category/CategoryReducer';
 import { UserReducer } from 'Reducers/User/UserReducer';
 import { ConfigReducer } from 'Reducers/Config/ConfigReducer';
 import { StatusReducer } from 'Reducers/Status/StatusReducer';
@@ -19,7 +20,8 @@ export default combineReducers({
     config: ConfigReducer,
     statuses: StatusReducer,
     products: ProductReducer,
-    titleSearch: TitleSearchReducer
+    titleSearch: TitleSearchReducer,
+    categories: CategoryReducer
     // More reducers if there are
     // can go here
 });

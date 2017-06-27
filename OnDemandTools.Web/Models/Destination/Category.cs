@@ -1,8 +1,6 @@
-﻿using OnDemandTools.Common.Model;
-using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnDemandTools.Web.Models.Destination
 {
@@ -10,9 +8,11 @@ namespace OnDemandTools.Web.Models.Destination
     {
         public Category()
         {
-            Titles = new List<Title>();
-          
+            Titles = new List<Title>();          
         }
+
+        public ObjectId Id { get; set; }
+
         public string Name { get; set; }
 
         public List<string> Brands { get; set; }
