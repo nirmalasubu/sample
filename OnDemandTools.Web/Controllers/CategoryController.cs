@@ -40,14 +40,14 @@ namespace OnDemandTools.Web.Controllers
             List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
             List<DestinationViewModel> destinationsModel = destinations.ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>();            
 
-            var categories = destinationsModel.SelectMany(d => d.Categories).Distinct();
+            var categories = destinationsModel.SelectMany(d => d.Categories);
 
-            foreach (var category in categories)
-            {
+            foreach (var category in categories.GroupBy(e=>e.Name))
+            {            
                 CategoryViewModel categoryVM = new CategoryViewModel
                 {
-                    Name = category.Name,
-                    Destinations = destinationsModel.Where(d => d.Categories.Any(c => c.Name == category.Name)).ToList()                    
+                    Name = category.Key,
+                    Destinations = destinationsModel.Where(d => d.Categories.Any(c => c.Name == category.Key)).ToList()                    
                 };
 
                 categoriesVM.Add(categoryVM);
