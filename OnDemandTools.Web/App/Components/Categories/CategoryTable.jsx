@@ -3,6 +3,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import CategoryExpandTable from 'Components/Categories/CategoryExpandTable';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
@@ -54,9 +55,20 @@ class CategoryTable extends React.Component {
     descriptionFormat(val) {
     }
 
+    isExpandableRow(row) {
+        if (row.destinations.length > 0) return true;
+        else return false;
+    }
+
+    expandComponent(row) {
+        return (
+            <CategoryExpandTable data={row} />
+        );
+    }
+
     categoryNameFormat(val, rowData) {
         return (
-            '<p data-toggle="tooltip">' + val + ' ( <a href="#">' + rowData.destinations.length + '</a> ) ' + '</p>'
+            '<p data-toggle="tooltip">' + val + ' ( ' + rowData.destinations.length + ' )' + '</p>'
         );
     }
 
@@ -64,7 +76,7 @@ class CategoryTable extends React.Component {
         var rows = [];
 
         for (var idx = 0; idx < rowData.destinations.length; idx++) {
-            rows.push(<Button> {rowData.destinations[idx].name} </Button>);
+            rows.push(<Button key={idx.toString()}> {rowData.destinations[idx].name} </Button>);
         }
         return (
             <div>
@@ -115,7 +127,15 @@ class CategoryTable extends React.Component {
                         <span class="addVertialAlign"> New Category</span>
                     </button>
                 </div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                <BootstrapTable
+                    expandableRow={this.isExpandableRow}
+                    expandComponent={this.expandComponent}
+                    data={this.props.RowData}
+                    striped={true}
+                    hover={true}
+                    keyField={this.props.KeyField}
+                    pagination={true}
+                    options={this.state.options}>
                     {row}
                 </BootstrapTable>
             </div>)
