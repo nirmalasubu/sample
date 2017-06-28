@@ -23,6 +23,7 @@ using BLPathModel = OnDemandTools.Business.Modules.Pathing.Model;
 using OnDemandTools.Business.Modules.Airing.Model;
 using OnDemandTools.Business.Modules.Queue.Model;
 using OnDemandTools.Common.Extensions;
+using System.Reflection;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -303,14 +304,18 @@ namespace OnDemandTools.API.v1.Routes
             {
                 foreach (var playlist in media.Playlists)
                 {
-                    var sourceUrl = playlist.BucketURL;                    
-                        if (!string.IsNullOrEmpty(sourceUrl))
-                        {   
-                            foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
-                            {
-                                playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt, airing);
-                            }
+                    var sourceUrl = playlist.BucketURL;
+                    if (!string.IsNullOrEmpty(sourceUrl))
+                    {
+                        foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
+                        {
+                            playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt, airing);
+
+                            // Add protectionType to properties if it doesn't already exist
+                            if (!playlist.AkamaiURL.IsNullOrEmpty())
+                                playlist.ProtectionType = pt.Target.ProtectionType;
                         }
+                    }
                 }
             }
         }

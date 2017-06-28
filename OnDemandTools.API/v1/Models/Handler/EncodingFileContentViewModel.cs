@@ -120,6 +120,9 @@ namespace OnDemandTools.API.v1.Models.Handler
         public String BucketURL { get; set; }
 
         [JsonIgnore]
+        public String ProtectionType { get; set; }
+
+        [JsonIgnore]
         public String AkamaiURL { get; set; }
 
         [JsonProperty(PropertyName = "asset-id")]

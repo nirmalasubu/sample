@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OnDemandTools.Common.Extensions;
 using RQModel = OnDemandTools.API.v1.Models.Handler;
 using BLModel = OnDemandTools.Business.Modules.File.Model;
 using System.Text.RegularExpressions;
@@ -121,6 +122,8 @@ namespace OnDemandTools.API.Helpers.MappingRules
             props.Add("DRMFairPlay", source.DRMFairPlay);
             props.Add("DRMClearKey", source.DRMClearKey);
             props.Add("AssetId", source.AssetId);
+            if(!source.ProtectionType.IsNullOrEmpty())
+                props.Add("ProtectionType", source.ProtectionType);
             return props;
         }
     }
