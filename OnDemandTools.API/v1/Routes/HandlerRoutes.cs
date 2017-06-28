@@ -309,10 +309,13 @@ namespace OnDemandTools.API.v1.Routes
                     {
                         foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
                         {
-                            playlist.AkamaiURL = MakeAkamaiUrl(sourceUrl, pt, airing);
+                            var result = MakeAkamaiUrl(sourceUrl, pt, airing);
+
+                            if (!result.IsNullOrEmpty())
+                                playlist.AkamaiURLs.Add(result);
 
                             // Add protectionType to properties if it doesn't already exist
-                            if (!playlist.AkamaiURL.IsNullOrEmpty())
+                            if (playlist.ProtectionType.IsNullOrEmpty() && !result.IsNullOrEmpty())
                                 playlist.ProtectionType = pt.Target.ProtectionType;
                         }
                     }
