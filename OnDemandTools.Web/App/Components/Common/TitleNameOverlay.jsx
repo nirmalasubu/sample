@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { searchByTitleIds } from 'Actions/TitleSearch/TitleSearchActions';
-
+import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 @connect((store) => {
-    return {        
+    return {
     };
 })
 class TitleNameOverlay extends React.Component {
@@ -19,7 +19,7 @@ class TitleNameOverlay extends React.Component {
 
     fetchAndUpdateTitles() {
 
-        var titleIds= this.props.data;
+        var titleIds = this.props.data;
 
         let searchPromise = searchByTitleIds(titleIds);
 
@@ -30,12 +30,10 @@ class TitleNameOverlay extends React.Component {
             console.error(error);
             this.setState({ titles: [], isProcessing: false });
         });
-
-
     }
 
     componentDidMount() {
-       this.setState({
+        this.setState({
             titlesIds: this.props.data,
             isProcessing: true
         });
@@ -44,17 +42,42 @@ class TitleNameOverlay extends React.Component {
     }
 
     render() {
+
+        var rows = [];
+
+        if (this.state.titles.length > 1) {
+            for (var i = 0; i < this.state.titles.length; i++) {
+                rows.push(<p key={i.toString()}> {this.state.titles[i].titleName} </p>)
+            }
+        }
+
+        const popoverLeft = (
+            <Popover id="popover-positioned-left" title="Titles/Series">
+                {rows}
+            </Popover>
+        );
+
         if (this.state.isProcessing) {
             return <div>Loading...</div>
         }
         else if (this.state.titles.length == 0) {
             return <div></div>
         }
-        return (
-            <div>
-                {this.state.titles[0].titleName}
-            </div>
-        )
+        else if (this.state.titles.length == 1) {
+            return (
+                <div>
+                    {this.state.titles[0].titleName}
+                </div>
+            )
+        }
+        else {
+            return (                                 
+                <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
+                    <div>
+                        { this.state.titles[0].titleName + " ... "}
+                    </div>
+                </OverlayTrigger>)
+        }
     }
 }
 

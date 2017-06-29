@@ -51,7 +51,7 @@ class CategoryTable extends React.Component {
         this.setState({ showAddEditModel: true, categoryDetails: val });
     }
 
-    closeAddEditModel() {        
+    closeAddEditModel() {
         this.setState({ showAddEditModel: false, categoryDetails: this.state.newCategoryModel });
     }
 
@@ -71,7 +71,7 @@ class CategoryTable extends React.Component {
 
     categoryNameFormat(val, rowData) {
         return (
-            '<p data-toggle="tooltip">' + val + ' ( ' + rowData.destinations.length + ' )' + '</p>'
+            <p data-toggle="tooltip"> {val}</p>
         );
     }
 

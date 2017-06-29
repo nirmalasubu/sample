@@ -50,7 +50,7 @@ class CategoryExpandTable extends React.Component {
     return (
       <div>
         <BootstrapTable options={options} data={this.props.data.destinations} striped hover>
-          <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Destinations</TableHeaderColumn>
+          <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Destination</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.titleOrSeriesFormat.bind(this)} >Title/Series</TableHeaderColumn>
         </BootstrapTable>
