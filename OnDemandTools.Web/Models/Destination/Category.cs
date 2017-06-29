@@ -12,6 +12,8 @@ namespace OnDemandTools.Web.Models.Destination
 
         public List<string> Brands { get; set; }
 
+        public List<Title> Titles { get; set; }
+
         public List<int> TitleIds { get; set; }
 
         public List<int> SeriesIds { get; set; }
