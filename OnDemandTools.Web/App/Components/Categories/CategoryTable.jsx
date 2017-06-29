@@ -19,7 +19,8 @@ class CategoryTable extends React.Component {
             options: {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
-
+                expandRowBgColor: 'rgb(242, 255, 163)',
+                expandBy: 'column',  
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -79,7 +80,7 @@ class CategoryTable extends React.Component {
         var rows = [];
 
         for (var idx = 0; idx < rowData.destinations.length; idx++) {
-            rows.push(<Button key={idx.toString()}> {rowData.destinations[idx].name} </Button>);
+            rows.push(<Button className="addMarginRight" key={idx.toString()}> {rowData.destinations[idx].name} </Button>);
         }
         return (
             <div>
@@ -115,7 +116,7 @@ class CategoryTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>

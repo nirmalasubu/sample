@@ -74,7 +74,7 @@ class TitleNameOverlay extends React.Component {
             return (                                 
                 <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
                     <div>
-                        { this.state.titles[0].titleName + " ... "}
+                        { this.state.titles[0].titleName } <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>)
         }

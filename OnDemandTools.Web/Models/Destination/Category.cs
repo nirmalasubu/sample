@@ -9,9 +9,11 @@ namespace OnDemandTools.Web.Models.Destination
 
         public Category()
         {
-            Titles = new List<Title>();
+            Brands=new List<string>();
+            Titles=new List<Title>();
+            TitleIds=new List<int>();
+            SeriesIds=new List<int>();
         }
-
         public ObjectId Id { get; set; }
 
         public string Name { get; set; }

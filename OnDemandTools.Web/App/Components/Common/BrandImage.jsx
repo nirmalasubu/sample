@@ -7,7 +7,7 @@ class BrandImage extends React.Component {
 
     render() {
         return (
-            <img className={"imageCheckbox"}
+            <img className={"brandImageIcon"}
                 src={"../images/brands/" + this.props.brandName + ".gif"}
                 alt={this.props.brandName}
                 title={this.props.brandName}

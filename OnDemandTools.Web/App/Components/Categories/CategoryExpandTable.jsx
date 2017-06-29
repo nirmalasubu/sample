@@ -1,7 +1,7 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
-import BrandImage from 'Components/Common/BrandImage';
+import BrandsOverlay from 'Components/Common/BrandsOverlay';
 
 class CategoryExpandTable extends React.Component {
 
@@ -17,12 +17,7 @@ class CategoryExpandTable extends React.Component {
   }
 
   brandColumnFormat(data, row) {
-    var brandImageRows = [];
-    for (var i = 0; i < row.categories[0].brands.length; i++) {
-      brandImageRows.push(<BrandImage key={i.toString()} brandName={row.categories[0].brands[i]} />);
-    }
-
-    return <div> {brandImageRows} </div>
+    return <BrandsOverlay data={row.categories[0].brands} />
   }
 
   titleOrSeriesFormat(data, row) {
@@ -36,7 +31,7 @@ class CategoryExpandTable extends React.Component {
       ids.push(row.categories[0].titleIds[i])
     }
 
-    return <TitleNameOverlay data={ids}/> 
+    return <TitleNameOverlay data={ids} />
   }
 
 
@@ -51,7 +46,7 @@ class CategoryExpandTable extends React.Component {
       <div>
         <BootstrapTable options={options} data={this.props.data.destinations} striped hover>
           <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Destination</TableHeaderColumn>
-          <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
+          <TableHeaderColumn width="200px" dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.titleOrSeriesFormat.bind(this)} >Title/Series</TableHeaderColumn>
         </BootstrapTable>
       </div>
