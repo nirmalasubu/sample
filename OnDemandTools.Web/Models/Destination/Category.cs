@@ -6,6 +6,12 @@ namespace OnDemandTools.Web.Models.Destination
 {
     public class Category
     {
+
+        public Category()
+        {
+            Titles = new List<Title>();
+        }
+
         public ObjectId Id { get; set; }
 
         public string Name { get; set; }
