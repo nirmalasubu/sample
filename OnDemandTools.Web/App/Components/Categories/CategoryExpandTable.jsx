@@ -1,5 +1,6 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandImage from 'Components/Common/BrandImage';
 
 class CategoryExpandTable extends React.Component {
@@ -35,7 +36,7 @@ class CategoryExpandTable extends React.Component {
       ids.push(row.categories[0].titleIds[i])
     }
 
-    return <div> {ids} </div>
+    return <TitleNameOverlay data={ids}/> 
   }
 
 
