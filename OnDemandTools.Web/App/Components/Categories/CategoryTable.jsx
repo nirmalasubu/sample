@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import CategoryExpandTable from 'Components/Categories/CategoryExpandTable';
+import AddEditCategory from 'Components/Categories/AddEditCategory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 
@@ -47,9 +48,11 @@ class CategoryTable extends React.Component {
     }
 
     openAddEditModel(val) {
+        this.setState({ showAddEditModel: true, categoryDetails: val });
     }
 
-    closeAddEditModel() {
+    closeAddEditModel() {        
+        this.setState({ showAddEditModel: false, categoryDetails: this.state.newCategoryModel });
     }
 
     descriptionFormat(val) {
@@ -138,6 +141,8 @@ class CategoryTable extends React.Component {
                     options={this.state.options}>
                     {row}
                 </BootstrapTable>
+
+                <AddEditCategory data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
             </div>)
     }
 
