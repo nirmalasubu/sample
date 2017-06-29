@@ -19,7 +19,7 @@ class CategoryTable extends React.Component {
             options: {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
-                expandRowBgColor: 'rgb(242, 255, 163)',
+                expandRowBgColor: '#EAECEE',
                 expandBy: 'column',  
                 sizePerPageList: [{
                     text: '10 ', value: 10
@@ -82,6 +82,7 @@ class CategoryTable extends React.Component {
         for (var idx = 0; idx < rowData.destinations.length; idx++) {
             rows.push(<Button className="addMarginRight" key={idx.toString()}> {rowData.destinations[idx].name} </Button>);
         }
+
         return (
             <div>
                 {rows}
