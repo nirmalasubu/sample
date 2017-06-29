@@ -50,10 +50,10 @@ namespace OnDemandTools.Business.Modules.Destination
         List<Model.Destination> GetByProductIds(IList<Guid> productIds);
 
         /// <summary>
-        ///  Add Destination properties and deliverables to airing
+        /// Retrieve destination related data - properties, deliverables and categories, and augment it to airing
         /// </summary>
         /// <param name="airing"></param>
-        void GetAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing);
+        void GetAiringDestinationRelatedData(ref Airing.Model.Airing airing);
 
         /// <summary>
         /// Fliter and Transform Destination properties and deliverables to airing

@@ -432,8 +432,9 @@ namespace OnDemandTools.API.v1.Routes
                     }
                     else
                     {
-                        //Add properties and deliverables to the airing destination
-                        destinationSvc.GetAiringDestinationPropertiesAndDeliverables(ref airing);
+                        // Retrieve destination related data - properties, deliverables and categories - lsand 
+                        // augment it to airing
+                        destinationSvc.GetAiringDestinationRelatedData(ref airing);
                         destinationSvc.TransformAiringDestinationPropertiesAndDeliverables(ref airing);
                     }
                     

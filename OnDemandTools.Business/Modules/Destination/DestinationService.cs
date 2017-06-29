@@ -119,7 +119,7 @@ namespace OnDemandTools.Business.Modules.Destination
         /// </summary>
         /// <param name="airing">airing</param>    
 
-        public void GetAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
+        public void GetAiringDestinationRelatedData(ref Airing.Model.Airing airing)
         {
             foreach (var flight in airing.Flights)
             {
@@ -135,6 +135,7 @@ namespace OnDemandTools.Business.Modules.Destination
                     {
                         if (dbDes.Name == des.Name)
                         {
+                            des.Categories = dbDes.Categories.ToBusinessModel<List<BLModel.Category>, List<Category>>();
                             des.Properties = dbDes.Properties.ToBusinessModel<List<BLModel.Property>, List<Property>>();
                             des.Deliverables = dbDes.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Deliverable>>();
                         }
