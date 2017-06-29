@@ -1,16 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnDemandTools.Business.Modules.Destination;
+using OnDemandTools.Common.Configuration;
+using OnDemandTools.Common.Model;
+using OnDemandTools.Web.Models.Destination;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using OnDemandTools.Common.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using OnDemandTools.Common.Model;
-using Microsoft.AspNetCore.Authorization;
-using System.Text.RegularExpressions;
-using OnDemandTools.Business.Modules.Destination.Model;
-using OnDemandTools.Web.Models.Destination;
-using OnDemandTools.Business.Modules.Destination;
-using OnDemandTools.Business.Modules.Airing.Model;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -32,23 +27,29 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // GET: api/values
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IEnumerable<CategoryViewModel> Get()
         {
             List<CategoryViewModel> categoriesVM = new List<CategoryViewModel>();
             List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
-            List<DestinationViewModel> destinationsModel = destinations.ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>();            
 
-            var categories = destinationsModel.SelectMany(d => d.Categories);
+            var categories = destinations.SelectMany(d => d.Categories);
 
-            foreach (var category in categories.GroupBy(e=>e.Name))
-            {            
+            foreach (var category in categories.GroupBy(e => e.Name))
+            {
                 CategoryViewModel categoryVM = new CategoryViewModel
                 {
+                    Id = new System.Guid().ToString(),
                     Name = category.Key,
-                    Destinations = destinationsModel.Where(d => d.Categories.Any(c => c.Name == category.Key)).ToList()                    
+                    Destinations = destinations.Where(e => e.Categories.Any(f => f.Name == category.Key)).ToList()
+                    .ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>()
                 };
+
+                foreach (var destination in categoryVM.Destinations)
+                {
+                    destination.Categories = new List<Category> { destination.Categories.First(e => e.Name == category.Key) };
+                }
 
                 categoriesVM.Add(categoryVM);
             }
@@ -62,7 +63,7 @@ namespace OnDemandTools.Web.Controllers
         {
             return new CategoryViewModel
             {
-                Name = string.Empty           
+                Name = string.Empty
             };
         }
     }
