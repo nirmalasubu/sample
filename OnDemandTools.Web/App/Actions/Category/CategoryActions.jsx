@@ -3,7 +3,12 @@ import Axios from 'axios';
 import $ from 'jquery';
 
 
-// Future  we get data through Axios or fetch
+export const filterCategorySuccess= (filterCategory) => {
+    return {
+        type: actionTypes.FILTER_CATEGORIES_SUCCESS,
+        filterCategory
+    }
+};
 
 export const fetchCategorySuccess = (categories) => {
     return {
