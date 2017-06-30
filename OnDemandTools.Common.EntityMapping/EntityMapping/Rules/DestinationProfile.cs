@@ -39,9 +39,14 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Property, DLAiringModel.Property>();
             CreateMap<DLModel.Deliverable, DLAiringModel.Deliverable>();
             CreateMap<DLAiringModel.Destination, BLAiringModel.Destination>();
+
+            // Mapping betweeen business models in different domain
             CreateMap<BLModel.Destination, BLAiringModel.Destination>();
             CreateMap <BLModel.Property, BLAiringModel.Property> ();
             CreateMap<BLModel.Deliverable, BLAiringModel.Deliverable>();
+            CreateMap<BLModel.Category, BLAiringModel.Category>()
+                .ForMember(cat => cat.Id, opt => opt.Ignore());
+
         }
     }
 }
