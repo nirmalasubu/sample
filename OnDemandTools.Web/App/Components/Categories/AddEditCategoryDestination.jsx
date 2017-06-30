@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
+import PropertiesFilter from 'Components/Common/PropertiesFilter';
 
 // Sub component of category page to  add ,edit and delete category destinations
 class AddEditCategoryDestination extends React.Component {
@@ -9,11 +10,26 @@ class AddEditCategoryDestination extends React.Component {
         this.state = ({
             categoryDetails:"",
             isCategoryNameRequired:false,
-            categoryDestinationsRow: {},
+            propertiesRow: {},
             destinationIndexToRemove:-1,
             showDestinationsDeleteModal:false,
-            destinationTitles:[]
+            destinationTitles:[],
+            showAddEditPropertiesFilter: false,
         });
+    }
+
+    /// <summary>
+    /// Handler to open properties at the indicated  row
+    /// </summary>
+    openPropertiesFilter(row) {
+        this.setState({ showAddEditPropertiesFilter: true,propertiesRow: row.categories[0] });
+    }
+
+    /// <summary>
+    /// Handler to close properties modal pop up
+    /// </summary
+    closePropertiesFilter() {
+        this.setState({ showAddEditPropertiesFilter: false });
     }
 
     //To delete  a destination of category
@@ -113,6 +129,7 @@ class AddEditCategoryDestination extends React.Component {
       <div class="destination-height">{row}</div>
       </Grid>
       </div>
+       <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
     </div>)
       }
           }
