@@ -18,6 +18,7 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Destination, VMAiringShortModel.Destination>();
             CreateMap<BLAiringModel.Property, VMAiringShortModel.Property>();
             CreateMap<BLAiringModel.Deliverable, VMAiringShortModel.Deliverable>();
+            CreateMap<BLAiringModel.Category, VMAiringShortModel.Category>();
             CreateMap<BLAiringModel.Duration, VMAiringShortModel.Duration>();           
             CreateMap<BLAiringModel.Episode, VMAiringShortModel.Episode>();
             CreateMap<BLAiringModel.Flags, VMAiringShortModel.Flags>();

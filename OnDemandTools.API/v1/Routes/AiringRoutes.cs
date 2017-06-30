@@ -428,14 +428,14 @@ namespace OnDemandTools.API.v1.Routes
                     if (airing.Flights.SelectMany(f => f.Products).Any())
                     {
                         productSvc.ProductDestinationConverter(ref airing);
-                        destinationSvc.TransformAiringDestinationPropertiesAndDeliverables(ref airing);
+                        destinationSvc.FilterDestinationPropertiesDeliverablesAndCategoriesAndTransformTokens(ref airing);
                     }
                     else
                     {
                         // Retrieve destination related data - properties, deliverables and categories - lsand 
                         // augment it to airing
                         destinationSvc.GetAiringDestinationRelatedData(ref airing);
-                        destinationSvc.TransformAiringDestinationPropertiesAndDeliverables(ref airing);
+                        destinationSvc.FilterDestinationPropertiesDeliverablesAndCategoriesAndTransformTokens(ref airing);
                     }
                     
                     // If the versions exist, create a mediaid based on the

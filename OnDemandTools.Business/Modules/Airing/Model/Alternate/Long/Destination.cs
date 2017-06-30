@@ -16,6 +16,9 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
 
         public List<Deliverable> Deliverables { get; set; }
 
+        public List<Category> Categories { get; set; }
+
+
         public Destination()
         {
             Package = new Package();

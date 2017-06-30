@@ -59,7 +59,7 @@ namespace OnDemandTools.Business.Modules.Destination
         /// Fliter and Transform Destination properties and deliverables to airing
         /// </summary>
         /// <param name="airing">airing</param>
-        void TransformAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing);
+        void FilterDestinationPropertiesDeliverablesAndCategoriesAndTransformTokens(ref Airing.Model.Airing airing);
 
         /// <summary>
         /// Remove destnation from collection using ObjectID

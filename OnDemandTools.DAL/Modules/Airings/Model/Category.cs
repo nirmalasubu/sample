@@ -1,8 +1,22 @@
-﻿namespace OnDemandTools.DAL.Modules.Airings.Model
+﻿using System.Collections.Generic;
+
+namespace OnDemandTools.DAL.Modules.Airings.Model
 {
     public class Category
     {
-        public string name { get; set; }
-        public string groupName { get; set; }
+        public Category()
+        {
+            Brands = new List<string>();
+            TitleIds = new List<int>();
+            SeriesIds = new List<int>();
+        }
+
+        public string Name { get; set; }
+
+        public List<string> Brands { get; set; }
+
+        public List<int> TitleIds { get; set; }
+
+        public List<int> SeriesIds { get; set; }
     }
 }

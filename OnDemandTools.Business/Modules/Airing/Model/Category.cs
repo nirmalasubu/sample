@@ -11,8 +11,6 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             SeriesIds = new List<int>();
         }
 
-        public string Id { get; set; }
-
         public string Name { get; set; }
 
         public List<string> Brands { get; set; }

@@ -12,10 +12,15 @@ namespace OnDemandTools.API.v1.Models.Airing.Short
 
         public List<Deliverable> Deliverables { get; set; }
 
+        public List<Category> Categories { get; set; }
+
+
         public Destination()
         {
             Properties = new List<Property>();
             Deliverables = new List<Deliverable>();
+            Categories = new List<Category>();
+
         }
     }
 

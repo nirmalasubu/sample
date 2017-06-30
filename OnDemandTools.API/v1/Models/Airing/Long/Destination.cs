@@ -17,6 +17,10 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
 
         public List<Deliverable> Deliverables { get; set; }
 
+         public List<Category> Categories { get; set; }
+
+
+
         public Destination()
         {
             Package = new Package();

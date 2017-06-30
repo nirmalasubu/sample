@@ -146,15 +146,17 @@ namespace OnDemandTools.Business.Modules.Destination
         }
 
         /// <summary>
-        /// Fliter and transform Destination properties and deliverables to airing
+        /// Fliter Deestination properties, deliverables and categories.Then transform the tokens.
+        ///  Finally, append results to the provided airing
         /// </summary>
         /// <param name="airing">airing</param>
-        public void TransformAiringDestinationPropertiesAndDeliverables(ref Airing.Model.Airing airing)
+        public void FilterDestinationPropertiesDeliverablesAndCategoriesAndTransformTokens(ref Airing.Model.Airing airing)
         {
             foreach (var flight in airing.Flights)
             {
                 foreach (var destination in flight.Destinations)
                 {
+                    // Filter out the properties based on selected brand(s) and title(s)
                     var propertiesToRemove = new List<Property>();
 
                     foreach (var property in destination.Properties)
@@ -190,12 +192,60 @@ namespace OnDemandTools.Business.Modules.Destination
                             }
                         }
                     }
+
                     destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList(); //remove  unmatched  properties
-                    bool isFlowDataRequired = CheckDelvierablesandPropertiesRequiresFlowTitle(destination); //check any Delvierables Properties  token requires flow data
+
+
+                    // Next filter out categories based on selected brand(s) and title(s)
+                    List<Category> categoriesToRemove = new List<Category>();
+
+                    foreach (Category cat in destination.Categories)
+                    {
+                        // Verify if category filter (brand) and airing brand match. If not, add it to list to be removed later
+                        if (cat.Brands.Any() && !cat.Brands.Contains(airing.Network))
+                        {
+                            categoriesToRemove.Add(cat);
+                            continue;
+                        }
+
+                        // Next, verify if category filter has any title or series associated with it. If so, verify that it matches that of the airing.
+                        // If it doesn't match, add it to list to be removed later
+                        if (cat.TitleIds.Any() && cat.SeriesIds.Any())
+                        {
+                            if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat) && !IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
+                            {
+                                categoriesToRemove.Add(cat);
+                            }
+                        }
+
+                        if (cat.TitleIds.Any())
+                        {
+                            if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat))
+                            {
+                                categoriesToRemove.Add(cat);
+                            }
+                        }
+
+                         if (cat.SeriesIds.Any())
+                        {
+                            if (!IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
+                            {
+                                categoriesToRemove.Add(cat);
+                            }
+                        }
+                    }
+
+                    // Finally remove categories whose filter criteria (series & title) doesn't match that of the airing
+                    destination.Categories = destination.Categories.Where(p => !categoriesToRemove.Contains(p)).ToList();
+
+                    // Check if the tokens identified in deliverables or properties require flow data
+                    bool isFlowDataRequired = CheckDelvierablesandPropertiesRequiresFlowTitle(destination); 
                     if (isFlowDataRequired)
                     {
                         GetFlowValuesforAiring(ref airing);
                     }
+
+                    // Now transform/subsitute tokens identified in properties & deliverables with actual values
                     new DeliverableFormatter(airing).Format(destination); // destinations passed by reference for formatting to transform Deliverable tokens
                     new PropertyFormatter(airing).Format(destination); // destinations passed by reference for formatting to transform property tokens
                     destination.Deliverables = destination.Deliverables.Where(x => x.Value != string.Empty).ToList(); // remove the empty tokens
@@ -282,7 +332,7 @@ namespace OnDemandTools.Business.Modules.Destination
 
             return titles;
         }
-        
+
 
         private Task<List<Airing.Model.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
         {
@@ -322,6 +372,38 @@ namespace OnDemandTools.Business.Modules.Destination
             return false;
         }
 
+        /// Verify if the title filter associated with the category matches that of the airing.
+        /// If yes, return true; else, false
+        private bool IsCategoryTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Category category)
+        {
+            List<int> titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+
+            if (titleIds.Any())
+            {
+                return (category.TitleIds.Any(titleIds.Contains));
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// Verify if the series filter associated with the category matches that of the airing.
+        /// If yes, return true; else, false
+        private bool IsCategorySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Category category)
+        {
+            if (airing.Title.Series != null && airing.Title.Series.Id.HasValue)
+            {
+                return (category.SeriesIds.Contains(airing.Title.Series.Id.Value));
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
         private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Property property)
         {
             var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
@@ -341,7 +423,7 @@ namespace OnDemandTools.Business.Modules.Destination
 
         private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Property property)
         {
-            if (airing.Title.Series!=null && airing.Title.Series.Id.HasValue)
+            if (airing.Title.Series != null && airing.Title.Series.Id.HasValue)
             {
                 if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
                 {
