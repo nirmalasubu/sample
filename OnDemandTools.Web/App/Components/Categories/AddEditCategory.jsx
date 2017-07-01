@@ -31,13 +31,21 @@ class AddEditCategory extends React.Component {
     }
 
     /// <summary>
+    /// This function is called after entering the modal pop up
+    /// </summary>
+    onEnteredModel() {
+            
+
+    }
+
+    /// <summary>
     /// This function is called on entering the modal pop up
     /// </summary>
     onOpenModel() {
         this.setState({
             isProcessing: false,
             categoryDetails: this.props.data.categoryDetails
-        });
+        });        
     }
 
     handleSave() {
@@ -85,9 +93,9 @@ class AddEditCategory extends React.Component {
         //this.validateForm();
     }
 
-    render() {
+    render() {        
         return (
-            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{($.inArray(this.state.categoryDetails.name, this.state.categoryDetails.destinations) > -1) ? "Edit Category -" + this.state.categoryDetails.name : "Add Category"}</div>

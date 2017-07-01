@@ -17,11 +17,30 @@ export const fetchCategorySuccess = (categories) => {
     }
 };
 
+export const saveCategorySuccess = (category) => {
+    return {
+        type: actionTypes.SAVE_CATEGORIES_SUCCESS,
+        category
+    }
+};
+
 export const fetchCategories = () => {
     return (dispatch) => {
         return Axios.get('/api/category')
             .then(response => {
                 dispatch(fetchCategorySuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
+export const saveCategory = (model) => {
+    return (dispatch) => {        
+        return Axios.post('/api/category', model)
+            .then(response => {
+                dispatch(saveDestinationSuccess(response.data))
             })
             .catch(error => {
                 throw (error);

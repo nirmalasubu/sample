@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿
 using System.Collections.Generic;
 
 namespace OnDemandTools.Business.Modules.Destination.Model
@@ -13,7 +12,7 @@ namespace OnDemandTools.Business.Modules.Destination.Model
             SeriesIds = new List<int>();
         }
 
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 

@@ -57,6 +57,32 @@ namespace OnDemandTools.Web.Controllers
             return categoriesVM;
         }
 
+        //save destination details
+        [Authorize]
+        [HttpPost]
+        public CategoryViewModel Post([FromBody]CategoryViewModel viewModel)
+        {
+            List<DestinationViewModel> destinations = new List<DestinationViewModel>();
+
+            foreach (var destination in viewModel.Destinations)
+            {
+                Business.Modules.Destination.Model.Destination blModel = destination.ToBusinessModel<DestinationViewModel, Business.Modules.Destination.Model.Destination>();
+
+                blModel = _destinationSvc.SaveDestinationCategory(blModel);
+
+                destinations.Add(blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>());
+            }
+
+            viewModel.Destinations = destinations;
+
+            foreach (var destination in viewModel.Destinations)
+            {
+                destination.Categories = new List<Category> { destination.Categories.First(e => e.Name == viewModel.Name) };
+            }
+
+            return viewModel;
+        }
+
         [Authorize]
         [HttpGet("newCategory")]
         public CategoryViewModel GetEmptyModel()

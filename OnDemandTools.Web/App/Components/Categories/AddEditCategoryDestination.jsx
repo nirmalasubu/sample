@@ -1,6 +1,9 @@
 import React from 'react';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
 import PropertiesFilter from 'Components/Common/PropertiesFilter';
+import * as categoryActions from 'Actions/Category/CategoryActions';
+import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
+import BrandsOverlay from 'Components/Common/BrandsOverlay';
 
 // Sub component of category page to  add ,edit and delete category destinations
 class AddEditCategoryDestination extends React.Component {
@@ -10,10 +13,11 @@ class AddEditCategoryDestination extends React.Component {
         this.state = ({
             categoryDetails:"",
             isCategoryNameRequired:false,
-            propertiesRow: {},
+            categoryDestinationsRow: {},
             destinationIndexToRemove:-1,
             showDestinationsDeleteModal:false,
             destinationTitles:[],
+            titleText : ""
             showAddEditPropertiesFilter: false,
         });
     }
@@ -52,13 +56,36 @@ class AddEditCategoryDestination extends React.Component {
         categoryData.destinations.unshift(newDestination);
         this.setState({destinationDetails: categoryData });
     }
+
     //To open delete destination warning window
     openDestinationsDeleteModel(item) {
         this.setState({ showDestinationsDeleteModal: true, destinationIndexToRemove: item });
     }
+
     // To close destination delete modal window
     closePropertiesDeleteModel() {
         this.setState({ showDestinationsDeleteModal: false });
+    }
+
+    //this method to show all category titles.
+    titleDetailConstruct(item,index){
+        var ids = [];
+
+        for (var i = 0; i < item.categories[0].seriesIds.length; i++) {
+            ids.push(item.categories[0].seriesIds[i]);
+        }
+
+        for (var i = 0; i < item.categories[0].titleIds.length; i++) {
+            ids.push(item.categories[0].titleIds[i]);
+        }
+
+        return <TitleNameOverlay data={ids} /> ;
+    }
+        
+    //this method constructs the category brands images.
+    categoryBrandImageConstruct(item,index)
+    {
+        return <BrandsOverlay data={item.categories[0].brands} /> ;
     }
 
     // validation for the name destination . To verify  name text is empty
@@ -97,8 +124,8 @@ class AddEditCategoryDestination extends React.Component {
                                 <FormControl type="text" value={item.description} title={item.description} ref="Value"  placeholder="Description" />
                                 </FormGroup>
                             </Col>
-                            <Col sm={2} ></Col>
-                            <Col sm={2} ></Col>
+                            <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
+                            <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
                                 <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-pencil-square-o"></i></button>
                                 <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>

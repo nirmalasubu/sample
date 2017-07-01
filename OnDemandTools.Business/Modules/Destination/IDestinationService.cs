@@ -80,6 +80,13 @@ namespace OnDemandTools.Business.Modules.Destination
         Model.Destination Save(Model.Destination model);
 
         /// <summary>
+        /// Update the categories to the destination collection
+        /// </summary>
+        /// <param name="destination">The destiination model.</param>
+        /// <returns></returns>
+        Model.Destination SaveDestinationCategory(Model.Destination destination);
+
+        /// <summary>
         /// Get title  names for titleIds from flow
         /// </summary>
         /// <param name="titleIds"> title Ids</param>
