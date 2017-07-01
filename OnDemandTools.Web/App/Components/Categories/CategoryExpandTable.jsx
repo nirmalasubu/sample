@@ -34,7 +34,9 @@ class CategoryExpandTable extends React.Component {
     return <TitleNameOverlay data={ids} />
   }
 
-
+  descriptionColumnFormat(data, row) {
+      return <p> {data} </p>;
+      }
 
   render() {
 
@@ -46,6 +48,7 @@ class CategoryExpandTable extends React.Component {
       <div>
         <BootstrapTable options={options} data={this.props.data.destinations} striped hover>
           <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Destination</TableHeaderColumn>
+          <TableHeaderColumn  dataSort={false} dataField="description" dataFormat={this.descriptionColumnFormat.bind(this)} >Description</TableHeaderColumn>
           <TableHeaderColumn width="200px" dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.titleOrSeriesFormat.bind(this)} >Title/Series</TableHeaderColumn>
         </BootstrapTable>
