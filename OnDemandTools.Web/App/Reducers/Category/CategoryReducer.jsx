@@ -5,6 +5,11 @@
         case 'FILTER_CATEGORIES_SUCCESS':       // Required to obtain  category object state 
             const assignState = Object.assign([], state);
             return assignState;
+        case 'DELETE_CATEGORY_SUCCESS':
+            var dIndex = state.findIndex((obj => obj.name == action.name));
+            if (dIndex >= 0)
+                state.splice(dIndex,1);
+            return state;
         default:
             return state;
     }

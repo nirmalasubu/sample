@@ -68,6 +68,12 @@ namespace OnDemandTools.Business.Modules.Destination
         void Delete(string id);
 
         /// <summary>
+        /// delete destination category by name
+        /// </summary>
+        /// <param name="name">category name</param>
+        void DeleteCategoryByName(string name);
+
+        /// <summary>
         /// Save destnation to collection
         /// </summary>
         /// <param name="model">destination model</param>

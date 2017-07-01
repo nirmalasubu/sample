@@ -32,5 +32,16 @@ namespace OnDemandTools.DAL.Modules.Destination.Command
 
             collection.Remove(query);
         }
+
+        public void DeleteCategoryByName(string name)
+        {
+
+            var collection = _database.GetCollection<DAL.Modules.Destination.Model.Destination>("Destination");
+            var filter = Query.EQ("Categories.Name", name);
+            collection.Update(filter,Update.Pull("Categories", new BsonDocument() { { "Name", name } }), UpdateFlags.Multi);
+            
+            
+        }
     }
 }
+;

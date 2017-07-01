@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import CategoryExpandTable from 'Components/Categories/CategoryExpandTable';
 import AddEditCategory from 'Components/Categories/AddEditCategory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
 
 
 class CategoryTable extends React.Component {
@@ -15,6 +16,7 @@ class CategoryTable extends React.Component {
             newCategoryModel: "",
             showModal: false,
             showAddEditModel: false,
+            showDeleteModal: false,
             categoryDetails: "",
             options: {
                 defaultSortName: 'name',
@@ -41,11 +43,18 @@ class CategoryTable extends React.Component {
     openCreateNewDestinationModel() {
 
     }
-
-    openModel(val) {
+    ///<summary>
+    // when delete category button event handled
+    ///</summary>
+    openDeleteModel(val) {
+        this.setState({ showDeleteModal: true, categoryDetails: val });
     }
 
-    closeModel() {
+    ///<summary>
+    // React modal pop up control   delete category is closed
+    ///</summary>
+    closeDeleteModel() {
+        this.setState({ showDeleteModal: false });
     }
 
     openAddEditModel(val) {
@@ -98,7 +107,7 @@ class CategoryTable extends React.Component {
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openModel(rowData, event)} >
+                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -145,6 +154,7 @@ class CategoryTable extends React.Component {
                 </BootstrapTable>
 
                 <AddEditCategory data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                            <RemoveCategoryModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }
 

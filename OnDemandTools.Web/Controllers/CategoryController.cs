@@ -66,5 +66,13 @@ namespace OnDemandTools.Web.Controllers
                 Name = string.Empty
             };
         }
+
+        [Authorize]
+        [HttpDelete("{name}")]
+        public bool Delete( string name)
+        {
+            _destinationSvc.DeleteCategoryByName(name);
+            return true;
+        }
     }
 }

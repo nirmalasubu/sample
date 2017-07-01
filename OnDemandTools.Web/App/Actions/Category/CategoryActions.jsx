@@ -29,4 +29,22 @@ export const fetchCategories = () => {
     };
 };
 
+export const deleteCategorySuccess = (name) => {
+    return {
+        type: actionTypes.DELETE_CATEGORY_SUCCESS,
+        name
+    }
+};
+
+export const deleteCategory = (name) => {
+    return (dispatch) => {        
+        return Axios.delete('/api/category/'+ name)
+            .then(response => {
+                dispatch(deleteCategorySuccess(name))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
 

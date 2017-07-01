@@ -14,7 +14,7 @@ namespace OnDemandTools.Web.Models.Destination
             TitleIds=new List<int>();
             SeriesIds=new List<int>();
         }
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
 
         public string Name { get; set; }
 

@@ -286,6 +286,15 @@ namespace OnDemandTools.Business.Modules.Destination
             return titles;
         }
 
+        /// <summary>
+        /// delete destination category by name
+        /// </summary>
+        /// <param name="name">category name</param>
+        public void DeleteCategoryByName(string name)
+        {
+             destinationCommand.DeleteCategoryByName(name);
+        }
+
         #region PRIVATE METHODS
         private void GetFlowValuesforAiring(ref Airing.Model.Airing airing)
         {
@@ -436,6 +445,7 @@ namespace OnDemandTools.Business.Modules.Destination
             }
             return true;
         }
+
         #endregion
     }
 }
