@@ -29,20 +29,20 @@ namespace OnDemandTools.DAL.Modules.Destination.Command
         {
             var _collection = _database.GetCollection<DAL.Modules.Destination.Model.Destination>("Destination");
 
-            if (category.Id==null)
+            if (category.Id.Pid == 0)
             {
                 var query = Query<DAL.Modules.Destination.Model.Destination>.EQ(e => e.Name, name);
 
                 List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
-                updateValues.Add(Update.PushAllWrapped("Categories", category));
+                updateValues.Add(Update.AddToSetEachWrapped("Categories", category));
 
                 IMongoUpdate update = Update.Combine(updateValues);
 
-                _collection.Update(query, update);
+                _collection.Update(query, update, UpdateFlags.Upsert);
             }
             else
             {
-                var query = Query.And(Query<DAL.Modules.Destination.Model.Destination>.EQ(e => e.Name, name), Query.EQ("Categories.id", category.Id));
+                var query = Query.And(Query<DAL.Modules.Destination.Model.Destination>.EQ(e => e.Name, name), Query.EQ("Categories.name", category.Name));
 
                 List<UpdateBuilder> updateValues = new List<UpdateBuilder>();
                 updateValues.Add(Update.Set("Categories.Name", category.Name));

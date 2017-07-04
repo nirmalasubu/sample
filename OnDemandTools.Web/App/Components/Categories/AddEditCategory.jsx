@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import AddEditCategoryDestination from 'Components/Categories/AddEditCategoryDestination';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import * as categoryActions from 'Actions/Category/CategoryActions';
 
 @connect((store) => {
     return {
@@ -26,7 +27,8 @@ class AddEditCategory extends React.Component {
         this.state = ({
             isProcessing: false,
             validationStateName: null,
-            categoryDetails:""
+            validationStateDestinationName: null,
+            categoryDetails:{}
         });
     }
 
@@ -49,7 +51,34 @@ class AddEditCategory extends React.Component {
     }
 
     handleSave() {
+        var elem = this;
+        if (this.state.validationStateName != "error" && this.state.validationStateDestinationName != "error") {
 
+            this.setState({ isProcessing: true });
+
+            this.props.dispatch(categoryActions.saveCategory(this.state.categoryDetails))
+                .then(() => {
+                    if (this.state.categoryDetails.id == null) {
+                        NotificationManager.success(this.state.categoryDetails.name + ' category successfully created.', '', 2000);
+                    }
+                    else {
+                        NotificationManager.success(this.state.categoryDetails.name + ' category updated successfully.', '', 2000);
+                    }
+                    setTimeout(function () {
+                        elem.props.handleClose();
+                    }, 3000);
+                }).catch(error => {
+                    if (this.state.categoryDetails.id == null) {
+                        NotificationManager.error(this.state.categoryDetails.name + ' category creation failed. ' + error, 'Failure');
+                    }
+                    else {
+                        NotificationManager.error(this.state.categoryDetails.name + ' category update failed. ' + error, 'Failure');
+                    }
+                    this.setState({ isProcessing: false });
+                });
+        }
+        else
+            return false;
     }
 
     handleAddEditClose() {
@@ -74,7 +103,17 @@ class AddEditCategory extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateName != null );
+        return (this.state.validationStateName != null || this.state.validationStateDestinationName != null);
+    }
+
+
+    validateForm() {
+        var name = this.state.categoryDetails.name;
+        var hasNameError = (name == "");
+
+        this.setState({
+            validationStateName: hasNameError  ? 'error' : null
+        });
     }
 
     /// <summary>
@@ -90,7 +129,17 @@ class AddEditCategory extends React.Component {
             categoryDetails:model
         });
 
-        //this.validateForm();
+        this.validateForm();
+    }
+
+    //callback function to update the validation
+    updateDestinationNameValidation(IsDestinationNameRequired) {
+        this.setState({ validationStateDestinationName: (IsDestinationNameRequired == true) ? 'error' : null });
+    }
+
+    updateDestinationDetail(destinations)
+    {
+
     }
 
     render() {        
@@ -98,7 +147,7 @@ class AddEditCategory extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{($.inArray(this.state.categoryDetails.name, this.state.categoryDetails.destinations) > -1) ? "Edit Category -" + this.state.categoryDetails.name : "Add Category"}</div>
+                        <div>{($.inArray(this.props.data.categoryDetails.name, this.props.data.categoryDetails.destinations) > -1) ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -108,7 +157,7 @@ class AddEditCategory extends React.Component {
                             <ControlLabel>Category Name</ControlLabel>
                             <FormControl
                             type="text"
-                            disabled={($.inArray(this.state.categoryDetails.name, this.state.categoryDetails.destinations) > -1) ? true : false}
+                            disabled={($.inArray(this.props.data.categoryDetails.name, this.props.data.categoryDetails.destinations) > -1) ? true : false}
                             value={this.state.categoryDetails.name}
                             ref="inputCategoryName"
                             placeholder="Enter a Category Name"
@@ -117,7 +166,7 @@ class AddEditCategory extends React.Component {
                         </FormGroup>
                         <Tabs defaultActiveKey={1} >
                             <Tab eventKey={1} >
-                                <AddEditCategoryDestination data={this.state.categoryDetails} />
+                                <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} updateDetails={this.updateDestinationDetail.bind(this)} />
                             </Tab>
                         </Tabs>
                         <NotificationContainer />

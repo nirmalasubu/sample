@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as categoryActions from 'Actions/Category/CategoryActions';
 import CategoryTable from 'Components/Categories/CategoryTable';
 import CategoryFilter from 'Components/Categories/CategoryFilter';
+import * as destinationActions from 'Actions/Destination/DestinationActions';
 import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
@@ -13,6 +14,7 @@ import 'react-notifications/lib/notifications.css';
     return {
         categories: store.categories,
         filteredCategories: (filteredCategoryValues!=undefined?filteredCategoryValues:store.destinations)
+        destinations: store.destinations
     };
 })
 class CategoriesPage extends React.Component {
@@ -63,6 +65,9 @@ class CategoriesPage extends React.Component {
     //called on the page load
     componentDidMount() {
         this.props.dispatch(categoryActions.fetchCategories());
+
+        if(this.props.destinations.length<=0)
+            this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Categories";
     }

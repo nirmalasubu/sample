@@ -1,9 +1,18 @@
 import React from 'react';
+import $ from 'jquery';
+import { connect } from 'react-redux';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
 import PropertiesFilter from 'Components/Common/PropertiesFilter';
 import * as categoryActions from 'Actions/Category/CategoryActions';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
+import Select from 'react-select';
+
+@connect((store) => {
+    return {
+        destinations: store.destinations
+    };
+})
 
 // Sub component of category page to  add ,edit and delete category destinations
 class AddEditCategoryDestination extends React.Component {
@@ -11,17 +20,43 @@ class AddEditCategoryDestination extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
-            categoryDetails:"",
+            categoryDetails:{},
             isCategoryNameRequired:false,
             categoryDestinationsRow: {},
             destinationIndexToRemove:-1,
             showDestinationsDeleteModal:false,
             destinationTitles:[],
-            titleText : ""
+            titleText : "",            
             showAddEditPropertiesFilter: false,
+            options: [],
+            destinationValue: ""
         });
     }
 
+    componentDidMount() {
+        var optionValues = this.getOptions(this.props.data);
+
+        this.setState({
+            categoryDetails: this.props.data,
+            options: optionValues
+        });
+    }
+
+    getOptions(categoryDetails) {
+        var options = [];
+        for (var x = 0; x < this.props.destinations.length; x++) {
+
+            var detailIndex = categoryDetails.destinations.findIndex((obj => obj.name == this.props.destinations[x].name));
+
+            if(detailIndex < 0)
+            {
+                var optionValue = { value: this.props.destinations[x].name, label: this.props.destinations[x].name + "-" + this.props.destinations[x].description};
+                options.push(optionValue);
+            }
+        }
+        return options;
+    }
+    
     /// <summary>
     /// Handler to open properties at the indicated  row
     /// </summary>
@@ -43,18 +78,26 @@ class AddEditCategoryDestination extends React.Component {
         categoryData = this.props.data;
         categoryData.destinations.splice(value, 1);
         this.setState({categoryDetails: categoryData });
-        this.props.data = this.props.data;
         this.setState({ showDestinationsDeleteModal: false});
     }
 
     //To add a new destination of category
-    AddNewdestination()
+    AddNewDestination()
     {
-        var newDestination={name:"",brands:[],titleIds:[],seriesIds:[]}
+        var newDestination= {name:"", description:"", categories:[]};
+        var category = {
+            name: this.state.categoryDetails.name,
+            brands: [],
+            titleIds: [],
+            seriesIds: []
+        };
+        newDestination.categories.push(category);
         var categoryData=[];
         categoryData = this.state.categoryDetails;  
         categoryData.destinations.unshift(newDestination);
-        this.setState({destinationDetails: categoryData });
+        this.setState({destinationDetails: categoryData });   
+        
+        this.CheckDestinationNameIsEmpty();
     }
 
     //To open delete destination warning window
@@ -70,22 +113,41 @@ class AddEditCategoryDestination extends React.Component {
     //this method to show all category titles.
     titleDetailConstruct(item,index){
         var ids = [];
+        if(item.categories.length>0)
+        {            
+            for (var i = 0; i < item.categories[0].seriesIds.length; i++) {
+                ids.push(item.categories[0].seriesIds[i]);
+            }
 
-        for (var i = 0; i < item.categories[0].seriesIds.length; i++) {
-            ids.push(item.categories[0].seriesIds[i]);
-        }
+            for (var i = 0; i < item.categories[0].titleIds.length; i++) {
+                ids.push(item.categories[0].titleIds[i]);
+            }
 
-        for (var i = 0; i < item.categories[0].titleIds.length; i++) {
-            ids.push(item.categories[0].titleIds[i]);
-        }
-
-        return <TitleNameOverlay data={ids} /> ;
+            if(ids.length>0)
+                return <TitleNameOverlay data={ids} />;
+        }        
     }
         
     //this method constructs the category brands images.
     categoryBrandImageConstruct(item,index)
     {
-        return <BrandsOverlay data={item.categories[0].brands} /> ;
+        var brands = [];
+
+        if(item.categories.length>0)
+            brands = item.categories[0].brands;
+        
+        return <BrandsOverlay data={brands} /> ;
+    }
+
+    handleChange(index, value) {
+        var model = this.state.categoryDetails;
+        model.destinations[index].name= value;
+        var detailIndex = this.props.destinations.findIndex((obj => obj.name == value));
+        model.destinations[index].description= this.props.destinations[detailIndex].description;
+        var optionValues = this.getOptions(model);
+        this.setState({ categoryDetails: model, options: optionValues });  
+        
+        this.CheckDestinationNameIsEmpty();
     }
 
     // validation for the name destination . To verify  name text is empty
@@ -98,32 +160,56 @@ class AddEditCategoryDestination extends React.Component {
             {
                 if(!(destinations[i].name))
                 {
-                    //this.props.validationStates(true);
-                    //return;
+                    this.props.validationStates(true);
+                    return;
                 }
             }
         }
-        //this.props.validationStates(false);
+        this.props.validationStates(false);
     }
 
     //destinations construct  of a category
     render() {
         let row = null;
-        if (Object.keys(this.props.data).length != 0 && this.props.data != Object) {
-            if(Object.keys(this.props.data.destinations).length !== 0 && this.props.data.destinations != Object){
-                row = this.props.data.destinations.map(function (item, index) {
+        if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
+            if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){
+                row = this.state.categoryDetails.destinations.map(function (item, index) {
+                    var nameValidation=item.name!=""?null:"error";
+                    let col = null, colDesc = null;
+                    if(item.name==""){
+                        col = (<Col sm={6   }>
+                                    <FormGroup controlId={index} validationState={nameValidation}>
+                                          <Select 
+                                      searchable={false} 
+                                      simpleValue className="destination-select-control" 
+                                      options={this.state.options} 
+                                      onChange={(event) => this.handleChange(index, event)}
+                                      value={item.name} />
+                                    </FormGroup>
+                                </Col>
+                            );
+                    }
+                    else{
+                        col = (
+                                <Col sm={3} >
+                                    <FormGroup controlId={index} >
+                                    <FormControl type="text" disabled={true} value={item.name} title={item.name} ref="Name"  placeholder="Destination" />
+                                    </FormGroup>
+                                </Col>
+                            );
+
+                            colDesc = (
+                                <Col sm={3}>
+                                    <FormGroup controlId={index} >
+                                    <FormControl type="text" disabled={true} value={item.description} title={item.description} ref="Value"  placeholder="Description" />
+                                    </FormGroup>
+                                </Col>
+                            );
+                    }
                     return (<Row >
                         <Form>
-                            <Col sm={3} >
-                                <FormGroup controlId={index} >
-                                <FormControl type="text" value={item.name} title={item.name} ref="Name"  placeholder="Name" />
-                                </FormGroup>
-                            </Col>
-                            <Col sm={3}>
-                                <FormGroup controlId={index} >
-                                <FormControl type="text" value={item.description} title={item.description} ref="Value"  placeholder="Description" />
-                                </FormGroup>
-                            </Col>
+                            {col}
+                            {colDesc}
                             <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
@@ -150,7 +236,7 @@ class AddEditCategoryDestination extends React.Component {
       <Row>
        <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
        <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
-       <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filter</label></Col>
+       <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
        <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
       </Row>
       <div class="destination-height">{row}</div>
