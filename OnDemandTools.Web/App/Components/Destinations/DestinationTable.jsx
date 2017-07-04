@@ -6,7 +6,6 @@ import { getNewDestination } from 'Actions/Destination/DestinationActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
-import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 
 @connect((store) => {

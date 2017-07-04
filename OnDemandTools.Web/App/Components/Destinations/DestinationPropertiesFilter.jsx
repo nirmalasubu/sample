@@ -11,7 +11,7 @@ import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
+import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
   return {
@@ -200,7 +200,7 @@ class DestinationPropertiesFilter extends React.Component {
               onRemoveTitles={this.onRemoveTitles.bind(this)}
             />
           </div>
-          <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.props.handleClose.bind(this)} />
+          <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.props.handleClose.bind(this)} />
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.handleClose.bind(this)}>Cancel</Button>

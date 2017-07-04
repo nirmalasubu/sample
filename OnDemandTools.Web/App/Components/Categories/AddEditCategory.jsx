@@ -6,12 +6,13 @@ import { ModalBody } from 'react-bootstrap';
 import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
-import { Tabs, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Tabs, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, Well, Panel } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import AddEditCategoryDestination from 'Components/Categories/AddEditCategoryDestination';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import * as categoryActions from 'Actions/Category/CategoryActions';
+import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
@@ -25,10 +26,12 @@ class AddEditCategory extends React.Component {
         super(props);
 
         this.state = ({
+            categoryUnModifiedData:"",
             isProcessing: false,
             validationStateName: null,
             validationStateDestinationName: null,
-            categoryDetails:{}
+            categoryDetails:{},
+            showWarningModel: false
         });
     }
 
@@ -45,16 +48,20 @@ class AddEditCategory extends React.Component {
     onOpenModel() {
         this.setState({
             isProcessing: false,
-            categoryDetails: this.props.data.categoryDetails
+            categoryDetails: this.props.data.categoryDetails,
+            categoryUnModifiedData: jQuery.extend(true, {}, this.props.data.categoryDetails)
         });       
         
     }
 
+    /// <summary>
+    /// To save and update the category to destinations table
+    /// </summary>
     handleSave() {
         var elem = this;
         if (this.state.validationStateName != "error" && this.state.validationStateDestinationName != "error") {
-
             var model = this.state.categoryDetails;
+
             for(var i=0; i<model.destinations.length-1; i++)
                 model.destinations[i].categories[0].name = model.name;
 
@@ -85,22 +92,37 @@ class AddEditCategory extends React.Component {
             return false;
     }
 
+    //called from cancel warning component to close add edit pop up
     handleAddEditClose() {
-        //var model = this.state.destinationUnModifiedData;
-        //jQuery.extend(this.props.data.destinationDetails, this.state.destinationUnModifiedData);
+        var model = this.state.destinationUnModifiedData;
+        jQuery.extend(this.state.categoryDetails, this.state.categoryUnModifiedData);
         this.props.handleClose();
     }
 
     /// <summary>
-    /// Called to close the pop up
+    /// Called to open the cancel warning pop up
+    /// </summary>
+    openWarningModel() {
+        this.setState({ showWarningModel: true });
+    }
+
+    /// <summary>
+    /// Called to close the cancel warning pop up
+    /// </summary>
+    closeWarningModel() {
+        this.setState({ showWarningModel: false });
+    }
+
+    /// <summary>
+    /// Called to close the add edit pop up or open cancel warning pop up
     /// </summary>
     handleClose() {
-        //if (JSON.stringify(this.state.destinationUnModifiedData) == JSON.stringify(this.props.data.destinationDetails)) {
+        if (JSON.stringify(this.state.categoryUnModifiedData) == JSON.stringify(this.state.categoryDetails)) {
               this.props.handleClose();
-        //}
-        //else {
-        //    this.openWarningModel();
-        //}
+        }
+        else {
+            this.openWarningModel();
+        }
     }
 
     /// <summary>
@@ -141,11 +163,6 @@ class AddEditCategory extends React.Component {
         this.setState({ validationStateDestinationName: (IsDestinationNameRequired == true) ? 'error' : null });
     }
 
-    updateDestinationDetail(destinations)
-    {
-
-    }
-
     render() {        
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
@@ -168,12 +185,11 @@ class AddEditCategory extends React.Component {
                             onChange={this.handleTextChange.bind(this)}
                             />
                         </FormGroup>
-                        <Tabs defaultActiveKey={1} >
-                            <Tab eventKey={1} >
-                                <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} updateDetails={this.updateDestinationDetail.bind(this)} />
-                            </Tab>
-                        </Tabs>
+                        <Panel bsStyle="category">
+                            <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
+                        </Panel>
                         <NotificationContainer />
+                        <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

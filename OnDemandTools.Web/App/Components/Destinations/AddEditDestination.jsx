@@ -16,7 +16,7 @@ import AddEditDestinationProperties from 'Components/Destinations/AddEditDestina
 import AddEditDestinationCategories from 'Components/Destinations/AddEditDestinationCategories';
 import { saveDestination } from 'Actions/Destination/DestinationActions';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
-import CancelWarningModal from 'Components/Destinations/CancelWarningModal';
+import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
@@ -154,7 +154,7 @@ class AddEditDestinationModel extends React.Component {
                         </Tab>
                     </Tabs>
                     <NotificationContainer />
-                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditDestinationClose={this.handleAddEditClose.bind(this)} />
+                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.handleClose.bind(this)}>Cancel</Button>

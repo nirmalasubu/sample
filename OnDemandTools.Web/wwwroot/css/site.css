@@ -413,3 +413,20 @@ p.shortDesc {
 .destination-deliverables-popovermargin{
     margin-bottom:3px;
 }
+
+.panel-category {
+  border-color: #bce8f1;
+}
+
+.panel-category .panel-body {
+  border-bottom-color: #bce8f1;
+  min-height: 300px;
+}
+
+.category-height{
+    min-height:250px;
+    max-height:260px;
+    overflow-y:auto;
+    overflow-x: hidden;
+
+}

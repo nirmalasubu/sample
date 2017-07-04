@@ -214,7 +214,7 @@ class AddEditCategoryDestination extends React.Component {
                             <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
-                                <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-pencil-square-o"></i></button>
+                                <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
                                 <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
@@ -244,7 +244,7 @@ class AddEditCategoryDestination extends React.Component {
                         <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                         <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>
-                        <div class="destination-height">{row}</div>
+                        <div class="category-height">{row}</div>
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
