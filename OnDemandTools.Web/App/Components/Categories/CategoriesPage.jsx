@@ -13,7 +13,7 @@ import 'react-notifications/lib/notifications.css';
     var filteredCategoryValues = getFilterVal(store.categories, store.filterCategory);
     return {
         categories: store.categories,
-        filteredCategories: (filteredCategoryValues!=undefined?filteredCategoryValues:store.destinations)
+        filteredCategories: (filteredCategoryValues!=undefined?filteredCategoryValues:store.destinations),
         destinations: store.destinations
     };
 })

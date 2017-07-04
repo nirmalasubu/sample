@@ -267,23 +267,6 @@ namespace OnDemandTools.Business.Modules.Destination
         }
 
         /// <summary>
-        /// Update the categories to the destination collection
-        /// </summary>
-        /// <param name="destination">The destiination model.</param>
-        /// <returns></returns>
-        public BLModel.Destination SaveDestinationCategory(BLModel.Destination destination)
-        {
-            foreach (var category in destination.Categories)
-            {
-                DLModel.Category dataModel = category.ToDataModel<BLModel.Category, DLModel.Category>();
-
-                destinationCommand.UpdateDestinationCategory(destination.Name, dataModel);
-            }
-
-            return GetByName(destination.Name);
-        }
-
-        /// <summary>
         /// Remove destnation from collection using ObjectID
         /// </summary>
         /// <param name="id">Object Id</param>

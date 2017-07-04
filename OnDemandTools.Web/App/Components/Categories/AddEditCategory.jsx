@@ -36,8 +36,7 @@ class AddEditCategory extends React.Component {
     /// This function is called after entering the modal pop up
     /// </summary>
     onEnteredModel() {
-            
-
+        this.validateForm();
     }
 
     /// <summary>
@@ -47,14 +46,19 @@ class AddEditCategory extends React.Component {
         this.setState({
             isProcessing: false,
             categoryDetails: this.props.data.categoryDetails
-        });        
+        });       
+        
     }
 
     handleSave() {
         var elem = this;
         if (this.state.validationStateName != "error" && this.state.validationStateDestinationName != "error") {
 
-            this.setState({ isProcessing: true });
+            var model = this.state.categoryDetails;
+            for(var i=0; i<model.destinations.length-1; i++)
+                model.destinations[i].categories[0].name = model.name;
+
+            this.setState({categoryDetails: model, isProcessing: true});
 
             this.props.dispatch(categoryActions.saveCategory(this.state.categoryDetails))
                 .then(() => {

@@ -7,13 +7,14 @@ import CategoryExpandTable from 'Components/Categories/CategoryExpandTable';
 import AddEditCategory from 'Components/Categories/AddEditCategory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
+import { getNewCategory } from 'Actions/Category/CategoryActions';
 
 
 class CategoryTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newCategoryModel: "",
+            newCategoryModel: {},
             showModal: false,
             showAddEditModel: false,
             showDeleteModal: false,
@@ -38,10 +39,20 @@ class CategoryTable extends React.Component {
     }
 
     componentDidMount() {
+        let promise = getNewCategory();
+        promise.then(message => {
+            this.setState({
+                newCategoryModel: message
+            });
+        }).catch(error => {
+            this.setState({
+                newCategoryModel: {}
+            });
+        });
     }
 
     openCreateNewDestinationModel() {
-
+        this.setState({ showAddEditModel: true, categoryDetails: jQuery.extend(true, {}, this.state.newCategoryModel) });
     }
     ///<summary>
     // when delete category button event handled

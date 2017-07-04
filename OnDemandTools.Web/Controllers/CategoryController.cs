@@ -6,6 +6,7 @@ using OnDemandTools.Common.Model;
 using OnDemandTools.Web.Models.Destination;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,7 +41,7 @@ namespace OnDemandTools.Web.Controllers
             {
                 CategoryViewModel categoryVM = new CategoryViewModel
                 {
-                    Id = new System.Guid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Name = category.Key,
                     Destinations = destinations.Where(e => e.Categories.Any(f => f.Name == category.Key)).ToList()
                     .ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>()
@@ -66,9 +67,31 @@ namespace OnDemandTools.Web.Controllers
 
             foreach (var destination in viewModel.Destinations)
             {
-                Business.Modules.Destination.Model.Destination blModel = destination.ToBusinessModel<DestinationViewModel, Business.Modules.Destination.Model.Destination>();
+                var destinationDetail = _destinationSvc.GetByName(destination.Name);
 
-                blModel = _destinationSvc.SaveDestinationCategory(blModel);
+                var category = destinationDetail.Categories.FirstOrDefault(e => e.Name == destination.Categories.First().Name);
+
+                if (category != null)
+                {
+                    category.Name = destination.Categories.First().Name;
+                    category.Brands = destination.Categories.First().Brands;
+                    category.TitleIds = destination.Categories.First().TitleIds;
+                    category.SeriesIds = destination.Categories.First().SeriesIds;
+                }
+                else
+                {
+                    var newCategory = new Business.Modules.Destination.Model.Category
+                    {
+                        Name = destination.Categories.First().Name,
+                        Brands = destination.Categories.First().Brands,
+                        TitleIds = destination.Categories.First().TitleIds,
+                        SeriesIds = destination.Categories.First().SeriesIds
+                    };
+
+                    destinationDetail.Categories.Add(newCategory);
+                }
+
+                var blModel = _destinationSvc.Save(destinationDetail);
 
                 destinations.Add(blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>());
             }
@@ -89,6 +112,7 @@ namespace OnDemandTools.Web.Controllers
         {
             return new CategoryViewModel
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = string.Empty
             };
         }

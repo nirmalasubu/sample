@@ -22,7 +22,7 @@ class AddEditCategoryDestination extends React.Component {
         this.state = ({
             categoryDetails:{},
             isCategoryNameRequired:false,
-            categoryDestinationsRow: {},
+            propertiesRowRow: {},
             destinationIndexToRemove:-1,
             showDestinationsDeleteModal:false,
             destinationTitles:[],
@@ -34,19 +34,19 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     componentDidMount() {
-        var optionValues = this.getOptions(this.props.data);
-
         this.setState({
-            categoryDetails: this.props.data,
-            options: optionValues
-        });
+            categoryDetails: this.props.data
+        });        
     }
 
     getOptions(categoryDetails) {
         var options = [];
         for (var x = 0; x < this.props.destinations.length; x++) {
 
-            var detailIndex = categoryDetails.destinations.findIndex((obj => obj.name == this.props.destinations[x].name));
+            var detailIndex  = -1;
+
+            if(categoryDetails.destinations.length>0)
+                detailIndex= categoryDetails.destinations.findIndex((obj => obj.name == this.props.destinations[x].name));
 
             if(detailIndex < 0)
             {
@@ -84,6 +84,7 @@ class AddEditCategoryDestination extends React.Component {
     //To add a new destination of category
     AddNewDestination()
     {
+        var optionValues = this.getOptions(this.state.categoryDetails);
         var newDestination= {name:"", description:"", categories:[]};
         var category = {
             name: this.state.categoryDetails.name,
@@ -95,7 +96,7 @@ class AddEditCategoryDestination extends React.Component {
         var categoryData=[];
         categoryData = this.state.categoryDetails;  
         categoryData.destinations.unshift(newDestination);
-        this.setState({destinationDetails: categoryData });   
+        this.setState({destinationDetails: categoryData, options: optionValues});
         
         this.CheckDestinationNameIsEmpty();
     }
@@ -173,15 +174,15 @@ class AddEditCategoryDestination extends React.Component {
         let row = null;
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
             if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){
-                row = this.state.categoryDetails.destinations.map(function (item, index) {
+                row = this.state.categoryDetails.destinations.map(function (item, index) {                    
                     var nameValidation=item.name!=""?null:"error";
                     let col = null, colDesc = null;
                     if(item.name==""){
                         col = (<Col sm={6   }>
-                                    <FormGroup controlId={index} validationState={nameValidation}>
+                                    <FormGroup controlId={index} validationState="error">
                                           <Select 
                                       searchable={false} 
-                                      simpleValue className="destination-select-control" 
+                                      simpleValue className="category-select-control" 
                                       options={this.state.options} 
                                       onChange={(event) => this.handleChange(index, event)}
                                       value={item.name} />
@@ -227,23 +228,29 @@ class AddEditCategoryDestination extends React.Component {
             }
 
  return (
- <div>
-     <div>
-         <button class="destination-properties-addnew btn" title="Add New" onClick={(event) => this.AddNewDestination(event)}>New Destination</button>
-    </div>
-     <div >
-    <Grid fluid={true}>
-      <Row>
-       <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
-       <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
-       <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
-       <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
-      </Row>
-      <div class="destination-height">{row}</div>
-      </Grid>
-      </div>
-       <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
-    </div>)
+        <div>
+            <div>
+                <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.AddNewDestination(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Destination</span>
+                </button>
+            </div><br/><br/>
+             <div>     
+                 <div >
+                    <Grid fluid={true}>
+                        <Row>
+                        <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
+                        <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
+                        <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
+                        <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
+                        </Row>
+                        <div class="destination-height">{row}</div>
+                    </Grid>
+                </div>
+                   <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
+            </div>
+        </div>
+     )
       }
           }
 

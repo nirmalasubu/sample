@@ -165,6 +165,10 @@ textarea.form-control-modal-Edit {
     width: 300px;
 }
 
+.category-select-control{
+    max-width: 400px;
+}
+
 .destination-properties-addnew{
    background-color: white;
     border: 1px solid #555;
@@ -296,6 +300,12 @@ p.shortDesc {
     max-width: 335px;
     position: absolute;
     background-color:#D3D3D3;
+}
+
+.has-error .select-control {
+  border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
 
 /* Make .svg files in the carousel display properly in older browsers */

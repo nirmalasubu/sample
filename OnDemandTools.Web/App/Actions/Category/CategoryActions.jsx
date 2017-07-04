@@ -40,12 +40,22 @@ export const saveCategory = (model) => {
     return (dispatch) => {        
         return Axios.post('/api/category', model)
             .then(response => {
-                dispatch(saveDestinationSuccess(response.data))
+                dispatch(saveCategorySuccess(response.data))
             })
             .catch(error => {
                 throw (error);
             });
     };
+};
+
+export const getNewCategory = () => {
+    return Axios.get('/api/category/newCategory')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
 };
 
 export const deleteCategorySuccess = (name) => {

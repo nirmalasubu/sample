@@ -18,7 +18,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.Property, DLModel.Property>();
             CreateMap<BLModel.Deliverable, DLModel.Deliverable>();
             CreateMap<BLModel.Category, DLModel.Category>()
-              .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
+              .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? ObjectId.GenerateNewId() : new ObjectId(s.Id)));
             CreateMap<BLModel.Content, DLModel.Content>();
 
             CreateMap<DLModel.Destination, BLModel.Destination>()
