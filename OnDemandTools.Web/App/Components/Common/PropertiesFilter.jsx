@@ -120,19 +120,15 @@ class PropertiesFilter extends React.Component {
     /// </summary>
     onClickSave() {
         var brands = this.state.brandsSelection
-        var array = [];
+        var selectedBrands = [];
         for (var i = 0; i < brands.length; i++) {
             if (brands[i].selected) {
-                array.push(brands[i].brandName);
+                selectedBrands.push(brands[i].brandName);
             }
         }
-        this.props.data.propertiesRow.brands = [];
-        this.props.data.propertiesRow.brands = array;
-
-        var titles = []
+       
         var titleIds = [];
         var seriesIds = [];
-
         for (var t = 0; t < this.state.selectedTitles.length; t++) {
 
             var selectedTitle = this.state.selectedTitles[t];
@@ -141,19 +137,11 @@ class PropertiesFilter extends React.Component {
                 seriesIds.push(selectedTitle.titleId);
             }
             else {
-                var title = {};
-                title.titleId = selectedTitle.titleId;
-                title.name = selectedTitle.titleName;
-                titles.push(title);
                 titleIds.push(selectedTitle.titleId);
             }
         }
-
-        this.props.data.propertiesRow.titleIds = titleIds;
-        this.props.data.propertiesRow.titles = titles;
-        this.props.data.propertiesRow.seriesIds = seriesIds;
-
-        this.props.handleClose();
+        var selectedFilterValues={"brands":selectedBrands,"titleIds":titleIds,"seriesIds":seriesIds};
+        this.props.handleSave(selectedFilterValues);
     }
 
     /// <summary>

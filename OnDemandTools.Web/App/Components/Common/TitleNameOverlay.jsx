@@ -9,15 +9,20 @@ import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 class TitleNameOverlay extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            titleIds: [],
             titles: [],
             isProcessing: false
         }
     }
+    
+    componentDidMount() {
+        this.setState({
+            isProcessing: true
+        });
 
-    fetchAndUpdateTitles() {
+    }
+
+    fetchAndUpdateTitles(titleIds) {
 
         var titleIds = this.props.data;
 
@@ -31,54 +36,50 @@ class TitleNameOverlay extends React.Component {
             this.setState({ titles: [], isProcessing: false });
         });
     }
-
-    componentDidMount() {
-        this.setState({
-            titlesIds: this.props.data,
-            isProcessing: true
-        });
-
-        this.fetchAndUpdateTitles();
-    }
-
-    render() {
-
+    titleDetailConstruct(titleIds)
+    {
+        if(titleIds.length==0)
+        {
+            return (<div></div>)
+        }
+        this.fetchAndUpdateTitles(titleIds);
         var rows = [];
 
         if (this.state.titles.length > 1) {
             for (var i = 0; i < this.state.titles.length; i++) {
                 rows.push(<p key={i.toString()}> {this.state.titles[i].titleName} </p>)
-            }
         }
+    }
 
-        const popoverLeft = (
-            <Popover id="popover-positioned-left" title="Titles/Series">
-                {rows}
-            </Popover>
-        );
-
+    const popoverLeft = (<Popover id="popover-positioned-left" title="Titles/Series">
+    {rows}</Popover> );
+       
         if (this.state.isProcessing) {
             return <div>Loading...</div>
         }
-        else if (this.state.titles.length == 0) {
-            return <div></div>
-        }
-        else if (this.state.titles.length == 1) {
+       if (this.state.titles.length == 1) {
             return (
                 <div>
                     {this.state.titles[0].titleName}
                 </div>
             )
-        }
-        else {
+       } 
+       if (this.state.titles.length > 1) {
             return (                                 
                 <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
                     <div>
                         { this.state.titles[0].titleName } <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>)
+                        }
+                        }
+
+
+        render() {
+
+            return (<div>{this.titleDetailConstruct(this.props.data)}</div>);
+      
         }
     }
-}
 
-export default TitleNameOverlay
+    export default TitleNameOverlay

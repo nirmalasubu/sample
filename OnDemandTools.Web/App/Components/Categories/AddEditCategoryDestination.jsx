@@ -33,7 +33,9 @@ class AddEditCategoryDestination extends React.Component {
             titleText : "",            
             showAddEditPropertiesFilter: false,
             options: [],
-            destinationValue: ""
+            destinationValue: "",
+            propertiesRowIndex:-1
+            
         });
     }
 
@@ -65,8 +67,8 @@ class AddEditCategoryDestination extends React.Component {
     /// <summary>
     /// Handler to open properties at the indicated  row
     /// </summary>
-    openPropertiesFilter(row) {
-        this.setState({ showAddEditPropertiesFilter: true,propertiesRow: row.categories[0] });
+    openPropertiesFilter(row,index) {
+        this.setState({ showAddEditPropertiesFilter: true,propertiesRow: row.categories[0] ,propertiesRowIndex:index });
     }
 
     /// <summary>
@@ -124,8 +126,20 @@ class AddEditCategoryDestination extends React.Component {
         this.setState({ showDestinationsDeleteModal: false });
     }
 
+    SavePropertiesFilterData(selectedFilterValues)
+    {
+       
+        var model= this.state.categoryDetails;
+        model.destinations[this.state.propertiesRowIndex].categories[0].brands=selectedFilterValues.brands;
+        model.destinations[this.state.propertiesRowIndex].categories[0].titleIds=selectedFilterValues.titleIds;
+        model.destinations[this.state.propertiesRowIndex].categories[0].seriesIds=selectedFilterValues.seriesIds;
+        this.setState({ categoryDetails: model , showAddEditPropertiesFilter: false});
+       
+    }
+
     //this method to show all category titles.
     titleDetailConstruct(item,index){
+       
         var ids = [];
         if(item.categories.length>0)
         {            
@@ -134,14 +148,17 @@ class AddEditCategoryDestination extends React.Component {
             }
 
             for (var i = 0; i < item.categories[0].titleIds.length; i++) {
+              
                 ids.push(item.categories[0].titleIds[i]);
             }
-
+          
             if(ids.length>0)
+            {
                 return <TitleNameOverlay data={ids} />;
+            }
         }        
     }
-        
+
     //this method constructs the category brands images.
     categoryBrandImageConstruct(item,index)
     {
@@ -227,8 +244,8 @@ class AddEditCategoryDestination extends React.Component {
                             <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
-                                <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
-                                <button type= "button"  class="btn-link" title="Delete Category" onClick={(event) => (item.name==""?this.removeDestinationModel(index, item):this.openDestinationsDeleteModel(index, event))} ><i class="fa fa-trash"></i></button>
+                                <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
+                                <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
 
@@ -260,6 +277,7 @@ class AddEditCategoryDestination extends React.Component {
                         <div class="category-height">{row}</div>
                     </Grid>
                 </div>
+                   <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
                    <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)}  handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
             </div>
