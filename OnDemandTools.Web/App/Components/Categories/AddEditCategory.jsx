@@ -20,8 +20,10 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
     };
 })
 
+// Sub component of category page to  add ,edit and delete category details
 class AddEditCategory extends React.Component {
-
+    // Define default component state information. This will
+    // get modified further based on how the user interacts with it
     constructor(props) {
         super(props);
 
@@ -132,7 +134,9 @@ class AddEditCategory extends React.Component {
         return (this.state.validationStateName != null || this.state.validationStateDestinationName != null);
     }
 
-
+    /// <summary>
+    /// This function is to set validations states value
+    /// </summary>
     validateForm() {
         var name = this.state.categoryDetails.name;
         var hasNameError = (name == "");
@@ -168,7 +172,7 @@ class AddEditCategory extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{($.inArray(this.props.data.categoryDetails.name, this.props.data.categoryDetails.destinations) > -1) ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
+                        <div>{(this.props.data.categoryDetails.destinations!=undefined && this.props.data.categoryDetails.destinations.length>0 && this.props.data.categoryDetails.destinations[0].categories[0].id!=undefined) ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -178,7 +182,7 @@ class AddEditCategory extends React.Component {
                             <ControlLabel>Category Name</ControlLabel>
                             <FormControl
                             type="text"
-                            disabled={($.inArray(this.props.data.categoryDetails.name, this.props.data.categoryDetails.destinations) > -1) ? true : false}
+                            disabled={(this.props.data.categoryDetails.destinations!=undefined && this.props.data.categoryDetails.destinations.length>0 && this.props.data.categoryDetails.destinations[0].categories[0].id!=undefined) ? true : false}
                             value={this.state.categoryDetails.name}
                             ref="inputCategoryName"
                             placeholder="Enter a Category Name"

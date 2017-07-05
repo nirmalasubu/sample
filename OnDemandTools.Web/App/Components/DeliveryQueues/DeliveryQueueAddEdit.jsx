@@ -24,6 +24,8 @@ import validator from 'validator';
 })
 class DeliveryQueueAddEdit extends React.Component {
 
+    // Define default component state information. This will
+    // get modified further based on how the user interacts with it
     constructor(props) {
         super(props);
 

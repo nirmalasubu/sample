@@ -7,7 +7,9 @@ import * as categoryActions from 'Actions/Category/CategoryActions';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 import Select from 'react-select';
+import RemoveDestinationModal from 'Components/Categories/RemoveDestinationModal';
 
+//Get all destinations from store
 @connect((store) => {
     return {
         destinations: store.destinations
@@ -16,7 +18,9 @@ import Select from 'react-select';
 
 // Sub component of category page to  add ,edit and delete category destinations
 class AddEditCategoryDestination extends React.Component {
-
+    
+    // Define default component state information. This will
+    // get modified further based on how the user interacts with it
     constructor(props) {
         super(props);
         this.state = ({
@@ -39,6 +43,7 @@ class AddEditCategoryDestination extends React.Component {
         });        
     }
 
+    //To Bind dropdown with all destinations name and description
     getOptions(categoryDetails) {
         var options = [];
         for (var x = 0; x < this.props.destinations.length; x++) {
@@ -72,17 +77,25 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     //To delete  a destination of category
-    RemoveDestinationModel(value)
+    removeDestinationModel(index, value)
     {
         var categoryData=[];
-        categoryData = this.props.data;
-        categoryData.destinations.splice(value, 1);
-        this.setState({categoryDetails: categoryData });
-        this.setState({ showDestinationsDeleteModal: false});
+        categoryData = this.state.categoryDetails;
+        if(categoryData.destinations[index].categories[0].id==undefined)
+        {
+            categoryData.destinations[index].name="";
+            categoryData.destinations[index].description="";
+        }
+        else
+        {
+            categoryData.destinations.splice(value, 1);
+            this.setState({ showDestinationsDeleteModal: false});
+        }
+        this.setState({categoryDetails: categoryData });        
     }
 
     //To add a new destination of category
-    AddNewDestination()
+    addNewDestination()
     {
         var optionValues = this.getOptions(this.state.categoryDetails);
         var newDestination= {name:"", description:"", categories:[]};
@@ -107,7 +120,7 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     // To close destination delete modal window
-    closePropertiesDeleteModel() {
+    closeDestinationDeleteModel() {
         this.setState({ showDestinationsDeleteModal: false });
     }
 
@@ -215,7 +228,7 @@ class AddEditCategoryDestination extends React.Component {
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
                                 <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
-                                <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
+                                <button type= "button"  class="btn-link" title="Delete Category" onClick={(event) => (item.name==""?this.removeDestinationModel(index, item):this.openDestinationsDeleteModel(index, event))} ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
 
@@ -230,7 +243,7 @@ class AddEditCategoryDestination extends React.Component {
  return (
         <div>
             <div>
-                <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.AddNewDestination(event)}>
+                <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDestination(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New Destination</span>
                 </button>
@@ -248,6 +261,7 @@ class AddEditCategoryDestination extends React.Component {
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
+                   <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)}  handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
             </div>
         </div>
      )
