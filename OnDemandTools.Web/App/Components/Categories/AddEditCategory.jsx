@@ -172,7 +172,7 @@ class AddEditCategory extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{(this.props.data.categoryDetails.destinations!=undefined && this.props.data.categoryDetails.destinations.length>0 && this.props.data.categoryDetails.destinations[0].categories[0].id!=undefined) ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
+                        <div>{ this.props.data.categoryDetails.id != null ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -182,7 +182,7 @@ class AddEditCategory extends React.Component {
                             <ControlLabel>Category Name</ControlLabel>
                             <FormControl
                             type="text"
-                            disabled={(this.props.data.categoryDetails.destinations!=undefined && this.props.data.categoryDetails.destinations.length>0 && this.props.data.categoryDetails.destinations[0].categories[0].id!=undefined) ? true : false}
+                            disabled={this.props.data.categoryDetails.id != null}
                             value={this.state.categoryDetails.name}
                             ref="inputCategoryName"
                             placeholder="Enter a Category Name"

@@ -96,6 +96,9 @@ namespace OnDemandTools.Web.Controllers
                 destinations.Add(blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>());
             }
 
+            if (string.IsNullOrEmpty(viewModel.Id))
+                viewModel.Id = Guid.NewGuid().ToString();
+
             viewModel.Destinations = destinations;
 
             foreach (var destination in viewModel.Destinations)
@@ -111,8 +114,7 @@ namespace OnDemandTools.Web.Controllers
         public CategoryViewModel GetEmptyModel()
         {
             return new CategoryViewModel
-            {
-                Id = Guid.NewGuid().ToString(),
+            {                
                 Name = string.Empty
             };
         }
