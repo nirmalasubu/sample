@@ -278,7 +278,7 @@ class AddEditCategoryDestination extends React.Component {
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
-                   <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
+                  
                    <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)}  handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
             </div>
         </div>
