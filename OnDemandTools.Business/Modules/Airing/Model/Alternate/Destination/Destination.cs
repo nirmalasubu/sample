@@ -12,6 +12,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination
         {
             Deliverables = new List<Deliverable>();
             Properties = new List<Property>();
+            Categories = new List<Category>();
             Playlists =  new List<Playlist>();           
         }
 
@@ -24,6 +25,8 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination
         public List<Property> Properties { get; set; }
 
         public List<Deliverable> Deliverables { get; set; }
+
+        public List<Category> Categories { get; set; }
 
         public Content Content { get; set; }
 

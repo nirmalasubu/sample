@@ -32,6 +32,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Destination, BLAiringLongModel.Destination.Destination>();
             CreateMap<DLModel.Property, BLAiringLongModel.Destination.Property>();
             CreateMap<DLModel.Deliverable, BLAiringLongModel.Destination.Deliverable>();
+            CreateMap<DLModel.Category, BLAiringLongModel.Destination.Category>();
             CreateMap<DLModel.Content, BLAiringLongModel.Destination.Content>();
 
             CreateMap<DLModel.Destination, DLAiringModel.Destination>();

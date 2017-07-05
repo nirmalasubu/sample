@@ -403,8 +403,9 @@ namespace OnDemandTools.Business.Modules.Airing
 
             var destinations = destinationQueryHelper.GetByDestinationNames(destinationNames)
                                 .ToBusinessModel<List<DLDestinationModel.Destination>, List<BLModel.Alternate.Destination.Destination>>();
-
+                        
             FilterPropertiesByBrand(destinations, ref airing);
+            FilterCategoriesByBrand(destinations, ref airing);
             new BLModel.Alternate.Destination.DeliverableFormatter(airing).Format(destinations); // destinations passed by reference for formatting
             new BLModel.Alternate.Destination.PropertyFormatter(airing).Format(destinations); // destinations passed by reference for formatting
 
@@ -521,6 +522,50 @@ namespace OnDemandTools.Business.Modules.Airing
             else return -1;
         }
 
+        private void FilterCategoriesByBrand(IEnumerable<BLModel.Alternate.Destination.Destination> dataModels, ref BLModel.Alternate.Long.Airing airing)
+        {
+            var categoriesToRemove = new List<BLModel.Alternate.Destination.Category>();
+
+            foreach (var destination in dataModels)
+            {
+                foreach (var category in destination.Categories)
+                {
+                    if (category.Brands.Any() && !category.Brands.Contains(airing.Brand))
+                    {
+                        categoriesToRemove.Add(category);
+                        continue;
+                    }
+
+                    if (category.TitleIds.Any() && category.SeriesIds.Any()) // Category has both title and series id . any one of the title/series Id should match
+                    {
+                        if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, category) && !IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, category))
+                        {
+                            categoriesToRemove.Add(category);
+                        }
+                        continue;
+                    }
+
+                    if (category.TitleIds.Any())
+                    {
+                        if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, category)) // Any one of the title Id should match
+                        {
+                            categoriesToRemove.Add(category);
+                        }
+                    }
+
+                    if (category.SeriesIds.Any())
+                    {
+                        if (!IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, category)) // Any one of the series Id should match
+                        {
+                            categoriesToRemove.Add(category);
+                        }
+                    }
+                }
+
+                destination.Categories = destination.Categories.Where(p => !categoriesToRemove.Contains(p)).ToList();
+            }
+        }
+
         private void FilterPropertiesByBrand(IEnumerable<BLModel.Alternate.Destination.Destination> dataModels, ref BLModel.Alternate.Long.Airing airing)
         {
             var propertiesToRemove = new List<BLModel.Alternate.Destination.Property>();
@@ -587,6 +632,40 @@ namespace OnDemandTools.Business.Modules.Airing
             if (titleIds.Any())
             {
                 if (!property.TitleIds.Any(titleIds.Contains))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        private bool IsCategorySeriesIdsAssociatedwithAiringSeriesIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Category category)
+        {
+            if (airing.Title.Series.Id.HasValue)
+            {
+                if (!category.SeriesIds.Contains(airing.Title.Series.Id.Value))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsCategoryTitleIdsAssociatedwithAiringTitleIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Category category)
+        {
+            var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+            if (titleIds.Any())
+            {
+                if (!category.TitleIds.Any(titleIds.Contains))
                 {
                     return false;
                 }
