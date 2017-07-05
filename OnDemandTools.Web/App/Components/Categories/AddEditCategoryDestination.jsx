@@ -245,7 +245,7 @@ class AddEditCategoryDestination extends React.Component {
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
                                 <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
-                                <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
+                                <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => (item.name==""?this.removeDestinationModel(index, item):this.openDestinationsDeleteModel(index, event))}  ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
 
