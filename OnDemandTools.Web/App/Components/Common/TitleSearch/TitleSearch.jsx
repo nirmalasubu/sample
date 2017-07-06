@@ -20,10 +20,14 @@ class TitleSearch extends React.Component {
             selectedSeriesFilter: "",
             titlesToRemove: [],
             titlesToAdd: [],
-            selectedTitleIds: []
+            selectedTitleIds: [],
+            options: {
+                noDataText: ""}
+
         }
     }
 
+    
     handleChange(val) {
         this.setState({ selectedTitleTypeFilter: "", selectedSeriesFilter: "", titlesToAdd: [], selectedTitleIds: [] });
         this.props.dispatch(clearTitles());
@@ -165,6 +169,12 @@ class TitleSearch extends React.Component {
             onSelect: this.onSelectedTitlesRowSelect.bind(this)
         };
 
+        if(this.props.hasTitles)
+            this.state.options.noDataText = <div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>;
+        else
+            this.state.options.noDataText = <i>There is no data to display</i>;
+    
+
         return (
             <div>
                 <Form inline>
@@ -231,7 +241,7 @@ class TitleSearch extends React.Component {
                                 tableContainerClass='react-bs-table_filter'
                                 selectRow={selectedGridProps}
                                 data={this.props.selectedTitles}
-                                striped hover pagination={true}>
+                                striped hover pagination={true}  options={this.state.options}>
                                 <TableHeaderColumn width="80px" isKey dataSort={false} dataField="titleId" dataFormat={this.titleIdFormat.bind(this)} >Id</TableHeaderColumn>
                                 <TableHeaderColumn dataSort={false} dataField="titleNameSortable" dataFormat={this.titleIdFormat.bind(this)} >Title</TableHeaderColumn>
                                 <TableHeaderColumn width="80px" dataSort={false} dataField="titleId" dataFormat={this.titleTypeFormat.bind(this)} >Type</TableHeaderColumn>

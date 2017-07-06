@@ -33,7 +33,8 @@ class PropertiesFilter extends React.Component {
             brandsSelection: {},
             selectedTitles: [],
             hasChange: false,
-            showWarningModel: false
+            showWarningModel: false,
+            loadingTable:false
         }
     }
 
@@ -77,17 +78,21 @@ class PropertiesFilter extends React.Component {
         titleIds = titleIds.concat(this.props.data.propertiesRow.seriesIds);
 
         if (titleIds.length > 0) {
-
+            this.setState({ loadingTable: true });
             let searchPromise = searchByTitleIds(titleIds);
             searchPromise.then(message => {
-                this.setState({ selectedTitles: message });
+                //Title Data  is fetched asynchronously .  
+                this.setState({ selectedTitles: message ,loadingTable: false});   
             })
             searchPromise.catch(error => {
                 console.error(error);
-                this.setState({ selectedTitles: [] });
+                titles = [];
             });
         }
-
+        else{
+            this.setState({ loadingTable: false });
+        }
+       
         for (var i = 0; i < this.props.config.brands.length; i++) {
             var brandName = this.props.config.brands[i];
             var brandObject = {};
@@ -95,8 +100,10 @@ class PropertiesFilter extends React.Component {
             brandObject.selected = $.inArray(brandName, this.props.data.propertiesRow.brands) > -1;
             brands.push(brandObject);
         }
+        
 
         this.setState({ brandsSelection: brands, selectedTitles: titles, hasChange: false });
+      
     }
 
     /// <summary>
@@ -212,6 +219,7 @@ class PropertiesFilter extends React.Component {
             <ControlLabel>Title/Series Associations</ControlLabel>
             <TitleSearch  
               selectedTitles={this.state.selectedTitles}
+              hasTitles={this.state.loadingTable}
               onAddTitles={this.onAddTitles.bind(this)}
               onRemoveTitles={this.onRemoveTitles.bind(this)}
             />
