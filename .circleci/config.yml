@@ -1,8 +1,12 @@
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: quay.io/turner/harbor-cicd:0.0.1
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
+    <<: *defaults
 
     branches:
       only:
@@ -10,8 +14,6 @@ jobs:
         - rc
         - sandbox
         - newbuild
-        
-    working_directory: ~/app
 
     steps:
       - checkout
@@ -34,11 +36,18 @@ jobs:
             docker-compose down
             docker-compose build odtapi odtwebapp odtjobs odt-api-tests odt-jobs-tests
 
-  test-harness:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
+      - persist_to_workspace:
+          root: /var/lib/docker/aufs
+          paths:
+            - .
 
-    working_directory: ~/app
+      - persist_to_workspace:
+          root: /var/lib/docker/image
+          paths:
+            - .
+
+  test-harness:
+    <<: *defaults
 
     steps:
       - run:
@@ -49,14 +58,18 @@ jobs:
             mkdir ~/app/tests/xunit
 
   test-api:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
+    <<: *defaults
 
-    working_directory: ~/app
     steps:
-      - checkout
-
       - setup_remote_docker
+
+      - attach_workspace:
+          at: /var/lib/docker/aufs
+          
+      - attach_workspace:
+          at: /var/lib/docker/image
+
+      - checkout      
 
       - run:
           name: Testing API
@@ -69,15 +82,18 @@ jobs:
             exit $BOMBED
 
   test-jobs:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - checkout
-      
+
       - setup_remote_docker
+
+      - attach_workspace:
+          at: /var/lib/docker/aufs
+          
+      - attach_workspace:
+          at: /var/lib/docker/image
 
       - run:
           name: Testing Jobs
@@ -90,10 +106,7 @@ jobs:
             exit $BOMBED
 
   test-spin-down:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - run:
@@ -104,10 +117,7 @@ jobs:
             docker-compose down   
 
   test-store:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - store_artifacts:
@@ -117,10 +127,7 @@ jobs:
           path: ~/app/tests
 
   deploy-image:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - run:
@@ -136,10 +143,7 @@ jobs:
             docker-compose push odtapi odtwebapp odtjobs  
 
   deploy-catalog:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - run:
@@ -148,10 +152,7 @@ jobs:
             command: harbor-compose catalog;
 
   deploy-dev:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - run:
@@ -160,10 +161,7 @@ jobs:
             command: harbor-compose deploy -e dev;                    
 
   deploy-sandbox:
-    docker:
-      - image: quay.io/turner/harbor-cicd:0.0.1
-
-    working_directory: ~/app
+    <<: *defaults
 
     steps:
       - run:
@@ -221,4 +219,4 @@ workflows:
           requires:
             - deploy-image
           
-  
+  template: &default
