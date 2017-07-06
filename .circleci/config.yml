@@ -54,6 +54,8 @@ jobs:
 
     working_directory: ~/app
     steps:
+      - setup_remote_docker
+
       - run:
           name: Testing API
           working_directory: ~/app/Deployment
@@ -71,6 +73,8 @@ jobs:
     working_directory: ~/app
 
     steps:
+      - setup_remote_docker
+
       - run:
           name: Testing Jobs
           working_directory: ~/app/Deployment
@@ -156,7 +160,7 @@ jobs:
       - image: quay.io/turner/harbor-cicd:0.0.1
 
     working_directory: ~/app
-    
+
     steps:
       - run:
             name: Continious Deployment to Sandbox
