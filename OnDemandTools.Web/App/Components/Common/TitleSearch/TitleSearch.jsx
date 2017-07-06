@@ -178,6 +178,7 @@ class TitleSearch extends React.Component {
         return (
             <div>
                 <Form inline>
+                    
                     <FormGroup controlId="code">
                         <FormControl type="text" inputRef={(input) => this.inputTitleSearch = input}
                             placeholder="Search..." />
@@ -185,6 +186,7 @@ class TitleSearch extends React.Component {
                         <Button onClick={this.handleChange.bind(this)} bsStyle="primary" disabled={this.state.processing} >
                             {this.state.processing ? " Processing" : "Search"}
                         </Button>
+                      
                         {' '}
                         <TitleSearchParameter
                             name="Title Type"
@@ -199,7 +201,8 @@ class TitleSearch extends React.Component {
                             selectedItem={this.state.selectedSeriesFilter} />
                     </FormGroup>
                 </Form>
-                <Grid fluid={true}>
+               
+                <Grid fluid={true} class="title-search-position">
                     <Row>
                         <Col md={5} >
                             <ControlLabel>Available Title/Series</ControlLabel>
@@ -231,7 +234,7 @@ class TitleSearch extends React.Component {
                                 Add >
                         </Button>
                             <br /><br />
-                            <Button bsStyle="primary" className="filterButton" disabled={this.state.titlesToRemove == 0} onClick={this.onRemoveTitleButtonClick.bind(this)} >
+                            <Button bsStyle="primary" disabled={this.state.titlesToRemove == 0} onClick={this.onRemoveTitleButtonClick.bind(this)} >
                                 Remove
                         </Button>
                         </Col>

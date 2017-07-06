@@ -212,10 +212,13 @@ class PropertiesFilter extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="propFilterContainer">
+             <div class="panel panel-default">
+             <div class="panel-body">
+          <div >
             <ControlLabel> Brands</ControlLabel><br />
         {rows}
             <hr />
+           
             <ControlLabel>Title/Series Associations</ControlLabel>
             <TitleSearch  
               selectedTitles={this.state.selectedTitles}
@@ -223,6 +226,8 @@ class PropertiesFilter extends React.Component {
               onAddTitles={this.onAddTitles.bind(this)}
               onRemoveTitles={this.onRemoveTitles.bind(this)}
             />
+            </div>
+            </div>
           </div>
           <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.props.handleClose.bind(this)} />
         </Modal.Body>
