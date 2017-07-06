@@ -189,7 +189,7 @@ class DestinationPropertiesFilter extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="propFilterContainer">
+          <div >
             <ControlLabel> Brands</ControlLabel><br />
             {rows}
             <hr />

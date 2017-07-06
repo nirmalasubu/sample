@@ -33,7 +33,9 @@ class AddEditCategory extends React.Component {
             validationStateName: null,
             validationStateDestinationName: null,
             categoryDetails:{},
-            showWarningModel: false
+            showWarningModel: false,
+            showError:false,
+            validationStateUniqueName:null
         });
     }
 
@@ -134,7 +136,7 @@ class AddEditCategory extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateName != null || this.state.validationStateDestinationName != null);
+        return (this.state.validationStateName != null || this.state.validationStateDestinationName != null|| this.state.validationStateUniqueName != null);
     }
 
     /// <summary>
@@ -142,11 +144,14 @@ class AddEditCategory extends React.Component {
     /// </summary>
     validateForm() {
         var name = this.state.categoryDetails.name;
-        var hasNameError = (name == "");
+        var hasNameError = (name == "")
+       
 
         this.setState({
-            validationStateName: hasNameError  ? 'error' : null
-        });
+            validationStateName: hasNameError  ? 'error' : null,
+            validationStateUniqueName: this.isNameUnique(this.state.categoryDetails)?'error' : null
+    });
+        console.log(this.state.validationStateUniqueName);
     }
 
     /// <summary>
@@ -170,7 +175,38 @@ class AddEditCategory extends React.Component {
         this.setState({ validationStateDestinationName: (IsDestinationNameRequired == true) ? 'error' : null });
     }
 
-    render() {        
+    /// <summary>
+    /// To validate the category name is unique
+    /// </summary>
+    isNameUnique(categoryDetails) {
+      
+        for (var x = 0; x < this.props.categoryIdandNames.length; x++){
+         
+            if (this.props.categoryIdandNames[x].id!= categoryDetails.id) {
+                if (this.props.categoryIdandNames[x].name== categoryDetails.name)                
+                {    
+                    console.log("categoryDetails.name");
+                    this.setState({
+                        showError: true
+                    });
+
+                    return true;
+                }
+                else
+                {
+                    this.setState({
+                        showError: false
+                    });
+                }}
+        }
+
+        return false;
+    }
+
+    render() { 
+        var msg ="";
+        if(this.state.showError)
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Category Name already exists. Please use a unique category name.</label>);
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
@@ -180,12 +216,12 @@ class AddEditCategory extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
+                        {msg}
                         <FormGroup
                             controlId="categoryName" validationState={this.state.validationStateName}>
                             <ControlLabel>Category Name</ControlLabel>
                             <FormControl
                             type="text"
-                            disabled={this.props.data.categoryDetails.id != null}
                             value={this.state.categoryDetails.name}
                             ref="inputCategoryName"
                             placeholder="Enter a Category Name"

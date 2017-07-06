@@ -114,11 +114,11 @@ class CategoryTable extends React.Component {
     actionFormat(val, rowData) {
         return (
             <div>
-                <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <button class="btn-link" title="Edit Category" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                <button class="btn-link" title="Delete Category" onClick={(event) => this.openDeleteModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -144,6 +144,14 @@ class CategoryTable extends React.Component {
             }
 
         }.bind(this));
+
+        var categoryIdandNames=[];
+       
+            for (var i = 0; i < this.props.RowData.length; i++)
+            {
+                categoryIdandNames.push({"id":this.props.RowData[i].id,"name":this.props.RowData[i].name});
+            }
+            
         return (
             <div>
                 <div>
@@ -161,13 +169,13 @@ class CategoryTable extends React.Component {
                     keyField={this.props.KeyField}
                     pagination={true}
                     options={this.state.options}>
-                    {row}
+                        {row}
                 </BootstrapTable>
 
-                <AddEditCategory data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditCategory data={this.state} categoryIdandNames={categoryIdandNames} handleClose={this.closeAddEditModel.bind(this)} />
                             <RemoveCategoryModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
-    }
+                        }
 
 }
 
