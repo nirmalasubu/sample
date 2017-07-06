@@ -34,6 +34,8 @@ jobs:
             docker-compose down
             docker-compose build odtapi odtwebapp odtjobs odt-api-tests odt-jobs-tests
 
+  test-harness:
+    steps:
       - run:
           name: Make Test Harness
           working_directory: ~/app
@@ -41,6 +43,8 @@ jobs:
             mkdir ~/app/tests
             mkdir ~/app/tests/xunit
 
+  test-api:
+    steps:
       - run:
           name: Testing API
           working_directory: ~/app/Deployment
@@ -51,63 +55,118 @@ jobs:
             docker cp apitest:/app/output/apiresults.xml ~/app/tests/xunit
             exit $BOMBED
 
-      - run:
-          name: Testing Jobs
-          working_directory: ~/app/Deployment
-          command: |
-            set +e
-            docker-compose run --name jobtest odt-jobs-tests
-            BOMBED=$?
-            docker cp jobtest:/app/output/jobresults.xml ~/app/tests/xunit
-            exit $BOMBED
+  test-jobs:
+      steps:
+        - run:
+            name: Testing Jobs
+            working_directory: ~/app/Deployment
+            command: |
+              set +e
+              docker-compose run --name jobtest odt-jobs-tests
+              BOMBED=$?
+              docker cp jobtest:/app/output/jobresults.xml ~/app/tests/xunit
+              exit $BOMBED
 
-      - run:
-          name: Spin down Test Harness
-          working_directory: ~/app/Deployment
-          command: |
-            set +e
-            docker-compose down            
-      
-      - store_artifacts:
-          path: ~/app/tests
-        
-      - store_test_results:
-          path: ~/app/tests
+  test-spin-down:
+      steps:
+        - run:
+            name: Spin down Test Harness
+            working_directory: ~/app/Deployment
+            command: |
+              set +e
+              docker-compose down   
 
-      - run:
-          name: Log into Quay          
-          command: |
-            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io  
+  test-store:
+      steps:
+        - store_artifacts:
+            path: ~/app/tests
+          
+        - store_test_results:
+            path: ~/app/tests
 
-      - run:
-          name: Push Image into Quay
-          working_directory: ~/app/Deployment
-          command: |
-            export COMPOSE_HTTP_TIMEOUT=600
-            docker-compose push odtapi odtwebapp odtjobs          
+  deploy-image:
+      steps:
+        - run:
+            name: Log into Quay          
+            command: |
+              docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io  
 
-      - run:
-          name: Continious Integration
-          working_directory: ~/app/Deployment
-          command: |
-              if [ "${CIRCLE_BRANCH}" == "rc" ] || [ "${CIRCLE_BRANCH}" == "master" ] || [ "${CIRCLE_BRANCH}" == "newbuild" ]; then
-                harbor-compose catalog;
-              fi
+        - run:
+            name: Push Image into Quay
+            working_directory: ~/app/Deployment
+            command: |
+              export COMPOSE_HTTP_TIMEOUT=600
+              docker-compose push odtapi odtwebapp odtjobs  
 
+  deploy-catalog:
+    steps:
       - run:
-          name: Continious Deployment to Dev
-          working_directory: ~/app/Deployment
-          command: |
-              if [ "${CIRCLE_BRANCH}" == "dev" ]; then
-                harbor-compose deploy -e dev;
-              fi
+            name: Continious Integration
+            working_directory: ~/app/Deployment
+            command: harbor-compose catalog;
 
+  deploy-dev:
+    steps:
       - run:
-          name: Continious Deployment to Sandbox
-          working_directory: ~/app/Deployment
-          command: |
-              if [ "${CIRCLE_BRANCH}" == "sandbox" ]; then
-                harbor-compose deploy -e sandbox;
-              fi
+            name: Continious Deployment to Dev
+            working_directory: ~/app/Deployment
+            command: harbor-compose deploy -e dev;                    
+
+  deploy-sandbox:
+    steps:
+      - run:
+            name: Continious Deployment to Sandbox
+            working_directory: ~/app/Deployment
+            command: harbor-compose deploy -e sandbox;                
            
-           
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - test-harness:
+          requires:
+            - build
+      - test-api:
+          requires:
+            - test-harness
+      - test-jobs:
+          requires:
+            - test-harness
+      - test-spin-down:
+          requires:
+            - test-api
+            - test-jobs
+      - test-store:
+          requires:
+            - test-api
+            - test-jobs
+      - deploy-image:
+          requires:
+            - test-api
+            - test-jobs
+      - deploy-catalog:
+          filters:
+            branches:
+              only:
+                - rc
+                - master
+                - newbuild
+          requires:
+            - deploy-image
+      - deploy-dev:
+          filters:
+            branches:
+              only:
+                - dev
+          requires:
+            - deploy-image
+      - deploy-sandbox:
+          filters:
+            branches:
+              only:
+                - sandbox
+          requires:
+            - deploy-image
+          
+  
