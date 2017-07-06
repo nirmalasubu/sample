@@ -65,7 +65,8 @@ class AddEditCategory extends React.Component {
             var model = this.state.categoryDetails;
 
             for(var i=0; i<model.destinations.length-1; i++)
-                model.destinations[i].categories[0].name = model.name;
+                if(model.destinations[i].categories.length>0)
+                    model.destinations[i].categories[0].name = model.name;
 
             this.setState({categoryDetails: model, isProcessing: true});
 
@@ -98,6 +99,8 @@ class AddEditCategory extends React.Component {
     handleAddEditClose() {
         var model = this.state.destinationUnModifiedData;
         jQuery.extend(this.state.categoryDetails, this.state.categoryUnModifiedData);
+
+        this.setState({validationStateDestinationName: null});
         this.props.handleClose();
     }
 

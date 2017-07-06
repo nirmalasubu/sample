@@ -42,7 +42,7 @@ class AddEditCategoryDestination extends React.Component {
     componentDidMount() {
         this.setState({
             categoryDetails: this.props.data
-        });        
+        });
     }
 
     //To Bind dropdown with all destinations name and description
@@ -61,8 +61,19 @@ class AddEditCategoryDestination extends React.Component {
                 options.push(optionValue);
             }
         }
+
+        if(options.length>0)
+            options.sort(this.SortByName);
+
         return options;
     }
+
+    //This will sort your array
+    SortByName(a, b){
+        var aName = a.value.toLowerCase();
+        var bName = b.value.toLowerCase(); 
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }    
     
     /// <summary>
     /// Handler to open properties at the indicated  row
@@ -90,10 +101,11 @@ class AddEditCategoryDestination extends React.Component {
         }
         else
         {
-            categoryData.destinations.splice(value, 1);
+            categoryData.destinations[index].categories.length = 0;
             this.setState({ showDestinationsDeleteModal: false});
         }
-        this.setState({categoryDetails: categoryData });        
+        var optionValues = this.getOptions(categoryData);        
+        this.setState({categoryDetails: categoryData, options: optionValues });
     }
 
     //To add a new destination of category
@@ -162,6 +174,8 @@ class AddEditCategoryDestination extends React.Component {
     //this method constructs the category brands images.
     categoryBrandImageConstruct(item,index)
     {
+        //this.CheckDestinationNameIsEmpty();
+
         var brands = [];
 
         if(item.categories.length>0)
@@ -204,7 +218,9 @@ class AddEditCategoryDestination extends React.Component {
         let row = null;
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
             if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){
-                row = this.state.categoryDetails.destinations.map(function (item, index) {                    
+                row = this.state.categoryDetails.destinations.map(function (item, index) { 
+                    if(item.categories.length>0)
+                        {
                     var nameValidation=item.name!=""?null:"error";
                     let col = null, colDesc = null;
                     if(item.name==""){
@@ -245,11 +261,11 @@ class AddEditCategoryDestination extends React.Component {
                             <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
                             <Col sm={2} >
                                 <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
-                                <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => (item.name==""?this.removeDestinationModel(index, item):this.openDestinationsDeleteModel(index, event))}  ><i class="fa fa-trash"></i></button>
+                                <button type= "button"  class="btn-link" title="Delete Category" onClick={(event) => (item.name==""?this.removeDestinationModel(index):this.openDestinationsDeleteModel(index, event))} ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
 
-                        </Row>)}.bind(this));
+                        </Row>)}}.bind(this));
                         }
                         else
                         {
