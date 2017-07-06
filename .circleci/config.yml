@@ -35,6 +35,11 @@ jobs:
             docker-compose build odtapi odtwebapp odtjobs odt-api-tests odt-jobs-tests
 
   test-harness:
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
     steps:
       - run:
           name: Make Test Harness
@@ -44,6 +49,10 @@ jobs:
             mkdir ~/app/tests/xunit
 
   test-api:
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
     steps:
       - run:
           name: Testing API
@@ -56,49 +65,74 @@ jobs:
             exit $BOMBED
 
   test-jobs:
-      steps:
-        - run:
-            name: Testing Jobs
-            working_directory: ~/app/Deployment
-            command: |
-              set +e
-              docker-compose run --name jobtest odt-jobs-tests
-              BOMBED=$?
-              docker cp jobtest:/app/output/jobresults.xml ~/app/tests/xunit
-              exit $BOMBED
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
+    steps:
+      - run:
+          name: Testing Jobs
+          working_directory: ~/app/Deployment
+          command: |
+            set +e
+            docker-compose run --name jobtest odt-jobs-tests
+            BOMBED=$?
+            docker cp jobtest:/app/output/jobresults.xml ~/app/tests/xunit
+            exit $BOMBED
 
   test-spin-down:
-      steps:
-        - run:
-            name: Spin down Test Harness
-            working_directory: ~/app/Deployment
-            command: |
-              set +e
-              docker-compose down   
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
+    steps:
+      - run:
+          name: Spin down Test Harness
+          working_directory: ~/app/Deployment
+          command: |
+            set +e
+            docker-compose down   
 
   test-store:
-      steps:
-        - store_artifacts:
-            path: ~/app/tests
-          
-        - store_test_results:
-            path: ~/app/tests
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
+    steps:
+      - store_artifacts:
+          path: ~/app/tests
+        
+      - store_test_results:
+          path: ~/app/tests
 
   deploy-image:
-      steps:
-        - run:
-            name: Log into Quay          
-            command: |
-              docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io  
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
 
-        - run:
-            name: Push Image into Quay
-            working_directory: ~/app/Deployment
-            command: |
-              export COMPOSE_HTTP_TIMEOUT=600
-              docker-compose push odtapi odtwebapp odtjobs  
+    working_directory: ~/app
+
+    steps:
+      - run:
+          name: Log into Quay          
+          command: |
+            docker login -u="${DOCKER_USER}" -p="${DOCKER_PASS}" -e="." quay.io  
+
+      - run:
+          name: Push Image into Quay
+          working_directory: ~/app/Deployment
+          command: |
+            export COMPOSE_HTTP_TIMEOUT=600
+            docker-compose push odtapi odtwebapp odtjobs  
 
   deploy-catalog:
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
     steps:
       - run:
             name: Continious Integration
@@ -106,6 +140,11 @@ jobs:
             command: harbor-compose catalog;
 
   deploy-dev:
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+
     steps:
       - run:
             name: Continious Deployment to Dev
@@ -113,6 +152,11 @@ jobs:
             command: harbor-compose deploy -e dev;                    
 
   deploy-sandbox:
+    docker:
+      - image: quay.io/turner/harbor-cicd:0.0.1
+
+    working_directory: ~/app
+    
     steps:
       - run:
             name: Continious Deployment to Sandbox
