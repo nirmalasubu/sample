@@ -226,6 +226,7 @@ class AddEditCategory extends React.Component {
                             <FormControl
                             type="text"
                             value={this.state.categoryDetails.name}
+                            disabled={this.props.data.categoryDetails.id != null}
                             ref="inputCategoryName"
                             placeholder="Enter a Category Name"
                             onChange={this.handleTextChange.bind(this)}
