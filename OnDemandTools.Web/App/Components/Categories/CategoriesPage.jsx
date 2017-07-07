@@ -64,6 +64,7 @@ class CategoriesPage extends React.Component {
 
     //called on the page load
     componentDidMount() {
+        this.props.dispatch(categoryActions.filterCategorySuccess(this.state.filterValue));
         this.props.dispatch(categoryActions.fetchCategories());
 
         if(this.props.destinations.length<=0)
