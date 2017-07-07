@@ -9,20 +9,15 @@ import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 class TitleNameOverlay extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
+            titleIds: [],
             titles: [],
             isProcessing: false
         }
     }
-    
-    componentDidMount() {
-        this.setState({
-            isProcessing: true
-        });
 
-    }
-
-    fetchAndUpdateTitles(titleIds) {
+    fetchAndUpdateTitles() {
 
         var titleIds = this.props.data;
 
@@ -36,13 +31,18 @@ class TitleNameOverlay extends React.Component {
             this.setState({ titles: [], isProcessing: false });
         });
     }
-    titleDetailConstruct(titleIds)
-    {
-        if(titleIds.length==0)
-        {
-            return (<div></div>)
-        }
-        this.fetchAndUpdateTitles(titleIds);
+
+    componentDidMount() {
+        this.setState({
+            titlesIds: this.props.data,
+            isProcessing: true
+        });
+
+        this.fetchAndUpdateTitles();
+    }
+
+    render() {
+
         var rows = [];
 
         if (this.state.titles.length > 1) {
@@ -51,20 +51,26 @@ class TitleNameOverlay extends React.Component {
         }
     }
 
-    const popoverLeft = (<Popover id="popover-positioned-left" title="Titles/Series">
-    {rows}</Popover> );
-       
+    const popoverLeft = (
+        <Popover id="popover-positioned-left" title="Titles/Series">
+    {rows}
+        </Popover>
+    );
+
         if (this.state.isProcessing) {
             return <div>Loading...</div>
         }
-       if (this.state.titles.length == 1) {
+        else if (this.state.titles.length == 0) {
+            return <div></div>
+        }
+        else if (this.state.titles.length == 1) {
             return (
                 <div>
                     {this.state.titles[0].titleName}
                 </div>
             )
-       } 
-       if (this.state.titles.length > 1) {
+        }
+        else {
             return (                                 
                 <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
                     <div>
@@ -73,13 +79,6 @@ class TitleNameOverlay extends React.Component {
                 </OverlayTrigger>)
                         }
                         }
-
-
-        render() {
-
-            return (<div>{this.titleDetailConstruct(this.props.data)}</div>);
-      
-        }
     }
 
     export default TitleNameOverlay
