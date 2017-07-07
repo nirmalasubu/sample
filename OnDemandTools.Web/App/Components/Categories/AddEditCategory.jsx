@@ -64,11 +64,15 @@ class AddEditCategory extends React.Component {
     handleSave() {
         var elem = this;
         if (this.state.validationStateName != "error" && this.state.validationStateDestinationName != "error") {
-            var model = this.state.categoryDetails;
+            var model = this.state.categoryDetails; 
 
-            for(var i=0; i<model.destinations.length-1; i++)
-                if(model.destinations[i].categories.length>0)
+            for(var i=0; i<model.destinations.length; i++)
+            {
+                if(model.destinations[i].categories[0].removed)
+                    model.destinations[i].categories[0].name = "";
+                else
                     model.destinations[i].categories[0].name = model.name;
+            }
 
             this.setState({categoryDetails: model, isProcessing: true});
 
@@ -150,8 +154,7 @@ class AddEditCategory extends React.Component {
         this.setState({
             validationStateName: hasNameError  ? 'error' : null,
             validationStateUniqueName: this.isNameUnique(this.state.categoryDetails)?'error' : null
-    });
-        console.log(this.state.validationStateUniqueName);
+        });
     }
 
     /// <summary>
@@ -236,7 +239,7 @@ class AddEditCategory extends React.Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
+                    <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
                     <Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>

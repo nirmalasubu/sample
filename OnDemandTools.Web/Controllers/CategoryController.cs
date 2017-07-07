@@ -69,12 +69,12 @@ namespace OnDemandTools.Web.Controllers
             {
                 var destinationDetail = _destinationSvc.GetByName(destination.Name);
 
-                if (destination.Categories.Count() > 0)
+                if (!string.IsNullOrEmpty(destination.Categories.First().Name))
                 {
-                    var category = destinationDetail.Categories.FirstOrDefault(e => e.Name == destination.Categories.First().Name);
-
-                    if (category != null)
+                    if (!string.IsNullOrEmpty(destination.Categories.First().Id))
                     {
+                        var category = destinationDetail.Categories.FirstOrDefault(e => e.Id == destination.Categories.First().Id);
+
                         category.Name = destination.Categories.First().Name;
                         category.Brands = destination.Categories.First().Brands;
                         category.TitleIds = destination.Categories.First().TitleIds;
@@ -94,7 +94,7 @@ namespace OnDemandTools.Web.Controllers
                     }
                 }
                 else
-                    destinationDetail.Categories.RemoveAll(e => e.Name == viewModel.Name);
+                    destinationDetail.Categories.RemoveAll(e => e.Id == destination.Categories.First().Id);
 
                 var blModel = _destinationSvc.Save(destinationDetail);
 
@@ -110,6 +110,8 @@ namespace OnDemandTools.Web.Controllers
             {
                 destination.Categories = new List<Category> { destination.Categories.FirstOrDefault(e => e.Name == viewModel.Name) };
             }
+
+            viewModel.Destinations = viewModel.Destinations.Where(d => d.Categories.FirstOrDefault()!=null).ToList();
 
             return viewModel;
         }

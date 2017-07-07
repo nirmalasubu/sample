@@ -8,15 +8,18 @@ import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 import Select from 'react-select';
 import RemoveDestinationModal from 'Components/Categories/RemoveDestinationModal';
-
+/// <summary>
 //Get all destinations from store
+/// </summary>
 @connect((store) => {
     return {
         destinations: store.destinations
     };
 })
 
+/// <summary>
 // Sub component of category page to  add ,edit and delete category destinations
+/// </summary>
 class AddEditCategoryDestination extends React.Component {
     
     // Define default component state information. This will
@@ -40,12 +43,15 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     componentDidMount() {
+        this.props.data.destinations.sort(this.sortDestinationsByName);
         this.setState({
             categoryDetails: this.props.data
         });
     }
 
-    //To Bind dropdown with all destinations name and description
+    /// <summary>
+    /// To Bind dropdown with all destinations name and description
+    /// </summary>
     getOptions(categoryDetails) {
         var options = [];
         for (var x = 0; x < this.props.destinations.length; x++) {
@@ -63,17 +69,27 @@ class AddEditCategoryDestination extends React.Component {
         }
 
         if(options.length>0)
-            options.sort(this.SortByName);
+            options.sort(this.sortOptionsByName);
 
         return options;
     }
-
-    //This will sort your array
-    SortByName(a, b){
+    /// <summary>
+    //This will sort your options array
+    /// </summary>
+    sortOptionsByName(a, b){
         var aName = a.value.toLowerCase();
         var bName = b.value.toLowerCase(); 
         return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
     }    
+
+    /// <summary>
+    //This will sort your destinations array
+    /// </summary>
+    sortDestinationsByName(a, b){
+        var aName = a.name.toLowerCase();
+        var bName = b.name.toLowerCase(); 
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }
     
     /// <summary>
     /// Handler to open properties at the indicated  row
@@ -89,7 +105,9 @@ class AddEditCategoryDestination extends React.Component {
         this.setState({ showAddEditPropertiesFilter: false });
     }
 
+    /// <summary>
     //To delete  a destination of category
+    /// </summary>
     removeDestinationModel(index, value)
     {
         var categoryData=[];
@@ -101,14 +119,23 @@ class AddEditCategoryDestination extends React.Component {
         }
         else
         {
+            var category = {
+                id: categoryData.destinations[index].categories[0].id,
+                name: "",
+                removed: true
+            };
             categoryData.destinations[index].categories.length = 0;
+            categoryData.destinations[index].categories.push(category);
             this.setState({ showDestinationsDeleteModal: false});
         }
         var optionValues = this.getOptions(categoryData);        
-        this.setState({categoryDetails: categoryData, options: optionValues });
+        this.setState({options: optionValues });
+        console.log(this.state.categoryDetails);
     }
 
+    /// <summary>
     //To add a new destination of category
+    /// </summary>
     addNewDestination()
     {
         var optionValues = this.getOptions(this.state.categoryDetails);
@@ -123,17 +150,21 @@ class AddEditCategoryDestination extends React.Component {
         var categoryData=[];
         categoryData = this.state.categoryDetails;  
         categoryData.destinations.unshift(newDestination);
-        this.setState({destinationDetails: categoryData, options: optionValues});
+        this.setState({options: optionValues});
         
         this.CheckDestinationNameIsEmpty();
     }
 
+    /// <summary>
     //To open delete destination warning window
+    /// </summary>
     openDestinationsDeleteModel(item) {
         this.setState({ showDestinationsDeleteModal: true, destinationIndexToRemove: item });
     }
 
+    /// <summary>
     // To close destination delete modal window
+    /// </summary>
     closeDestinationDeleteModel() {
         this.setState({ showDestinationsDeleteModal: false });
     }
@@ -149,7 +180,9 @@ class AddEditCategoryDestination extends React.Component {
        
     }
 
+    /// <summary>
     //this method to show all category titles.
+    /// </summary>
     titleDetailConstruct(item,index){
        
         var ids = [];
@@ -171,7 +204,9 @@ class AddEditCategoryDestination extends React.Component {
         }        
     }
 
+    /// <summary>
     //this method constructs the category brands images.
+    /// </summary>
     categoryBrandImageConstruct(item,index)
     {
         //this.CheckDestinationNameIsEmpty();
@@ -184,6 +219,9 @@ class AddEditCategoryDestination extends React.Component {
         return <BrandsOverlay data={brands} /> ;
     }
 
+    /// <summary>
+    //this method handle the change of the dropdown value.
+    /// </summary>
     handleChange(index, value) {
         var model = this.state.categoryDetails;
         model.destinations[index].name= value;
@@ -195,7 +233,9 @@ class AddEditCategoryDestination extends React.Component {
         this.CheckDestinationNameIsEmpty();
     }
 
+    /// <summary>
     // validation for the name destination . To verify  name text is empty
+    /// </summary>
     CheckDestinationNameIsEmpty()
     {
         var destinations=this.state.categoryDetails.destinations;
@@ -213,13 +253,16 @@ class AddEditCategoryDestination extends React.Component {
         this.props.validationStates(false);
     }
 
+    /// <summary>
     //destinations construct  of a category
+    /// </summary>
     render() {
         let row = null;
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
-            if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){
-                row = this.state.categoryDetails.destinations.map(function (item, index) { 
-                    if(item.categories.length>0)
+            if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){     
+                //this.state.categoryDetails.destinations.sort(this.sortDestinationsByName);
+                row = this.state.categoryDetails.destinations.map(function (item, index) {
+                    if(item.categories[0].removed==undefined )
                         {
                     var nameValidation=item.name!=""?null:"error";
                     let col = null, colDesc = null;
@@ -227,7 +270,7 @@ class AddEditCategoryDestination extends React.Component {
                         col = (<Col sm={6   }>
                                     <FormGroup controlId={index} validationState="error">
                                           <Select 
-                                      searchable={false} 
+                                      searchable={true} 
                                       simpleValue className="category-select-control" 
                                       options={this.state.options} 
                                       onChange={(event) => this.handleChange(index, event)}
@@ -285,7 +328,7 @@ class AddEditCategoryDestination extends React.Component {
                  <div >
                     <Grid fluid={true}>
                         <Row>
-                        <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
+                        <Col sm={3} ><label class="destination-properties-label">Destination</label></Col>
                         <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
                         <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                         <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
