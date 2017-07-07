@@ -435,3 +435,28 @@ p.shortDesc {
 .title-search-position{
     padding-left:1px;
 }
+
+/*****************************************************/
+/******** brand image styling  starts******/
+.brand-container { 
+    width: 40px;
+    float:left;
+    
+}
+.brand-container img { 
+    width: 100%;
+}
+
+.brand-img{
+    width:120px;
+    height: 2.8em; 
+    line-height: 1em; 
+    text-overflow: ellipsis;
+    margin-bottom: 12px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow:hidden;
+    white-space: nowrap;
+}
+/*****************************************************/
+/******** brand image styling  ends******/

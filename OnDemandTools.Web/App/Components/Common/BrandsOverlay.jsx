@@ -22,11 +22,11 @@ class BrandsOverlay extends React.Component {
         var firstTwoRows = [];
 
         var noOfBrandsToShow=2;
-
+        var isCssExpected=true;
 
         for (var i = 0; i < this.props.data.length; i++) {
             if (i < noOfBrandsToShow) {
-                firstTwoRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()} />);
+                firstTwoRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()}  isCssExpected={isCssExpected}/>);
             }
             allRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()} />);
         }
@@ -43,7 +43,7 @@ class BrandsOverlay extends React.Component {
         }
         if (this.props.data.length <=noOfBrandsToShow) {
             return (
-                <div>
+                <div >
                     {firstTwoRows}
                 </div>
             )
@@ -51,8 +51,8 @@ class BrandsOverlay extends React.Component {
         else {
             return (
                 <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
-                    <div>
-                        {firstTwoRows} <i class="fa fa-ellipsis-h"></i>
+                    <div class="brand-img">
+                        {firstTwoRows} <div class="brand-container"><button class="btn-link destination-img-btn" type="button"> <i class="fa fa-ellipsis-h" /></button></div>
                     </div>
                 </OverlayTrigger>)
         }
