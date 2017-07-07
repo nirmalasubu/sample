@@ -438,10 +438,10 @@ p.shortDesc {
 
 /*****************************************************/
 /******** brand image styling  starts******/
-.brand-container { 
-    width: 40px;
-    float:left;
-    
+.brand-container {
+   width: 35px;
+   float: left;
+   margin-right: 5px;
 }
 .brand-container img { 
     width: 100%;

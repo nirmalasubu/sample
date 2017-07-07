@@ -84,6 +84,7 @@ class AddEditCategory extends React.Component {
                     else {
                         NotificationManager.success(this.state.categoryDetails.name + ' category updated successfully.', '', 2000);
                     }
+                    this.props.dispatch(categoryActions.fetchCategories()); // Called to refresh the page data
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);

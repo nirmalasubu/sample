@@ -6,13 +6,13 @@ class BrandImage extends React.Component {
     }
 
     render() {
-        if (this.props.isCssExpected) {
-            return (<div class="brand-container"><img className={"brandImageIcon"}
-                src={"../images/brands/" + this.props.brandName + ".gif"}
-                alt={this.props.brandName}
-                title={this.props.brandName}
-                key={this.props.brandName}
-            /></div>)
+        if(this.props.isCssExpected){
+            return(<div class="brand-container"><img 
+        src={"../images/brands/" + this.props.brandName + ".gif"}
+        alt={this.props.brandName}
+        title={this.props.brandName}
+        key={this.props.brandName}
+    /></div>)
         }
         else {
             return (<img className={"brandImageIcon"}

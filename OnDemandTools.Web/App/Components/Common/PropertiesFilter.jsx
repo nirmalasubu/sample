@@ -196,7 +196,7 @@ class PropertiesFilter extends React.Component {
         // ImageCheckBox sub component used to render list brand images
         var rows = [];
         for (var i = 0; i < this.state.brandsSelection.length; i++) {
-            console.log(" brand"+JSON.stringify(this.state.brandsSelection[i]));
+            
             var brand = this.state.brandsSelection[i];
             rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} />);
     }

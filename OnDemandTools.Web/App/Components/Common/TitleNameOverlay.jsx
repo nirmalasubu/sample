@@ -18,9 +18,12 @@ class TitleNameOverlay extends React.Component {
     }
 
     fetchAndUpdateTitles() {
-
+       
         var titleIds = this.props.data;
-
+        this.setState({
+            titlesIds: this.props.data
+            
+        });
         let searchPromise = searchByTitleIds(titleIds);
 
         searchPromise.then(message => {
@@ -40,11 +43,34 @@ class TitleNameOverlay extends React.Component {
 
         this.fetchAndUpdateTitles();
     }
+    
+    ///<summary>
+    /// after component is mounted . update the stae when  titles are added  or removed
+    ///</summary>
+    compareAndUpdatetitles()
+    {
+        if(this.state.titlesIds!=undefined)
+        {
+            if (this.state.titlesIds.length != this.props.data.length)
+            {
+                this.fetchAndUpdateTitles();
+            }else{
+                for (var i = 0; i < this.props.data.length; i++) {
+                  if (this.state.titlesIds[i] != this.props.data[i]) {
+                    
+                      this.fetchAndUpdateTitles();
+                      return false;
+                } }
+            }
+        }
+        return true;
+    }
+
 
     render() {
 
         var rows = [];
-
+        this.compareAndUpdatetitles();
         if (this.state.titles.length > 1) {
             for (var i = 0; i < this.state.titles.length; i++) {
                 rows.push(<p key={i.toString()}> {this.state.titles[i].titleName} </p>)
