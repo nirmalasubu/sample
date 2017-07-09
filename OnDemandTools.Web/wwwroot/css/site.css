@@ -437,6 +437,29 @@ p.shortDesc {
 }
 
 /*****************************************************/
+/******** category strike out styling starts******/
+.category-table td {
+    overflow: initial;
+    border: 0 !important;
+}
+
+.strikeout td[class*=col-]{
+    position:relative;
+    float: none;
+}
+
+tr.strikeout td:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #a94442;
+    width: 100%;
+}
+/*****************************************************/
+/******** category strike out styling ends******/
+
+/*****************************************************/
 /******** brand image styling  starts******/
 .brand-container {
    width: 35px;
