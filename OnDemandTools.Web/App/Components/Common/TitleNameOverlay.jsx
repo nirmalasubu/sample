@@ -69,17 +69,27 @@ class TitleNameOverlay extends React.Component {
 
     render() {
 
-        var rows = [];
+        var titleNames = [];
+        var sortedTitleRows = [];
+        var titleText="";
         this.compareAndUpdatetitles();
         if (this.state.titles.length > 1) {
             for (var i = 0; i < this.state.titles.length; i++) {
-                rows.push(<p key={i.toString()}> {this.state.titles[i].titleName} </p>)
+                titleNames.push( this.state.titles[i].titleName)
+           }
         }
-    }
+         // sort the title names
+        if (titleNames.length > 1) {
+            titleNames.sort();
+            titleText=titleNames[0];
+            for (var i = 0; i < titleNames.length; i++) {
+                sortedTitleRows.push(<p key={i.toString()}> {titleNames[i]} </p>)
+         }
+      }
 
     const popoverLeft = (
         <Popover id="popover-positioned-left" title="Titles/Series">
-   <div class="TitleOverlay-height"> {rows} </div>
+   <div class="TitleOverlay-height"> {sortedTitleRows} </div>
         </Popover>
     );
 
@@ -98,9 +108,9 @@ class TitleNameOverlay extends React.Component {
         }
         else {
             return (                                 
-                <OverlayTrigger trigger={[ 'click']}  rootClose placement="left" overlay={popoverLeft}>
+                <OverlayTrigger trigger={['click']}  rootClose placement="left" overlay={popoverLeft}>
                     <div>
-                        { this.state.titles[0].titleName } <i class="fa fa-ellipsis-h"></i>
+                        { titleText } <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>)
                         }

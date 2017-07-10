@@ -81,7 +81,15 @@ class PropertiesFilter extends React.Component {
             this.setState({ loadingTable: true });
             let searchPromise = searchByTitleIds(titleIds);
             searchPromise.then(message => {
-                //Title Data  is fetched asynchronously .  
+                //Title Data  is fetched asynchronously .  and sorted by titlename on loading
+                message.sort(function(a, b){                   
+                    var firstTitle = a.titleName.toLowerCase();
+                    var SecondTitle = b.titleName.toLowerCase();
+                    if (firstTitle < SecondTitle) {return -1;}
+                    if (firstTitle > SecondTitle) {return 1;}
+                    return 0;
+                });
+                console.log("message :"+JSON.stringify(message));
                 this.setState({ selectedTitles: message ,loadingTable: false});   
             })
             searchPromise.catch(error => {

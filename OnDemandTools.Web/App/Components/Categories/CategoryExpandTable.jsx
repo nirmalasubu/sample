@@ -40,7 +40,9 @@ class CategoryExpandTable extends React.Component {
 
   render() {
 
-    const options = {
+      const options = {
+       defaultSortName: 'name',
+       defaultSortOrder: 'asc',
       expandRowBgColor: 'rgb(242, 255, 163)',
       expandBy: 'column'  // Currently, available value is row and column, default is row
     };

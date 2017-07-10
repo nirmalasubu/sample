@@ -96,11 +96,19 @@ class CategoryTable extends React.Component {
         );
     }
 
-    destinationFormat(val, rowData) {
-        var rows = [];
-
-        for (var idx = 0; idx < rowData.destinations.length; idx++) {
-            rows.push(<Button className="addMarginRight" key={idx.toString()}> {rowData.destinations[idx].name} </Button>);
+        destinationFormat(val, rowData) {
+            var destinationNames = [];
+            var rows = [];
+           
+            for (var idx = 0; idx < rowData.destinations.length; idx++) {
+                destinationNames.push(rowData.destinations[idx].name);
+            }
+            //destination names are sorted before rendering 
+            if(destinationNames.length>0){
+                destinationNames.sort();
+                for (var idx = 0; idx < destinationNames.length; idx++) {
+                    rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
+            }
         }
 
         return (
