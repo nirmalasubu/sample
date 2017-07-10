@@ -79,7 +79,7 @@ class TitleNameOverlay extends React.Component {
 
     const popoverLeft = (
         <Popover id="popover-positioned-left" title="Titles/Series">
-    {rows}
+   <div class="TitleOverlay-height"> {rows} </div>
         </Popover>
     );
 
@@ -98,7 +98,7 @@ class TitleNameOverlay extends React.Component {
         }
         else {
             return (                                 
-                <OverlayTrigger trigger={['hover', 'focus']} placement="left" overlay={popoverLeft}>
+                <OverlayTrigger trigger={[ 'click']}  rootClose placement="left" overlay={popoverLeft}>
                     <div>
                         { this.state.titles[0].titleName } <i class="fa fa-ellipsis-h"></i>
                     </div>
