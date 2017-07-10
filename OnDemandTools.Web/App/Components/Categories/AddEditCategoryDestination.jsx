@@ -118,8 +118,7 @@ class AddEditCategoryDestination extends React.Component {
         categoryData = this.state.categoryDetails;
         if(categoryData.destinations[index].categories[0].id==undefined)
         {
-            categoryData.destinations[index].name="";
-            categoryData.destinations[index].description="";
+            categoryData.destinations.splice(index, 1);
         }
         else
         {

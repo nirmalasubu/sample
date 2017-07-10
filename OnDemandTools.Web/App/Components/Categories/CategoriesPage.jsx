@@ -66,9 +66,8 @@ class CategoriesPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(categoryActions.filterCategorySuccess(this.state.filterValue));
         this.props.dispatch(categoryActions.fetchCategories());
-
-        if(this.props.destinations.length<=0)
-            this.props.dispatch(destinationActions.fetchDestinations());
+        
+        this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Categories";
     }
