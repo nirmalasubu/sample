@@ -211,8 +211,8 @@ class AddEditCategory extends React.Component {
         var msg ="";
         if(this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Category Name already exists. Please use a unique category name.</label>);
-        else if(this.state.validationStateDestinationName=="error")
-        msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Please add atleast one destination</label>);
+        else if(this.state.validationStateDestinationName=="error" || this.state.validationStateName=="error")
+            msg = (<label data-ng-show="showError" class="alert alert-danger">Category name and destinations are required</label>);
 
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
