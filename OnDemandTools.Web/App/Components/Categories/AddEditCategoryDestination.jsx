@@ -339,7 +339,7 @@ return (
                             <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                             <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>                   
-                        {row}
+                        <div class="category-height">{row}</div>
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
