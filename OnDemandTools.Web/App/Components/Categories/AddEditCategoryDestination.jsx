@@ -44,9 +44,13 @@ class AddEditCategoryDestination extends React.Component {
 
     componentDidMount() {
         this.props.data.destinations.sort(this.sortDestinationsByName);
+        var optionValues = this.getOptions(this.props.data);
         this.setState({
-            categoryDetails: this.props.data
-        });
+            categoryDetails: this.props.data,
+            options: optionValues
+        });   
+        
+        this.CheckDestinationNameIsEmpty(this.props.data.destinations);
     }
 
     /// <summary>
@@ -140,7 +144,6 @@ class AddEditCategoryDestination extends React.Component {
     /// </summary>
     addNewDestination()
     {
-        var optionValues = this.getOptions(this.state.categoryDetails);
         var newDestination= {name:"", description:"", categories:[]};
         var category = {
             name: this.state.categoryDetails.name,
@@ -151,10 +154,9 @@ class AddEditCategoryDestination extends React.Component {
         newDestination.categories.push(category);
         var categoryData=[];
         categoryData = this.state.categoryDetails;  
-        categoryData.destinations.unshift(newDestination);
-        this.setState({options: optionValues});
+        categoryData.destinations.unshift(newDestination);        
         
-        this.CheckDestinationNameIsEmpty();
+        this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
 
     /// <summary>
@@ -232,15 +234,14 @@ class AddEditCategoryDestination extends React.Component {
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });  
         
-        this.CheckDestinationNameIsEmpty();
+        this.CheckDestinationNameIsEmpty(model.destinations);
     }
 
     /// <summary>
     // validation for the name destination . To verify  name text is empty
     /// </summary>
-    CheckDestinationNameIsEmpty()
+    CheckDestinationNameIsEmpty(destinations)
     {
-        var destinations=this.state.categoryDetails.destinations;
         if(destinations.length>0)
         {
             for(var i=0;i<=destinations.length-1;i++)
@@ -251,8 +252,12 @@ class AddEditCategoryDestination extends React.Component {
                     return;
                 }
             }
+
+            this.props.validationStates(false);
         }
-        this.props.validationStates(false);
+        else{
+            this.props.validationStates(true);
+        }        
     }
 
     /// <summary>
@@ -260,9 +265,8 @@ class AddEditCategoryDestination extends React.Component {
     /// </summary>
     render() {
         let row = null;
-        if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
-            if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){     
-                //this.state.categoryDetails.destinations.sort(this.sortDestinationsByName);
+        if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {            
+            if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){                     
                 row = this.state.categoryDetails.destinations.map(function (item, index) {
                     if(true )
                     {
@@ -301,8 +305,8 @@ class AddEditCategoryDestination extends React.Component {
         return (<Row componentClass="tr" bsClass={(item.categories[0].removed!=undefined) ? "row strikeout":"row"}>
     {col}
     {colDesc}
-    <Col sm={4} componentClass="td">
-        <Col sm={5} >{this.categoryBrandImageConstruct(item,index)}</Col>
+    <Col sm={5} componentClass="td">
+        <Col sm={6} >{this.categoryBrandImageConstruct(item,index)}</Col>
         <Col sm={5} >{this.titleDetailConstruct(item,index)}</Col>
     </Col>
     <Col sm={2} componentClass="td" >
@@ -314,7 +318,7 @@ class AddEditCategoryDestination extends React.Component {
     }
                         else
                         {
-                            row =<Row><Col sm={12} ><p> No destination available</p></Col></Row>
+                            row =<Row componentClass="tr"><td colSpan="5"><p> No destination available</p></td></Row>
                         }
                         }
 

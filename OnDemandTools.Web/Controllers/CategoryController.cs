@@ -67,38 +67,43 @@ namespace OnDemandTools.Web.Controllers
 
             foreach (var destination in viewModel.Destinations)
             {
-                var destinationDetail = _destinationSvc.GetByName(destination.Name);
+                Business.Modules.Destination.Model.Destination destinationDetail = null;
 
-                if (!string.IsNullOrEmpty(destination.Categories.First().Name))
+                if (!string.IsNullOrEmpty(destination.Name))
+                    destinationDetail = _destinationSvc.GetByName(destination.Name);
+                if (destinationDetail != null)
                 {
-                    if (!string.IsNullOrEmpty(destination.Categories.First().Id))
+                    if (!string.IsNullOrEmpty(destination.Categories.First().Name))
                     {
-                        var category = destinationDetail.Categories.FirstOrDefault(e => e.Id == destination.Categories.First().Id);
+                        if (!string.IsNullOrEmpty(destination.Categories.First().Id))
+                        {
+                            var category = destinationDetail.Categories.FirstOrDefault(e => e.Id == destination.Categories.First().Id);
 
-                        category.Name = destination.Categories.First().Name;
-                        category.Brands = destination.Categories.First().Brands;
-                        category.TitleIds = destination.Categories.First().TitleIds;
-                        category.SeriesIds = destination.Categories.First().SeriesIds;
+                            category.Name = destination.Categories.First().Name;
+                            category.Brands = destination.Categories.First().Brands;
+                            category.TitleIds = destination.Categories.First().TitleIds;
+                            category.SeriesIds = destination.Categories.First().SeriesIds;
+                        }
+                        else
+                        {
+                            var newCategory = new Business.Modules.Destination.Model.Category
+                            {
+                                Name = destination.Categories.First().Name,
+                                Brands = destination.Categories.First().Brands,
+                                TitleIds = destination.Categories.First().TitleIds,
+                                SeriesIds = destination.Categories.First().SeriesIds
+                            };
+
+                            destinationDetail.Categories.Add(newCategory);
+                        }
                     }
                     else
-                    {
-                        var newCategory = new Business.Modules.Destination.Model.Category
-                        {
-                            Name = destination.Categories.First().Name,
-                            Brands = destination.Categories.First().Brands,
-                            TitleIds = destination.Categories.First().TitleIds,
-                            SeriesIds = destination.Categories.First().SeriesIds
-                        };
+                        destinationDetail.Categories.RemoveAll(e => e.Id == destination.Categories.First().Id);
 
-                        destinationDetail.Categories.Add(newCategory);
-                    }
+                    var blModel = _destinationSvc.Save(destinationDetail);
+
+                    destinations.Add(blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>());
                 }
-                else
-                    destinationDetail.Categories.RemoveAll(e => e.Id == destination.Categories.First().Id);
-
-                var blModel = _destinationSvc.Save(destinationDetail);
-
-                destinations.Add(blModel.ToViewModel<Business.Modules.Destination.Model.Destination, DestinationViewModel>());
             }
 
             if (string.IsNullOrEmpty(viewModel.Id))
