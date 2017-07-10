@@ -192,7 +192,7 @@ SubsitutionTokenClick(index,event){
         <Col sm={2} >{this.PropertyBrandImageConstruct(item,index)}</Col>
         <Col sm={2} >{this.TitledetailConstruct(item,index)}</Col>
         <Col sm={2} >
-        <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-pencil-square-o"></i></button>
+        <button type= "button"  class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
         <button type= "button"  class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
         </Col>
         </Form>

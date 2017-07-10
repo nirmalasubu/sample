@@ -137,6 +137,8 @@ class AddEditCategoryDestination extends React.Component {
         }
         var optionValues = this.getOptions(categoryData);        
         this.setState({options: optionValues });
+
+        this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
 
     /// <summary>
@@ -268,12 +270,12 @@ class AddEditCategoryDestination extends React.Component {
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {            
             if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){                     
                 row = this.state.categoryDetails.destinations.map(function (item, index) {
-                    if(true )
+                    if(item.categories[0].removed==undefined )
                     {
                         var nameValidation=item.name!=""?null:"error";
                         let col = null, colDesc = null;
                         if(item.name==""){
-                            col = (<td colSpan="2">
+                            col = (<Col sm={6}  >
                                         <FormGroup controlId={index} validationState="error">
                                               <Select 
                         searchable={true} 
@@ -282,64 +284,62 @@ class AddEditCategoryDestination extends React.Component {
                         onChange={(event) => this.handleChange(index, event)}
                     value={item.name} />
                   </FormGroup>
-              </td>
+              </Col>
                             );
                 }
                 else{
                         col = (
-                                <Col sm={3} componentClass="td" >
-                                    <FormGroup bsClass="" controlId={index} >
+                                <Col sm={3}  >
+                                    <FormGroup controlId={index} >
                                     <FormControl type="text" disabled={true} value={item.name} title={item.name} ref="Name"  placeholder="Destination" />
                                     </FormGroup>
                                 </Col>
                             );
 
                 colDesc = (
-                    <Col sm={3} componentClass="td">
-                        <FormGroup bsClass="" controlId={index} >
+                    <Col sm={3} >
+                        <FormGroup controlId={index} >
                         <FormControl type="text" disabled={true} value={item.description} title={item.description} ref="Value"  placeholder="Description" />
                         </FormGroup>
                     </Col>
                             );
         }
-        return (<Row componentClass="tr" bsClass={(item.categories[0].removed!=undefined) ? "row strikeout":"row"}>
+            return (<Row>
     {col}
     {colDesc}
-    <Col sm={5} componentClass="td">
-        <Col sm={6} >{this.categoryBrandImageConstruct(item,index)}</Col>
-        <Col sm={5} >{this.titleDetailConstruct(item,index)}</Col>
-    </Col>
-    <Col sm={2} componentClass="td" >
-        <button type= "button"  class="btn-link" title="Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
+    <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
+    <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
+    <Col sm={2} >
+        <button type= "button"  class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
         <button type= "button"  class="btn-link" title="Delete Category" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
     </Col>
 
 </Row>)}}.bind(this));
     }
-                        else
-                        {
-                            row =<Row componentClass="tr"><td colSpan="5"><p> No destination available</p></td></Row>
-                        }
-                        }
+    else
+    {
+        row =<Row><Col sm={12}><p> No destination available</p></Col></Row>
+    }
+    }
 
- return (
-        <div>
-            <div>
-                <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDestination(event)}>
+return (
+<div>
+<div>
+<button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDestination(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New Destination</span>
                 </button>
             </div><br/><br/>
              <div>     
                  <div >
-                    <Grid bsClass="category-table" componentClass="table">
-                        <Row componentClass="tr">
-                            <Col componentClass="td" sm={3} ><label class="destination-properties-label">Destination</label></Col>
-                            <Col componentClass="td" sm={3} ><label class="destination-properties-label">Description</label></Col>
-                            <Col componentClass="td" sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
-                            <Col componentClass="td" sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
-                        </Row>
-                    {row}
+                    <Grid bsClass="category-table" >
+                        <Row >
+                            <Col sm={3} ><label class="destination-properties-label">Destination</label></Col>
+                            <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
+                            <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
+                            <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
+                        </Row>                   
+                        {row}
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
