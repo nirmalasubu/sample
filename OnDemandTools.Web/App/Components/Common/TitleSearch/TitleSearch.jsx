@@ -158,7 +158,7 @@ class TitleSearch extends React.Component {
             clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
             onSelect: this.onAvailableTitlesRowSelect.bind(this),
             unselectable: unselectableTitles,
-            selected: this.state.selectedTitles
+            selected: this.state.selectedTitleIds
         };
 
         const selectedGridProps = {
