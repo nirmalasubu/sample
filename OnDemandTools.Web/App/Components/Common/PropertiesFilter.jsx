@@ -89,7 +89,6 @@ class PropertiesFilter extends React.Component {
                     if (firstTitle > SecondTitle) {return 1;}
                     return 0;
                 });
-                console.log("message :"+JSON.stringify(message));
                 this.setState({ selectedTitles: message ,loadingTable: false});   
             })
             searchPromise.catch(error => {

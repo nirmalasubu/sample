@@ -188,8 +188,7 @@ class AddEditCategory extends React.Component {
          
             if (this.props.categoryIdandNames[x].id!= categoryDetails.id) {
                 if (this.props.categoryIdandNames[x].name== categoryDetails.name)                
-                {    
-                    console.log("categoryDetails.name");
+                {   
                     this.setState({
                         showError: true
                     });

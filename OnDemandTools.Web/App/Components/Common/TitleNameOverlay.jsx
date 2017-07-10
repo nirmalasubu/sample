@@ -18,11 +18,11 @@ class TitleNameOverlay extends React.Component {
     }
 
     fetchAndUpdateTitles() {
-       
+
         var titleIds = this.props.data;
         this.setState({
             titlesIds: this.props.data
-            
+
         });
         let searchPromise = searchByTitleIds(titleIds);
 
@@ -43,24 +43,22 @@ class TitleNameOverlay extends React.Component {
 
         this.fetchAndUpdateTitles();
     }
-    
+
     ///<summary>
     /// after component is mounted . update the stae when  titles are added  or removed
     ///</summary>
-    compareAndUpdatetitles()
-    {
-        if(this.state.titlesIds!=undefined)
-        {
-            if (this.state.titlesIds.length != this.props.data.length)
-            {
+    compareAndUpdatetitles() {
+        if (this.state.titlesIds != undefined) {
+            if (this.state.titlesIds.length != this.props.data.length) {
                 this.fetchAndUpdateTitles();
-            }else{
+            } else {
                 for (var i = 0; i < this.props.data.length; i++) {
-                  if (this.state.titlesIds[i] != this.props.data[i]) {
-                    
-                      this.fetchAndUpdateTitles();
-                      return false;
-                } }
+                    if (this.state.titlesIds[i] != this.props.data[i]) {
+
+                        this.fetchAndUpdateTitles();
+                        return false;
+                    }
+                }
             }
         }
         return true;
@@ -71,27 +69,27 @@ class TitleNameOverlay extends React.Component {
 
         var titleNames = [];
         var sortedTitleRows = [];
-        var titleText="";
+        var titleText = "";
         this.compareAndUpdatetitles();
         if (this.state.titles.length > 1) {
             for (var i = 0; i < this.state.titles.length; i++) {
-                titleNames.push( this.state.titles[i].titleName)
-           }
+                titleNames.push(this.state.titles[i].titleName)
+            }
         }
-         // sort the title names
+        // sort the title names
         if (titleNames.length > 1) {
             titleNames.sort();
-            titleText=titleNames[0];
+            titleText = titleNames[0];
             for (var i = 0; i < titleNames.length; i++) {
                 sortedTitleRows.push(<p key={i.toString()}> {titleNames[i]} </p>)
-         }
-      }
+            }
+        }
 
-    const popoverLeft = (
-        <Popover id="popover-positioned-left" title="Titles/Series">
-   <div class="TitleOverlay-height"> {sortedTitleRows} </div>
-        </Popover>
-    );
+        const popoverLeft = (
+            <Popover id="popover-positioned-left" title="Titles/Series">
+                <div class="TitleOverlay-height"> {sortedTitleRows} </div>
+            </Popover>
+        );
 
         if (this.state.isProcessing) {
             return <div>Loading...</div>
@@ -107,14 +105,14 @@ class TitleNameOverlay extends React.Component {
             )
         }
         else {
-            return (                                 
-                <OverlayTrigger trigger={['click']}  rootClose placement="left" overlay={popoverLeft}>
-                    <div>
-                        { titleText } <i class="fa fa-ellipsis-h"></i>
+            return (
+                <OverlayTrigger trigger={['click']} rootClose placement="left" overlay={popoverLeft}>
+                    <div title="click to view more Title/Series">
+                        {titleText} <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>)
-                        }
-                        }
+        }
     }
+}
 
-    export default TitleNameOverlay
+export default TitleNameOverlay
