@@ -298,42 +298,66 @@ namespace OnDemandTools.API.v1.Routes
         {
             // Get an asset (the first one in the list) with the given media id
             var airing = _airingSvc.GetByMediaId(file.MediaId).FirstOrDefault();
-            var pathings = _pathingSvc.GetAll();                            
+            var pathings = _pathingSvc.GetAll();
 
             foreach (var media in file.MediaCollection)
             {
                 foreach (var playlist in media.Playlists)
                 {
-                    var sourceUrl = playlist.BucketURL;
-                    if (!string.IsNullOrEmpty(sourceUrl))
+                    Dictionary<string, string> sourceUrls = playlist.Urls;
+
+                    if (!sourceUrls.Any())
                     {
-                        foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
+                        sourceUrls["bucketUrl"] = playlist.BucketURL;
+                    }
+
+                    foreach (var url in sourceUrls)
+                    {
+                        var urlType = url.Key;
+                        var sourceUrl = url.Value;
+
+                        playlist.TranslatedUrls.Add(new TranslatedUrlViewModel { UrlType = urlType, Url = sourceUrl });
+
+                        if (!string.IsNullOrEmpty(sourceUrl))
                         {
-                            var result = MakeAkamaiUrl(sourceUrl, pt, airing);
+                            foreach (var pt in pathings.Where(x => sourceUrl.StartsWith(x.Source.BaseUrl)))
+                            {
+                                var translatedUrl = GetTranslatedUrl(sourceUrl, pt, airing);
 
-                            if (!result.IsNullOrEmpty())
-                                playlist.AkamaiURLs.Add(result);
+                                if (!translatedUrl.IsNullOrEmpty())
+                                {
+                                    var tranlatedUrlType = pt.Target.UrlType;
+                                    if (string.IsNullOrEmpty(tranlatedUrlType))
+                                        tranlatedUrlType = "akamaiUrl";
 
-                            // Add protectionType to properties if it doesn't already exist
-                            if (playlist.ProtectionType.IsNullOrEmpty() && !result.IsNullOrEmpty())
-                                playlist.ProtectionType = pt.Target.ProtectionType;
+                                    playlist.TranslatedUrls.Add(new TranslatedUrlViewModel { UrlType = tranlatedUrlType, Url = translatedUrl });
+                                }
+
+                                // Add protectionType to properties if it doesn't already exist
+                                if (playlist.ProtectionType.IsNullOrEmpty() && !translatedUrl.IsNullOrEmpty())
+                                    playlist.ProtectionType = pt.Target.ProtectionType;
+                            }
                         }
                     }
                 }
             }
         }
 
-        private string MakeAkamaiUrl(string sourceUrl, BLPathModel.PathTranslation pt, Airing airing) {
+        private string GetTranslatedUrl(string sourceUrl, BLPathModel.PathTranslation pt, Airing airing)
+        {
             var result = sourceUrl.Replace(pt.Source.BaseUrl, pt.Target.BaseUrl);
-            if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase)) {
+            if (!string.IsNullOrEmpty(pt.Source.Brand) && pt.Source.Brand.Equals(airing.Network, StringComparison.OrdinalIgnoreCase))
+            {
                 return result;
             }
-            else if (string.IsNullOrEmpty(pt.Source.Brand)) {
+            else if (string.IsNullOrEmpty(pt.Source.Brand))
+            {
                 return result;
             }
-            else {
+            else
+            {
                 return string.Empty;
-            }            
+            }
         }
 
         /// <summary>

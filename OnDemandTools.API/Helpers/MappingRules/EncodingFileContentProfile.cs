@@ -21,7 +21,7 @@ namespace OnDemandTools.API.Helpers.MappingRules
               .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Output))
               .ForMember(dest => dest.Captions, opt => opt.ResolveUsing<EncodingCaptionsResolver>());
             CreateMap<RQModel.ContentSegmentViewModel, BLModel.ContentSegment>();
-            CreateMap<RQModel.PlayListViewModel, BLModel.PlayList>()               
+            CreateMap<RQModel.PlayListViewModel, BLModel.PlayList>()
                 .ApplyEncodingPlaylistToFilePlaylist();
         }
     }
@@ -76,7 +76,7 @@ namespace OnDemandTools.API.Helpers.MappingRules
         /// <returns></returns>
         public static IMappingExpression<TSource, TDest> ApplyEncodingPlaylistToFilePlaylist<TSource, TDest>(this IMappingExpression<TSource, TDest> mapping)
             where TSource : RQModel.PlayListViewModel
-            where TDest :BLModel.PlayList
+            where TDest : BLModel.PlayList
         {
             mapping.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
             mapping.ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type));
@@ -122,7 +122,7 @@ namespace OnDemandTools.API.Helpers.MappingRules
             props.Add("DRMFairPlay", source.DRMFairPlay);
             props.Add("DRMClearKey", source.DRMClearKey);
             props.Add("AssetId", source.AssetId);
-            if(!source.ProtectionType.IsNullOrEmpty())
+            if (!source.ProtectionType.IsNullOrEmpty())
                 props.Add("ProtectionType", source.ProtectionType);
             return props;
         }
@@ -206,23 +206,20 @@ namespace OnDemandTools.API.Helpers.MappingRules
         {
             List<Dictionary<String, BLModel.Url>> urls = new List<Dictionary<String, BLModel.Url>>();
             Regex regex = new Regex(@"^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$");
-            
-            var matches = regex.Match(source.BucketURL);
 
-            urls.Add(BuildUrlFor(matches, "bucketUrl"));
-
-            foreach (var AkamaiURL in source.AkamaiURLs)
+            foreach (var translatedUrl in source.TranslatedUrls)
             {
-                if (!string.IsNullOrEmpty(AkamaiURL))
+                if (!string.IsNullOrEmpty(translatedUrl.Url))
                 {
-                    matches = regex.Match(AkamaiURL);
-                    urls.Add(BuildUrlFor(matches, "akamaiUrl"));
+                    var matches = regex.Match(translatedUrl.Url);
+                    urls.Add(BuildUrlFor(matches, translatedUrl.UrlType));
                 }
             }
             return urls;
         }
 
-        private Dictionary<String, BLModel.Url> BuildUrlFor(Match matches, string key) {
+        private Dictionary<String, BLModel.Url> BuildUrlFor(Match matches, string key)
+        {
             var result = new Dictionary<String, BLModel.Url>();
             var host = matches.Groups[1].ToString() + @"/" + matches.Groups[3].ToString();
             var path = matches.Groups[4].ToString();

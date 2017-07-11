@@ -92,7 +92,7 @@ namespace OnDemandTools.API.v1.Models.Handler
     {
         public PlayListViewModel()
         {
-            AkamaiURLs = new List<String>();
+            TranslatedUrls = new List<TranslatedUrlViewModel>();
         }
 
         [JsonProperty(PropertyName = "name")]
@@ -132,10 +132,17 @@ namespace OnDemandTools.API.v1.Models.Handler
         public String ProtectionType { get; set; }
 
         [JsonIgnore]
-        public List<String> AkamaiURLs { get; set; }
+        public List<TranslatedUrlViewModel> TranslatedUrls { get; set; }
 
         [JsonProperty(PropertyName = "asset-id")]
         public String AssetId { get; set; }
 
+    }
+
+    public class TranslatedUrlViewModel
+    {
+        public string UrlType { get; set; }
+
+        public string Url { get; set; }
     }
 }
