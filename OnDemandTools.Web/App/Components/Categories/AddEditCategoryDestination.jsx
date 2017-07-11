@@ -147,6 +147,7 @@ class AddEditCategoryDestination extends React.Component {
     /// </summary>
     addNewDestination()
     {
+        var optionValues = this.getOptions(this.state.categoryDetails);
         var newDestination= {name:"", description:"", categories:[]};
         var category = {
             name: this.state.categoryDetails.name,
@@ -157,7 +158,9 @@ class AddEditCategoryDestination extends React.Component {
         newDestination.categories.push(category);
         var categoryData=[];
         categoryData = this.state.categoryDetails;  
-        categoryData.destinations.unshift(newDestination);        
+        categoryData.destinations.unshift(newDestination); 
+        
+        this.setState({options:optionValues});
         
         this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
@@ -312,7 +315,7 @@ class AddEditCategoryDestination extends React.Component {
     <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
     <Col sm={2} >
         <button type= "button"  class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
-        <button type= "button"  class="btn-link" title="Delete Category" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
+        <button type= "button"  class="btn-link" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
     </Col>
 
 </Row>)}}.bind(this));
