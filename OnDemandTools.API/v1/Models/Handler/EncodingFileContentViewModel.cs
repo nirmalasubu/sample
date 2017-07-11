@@ -93,6 +93,7 @@ namespace OnDemandTools.API.v1.Models.Handler
         public PlayListViewModel()
         {
             TranslatedUrls = new List<TranslatedUrlViewModel>();
+            Urls = new Dictionary<string, string>();
         }
 
         [JsonProperty(PropertyName = "name")]
