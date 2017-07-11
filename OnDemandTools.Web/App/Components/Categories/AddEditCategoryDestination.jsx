@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
 import PropertiesFilter from 'Components/Common/PropertiesFilter';
 import * as categoryActions from 'Actions/Category/CategoryActions';
+import * as destinationActions from 'Actions/Destination/DestinationActions';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 import Select from 'react-select';
@@ -43,6 +44,7 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(destinationActions.fetchDestinations());
         this.props.data.destinations.sort(this.sortDestinationsByName);
         var optionValues = this.getOptions(this.props.data);
         this.setState({
