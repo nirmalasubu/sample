@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OnDemandTools.Common;
 using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
@@ -123,6 +124,9 @@ namespace OnDemandTools.API.v1.Models.Handler
 
         [JsonProperty(PropertyName = "bucket-url")]
         public String BucketURL { get; set; }
+
+        [JsonProperty(PropertyName = "urls")]
+        public Dictionary<string, string> Urls { get; set; }
 
         [JsonIgnore]
         public String ProtectionType { get; set; }
