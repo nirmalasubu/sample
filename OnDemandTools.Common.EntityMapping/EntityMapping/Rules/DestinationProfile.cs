@@ -45,6 +45,7 @@ namespace OnDemandTools.Common.EntityMapping
             // Mapping betweeen business models in different domain
             CreateMap<BLModel.Destination, BLAiringModel.Destination>();
             CreateMap <BLModel.Property, BLAiringModel.Property> ();
+            CreateMap<BLModel.Category, BLAiringModel.Property>();
             CreateMap<BLModel.Deliverable, BLAiringModel.Deliverable>();
 
         }
