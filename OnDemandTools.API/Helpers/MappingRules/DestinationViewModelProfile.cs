@@ -23,7 +23,6 @@ namespace OnDemandTools.API.Helpers.MappingRules
             CreateMap<BLAiringLongModel.Destination.Destination, VMAiringModel.Destination.Destination>();
             CreateMap<BLAiringLongModel.Destination.Property, VMAiringModel.Destination.Property>();
             CreateMap<BLAiringLongModel.Destination.Deliverable, VMAiringModel.Destination.Deliverable>();
-            CreateMap<BLAiringLongModel.Destination.Category, VMAiringModel.Destination.Category>();
             CreateMap<BLAiringLongModel.Destination.Content, VMAiringModel.Destination.Content>();
         }
     }

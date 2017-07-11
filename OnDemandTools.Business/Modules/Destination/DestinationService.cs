@@ -135,8 +135,11 @@ namespace OnDemandTools.Business.Modules.Destination
                     {
                         if (dbDes.Name == des.Name)
                         {
-                            des.Categories = dbDes.Categories.ToBusinessModel<List<BLModel.Category>, List<Category>>();
                             des.Properties = dbDes.Properties.ToBusinessModel<List<BLModel.Property>, List<Property>>();
+                            if (dbDes.Categories.Any()) // To be added -Nirmala
+                            {
+                                des.Properties.AddRange(dbDes.Categories.ToBusinessModel<List<BLModel.Category>, List<Property>>());
+                            }
                             des.Deliverables = dbDes.Deliverables.ToBusinessModel<List<BLModel.Deliverable>, List<Deliverable>>();
                         }
                     }
@@ -196,47 +199,47 @@ namespace OnDemandTools.Business.Modules.Destination
                     destination.Properties = destination.Properties.Where(p => !propertiesToRemove.Contains(p)).ToList(); //remove  unmatched  properties
 
 
-                    // Next filter out categories based on selected brand(s) and title(s)
-                    List<Category> categoriesToRemove = new List<Category>();
+                    //// Next filter out categories based on selected brand(s) and title(s)
+                    //List<Category> categoriesToRemove = new List<Category>();
 
-                    foreach (Category cat in destination.Categories)
-                    {
-                        // Verify if category filter (brand) and airing brand match. If not, add it to list to be removed later
-                        if (cat.Brands.Any() && !cat.Brands.Contains(airing.Network))
-                        {
-                            categoriesToRemove.Add(cat);
-                            continue;
-                        }
+                    //foreach (Category cat in destination.Categories)
+                    //{
+                    //    // Verify if category filter (brand) and airing brand match. If not, add it to list to be removed later
+                    //    if (cat.Brands.Any() && !cat.Brands.Contains(airing.Network))
+                    //    {
+                    //        categoriesToRemove.Add(cat);
+                    //        continue;
+                    //    }
 
-                        // Next, verify if category filter has any title or series associated with it. If so, verify that it matches that of the airing.
-                        // If it doesn't match, add it to list to be removed later
-                        if (cat.TitleIds.Any() && cat.SeriesIds.Any())
-                        {
-                            if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat) && !IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
-                            {
-                                categoriesToRemove.Add(cat);
-                            }
-                        }
+                    //    // Next, verify if category filter has any title or series associated with it. If so, verify that it matches that of the airing.
+                    //    // If it doesn't match, add it to list to be removed later
+                    //    if (cat.TitleIds.Any() && cat.SeriesIds.Any())
+                    //    {
+                    //        if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat) && !IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
+                    //        {
+                    //            categoriesToRemove.Add(cat);
+                    //        }
+                    //    }
 
-                        if (cat.TitleIds.Any())
-                        {
-                            if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat))
-                            {
-                                categoriesToRemove.Add(cat);
-                            }
-                        }
+                    //    if (cat.TitleIds.Any())
+                    //    {
+                    //        if (!IsCategoryTitleIdsAssociatedwithAiringTitleIds(airing, cat))
+                    //        {
+                    //            categoriesToRemove.Add(cat);
+                    //        }
+                    //    }
 
-                         if (cat.SeriesIds.Any())
-                        {
-                            if (!IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
-                            {
-                                categoriesToRemove.Add(cat);
-                            }
-                        }
-                    }
+                    //     if (cat.SeriesIds.Any())
+                    //    {
+                    //        if (!IsCategorySeriesIdsAssociatedwithAiringSeriesIds(airing, cat))
+                    //        {
+                    //            categoriesToRemove.Add(cat);
+                    //        }
+                    //    }
+                    //}
 
-                    // Finally remove categories whose filter criteria (series & title) doesn't match that of the airing
-                    destination.Categories = destination.Categories.Where(p => !categoriesToRemove.Contains(p)).ToList();
+                    //// Finally remove categories whose filter criteria (series & title) doesn't match that of the airing
+                    //destination.Categories = destination.Categories.Where(p => !categoriesToRemove.Contains(p)).ToList();
 
                     // Check if the tokens identified in deliverables or properties require flow data
                     bool isFlowDataRequired = CheckDelvierablesandPropertiesRequiresFlowTitle(destination); 
@@ -357,14 +360,17 @@ namespace OnDemandTools.Business.Modules.Destination
         {
             foreach (Property p in destination.Properties)
             {
-                if (p.Value == Episode || p.Value == AiringStorylineLong || p.Value == AiringStorylineShort)
+                if (p.Value != null)    // For Category properties values is null
                 {
-                    return true;
-                }
+                    if (p.Value == Episode || p.Value == AiringStorylineLong || p.Value == AiringStorylineShort)
+                    {
+                        return true;
+                    }
 
-                var match = Regex.Match(p.Value, TitleStorylinePattern);
-                if (match.Success)
-                    return true;
+                    var match = Regex.Match(p.Value, TitleStorylinePattern);
+                    if (match.Success)
+                        return true;
+                }
             }
 
             foreach (Deliverable p in destination.Deliverables)
@@ -380,37 +386,8 @@ namespace OnDemandTools.Business.Modules.Destination
             }
             return false;
         }
+        
 
-        /// Verify if the title filter associated with the category matches that of the airing.
-        /// If yes, return true; else, false
-        private bool IsCategoryTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Category category)
-        {
-            List<int> titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
-
-            if (titleIds.Any())
-            {
-                return (category.TitleIds.Any(titleIds.Contains));
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// Verify if the series filter associated with the category matches that of the airing.
-        /// If yes, return true; else, false
-        private bool IsCategorySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Category category)
-        {
-            if (airing.Title.Series != null && airing.Title.Series.Id.HasValue)
-            {
-                return (category.SeriesIds.Contains(airing.Title.Series.Id.Value));
-
-            }
-            else
-            {
-                return false;
-            }
-        }
 
 
         private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Property property)

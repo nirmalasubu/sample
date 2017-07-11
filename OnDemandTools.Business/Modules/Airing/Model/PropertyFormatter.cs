@@ -27,6 +27,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
         {
             foreach (var property in viewModel.Properties)
             {
+                if(property.Value!=null)   //  after combinig property and category. Property.value is null for categories
                 property.Value = Format(property.Value);
             }
         }

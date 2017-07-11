@@ -17,15 +17,13 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
         public List<Property> Properties { get; set; }
 
         public List<Deliverable> Deliverables { get; set; }
-
-        public List<Category> Categories { get; set; }
+       
 
         public Destination()
         {
             Package = new Package();
             Properties = new List<Property>();
             Deliverables = new List<Deliverable>();
-            Categories = new List<Category>();
         }
     }
 }

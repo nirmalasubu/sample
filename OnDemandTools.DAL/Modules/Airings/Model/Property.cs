@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Airings.Model
@@ -14,6 +15,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public string Name { get; set; }
 
+        [BsonIgnoreIfNull]
         public string Value { get; set; }
 
         public List<string> Brands { get; set; }
@@ -29,7 +31,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
             return TitleIds.Any();
         }
 
-        public bool ShouldSerializeSeriesIdss()
+        public bool ShouldSerializeSeriesIds()
         {
             return SeriesIds.Any();
         }

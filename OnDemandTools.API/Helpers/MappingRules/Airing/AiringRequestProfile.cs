@@ -22,7 +22,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
                 .ForMember(d => d.IgnoredQueues, opt => opt.Ignore());
 
             CreateMap<AiringRequestModel.AiringLink, BLAiringModel.AiringLink>();
-            CreateMap<AiringRequestModel.Category, BLAiringModel.Category>();
             CreateMap<AiringRequestModel.ClosedCaptioning, BLAiringModel.ClosedCaptioning>();
             CreateMap<AiringRequestModel.Deliverable, BLAiringModel.Deliverable>();
             CreateMap<AiringRequestModel.Destination, BLAiringModel.Destination>();
@@ -36,7 +35,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
                 .ForMember(d => d.End, opt => opt.MapFrom(s => DateTime.SpecifyKind(s.End, DateTimeKind.Unspecified)));
             CreateMap<AiringRequestModel.Genre, BLAiringModel.Genre>();
             CreateMap<AiringRequestModel.GuideCategory, BLAiringModel.GuideCategory>();
-            CreateMap<AiringRequestModel.Category, BLAiringModel.Category>();
             CreateMap<AiringRequestModel.Package, BLAiringModel.Package>();
             CreateMap<AiringRequestModel.Participant, BLAiringModel.Participant>();
             CreateMap<AiringRequestModel.PlayItem, BLAiringModel.PlayItem>();

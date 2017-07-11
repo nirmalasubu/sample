@@ -21,7 +21,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
                 .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
 
             CreateMap<BLAiringModel.AiringLink, VMAiringLongModel.AiringLink>();
-            CreateMap<BLAiringModel.Category, VMAiringLongModel.Category>();
             CreateMap<BLAiringModel.ClosedCaptioning, VMAiringLongModel.ClosedCaptioning>();
             CreateMap<BLAiringModel.Destination, VMAiringLongModel.Destination>();
             CreateMap<BLAiringModel.Duration, VMAiringLongModel.Duration>();           
@@ -31,7 +30,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Flight, VMAiringLongModel.Flight>();
             CreateMap<BLAiringModel.Genre, VMAiringLongModel.Genre>();
             CreateMap<BLAiringModel.GuideCategory, VMAiringLongModel.GuideCategory>();
-            CreateMap<BLAiringModel.Category, VMAiringLongModel.Category>();
             CreateMap<BLAiringModel.Package, VMAiringLongModel.Package>();
             CreateMap<BLAiringModel.Participant, VMAiringLongModel.Participant>();
             CreateMap<BLAiringModel.PlayItem, VMAiringLongModel.PlayItem>();
@@ -61,7 +59,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
                 .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
 
             CreateMap<BLAiringModel.AiringLink, BLAiringLongModel.AiringLink>();
-            CreateMap<BLAiringModel.Category, BLAiringLongModel.Category>();
             CreateMap<BLAiringModel.ClosedCaptioning, BLAiringLongModel.ClosedCaptioning>();
             CreateMap<BLAiringModel.Destination, BLAiringLongModel.Destination>();
             CreateMap<BLAiringModel.Duration, BLAiringLongModel.Duration>();
@@ -71,7 +68,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Flight, BLAiringLongModel.Flight>();
             CreateMap<BLAiringModel.Genre, BLAiringLongModel.Genre>();
             CreateMap<BLAiringModel.GuideCategory, BLAiringLongModel.GuideCategory>();
-            CreateMap<BLAiringModel.Category, BLAiringLongModel.Category>();
             CreateMap<BLAiringModel.Package, BLAiringLongModel.Package>();
             CreateMap<BLAiringModel.Participant, BLAiringLongModel.Participant>();
             CreateMap<BLAiringModel.PlayItem, BLAiringLongModel.PlayItem>();
@@ -94,7 +90,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             // VM to long BL
             CreateMap<VMAiringLongModel.Airing, BLAiringLongModel.Airing>();
             CreateMap<VMAiringLongModel.AiringLink, BLAiringLongModel.AiringLink>();
-            CreateMap<VMAiringLongModel.Category, BLAiringLongModel.Category>();
             CreateMap<VMAiringLongModel.ClosedCaptioning, BLAiringLongModel.ClosedCaptioning>();
             CreateMap<VMAiringLongModel.Destination, BLAiringLongModel.Destination>();
             CreateMap<VMAiringLongModel.Duration, BLAiringLongModel.Duration>();
@@ -103,7 +98,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<VMAiringLongModel.Flight, BLAiringLongModel.Flight>();
             CreateMap<VMAiringLongModel.Genre, BLAiringLongModel.Genre>();
             CreateMap<VMAiringLongModel.GuideCategory, BLAiringLongModel.GuideCategory>();
-            CreateMap<VMAiringLongModel.Category, BLAiringLongModel.Category>();
             CreateMap<VMAiringLongModel.Package, BLAiringLongModel.Package>();
             CreateMap<VMAiringLongModel.Participant, BLAiringLongModel.Participant>();
             CreateMap<VMAiringLongModel.PlayItem, BLAiringLongModel.PlayItem>();
@@ -125,7 +119,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             // long BL to VM
             CreateMap<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
             CreateMap<BLAiringLongModel.AiringLink, VMAiringLongModel.AiringLink>();
-            CreateMap<BLAiringLongModel.Category, VMAiringLongModel.Category>();
             CreateMap<BLAiringLongModel.ClosedCaptioning, VMAiringLongModel.ClosedCaptioning>();
             CreateMap<BLAiringLongModel.Destination, VMAiringLongModel.Destination>();
             CreateMap<BLAiringLongModel.Duration, VMAiringLongModel.Duration>();
@@ -134,7 +127,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringLongModel.Flight, VMAiringLongModel.Flight>();
             CreateMap<BLAiringLongModel.Genre, VMAiringLongModel.Genre>();
             CreateMap<BLAiringLongModel.GuideCategory, VMAiringLongModel.GuideCategory>();
-            CreateMap<BLAiringLongModel.Category, VMAiringLongModel.Category>();
             CreateMap<BLAiringLongModel.Package, VMAiringLongModel.Package>();
             CreateMap<BLAiringLongModel.Participant, VMAiringLongModel.Participant>();
             CreateMap<BLAiringLongModel.PlayItem, VMAiringLongModel.PlayItem>();
@@ -187,7 +179,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
                 .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
 
             CreateMap<BLAiringModel.AiringLink, VMAiringPostResponseModel.AiringLink>();
-            CreateMap<BLAiringModel.Category, VMAiringPostResponseModel.Category>();
             CreateMap<BLAiringModel.ClosedCaptioning, VMAiringPostResponseModel.ClosedCaptioning>();
 
             CreateMap<BLAiringModel.Duration, VMAiringPostResponseModel.Duration>();
@@ -197,7 +188,6 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Flight, VMAiringPostResponseModel.PostResponseFlight>();
             CreateMap<BLAiringModel.Genre, VMAiringPostResponseModel.Genre>();
             CreateMap<BLAiringModel.GuideCategory, VMAiringPostResponseModel.GuideCategory>();
-            CreateMap<BLAiringModel.Category, VMAiringPostResponseModel.Category>();
             CreateMap<BLAiringModel.Package, VMAiringPostResponseModel.Package>();
             CreateMap<BLAiringModel.Participant, VMAiringPostResponseModel.Participant>();
             CreateMap<BLAiringModel.PlayItem, VMAiringPostResponseModel.PlayItem>();

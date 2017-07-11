@@ -46,7 +46,6 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.Destination, BLAiringModel.Destination>();
             CreateMap <BLModel.Property, BLAiringModel.Property> ();
             CreateMap<BLModel.Deliverable, BLAiringModel.Deliverable>();
-            CreateMap<BLModel.Category, BLAiringModel.Category>();
 
         }
     }

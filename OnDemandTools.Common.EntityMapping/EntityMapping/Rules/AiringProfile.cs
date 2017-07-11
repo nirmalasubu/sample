@@ -13,7 +13,6 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.Airing, DLModel.Airing>()
              .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
             CreateMap<BLModel.AiringLink, DLModel.AiringLink>();
-            CreateMap<BLModel.Category, DLModel.Category>();
             CreateMap<BLModel.ClosedCaptioning, DLModel.ClosedCaptioning>();
             CreateMap<BLModel.Deliverable, DLModel.Deliverable>();
             CreateMap<BLModel.Destination, DLModel.Destination>();
@@ -50,7 +49,6 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Airing, BLModel.Airing>()
            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));
             CreateMap<DLModel.AiringLink, BLModel.AiringLink>();
-            CreateMap<DLModel.Category, BLModel.Category>();
             CreateMap<DLModel.ClosedCaptioning, BLModel.ClosedCaptioning>();
             CreateMap<DLModel.Deliverable, BLModel.Deliverable>();
             CreateMap<DLModel.Destination, BLModel.Destination>();
@@ -91,7 +89,6 @@ namespace OnDemandTools.Common.EntityMapping
                 .ForMember(d => d.ReleasedOn, opt => opt.MapFrom(s => s.ReleaseOn));
 
             CreateMap<DLModel.AiringLink, BLAiringLongModel.AiringLink>();
-            CreateMap<DLModel.Category, BLAiringLongModel.Category>();
             CreateMap<DLModel.ClosedCaptioning, BLAiringLongModel.ClosedCaptioning>();
             CreateMap<DLModel.Destination, BLAiringLongModel.Destination>();
             CreateMap<DLModel.Duration, BLAiringLongModel.Duration>();
@@ -101,7 +98,6 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.Flight, BLAiringLongModel.Flight>();
             CreateMap<DLModel.Genre, BLAiringLongModel.Genre>();
             CreateMap<DLModel.GuideCategory, BLAiringLongModel.GuideCategory>();
-            CreateMap<DLModel.Category, BLAiringLongModel.Category>();
             CreateMap<DLModel.Package, BLAiringLongModel.Package>();
             CreateMap<DLModel.Participant, BLAiringLongModel.Participant>();
             CreateMap<DLModel.PlayItem, BLAiringLongModel.PlayItem>();
