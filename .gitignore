@@ -258,3 +258,5 @@ paket-files/
 /OnDemandTools.Common/Configuration/AppSettings.cs.orig
 react.odtportal.bundle.js
 /OnDemandTools.Web/web.config
+
+.DS_Store
