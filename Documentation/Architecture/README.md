@@ -45,4 +45,4 @@ Cost Summary
 
 ### Architecture Diagram
 
-![diagram](architecture.png)
+![diagram](odt-architecture.png)
