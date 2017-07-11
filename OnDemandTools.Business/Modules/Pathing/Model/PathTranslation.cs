@@ -24,6 +24,7 @@ namespace OnDemandTools.Business.Modules.Pathing.Model
         public String BaseUrl { get; set; }       
         public String Brand { get; set; }      
         public String ProtectionType { get; set; }
+        public String UrlType { get; set; }
     }
 
     public class PathTranslationNotFoundException : Exception

@@ -12,6 +12,10 @@ namespace OnDemandTools.DAL.Modules.Pathing.Model
         public virtual String Brand { get; set; }
         [BsonIgnoreIfNull]
         public virtual String ProtectionType { get; set; }
+
+        [BsonIgnoreIfNull]
+        public virtual String UrlType { get; set; }
+
     }
 
 }
