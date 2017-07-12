@@ -19,10 +19,13 @@
             const assignState = Object.assign([], state);
             return assignState;
         case 'DELETE_CATEGORY_SUCCESS':
+            const newState = Object.assign([], state); 
             var dIndex = state.findIndex((obj => obj.name == action.name));
             if (dIndex >= 0)
-                state.splice(dIndex,1);
-            return state;
+            {
+                newState.splice(dIndex,1);
+            }
+            return newState;
         default:
             return state;
     }

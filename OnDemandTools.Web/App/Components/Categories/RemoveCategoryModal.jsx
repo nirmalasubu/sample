@@ -44,6 +44,7 @@ class RemoveCategoryModal extends React.Component
         this.setState({ isProcessing: true });           
         this.props.dispatch(categoryActions.deleteCategory(this.props.data.categoryDetails.name))
             .then(() => {
+                this.setState({ isProcessing: false }); 
                 this.props.handleClose();
             }).catch(error => {
                 this.setState({ isProcessing: false });
