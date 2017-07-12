@@ -84,6 +84,15 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("getdestinations")]
+        public IEnumerable<DestinationViewModel> GetDestinations()
+        {
+            List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+            List<DestinationViewModel> destinationModel = destinations.ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>();
+            return destinationModel;
+        }
+
+        [Authorize]
         [HttpGet("newdestination")]
         public DestinationViewModel GetEmptyModel()
         {

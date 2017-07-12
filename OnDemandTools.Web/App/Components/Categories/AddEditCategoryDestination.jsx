@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
@@ -38,19 +39,23 @@ class AddEditCategoryDestination extends React.Component {
             showAddEditPropertiesFilter: false,
             options: [],
             destinationValue: "",
-            propertiesRowIndex:-1
+            propertiesRowIndex:-1,
+            destinations: []
             
         });
     }
 
     componentDidMount() {
-        this.props.dispatch(destinationActions.fetchDestinations());
         this.props.data.destinations.sort(this.sortDestinationsByName);
-        var optionValues = this.getOptions(this.props.data);
-        this.setState({
-            categoryDetails: this.props.data,
-            options: optionValues
-        });   
+
+        var destinationArray = destinationActions.getDestinations();
+        destinationArray.then(message => {
+            this.setState({ destinations: message, categoryDetails: this.props.data});
+        })
+        destinationArray.catch(error => {
+            console.error(error);
+            this.setState({ destinations: [], categoryDetails: this.props.data });
+        });        
         
         this.CheckDestinationNameIsEmpty(this.props.data.destinations);
     }
@@ -58,18 +63,18 @@ class AddEditCategoryDestination extends React.Component {
     /// <summary>
     /// To Bind dropdown with all destinations name and description
     /// </summary>
-    getOptions(categoryDetails) {
+    getOptions(categoryDetails) { 
         var options = [];
-        for (var x = 0; x < this.props.destinations.length; x++) {
+        for (var x = 0; x < this.state.destinations.length; x++) {
 
             var detailIndex  = -1;
 
             if(categoryDetails.destinations.length>0)
-                detailIndex= categoryDetails.destinations.findIndex((obj => obj.name == this.props.destinations[x].name));
+                detailIndex= categoryDetails.destinations.findIndex((obj => obj.name == this.state.destinations[x].name));
 
             if(detailIndex < 0)
             {
-                var optionValue = { value: this.props.destinations[x].name, label: this.props.destinations[x].name + "-" + this.props.destinations[x].description};
+                var optionValue = { value: this.state.destinations[x].name, label: this.state.destinations[x].name + "-" + this.state.destinations[x].description};
                 options.push(optionValue);
             }
         }
@@ -146,7 +151,7 @@ class AddEditCategoryDestination extends React.Component {
     //To add a new destination of category
     /// </summary>
     addNewDestination()
-    {
+    {       
         var optionValues = this.getOptions(this.state.categoryDetails);
         var newDestination= {name:"", description:"", categories:[]};
         var category = {
@@ -161,6 +166,12 @@ class AddEditCategoryDestination extends React.Component {
         categoryData.destinations.unshift(newDestination); 
         
         this.setState({options:optionValues});
+
+        //set the focus
+        let node;    
+        node = ReactDOM.findDOMNode(this.refs.category-scroll);
+        console.log(node);
+        window.scrollTo(node.offsetTop, 0);
         
         this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
@@ -235,8 +246,8 @@ class AddEditCategoryDestination extends React.Component {
     handleChange(index, value) {
         var model = this.state.categoryDetails;
         model.destinations[index].name= value;
-        var detailIndex = this.props.destinations.findIndex((obj => obj.name == value));
-        model.destinations[index].description= this.props.destinations[detailIndex].description;
+        var detailIndex = this.state.destinations.findIndex((obj => obj.name == value));
+        model.destinations[index].description= this.state.destinations[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });  
         
@@ -312,8 +323,8 @@ class AddEditCategoryDestination extends React.Component {
     <Col sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item,index)}</Col>
     <Col sm={2} bsClass="col-height col">{this.titleDetailConstruct(item,index)}</Col>
     <Col sm={2} bsClass="col-height col">
-        <button type= "button"  class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
-        <button type= "button"  class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
+        <button disabled={item.categories[0].removed==undefined?false:true} type= "button"  class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
+        <button disabled={item.categories[0].removed==undefined?false:true} type= "button"  class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
     </Col>
 
 </Row>)}}.bind(this));
@@ -341,7 +352,7 @@ return (
                             <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                             <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>                   
-                        <div class="category-height">{row}</div>
+                        <div class="category-height" ref="category-scroll">{row}</div>
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />

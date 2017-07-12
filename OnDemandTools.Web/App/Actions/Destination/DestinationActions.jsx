@@ -55,6 +55,16 @@ export const getNewDestination = () => {
         });
 };
 
+export const getDestinations = () => {
+    return Axios.get('/api/destination/getdestinations')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+
 export const saveDestination = (model) => {
     return (dispatch) => {        
         return Axios.post('/api/destination', model)
