@@ -51,6 +51,10 @@ class AddEditCategoryDestination extends React.Component {
         var destinationArray = destinationActions.getDestinations();
         destinationArray.then(message => {
             this.setState({ destinations: message, categoryDetails: this.props.data });
+
+            if (this.props.data.destinations.length == 0) {
+                this.addNewDestination();
+            }
         })
         destinationArray.catch(error => {
             console.error(error);
