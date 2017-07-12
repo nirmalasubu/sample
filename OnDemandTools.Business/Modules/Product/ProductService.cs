@@ -73,8 +73,10 @@ namespace OnDemandTools.Business.Modules.Product
                     .Distinct(new DestinationDataModelComparer())
                     .ToList();
 
+                AddCategoriesToDestinationProperties(destinationData);
+
                 var destinations = destinationData.ToDataModel<List<DLDestinationModel.Destination>, List<DLAiringModel.Destination>>();
-              
+
                 foreach (var destination in destinations)
                 {
                     //if there are multiple destinations with the same name, the least restrictive (isAuth=false) will win
@@ -83,7 +85,29 @@ namespace OnDemandTools.Business.Modules.Product
                     else destination.AuthenticationRequired = destinationMapping.Where(dm => dm.DestinationName.Equals(destination.Name)).FirstOrDefault().AuthorizationRequired;
                 }
 
-                flight.Destinations = destinations.ToBusinessModel<List<DLAiringModel.Destination>,List<BLAiringModel.Destination>>();
+                flight.Destinations = destinations.ToBusinessModel<List<DLAiringModel.Destination>, List<BLAiringModel.Destination>>();
+
+
+            }
+        }
+
+
+        private static void AddCategoriesToDestinationProperties(List<DLDestinationModel.Destination> destinationData)
+        {
+            foreach (DLDestinationModel.Destination des in destinationData)  //verify each destination has categories . if yes then combine categories and properties.
+            {
+                if (des.Categories.Any())
+                {
+                    foreach (DLDestinationModel.Category cat in des.Categories)
+                    {
+                        DLDestinationModel.Property property = new DLDestinationModel.Property();
+                        property.Name = cat.Name;
+                        property.Brands = cat.Brands;
+                        property.TitleIds = cat.TitleIds;
+                        property.SeriesIds = cat.SeriesIds;
+                        des.Properties.Add(property);
+                    }
+                }
             }
         }
     }
