@@ -22,14 +22,14 @@ namespace OnDemandTools.API.v1.Routes
 
             Get("/destination/{name}", _ =>
             {
-                this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());                
+                this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var name = (string)_.name;
                 ValidateRequest(name, Context.User().Destinations);
-
-                return desService.GetByName(name).ToViewModel<Destination, ADModel.Destination>();
+                Destination destination = desService.GetByName(name);
+                return AddDestinationCategoriesToProperties(destination).ToViewModel<Destination, ADModel.Destination>();
             });
 
-            Get("/destinations",  _ =>
+           Get("/destinations",  _ =>
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var destinations = desService.GetAll();
@@ -37,9 +37,58 @@ namespace OnDemandTools.API.v1.Routes
                 // retrieve permitted destinations
                 var permittedDestinations = FilterDestinations(destinations, Context.User().Destinations);
 
-                return permittedDestinations.ToViewModel<List<Destination>, List<ADModel.Destination>>();
+                return  AddListDestinationsCategoriesToProerties(permittedDestinations).ToViewModel<List<Destination>, List<ADModel.Destination>>();
             });
 
+        }
+
+        #region "PRIVATE METHODS"
+
+        /// <summary>
+        /// To add category strings within the properties array in the  list of destinations
+        /// </summary>
+        /// <param name="permittedDestinations">destination list</param>
+        /// <returns>destinations</returns>
+        private List<Destination> AddListDestinationsCategoriesToProerties(List<Destination> permittedDestinations)
+        {
+            foreach (Destination des in permittedDestinations)  //verify each destination has categories . if yes then combine categories and properties.
+            {
+                if (des.Categories.Any())
+                {
+                    foreach (Category cat in des.Categories)
+                    {
+                        Property property = new Property();
+                        property.Name = cat.Name;
+                        property.Brands = cat.Brands;
+                        property.TitleIds = cat.TitleIds;
+                        property.SeriesIds = cat.SeriesIds;
+                        des.Properties.Add(property);
+                    }
+                }
+            }
+            return permittedDestinations;
+        }
+
+        /// <summary>
+        /// To add category strings within the properties array of destination.
+        /// </summary>
+        /// <param name="destination">destination</param>
+        /// <returns>destination</returns>
+        private Destination AddDestinationCategoriesToProperties(Destination destination)
+        {
+            if (destination.Categories.Any())
+            {
+                foreach (Category cat in destination.Categories)
+                {
+                    Property property = new Property();
+                    property.Name = cat.Name;
+                    property.Brands = cat.Brands;
+                    property.TitleIds = cat.TitleIds;
+                    property.SeriesIds = cat.SeriesIds;
+                    destination.Properties.Add(property);
+                }
+            }
+            return destination;
         }
 
         private List<Destination> FilterDestinations(IEnumerable<Destination> destinations, IEnumerable<string> permittedDestinations)
@@ -52,6 +101,6 @@ namespace OnDemandTools.API.v1.Routes
             if (!permittedDestinations.Contains(name))
                 throw new SecurityAccessDeniedException(string.Format("Request denied for {0} destination.", name));
         }
-
+        #endregion
     }
 }
