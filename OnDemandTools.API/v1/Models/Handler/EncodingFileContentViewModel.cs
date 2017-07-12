@@ -132,7 +132,10 @@ namespace OnDemandTools.API.v1.Models.Handler
         [JsonIgnore]
         public String ProtectionType { get; set; }
 
-        [JsonIgnore]
+        /// <summary>
+        /// This property used to store all given urls and translated urls.
+        /// </summary>
+        [JsonIgnore]        
         public List<TranslatedUrlViewModel> TranslatedUrls { get; set; }
 
         [JsonProperty(PropertyName = "asset-id")]

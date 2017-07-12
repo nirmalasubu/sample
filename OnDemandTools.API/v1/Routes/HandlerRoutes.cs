@@ -306,6 +306,7 @@ namespace OnDemandTools.API.v1.Routes
                 {
                     Dictionary<string, string> sourceUrls = playlist.Urls;
 
+                    //If input URLs payload is empty then get bucket url
                     if (!sourceUrls.Any())
                     {
                         sourceUrls["bucketUrl"] = playlist.BucketURL;
@@ -316,6 +317,7 @@ namespace OnDemandTools.API.v1.Routes
                         var urlType = url.Key;
                         var sourceUrl = url.Value;
 
+                        //Adds the given url
                         playlist.TranslatedUrls.Add(new TranslatedUrlViewModel { UrlType = urlType, Url = sourceUrl });
 
                         if (!string.IsNullOrEmpty(sourceUrl))
@@ -327,9 +329,12 @@ namespace OnDemandTools.API.v1.Routes
                                 if (!translatedUrl.IsNullOrEmpty())
                                 {
                                     var tranlatedUrlType = pt.Target.UrlType;
+
+                                    //if URL type not specified then default it to Akamai URL
                                     if (string.IsNullOrEmpty(tranlatedUrlType))
                                         tranlatedUrlType = "akamaiUrl";
 
+                                    //Adds the translated URL
                                     playlist.TranslatedUrls.Add(new TranslatedUrlViewModel { UrlType = tranlatedUrlType, Url = translatedUrl });
                                 }
 
