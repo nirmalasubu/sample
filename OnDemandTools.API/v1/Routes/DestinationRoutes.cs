@@ -37,7 +37,7 @@ namespace OnDemandTools.API.v1.Routes
                 // retrieve permitted destinations
                 var permittedDestinations = FilterDestinations(destinations, Context.User().Destinations);
 
-                return  AddListDestinationsCategoriesToProerties(permittedDestinations).ToViewModel<List<Destination>, List<ADModel.Destination>>();
+                return AddListDestinationsCategoriesToProperties(permittedDestinations).ToViewModel<List<Destination>, List<ADModel.Destination>>();
             });
 
         }
@@ -49,7 +49,7 @@ namespace OnDemandTools.API.v1.Routes
         /// </summary>
         /// <param name="permittedDestinations">destination list</param>
         /// <returns>destinations</returns>
-        private List<Destination> AddListDestinationsCategoriesToProerties(List<Destination> permittedDestinations)
+        private List<Destination> AddListDestinationsCategoriesToProperties(List<Destination> permittedDestinations)
         {
             foreach (Destination des in permittedDestinations)  //verify each destination has categories . if yes then combine categories and properties.
             {
