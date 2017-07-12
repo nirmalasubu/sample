@@ -167,11 +167,14 @@ class AddEditCategoryDestination extends React.Component {
         
         this.setState({options:optionValues});
 
-        //set the focus
-        let node;    
-        node = ReactDOM.findDOMNode(this.refs.category-scroll);
-        console.log(node);
-        window.scrollTo(node.offsetTop, 0);
+        //set the scroll to top
+        let panel, node;  
+        panel=this.refs.categoryScroll;
+        node = ReactDOM.findDOMNode(this.refs.categoryScroll);
+
+        if (panel && node && (node.offsetTop > panel.scrollTop + panel.offsetHeight || node.offsetTop < panel.scrollTop)) {
+            panel.scrollTop = node.offsetTop - panel.offsetTop;
+        }
         
         this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
@@ -353,7 +356,7 @@ return (
                             <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                             <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>                   
-                        <div class="category-height" ref="category-scroll">{row}</div>
+                        <div class="category-height" ref="categoryScroll">{row}</div>
                     </Grid>
                 </div>
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
