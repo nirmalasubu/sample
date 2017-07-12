@@ -463,13 +463,42 @@ tr.strikeout td:before {
     border-bottom: 1px solid #a94442;
     width: 100%;
 }
+
+.row-margin{
+    margin-bottom:10px;
+}
+
+.strikeout div[class*=col-]{
+    position:relative;
+}
+
+.strikeout div:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #a94442;
+    width: 100%;
+}
+
+.col-height {
+    height:33px;
+}
+
+.alert-info-right {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  float:right;
+}
+
 /*****************************************************/
 /******** category strike out styling ends******/
 
 /*****************************************************/
 /******** brand image styling  starts******/
 .brand-container {
-   width: 35px;
+   width: 33px;
    float: left;
    margin-right: 5px;
 }

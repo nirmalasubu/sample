@@ -274,14 +274,14 @@ class AddEditCategoryDestination extends React.Component {
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {            
             if(Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object){                     
                 row = this.state.categoryDetails.destinations.map(function (item, index) {
-                    if(item.categories[0].removed==undefined )
+                    if(true)
                     {
                         var nameValidation=item.name!=""?null:"error";
                         let col = null, colDesc = null;
                         if(item.name==""){
                             col = (<Col sm={6}  >
                                         <FormGroup controlId={index} validationState="error">
-                                              <Select 
+                                              <Select
                         searchable={true} 
                         simpleValue className="category-select-control" 
                         options={this.state.options} 
@@ -294,28 +294,26 @@ class AddEditCategoryDestination extends React.Component {
                 else{
                         col = (
                                 <Col sm={3}  >
-                                    <FormGroup controlId={index} >
-                                    <FormControl type="text" disabled={true} value={item.name} title={item.name} ref="Name"  placeholder="Destination" />
-                                    </FormGroup>
+                                    <FormControl controlId={index} type="text" disabled={true} value={item.name} title={item.name} ref="Name"  placeholder="Destination" />
+                                    
                                 </Col>
                             );
 
                 colDesc = (
                     <Col sm={3} >
-                        <FormGroup controlId={index} >
-                        <FormControl type="text" disabled={true} value={item.description} title={item.description} ref="Value"  placeholder="Description" />
-                        </FormGroup>
+                        <FormControl controlId={index} type="text" disabled={true} value={item.description} title={item.description} ref="Value"  placeholder="Description" />
+                       
                     </Col>
                             );
         }
-            return (<Row>
+        return (<Row bsClass={item.categories[0].removed==undefined?"row row-margin":"row row-margin strikeout"}>
     {col}
     {colDesc}
-    <Col sm={2} >{this.categoryBrandImageConstruct(item,index)}</Col>
-    <Col sm={2} >{this.titleDetailConstruct(item,index)}</Col>
-    <Col sm={2} >
-        <button type= "button"  class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
-        <button type= "button"  class="btn-link" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
+    <Col sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item,index)}</Col>
+    <Col sm={2} bsClass="col-height col">{this.titleDetailConstruct(item,index)}</Col>
+    <Col sm={2} bsClass="col-height col">
+        <button type= "button"  class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item,index, event)} ><i class="fa fa-filter"></i></button>
+        <button type= "button"  class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
     </Col>
 
 </Row>)}}.bind(this));
