@@ -97,10 +97,10 @@ class TitleNameOverlay extends React.Component {
         else if (this.state.titles.length == 0) {
             return <div></div>
         }
-        else if (this.state.titles.length == 1) {
+        else if (this.state.titles.length == 1 || this.props.disableOverlay) {
             return (
                 <div>
-                    {this.state.titles[0].titleName}
+                    {titleText}
                 </div>
             )
         }

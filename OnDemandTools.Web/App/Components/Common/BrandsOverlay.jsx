@@ -21,12 +21,12 @@ class BrandsOverlay extends React.Component {
         var allRows = [];
         var firstTwoRows = [];
 
-        var noOfBrandsToShow=2;
-        var isCssExpected=true;
+        var noOfBrandsToShow = 2;
+        var isCssExpected = true;
 
         for (var i = 0; i < this.props.data.length; i++) {
             if (i < noOfBrandsToShow) {
-                firstTwoRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()}  isCssExpected={isCssExpected}/>);
+                firstTwoRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()} isCssExpected={isCssExpected} />);
             }
             allRows.push(<BrandImage brandName={this.props.data[i]} key={i.toString()} />);
         }
@@ -41,7 +41,7 @@ class BrandsOverlay extends React.Component {
         if (this.props.data.length == 0) {
             return <div></div>
         }
-        if (this.props.data.length <=noOfBrandsToShow) {
+        if (this.props.data.length <= noOfBrandsToShow || this.props.disableOverlay) {
             return (
                 <div >
                     {firstTwoRows}

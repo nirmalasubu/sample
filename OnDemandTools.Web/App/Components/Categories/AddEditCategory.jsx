@@ -219,8 +219,7 @@ class AddEditCategory extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <label class="alert-info-right">NOTE: Category name and destinations are required *</label>
+                    <div>                        
                         {msg}
                         <FormGroup
                             controlId="categoryName" validationState={this.state.validationStateName}>

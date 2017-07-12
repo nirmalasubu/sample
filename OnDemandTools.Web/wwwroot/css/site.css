@@ -263,6 +263,11 @@ textarea.form-control-modal-Edit {
     margin-right: 20px;
 }
 
+.addMarginLeft
+{
+    margin-left: 5px;
+}
+
 .addMarginRight:hover
 {
     text-decoration: none;
@@ -460,7 +465,6 @@ tr.strikeout td:before {
     position: absolute;
     top: 50%;
     left: 0;
-    border-bottom: 1px solid #a94442;
     width: 100%;
 }
 
@@ -470,6 +474,7 @@ tr.strikeout td:before {
 
 .strikeout div[class*=col-]{
     position:relative;
+     background-color: grey;
 }
 
 .strikeout div:before {
@@ -477,8 +482,12 @@ tr.strikeout td:before {
     position: absolute;
     top: 50%;
     left: 0;
-    border-bottom: 1px solid #a94442;
     width: 100%;
+}
+
+.strikeout .dev input
+{
+    background-color: grey;
 }
 
 .col-height {
