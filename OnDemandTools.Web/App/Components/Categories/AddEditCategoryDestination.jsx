@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well } from 'react-bootstrap';
+import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover,Collapse,Well, Panel } from 'react-bootstrap';
 import PropertiesFilter from 'Components/Common/PropertiesFilter';
 import * as categoryActions from 'Actions/Category/CategoryActions';
 import * as destinationActions from 'Actions/Destination/DestinationActions';
@@ -343,6 +343,7 @@ return (
                     <span class="addVertialAlign"> New Destination</span>
                 </button>
             </div><br/><br/>
+            <Panel bsStyle="category">
              <div>     
                  <div >
                     <Grid bsClass="category-table" >
@@ -358,7 +359,8 @@ return (
                    <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
                   
                    <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)}  handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
-            </div>
+             </div>
+            </Panel>
         </div>
      )
       }

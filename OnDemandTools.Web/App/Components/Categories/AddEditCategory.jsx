@@ -234,9 +234,8 @@ class AddEditCategory extends React.Component {
                             onChange={this.handleTextChange.bind(this)}
                             />
                         </FormGroup>
-                        <Panel bsStyle="category">
-                            <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
-                        </Panel>
+                        
+                        <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>
