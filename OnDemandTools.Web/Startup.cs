@@ -155,7 +155,7 @@ namespace OnDemandTools.Web
             {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromMinutes(30),
+                ExpireTimeSpan = TimeSpan.FromHours(12),
                 SlidingExpiration = true
             });
 
