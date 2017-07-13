@@ -22,6 +22,10 @@ namespace OnDemandTools.API.Tests.AiringRoute
             _client = _fixture.restClient;
         }
 
+
+        /// <summary>
+        /// Unit test to verify properties in the destination UTEST and category UNITTESTCategory
+        /// </summary>
         [Fact, Order(1)]
         public void GetAiringHavingDestinationUTESTWithCategoryUNITTESTCategory()
         {
@@ -41,8 +45,10 @@ namespace OnDemandTools.API.Tests.AiringRoute
             }
 
             JArray flights = response.Value<JArray>(@"flights");
-            // Assert
-           // Assert.True(jAirings.First.Value<string>(@"authority") == "Turniverse", string.Format("Authority should be 'Turniverse' and but the returned {0}", jAirings.First.Value<string>(@"authority")));
+            JArray destinations = flights.First.Value <JArray>(@"destinations");
+            JArray properties = destinations.First.Value<JArray>(@"properties");
+
+            Assert.True(properties != null, string.Format("Either destination doesn't exists  or Properties are null for the destination. Add a property or category for the destination"));
         }
         
 
