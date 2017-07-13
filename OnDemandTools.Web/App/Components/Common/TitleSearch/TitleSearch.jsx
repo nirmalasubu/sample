@@ -21,6 +21,7 @@ class TitleSearch extends React.Component {
             titlesToRemove: [],
             titlesToAdd: [],
             selectedTitleIds: [],
+            titleIdsToRemove:[],
             options: {
                 noDataText: ""}
 
@@ -69,6 +70,7 @@ class TitleSearch extends React.Component {
 
     onSelectedTitlesRowSelect(row, isSelected, e) {
         var titlesToRemoveTemp = this.state.titlesToRemove;
+        var titleIdsToRemove=this.state.titleIdsToRemove;
 
         var titleFoundIdx = -1;
 
@@ -81,14 +83,16 @@ class TitleSearch extends React.Component {
         if (isSelected) {
             if (titleFoundIdx == -1) {
                 titlesToRemoveTemp.push(row);
+                titleIdsToRemove.push(row.titleId);
             }
         }
         else {
             if (titleFoundIdx > -1) {
                 titlesToRemoveTemp.splice(titleFoundIdx, 1);
+                titleIdsToRemove.splic(titleFoundIdx,1);
             }
         }
-        this.setState({ titlesToRemove: titlesToRemoveTemp });
+        this.setState({ titlesToRemove: titlesToRemoveTemp,titleIdsToRemove:titleIdsToRemove });
 
     }
 
@@ -126,7 +130,7 @@ class TitleSearch extends React.Component {
 
     onRemoveTitleButtonClick() {
         this.props.onRemoveTitles(this.state.titlesToRemove);
-        this.setState({ titlesToRemove: [] })
+        this.setState({ titlesToRemove: [],titleIdsToRemove:[] })
     }
 
     gridRowColor(row, isSelect) {
@@ -166,7 +170,8 @@ class TitleSearch extends React.Component {
             bgColor: 'yellow', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
             hideSelectColumn: true,  // enable hide selection column.
             clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
-            onSelect: this.onSelectedTitlesRowSelect.bind(this)
+            onSelect: this.onSelectedTitlesRowSelect.bind(this),
+            selected:this.state.titleIdsToRemove
         };
 
         if(this.props.hasTitles)
