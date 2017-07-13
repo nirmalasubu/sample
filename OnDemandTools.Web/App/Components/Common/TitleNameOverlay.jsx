@@ -77,7 +77,7 @@ class TitleNameOverlay extends React.Component {
             }
         }
         // sort the title names
-        if (titleNames.length > 1) {
+        if (titleNames.length > 0) {
             titleNames.sort();
             titleText = titleNames[0];
             for (var i = 0; i < titleNames.length; i++) {
