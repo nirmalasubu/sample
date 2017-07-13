@@ -28,14 +28,14 @@ class AddEditCategory extends React.Component {
         super(props);
 
         this.state = ({
-            categoryUnModifiedData:"",
+            categoryUnModifiedData: "",
             isProcessing: false,
             validationStateName: null,
             validationStateDestinationName: null,
-            categoryDetails:{},
+            categoryDetails: {},
             showWarningModel: false,
-            showError:false,
-            validationStateUniqueName:null
+            showError: false,
+            validationStateUniqueName: null
         });
     }
 
@@ -54,8 +54,8 @@ class AddEditCategory extends React.Component {
             isProcessing: false,
             categoryDetails: this.props.data.categoryDetails,
             categoryUnModifiedData: jQuery.extend(true, {}, this.props.data.categoryDetails)
-        });       
-        
+        });
+
     }
 
     /// <summary>
@@ -63,18 +63,23 @@ class AddEditCategory extends React.Component {
     /// </summary>
     handleSave() {
         var elem = this;
-        if (this.state.validationStateName != "error" && this.state.validationStateDestinationName != "error") {
-            var model = this.state.categoryDetails; 
+        if (this.state.validationStateName != "error") {
 
-            for(var i=0; i<model.destinations.length; i++)
-            {
-                if(model.destinations[i].categories[0].removed)
+            if (!this.hasValidDestinations()) {
+                console.log(this.state.categoryDetails);
+                NotificationManager.error('At-least one destination required for category.', 'Destination required');
+                return false;
+            }
+            var model = this.state.categoryDetails;
+
+            for (var i = 0; i < model.destinations.length; i++) {
+                if (model.destinations[i].categories[0].removed)
                     model.destinations[i].categories[0].name = "";
                 else
                     model.destinations[i].categories[0].name = model.name;
             }
 
-            this.setState({categoryDetails: model, isProcessing: true});
+            this.setState({ categoryDetails: model, isProcessing: true });
 
             this.props.dispatch(categoryActions.saveCategory(this.state.categoryDetails))
                 .then(() => {
@@ -102,12 +107,24 @@ class AddEditCategory extends React.Component {
             return false;
     }
 
+    hasValidDestinations() {
+        var hasOneDestination = false;
+        for (var i = 0; i < this.state.categoryDetails.destinations.length; i++) {
+            if (this.state.categoryDetails.destinations[i].categories[0].removed == undefined
+                && this.state.categoryDetails.destinations[i].name.length > 2) {
+                hasOneDestination = true;
+            }
+        }
+
+        return hasOneDestination;
+    }
+
     //called from cancel warning component to close add edit pop up
     handleAddEditClose() {
         var model = this.state.destinationUnModifiedData;
         jQuery.extend(this.state.categoryDetails, this.state.categoryUnModifiedData);
 
-        this.setState({validationStateDestinationName: null});
+        this.setState({ validationStateDestinationName: null });
         this.props.handleClose();
     }
 
@@ -130,7 +147,7 @@ class AddEditCategory extends React.Component {
     /// </summary>
     handleClose() {
         if (JSON.stringify(this.state.categoryUnModifiedData) == JSON.stringify(this.state.categoryDetails)) {
-              this.props.handleClose();
+            this.props.handleClose();
         }
         else {
             this.openWarningModel();
@@ -141,7 +158,7 @@ class AddEditCategory extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateName != null || this.state.validationStateDestinationName != null|| this.state.validationStateUniqueName != null);
+        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null);
     }
 
     /// <summary>
@@ -150,25 +167,25 @@ class AddEditCategory extends React.Component {
     validateForm() {
         var name = this.state.categoryDetails.name;
         var hasNameError = (name == "")
-       
+
 
         this.setState({
-            validationStateName: hasNameError  ? 'error' : null,
-            validationStateUniqueName: this.isNameUnique(this.state.categoryDetails)?'error' : null
+            validationStateName: hasNameError ? 'error' : null,
+            validationStateUniqueName: this.isNameUnique(this.state.categoryDetails) ? 'error' : null
         });
     }
 
     /// <summary>
     /// Updating the category name in the state on change of text
     /// </summary>
-    handleTextChange(event) {       
+    handleTextChange(event) {
 
         var model = this.state.categoryDetails;
-                
+
         model.name = event.target.value;
 
         this.setState({
-            categoryDetails:model
+            categoryDetails: model
         });
 
         this.validateForm();
@@ -183,57 +200,56 @@ class AddEditCategory extends React.Component {
     /// To validate the category name is unique
     /// </summary>
     isNameUnique(categoryDetails) {
-      
-        for (var x = 0; x < this.props.categoryIdandNames.length; x++){
-         
-            if (this.props.categoryIdandNames[x].id!= categoryDetails.id) {
-                if (this.props.categoryIdandNames[x].name== categoryDetails.name)                
-                {   
+
+        for (var x = 0; x < this.props.categoryIdandNames.length; x++) {
+
+            if (this.props.categoryIdandNames[x].id != categoryDetails.id) {
+                if (this.props.categoryIdandNames[x].name == categoryDetails.name) {
                     this.setState({
                         showError: true
                     });
 
                     return true;
                 }
-                else
-                {
+                else {
                     this.setState({
                         showError: false
                     });
-                }}
+                }
+            }
         }
 
         return false;
     }
 
-    render() { 
-        var msg ="";
-        if(this.state.showError)
+    render() {
+        var msg = "";
+        if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Category Name already exists. Please use a unique category name.</label>);
 
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>                        
-                        <div>{ this.props.data.categoryDetails.id != null ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
+                    <Modal.Title>
+                        <div>{this.props.data.categoryDetails.id != null ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>                        
+                    <div>
                         {msg}
                         <FormGroup
                             controlId="categoryName" validationState={this.state.validationStateName}>
                             <ControlLabel>Category Name</ControlLabel>
                             <FormControl
-                            type="text"
-                            value={this.state.categoryDetails.name}
-                            disabled={this.props.data.categoryDetails.id != null}
-                            ref="inputCategoryName"
-                            placeholder="Enter a Category Name"
-                            onChange={this.handleTextChange.bind(this)}
+                                type="text"
+                                value={this.state.categoryDetails.name}
+                                disabled={this.props.data.categoryDetails.id != null}
+                                ref="inputCategoryName"
+                                placeholder="Enter a Category Name"
+                                onChange={this.handleTextChange.bind(this)}
                             />
                         </FormGroup>
-                        
+
                         <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />

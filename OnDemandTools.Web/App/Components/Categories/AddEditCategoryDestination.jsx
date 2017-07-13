@@ -125,7 +125,7 @@ class AddEditCategoryDestination extends React.Component {
     removeDestinationModel(index, value) {
         var categoryData = [];
         categoryData = this.state.categoryDetails;
-        if (categoryData.destinations[index].categories[0].id == undefined) {
+        if (categoryData.destinations[index].name == "") {
             categoryData.destinations.splice(index, 1);
         }
         else {
