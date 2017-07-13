@@ -71,7 +71,7 @@ class TitleNameOverlay extends React.Component {
         var sortedTitleRows = [];
         var titleText = "";
         this.compareAndUpdatetitles();
-        if (this.state.titles.length > 1) {
+        if (this.state.titles.length > 0) {
             for (var i = 0; i < this.state.titles.length; i++) {
                 titleNames.push(this.state.titles[i].titleName)
             }
