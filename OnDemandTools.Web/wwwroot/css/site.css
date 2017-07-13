@@ -410,6 +410,7 @@ p.shortDesc {
     width: 78px;
 }
 
+
 /*****************************************************/
 /******** Destination Deliverables tab styling ******/
 #deliverable-grid {
@@ -472,26 +473,12 @@ tr.strikeout td:before {
     margin-bottom:10px;
 }
 
-.strikeout div[class*=col-]{
-    position:relative;
+.strikeout {    
      background-color: grey;
 }
 
-.strikeout div:before {
-    content: " ";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-}
-
-.strikeout .dev input
-{
-    background-color: grey;
-}
-
 .col-height {
-    height:33px;
+    min-height:33px;    
 }
 
 .alert-info-right {
@@ -501,6 +488,10 @@ tr.strikeout td:before {
   float:right;
 }
 
+.cursorPointer
+{
+    cursor: pointer;
+}
 /*****************************************************/
 /******** category strike out styling ends******/
 

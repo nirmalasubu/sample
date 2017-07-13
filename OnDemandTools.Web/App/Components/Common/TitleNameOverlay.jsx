@@ -107,7 +107,7 @@ class TitleNameOverlay extends React.Component {
         else {
             return (
                 <OverlayTrigger trigger={['click']} rootClose placement="left" overlay={popoverLeft}>
-                    <div title="click to view more Title/Series">
+                    <div className="cursorPointer" title="click to view more Title/Series">
                         {titleText} <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>)
