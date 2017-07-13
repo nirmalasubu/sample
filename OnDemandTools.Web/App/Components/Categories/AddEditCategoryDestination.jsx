@@ -60,8 +60,6 @@ class AddEditCategoryDestination extends React.Component {
             console.error(error);
             this.setState({ destinations: [], categoryDetails: this.props.data });
         });
-
-        this.CheckDestinationNameIsEmpty(this.props.data.destinations);
     }
 
     /// <summary>
@@ -143,8 +141,6 @@ class AddEditCategoryDestination extends React.Component {
         }
         var optionValues = this.getOptions(categoryData);
         this.setState({ options: optionValues });
-
-        this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
 
     /// <summary>
@@ -174,8 +170,6 @@ class AddEditCategoryDestination extends React.Component {
         if (panel && node && (node.offsetTop > panel.scrollTop + panel.offsetHeight || node.offsetTop < panel.scrollTop)) {
             panel.scrollTop = node.offsetTop - panel.offsetTop;
         }
-
-        this.CheckDestinationNameIsEmpty(categoryData.destinations);
     }
 
     /// <summary>
@@ -227,8 +221,6 @@ class AddEditCategoryDestination extends React.Component {
     //this method constructs the category brands images.
     /// </summary>
     categoryBrandImageConstruct(item, index) {
-        //this.CheckDestinationNameIsEmpty();
-
         var brands = [];
 
         if (item.categories.length > 0)
@@ -247,27 +239,6 @@ class AddEditCategoryDestination extends React.Component {
         model.destinations[index].description = this.state.destinations[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });
-
-        this.CheckDestinationNameIsEmpty(model.destinations);
-    }
-
-    /// <summary>
-    // validation for the name destination . To verify  name text is empty
-    /// </summary>
-    CheckDestinationNameIsEmpty(destinations) {
-        if (destinations.length > 0) {
-            for (var i = 0; i <= destinations.length - 1; i++) {
-                if (!(destinations[i].name)) {
-                    this.props.validationStates(true);
-                    return;
-                }
-            }
-
-            this.props.validationStates(false);
-        }
-        else {
-            this.props.validationStates(true);
-        }
     }
 
     /// <summary>
@@ -278,12 +249,11 @@ class AddEditCategoryDestination extends React.Component {
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
             if (Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object) {
                 row = this.state.categoryDetails.destinations.map(function (item, index) {
-                    if (true) {
-                        var nameValidation = item.name != "" ? null : "error";
+                    if (true) {                        
                         let col = null, colDesc = null;
                         if (item.name == "") {
                             col = (<Col sm={6}  >
-                                <FormGroup controlId={index} validationState="error">
+                                <FormGroup controlId={index}>
                                     <Select
                                         searchable={true}
                                         simpleValue className="category-select-control"
