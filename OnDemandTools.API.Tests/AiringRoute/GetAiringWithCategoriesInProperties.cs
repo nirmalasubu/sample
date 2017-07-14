@@ -2,6 +2,7 @@
 using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -47,8 +48,19 @@ namespace OnDemandTools.API.Tests.AiringRoute
             JArray flights = response.Value<JArray>(@"flights");
             JArray destinations = flights.First.Value <JArray>(@"destinations");
             JArray properties = destinations.First.Value<JArray>(@"properties");
+            bool isCategoryExists = false;
+            foreach (var item in properties.Children())
+            {
+                var itemProperties = item.Children<JProperty>();
+                var nameProperty = itemProperties.FirstOrDefault(x => x.Name == "name");
+                if(nameProperty.Value.ToString()== "UNITTESTCategory")
+                {
+                    isCategoryExists = true;
+                }
 
-            Assert.True(properties != null, string.Format("Either destination doesn't exists  or Properties are null for the destination. Add a property or category for the destination"));
+            }
+
+            Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not exists"));
         }
         
 

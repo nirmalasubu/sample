@@ -2,6 +2,7 @@
 using OnDemandTools.API.Tests.Helpers;
 using RestSharp;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -50,7 +51,7 @@ namespace OnDemandTools.API.Tests.DestinationRoute
 
 
             Assert.True(responseDestinationName == destinationName, string.Format("UTEST destination name is passed but it is returned as {0}",responseDestinationName));
-            Assert.True(properties != null, string.Format(" Properties are null for the destination. Add a property or category for the destination"));
+          
         }
 
 
@@ -79,7 +80,43 @@ namespace OnDemandTools.API.Tests.DestinationRoute
             Assert.True(value!=null, string.Format("destination name does not exists or user has no permission to the destination :{0}", destinationName));
         }
 
-        
+        /// <summary>
+        /// To Test existance of category within the properties of the destination
+        /// If the test fails create category "UNITTESTCategory" for destination "UTEST"
+        /// </summary>
+        [Fact, Order(1)]
+        public void GetDestinationByNamehavingCategoryWithinProperty()
+        {
+            string destinationName = "UTEST";
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/destination/" + destinationName, Method.GET);
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"StatusCode");
+            if (value != null)
+            {
+                Assert.True(false, "Error in getting Destination :" + destinationName);
+            }
+
+            string responseDestinationName = response.Value<string>(@"name");
+            JArray properties = response.Value<JArray>(@"properties");
+            bool isCategoryExists = false;
+            foreach (var item in properties.Children())
+            {
+                var itemProperties = item.Children<JProperty>();
+                var nameProperty = itemProperties.FirstOrDefault(x => x.Name == "name");
+                if (nameProperty.Value.ToString() == "UNITTESTCategory")
+                {
+                    isCategoryExists = true;
+                }
+
+            }
+            Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not eixists with the destinstion properties" ));
+        }
 
     }
 }
