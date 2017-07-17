@@ -2,6 +2,9 @@ import React from 'react';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover, Collapse, Well } from 'react-bootstrap';
 import DestinationPropertiesFilter from 'Components/Destinations/DestinationPropertiesFilter';
 import RemovePropertiesModal from 'Components/Destinations/RemovePropertiesModal';
+import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
+import BrandsOverlay from 'Components/Common/BrandsOverlay';
+
 
 // Sub component of destination page to  add ,edit and delete  destination properties
 class AddEditDestinationProperties extends React.Component {
@@ -108,40 +111,30 @@ class AddEditDestinationProperties extends React.Component {
 
 
     //To show all titles.
-    TitledetailConstruct(item, index) {
+    titledetailConstruct(item, index) {
+        var ids = [];
 
-        var titleName = [];
-        item.titles.map(function (title, index) { titleName.push(title.name) });
-        var titletext = titleName.toString();
-        var title = (<p class="destination-label-title" title="title/series">{titletext}</p>);
-        return title;
+        for (var i = 0; i < item.seriesIds.length; i++) {
+            ids.push(item.seriesIds[i]);
+        }
+
+        for (var i = 0; i < item.titleIds.length; i++) {
+            ids.push(item.titleIds[i]);
+        }
+
+        if (ids.length > 0) {
+            return <TitleNameOverlay disableOverlay={false} data={ids} />;
+        }
     }
 
     //To construct brands.
-    PropertyBrandImageConstruct(item, index) {
-        if (item.brands.length >= 1 && item.brands.length < 3) {
-            var image = [];
-            item.brands.map(function (name, index) {
-                var path = "images/brands/" + name + ".gif";
-                image.push(<div class="destination-container"><img src={path} title={name} alt={name} /></div>)
-            });
+    propertyBrandImageConstruct(item, index) {
+        var brands = [];
 
-            var tag = (<div>{image}</div>);
-            return tag;
-        }
+        if (item.brands.length > 0)
+            brands = item.brands;
 
-        if (item.brands.length >= 3) {
-            var image = [];
-            item.brands.map(function (name, index) {
-                var path = "images/brands/" + name + ".gif";
-                image.push(<div class="destination-container"><img src={path} title={name} alt={name} /></div>)
-                if (index == 1) {
-                    image.push(<div class="destination-container"><button class="btn-link destination-img-btn" type="button"> <i class="fa fa-ellipsis-h" /></button></div>)
-                }
-            });
-            var tag = (<div class="destination-img">{image}</div>);
-            return tag;
-        }
+        return <BrandsOverlay disableOverlay={false} data={brands} />;
     }
     // Tokens for the popover
     popoverValueClickRootClose(index) {
@@ -188,10 +181,10 @@ class AddEditDestinationProperties extends React.Component {
                                 <FormGroup controlId={index.toString()} >
                                     <FormControl type="text" value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
                                 </FormGroup></OverlayTrigger></Col>
-                            <Col sm={2} >{this.PropertyBrandImageConstruct(item, index)}</Col>
-                            <Col sm={2} >{this.TitledetailConstruct(item, index)}</Col>
+                            <Col sm={2} >{this.propertyBrandImageConstruct(item, index)}</Col>
+                            <Col sm={2} >{this.titledetailConstruct(item, index)}</Col>
                             <Col sm={2} >
-        <button type= "button"  class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
+                                <button type="button" class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
                                 <button type="button" class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
                             </Col>
                         </Form>
