@@ -32,7 +32,7 @@ class AddEditDestinationCategories extends React.Component {
         });
     }
 
-     //To show all titles.
+    //To show all titles.
     titleDetailConstruct(item, index) {
         var ids = [];
 
@@ -65,17 +65,14 @@ class AddEditDestinationCategories extends React.Component {
         if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if (Object.keys(this.state.destinationDetails.categories).length !== 0 && this.state.destinationDetails.categories != Object) {
                 row = this.state.destinationDetails.categories.map(function (item, index) {
-                    var nameValidation = item.name ? null : "error"
                     return (<Row key={item.id}>
                         <Form>
                             <Col sm={3} md={5} >
-                                <FormGroup controlId="Name" validationState={nameValidation}>
-                                    <FormControl type="text" value={item.name} ref="Name" placeholder="Name" disabled="true" />
-                                </FormGroup></Col>
+                              <p>  {item.name} </p>
+                            </Col>
                         </Form>
                         <Col sm={2} md={3} >
                             {this.propertyBrandImageConstruct(item, index)}
-
                         </Col>
                         <Col sm={2} >
                             {this.titleDetailConstruct(item, index)}
