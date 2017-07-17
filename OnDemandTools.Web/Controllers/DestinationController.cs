@@ -38,48 +38,6 @@ namespace OnDemandTools.Web.Controllers
         {
             List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
             List<DestinationViewModel> destinationModel = destinations.ToViewModel<List<Business.Modules.Destination.Model.Destination>, List<DestinationViewModel>>();
-           foreach(DestinationViewModel destination in destinationModel)
-            {
-                if(destination.Properties.Any())
-                {
-                    foreach(Web.Models.Destination.Property property in destination.Properties)
-                    {
-                        if(property.TitleIds.Any())
-                        {
-                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles =  _destinationSvc.GetTitlesNameFor(property.TitleIds);
-                            property.Titles = titles.ToViewModel <List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
-                        }
-                        if (property.SeriesIds.Any())
-                        {
-                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(property.SeriesIds);
-                            if(property.Titles.Any())
-                                property.Titles.AddRange(titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>());
-                            else
-                                property.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
-                        }
-                    }
-                }
-
-                if (destination.Categories.Any())
-                {
-                    foreach (Web.Models.Destination.Category category in destination.Categories)
-                    {
-                        if (category.TitleIds.Any())
-                        {
-                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(category.TitleIds);
-                            category.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
-                        }
-                        if (category.SeriesIds.Any())
-                        {
-                            List<Business.Modules.Airing.Model.Alternate.Title.Title> titles = _destinationSvc.GetTitlesNameFor(category.SeriesIds);
-                            if (category.Titles.Any())
-                                category.Titles.AddRange(titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>());
-                            else
-                                category.Titles = titles.ToViewModel<List<Business.Modules.Airing.Model.Alternate.Title.Title>, List<Models.Destination.Title>>();
-                        }
-                    }
-                }
-            }
             return destinationModel;
         }
 
@@ -100,7 +58,7 @@ namespace OnDemandTools.Web.Controllers
             {
                 Name = string.Empty,
                 Description = string.Empty,
-                ExternalId = 0                
+                ExternalId = 0
             };
         }
 
