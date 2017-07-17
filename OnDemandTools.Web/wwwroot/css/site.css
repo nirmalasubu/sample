@@ -276,6 +276,7 @@ textarea.form-control-modal-Edit {
 .addVertialAlign
 {
     vertical-align: super;
+    padding-right: 10px;
 }
 
 .noPadding
