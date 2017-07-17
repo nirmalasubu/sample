@@ -214,19 +214,18 @@ class AddEditDestinationBasic extends React.Component {
                             </Col>
                             <Col md={4}>
                                 <ControlLabel>Content</ControlLabel>
-                                <Form inline>
-                                    <FormGroup
-                                        controlId="contents">
-                                        <Checkbox name="hd" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.destinationModel.content.highDefinition}> HD <a href="#"><span data-toggle="tooltip" data-placement="right" title="High definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
-                                        <Checkbox name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.destinationModel.content.standardDefinition}> SD <a href="#"><span data-toggle="tooltip" data-placement="right" title="Standard definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
-                                        <Checkbox name="cx" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.destinationModel.content.cx}> C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
-                                        <Checkbox name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.destinationModel.content.nonCx}> Non-C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="Non-C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
-                                    </FormGroup>
-                                </Form>
+
+                                <FormGroup
+                                    controlId="contents">
+                                    <Checkbox inline name="hd" onChange={this.handleCheckboxChange.bind(this)}
+                                        checked={this.state.destinationModel.content.highDefinition}> HD <a href="#"><span data-toggle="tooltip" data-placement="right" title="High definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                    <Checkbox inline name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                                        checked={this.state.destinationModel.content.standardDefinition}> SD <a href="#"><span data-toggle="tooltip" data-placement="right" title="Standard definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                    <Checkbox inline name="cx" onChange={this.handleCheckboxChange.bind(this)}
+                                        checked={this.state.destinationModel.content.cx}> C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                    <Checkbox inline name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                                        checked={this.state.destinationModel.content.nonCx}> Non-C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="Non-C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                </FormGroup>
                                 <ControlLabel>Options</ControlLabel>
                                 <FormGroup
                                     controlId="options">
