@@ -24,6 +24,7 @@ export const DELETE_CATEGORY_SUCCESS = 'DELETE_CATEGORY_SUCCESS';
 
 //product Action Reducer Name
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
+export const FILTER_PRODUCTS_SUCCESS = 'FILTER_PRODUCTS_SUCCESS';
 
 //Title Search Action Reducer Name
 export const TITLE_SEARCH_SUCCESS = 'TITLE_SEARCH_SUCCESS';

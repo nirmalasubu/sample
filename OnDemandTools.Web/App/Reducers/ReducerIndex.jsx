@@ -6,7 +6,7 @@ import { CategoryReducer ,FilterCategoryDataReducer } from 'Reducers/Category/Ca
 import { UserReducer } from 'Reducers/User/UserReducer';
 import { ConfigReducer } from 'Reducers/Config/ConfigReducer';
 import { StatusReducer } from 'Reducers/Status/StatusReducer';
-import { ProductReducer } from 'Reducers/Product/ProductReducer';
+import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
 
 export default combineReducers({
@@ -22,7 +22,8 @@ export default combineReducers({
     products: ProductReducer,
     titleSearch: TitleSearchReducer,
     categories: CategoryReducer,
-    filterCategory: FilterCategoryDataReducer
+    filterCategory: FilterCategoryDataReducer,
+    filterProduct: FilterProductDataReducer
     // More reducers if there are
     // can go here
 });
