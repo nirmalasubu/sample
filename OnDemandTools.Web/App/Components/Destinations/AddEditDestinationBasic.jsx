@@ -230,7 +230,7 @@ class AddEditDestinationBasic extends React.Component {
                                 </FormGroup>
                                 <ControlLabel>Options</ControlLabel>
                                 <FormGroup controlId="options">
-                                    <Checkbox name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
+                                    <Checkbox inline name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
                                         checked={this.state.destinationModel.auditDelivery}> Audit Delivery <InfoOverlay data="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." /></Checkbox>
                                 </FormGroup>
                             </Col>
