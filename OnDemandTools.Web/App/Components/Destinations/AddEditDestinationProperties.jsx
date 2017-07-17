@@ -209,7 +209,7 @@ class AddEditDestinationProperties extends React.Component {
                         <Row>
                             <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
                             <Col sm={3} ><label class="destination-properties-label">Value</label></Col>
-                            <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filter</label></Col>
+                            <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
                             <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
                         </Row>
                         <div class="destination-height">{row}</div>
