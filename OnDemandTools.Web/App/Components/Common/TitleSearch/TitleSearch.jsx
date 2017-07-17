@@ -89,7 +89,7 @@ class TitleSearch extends React.Component {
         else {
             if (titleFoundIdx > -1) {
                 titlesToRemoveTemp.splice(titleFoundIdx, 1);
-                titleIdsToRemove.splic(titleFoundIdx,1);
+                titleIdsToRemove.splice(titleFoundIdx,1);
             }
         }
         this.setState({ titlesToRemove: titlesToRemoveTemp,titleIdsToRemove:titleIdsToRemove });
