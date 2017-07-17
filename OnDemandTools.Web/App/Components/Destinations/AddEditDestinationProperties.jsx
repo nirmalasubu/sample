@@ -169,7 +169,7 @@ class AddEditDestinationProperties extends React.Component {
         if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if (Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object) {
                 row = this.state.destinationDetails.properties.map(function (item, index) {
-                    var nameValidation = item.name ? "" : "error"
+                    var nameValidation = item.name ? null : "error"
                     var overlay = "overlay" + index
                     return (<Row key={index.toString()}>
                         <Form>

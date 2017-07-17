@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover, Collapse, Well } from 'react-bootstrap';
-
+import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
+import BrandsOverlay from 'Components/Common/BrandsOverlay';
 
 class AddEditDestinationCategories extends React.Component {
 
@@ -8,9 +9,7 @@ class AddEditDestinationCategories extends React.Component {
         super(props);
         this.state = ({
             destinationDetails: {},
-            isPropertyNameRequired: false,
-            titleopen: [],
-            imageopen: []
+            isPropertyNameRequired: false
         });
     }
 
@@ -33,42 +32,31 @@ class AddEditDestinationCategories extends React.Component {
         });
     }
 
-    //To show all titles. 
-    TitledetailConstruct(item, index) {
+     //To show all titles.
+    titleDetailConstruct(item, index) {
+        var ids = [];
 
-        var titleName = [];
-        item.titles.map(function (title, index) { titleName.push(title.name) });
-        var titletext = titleName.toString();
-        var title = (<p class="destination-label-title" title="title/series">{titletext}</p>);
-        return title;
+        for (var i = 0; i < item.seriesIds.length; i++) {
+            ids.push(item.seriesIds[i]);
+        }
+
+        for (var i = 0; i < item.titleIds.length; i++) {
+            ids.push(item.titleIds[i]);
+        }
+
+        if (ids.length > 0) {
+            return <TitleNameOverlay disableOverlay={false} data={ids} />;
+        }
     }
 
-    //To construct brands. 
-    CategoryBrandImageConstruct(item, index) {
-        if (item.brands.length >= 1 && item.brands.length <= 4) {
-            var image = [];
-            item.brands.map(function (name, index) {
-                var path = "images/brands/" + name + ".gif";
-                image.push(<div class="destination-container"><img src={path} title={name} alt={name} /></div>)
-            });
+    //To construct brands.
+    propertyBrandImageConstruct(item, index) {
+        var brands = [];
 
-            var tag = (<div>{image}</div>);
-            return tag;
-        }
+        if (item.brands.length > 0)
+            brands = item.brands;
 
-        if (item.brands.length >= 4) {
-            var image = [];
-            item.brands.map(function (name, index) {
-                var path = "images/brands/" + name + ".gif";
-                image.push(<div class="destination-container"><img src={path} title={name} alt={name} /></div>)
-                if (index == 1) {
-                    image.push(<div class="destination-container"><button class="btn-link destination-img-btn" type="button"> <i class="fa fa-ellipsis-h" /></button></div>)
-                }
-            });
-
-            var tag = (<div class="destination-img">{image}</div>);
-            return tag;
-        }
+        return <BrandsOverlay disableOverlay={false} data={brands} />;
     }
 
     render() {
@@ -77,21 +65,20 @@ class AddEditDestinationCategories extends React.Component {
         if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if (Object.keys(this.state.destinationDetails.categories).length !== 0 && this.state.destinationDetails.categories != Object) {
                 row = this.state.destinationDetails.categories.map(function (item, index) {
-                    var nameValidation = item.name ? "" : "error"
+                    var nameValidation = item.name ? null : "error"
                     return (<Row >
                         <Form>
                             <Col sm={3} md={5} >
                                 <FormGroup controlId="Name" validationState={nameValidation}>
-                                    <FormControl type="text" id={index} value={item.name} ref="Name" placeholder="Name" disabled="true" />
+                                    <FormControl type="text" value={item.name} ref="Name" placeholder="Name" disabled="true" />
                                 </FormGroup></Col>
                         </Form>
                         <Col sm={2} md={3} >
-                            {this.CategoryBrandImageConstruct(item, index)}
+                            {this.propertyBrandImageConstruct(item, index)}
 
                         </Col>
                         <Col sm={2} >
-                            {this.TitledetailConstruct(item, index)}
-
+                            {this.titleDetailConstruct(item, index)}
                         </Col>
                     </Row>)
                 }.bind(this));
@@ -99,7 +86,6 @@ class AddEditDestinationCategories extends React.Component {
             else {
                 row = <Row><Col sm={12} ><p> No Categories available</p></Col></Row>
             }
-
         }
 
         return (

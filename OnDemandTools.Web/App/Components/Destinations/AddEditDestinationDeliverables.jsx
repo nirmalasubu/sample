@@ -184,7 +184,7 @@ class AddEditDestinationDeliverables extends React.Component {
       var deliverableRows = this.state.destinationDetails.deliverables.map(function (item, index) {
 
         // Validate if deliverable value is empty. If yes, set state to 'error'
-        var isValueValid = item.value ? "" : "error";
+        var isValueValid = item.value ? null : "error";
 
         return (<Row key={index.toString()}>
           <Col sm={10} >
