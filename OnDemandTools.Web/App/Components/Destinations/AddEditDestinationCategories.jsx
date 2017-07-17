@@ -66,7 +66,7 @@ class AddEditDestinationCategories extends React.Component {
             if (Object.keys(this.state.destinationDetails.categories).length !== 0 && this.state.destinationDetails.categories != Object) {
                 row = this.state.destinationDetails.categories.map(function (item, index) {
                     var nameValidation = item.name ? null : "error"
-                    return (<Row >
+                    return (<Row key={item.id}>
                         <Form>
                             <Col sm={3} md={5} >
                                 <FormGroup controlId="Name" validationState={nameValidation}>
