@@ -3,6 +3,7 @@ import PageHeader from 'Components/Common/PageHeader';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import InfoOverlay from 'Components/Common/InfoOverlay';
 
 @connect((store) => {
     return {
@@ -194,7 +195,7 @@ class AddEditDestinationBasic extends React.Component {
                                         disabled={this.state.destinationModel.id == null ? false : true}
                                         value={this.state.destinationModel.name}
                                         ref="inputFriendlyName"
-                                        placeholder="Enter 3 to 5 alphabetical letter for destination code"
+                                        placeholder="Enter 3 to 5 letters for destination code"
                                         onChange={this.handleTextChange.bind(this)}
                                     />
                                 </FormGroup>
@@ -208,29 +209,29 @@ class AddEditDestinationBasic extends React.Component {
                                 <FormGroup
                                     controlId="destinationDescription" validationState={this.state.validationStateDescription}>
                                     <ControlLabel>Destination Description</ControlLabel>
-                                    <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.state.destinationModel.description} placeholder="Results"
+                                    <FormControl bsClass="form-control form-control-modal"
+                                        componentClass="textarea" value={this.state.destinationModel.description}
+                                        placeholder="Enter a description for the destination code"
                                         onChange={this.handleDescriptionChange.bind(this)} />
                                 </FormGroup>
                             </Col>
                             <Col md={4}>
                                 <ControlLabel>Content</ControlLabel>
-
                                 <FormGroup
                                     controlId="contents">
                                     <Checkbox inline name="hd" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.content.highDefinition}> HD <a href="#"><span data-toggle="tooltip" data-placement="right" title="High definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                        checked={this.state.destinationModel.content.highDefinition}> HD <InfoOverlay data="High definition content can be delivered to this destination." /></Checkbox>
                                     <Checkbox inline name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.content.standardDefinition}> SD <a href="#"><span data-toggle="tooltip" data-placement="right" title="Standard definition content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                        checked={this.state.destinationModel.content.standardDefinition}> SD <InfoOverlay data="Standard definition content can be delivered to this destination." /></Checkbox>
                                     <Checkbox inline name="cx" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.content.cx}> C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                        checked={this.state.destinationModel.content.cx}> C(X) <InfoOverlay data="C(X) content can be delivered to this destination." /></Checkbox>
                                     <Checkbox inline name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.content.nonCx}> Non-C(X) <a href="#"><span data-toggle="tooltip" data-placement="right" title="Non-C(X) content can be delivered to this destination." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                        checked={this.state.destinationModel.content.nonCx}> Non-C(X) <InfoOverlay data="Non-C(X) content can be delivered to this destination." /></Checkbox>
                                 </FormGroup>
                                 <ControlLabel>Options</ControlLabel>
-                                <FormGroup
-                                    controlId="options">
+                                <FormGroup controlId="options">
                                     <Checkbox name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.auditDelivery}> Audit Delivery <a href="#"><span data-toggle="tooltip" data-placement="right" title="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." class="glyphicon glyphicon-info-sign"></span></a></Checkbox>
+                                        checked={this.state.destinationModel.auditDelivery}> Audit Delivery <InfoOverlay data="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." /></Checkbox>
                                 </FormGroup>
                             </Col>
                         </Row>
