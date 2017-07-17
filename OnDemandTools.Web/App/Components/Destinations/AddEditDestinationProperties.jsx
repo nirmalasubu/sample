@@ -199,9 +199,12 @@ class AddEditDestinationProperties extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="destination-properties-addnew btn" title="Add New" onClick={(event) => this.AddNewProperty(event)}>Add  New</button>
+                    <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.AddNewProperty(event)}>
+                        <i class="fa fa-plus-square fa-2x"></i>
+                        <span class="addVertialAlign"> New Property</span>
+                    </button>
                 </div>
-                <div >
+                <div className="clearBoth">
                     <Grid fluid={true}>
                         <Row>
                             <Col sm={3} ><label class="destination-properties-label">Name</label></Col>
