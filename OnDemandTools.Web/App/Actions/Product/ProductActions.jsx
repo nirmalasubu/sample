@@ -31,4 +31,23 @@ export const fetchProducts = () => {
     };
 };
 
+export const deleteProductSuccess = (objectId) => {
+    return {
+        type: actionTypes.DELETE_PRODUCT_SUCCESS,
+        objectId
+    }
+};
+
+export const deleteProduct = (id) => {
+    return (dispatch) => {        
+        return Axios.delete('/api/product/'+ id)
+            .then(response => {
+                dispatch(deleteProductSuccess(id))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
 

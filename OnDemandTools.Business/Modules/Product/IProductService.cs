@@ -35,5 +35,11 @@ namespace OnDemandTools.Business.Modules.Product
         /// <param name="airing">The airing.</param>
         void ProductDestinationConverter(ref BLAiringModel.Airing airing);
 
+        /// <summary>
+        /// Remove product from collection using ObjectID
+        /// </summary>
+        /// <param name="id">Object Id</param>
+        void Delete(string id);
+
     }
 }

@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
-import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
+import RemoveProductModal from 'Components/Products/RemoveProductModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
 
 
@@ -58,17 +58,17 @@ class ProductTable extends React.Component {
     ///This is to open a modal popup to add a new product.
     ///</summary>
     openCreateNewDestinationModel() {
-        this.setState({ showAddEditModel: true, categoryDetails: jQuery.extend(true, {}, this.state.newProductModel) });
+        this.setState({ showAddEditModel: true, productDetails: jQuery.extend(true, {}, this.state.newProductModel) });
     }
     ///<summary>
-    // when delete category button event handled
+    // when delete product button event handled
     ///</summary>
     openDeleteModel(val) {
         this.setState({ showDeleteModal: true, productDetails: val });
     }
 
     ///<summary>
-    // React modal pop up control   delete category is closed
+    // React modal pop up control delete product is closed
     ///</summary>
     closeDeleteModel() {
         this.setState({ showDeleteModal: false });
@@ -181,6 +181,7 @@ class ProductTable extends React.Component {
                     options={this.state.options}>
                         {row}
                 </BootstrapTable>
+                <RemoveProductModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
                         }
 

@@ -11,18 +11,24 @@ using OnDemandTools.DAL.Modules.Destination.Queries;
 using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
 using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
+using OnDemandTools.DAL.Modules.Product.Command;
 
 namespace OnDemandTools.Business.Modules.Product
 {
     public class ProductService : IProductService
     {
         IProductQuery productHelper;
+        IProductCommand productCommand;
         IDestinationQuery destionationQueryHelper;
 
-        public ProductService(IProductQuery productHelper, IDestinationQuery destionationQueryHelper)
+        public ProductService(IProductQuery productHelper, 
+            IDestinationQuery destionationQueryHelper,
+            IProductCommand productCommand
+            )
         {
             this.productHelper = productHelper;
             this.destionationQueryHelper = destionationQueryHelper;
+            this.productCommand = productCommand;
         }
 
 
@@ -109,6 +115,15 @@ namespace OnDemandTools.Business.Modules.Product
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Remove product from collection using ObjectID
+        /// </summary>
+        /// <param name="id">Object Id</param>
+        public void Delete(string id)
+        {
+            productCommand.Delete(id);
         }
     }
 }

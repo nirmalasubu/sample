@@ -31,7 +31,7 @@ namespace OnDemandTools.Web.Controllers
         }
 
         // GET: api/values
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IEnumerable<ProductViewModel> Get()
         {
@@ -39,6 +39,13 @@ namespace OnDemandTools.Web.Controllers
             List<ProductViewModel> productModel = products.ToViewModel<List<Product>, List<ProductViewModel>>();
 
             return productModel;
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public void Delete(string id)
+        {
+            productSvc.Delete(id);
         }
     }
 }
