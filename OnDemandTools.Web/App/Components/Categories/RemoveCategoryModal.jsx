@@ -13,7 +13,10 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 // To connect to store. Required for 'this.props.dispatch' to work
 @connect((store) => {
-    
+    return {
+        categories: store.categories
+       
+    };
 })
 
 // Sub component used within Category page to delete category

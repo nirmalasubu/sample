@@ -222,6 +222,16 @@ class AddEditCategory extends React.Component {
         return false;
     }
 
+    componentDidMount() {
+        var initialCategory={ "id": null, "name": "", "destinations":[]};
+
+        //required to overcome form control warning of categoryName
+        this.setState({
+            categoryDetails: initialCategory 
+        });
+      
+    }
+
     render() {
         var msg = "";
         if (this.state.showError)
@@ -243,7 +253,7 @@ class AddEditCategory extends React.Component {
                             <FormControl
                                 type="text"
                                 value={this.state.categoryDetails.name}
-                                disabled={this.props.data.categoryDetails.id != null}
+                                disabled={this.state.categoryDetails.id != null}
                                 ref="inputCategoryName"
                                 placeholder="Enter a Category Name"
                                 onChange={this.handleTextChange.bind(this)}

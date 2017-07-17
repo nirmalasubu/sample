@@ -46,6 +46,7 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     componentDidMount() {
+        if(this.props.data.destinations.length>0)
         this.props.data.destinations.sort(this.sortDestinationsByName);
 
         var destinationArray = destinationActions.getDestinations();
@@ -253,30 +254,30 @@ class AddEditCategoryDestination extends React.Component {
                         let col = null, colDesc = null;
                         if (item.name == "") {
                             col = (<Col sm={6}  >
-                                <FormGroup controlId={index}>
+                                <FormGroup controlId={index.toString()}>
                                     <Select
-                                        searchable={true}
-                                        simpleValue className="category-select-control"
-                                        options={this.state.options}
-                                        onChange={(event) => this.handleChange(index, event)}
-                                        value={item.name} />
-                                </FormGroup>
-                            </Col>
+                        searchable={true}
+                        simpleValue className="category-select-control"
+                        options={this.state.options}
+                        onChange={(event) => this.handleChange(index, event)}
+                    value={item.name} />
+            </FormGroup>
+        </Col>
                             );
-                        }
-                        else {
+                }
+                else {
                             col = (
                                 <Col bsClass="col-height col" sm={3}>
                                     <p>  {item.name} </p>
                                 </Col>
                             );
-                            colDesc = (
-                                <Col bsClass="col-height col" sm={3} >
-                                    <p>  {item.description} </p>
-                                </Col>
+                colDesc = (
+                    <Col bsClass="col-height col" sm={3} >
+                        <p>  {item.description} </p>
+                    </Col>
                             );
-                        }
-                        return (<Row bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
+        }
+        return (<Row key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
                             <Col sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
@@ -303,7 +304,7 @@ class AddEditCategoryDestination extends React.Component {
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
                 </div><br /><br />
-                <Panel bsStyle="category">
+                <Panel >
                     <div>
                         <div >
                             <Grid bsClass="category-table" >

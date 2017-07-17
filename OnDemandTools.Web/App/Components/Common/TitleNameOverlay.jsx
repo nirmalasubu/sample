@@ -17,6 +17,9 @@ class TitleNameOverlay extends React.Component {
         }
     }
 
+    //<summary>
+    ///  fetchAndUpdateTitles when component is initially loaded
+    ///</summary>
     fetchAndUpdateTitles() {
 
         var titleIds = this.props.data;
@@ -44,33 +47,53 @@ class TitleNameOverlay extends React.Component {
         this.fetchAndUpdateTitles();
     }
 
-    ///<summary>
-    /// after component is mounted . update the stae when  titles are added  or removed
-    ///</summary>
-    compareAndUpdatetitles() {
-        if (this.state.titlesIds != undefined) {
-            if (this.state.titlesIds.length != this.props.data.length) {
-                this.fetchAndUpdateTitles();
-            } else {
-                for (var i = 0; i < this.props.data.length; i++) {
-                    if (this.state.titlesIds[i] != this.props.data[i]) {
 
-                        this.fetchAndUpdateTitles();
-                        return false;
-                    }
+
+    ///<summary>
+    /// update the state when  titles are added  or removed with new properties
+    ///</summary>
+    fetchAndUpdateTitleswithNextProps(titleIds) {
+
+        var titleIds = titleIds;
+        this.setState({
+            titlesIds: titleIds
+
+        });
+        let searchPromise = searchByTitleIds(titleIds);
+
+        searchPromise.then(message => {
+            this.setState({ titles: message, isProcessing: false });
+        })
+        searchPromise.catch(error => {
+            console.error(error);
+            this.setState({ titles: [], isProcessing: false });
+        });
+    }
+
+    //<summary>
+    /// after component is mounted . update the state when  titles are added  or removed
+    ///</summary>
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.data.length != this.props.data.length) {
+            console.log("fetchAndUpdateTitles");
+            this.fetchAndUpdateTitleswithNextProps(nextProps.data);
+        } else {
+            for (var i = 0; i < this.props.data.length; i++) {
+                if (nextProps.data[i] != this.props.data[i]) {
+                    console.log("fetchAndUpdateTitles in else");
+                    this.fetchAndUpdateTitleswithNextProps(nextProps.data);
+                    return false;
                 }
             }
         }
-        return true;
     }
-
 
     render() {
 
         var titleNames = [];
         var sortedTitleRows = [];
         var titleText = "";
-        this.compareAndUpdatetitles();
         if (this.state.titles.length > 0) {
             for (var i = 0; i < this.state.titles.length; i++) {
                 titleNames.push(this.state.titles[i].titleName)
