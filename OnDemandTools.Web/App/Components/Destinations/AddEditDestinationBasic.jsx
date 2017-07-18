@@ -84,43 +84,13 @@ class AddEditDestinationBasic extends React.Component {
     componentDidMount() {
         var model = this.state.destinationModel;
         if (this.state.destinationModel.id == null) {
-            model.externalId = this.getUnusedExternalId();
-
             this.setState({ destinationModel: model, componentJustMounted: true });
         }
     }
 
-    getUnusedExternalId() {
-        var externalId = 1;
-
-        while (true) {
-
-            if (!this.isExternaldUsed(externalId)) {
-                break;
-            }
-
-            externalId++;
-        }
-
-        return externalId;
-    }
-
-    isExternaldUsed(externalId) {
-        for (var x = 0; x < this.props.destinations.length; x++) {
-            if (externalId == this.props.destinations[x].externalId) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     handleTextChange(event) {
-
         var model = this.state.destinationModel;
-
         model.name = event.target.value.toUpperCase();
-
         this.setState({
             destinationModel: model
         });

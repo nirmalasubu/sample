@@ -27,8 +27,7 @@ class DestinationTable extends React.Component {
             options: {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
-                noDataText: this._setLoadingOption(),
-
+                noDataText: <i>There is no data to display</i>,
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -41,14 +40,6 @@ class DestinationTable extends React.Component {
                 }]
             }
         }
-    }
-
-    _setLoadingOption()
-    {
-        if(this.props.RowData.length<=0 && (this.props.filterDestination.length<=0 || (this.props.filterDestination.code=="" && this.props.filterDestination.description=="" && this.props.filterDestination.content=="")))
-            return (<div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>);
-        else
-            return(<i>There is no data to display</i>);
     }
 
     componentDidMount() {
