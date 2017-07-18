@@ -398,7 +398,11 @@ p.shortDesc {
 }
 .imageSelected
 {
-    background-color: yellow;
+    background-color:grey;
+    border-color: black;
+    border-width: 3px;
+    padding: 2px;
+    border-style: solid;
 }
 
 .react-bs-table_filter {
