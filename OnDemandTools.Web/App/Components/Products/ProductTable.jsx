@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveProductModal from 'Components/Products/RemoveProductModal';
+import DestinationOverlay from 'Components/Common/DestinationOverlay';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
 
 
@@ -133,28 +134,7 @@ class ProductTable extends React.Component {
                 rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
         }
         
-        if(destinationNames.length>1){
-            const popoverLeft = (
-                <Popover id="popover-positioned-left" title="Destinations">
-                    <div class="TitleOverlay-height"> {rows} </div>
-                </Popover>
-            );
-
-            return(
-                <OverlayTrigger trigger={['click', 'focus']} rootClose placement="left" overlay={popoverLeft}>
-                    <div className="cursorPointer" title="click to view more destinations">
-                    {rows[0]}{rows[1]} <i class="fa fa-ellipsis-h"></i>
-                    </div>
-                </OverlayTrigger>
-                );
-        }
-        else{
-            return (
-                <div>
-            {rows}
-                </div>
-            );
-        }
+        return <DestinationOverlay rows={rows} />;
     }
 
     ///<summary>
