@@ -104,11 +104,11 @@ class ProductTable extends React.Component {
                     <div class="TitleOverlay-height"> {val} </div>
                 </Popover>
             );
-        if(val.length > 20){
+        if(val.length > 30){
             return(
                 <OverlayTrigger trigger={['hover']} rootClose placement="bottom" overlay={popoverDescLeft}>
                     <div className="cursorPointer">
-                    {val.substring(0,20)} <i class="fa fa-ellipsis-h"></i>
+                    {val.substring(0,30)} <i class="fa fa-ellipsis-h"></i>
                     </div>
                 </OverlayTrigger>
             );
@@ -172,19 +172,19 @@ class ProductTable extends React.Component {
         row = this.props.ColumnData.map(function (item, index) {
 
             if (item.label == "Prodduct") {
-                return <TableHeaderColumn  dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.productNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="35%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.productNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Description") {
-                return <TableHeaderColumn width="200px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)} >{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="28%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Destinations") {
-                return <TableHeaderColumn width="200px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="17%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Tags") {
-                return <TableHeaderColumn width="150px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.tagFormat.bind(this)} >{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="10%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.tagFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="10%" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
