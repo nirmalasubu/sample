@@ -23,10 +23,7 @@ class TitleNameOverlay extends React.Component {
     fetchAndUpdateTitles() {
 
         var titleIds = this.props.data;
-        this.setState({
-            titlesIds: this.props.data
-
-        });
+        
         let searchPromise = searchByTitleIds(titleIds);
 
         searchPromise.then(message => {
@@ -43,8 +40,9 @@ class TitleNameOverlay extends React.Component {
             titlesIds: this.props.data,
             isProcessing: true
         });
-
-        this.fetchAndUpdateTitles();
+        
+        if(this.props.data.length>0)
+          this.fetchAndUpdateTitles();
     }
 
 
@@ -53,12 +51,6 @@ class TitleNameOverlay extends React.Component {
     /// update the state when  titles are added  or removed with new properties
     ///</summary>
     fetchAndUpdateTitleswithNextProps(titleIds) {
-
-        var titleIds = titleIds;
-        this.setState({
-            titlesIds: titleIds
-
-        });
         let searchPromise = searchByTitleIds(titleIds);
 
         searchPromise.then(message => {
@@ -76,18 +68,19 @@ class TitleNameOverlay extends React.Component {
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.data.length != this.props.data.length) {
-            console.log("fetchAndUpdateTitles");
+            this.setState({titlesIds: nextProps.data});
             this.fetchAndUpdateTitleswithNextProps(nextProps.data);
         } else {
             for (var i = 0; i < this.props.data.length; i++) {
-                if (nextProps.data[i] != this.props.data[i]) {
-                    console.log("fetchAndUpdateTitles in else");
+                if (nextProps.data[i] != this.props.data[i]) { // if titleIds are not same . then update the titles
+                    this.setState({titlesIds: nextProps.data});
                     this.fetchAndUpdateTitleswithNextProps(nextProps.data);
                     return false;
                 }
             }
         }
     }
+    
 
     render() {
 
