@@ -13,7 +13,9 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 // To connect to store. Required for 'this.props.dispatch' to work
 @connect((store) => {
-    
+    return {
+        result:null
+    };
 })
 
 // Sub component used within Product page to delete product
@@ -31,7 +33,8 @@ class RemoveProductModal extends React.Component
     ///<summary>
     // React modal pop up control bubbles up when delete product modal up loads
     ///</summary>
-    onOpenModal(){        
+    onOpenModal(){     
+        console.log(this.props.productDetails);
         this.setState({
             message:"If you continue, '" + this.props.data.productDetails.name + "' will be permantly deleted."
         });

@@ -2,7 +2,7 @@
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveProductModal from 'Components/Products/RemoveProductModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
@@ -98,14 +98,63 @@ class ProductTable extends React.Component {
     ///This method returns a product description to display in the grid.
     ///</summary>
     descriptionFormat(val) {
-        return '<p data-toggle="tooltip" class="shortDesc">' + val + '</p>';
+        const popoverDescLeft = (
+                <Popover id="popover-positioned-left">
+                    <div class="TitleOverlay-height"> {val} </div>
+                </Popover>
+            );
+        if(val.length > 20){
+            return(
+                <OverlayTrigger trigger={['hover']} rootClose placement="bottom" overlay={popoverDescLeft}>
+                    <div className="cursorPointer">
+                    {val.substring(0,20)} <i class="fa fa-ellipsis-h"></i>
+                    </div>
+                </OverlayTrigger>
+            );
+        }        
+        else
+            return '<p data-toggle="tooltip">' + val + '</p>';
     }
 
     ///<summary>
     ///This method returns all destinations that mapped to a product to display in the grid.
     ///</summary>
     destinationFormat(val) {
-        return '<p data-toggle="tooltip">' + val.toString() + '</p>';
+        var destinationNames = [];
+        var rows = [];
+           
+        for (var idx = 0; idx < val.length; idx++) {
+            destinationNames.push(val[idx]);
+        }
+        //destination names are sorted before rendering 
+        if(destinationNames.length>0){
+            destinationNames.sort();
+            for (var idx = 0; idx < destinationNames.length; idx++)
+                rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
+        }
+        
+        if(destinationNames.length>1){
+            const popoverLeft = (
+                <Popover id="popover-positioned-left" title="Destinations">
+                    <div class="TitleOverlay-height"> {rows} </div>
+                </Popover>
+            );
+
+            return(
+                <OverlayTrigger trigger={['click', 'focus']} rootClose placement="left" overlay={popoverLeft}>
+                    <div className="cursorPointer" title="click to view more destinations">
+                    {rows[0]}{rows[1]} <i class="fa fa-ellipsis-h"></i>
+                    </div>
+                </OverlayTrigger>
+                );
+        }
+        else{
+            return (
+                <div>
+            {rows}
+                </div>
+            );
+        }
     }
 
     ///<summary>
