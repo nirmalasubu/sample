@@ -141,7 +141,6 @@ class ProductTable extends React.Component {
     ///This method returns all tags to display in the grid.
     ///</summary>
     tagFormat(val) {
-        console.log(val);
         var tags = [];
         for(var i=0; i < val.length; i++)
         {

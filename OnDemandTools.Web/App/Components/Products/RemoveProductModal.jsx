@@ -34,7 +34,6 @@ class RemoveProductModal extends React.Component
     // React modal pop up control bubbles up when delete product modal up loads
     ///</summary>
     onOpenModal(){     
-        console.log(this.props.productDetails);
         this.setState({
             message:"If you continue, '" + this.props.data.productDetails.name + "' will be permantly deleted."
         });

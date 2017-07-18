@@ -66,7 +66,6 @@ class AddEditCategory extends React.Component {
         if (this.state.validationStateName != "error") {
 
             if (!this.hasValidDestinations()) {
-                console.log(this.state.categoryDetails);
                 NotificationManager.error('At-least one destination required for category.', 'Destination required');
                 return false;
             }

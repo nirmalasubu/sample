@@ -8,7 +8,6 @@ class DestinationOverlay extends React.Component {
     }
 
     render() {
-        console.log(this.props.rows);
         if(this.props.rows.length>1){
             const popoverLeft = (
                 <Popover id="popover-positioned-left" title="Destinations">

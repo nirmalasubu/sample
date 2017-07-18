@@ -115,13 +115,7 @@ class DestinationTable extends React.Component {
     }
 
     revertSortFunc(a, b, order) {   // order is desc or asc
-        //if (order === 'desc') {
-        //    return a.price - b.price;
-        //} else {
-        //    return b.price - a.price;
-        //}
-        console.log(a.content.highDefinition + " " + b.content.highDefinition + "/n" +
-                    a.name + " " + b.name);
+
     }
 
     descriptionFormat(val) {
