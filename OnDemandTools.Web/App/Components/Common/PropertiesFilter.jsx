@@ -205,7 +205,8 @@ class PropertiesFilter extends React.Component {
         for (var i = 0; i < this.state.brandsSelection.length; i++) {
             
             var brand = this.state.brandsSelection[i];
-            rows.push(<ImageCheckBox brandName={brand.brandName} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} />);
+            // span with key is required to remove the console warning "Each child in an array or iterator should have a unique "key" prop".
+            rows.push( <span key={i.toString()}><ImageCheckBox brandName={brand.brandName} brandkey={i} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /></span>);
     }
 
     return (
@@ -224,7 +225,7 @@ class PropertiesFilter extends React.Component {
              <div class="panel-body">
           <div >
             <ControlLabel> Brands</ControlLabel><br />
-        {rows}
+             {rows}
             <hr />
            
             <ControlLabel>Title/Series Associations</ControlLabel>
