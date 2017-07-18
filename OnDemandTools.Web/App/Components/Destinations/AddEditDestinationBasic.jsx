@@ -222,7 +222,7 @@ class AddEditDestinationBasic extends React.Component {
                                         onChange={this.handleDescriptionChange.bind(this)} />
                                 </FormGroup>
                             </Col>
-                            <Col md={4}>
+                            <Col md={5}>
                                 <ControlLabel>Content</ControlLabel>
                                 <FormGroup
                                     controlId="contents">
