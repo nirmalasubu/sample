@@ -7,7 +7,7 @@ import DeliveryQueues from 'Components/DeliveryQueues/DeliveryQueuesPage';
 import Permissions from 'Components/Permissions/PermissionsPage';
 import PendingRequests from 'Components/PendingRequests/PendingRequestsPage';
 import ContentTiers from 'Components/ContentTiers/ContentTiersPage';
-import WorkflowStatuses from 'Components/WorkflowStatuses/WorkflowStatusesPage';
+import WorkflowStatuses from 'Components/WorkflowStatus/WorkflowStatusesPage';
 import CategoriesPage from 'Components/Categories/CategoriesPage'
 import App from 'Components/App'
 

@@ -33,5 +33,12 @@ namespace OnDemandTools.Web.Controllers
 
             return statuses.ToViewModel<List<BLModel.Status>, List<StatusModel>>();
         }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public void Delete(string id)
+        {
+            
+        }
     }
 }

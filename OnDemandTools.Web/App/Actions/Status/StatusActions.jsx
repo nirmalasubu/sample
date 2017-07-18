@@ -2,7 +2,6 @@
 import Axios from 'axios';
 
 
-
 export const fetchStatusSuccess = (statuses) => {    
     return {
         type: actionTypes.FETCH_STATUS_SUCCESS,
@@ -21,3 +20,30 @@ export const fetchStatus = () => {
           });
     };
 };
+
+export const filterStatusSuccess= (filterStatus) => {
+    return {
+        type: actionTypes.FILTER_STATUS_SUCCESS,
+        filterStatus
+    }
+};
+
+
+export const deleteStatusSuccess = (objectId) => {
+    return {
+        type: actionTypes.DELETE_STATUS_SUCCESS,
+        objectId
+    }
+};
+
+export const deleteStatus = (id) => {
+    return (dispatch) => {        
+        return Axios.delete('/api/status/'+ id)
+            .then(response => {
+                dispatch(deleteStatusSuccess(id))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+}
