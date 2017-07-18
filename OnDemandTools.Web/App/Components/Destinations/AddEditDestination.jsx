@@ -109,7 +109,7 @@ class AddEditDestinationModel extends React.Component {
         }
     }
 
-    updateValidations(name, description) {
+    updateBasicValidateStates(name, description) {
         this.setState({
             validationStateName: name ? 'error' : null,
             validationStateDescription: description ? 'error' : null
@@ -157,7 +157,7 @@ class AddEditDestinationModel extends React.Component {
                     <AddEditDestinationBasic
                         updateDestination={this.updateDestination.bind(this)}
                         data={this.state.destinationDetails}
-                        validationStates={this.updateValidations.bind(this)} />
+                        validationStates={this.updateBasicValidateStates.bind(this)} />
                     <Tabs id="addeditdestination" defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
                             <AddEditDestinationProperties

@@ -20,7 +20,8 @@ class AddEditDestinationBasic extends React.Component {
             destinationModel: {},
             validationStateName: null,
             validationStateDescription: null,
-            showError: false
+            showError: false,
+            componentJustMounted: true
         });
     }
 
@@ -28,6 +29,12 @@ class AddEditDestinationBasic extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             destinationModel: nextProps.data
+        }, function () {
+            if (this.state.componentJustMounted) {
+                this.setState({ componentJustMounted: false }, function () {
+                    this.validateForm();
+                });
+            }
         });
     }
 
@@ -79,7 +86,7 @@ class AddEditDestinationBasic extends React.Component {
         if (this.state.destinationModel.id == null) {
             model.externalId = this.getUnusedExternalId();
 
-            this.setState({ destinationModel: model });
+            this.setState({ destinationModel: model, componentJustMounted: true });
         }
     }
 
