@@ -36,14 +36,47 @@ class WorkflowStatusesTable extends React.Component {
         }
     }
 
+    ///<summary>
+    /// status description to display in the grid.
+    ///</summary>
+    descriptionFormat(val) {
+        if (val != null) {
+            const popoverDescLeft = (
+                <Popover id="popover-positioned-left">
+                    <div class="TitleOverlay-height"> {val} </div>
+                </Popover>
+            );
+            if (val.length > 40) {
+                return (
+                    <OverlayTrigger trigger={['hover']} rootClose placement="bottom" overlay={popoverDescLeft}>
+                        <div className="cursorPointer">
+                            {val.substring(0, 20)} <i class="fa fa-ellipsis-h"></i>
+                        </div>
+                    </OverlayTrigger>
+                );
+            }
+            else
+                return '<p>' + val + '</p>';
+        }
+    }
+
+    ///<summary>
+    // Format the status name column
+    ///</summary>
     StatusNameFormat(val) {
-        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>';
+        return '<p>' + val + '</p>';
     }
 
+    ///<summary>
+    //Format the user group column
+    ///</summary>
     userFormat(val) {
-        return '<p data-toggle="tooltip" title="' + val + '">' + val + '</p>';
+        return '<p>' + val + '</p>';
     }
 
+    ///<summary>
+    //Format the action column
+    ///</summary>
     actionFormat(val, rowData) {
         return (
             <div>
@@ -74,13 +107,13 @@ class WorkflowStatusesTable extends React.Component {
 
     render() {
         var row;
-        row = this.props.ColumnData.map(function (item, index) {
+        row = this.props.ColumnData.map(function(item, index) {
 
             if (item.label == "Status Name") {
                 return <TableHeaderColumn width="200px" dataField={item.dataField} key={index.toString()} dataSort={item.sort} dataFormat={this.StatusNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Description") {
-                return <TableHeaderColumn width="200px" dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="200px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "User Group") {
                 return <TableHeaderColumn width="200px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.userFormat.bind(this)} >{item.label}</TableHeaderColumn>

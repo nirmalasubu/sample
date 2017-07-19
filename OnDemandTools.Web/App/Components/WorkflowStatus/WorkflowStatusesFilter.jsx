@@ -41,6 +41,13 @@ class WorkflowStatusesFilter extends React.Component
         this.props.updateFilter("", "CL");  // CL is for clear
     }
 
+    ///<summary>
+    /// capitalize the status name text
+    ///</summary>
+    ConvertToUpperCase(){
+        this.inputName.value=this.inputName.value.toUpperCase();
+    }
+
     render() {
         return (
             <div>
@@ -48,7 +55,7 @@ class WorkflowStatusesFilter extends React.Component
                     <ControlLabel>Filter by: </ControlLabel>
         {' '}
         <FormGroup controlId="name">
-                <FormControl type="text" inputRef = {(input) => this.inputName = input } onChange={this.handleChange.bind(this) }  placeholder="Status Name" />
+                <FormControl type="text" inputRef = {(input) => this.inputName = input } onKeyUp={this.ConvertToUpperCase.bind(this)} onChange={this.handleChange.bind(this) }  placeholder="Status Name" />
             </FormGroup>
         {' '}
         <FormGroup controlId="description">

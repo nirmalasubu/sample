@@ -39,8 +39,9 @@ class WorkflowStatuses extends React.Component {
           keyField: "name"
       }
   }
-
-    //callback function to get the filter value from filter component
+    ///<summary>
+    ///callback function to get the filter value from filter component
+    ///</summary>
     handleFilterUpdate(filtersValue, type) {
        
         var stateFilterValue = this.state.filterValue;
@@ -99,7 +100,7 @@ const getFilterVal = (statuses, filterVal) => {
         
         
         return statuses.filter(obj=> ((name != "" ? obj.name.toLowerCase().indexOf(name) != -1 : true)
-                && (description != "" ? (obj.description!=null && obj.description.toLowerCase().indexOf(description)) != -1 : true)
+                && (description != "" ?matchDescription(obj.description,description) : true)
                 && (user != "" ? obj.user.toLowerCase().indexOf(user) != -1 : true) 
                 ));
     }
@@ -107,6 +108,16 @@ const getFilterVal = (statuses, filterVal) => {
         statuses;
 };
 
+///<summary>
+// returns  true  if any of the search value matches description 
+///</summary>
+const matchDescription = (objdescription,description) => {
+   
+    if(objdescription==null) // skip the null description values 
+        return false;
+    
+    return objdescription.toLowerCase().indexOf(description) != -1;
+};
 export default WorkflowStatuses
 
 
