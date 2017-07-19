@@ -7,6 +7,7 @@ require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditDestinationModel from 'Components/Destinations/AddEditDestination';
 import RemoveDestinationModal from 'Components/Destinations/RemoveDestinationModal';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
+import TextOverlay from 'Components/Common/TextOverlay';
 
 @connect((store) => {
     return {
@@ -110,7 +111,7 @@ class DestinationTable extends React.Component {
     }
 
     descriptionFormat(val) {
-        return '<p data-toggle="tooltip" class="shortDesc">' + val + '</p>';
+        return <TextOverlay data={val} numberOfChar={45} />;
     }
 
     codeFormat(val, rowData) {

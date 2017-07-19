@@ -6,6 +6,7 @@ import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveProductModal from 'Components/Products/RemoveProductModal';
 import DestinationOverlay from 'Components/Common/DestinationOverlay';
+import TextOverlay from 'Components/Common/TextOverlay';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
 
 
@@ -98,23 +99,8 @@ class ProductTable extends React.Component {
     ///<summary>
     ///This method returns a product description to display in the grid.
     ///</summary>
-    descriptionFormat(val) {
-        const popoverDescLeft = (
-                <Popover id="popover-positioned-left">
-                    <div class="TitleOverlay-height"> {val} </div>
-                </Popover>
-            );
-        if(val.length > 30){
-            return(
-                <OverlayTrigger trigger={['hover']} rootClose placement="bottom" overlay={popoverDescLeft}>
-                    <div className="cursorPointer">
-                    {val.substring(0,30)} <i class="fa fa-ellipsis-h"></i>
-                    </div>
-                </OverlayTrigger>
-            );
-        }        
-        else
-            return '<p data-toggle="tooltip">' + val + '</p>';
+    descriptionFormat(val) {        
+        return <TextOverlay data={val} numberOfChar={30} />;
     }
 
     ///<summary>
