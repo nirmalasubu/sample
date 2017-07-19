@@ -120,7 +120,7 @@ class ProductTable extends React.Component {
                 rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
         }
         
-        return <DestinationOverlay rows={rows} />;
+        return <DestinationOverlay rows={rows} numberOfDestinations={2} />;
     }
 
     ///<summary>
