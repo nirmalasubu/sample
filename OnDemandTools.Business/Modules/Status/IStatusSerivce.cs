@@ -10,5 +10,11 @@ namespace OnDemandTools.Business.Modules.Status
         /// </summary>
         /// <returns>all status</returns>
         IList<Model.Status> GetAllStatus();
+
+        /// <summary>
+        /// To delete status 
+        /// </summary>
+        /// <param name="id">status id</param>
+        void Delete(string id);
     }
 }

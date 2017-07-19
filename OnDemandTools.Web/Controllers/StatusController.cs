@@ -38,7 +38,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
-            
+            statusService.Delete(id);
         }
     }
 }
