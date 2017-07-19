@@ -186,8 +186,8 @@ class AddEditDestinationDeliverables extends React.Component {
         // Validate if deliverable value is empty. If yes, set state to 'error'
         var isValueValid = item.value ? null : "error";
 
-        return (<Row key={index.toString()}>
-          <Col sm={10} >
+        return (<Row componentClass="tr" key={index.toString()}>
+          <Col componentClass="td" sm={10} >
             <Form>
               <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
                 <FormGroup validationState={isValueValid}>
@@ -197,7 +197,7 @@ class AddEditDestinationDeliverables extends React.Component {
               </OverlayTrigger>
             </Form>
           </Col>
-          <Col sm={2} >
+          <Col componentClass="td" sm={2} >
             <button class="btn-link" title="Delete Deliverable" onClick={(event) => openDeleteDeliverableModal(index, event)}>
               <i class="fa fa-trash"></i></button>
           </Col>
@@ -206,14 +206,12 @@ class AddEditDestinationDeliverables extends React.Component {
 
       return (
         // Construct the full tabuler view of deliverables for rendering
-        <Grid fluid={true} id="deliverable-grid">
-          <Row>
-            <Col sm={10} ><label class="destination-properties-label">Value</label></Col>
-            <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin"></label></Col>
-          </Row>
-          <div class="destination-height">
-            {deliverableRows}
-          </div>
+        <Grid componentClass="table" bsClass="modalTable" id="deliverable-grid">
+          <Row componentClass="tr">
+            <Col componentClass="th" sm={10} ><label>Value</label></Col>
+            <Col componentClass="th" sm={2} ><label>Action</label></Col>
+          </Row>          
+            {deliverableRows}          
         </Grid>
       );
     }

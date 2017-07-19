@@ -65,39 +65,37 @@ class AddEditDestinationCategories extends React.Component {
         if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
             if (Object.keys(this.state.destinationDetails.categories).length !== 0 && this.state.destinationDetails.categories != Object) {
                 row = this.state.destinationDetails.categories.map(function (item, index) {
-                    return (<Row key={item.id}>
-                        <Form>
-                            <Col sm={3} md={5} >
-                              <p>  {item.name} </p>
-                            </Col>
-                        </Form>
-                        <Col sm={2} md={3} >
+                    return (<Row componentClass="tr" key={item.id}>
+                        <Col componentClass="td" sm={3} md={5} >
+                            <p>  {item.name} </p>
+                        </Col>
+                        <Col componentClass="td" sm={2} md={3} >
                             {this.propertyBrandImageConstruct(item, index)}
                         </Col>
-                        <Col sm={2} >
+                        <Col componentClass="td" sm={2} >
                             {this.titleDetailConstruct(item, index)}
                         </Col>
                     </Row>)
                 }.bind(this));
             }
             else {
-                row = <Row><Col sm={12} ><p> No Categories available</p></Col></Row>
+                row = <Row componentClass="tr"><Col componentClass="td" colSpan={3} sm={12} ><p> No Categories available</p></Col></Row>
             }
         }
 
         return (
-            <div>
-                <div >
-                    <Grid fluid={true}>
-                        <Row>
-                            <Col sm={3} md={5} ><label class="destination-properties-label">Name</label></Col>
-                            <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
-                        </Row>
-                        <div class="destination-height">
-                            {row}
-                        </div>
-                    </Grid>
-                </div>
+            <div className="clearBoth">
+                <Grid componentClass="table" bsClass="modalTable">
+                    <Row componentClass="tr">
+                        <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Name</label></Col>
+                        <Col componentClass="th" row={0} colSpan={2} sm={4} ><label >Filters</label></Col>
+                    </Row>
+                    <Row componentClass="tr">
+                        <Col componentClass="th" sm={4} ><label>Brands</label></Col>
+                        <Col componentClass="th" sm={4} ><label >Title/Series</label></Col>
+                    </Row>
+                    {row}
+                </Grid>
             </div>
         )
     }

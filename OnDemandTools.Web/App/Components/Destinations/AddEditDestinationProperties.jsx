@@ -206,12 +206,12 @@ class AddEditDestinationProperties extends React.Component {
                     <Grid componentClass="table" bsClass="modalTable">
                         <Row componentClass="tr">
                             <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Name</label></Col>
-                            <Col componentClass="th" row={0} sm={3} rowSpan={2}  ><label >Value</label></Col>
+                            <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Value</label></Col>
                             <Col componentClass="th" row={0} colSpan={2} sm={4} ><label >Filters</label></Col>
                             <Col componentClass="th" row={0} rowSpan={2} sm={2} ><label>Actions</label></Col>
                         </Row>
                         <Row componentClass="tr">
-                            <Col componentClass="th" width="150px" sm={4} ><label>Brands</label></Col>
+                            <Col componentClass="th" sm={4} ><label>Brands</label></Col>
                             <Col componentClass="th" sm={4} ><label >Title/Series</label></Col>
                         </Row>
                         {row}
