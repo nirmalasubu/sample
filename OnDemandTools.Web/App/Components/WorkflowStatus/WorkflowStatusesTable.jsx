@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+import AddEditWorkflowStatus from 'Components/WorkflowStatus/AddEditWorkflowStatus';
 import RemoveWorkflowStatusModal from 'Components/WorkflowStatus/RemoveWorkflowStatusModal';
 
 class WorkflowStatusesTable extends React.Component {
@@ -15,6 +16,7 @@ class WorkflowStatusesTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            newStatusModel: {},
             showModal: false,
             showAddEditModel: false,
             showDeleteModal: false,
@@ -105,6 +107,20 @@ class WorkflowStatusesTable extends React.Component {
         this.setState({ showDeleteModal: false });
     }
 
+    //<summary>
+    // React modal pop up control edit status  event handled
+    ///</summary>
+    openAddEditModel(val) {
+        this.setState({ showAddEditModel: true, status: val });
+    }
+
+    ///<summary>
+    // React modal pop up control edit status is closed
+    ///</summary>
+    closeAddEditModel() {
+        this.setState({ showAddEditModel: false, categoryDetails: this.state.newStatusModel });
+    }
+
     render() {
         var row;
         row = this.props.ColumnData.map(function(item, index) {
@@ -123,6 +139,13 @@ class WorkflowStatusesTable extends React.Component {
             }
 
         }.bind(this));
+
+        var statusIdandNames=[];
+       
+        for (var i = 0; i < this.props.RowData.length; i++)
+        {
+            statusIdandNames.push({"id":this.props.RowData[i].id,"name":this.props.RowData[i].name});
+        }
         return (
             <div>
                 <button class="btn-link pull-right addMarginRight" title="New Status" onClick={(event) => this.openCreateNewDestinationModel(event)}>
@@ -139,6 +162,7 @@ class WorkflowStatusesTable extends React.Component {
                     >
                     {row}
                 </BootstrapTable>
+                 <AddEditWorkflowStatus data={this.state} statusIdandNames={statusIdandNames}  handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveWorkflowStatusModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

@@ -47,3 +47,22 @@ export const deleteStatus = (id) => {
             });
     };
 }
+
+export const saveStatusSuccess = (status) => {
+    return {
+        type: actionTypes.SAVE_STATUS_SUCCESS,
+        status
+    }
+}
+
+export const saveStatus = (model) => {
+    return (dispatch) => {        
+        return Axios.post('/api/status', model)
+            .then(response => {
+                dispatch(saveStatusSuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};

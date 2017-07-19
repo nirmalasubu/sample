@@ -12,6 +12,18 @@
             })
             newState.splice(indexOfStatus, 1);
             return newState;
+        case 'SAVE_STATUS_SUCCESS':
+            var statusIndex = state.findIndex((obj => obj.id == action.status.id));
+            if (statusIndex < 0) {  
+                return [
+                    ...state.filter(obj => obj.id !== action.status.id),
+                    Object.assign({}, action.status)
+                ]
+            }
+            else {
+                state[statusIndex] = action.status;
+                return state;
+            } 
         default:
             return state;
     }

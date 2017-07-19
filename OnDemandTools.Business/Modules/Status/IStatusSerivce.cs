@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using OnDemandTools.Business.Modules.Status.Model;
 
 namespace OnDemandTools.Business.Modules.Status
 {
@@ -16,5 +16,12 @@ namespace OnDemandTools.Business.Modules.Status
         /// </summary>
         /// <param name="id">status id</param>
         void Delete(string id);
+
+        /// <summary>
+        /// To save status details
+        /// </summary>
+        /// <param name="status">status</param>
+        /// <returns>status model</returns>
+        Model.Status Save(Model.Status status);
     }
 }

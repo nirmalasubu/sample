@@ -41,6 +41,20 @@ namespace OnDemandTools.Business.Modules.Status
         {
             _statusCommand.Delete(id);
         }
+
+        /// <summary>
+        /// To save status details
+        /// </summary>
+        /// <param name="status">status</param>
+        /// <returns>status model</returns>
+        public BLModel.Status Save(BLModel.Status status)
+        {
+            DLModel.Status dataModel = status.ToDataModel<BLModel.Status, DLModel.Status>();
+
+            dataModel = _statusCommand.Save(dataModel);
+
+            return dataModel.ToBusinessModel<DLModel.Status, BLModel.Status>(); ;
+        }
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using OnDemandTools.DAL.Database;
@@ -23,6 +24,17 @@ namespace OnDemandTools.DAL.Modules.Status.Command
             var query = Query<DLModel.Status>.EQ(e => e.Id, new ObjectId(id));
 
             collection.Remove(query);
+        }
+
+        public DLModel.Status Save(DLModel.Status status)
+        {
+            var collection = _database.GetCollection<DLModel.Status>("airingstatus");
+
+            collection.Save(status);
+
+            return status;
+
+
         }
     }
 }
