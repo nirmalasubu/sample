@@ -46,8 +46,8 @@ class AddEditCategoryDestination extends React.Component {
     }
 
     componentDidMount() {
-        if(this.props.data.destinations.length>0)
-        this.props.data.destinations.sort(this.sortDestinationsByName);
+        if (this.props.data.destinations.length > 0)
+            this.props.data.destinations.sort(this.sortDestinationsByName);
 
         var destinationArray = destinationActions.getDestinations();
         destinationArray.then(message => {
@@ -250,39 +250,39 @@ class AddEditCategoryDestination extends React.Component {
         if (Object.keys(this.state.categoryDetails).length != 0 && this.state.categoryDetails != Object) {
             if (Object.keys(this.state.categoryDetails.destinations).length !== 0 && this.state.categoryDetails.destinations != Object) {
                 row = this.state.categoryDetails.destinations.map(function (item, index) {
-                    if (true) {                        
+                    if (true) {
                         let col = null, colDesc = null;
                         if (item.name == "") {
-                            col = (<Col sm={6}  >
+                            col = (<Col componentClass="td" colSpan={2} sm={6}  >
                                 <FormGroup controlId={index.toString()}>
                                     <Select
-                        searchable={true}
-                        simpleValue className="category-select-control"
-                        options={this.state.options}
-                        onChange={(event) => this.handleChange(index, event)}
-                    value={item.name} />
-            </FormGroup>
-        </Col>
+                                        searchable={true}
+                                        simpleValue className="category-select-control"
+                                        options={this.state.options}
+                                        onChange={(event) => this.handleChange(index, event)}
+                                        value={item.name} />
+                                </FormGroup>
+                            </Col>
                             );
-                }
-                else {
+                        }
+                        else {
                             col = (
-                                <Col bsClass="col-height col" sm={3}>
+                                <Col componentClass="td" bsClass="col-height col" sm={3}>
                                     <p>  {item.name} </p>
                                 </Col>
                             );
-                colDesc = (
-                    <Col bsClass="col-height col" sm={3} >
-                        <p>  {item.description} </p>
-                    </Col>
+                            colDesc = (
+                                <Col componentClass="td" bsClass="col-height col" sm={3} >
+                                    <p>  {item.description} </p>
+                                </Col>
                             );
-        }
-        return (<Row key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
+                        }
+                        return (<Row componentClass="tr" key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
-                            <Col sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
-                            <Col sm={2} bsClass="col-height col">{this.titleDetailConstruct(item, index)}</Col>
-                            <Col sm={2} bsClass="col-height col">
+                            <Col componentClass="td" sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
+                            <Col componentClass="td" sm={2} bsClass="col-height col">{this.titleDetailConstruct(item, index)}</Col>
+                            <Col componentClass="td" sm={2} bsClass="col-height col">
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
                             </Col>
@@ -307,14 +307,18 @@ class AddEditCategoryDestination extends React.Component {
                 <Panel >
                     <div>
                         <div >
-                            <Grid bsClass="category-table" >
-                                <Row >
-                                    <Col sm={3} ><label class="destination-properties-label">Destination</label></Col>
-                                    <Col sm={3} ><label class="destination-properties-label">Description</label></Col>
-                                    <Col sm={4} ><label class="destination-properties-label  destination-properties-filtermargin">Filters</label></Col>
-                                    <Col sm={2} ><label class="destination-properties-label destination-properties-actionmargin">Actions</label></Col>
+                            <Grid componentClass="table" bsClass="modalTable">
+                                <Row componentClass="tr" >
+                                    <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
+                                    <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
+                                    <Col componentClass="th" colSpan={2} sm={4} ><label>Filters</label></Col>
+                                    <Col componentClass="th" rowSpan={2} sm={2} ><label>Actions</label></Col>
                                 </Row>
-                                <div class="category-height" ref="categoryScroll">{row}</div>
+                                <Row componentClass="tr">
+                                    <Col componentClass="th" sm={4} ><label>Brands</label></Col>
+                                    <Col componentClass="th"  ><label>Title/Series</label></Col>
+                                </Row>
+                                {row}
                             </Grid>
                         </div>
                         <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />

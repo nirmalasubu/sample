@@ -531,3 +531,9 @@ tr.strikeout td:before {
 }
 /*****************************************************/
 /******** brand image styling  ends******/
+
+
+.modalTable
+{
+    table-layout: auto;
+}
