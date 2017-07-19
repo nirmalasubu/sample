@@ -181,7 +181,7 @@ class AddEditDestinationModel extends React.Component {
                     <CancelWarningModal
                         data={this.state}
                         handleClose={this.closeWarningModel.bind(this)}
-                        handleAddEditDestinationClose={this.handleAddEditClose.bind(this)} />
+                        handleAddEditClose={this.handleAddEditClose.bind(this)} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
