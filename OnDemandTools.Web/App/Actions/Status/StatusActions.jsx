@@ -66,3 +66,13 @@ export const saveStatus = (model) => {
             });
     };
 };
+
+export const getNewStatus = () => {
+    return Axios.get('/api/status/newstatus')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};

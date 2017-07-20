@@ -57,7 +57,7 @@ class AddEditWorkflowStatus extends React.Component {
     /// This function is called after entering the modal pop up
     /// </summary>
      onEnteredModel() {
-            //this.validateForm();
+            this.validateForm();
         }
 
     /// <summary>
@@ -134,12 +134,11 @@ class AddEditWorkflowStatus extends React.Component {
     /// This function is to set validations states value
     /// </summary>
     validateForm() {
-       
-        var isNameEmpty = (this.state.status.name == "")
-        var isUserEmpty = (this.state.status.user == "")
+        var isNameValid = this.state.status.name.match("^[a-zA-Z ]+$")==null;  //validation to accept only aplhabets
+        var isUserEmpty = (this.state.status.user == "");
 
         this.setState({
-            validateStatusName: isNameEmpty ? 'error' : null,
+            validateStatusName: isNameValid ? 'error' : null,
             validateUser: isUserEmpty ? 'error' : null,
             validateUniqueStatusName: this.isStatusNameUnique(this.state.status) ? 'error' : null
         });
@@ -168,7 +167,6 @@ class AddEditWorkflowStatus extends React.Component {
     /// </summary>
     handleSave() {
         var elem = this;
-        console.log(this.state.status);
         if (this.state.validateStatusName != "error" && this.state.validateUser != "error"&& this.state.validateUniqueStatusName != "error") {
 
             this.setState({ isProcessing: true });
@@ -215,34 +213,45 @@ render() {
         msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
 
     return (
-        <Modal  backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+        <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
             <Modal.Header closeButton>
                 <Modal.Title>
                     <div>{this.props.data.status.id != null ? "Edit Status -" + this.props.data.status.name : "Add Status"}</div>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>
-                    {msg}
+                <div class="panel panel-default">
+                   <div class="panel-body">
+                     <Grid >
+                     <Row>
+                      <Form>    
+                     {msg}
+                    <Col sm={4}>
                     <FormGroup controlId="statusName" validationState={this.state.validateStatusName}>
-                        <ControlLabel>Status Name</ControlLabel>
-                        <FormControl type="text"  value={this.state.status.name} ref="inputStatusName" placeholder="Status Name" 
+                    <ControlLabel>Status Name:*</ControlLabel>
+                    <FormControl type="text"  value={this.state.status.name} maxLength="20" ref="inputStatusName" placeholder="Status Name" 
                     onChange={(event) =>this.handleTextChange("name", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
                     </FormGroup>
-                   <FormGroup controlId="description">
-                       <ControlLabel>Description</ControlLabel>
-                    <FormControl type="textarea" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
-                     onChange={(event) =>this.handleTextChange("description", event)}/>
-                   </FormGroup>
-                    {' '}
+                   </Col>
+                   <Col sm={4}>
                    <FormGroup controlId="user" validationState={this.state.validateUser}>
-                        <ControlLabel>User</ControlLabel>
+                    <ControlLabel>User:*</ControlLabel>
                     <FormControl type="text"  value={this.state.status.user} ref="inputStatusUser" placeholder="User Group"
                      onChange={(event) =>this.handleTextChange("user", event)}/>
                     </FormGroup>
+                     </Col>
+                     </Form >
+                    </Row>
+                    <FormGroup controlId="description">
+                    <ControlLabel>Description</ControlLabel>
+                    <FormControl componentClass="textarea"  rows="3" cols="40" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
+                     onChange={(event) =>this.handleTextChange("description", event)}/>
+                   </FormGroup>
+                   </Grid>
+                  </div>
+                  </div>
                     <NotificationContainer />
                     <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
-                </div>
             </Modal.Body>
             <Modal.Footer>
                 <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>

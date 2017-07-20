@@ -6,6 +6,7 @@ import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import AddEditWorkflowStatus from 'Components/WorkflowStatus/AddEditWorkflowStatus';
 import RemoveWorkflowStatusModal from 'Components/WorkflowStatus/RemoveWorkflowStatusModal';
+import { getNewStatus } from 'Actions/Status/StatusActions';
 
 class WorkflowStatusesTable extends React.Component {
 
@@ -118,9 +119,29 @@ class WorkflowStatusesTable extends React.Component {
     // React modal pop up control edit status is closed
     ///</summary>
     closeAddEditModel() {
-        this.setState({ showAddEditModel: false, categoryDetails: this.state.newStatusModel });
+        this.setState({ showAddEditModel: false, status: this.state.newStatusModel });
     }
 
+    ///<summary>
+    // React modal pop up control create new status event handles
+    ///</summary>
+    createNewStatusModel() {
+        this.setState({ showAddEditModel: true, status: jQuery.extend(true, {}, this.state.newStatusModel) });
+    }
+
+    componentDidMount() {
+        let promise = getNewStatus();
+        promise.then(response => {
+            this.setState({
+                newStatusModel: response
+            });
+        }).catch(error => {
+            this.setState({
+                newStatusModel: {}
+            });
+        });
+    }
+                                 
     render() {
         var row;
         row = this.props.ColumnData.map(function(item, index) {
@@ -148,7 +169,7 @@ class WorkflowStatusesTable extends React.Component {
         }
         return (
             <div>
-                <button class="btn-link pull-right addMarginRight" title="New Status" onClick={(event) => this.openCreateNewDestinationModel(event)}>
+                <button class="btn-link pull-right addMarginRight" title="New Status" onClick={(event) => this.createNewStatusModel(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New Status</span>
                 </button>

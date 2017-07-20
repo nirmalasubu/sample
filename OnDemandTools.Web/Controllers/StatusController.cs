@@ -50,7 +50,7 @@ namespace OnDemandTools.Web.Controllers
             {
                 Name = string.Empty,
                 Description = string.Empty,
-               User=string.Empty
+                User=string.Empty
             };
         }
 
