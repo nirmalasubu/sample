@@ -205,16 +205,18 @@ class AddEditDestinationProperties extends React.Component {
                 </div>
                 <div className="clearBoth">
                     <Grid componentClass="table" bsClass={this.hasProperties() ? "modalTable" : "hideModalTable"}>
-                        <Row componentClass="tr">
-                            <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Name</label></Col>
-                            <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Value</label></Col>
-                            <Col componentClass="th" row={0} colSpan={2} className="filterColumn" ><label >Filters</label></Col>
-                            <Col componentClass="th" row={0} rowSpan={2} className="actionsColumn"><label>Actions</label></Col>
-                        </Row>
-                        <Row componentClass="tr">
-                            <Col componentClass="th" className="brandsColumn"   ><label>Brands</label></Col>
-                            <Col componentClass="th" className="titlesColumn"  ><label >Title/Series</label></Col>
-                        </Row>
+                        <thead>
+                            <Row componentClass="tr">
+                                <Col componentClass="th" sm={3} rowSpan={2} ><label >Name</label></Col>
+                                <Col componentClass="th" sm={3} rowSpan={2} ><label >Value</label></Col>
+                                <Col componentClass="th" colSpan={2} className="filterColumn" ><label >Filters</label></Col>
+                                <Col componentClass="th" rowSpan={2} className="actionsColumn"><label>Actions</label></Col>
+                            </Row>
+                            <Row componentClass="tr">
+                                <Col componentClass="th" className="brandsColumn"   ><label>Brands</label></Col>
+                                <Col componentClass="th" className="titlesColumn"  ><label >Title/Series</label></Col>
+                            </Row>
+                        </thead>
                         <tbody>
                             {row}
                         </tbody>

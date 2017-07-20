@@ -308,17 +308,21 @@ class AddEditCategoryDestination extends React.Component {
                     <div>
                         <div >
                             <Grid componentClass="table" bsClass="modalTable">
-                                <Row componentClass="tr" >
-                                    <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
-                                    <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
-                                    <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
-                                    <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
-                                </Row>
-                                <Row componentClass="tr">
-                                    <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>
-                                    <Col componentClass="th"  ><label>Title/Series</label></Col>
-                                </Row>
-                                {row}
+                                <thead>
+                                    <Row componentClass="tr" >
+                                        <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
+                                        <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
+                                        <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
+                                        <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
+                                    </Row>
+                                    <Row componentClass="tr">
+                                        <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>
+                                        <Col componentClass="th"  ><label>Title/Series</label></Col>
+                                    </Row>
+                                </thead>
+                                <tbody>
+                                    {row}
+                                </tbody>
                             </Grid>
                         </div>
                         <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />

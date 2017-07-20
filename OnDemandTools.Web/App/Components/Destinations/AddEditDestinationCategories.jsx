@@ -60,40 +60,45 @@ class AddEditDestinationCategories extends React.Component {
     }
 
     render() {
+
+        if (this.state.destinationDetails.id == undefined || this.state.destinationDetails.id == null) {
+            return <div className="clearBoth"> <table> <tbody> <tr> <td> <p> Categories can be added after the Destination has been created. </p> </td> </tr> </tbody> </table> </div>
+        }
+
         let row = null;
 
-        if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
-            if (Object.keys(this.state.destinationDetails.categories).length !== 0 && this.state.destinationDetails.categories != Object) {
-                row = this.state.destinationDetails.categories.map(function (item, index) {
-                    return (<Row componentClass="tr" key={item.id}>
-                        <Col componentClass="td">
-                            <p>  {item.name} </p>
-                        </Col>
-                        <Col componentClass="td">
-                            {this.propertyBrandImageConstruct(item, index)}
-                        </Col>
-                        <Col componentClass="td" >
-                            {this.titleDetailConstruct(item, index)}
-                        </Col>
-                    </Row>)
-                }.bind(this));
-            }
-            else {
-                row = <Row componentClass="tr"><Col componentClass="td"><p> No Categories available</p></Col></Row>
-            }
+        if (this.state.destinationDetails.categories.length > 0) {
+            row = this.state.destinationDetails.categories.map(function (item, index) {
+                return (<Row componentClass="tr" key={item.id}>
+                    <Col componentClass="td">
+                        <p>  {item.name} </p>
+                    </Col>
+                    <Col componentClass="td">
+                        {this.propertyBrandImageConstruct(item, index)}
+                    </Col>
+                    <Col componentClass="td" >
+                        {this.titleDetailConstruct(item, index)}
+                    </Col>
+                </Row>)
+            }.bind(this));
+        }
+        else {
+            row = <Row componentClass="tr"><Col componentClass="td" colSpan={3}><p> No Categories available</p></Col></Row>
         }
 
         return (
             <div className="clearBoth">
                 <Grid componentClass="table" bsClass="modalTable">
-                    <Row componentClass="tr">
-                        <Col componentClass="th" row={0} rowSpan={2}><label >Name</label></Col>
-                        <Col componentClass="th" row={0} colSpan={2} className="filterColumn" ><label >Filters</label></Col>
-                    </Row>
-                    <Row componentClass="tr">
-                        <Col componentClass="th" className="brandsColumn"  ><label>Brands</label></Col>
-                        <Col componentClass="th"  ><label >Title/Series</label></Col>
-                    </Row>
+                    <thead>
+                        <Row componentClass="tr">
+                            <Col componentClass="th" rowSpan={2}><label >Name</label></Col>
+                            <Col componentClass="th" colSpan={2} className="filterColumn" ><label >Filters</label></Col>
+                        </Row>
+                        <Row componentClass="tr">
+                            <Col componentClass="th" className="brandsColumn"  ><label>Brands</label></Col>
+                            <Col componentClass="th"  ><label >Title/Series</label></Col>
+                        </Row>
+                    </thead>
                     <tbody>
                         {row}
                     </tbody>
