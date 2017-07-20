@@ -541,6 +541,12 @@ tr.strikeout td:before {
     table-layout: auto;
 }
 
+.hideModalTable
+{
+    visibility: hidden;
+    display:none;
+}
+
 .filterColumn
 {
     text-align: center;

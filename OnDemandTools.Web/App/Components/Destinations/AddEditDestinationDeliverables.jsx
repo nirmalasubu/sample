@@ -228,7 +228,7 @@ class AddEditDestinationDeliverables extends React.Component {
             <span class="addVertialAlign"> New Deliverable</span>
           </button>
         </div>
-        <div>
+        <div className="clearBoth">
           {this.generateDeliverableTable()}
         </div>
         <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />

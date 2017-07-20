@@ -142,7 +142,7 @@ class TitleSearch extends React.Component {
         }
 
         if (isSelect) {
-            return '#8dd4e8';
+            return '#a7c8e5';
         }
         return null;
     }
@@ -167,7 +167,7 @@ class TitleSearch extends React.Component {
 
         const selectedGridProps = {
             mode: 'checkbox',
-            bgColor: '#8dd4e8', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
+            bgColor: '#a7c8e5', // you should give a bgcolor, otherwise, you can't recognize which row has been selected
             hideSelectColumn: true,  // enable hide selection column.
             clickToSelect: true,  // you should enable clickToSelect, otherwise, you can't select column.
             onSelect: this.onSelectedTitlesRowSelect.bind(this),
