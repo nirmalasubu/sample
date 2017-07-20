@@ -2,7 +2,6 @@ import React from 'react';
 import PageHeader from 'Components/Common/PageHeader';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover, Collapse, Well } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import RemoveDeliverablesModal from 'Components/Destinations/RemoveDeliverablesModal';
 
 /// <summary>
 // Sub component for all things related to destination deliverables
@@ -15,8 +14,6 @@ class AddEditDestinationDeliverables extends React.Component {
 
     this.state = ({
       destinationDetails: {},
-      showDeliverableDeleteModal: false,
-      deliverableIndexToRemove: -1,
       cursorPosition: 0
     });
   }
@@ -47,7 +44,7 @@ class AddEditDestinationDeliverables extends React.Component {
   /// Add a new row for entering new deliverable info   
   /// </summary>
   addNewDeliverable() {
-    var newDeliverable = { value: "" }
+    var newDeliverable = { value: "", deleted: false }
 
     // First get the current destination data which is funneled
     // down from the parent component
@@ -67,34 +64,6 @@ class AddEditDestinationDeliverables extends React.Component {
     this.props.validationStates(true);
   }
 
-
-  /// <summary>
-  /// Handler to close deliverable delete modal window
-  /// </summary>
-  closeDeliverableDeleteModal = () => {
-    this.setState({ showDeliverableDeleteModal: false });
-  }
-
-
-  /// <summary>
-  /// Handler to remove deliverable at the indicated index and close deliverable delete modal window
-  /// </summary>
-  removeDeliverableAndCloseDeliverableDeleteModal = (index) => {
-
-    // Remove deliverable at the indicated index and update local state
-    var model = this.state.destinationDetails;
-    model.deliverables.splice(index, 1);
-    this.setState({ destinationDetails: model });
-
-    // Close modal window and set states to default values
-    this.setState({ showDeliverableDeleteModal: false });
-    this.setState({ deliverableIndexToRemove: -1 });
-
-    // Bubble up validation state change to parent
-    this.updateValidationStates();
-  }
-
-
   /// <summary>
   /// The idea here is to iterate through the full list of deliverables and if
   /// any of the deliverable value is empty/null, bubble up validation state change
@@ -103,8 +72,10 @@ class AddEditDestinationDeliverables extends React.Component {
   updateValidationStates = () => {
 
     var stateChanged = this.state.destinationDetails.deliverables.some((deliverable) => {
-      if (!deliverable.value) {
-        return true;
+      if (!deliverable.deleted) {
+        if (!deliverable.value) {
+          return true;
+        }
       }
     });
 
@@ -117,13 +88,20 @@ class AddEditDestinationDeliverables extends React.Component {
   /// </summary>
   generateDeliverableTable = () => {
 
+    const removeDeliverable = (index) => {
 
-    // Open model window to confirm delete action
-    const openDeleteDeliverableModal = (index) => {
-      // Setting the state here triggers the event within 'RemoveDeliverablesModal' sub component
-      this.setState({ showDeliverableDeleteModal: true, deliverableIndexToRemove: index });
+      // Remove deliverable at the indicated index and update local state
+      var model = this.state.destinationDetails;
+      model.deliverables[index].deleted = true;
+      this.setState({ destinationDetails: model });
+
+      // Close modal window and set states to default values
+      this.setState({ showDeliverableDeleteModal: false });
+      this.setState({ deliverableIndexToRemove: -1 });
+
+      // Bubble up validation state change to parent
+      this.updateValidationStates();
     }
-
 
     // Handle event that's triggered from changing deliverable value. 
     // The change is reflected in local state 'destinationDetails' and
@@ -186,20 +164,38 @@ class AddEditDestinationDeliverables extends React.Component {
         // Validate if deliverable value is empty. If yes, set state to 'error'
         var isValueValid = item.value ? null : "error";
 
-        return (<Row componentClass="tr" key={index.toString()}>
+        if (isValueValid == "error" && item.deleted == true) {
+          isValueValid = null;
+        }
+
+        let deliverableTextBox = null;
+
+        if (item.deleted) {
+          deliverableTextBox =
+            <FormGroup>
+              <FormControl type="text" disabled={true} id={index.toString()} value={item.value} ref="input" placeholder="Value"
+                className="deliverablesTextBox" />
+            </FormGroup>
+        }
+        else {
+          deliverableTextBox =
+            <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
+              <FormGroup validationState={isValueValid}>
+                <FormControl type="text" id={index.toString()} value={item.value} ref="input" placeholder="Value" onChange={handleDeliverableValueChange.bind(this)}
+                  onClick={handleDeliverableValueClick}
+                  className="deliverablesTextBox" />
+              </FormGroup>
+            </OverlayTrigger>;
+        }
+
+        return (<Row componentClass="tr" className={item.deleted ? "strikeout" : ""} key={index.toString()}>
           <Col componentClass="td">
             <Form>
-              <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
-                <FormGroup validationState={isValueValid}>
-                  <FormControl type="text" id={index.toString()} value={item.value} ref="input" placeholder="Value" onChange={handleDeliverableValueChange.bind(this)}
-                    onClick={handleDeliverableValueClick}
-                    className="deliverablesTextBox" />
-                </FormGroup>
-              </OverlayTrigger>
+              {deliverableTextBox}
             </Form>
           </Col>
           <Col componentClass="td"  >
-            <button class="btn-link" title="Delete Deliverable" onClick={(event) => openDeleteDeliverableModal(index, event)}>
+            <button class="btn-link" disabled={item.deleted} title="Delete Deliverable" onClick={(event) => removeDeliverable(index, event)}>
               <i class="fa fa-trash"></i></button>
           </Col>
         </Row>)
@@ -236,7 +232,6 @@ class AddEditDestinationDeliverables extends React.Component {
         <div className="clearBoth">
           {this.generateDeliverableTable()}
         </div>
-        <RemoveDeliverablesModal data={this.state} handleClose={this.closeDeliverableDeleteModal.bind(this)} handleRemoveAndClose={this.removeDeliverableAndCloseDeliverableDeleteModal.bind(this)} />
       </div>
     )
   }

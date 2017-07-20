@@ -49,7 +49,16 @@ class AddEditDestinationModel extends React.Component {
     }
     //called on the model load
     onOpenModel(destination) {
-        var model = $.extend(true, {}, destination);        
+        var model = $.extend(true, {}, destination);
+
+        for (var i = 0; i < model.properties.length; i++) {
+            model.properties[i].deleted = false;
+        }
+
+        for (var i = 0; i < model.deliverables.length; i++) {
+            model.deliverables[i].deleted = false;
+        }
+
         this.setState({
             isProcessing: false,
             destinationDetails: model
@@ -70,24 +79,40 @@ class AddEditDestinationModel extends React.Component {
 
             this.setState({ isProcessing: true });
 
-            this.props.dispatch(saveDestination(this.state.destinationDetails))
+            var destinationToSave = this.state.destinationDetails;
+
+            if (destinationToSave.properties.length > 0) {
+                destinationToSave.properties = destinationToSave.properties.filter(function (property) {
+                    return property.deleted == false;
+                });
+            }
+
+            if (destinationToSave.deliverables.length > 0) {
+                destinationToSave.deliverables = destinationToSave.deliverables.filter(function (deliverable) {
+                    return deliverable.deleted == false;
+                });
+            }
+
+            console.log(destinationToSave);
+
+            this.props.dispatch(saveDestination(destinationToSave))
                 .then(() => {
                     if (this.state.destinationDetails.id == null) {
-                        NotificationManager.success(this.state.destinationDetails.name + ' destination successfully created.', '', 2000);
+                        NotificationManager.success(destinationToSave.name + ' destination successfully created.', '', 2000);
                     }
                     else {
-                        NotificationManager.success(this.state.destinationDetails.name + ' destination updated successfully.', '', 2000);
+                        NotificationManager.success(destinationToSave.name + ' destination updated successfully.', '', 2000);
                     }
                     this.props.dispatch(destinationAction.fetchDestinations());
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
                 }).catch(error => {
-                    if (this.state.destinationDetails.id == null) {
-                        NotificationManager.error(this.state.destinationDetails.name + ' destination creation failed. ' + error, 'Failure');
+                    if (destinationToSave.id == null) {
+                        NotificationManager.error(destinationToSave.name + ' destination creation failed. ' + error, 'Failure');
                     }
                     else {
-                        NotificationManager.error(this.state.destinationDetails.name + ' destination update failed. ' + error, 'Failure');
+                        NotificationManager.error(destinationToSave.name + ' destination update failed. ' + error, 'Failure');
                     }
                     this.setState({ isProcessing: false });
                 });

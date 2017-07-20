@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover, Collapse, Well } from 'react-bootstrap';
 import DestinationPropertiesFilter from 'Components/Destinations/DestinationPropertiesFilter';
-import RemovePropertiesModal from 'Components/Destinations/RemovePropertiesModal';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 
@@ -14,7 +13,6 @@ class AddEditDestinationProperties extends React.Component {
         this.state = ({
             destinationDetails: {},
             showAddEditPropertiesFilter: false,
-            showPropertiesDeleteModal: false,
             isPropertyNameRequired: false,
             destinationPropertiesRow: {},
             propertyIndexToRemove: -1,
@@ -48,34 +46,24 @@ class AddEditDestinationProperties extends React.Component {
     }
 
     //To delete  a property of destination
-    RemovePropertiesModel(value) {
-        var model = {};
-        model = this.state.destinationDetails;
-        model.properties.splice(value, 1);
+    removeProperties(value) {
+        var model = this.state.destinationDetails;
+        model.properties[value].deleted = true;
         this.setState({ destinationDetails: model });
         this.props.updateDestination(model);
         this.setState({ showPropertiesDeleteModal: false });
-        this.CheckPropertyNameIsEmpty();
-
+        this.checkPropertyNameIsEmpty();
     }
 
     //To add a new property of destination
-    AddNewProperty() {
-        var newProperty = { name: "", value: "", brands: [], titleIds: [], seriesIds: [], titles: [] }
+    addNewProperty() {
+        var newProperty = { name: "", value: "", brands: [], titleIds: [], seriesIds: [], titles: [], deleted: false }
         var model = {};
         model = this.state.destinationDetails;
         model.properties.unshift(newProperty);
         this.setState({ destinationDetails: model });
 
-        this.CheckPropertyNameIsEmpty();
-    }
-    //To open delete property warning window
-    openPropertiesDeleteModel(item) {
-        this.setState({ showPropertiesDeleteModal: true, propertyIndexToRemove: item });
-    }
-    // To close property delete modal window
-    closePropertiesDeleteModel() {
-        this.setState({ showPropertiesDeleteModal: false });
+        this.checkPropertyNameIsEmpty();
     }
 
     // when name property is edited
@@ -84,7 +72,7 @@ class AddEditDestinationProperties extends React.Component {
         model.properties[event.target.id].name = event.target.value;
         this.setState({ destinationDetails: model });
         this.props.updateDestination(model);
-        this.CheckPropertyNameIsEmpty();
+        this.checkPropertyNameIsEmpty();
     }
 
     // called when a property value is edited
@@ -96,13 +84,15 @@ class AddEditDestinationProperties extends React.Component {
     }
 
     // validation for the name property . To verify  name text is empty
-    CheckPropertyNameIsEmpty() {
+    checkPropertyNameIsEmpty() {
         var properties = this.state.destinationDetails.properties;
         if (properties.length > 0) {
             for (var i = 0; i <= properties.length - 1; i++) {
-                if (!(properties[i].name)) {
-                    this.props.validationStates(true);
-                    return;
+                if (!properties[i].deleted) {
+                    if (!(properties[i].name)) {
+                        this.props.validationStates(true);
+                        return;
+                    }
                 }
             }
         }
@@ -123,7 +113,7 @@ class AddEditDestinationProperties extends React.Component {
         }
 
         if (ids.length > 0) {
-            return <TitleNameOverlay disableOverlay={false} data={ids} />;
+            return <TitleNameOverlay disableOverlay={item.deleted} data={ids} />;
         }
     }
 
@@ -134,24 +124,24 @@ class AddEditDestinationProperties extends React.Component {
         if (item.brands.length > 0)
             brands = item.brands;
 
-        return <BrandsOverlay disableOverlay={false} data={brands} />;
+        return <BrandsOverlay disableOverlay={item.deleted} data={brands} />;
     }
     // Tokens for the popover
     popoverValueClickRootClose(index) {
         return (<Popover id="popover-trigger-click-root-close" title="Subsitution Tokens">
-            <span><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
-            <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
-            <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
-            <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
-            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
-            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
-            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
-            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.SubsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
+            <span><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;AIRING_ID&#125;">&#123;AIRING_ID&#125;</button></span>
+            <span> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;AIRING_NAME&#125;">&#123;AIRING_NAME&#125;</button></span>
+            <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;BRAND&#125;">&#123;BRAND&#125;</button></div>
+            <div><button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;TITLE_EPISODE_NUMBER&#125;">&#123;TITLE_EPISODE_NUMBER&#125;</button></div>
+            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" type="button" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_LONG&#125;">&#123;AIRING_STORYLINE_LONG&#125;</button></div>
+            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;AIRING_STORYLINE_SHORT&#125;">&#123;AIRING_STORYLINE_SHORT&#125;</button></div>
+            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;IFHD=(value)ELSE=(value)&#125;">&#123;IFHD=(value)ELSE=(value)&#125;</button></div>
+            <div> <button class="btn btn-primary btn-xs destination-properties-popovermargin" onClick={(event) => this.subsitutionTokenClick(index, event)} value="&#123;TITLE_STORYLINE(type)&#125;">&#123;TITLE_STORYLINE(type)&#125;</button></div>
         </Popover>);
     }
 
     //To subsitute the token values  in the value text box
-    SubsitutionTokenClick(index, event) {
+    subsitutionTokenClick(index, event) {
         var model = this.state.destinationDetails;
         var oldValue = model.properties[index].value;
         model.properties[index].value = oldValue + event.target.value;
@@ -165,7 +155,6 @@ class AddEditDestinationProperties extends React.Component {
 
     hasProperties() {
         if (this.state.destinationDetails.properties == undefined) return false;
-
         return (this.state.destinationDetails.properties.length > 0);
     }
 
@@ -174,22 +163,43 @@ class AddEditDestinationProperties extends React.Component {
         let row = null;
         if (this.hasProperties()) {
             row = this.state.destinationDetails.properties.map(function (item, index) {
-                var nameValidation = item.name ? null : "error"
+                var nameValidation = item.name == false ? null : "error"
+                if (nameValidation == "error" && item.deleted) {
+                    nameValidation = null;
+                }
                 var overlay = "overlay" + index
-                return (<Row componentClass="tr" key={index.toString()}>
+
+                let valueTextBox = null;
+
+                if (item.deleted) {
+                    valueTextBox =
+                        <FormGroup controlId={index.toString()} >
+                            <FormControl type="text" disabled={item.deleted} value={item.value} title={item.value} ref="Value" placeholder="Value" />
+                        </FormGroup>;
+                }
+                else {
+                    valueTextBox =
+                        <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
+                            <FormGroup controlId={index.toString()} >
+                                <FormControl type="text" disabled={item.deleted} value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
+                            </FormGroup>
+                        </OverlayTrigger>;
+
+                }
+
+                return (<Row componentClass="tr" key={index.toString()} className={item.deleted ? "strikeout" : ""}>
                     <Col componentClass="td" sm={3} >
                         <FormGroup controlId={index.toString()} validationState={nameValidation}>
-                            <FormControl type="text" value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
+                            <FormControl type="text" disabled={item.deleted} value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
                         </FormGroup></Col>
-                    <Col componentClass="td" sm={3}> <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
-                        <FormGroup controlId={index.toString()} >
-                            <FormControl type="text" value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
-                        </FormGroup></OverlayTrigger></Col>
+                    <Col componentClass="td" sm={3}>
+                        {valueTextBox}
+                    </Col>
                     <Col componentClass="td"  >{this.propertyBrandImageConstruct(item, index)}</Col>
                     <Col componentClass="td"  >{this.titledetailConstruct(item, index)}</Col>
                     <Col componentClass="td">
-                        <button type="button" class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
-                        <button type="button" class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
+                        <button type="button" disabled={item.deleted} class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
+                        <button type="button" disabled={item.deleted} class="btn-link" title="Delete Property" onClick={(event) => this.removeProperties(index, event)} ><i class="fa fa-trash"></i></button>
                     </Col>
                 </Row>)
             }.bind(this));
@@ -198,7 +208,7 @@ class AddEditDestinationProperties extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.AddNewProperty(event)}>
+                    <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewProperty(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
                         <span class="addVertialAlign"> New Property</span>
                     </button>
@@ -223,7 +233,6 @@ class AddEditDestinationProperties extends React.Component {
                     </Grid>
                 </div>
                 <DestinationPropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />
-                <RemovePropertiesModal data={this.state} handleClose={this.closePropertiesDeleteModel.bind(this)} handleRemoveAndClose={this.RemovePropertiesModel.bind(this)} />
             </div>)
     }
 }

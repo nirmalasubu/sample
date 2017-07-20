@@ -478,7 +478,7 @@ tr.strikeout td:before {
     margin-bottom:10px;
 }
 
-.strikeout {    
+.strikeout td{    
      background-color: grey;
 }
 
