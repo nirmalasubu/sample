@@ -280,9 +280,9 @@ class AddEditCategoryDestination extends React.Component {
                         return (<Row componentClass="tr" key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
-                            <Col componentClass="td" sm={2} bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
-                            <Col componentClass="td" sm={2} bsClass="col-height col">{this.titleDetailConstruct(item, index)}</Col>
-                            <Col componentClass="td" sm={2} bsClass="col-height col">
+                            <Col componentClass="td" bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
+                            <Col componentClass="td" bsClass="col-height col">{this.titleDetailConstruct(item, index)}</Col>
+                            <Col componentClass="td" bsClass="col-height col">
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
                             </Col>
@@ -311,11 +311,11 @@ class AddEditCategoryDestination extends React.Component {
                                 <Row componentClass="tr" >
                                     <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
                                     <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
-                                    <Col componentClass="th" colSpan={2} sm={4} ><label>Filters</label></Col>
-                                    <Col componentClass="th" rowSpan={2} sm={2} ><label>Actions</label></Col>
+                                    <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
+                                    <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
                                 </Row>
                                 <Row componentClass="tr">
-                                    <Col componentClass="th" sm={4} ><label>Brands</label></Col>
+                                    <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>
                                     <Col componentClass="th"  ><label>Title/Series</label></Col>
                                 </Row>
                                 {row}

@@ -180,9 +180,9 @@ class AddEditDestinationProperties extends React.Component {
                             <FormGroup controlId={index.toString()} >
                                 <FormControl type="text" value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
                             </FormGroup></OverlayTrigger></Col>
-                        <Col componentClass="td" sm={2} >{this.propertyBrandImageConstruct(item, index)}</Col>
-                        <Col componentClass="td" sm={2} >{this.titledetailConstruct(item, index)}</Col>
-                        <Col componentClass="td" sm={2} >
+                        <Col componentClass="td"  >{this.propertyBrandImageConstruct(item, index)}</Col>
+                        <Col componentClass="td"  >{this.titledetailConstruct(item, index)}</Col>
+                        <Col componentClass="td">
                             <button type="button" class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
                             <button type="button" class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
                         </Col>
@@ -207,12 +207,12 @@ class AddEditDestinationProperties extends React.Component {
                         <Row componentClass="tr">
                             <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Name</label></Col>
                             <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Value</label></Col>
-                            <Col componentClass="th" row={0} colSpan={2} sm={4} ><label >Filters</label></Col>
-                            <Col componentClass="th" row={0} rowSpan={2} sm={2} ><label>Actions</label></Col>
+                            <Col componentClass="th" row={0} colSpan={2} className="filterColumn" ><label >Filters</label></Col>
+                            <Col componentClass="th" row={0} rowSpan={2} className="actionsColumn"><label>Actions</label></Col>
                         </Row>
                         <Row componentClass="tr">
-                            <Col componentClass="th" sm={4} ><label>Brands</label></Col>
-                            <Col componentClass="th" sm={4} ><label >Title/Series</label></Col>
+                            <Col componentClass="th" className="brandsColumn"   ><label>Brands</label></Col>
+                            <Col componentClass="th" className="titlesColumn"  ><label >Title/Series</label></Col>
                         </Row>
                         {row}
                     </Grid>

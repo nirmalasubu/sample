@@ -79,7 +79,7 @@ class AddEditDestinationCategories extends React.Component {
                 }.bind(this));
             }
             else {
-                row = <Row componentClass="tr"><Col componentClass="td" colSpan={3} sm={12} ><p> No Categories available</p></Col></Row>
+                row = <Row componentClass="tr"><Col componentClass="td"><p> No Categories available</p></Col></Row>
             }
         }
 
@@ -87,12 +87,12 @@ class AddEditDestinationCategories extends React.Component {
             <div className="clearBoth">
                 <Grid componentClass="table" bsClass="modalTable">
                     <Row componentClass="tr">
-                        <Col componentClass="th" row={0} md={6} rowSpan={2} ><label >Name</label></Col>
-                        <Col componentClass="th" row={0} colSpan={2} ><label >Filters</label></Col>
+                        <Col componentClass="th" row={0} rowSpan={2}><label >Name</label></Col>
+                        <Col componentClass="th" row={0} colSpan={2} className="filterColumn" ><label >Filters</label></Col>
                     </Row>
                     <Row componentClass="tr">
-                        <Col componentClass="th" md={3} ><label>Brands</label></Col>
-                        <Col componentClass="th" md={3} ><label >Title/Series</label></Col>
+                        <Col componentClass="th" className="brandsColumn"  ><label>Brands</label></Col>
+                        <Col componentClass="th"  ><label >Title/Series</label></Col>
                     </Row>
                     {row}
                 </Grid>

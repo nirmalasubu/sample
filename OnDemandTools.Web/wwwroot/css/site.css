@@ -533,7 +533,28 @@ tr.strikeout td:before {
 /******** brand image styling  ends******/
 
 
+/*****************************************************/
+/******** Modal Table styling  starts ******/
+
 .modalTable
 {
     table-layout: auto;
 }
+
+.filterColumn
+{
+    text-align: center;
+}
+
+.actionsColumn
+{
+    width: 70px;
+}
+
+.brandsColumn
+{
+    width: 130px;
+}
+
+/******** Modal Table styling  ends ******/
+/*****************************************************/
