@@ -233,7 +233,6 @@ textarea.form-control-modal-Edit {
 }
 .destination-img-btn{
  height: 2em;
- margin-bottom: 11px;
 }
 .destination-img{
     width:120px;
@@ -523,7 +522,6 @@ tr.strikeout td:before {
     height: 2.8em; 
     line-height: 1em; 
     text-overflow: ellipsis;
-    margin-bottom: 12px;
     cursor: pointer;
     word-break: break-all;
     overflow:hidden;

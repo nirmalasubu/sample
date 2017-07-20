@@ -280,9 +280,9 @@ class AddEditCategoryDestination extends React.Component {
                         return (<Row componentClass="tr" key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
-                            <Col componentClass="td" bsClass="col-height col">{this.categoryBrandImageConstruct(item, index)}</Col>
-                            <Col componentClass="td" bsClass="col-height col">{this.titleDetailConstruct(item, index)}</Col>
-                            <Col componentClass="td" bsClass="col-height col">
+                            <Col componentClass="td">{this.categoryBrandImageConstruct(item, index)}</Col>
+                            <Col componentClass="td">{this.titleDetailConstruct(item, index)}</Col>
+                            <Col componentClass="td">
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
                                 <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
                             </Col>

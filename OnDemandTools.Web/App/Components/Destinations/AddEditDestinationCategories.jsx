@@ -62,7 +62,7 @@ class AddEditDestinationCategories extends React.Component {
     render() {
 
         if (this.state.destinationDetails.id == undefined || this.state.destinationDetails.id == null) {
-            return <div className="clearBoth"> <table> <tbody> <tr> <td> <p> Categories can be added after the Destination has been created. </p> </td> </tr> </tbody> </table> </div>
+            return <div className="clearBoth"> <table><tbody><tr><td><p>Categories can be added after the Destination has been created.</p></td></tr></tbody></table></div>;
         }
 
         let row = null;
@@ -83,7 +83,7 @@ class AddEditDestinationCategories extends React.Component {
             }.bind(this));
         }
         else {
-            row = <Row componentClass="tr"><Col componentClass="td" colSpan={3}><p> No Categories available</p></Col></Row>
+            return <div className="clearBoth"> <table><tbody><tr><td><p>No Categories available</p></td></tr></tbody></table></div>;            
         }
 
         return (
