@@ -163,35 +163,36 @@ class AddEditDestinationProperties extends React.Component {
         this.refs[overlayIndex].hide();
     }
 
+    hasProperties() {
+        if (this.state.destinationDetails.properties == undefined) return false;
+
+        return (this.state.destinationDetails.properties.length > 0);
+    }
+
     //properties construct  of a destination
     render() {
         let row = null;
-        if (Object.keys(this.state.destinationDetails).length != 0 && this.state.destinationDetails != Object) {
-            if (Object.keys(this.state.destinationDetails.properties).length !== 0 && this.state.destinationDetails.properties != Object) {
-                row = this.state.destinationDetails.properties.map(function (item, index) {
-                    var nameValidation = item.name ? null : "error"
-                    var overlay = "overlay" + index
-                    return (<Row componentClass="tr" key={index.toString()}>
-                        <Col componentClass="td" sm={3} >
-                            <FormGroup controlId={index.toString()} validationState={nameValidation}>
-                                <FormControl type="text" value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
-                            </FormGroup></Col>
-                        <Col componentClass="td" sm={3}> <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
-                            <FormGroup controlId={index.toString()} >
-                                <FormControl type="text" value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
-                            </FormGroup></OverlayTrigger></Col>
-                        <Col componentClass="td"  >{this.propertyBrandImageConstruct(item, index)}</Col>
-                        <Col componentClass="td"  >{this.titledetailConstruct(item, index)}</Col>
-                        <Col componentClass="td">
-                            <button type="button" class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
-                            <button type="button" class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
-                        </Col>
-                    </Row>)
-                }.bind(this));
-            }
-            else {
-                row = <Row componentClass="tr"><Col componentClass="td" colSpan={5} sm={12} ><p> No properties available</p></Col></Row>
-            }
+        if (this.hasProperties()) {
+            row = this.state.destinationDetails.properties.map(function (item, index) {
+                var nameValidation = item.name ? null : "error"
+                var overlay = "overlay" + index
+                return (<Row componentClass="tr" key={index.toString()}>
+                    <Col componentClass="td" sm={3} >
+                        <FormGroup controlId={index.toString()} validationState={nameValidation}>
+                            <FormControl type="text" value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
+                        </FormGroup></Col>
+                    <Col componentClass="td" sm={3}> <OverlayTrigger trigger="click" ref={overlay} rootClose placement="left" overlay={this.popoverValueClickRootClose(index)}>
+                        <FormGroup controlId={index.toString()} >
+                            <FormControl type="text" value={item.value} title={item.value} ref="Value" placeholder="Value" onChange={this.handlePropertyValueChange.bind(this)} />
+                        </FormGroup></OverlayTrigger></Col>
+                    <Col componentClass="td"  >{this.propertyBrandImageConstruct(item, index)}</Col>
+                    <Col componentClass="td"  >{this.titledetailConstruct(item, index)}</Col>
+                    <Col componentClass="td">
+                        <button type="button" class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
+                        <button type="button" class="btn-link" title="Delete Property" onClick={(event) => this.openPropertiesDeleteModel(index, event)} ><i class="fa fa-trash"></i></button>
+                    </Col>
+                </Row>)
+            }.bind(this));
         }
 
         return (
@@ -203,7 +204,7 @@ class AddEditDestinationProperties extends React.Component {
                     </button>
                 </div>
                 <div className="clearBoth">
-                    <Grid componentClass="table" bsClass="modalTable">
+                    <Grid componentClass="table" bsClass={this.hasProperties() ? "modalTable" : "hideModalTable"}>
                         <Row componentClass="tr">
                             <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Name</label></Col>
                             <Col componentClass="th" row={0} sm={3} rowSpan={2} ><label >Value</label></Col>
@@ -214,7 +215,9 @@ class AddEditDestinationProperties extends React.Component {
                             <Col componentClass="th" className="brandsColumn"   ><label>Brands</label></Col>
                             <Col componentClass="th" className="titlesColumn"  ><label >Title/Series</label></Col>
                         </Row>
-                        {row}
+                        <tbody>
+                            {row}
+                        </tbody>
                     </Grid>
                 </div>
                 <DestinationPropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} />

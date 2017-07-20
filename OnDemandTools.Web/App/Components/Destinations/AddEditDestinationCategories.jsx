@@ -94,7 +94,9 @@ class AddEditDestinationCategories extends React.Component {
                         <Col componentClass="th" className="brandsColumn"  ><label>Brands</label></Col>
                         <Col componentClass="th"  ><label >Title/Series</label></Col>
                     </Row>
-                    {row}
+                    <tbody>
+                        {row}
+                    </tbody>
                 </Grid>
             </div>
         )

@@ -562,5 +562,11 @@ tr.strikeout td:before {
     width: 130px;
 }
 
+.deliverablesTextBox
+{
+    width: 90%;
+    max-width: 90%;
+}
+
 /******** Modal Table styling  ends ******/
 /*****************************************************/

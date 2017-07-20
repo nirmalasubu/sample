@@ -192,7 +192,8 @@ class AddEditDestinationDeliverables extends React.Component {
               <OverlayTrigger trigger="click" rootClose placement="left" ref="overlay" overlay={popoverValueClickRootClose(index)}>
                 <FormGroup validationState={isValueValid}>
                   <FormControl type="text" id={index.toString()} value={item.value} ref="input" placeholder="Value" onChange={handleDeliverableValueChange.bind(this)}
-                    onClick={handleDeliverableValueClick} />
+                    onClick={handleDeliverableValueClick} 
+                    className="deliverablesTextBox"/>
                 </FormGroup>
               </OverlayTrigger>
             </Form>
@@ -211,7 +212,9 @@ class AddEditDestinationDeliverables extends React.Component {
             <Col componentClass="th" ><label>Value</label></Col>
             <Col componentClass="th" className="actionsColumn" ><label>Action</label></Col>
           </Row>
-          {deliverableRows}
+          <tbody>
+            {deliverableRows}
+          </tbody>
         </Grid>
       );
     }
