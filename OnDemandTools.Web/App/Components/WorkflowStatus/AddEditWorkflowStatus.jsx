@@ -244,7 +244,7 @@ render() {
                     </Row>
                     <FormGroup controlId="description">
                     <ControlLabel>Description</ControlLabel>
-                    <FormControl componentClass="textarea"  rows="3" cols="40" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
+                    <FormControl componentClass="textarea"  rows="3" cols="40" maxLength="150" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
                      onChange={(event) =>this.handleTextChange("description", event)}/>
                    </FormGroup>
                    </Grid>
