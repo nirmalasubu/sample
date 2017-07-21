@@ -306,7 +306,7 @@ class AddEditCategoryDestination extends React.Component {
                 </div><br /><br />
                 <Panel >
                     <div>
-                        <div >
+                        <div class="category-height" ref="categoryScroll">
                             <Grid componentClass="table" bsClass="modalTable">
                                 <thead>
                                     <Row componentClass="tr" >

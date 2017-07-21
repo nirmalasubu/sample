@@ -97,7 +97,6 @@ th {
 tr,td{
     word-wrap: break-word;
     max-width: 0;
-    overflow: auto;
 }
 
 .react-bs-table table td, 
@@ -436,11 +435,10 @@ p.shortDesc {
 }
 
 .category-height{
-    min-height:250px;
-    max-height:260px;
+    min-height:270px;
+    max-height:270px;
     overflow-y:auto;
     overflow-x: hidden;
-
 }
 
 .TitleOverlay-height{   
@@ -476,6 +474,7 @@ tr.strikeout td:before {
 
 .row-margin{
     margin-bottom:10px;
+    overflow: visible !important;
 }
 
 .strikeout td{    
