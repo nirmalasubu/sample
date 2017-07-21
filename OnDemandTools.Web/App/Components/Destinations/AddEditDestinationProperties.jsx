@@ -163,7 +163,7 @@ class AddEditDestinationProperties extends React.Component {
         let row = null;
         if (this.hasProperties()) {
             row = this.state.destinationDetails.properties.map(function (item, index) {
-                var nameValidation = item.name == false ? null : "error"
+                var nameValidation = item.name ? null : "error"
                 if (nameValidation == "error" && item.deleted) {
                     nameValidation = null;
                 }
