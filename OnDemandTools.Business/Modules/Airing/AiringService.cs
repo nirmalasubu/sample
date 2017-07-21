@@ -704,12 +704,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 {
 
                     var rs = await client.RetrieveRecords(request);
-                    premieres = rs;
-                    // var rs = await GetPremiereDataAsync(client, request) as List<JObject>;
-                    // if (!rs.IsNullOrEmpty())
-                    // {
-                    //     premieres.AddRange(rs);
-                    // }
+                    premieres = rs;                    
 
                 }).Wait();
             }
@@ -727,22 +722,6 @@ namespace OnDemandTools.Business.Modules.Airing
             return tcs.Task;
         }
 
-
-        // private Task<List<JObject>> GetPremiereDataAsync(RestClient theClient, RestRequest theRequest)
-        // {
-        //     var tcs = new TaskCompletionSource<List<JObject>>();
-
-        //     theClient.ExecuteAsync<List<string>>(theRequest, response =>
-        //     {
-        //         var kk = response.Data[0] as JObject;
-        //     });
-
-        //     theClient.ExecuteAsync<List<JObject>>(theRequest, response =>
-        //     {
-        //         tcs.SetResult(response.Data);
-        //     });
-        //     return tcs.Task;
-        // }
 
         private List<string> ExtractVersionIdsFrom(BLModel.Alternate.Long.Airing airing)
         {
