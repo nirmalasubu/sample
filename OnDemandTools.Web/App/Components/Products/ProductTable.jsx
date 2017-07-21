@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+import AddEditProduct from 'Components/Products/AddEditProduct';
 import RemoveProductModal from 'Components/Products/RemoveProductModal';
 import DestinationOverlay from 'Components/Common/DestinationOverlay';
 import TextOverlay from 'Components/Common/TextOverlay';
@@ -83,6 +84,9 @@ class ProductTable extends React.Component {
         this.setState({ showAddEditModel: true, productDetails: val });
     }
 
+    ///<summary>
+    ///This is to close a modal popup to edit a product.
+    ///</summary>
     closeAddEditModel() {
         this.setState({ showAddEditModel: false, productDetails: this.state.newProductModel });
     }
@@ -195,6 +199,7 @@ class ProductTable extends React.Component {
                     options={this.state.options}>
                         {row}
                 </BootstrapTable>
+                <AddEditProduct data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveProductModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
                         }

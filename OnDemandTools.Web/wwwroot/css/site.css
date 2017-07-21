@@ -425,12 +425,7 @@ p.shortDesc {
     margin-bottom:3px;
 }
 
-.panel-category {
-  border-color: #bce8f1;
-}
-
 .panel-category .panel-body {
-  border-bottom-color: #bce8f1;
   min-height: 300px;
 }
 
@@ -450,6 +445,12 @@ p.shortDesc {
 
 .title-search-position{
     padding-left:1px;
+}
+
+.product-input{
+    display: inline-block !important;
+    min-width:260px;
+    max-width:260px;
 }
 
 /*****************************************************/
