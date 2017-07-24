@@ -59,9 +59,12 @@ class AddEditDestinationModel extends React.Component {
             model.deliverables[i].deleted = false;
         }
 
+        var destinationDetailsBackup = $.extend(true, {}, model);
+
         this.setState({
             isProcessing: false,
-            destinationDetails: model
+            destinationDetails: model,
+            destinationDetailsBackup: destinationDetailsBackup
         });
     }
 
@@ -126,7 +129,7 @@ class AddEditDestinationModel extends React.Component {
     }
 
     handleClose() {
-        if (JSON.stringify(this.state.destinationDetails) == JSON.stringify(this.props.data.destinationDetails)) {
+        if (JSON.stringify(this.state.destinationDetails) == JSON.stringify(this.state.destinationDetailsBackup)) {
             this.props.handleClose();
         }
         else {
