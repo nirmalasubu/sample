@@ -10,6 +10,7 @@ import ContentTiers from 'Components/ContentTiers/ContentTiersPage';
 import WorkflowStatuses from 'Components/WorkflowStatus/WorkflowStatusesPage';
 import CategoriesPage from 'Components/Categories/CategoriesPage';
 import airingIds from 'Components/IDDistribution/DistributionPage';
+import PathTranslations from 'Components/PathTranslations/PathTranslationsPage'
 import App from 'Components/App'
 
 
@@ -27,6 +28,7 @@ export default (
       <Route path="contentTiers" component={ContentTiers}></Route>
       <Route path="workflowStatuses" component={WorkflowStatuses}></Route>
       <Route path="airingIds" component={airingIds}></Route>
+      <Route path="pathTranslations" component={PathTranslations}></Route>
     </Route>
   </Router>
 )

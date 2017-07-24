@@ -37,6 +37,7 @@ class Menu extends React.Component {
           <NavItem eventKey={"workflowStatuses"}>Workflow Statuses</NavItem>
           <NavItem eventKey={"airingIds"}>ID Distribution</NavItem>
           <NavItem eventKey={"permissions"}>Permissions</NavItem>
+          <NavItem eventKey={"pathTranslations"}>Path Translations</NavItem>
         </Nav>
       </div>
     );
