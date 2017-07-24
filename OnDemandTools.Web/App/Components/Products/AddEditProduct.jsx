@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import AddEditProductBasic from 'Components/Products/AddEditProductBasic';
-import { saveDestination } from 'Actions/Product/ProductActions';
+import { saveProduct } from 'Actions/Product/ProductActions';
 import * as destinationAction from 'Actions/Product/ProductActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
@@ -55,11 +55,11 @@ class AddEditProduct extends React.Component {
     /// This function is called on entering the modal pop up
     /// </summary>
     onOpenModel(product) {
-        var model = $.extend(true, {}, product);
+        //var model = $.extend(true, {}, product);
 
         this.setState({
             isProcessing: false,
-            productDetails: model
+            productDetails: product
         });
     }
     /// <summary>
@@ -76,52 +76,42 @@ class AddEditProduct extends React.Component {
     }
 
     /// <summary>
-    /// To save and update the category to destinations table
+    /// To save and update the product details
     /// </summary>
     handleSave() {
-        //var elem = this;
-        //if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
+        console.log(this.state.productDetails);
+        var elem = this;
+        if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
 
-        //    this.setState({ isProcessing: true });
+            this.setState({ isProcessing: true });
 
-        //    var destinationToSave = this.state.destinationDetails;
+            var productToSave = this.state.productDetails;
 
-        //    if (destinationToSave.properties.length > 0) {
-        //        destinationToSave.properties = destinationToSave.properties.filter(function (property) {
-        //            return property.deleted == false;
-        //        });
-        //    }
+            this.props.dispatch(saveProduct(productToSave))
+                .then(() => {
+                    if (this.state.productDetails.id == null) {
+                        NotificationManager.success(productToSave.name + ' product successfully created.', '', 2000);
+                    }
+                    else {
+                        NotificationManager.success(productToSave.name + ' product updated successfully.', '', 2000);
+                    }
 
-        //    if (destinationToSave.deliverables.length > 0) {
-        //        destinationToSave.deliverables = destinationToSave.deliverables.filter(function (deliverable) {
-        //            return deliverable.deleted == false;
-        //        });
-        //    }
+                    setTimeout(function () {
+                        elem.props.handleClose();
+                    }, 3000);
 
-        //    this.props.dispatch(saveDestination(destinationToSave))
-        //        .then(() => {
-        //            if (this.state.destinationDetails.id == null) {
-        //                NotificationManager.success(destinationToSave.name + ' destination successfully created.', '', 2000);
-        //            }
-        //            else {
-        //                NotificationManager.success(destinationToSave.name + ' destination updated successfully.', '', 2000);
-        //            }
-        //            this.props.dispatch(destinationAction.fetchDestinations());
-        //            setTimeout(function () {
-        //                elem.props.handleClose();
-        //            }, 3000);
-        //        }).catch(error => {
-        //            if (destinationToSave.id == null) {
-        //                NotificationManager.error(destinationToSave.name + ' destination creation failed. ' + error, 'Failure');
-        //            }
-        //            else {
-        //                NotificationManager.error(destinationToSave.name + ' destination update failed. ' + error, 'Failure');
-        //            }
-        //            this.setState({ isProcessing: false });
-        //        });
-        //}
-        //else
-        //    return false;
+                }).catch(error => {
+                    if (productToSave.id == null) {
+                        NotificationManager.error(productToSave.name + ' product creation failed. ' + error, 'Failure');
+                    }
+                    else {
+                        NotificationManager.error(productToSave.name + ' product update failed. ' + error, 'Failure');
+                    }
+                    this.setState({ isProcessing: false });
+                });
+        }
+        else
+            return false;
     }
 
     /// <summary>

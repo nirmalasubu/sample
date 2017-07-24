@@ -4,10 +4,12 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import { connect } from 'react-redux';
 import validator from 'validator';
 import InfoOverlay from 'Components/Common/InfoOverlay';
+import { WithContext as ReactTags } from 'react-tag-input';
+import 'react-tag-input/example/reactTags.css';
 
 @connect((store) => {
     return {
-        destinations: store.destinations
+        products : store.products
     };
 })
 /// <summary>
@@ -28,8 +30,69 @@ class AddEditProductBasic extends React.Component {
             validationStateExternalId: null,
             validationStateMappingId: null,
             showError: false,
-            componentJustMounted: true
+            componentJustMounted: true,
+            suggestions: []
         });
+    }
+
+    /// <summary>
+    /// This method is to get tags from products for tags suggestion
+    /// </summary>
+    getTagsBy(query) {
+        var regExp = new RegExp(query);        
+        var tags = [];
+
+        for (var x = 0; x < this.props.products.length; x++) {
+            for (var y = 0; y < this.props.products[x].tags.length; y++) {
+                console.log(regExp.test(this.props.products[x].tags[y].text) && 
+                    this.isTagMissing(tags, this.props.products[x].tags[y]));
+                if (regExp.test(this.props.products[x].tags[y].text) && 
+                    this.isTagMissing(tags, this.props.products[x].tags[y])) {
+                    tags.push(this.props.products[x].tags[y].text);
+                }                    
+            }
+        }
+
+        return tags;
+    }
+
+    /// <summary>
+    /// This method is to avoid duplication of tags
+    /// </summary>
+    isTagMissing(tags, tag) {
+        for (var x = 0; x < tags.length; x++) {
+            if (tags[x] == tag.text)
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// This method sets the state with the product details before the component gets mounted
+    /// </summary> 
+    componentWillMount() {
+        var i=1;
+        let product = this.props.data;
+        product.tags.map(function(tag){
+            tag.id=i;
+            i++;
+        }
+        );
+
+        this.setState({
+            productModel: product
+        });
+    }
+
+    /// <summary>
+    /// This method sets the state after the component gets mounted
+    /// </summary> 
+    componentDidMount() {
+        var model = this.state.productModel;
+        if (this.state.productModel.id == null) {
+            this.setState({ productModel: model, componentJustMounted: true });
+        }
     }
 
     /// <summary>
@@ -82,26 +145,7 @@ class AddEditProductBasic extends React.Component {
         });
 
         this.props.validationStates(hasNameError, hasDesError);
-    }
-
-    /// <summary>
-    /// This method sets the state with the product details before the component gets mounted
-    /// </summary> 
-    componentWillMount() {
-        this.setState({
-            destinationModel: this.props.data
-        });
-    }
-
-    /// <summary>
-    /// This method sets the state after the component gets mounted
-    /// </summary> 
-    componentDidMount() {
-        var model = this.state.destinationModel;
-        if (this.state.destinationModel.id == null) {
-            this.setState({ destinationModel: model, componentJustMounted: true });
-        }
-    }
+    }    
 
     /// <summary>
     /// Updating the state on change of External ID
@@ -165,13 +209,13 @@ class AddEditProductBasic extends React.Component {
     }
 
     /// <summary>
-    /// Updating the state on change of product tags
+    /// Updating the state on change of dynamic ad trigger checkbox
     /// </summary>
-    handleTagsChange(event) {
-        var tag = {text:""};
-        tag.text = event.target.value;
+    handleCheckboxChange(event) {
+        var checked = event.target.checked;
+
         var model = this.state.productModel;
-        model.tags.push(tag);
+        model.dynamicAdTrigger = checked;
 
         this.setState({
             productModel: model
@@ -182,23 +226,52 @@ class AddEditProductBasic extends React.Component {
         //this.props.updateDestination(this.state.destinationModel);
     }
 
-    handleCheckboxChange(event) {
-        var checked = event.target.checked;
-
-        var model = this.state.destinationModel
-        model.dynamicAdTrigger = checked;
-
-        this.setState({
-            destinationModel: model
+    /// <summary>
+    /// this method is to delete the tags in the state
+    /// </summary>
+    handleDelete(i) {
+        let product = this.state.productModel;
+        product.tags.splice(i, 1);
+        this.setState({productModel: product});
+    }
+    
+    /// <summary>
+    /// this method is to handle the addition of tags to the state
+    /// </summary>
+    handleAddition(tag) {
+        let product = this.state.productModel;
+        product.tags.push({
+            id: product.tags.length + 1,
+            text: tag
         });
+        this.setState({productModel: product});
+    }
+    
+    /// <summary>
+    /// this method is to change the position of the tags in the state  tags array
+    /// </summary>
+    handleDrag(tag, currPos, newPos) {
+        let product = this.state.productModel;
+ 
+        // mutate array 
+        product.tags.splice(currPos, 1);
+        product.tags.splice(newPos, 0, tag);
+ 
+        // re-render 
+        this.setState({ productModel: product });
+    }
 
-        //this.validateForm();
+    /// <summary>
+    /// this method is to handle the on change of the tags input value
+    /// </summary>
+    handleInputChange(value){
+        if(value.length>2)
+            var tags = this.getTagsBy(value);
 
-        //this.props.updateDestination(this.state.destinationModel);
+        this.setState({suggestions:tags});
     }
 
     render() {
-
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Destination already exists. Please use a unique destination code. To view external ids in use, visit the <a href='http://eawiki/display/turniverse/Enumerations' target='wiki'>Enumerations</a> page.</label>);
@@ -223,7 +296,7 @@ class AddEditProductBasic extends React.Component {
                                         disabled={this.state.productModel.id == null ? false : true}
                                         value={this.state.productModel.externalId}
                                         ref="inputExternalId"
-                                        placeholder="External ID"
+                                        placeholder="If blank, guid will be generated."
                                         onChange={this.handleExternalChange.bind(this)}
                                     />
                                 </FormGroup>
@@ -231,15 +304,14 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4}>
                                 <FormGroup
                                     controlId="mappingId" validationState={this.state.validationStateMappingId}>
-                                    <span style={{paddingRight:10}}>Mapping ID</span>
+                                    <span title="an identifier from another system that maps to this product like a Turniverse feed id" style={{paddingRight:10}}>Mapping ID</span>
                                     <FormControl
                                         bsClass="form-control product-input"
-                                        type="text"
+                                        type="number"
                                         disabled={this.state.productModel.id == null ? false : true}
-                                    value={this.state.productModel.mappingId}
-                                ref="inputMappingId"
-                                placeholder="Mapping ID"
-                                onChange={this.handleMappingChange.bind(this)}
+                                        value={this.state.productModel.mappingId}
+                                        ref="inputMappingId"
+                                        onChange={this.handleMappingChange.bind(this)}
                                     />
                                 </FormGroup>
                             </Col>
@@ -252,7 +324,6 @@ class AddEditProductBasic extends React.Component {
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
-                                        disabled={this.state.productModel.id == null ? false : true}
                                         value={this.state.productModel.name}
                                         ref="inputProductName"
                                         placeholder="Product Name"
@@ -280,27 +351,28 @@ class AddEditProductBasic extends React.Component {
                                 <FormGroup
                                         controlId="prdTags" validationState={this.state.validationStateTags}>
                                         <span style={{paddingRight:67, fontWeight:20}}>Tags</span>
-                                        <FormControl
-                                            bsClass="form-control product-input"
-                                            type="text"
-                                            value={this.state.productModel.description}
-                                            ref="inputTags"
-                                            placeholder="Tags"
-                                            onChange={this.handleTagsChange.bind(this)}
-                                        />
+                                        <ReactTags tags={this.state.productModel.tags}
+                                            id = "inputTags"
+                                            suggestions={this.state.suggestions}
+                                            autocomplete={true}
+                                            handleDelete={this.handleDelete.bind(this)}
+                                            handleAddition={this.handleAddition.bind(this)}
+                                            handleDrag={this.handleDrag.bind(this)} 
+                                            handleInputChange={this.handleInputChange.bind(this)}    
+                                                />
                                 </FormGroup>
                             </Col>
                             <Col md={4}>                                
                                 <FormGroup
-                                    controlId="contents">
-                                    <Checkbox inline name="Ad" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.productModel.dynamicAdTrigger}>Dynamic Ad Trigger</Checkbox>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Grid>
-            </div>
+                                            controlId="contents">
+                                            <Checkbox inline name="Ad" onChange={this.handleCheckboxChange.bind(this)}
+                                            checked={this.state.productModel.dynamicAdTrigger}>Dynamic Ad Trigger</Checkbox>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Form>
+                    </Grid>
+                </div>
         )
     }
 }

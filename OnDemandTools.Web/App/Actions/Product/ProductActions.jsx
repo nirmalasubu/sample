@@ -31,6 +31,25 @@ export const fetchProducts = () => {
     };
 };
 
+export const saveProductSuccess = (product) => {
+    return {
+        type: actionTypes.SAVE_PRODUCT_SUCCESS,
+        product
+    }
+};
+
+export const saveProduct = (model) => {
+    return (dispatch) => {        
+        return Axios.post('/api/product', model)
+            .then(response => {
+                dispatch(saveProductSuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
 export const deleteProductSuccess = (objectId) => {
     return {
         type: actionTypes.DELETE_PRODUCT_SUCCESS,

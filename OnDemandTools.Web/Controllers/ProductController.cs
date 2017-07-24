@@ -41,6 +41,33 @@ namespace OnDemandTools.Web.Controllers
             return productModel;
         }
 
+        //save product details
+        [Authorize]
+        [HttpPost]
+        public ProductViewModel Post([FromBody]ProductViewModel viewModel)
+        {
+
+            if (string.IsNullOrWhiteSpace(viewModel.ExternalId))
+                viewModel.ExternalId = Guid.NewGuid().ToString();
+
+            Product blModel = viewModel.ToBusinessModel<ProductViewModel, Product>();
+
+            if (string.IsNullOrEmpty(blModel.Id))
+            {
+                blModel.CreatedDateTime = DateTime.UtcNow;
+                blModel.CreatedBy = HttpContext.User.Identity.Name;
+            }
+            else
+            {
+                blModel.ModifiedDateTime = DateTime.UtcNow;
+                blModel.ModifiedBy = HttpContext.User.Identity.Name;
+            }
+
+            blModel = productSvc.Save(blModel);
+
+            return blModel.ToViewModel<Product, ProductViewModel>();
+        }
+
         [Authorize]
         [HttpDelete("{id}")]
         public void Delete(string id)

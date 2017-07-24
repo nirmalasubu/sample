@@ -16,6 +16,15 @@ namespace OnDemandTools.DAL.Modules.Product.Command
             _database = connection.GetDatabase();
         }
 
+        public DLModel.Product Save(DLModel.Product product)
+        {
+            var collection = _database.GetCollection<DLModel.Product>("Product");
+
+            collection.Save(product);
+
+            return product;
+        }
+
         public void Delete(string id)
         {
             var collection = _database.GetCollection<DLModel.Product>("Product");

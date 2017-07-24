@@ -118,6 +118,19 @@ namespace OnDemandTools.Business.Modules.Product
         }
 
         /// <summary>
+        /// Save product to collection
+        /// </summary>
+        /// <param name="model">product model</param>
+        public BLModel.Product Save(BLModel.Product model)
+        {
+            DLModel.Product dataModel = model.ToDataModel<BLModel.Product, DLModel.Product>();
+
+            dataModel = productCommand.Save(dataModel);
+
+            return dataModel.ToBusinessModel<DLModel.Product, BLModel.Product>();
+        }
+
+        /// <summary>
         /// Remove product from collection using ObjectID
         /// </summary>
         /// <param name="id">Object Id</param>

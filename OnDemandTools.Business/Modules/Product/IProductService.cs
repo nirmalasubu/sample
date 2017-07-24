@@ -36,6 +36,12 @@ namespace OnDemandTools.Business.Modules.Product
         void ProductDestinationConverter(ref BLAiringModel.Airing airing);
 
         /// <summary>
+        /// Save product to collection
+        /// </summary>
+        /// <param name="model">product model</param>
+        Model.Product Save(Model.Product model);
+
+        /// <summary>
         /// Remove product from collection using ObjectID
         /// </summary>
         /// <param name="id">Object Id</param>
