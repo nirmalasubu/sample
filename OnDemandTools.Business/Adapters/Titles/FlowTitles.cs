@@ -27,21 +27,28 @@ namespace OnDemandTools.Business.Adapters.Titles
             RestClient client = new RestClient(_appSettings.GetExternalService("Flow").Url);
             var titles = new List<Title>();
 
+            var allTasks = new List<Task>();
+
             foreach (var list in listsOfTitleIds)
             {
                 var request = new RestRequest("/v2/title/{ids}?api_key={api_key}", Method.GET);
                 request.AddUrlSegment("ids", string.Join(",", list));
                 request.AddUrlSegment("api_key", _appSettings.GetExternalService("Flow").ApiKey);
 
-                Task.Run(async () =>
-                {
-                    var rs = await GetFlowTitleAsync(client, request) as List<Title>;
-                    if (!rs.IsNullOrEmpty())
-                    {
-                        titles.AddRange(rs);
-                    }
-
-                }).Wait();
+                allTasks.Add(Task.Run(async () =>
+               {
+                   var rs = await GetFlowTitleAsync(client, request) as List<Title>;
+                   if (!rs.IsNullOrEmpty())
+                   {
+                       titles.AddRange(rs);
+                   }
+               }));
+            }
+            
+            //Ensure all requests completed
+            while (allTasks.Any(e => !(e.IsCompleted || e.IsCanceled || e.IsFaulted)))
+            {
+                //still processing the requests
             }
 
             return titles;
