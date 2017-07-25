@@ -116,7 +116,7 @@ const getFilterVal = (products, filterVal) => {
 const matchTags = (objTags,tag) => {
     var tagTexts=[];
     objTags.map(function(item){
-        tagTexts.push(item.text);
+        tagTexts.push(item.name);
     });
     var flag= false;
     tagTexts.map(function(text){

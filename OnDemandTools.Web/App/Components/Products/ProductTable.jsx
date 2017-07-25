@@ -134,7 +134,7 @@ class ProductTable extends React.Component {
         var tags = [];
         for(var i=0; i < val.length; i++)
         {
-            tags.push(val[i].text);
+            tags.push(val[i].name);
         }
         return '<p data-toggle="tooltip">' + tags.toString() + '</p>';        
     }

@@ -4,8 +4,8 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import { connect } from 'react-redux';
 import validator from 'validator';
 import InfoOverlay from 'Components/Common/InfoOverlay';
-import { WithContext as ReactTags } from 'react-tag-input';
-import 'react-tag-input/example/reactTags.css';
+import ReactTags from 'react-tag-autocomplete';
+import 'react-tag-autocomplete/example/styles.css';
 
 @connect((store) => {
     return {
@@ -31,25 +31,24 @@ class AddEditProductBasic extends React.Component {
             validationStateMappingId: null,
             showError: false,
             componentJustMounted: true,
+            allTags: this.getAllTags(),
             suggestions: []
         });
     }
 
     /// <summary>
-    /// This method is to get tags from products for tags suggestion
+    /// This method is to get all tags from products for tags suggestion
     /// </summary>
-    getTagsBy(query) {
-        var regExp = new RegExp(query);        
+    getAllTags() {    
         var tags = [];
-
+        var i=1;
         for (var x = 0; x < this.props.products.length; x++) {
             for (var y = 0; y < this.props.products[x].tags.length; y++) {
-                console.log(regExp.test(this.props.products[x].tags[y].text) && 
-                    this.isTagMissing(tags, this.props.products[x].tags[y]));
-                if (regExp.test(this.props.products[x].tags[y].text) && 
-                    this.isTagMissing(tags, this.props.products[x].tags[y])) {
-                    tags.push(this.props.products[x].tags[y].text);
-                }                    
+                if ( this.isTagMissing(tags, this.props.products[x].tags[y])) {
+                    var tag={id:i,name:this.props.products[x].tags[y].name};
+                    tags.push(tag);
+                    i++;
+                }
             }
         }
 
@@ -57,14 +56,54 @@ class AddEditProductBasic extends React.Component {
     }
 
     /// <summary>
+    /// This method is to get tags by name from products for tags suggestion
+    /// </summary>
+    getTagsBy(query) {
+        var regExp = new RegExp(query.toLowerCase());        
+        var tags = [];
+        var allTag = [];
+
+        for (var x = 0; x < this.props.products.length; x++) {
+            for (var y = 0; y < this.props.products[x].tags.length; y++) {
+                if ((regExp.test(this.props.products[x].tags[y].name.toLowerCase()) && this.isTagMissing(tags, this.props.products[x].tags[y]))) {
+                    tags.push(this.props.products[x].tags[y]);
+                }                    
+            }
+        }
+        for (var x=0; x < this.state.allTags.length; x++) {
+            if(this.state.allTags[x].name==tags[0].name){
+                if(!this.isTagExist(this.state.allTags[x]))
+                    allTag.push(this.state.allTags[x]);
+            }
+        }
+
+        this.setState({suggestions:allTag});
+    }
+
+    /// <summary>
+    /// This method is to check the tag exist for the product
+    /// </summary>
+    isTagExist(tag)
+    {
+        console.log(tag.name);
+        var product = this.state.productModel;
+        for(var i=0; i < product.tags.length; i++)
+        {
+            if(product.tags[i].name==tag.name)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// This method is to avoid duplication of tags
     /// </summary>
     isTagMissing(tags, tag) {
         for (var x = 0; x < tags.length; x++) {
-            if (tags[x] == tag.text)
+            if (tags[x].name.toLowerCase() == tag.name.toLowerCase())
                 return false;
         }
-
         return true;
     }
 
@@ -100,14 +139,15 @@ class AddEditProductBasic extends React.Component {
     /// </summary>    
     componentWillReceiveProps(nextProps) {
         //this.setState({
-        //    destinationModel: nextProps.data
+        //    suggestions: nextProps.suggestions
         //}, function () {
-        //    if (this.state.componentJustMounted) {
-        //        this.setState({ componentJustMounted: false }, function () {
-        //            this.validateForm();
-        //        });
-        //    }
+            //if (this.state.componentJustMounted) {
+            //    this.setState({ componentJustMounted: false }, function () {
+            //        this.validateForm();
+            //    });
+            //}
         //});
+        //console.log(this.state.suggestions);
     }
 
     isCodeUnique(currentDestination) {
@@ -242,33 +282,18 @@ class AddEditProductBasic extends React.Component {
         let product = this.state.productModel;
         product.tags.push({
             id: product.tags.length + 1,
-            text: tag
+            name: tag.name
         });
         this.setState({productModel: product});
-    }
-    
-    /// <summary>
-    /// this method is to change the position of the tags in the state  tags array
-    /// </summary>
-    handleDrag(tag, currPos, newPos) {
-        let product = this.state.productModel;
- 
-        // mutate array 
-        product.tags.splice(currPos, 1);
-        product.tags.splice(newPos, 0, tag);
- 
-        // re-render 
-        this.setState({ productModel: product });
     }
 
     /// <summary>
     /// this method is to handle the on change of the tags input value
     /// </summary>
     handleInputChange(value){
-        if(value.length>2)
-            var tags = this.getTagsBy(value);
-
-        this.setState({suggestions:tags});
+        if(value.length>2){
+            this.getTagsBy(value);
+        }
     }
 
     render() {
@@ -355,10 +380,11 @@ class AddEditProductBasic extends React.Component {
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
                                             autocomplete={true}
+                                            minQueryLength={3}
+                                            allowNew={true}
                                             handleDelete={this.handleDelete.bind(this)}
                                             handleAddition={this.handleAddition.bind(this)}
-                                            handleDrag={this.handleDrag.bind(this)} 
-                                            handleInputChange={this.handleInputChange.bind(this)}    
+                                            handleInputChange={this.handleInputChange.bind(this)}
                                                 />
                                 </FormGroup>
                             </Col>

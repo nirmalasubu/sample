@@ -13,7 +13,7 @@ namespace OnDemandTools.Web.Mappings
         {
             CreateMap<ProductViewModel, BLModel.Product>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)))
-                .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.Tags.Select(t => t.Text)));
+                .ForMember(d => d.Tags, opt => opt.MapFrom(s => s.Tags.Select(t => t.Name)));
 
             CreateMap<BLModel.Product, ProductViewModel>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()))

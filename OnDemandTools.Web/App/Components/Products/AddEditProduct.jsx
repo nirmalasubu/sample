@@ -41,8 +41,7 @@ class AddEditProduct extends React.Component {
                 description: "",
                 mappingId: "",
                 dynamicAdTrigger: false,
-                tags: [],
-                destinations: []
+                tags: []
             },
             validationStateName: null,
             validationStateDescription: null,
