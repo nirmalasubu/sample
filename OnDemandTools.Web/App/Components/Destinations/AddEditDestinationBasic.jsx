@@ -89,8 +89,11 @@ class AddEditDestinationBasic extends React.Component {
     }
 
     handleTextChange(event) {
+        var enteredValue = event.target.value.toUpperCase();
+        if (enteredValue.length > 5) return;
+
         var model = this.state.destinationModel;
-        model.name = event.target.value.toUpperCase();
+        model.name = enteredValue.toUpperCase();
         this.setState({
             destinationModel: model
         });
@@ -151,7 +154,9 @@ class AddEditDestinationBasic extends React.Component {
 
         var msg = "";
         if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Destination already exists. Please use a unique destination code. To view external ids in use, visit the <a href='http://eawiki/display/turniverse/Enumerations' target='wiki'>Enumerations</a> page.</label>);
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Destination already exists. Please use a unique destination code.</label>);
+        else if (this.state.validationStateName == "error" && this.state.destinationModel.name.length > 0)
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> 3 to 5 letters are required for a Destination Code</label>);
 
         return (
             <div>
