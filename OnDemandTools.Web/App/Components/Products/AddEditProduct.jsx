@@ -11,8 +11,9 @@ import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import AddEditProductBasic from 'Components/Products/AddEditProductBasic';
+import AddEditProductDestination from 'Components/Products/AddEditProductDestination';
 import { saveProduct } from 'Actions/Product/ProductActions';
-import * as destinationAction from 'Actions/Product/ProductActions';
+import * as productAction from 'Actions/Product/ProductActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
@@ -172,7 +173,8 @@ class AddEditProduct extends React.Component {
                         data={this.props.data.productDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
                     <Panel bsClass="panel-category panel">
-                        Text
+                        <AddEditProductDestination
+                            data={this.props.data.productDetails} />
                     </Panel>
                     <NotificationContainer />
                     <CancelWarningModal
