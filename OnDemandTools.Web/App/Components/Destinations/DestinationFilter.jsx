@@ -12,6 +12,7 @@ class DestinationFilter extends React.Component
 
         this.state = {
             options: [
+                { value: 'None', label: 'None' },
                 { value: 'HD', label: 'HD' },
                 { value: 'SD', label: 'SD' },
                 { value: 'C3', label: 'C(X)' },

@@ -9,7 +9,7 @@ class TextOverlay extends React.Component {
     }
 
     render() {
-        if(this.props.data.length > this.props.numberOfChar){
+        if(this.props.data!=null && this.props.data.length > this.props.numberOfChar){
             const popoverDescLeft = (
                 <Popover id="popover-positioned-left">
                     <div class="TitleOverlay-height"> {this.props.data} </div>

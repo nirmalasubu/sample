@@ -10,7 +10,7 @@ import 'react-notifications/lib/notifications.css';
     var arr = getFilterVal(store.destinations, store.filterDestination);
     return {
         destinations: store.destinations,
-        filteredDestinations: (arr!=undefined?arr:store.destinations)
+        filteredDestinations: (arr != undefined ? arr : store.destinations)
     };
 })
 
@@ -18,7 +18,7 @@ class DestinationPage extends React.Component {
 
     constructor(props) {
         super(props);
-       
+
         this.state = {
             stateQueue: [],
 
@@ -73,7 +73,7 @@ class DestinationPage extends React.Component {
 
     render() {
         return (
-            <div>               
+            <div>
                 <PageHeader pageName="Destinations" />
                 <DestinationFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <DestinationTable RowData={this.props.filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
@@ -84,17 +84,60 @@ class DestinationPage extends React.Component {
 
 //filter the states using filter values
 const getFilterVal = (destinations, filterVal) => {
-    if(filterVal.code!=undefined)
-    {        
+    if (filterVal.code != undefined) {
         var code = filterVal.code.toLowerCase();
         var description = filterVal.description.toLowerCase();
         var content = filterVal.content;
-        
-        return (destinations.filter(obj=> ((code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
-                && (description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
-                && (obj.content!=null?(content != "" ? ((content=="HD"?obj.content.highDefinition:false) || (content=="SD"?obj.content.standardDefinition:false)
-                                       || (content=="C3"?obj.content.cx:false) || (content=="NonC3"?obj.content.nonCx:false)) : true):false)
-            )));
+
+        var filteredDestinations = destinations;
+
+        if (code != "") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.name.toLowerCase().indexOf(code) != -1
+            });
+        }
+
+        if (description != "") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.description.toLowerCase().indexOf(description) != -1
+            });
+        }
+
+        if (content == "") return filteredDestinations;
+
+        console.log(filteredDestinations);
+
+        if (content == "None") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.content == null || (
+                    dest.content.highDefinition == false
+                    && dest.content.standardDefinition == false
+                    && dest.content.cx == false
+                    && dest.content.nonCx == false)
+            });
+        }
+        else if (content == "HD") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.content != null && dest.content.highDefinition == true
+            });
+        }
+        else if (content == "SD") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.content != null && dest.content.standardDefinition == true
+            });
+        }
+        else if (content == "C3") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.content != null && dest.content.cx == true
+            });
+        }
+        else if (content == "NonC3") {
+            filteredDestinations = filteredDestinations.filter(function (dest) {
+                return dest.content != null && dest.content.nonCx == true
+            });
+        }
+
+        return filteredDestinations;
     }
     else
         return destinations;
