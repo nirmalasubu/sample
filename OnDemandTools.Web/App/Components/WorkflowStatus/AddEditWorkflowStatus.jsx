@@ -138,7 +138,7 @@ class AddEditWorkflowStatus extends React.Component {
         var isUserEmpty = (this.state.status.user == "");
 
         this.setState({
-            validateStatusName: isNameValid ? 'error' : null,
+            validateStatusName: isNameValid  ? 'error' : null,
             validateUser: isUserEmpty ? 'error' : null,
             validateUniqueStatusName: this.isStatusNameUnique(this.state.status) ? 'error' : null
         });
@@ -227,15 +227,15 @@ render() {
                      <Row>
                       <Form> 
                     <Col sm={4}>
-                    <FormGroup controlId="statusName" validationState={this.state.validateStatusName}>
-                    <ControlLabel>Status Name:*</ControlLabel>
+                    <FormGroup controlId="statusName" validationState={this.state.validateStatusName||this.state.validateUniqueStatusName}>
+                    <ControlLabel>Status Name:</ControlLabel>
                     <FormControl type="text"  value={this.state.status.name} maxLength="20" ref="inputStatusName" placeholder="Status Name" 
                     onChange={(event) =>this.handleTextChange("name", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
                     </FormGroup>
                    </Col>
                    <Col sm={4}>
                    <FormGroup controlId="user" validationState={this.state.validateUser}>
-                    <ControlLabel>User:*</ControlLabel>
+                    <ControlLabel>User:</ControlLabel>
                     <FormControl type="text"  value={this.state.status.user} ref="inputStatusUser" placeholder="User Group"
                      onChange={(event) =>this.handleTextChange("user", event)}/>
                     </FormGroup>
@@ -244,7 +244,7 @@ render() {
                     </Row>
                     <FormGroup controlId="description">
                     <ControlLabel>Description</ControlLabel>
-                    <FormControl componentClass="textarea"  rows="3" cols="40" maxLength="150" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
+                    <FormControl componentClass="textarea" class="workflowStatus-description"  rows="3" cols="40" maxLength="150" value={this.state.status.description} ref="inputStatusDescription"   placeholder="Description" 
                      onChange={(event) =>this.handleTextChange("description", event)}/>
                    </FormGroup>
                    </Grid>

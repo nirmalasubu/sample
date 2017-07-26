@@ -575,3 +575,12 @@ tr.strikeout td:before {
 
 /******** Modal Table styling  ends ******/
 /*****************************************************/
+
+/*****************************************************/
+/******** work flow styling  starts ******/
+.workflowStatus-description{
+   max-width: 66%;
+}
+
+/*****************************************************/
+/******** work flow styling  ends ******/
