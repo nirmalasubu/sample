@@ -282,7 +282,7 @@ class AddEditProductBasic extends React.Component {
     /// this method is to handle the addition of tags to the state
     /// </summary>
     handleAddition(tag) {
-        if(!this.isTagExist(tag))
+        if(!this.isTagExist(tag) && tag.name.length>2)
         {
             let product = this.state.productModel;
             product.tags.push({
