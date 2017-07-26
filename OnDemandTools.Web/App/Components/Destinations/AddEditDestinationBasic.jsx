@@ -59,6 +59,9 @@ class AddEditDestinationBasic extends React.Component {
     }
 
     validateForm() {
+
+        this.setState({showError: false});
+
         var name = this.state.destinationModel.name;
         var description = this.state.destinationModel.description;
         var hasError = false;
