@@ -41,6 +41,18 @@ namespace OnDemandTools.Web.Controllers
             return productModel;
         }
 
+        [Authorize]
+        [HttpGet("newProduct")]
+        public ProductViewModel GetEmptyModel()
+        {
+            return new ProductViewModel
+            {
+                Name = string.Empty,
+                Description = string.Empty,
+                ExternalId = string.Empty
+            };
+        }
+
         //save product details
         [Authorize]
         [HttpPost]

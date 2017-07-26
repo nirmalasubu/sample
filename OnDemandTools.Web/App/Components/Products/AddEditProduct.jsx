@@ -44,10 +44,7 @@ class AddEditProduct extends React.Component {
                 dynamicAdTrigger: false,
                 tags: []
             },
-            validationStateName: null,
-            validationStateDescription: null,
-            validationStateExternalId: null,
-            validationStateMappingId: null,
+            validationState: null,
             showWarningModel: false
         });
     }
@@ -79,7 +76,6 @@ class AddEditProduct extends React.Component {
     /// To save and update the product details
     /// </summary>
     handleSave() {
-        console.log(this.state.productDetails);
         var elem = this;
         if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
 
@@ -138,10 +134,9 @@ class AddEditProduct extends React.Component {
     /// property of this component to reflect that change. This will enable/disable the
     /// save button
     /// </summary>
-    updateBasicValidateStates(name, description) {
+    updateBasicValidateStates(error) {
         this.setState({
-            validationStateName: name ? 'error' : null,
-            validationStateDescription: description ? 'error' : null
+            validationState: error ? 'error' : null
         });
     }
 
@@ -149,13 +144,8 @@ class AddEditProduct extends React.Component {
     /// Determine whether save button needs to be enabled or not based on the validation states value
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateName != null || this.state.validationStateDescription != null
-            || this.state.validationStatePropertyName != null || this.state.isProcessing || this.state.validationStateDeliverables != null);
+        return (this.state.validationState != null);
     }
-
-    //updateDestination(destination) {
-    //    this.setState({ destinationDetails: destination });
-    //}
 
     render() {
         return (
@@ -172,7 +162,7 @@ class AddEditProduct extends React.Component {
                     <AddEditProductBasic
                         data={this.props.data.productDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
-                    <Panel bsClass="panel-category panel">
+                    <Panel header="Destination" >
                         <AddEditProductDestination
                             data={this.props.data.productDetails} />
                     </Panel>

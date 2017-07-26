@@ -8,7 +8,7 @@ import AddEditProduct from 'Components/Products/AddEditProduct';
 import RemoveProductModal from 'Components/Products/RemoveProductModal';
 import DestinationOverlay from 'Components/Common/DestinationOverlay';
 import TextOverlay from 'Components/Common/TextOverlay';
-import { getNewCategory } from 'Actions/Category/CategoryActions';
+import { getNewProduct } from 'Actions/Product/ProductActions';
 
 
 class ProductTable extends React.Component {
@@ -45,16 +45,16 @@ class ProductTable extends React.Component {
     ///Called on component load
     ///</summary>
     componentDidMount() {
-        //let promise = getNewCategory();
-        //promise.then(message => {
-        //    this.setState({
-        //        newCategoryModel: message
-        //    });
-        //}).catch(error => {
-        //    this.setState({
-        //        newCategoryModel: {}
-        //    });
-        //});
+        let promise = getNewProduct();
+        promise.then(message => {
+            this.setState({
+                newProductModel: message
+            });
+        }).catch(error => {
+            this.setState({
+                newProductModel: {}
+            });
+        });
     }
 
     ///<summary>
@@ -63,6 +63,7 @@ class ProductTable extends React.Component {
     openCreateNewDestinationModel() {
         this.setState({ showAddEditModel: true, productDetails: jQuery.extend(true, {}, this.state.newProductModel) });
     }
+
     ///<summary>
     // when delete product button event handled
     ///</summary>

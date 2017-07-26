@@ -5,7 +5,7 @@
         case 'FILTER_PRODUCTS_SUCCESS':       // Required to obtain product object state 
             const assignState = Object.assign([], state);
             return assignState;
-        case 'SAVE_DESTINATION_SUCCESS':
+        case 'SAVE_PRODUCT_SUCCESS':
             var productIndex = state.findIndex((obj => obj.id == action.product.id));
             if (productIndex < 0) { 
                 return [

@@ -31,6 +31,16 @@ export const fetchProducts = () => {
     };
 };
 
+export const getNewProduct = () => {
+    return Axios.get('/api/product/newProduct')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+
 export const saveProductSuccess = (product) => {
     return {
         type: actionTypes.SAVE_PRODUCT_SUCCESS,

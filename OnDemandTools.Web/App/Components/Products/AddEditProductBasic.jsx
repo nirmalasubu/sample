@@ -28,7 +28,6 @@ class AddEditProductBasic extends React.Component {
             validationStateName: null,
             validationStateDescription: null,
             validationStateExternalId: null,
-            validationStateMappingId: null,
             showError: false,
             componentJustMounted: true,
             allTags: this.getAllTags(),
@@ -70,10 +69,13 @@ class AddEditProductBasic extends React.Component {
                 }                    
             }
         }
-        for (var x=0; x < this.state.allTags.length; x++) {
-            if(this.state.allTags[x].name==tags[0].name){
-                if(!this.isTagExist(this.state.allTags[x]))
-                    allTag.push(this.state.allTags[x]);
+        if(tags.length>0)
+        {
+            for (var x=0; x < this.state.allTags.length; x++) {
+                if(this.state.allTags[x].name==tags[0].name){
+                    if(!this.isTagExist(this.state.allTags[x]))
+                        allTag.push(this.state.allTags[x]);
+                }
             }
         }
 
@@ -85,11 +87,10 @@ class AddEditProductBasic extends React.Component {
     /// </summary>
     isTagExist(tag)
     {
-        console.log(tag.name);
         var product = this.state.productModel;
         for(var i=0; i < product.tags.length; i++)
         {
-            if(product.tags[i].name==tag.name)
+            if(product.tags[i].name.toLowerCase()==tag.name.toLowerCase())
                 return true;
         }
 
@@ -132,6 +133,8 @@ class AddEditProductBasic extends React.Component {
         if (this.state.productModel.id == null) {
             this.setState({ productModel: model, componentJustMounted: true });
         }
+
+        this.validateForm();
     }
 
     /// <summary>
@@ -150,41 +153,55 @@ class AddEditProductBasic extends React.Component {
         //console.log(this.state.suggestions);
     }
 
-    isCodeUnique(currentDestination) {
-        //for (var x = 0; x < this.props.destinations.length; x++) {
-        //    if (this.props.destinations[x].id != currentDestination.id) {
-        //        if (this.props.destinations[x].name == currentDestination.name) {
-        //            this.setState({
-        //                showError: true
-        //            });
+    /// <summary>
+    /// This method checks whether the product already exist
+    /// </summary>
+    isProductUnique(currentProduct) {
+        for (var x = 0; x < this.props.products.length; x++) {
+            if (this.props.products[x].id != currentProduct.id) {
+                if (this.props.products[x].name == currentProduct.name || 
+                    this.props.products[x].externalId == currentProduct.externalId) {
+                    this.setState({
+                        showError: true
+                    });
 
-        //            return false;
-        //        }
-        //        else {
-        //            this.setState({
-        //                showError: false
-        //            });
-        //        }
-        //    }
-        //}
-        //return true;
+                    return false;
+                }
+                else {
+                    this.setState({
+                        showError: false
+                    });
+                }
+            }
+        }
+        return true;
     }
 
+    /// <summary>
+    /// This method validates the name, description and external id fields
+    /// and updates the validationstate
+    /// </summary>
     validateForm() {
-        var name = this.state.destinationModel.name;
-        var description = this.state.destinationModel.description;
+        var name = this.state.productModel.name;
+        var description = this.state.productModel.description;
+        var externalId = this.state.productModel.externalId;
         var hasError = false;
-        var hasNameError = (name != undefined
-            && (name == "" || name.length < 3 || name.length > 5 || !validator.isAlpha(name)
-                || !this.isCodeUnique(this.state.destinationModel)));
+        var hasNameError = ((name == "" || !this.isProductUnique(this.state.productModel)));
         var hasDesError = (description == "");
+        var hasExternalError = (externalId!=""?!validator.isUUID(externalId):false);
+
+        if(hasNameError || hasDesError || hasExternalError)
+            hasError = true;
+        else
+            hasError = false;
 
         this.setState({
             validationStateName: hasNameError ? 'error' : null,
-            validationStateDescription: hasDesError ? 'error' : null
+            validationStateDescription: hasDesError ? 'error' : null,
+            validationStateExternalId: hasExternalError ? 'error' : null,
         });
 
-        this.props.validationStates(hasNameError, hasDesError);
+        this.props.validationStates(hasError);
     }    
 
     /// <summary>
@@ -197,9 +214,7 @@ class AddEditProductBasic extends React.Component {
             productModel: model
         });
 
-        //this.validateForm();
-
-        //this.props.updateDestination(this.state.destinationModel);
+        this.validateForm();
     }
 
     /// <summary>
@@ -211,10 +226,6 @@ class AddEditProductBasic extends React.Component {
         this.setState({
             productModel: model
         });
-
-        //this.validateForm();
-
-        //this.props.updateDestination(this.state.destinationModel);
     }
 
     /// <summary>
@@ -227,9 +238,7 @@ class AddEditProductBasic extends React.Component {
             productModel: model
         });
 
-        //this.validateForm();
-
-        //this.props.updateDestination(this.state.destinationModel);
+        this.validateForm();
     }
 
     /// <summary>
@@ -243,9 +252,7 @@ class AddEditProductBasic extends React.Component {
             productModel: model
         });
 
-        //this.validateForm();
-
-        //this.props.updateDestination(this.state.destinationModel);
+        this.validateForm();
     }
 
     /// <summary>
@@ -260,10 +267,6 @@ class AddEditProductBasic extends React.Component {
         this.setState({
             productModel: model
         });
-
-        //this.validateForm();
-
-        //this.props.updateDestination(this.state.destinationModel);
     }
 
     /// <summary>
@@ -279,12 +282,15 @@ class AddEditProductBasic extends React.Component {
     /// this method is to handle the addition of tags to the state
     /// </summary>
     handleAddition(tag) {
-        let product = this.state.productModel;
-        product.tags.push({
-            id: product.tags.length + 1,
-            name: tag.name
-        });
-        this.setState({productModel: product});
+        if(!this.isTagExist(tag))
+        {
+            let product = this.state.productModel;
+            product.tags.push({
+                id: product.tags.length + 1,
+                name: tag.name
+            });
+            this.setState({productModel: product});
+        }
     }
 
     /// <summary>
@@ -299,7 +305,7 @@ class AddEditProductBasic extends React.Component {
     render() {
         var msg = "";
         if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Destination already exists. Please use a unique destination code. To view external ids in use, visit the <a href='http://eawiki/display/turniverse/Enumerations' target='wiki'>Enumerations</a> page.</label>);
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Product already exists. Please use a unique product name and external id.</label>);
 
         return (
             <div>
@@ -314,7 +320,7 @@ class AddEditProductBasic extends React.Component {
             <Col md={4} >
                                 <FormGroup
                                     controlId="externalId" validationState={this.state.validationStateExternalId}>
-                                    <span style={{paddingRight:30}}>External ID</span>
+                                    <span style={{paddingRight:23, fontWeight:"bold"}}>External ID</span>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -328,8 +334,8 @@ class AddEditProductBasic extends React.Component {
                             </Col>
                             <Col md={4}>
                                 <FormGroup
-                                    controlId="mappingId" validationState={this.state.validationStateMappingId}>
-                                    <span title="an identifier from another system that maps to this product like a Turniverse feed id" style={{paddingRight:10}}>Mapping ID</span>
+                                    controlId="mappingId">
+                                    <span title="an identifier from another system that maps to this product like a Turniverse feed id" style={{paddingRight:10, fontWeight:"bold"}}>Mapping ID</span>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="number"
@@ -345,7 +351,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                     controlId="productName" validationState={this.state.validationStateName}>
-                                    <span style={{paddingRight:10}}>Product Name</span>
+                                    <span style={{paddingRight:1, fontWeight:"bold"}}>Product Name</span>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -359,7 +365,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                     controlId="prdDescription" validationState={this.state.validationStateDescription}>
-                                    <span style={{paddingRight:10}}>Description</span>
+                                    <span style={{paddingRight:10, fontWeight:"bold"}}>Description</span>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -374,8 +380,8 @@ class AddEditProductBasic extends React.Component {
                         <Row>
                             <Col md={4} >
                                 <FormGroup
-                                        controlId="prdTags" validationState={this.state.validationStateTags}>
-                                        <span style={{paddingRight:67, fontWeight:20}}>Tags</span>
+                                        controlId="prdTags">
+                                        <span style={{paddingRight:67, fontWeight:"bold"}}>Tags</span>
                                         <ReactTags tags={this.state.productModel.tags}
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
