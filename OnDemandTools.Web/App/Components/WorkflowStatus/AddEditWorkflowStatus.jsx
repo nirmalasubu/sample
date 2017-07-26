@@ -222,10 +222,10 @@ render() {
             <Modal.Body>
                 <div class="panel panel-default">
                    <div class="panel-body">
+                    {msg}
                      <Grid >
                      <Row>
-                      <Form>    
-                     {msg}
+                      <Form> 
                     <Col sm={4}>
                     <FormGroup controlId="statusName" validationState={this.state.validateStatusName}>
                     <ControlLabel>Status Name:*</ControlLabel>
