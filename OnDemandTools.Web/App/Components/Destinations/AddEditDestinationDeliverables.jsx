@@ -229,7 +229,7 @@ class AddEditDestinationDeliverables extends React.Component {
             <span class="addVertialAlign"> New Deliverable</span>
           </button>
         </div>
-        <div className="clearBoth">
+        <div className="clearBoth modalTableContainer">
           {this.generateDeliverableTable()}
         </div>
       </div>

@@ -533,6 +533,14 @@ tr.strikeout td:before {
 /*****************************************************/
 /******** Modal Table styling  starts ******/
 
+
+.modalTableContainer
+{
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+}
+
 .modalTable
 {
     table-layout: auto;

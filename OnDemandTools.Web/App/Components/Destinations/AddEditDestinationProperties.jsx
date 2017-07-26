@@ -213,7 +213,7 @@ class AddEditDestinationProperties extends React.Component {
                         <span class="addVertialAlign"> New Property</span>
                     </button>
                 </div>
-                <div className="clearBoth">
+                <div className="clearBoth modalTableContainer">
                     <Grid componentClass="table" bsClass={this.hasProperties() ? "modalTable" : "hideModalTable"}>
                         <thead>
                             <Row componentClass="tr">
