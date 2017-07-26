@@ -163,14 +163,16 @@ class AddEditProduct extends React.Component {
                     <AddEditProductBasic
                         data={this.props.data.productDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
-                    <Panel header="Destination" >
-                        <AddEditProductDestination
-                            data={this.props.data.productDetails} />
-                    </Panel>
-                    <Panel header="Content-Tiers">
-                        <AddEditProductContentTier
-                            data={this.props.data.productDetails} />
-                    </Panel>
+                    <Tabs id="addeditdestination" defaultActiveKey={1} >
+                        <Tab eventKey={1} title="Destination">
+                            <AddEditProductDestination
+                                data={this.props.data.productDetails} />
+                        </Tab>
+                        <Tab eventKey={2} title="Content-Tiers">
+                            <AddEditProductContentTier
+                                data={this.props.data.productDetails} />
+                        </Tab>
+                    </Tabs>
                     <NotificationContainer />
                     <CancelWarningModal
                         data={this.state}
