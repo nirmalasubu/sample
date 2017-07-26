@@ -11,6 +11,7 @@ namespace OnDemandTools.DAL.Modules.Product.Model
         {
             Destinations = new List<string>();
             Tags = new List<string>();
+            ContentTiers = new List<ContentTier>();
 
             ExternalId = Guid.NewGuid();
         }
@@ -24,6 +25,8 @@ namespace OnDemandTools.DAL.Modules.Product.Model
         public string Description { get; set; }
 
         public int MappingId { get; set; }
+
+        public List<ContentTier> ContentTiers { get; set; }
 
         public List<string> Tags { get; set; }
 

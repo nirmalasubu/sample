@@ -10,6 +10,7 @@ namespace OnDemandTools.Web.Models.Product
         {
             Destinations = new List<string>();
             Tags = new List<Tag>();
+            ContentTiers = new List<ContentTier>();
 
             this.UpdateCreatedBy();
         }
@@ -23,6 +24,8 @@ namespace OnDemandTools.Web.Models.Product
         public string Description { get; set; }
 
         public int MappingId { get; set; }
+
+        public List<ContentTier> ContentTiers { get; set; }
 
         public List<Tag> Tags { get; set; }
 

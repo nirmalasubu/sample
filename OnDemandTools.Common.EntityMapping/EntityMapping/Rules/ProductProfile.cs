@@ -12,9 +12,12 @@ namespace OnDemandTools.Common.EntityMapping
         {
             CreateMap<BLModel.Product, DLModel.Product>()
               .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
-           
+            CreateMap<BLModel.ContentTier, DLModel.ContentTier>()
+              .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? ObjectId.GenerateNewId() : new ObjectId(s.Id)));
+
             CreateMap<DLModel.Product, BLModel.Product>()
-             .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));           
+             .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));
+            CreateMap<DLModel.ContentTier, BLModel.ContentTier>();
         }
     }
 }

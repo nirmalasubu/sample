@@ -12,6 +12,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import AddEditProductBasic from 'Components/Products/AddEditProductBasic';
 import AddEditProductDestination from 'Components/Products/AddEditProductDestination';
+import AddEditProductContentTier from 'Components/Products/AddEditProductContentTier';
 import { saveProduct } from 'Actions/Product/ProductActions';
 import * as productAction from 'Actions/Product/ProductActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
@@ -164,6 +165,10 @@ class AddEditProduct extends React.Component {
                         validationStates={this.updateBasicValidateStates.bind(this)} />
                     <Panel header="Destination" >
                         <AddEditProductDestination
+                            data={this.props.data.productDetails} />
+                    </Panel>
+                    <Panel header="Content-Tiers">
+                        <AddEditProductContentTier
                             data={this.props.data.productDetails} />
                     </Panel>
                     <NotificationContainer />

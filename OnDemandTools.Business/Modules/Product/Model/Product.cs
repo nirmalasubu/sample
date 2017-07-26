@@ -11,7 +11,8 @@ namespace OnDemandTools.Business.Modules.Product.Model
     {
         public Product()
         {
-            Destinations = new List<string>();            
+            Destinations = new List<string>();
+            ContentTiers = new List<ContentTier>();
         }
 
         public String Id { get; set; }
@@ -23,6 +24,8 @@ namespace OnDemandTools.Business.Modules.Product.Model
         public string Description { get; set; }
 
         public int MappingId { get; set; }
+
+        public List<ContentTier> ContentTiers { get; set; }
 
         public List<string> Tags { get; set; }
 
