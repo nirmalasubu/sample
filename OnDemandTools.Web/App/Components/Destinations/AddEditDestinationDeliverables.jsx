@@ -62,6 +62,13 @@ class AddEditDestinationDeliverables extends React.Component {
     // so that it can render its controls accordingly. In this case
     // the validation state is false b/c the user hasn't entered anything for deliverable value
     this.props.validationStates(true);
+
+
+    //Moves the scroll bar to top if there is too many contents
+    let node = ReactDOM.findDOMNode(this.refs.destinationDeliverablesContainer);
+    if (node) {
+      node.scrollTop = 0;
+    }
   }
 
   /// <summary>
@@ -229,7 +236,7 @@ class AddEditDestinationDeliverables extends React.Component {
             <span class="addVertialAlign"> New Deliverable</span>
           </button>
         </div>
-        <div className="clearBoth modalTableContainer">
+        <div className="clearBoth modalTableContainer" ref="destinationDeliverablesContainer">
           {this.generateDeliverableTable()}
         </div>
       </div>

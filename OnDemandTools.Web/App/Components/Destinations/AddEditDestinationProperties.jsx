@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Tabs, Checkbox, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, OverlayTrigger, Popover, Collapse, Well } from 'react-bootstrap';
 import DestinationPropertiesFilter from 'Components/Destinations/DestinationPropertiesFilter';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
@@ -62,6 +63,12 @@ class AddEditDestinationProperties extends React.Component {
         model = this.state.destinationDetails;
         model.properties.unshift(newProperty);
         this.setState({ destinationDetails: model });
+
+        //Moves the scroll bar to top if there is too many contents
+        let node = ReactDOM.findDOMNode(this.refs.destinationPropertiesContainer);
+        if (node) {
+            node.scrollTop = 0;
+        }
 
         this.checkPropertyNameIsEmpty();
     }
@@ -213,7 +220,7 @@ class AddEditDestinationProperties extends React.Component {
                         <span class="addVertialAlign"> New Property</span>
                     </button>
                 </div>
-                <div className="clearBoth modalTableContainer">
+                <div className="clearBoth modalTableContainer" ref="destinationPropertiesContainer">
                     <Grid componentClass="table" bsClass={this.hasProperties() ? "modalTable" : "hideModalTable"}>
                         <thead>
                             <Row componentClass="tr">
