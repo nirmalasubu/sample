@@ -36,6 +36,7 @@ class AddEditProduct extends React.Component {
         super(props);
 
         this.state = ({
+            productUnModifiedData:"",
             isProcessing: false,
             productDetails: {
                 externalId: "",
@@ -57,7 +58,8 @@ class AddEditProduct extends React.Component {
 
         this.setState({
             isProcessing: false,
-            productDetails: product
+            productDetails: product,
+            productUnModifiedData: jQuery.extend(true, {}, product)
         });
     }
     /// <summary>
@@ -115,6 +117,8 @@ class AddEditProduct extends React.Component {
     /// called from cancel warning component to close add edit pop up
     /// </summary>
     handleAddEditClose() {
+        var model = this.state.productUnModifiedData;
+        jQuery.extend(this.state.productDetails, model);
         this.props.handleClose();
     }
 
@@ -122,7 +126,7 @@ class AddEditProduct extends React.Component {
     /// Called to close the add edit pop up or open cancel warning pop up
     /// </summary>
     handleClose() {
-        if (JSON.stringify(this.state.destinationDetails) == JSON.stringify(this.props.data.destinationDetails)) {
+        if (JSON.stringify(this.state.productUnModifiedData) == JSON.stringify(this.state.productDetails)) {
             this.props.handleClose();
         }
         else {
