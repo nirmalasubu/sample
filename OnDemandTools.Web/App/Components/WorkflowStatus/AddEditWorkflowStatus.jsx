@@ -134,7 +134,7 @@ class AddEditWorkflowStatus extends React.Component {
     /// This function is to set validations states value
     /// </summary>
     validateForm() {
-        var isNameValid = this.state.status.name.match("^[a-zA-Z ]+$")==null;  //validation to accept only aplhabets
+        var isNameValid = this.state.status.name.match("^[a-zA-Z]+$")==null;  //validation to accept only aplhabets
         var isUserEmpty = (this.state.status.user == "");
 
         this.setState({
@@ -202,7 +202,8 @@ class AddEditWorkflowStatus extends React.Component {
 
         //required to overcome form control warning of categoryName
         this.setState({
-            status: initialStatus 
+            status: initialStatus
+            
         });
       
     }
@@ -216,7 +217,7 @@ render() {
         <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <div>{this.props.data.status.id != null ? "Edit Status -" + this.props.data.status.name : "Add Status"}</div>
+                    <div>{this.props.data.status.id != null ? "Edit Status -" + this.state.statusUnModifiedData.name : "Add Status"}</div>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -236,7 +237,7 @@ render() {
                    <Col sm={4}>
                    <FormGroup controlId="user" validationState={this.state.validateUser}>
                     <ControlLabel>User:</ControlLabel>
-                    <FormControl type="text"  value={this.state.status.user} ref="inputStatusUser" placeholder="User Group"
+                    <FormControl type="text"  value={this.state.status.user} ref="inputStatusUser" placeholder="User Group" maxLength="20" 
                      onChange={(event) =>this.handleTextChange("user", event)}/>
                     </FormGroup>
                      </Col>
