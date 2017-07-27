@@ -229,14 +229,14 @@ render() {
                       <Form> 
                     <Col sm={4}>
                     <FormGroup controlId="statusName" validationState={this.state.validateStatusName||this.state.validateUniqueStatusName}>
-                    <ControlLabel>Status Name:</ControlLabel>
+                    <ControlLabel>Status Name</ControlLabel>
                     <FormControl type="text"  value={this.state.status.name} maxLength="20" ref="inputStatusName" placeholder="Status Name" 
                     onChange={(event) =>this.handleTextChange("name", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
                     </FormGroup>
                    </Col>
                    <Col sm={4}>
                    <FormGroup controlId="user" validationState={this.state.validateUser}>
-                    <ControlLabel>User:</ControlLabel>
+                    <ControlLabel>User Group</ControlLabel>
                     <FormControl type="text"  value={this.state.status.user} ref="inputStatusUser" placeholder="User Group" maxLength="20" 
                      onChange={(event) =>this.handleTextChange("user", event)}/>
                     </FormGroup>
