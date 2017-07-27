@@ -84,7 +84,7 @@ class DualListBox extends React.Component {
     }
 
     ///<summary>
-    /// Sets the available and selected options based on the filterer 
+    /// Sets the available and selected options based on the filterer and filter input
     ///</summary>
     filterOptions(options, filterer, filterInput) {
         const {canFilter, filterCallback } = this.props;
@@ -170,11 +170,20 @@ class DualListBox extends React.Component {
     onDoubleClick(event) {
         const value = event.currentTarget.value;
         const selected = this.toggleSelected([value]);
+        var id =event.currentTarget.id;
 
-        this.setState({
-            isAvailableSelected:false,
-            isCurrentSelected:false
-        });
+        if(id === 'available')
+        {
+            this.setState({
+                isAvailableSelected:false
+            });
+        }
+        else
+        {
+            this.setState({
+                isCurrentSelected:false
+            });
+        }
 
         this.props.onChange(selected);
     }
@@ -187,18 +196,24 @@ class DualListBox extends React.Component {
         const { options, onChange } = this.props;
         const select = direction === 'Right' ? this.available : this.selected;
 
-        console.log(select);
-
         let selected = [];
         
         selected = this.toggleSelected(
             this.getSelectedOptions(select),
         );
 
-        this.setState({
-            isAvailableSelected:false,
-            isCurrentSelected:false
-        });
+        if(direction === 'Right')
+        {
+            this.setState({
+                isAvailableSelected:false
+            });
+        }
+        else
+        {
+            this.setState({
+                isCurrentSelected:false
+            });
+        }
 
         onChange(selected);
     }
