@@ -24,7 +24,8 @@ export default combineReducers({
     categories: CategoryReducer,
     filterCategory: FilterCategoryDataReducer,
     filterProduct: FilterProductDataReducer,
-    filterStatus:FilterStatusDataReducer
+    filterStatus:FilterStatusDataReducer,
+    serverIdletime:0
     // More reducers if there are
     // can go here
 });

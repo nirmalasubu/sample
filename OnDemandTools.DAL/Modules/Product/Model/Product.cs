@@ -1,10 +1,12 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using OnDemandTools.Common.Model;
 using System;
 using System.Collections.Generic;
 
 namespace OnDemandTools.DAL.Modules.Product.Model
 {
+    [BsonIgnoreExtraElements]
     public class Product:IModel
     {
         public Product()

@@ -24,6 +24,7 @@ using OnDemandTools.Web.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using OnDemandTools.Web.Utilities.Redis;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace OnDemandTools.Web
 {
@@ -156,8 +157,10 @@ namespace OnDemandTools.Web
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
                 ExpireTimeSpan = TimeSpan.FromHours(12),
-                SlidingExpiration = true
-            });
+                SlidingExpiration = true,
+                
+                
+            }); 
 
             // Configure the OWIN pipeline to use OpenID Connect auth.
             AppSettings settings = Configuration.Get<AppSettings>("Application");

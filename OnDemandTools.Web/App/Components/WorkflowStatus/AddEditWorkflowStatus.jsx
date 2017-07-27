@@ -35,7 +35,9 @@ class AddEditWorkflowStatus extends React.Component {
             validationStateUniqueName: null,
             validateStatusName:null,
             validateUser:null,
-            validateUniqueStatusName:null
+            validateUniqueStatusName:null,
+            IDLE_TIMEOUT:10,
+            _idleSecondsCounter:0
         });
     }
 
@@ -205,6 +207,18 @@ class AddEditWorkflowStatus extends React.Component {
             status: initialStatus 
         });
       
+        //setInterval(this.CheckIdleTime, 10);
+    }
+
+
+    CheckIdleTime() {
+        alert("Time expired!");
+        //var count=this.state._idleSecondsCounter++;
+        //this.setState ({_idleSecondsCounter:count});
+        //console.log("this.state._idleSecondsCounter "+this.state._idleSecondsCounter)
+        //if (this.state._idleSecondsCounter >= this.state.IDLE_TIMEOUT) {
+        //    alert("Time expired!");
+        //}
     }
 
 render() {

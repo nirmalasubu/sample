@@ -63,9 +63,8 @@
     "Microsoft.AspNetCore.Session": "1.1.1",
     "Gray.Microsoft.AspNetCore.SignalR.Server": "0.2.0-alpha1",
     "System.Threading.Timer": "4.3.0",
-    "Microsoft.Extensions.Caching.Redis": "1.1.1"
-   
-   
+    "Microsoft.Extensions.Caching.Redis": "1.1.1",
+    "Microsoft.Owin.Security.Cookies": "3.1.0"
   },
 
   "tools": {
