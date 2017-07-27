@@ -137,6 +137,11 @@ class DualListBox extends React.Component {
         const value = event.currentTarget.value;
         const selected = this.toggleSelected([value]);
 
+        this.setState({
+            isAvailableSelected:false,
+            isCurrentSelected:false
+        });
+
         this.props.onChange(selected);
     }
 
@@ -151,6 +156,11 @@ class DualListBox extends React.Component {
         selected = this.toggleSelected(
             this.getSelectedOptions(select),
         );
+
+        this.setState({
+            isAvailableSelected:false,
+            isCurrentSelected:false
+        });
 
         onChange(selected);
     }
