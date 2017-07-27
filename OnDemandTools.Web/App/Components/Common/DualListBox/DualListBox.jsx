@@ -5,6 +5,9 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import ListBox from 'Components/Common/DualListBox/ListBox';
 
 class DualListBox extends React.Component {
+    /// <summary>
+    /// set the prop types
+    /// </summary>
     static propTypes = {
         options: PropTypes.arrayOf(
             PropTypes.oneOfType([
@@ -23,6 +26,9 @@ class DualListBox extends React.Component {
         moduleName: PropTypes.string,
     };
 
+    /// <summary>
+    /// set the default values to the prop types
+    /// </summary>
     static defaultProps = {
         available: undefined,
         selected: [],
@@ -31,6 +37,10 @@ class DualListBox extends React.Component {
         moduleName:""
     };
 
+    ///<summary>
+    /// Define default component state information. This will
+    /// get modified further based on how the user interacts with it
+    ///</summary>
     constructor(props) {
         super(props);
 
@@ -51,6 +61,9 @@ class DualListBox extends React.Component {
         this.onRightSelectChange = this.onRightSelectChange.bind(this);
     }
 
+    ///<summary>
+    /// This is a callback method which filters the options based upon the filter input 
+    ///</summary>
     filterCallBack(option, filterInput){
         if (filterInput === '') {
             return true;
@@ -59,6 +72,9 @@ class DualListBox extends React.Component {
         return (new RegExp(filterInput, 'i')).test(option.label);
     };
 
+    ///<summary>
+    /// This is a callback method which is called at the time of search text change. 
+    ///</summary>
     onFilterChange(event) {
         var filter = this.state.filter;
         filter[event.target.dataset.key] = event.target.value;
@@ -67,6 +83,9 @@ class DualListBox extends React.Component {
         });
     }
 
+    ///<summary>
+    /// Sets the available and selected options based on the filterer 
+    ///</summary>
     filterOptions(options, filterer, filterInput) {
         const {canFilter, filterCallback } = this.props;
         const filtered = [];
@@ -85,6 +104,9 @@ class DualListBox extends React.Component {
         return filtered;
     }
 
+    ///<summary>
+    /// Sets the available options 
+    ///</summary>
     filterAvailable(options) {
         const { filterType } = this.props;
         // Show all un-selected options
@@ -95,6 +117,9 @@ class DualListBox extends React.Component {
         );
     }
 
+    ///<summary>
+    /// Sets the selected options 
+    ///</summary>
     filterSelected(options) {
         const { filterType } = this.props;
         // Order the selections by the default order
@@ -105,6 +130,9 @@ class DualListBox extends React.Component {
         );
     }
 
+    ///<summary>
+    /// this method renders the options tag inside select 
+    ///</summary>
     renderOptions(options) {
         return options.map((option) => {
             const key = `${option.value}-${option.label}`;
@@ -117,6 +145,9 @@ class DualListBox extends React.Component {
         });
     }
 
+    ///<summary>
+    /// this methos add/remove the values from selected array 
+    ///</summary>
     toggleSelected(selected) {
         const oldSelected = this.props.selected.slice(0);
 
@@ -132,7 +163,10 @@ class DualListBox extends React.Component {
 
         return oldSelected;
     }
-
+    
+    ///<summary>
+    /// this method moves thevalue to the opposite box on double click 
+    ///</summary>
     onDoubleClick(event) {
         const value = event.currentTarget.value;
         const selected = this.toggleSelected([value]);
@@ -145,6 +179,10 @@ class DualListBox extends React.Component {
         this.props.onChange(selected);
     }
 
+    ///<summary>
+    /// this method adds/removes the values from available and selected box 
+    /// on click of add and remove button
+    ///</summary>
     onClick(direction) {
         const { options, onChange } = this.props;
         const select = direction === 'Right' ? this.available : this.selected;
@@ -165,6 +203,9 @@ class DualListBox extends React.Component {
         onChange(selected);
     }
 
+    ///<summary>
+    /// this method selects the values from available and selected box on key up
+    ///</summary>
     onKeyUp(event) {
         const { currentTarget, key } = event;
 
@@ -179,12 +220,18 @@ class DualListBox extends React.Component {
         }
     }
 
+    ///<summary>
+    /// this method gets the select values from the list box
+    ///</summary>
     getSelectedOptions(element) {
         return this.arrayFrom(element.options)
             .filter(option => option.selected)
             .map(option => option.value);
     }
 
+    ///<summary>
+    /// this method gets the array of values from the options shape
+    ///</summary>
     arrayFrom(iterable) {
         const arr = [];
 
@@ -195,6 +242,10 @@ class DualListBox extends React.Component {
         return arr;
     }
 
+    ///<summary>
+    /// this method gets called at the time of selecting 
+    /// the values from available list box
+    ///</summary>
     onLeftSelectChange(event){
         var array = [];
         array = this.getSelectedOptions(event.target);
@@ -204,6 +255,10 @@ class DualListBox extends React.Component {
             this.setState({isAvailableSelected:false});
     }
 
+    ///<summary>
+    /// this method gets called at the time of selecting 
+    /// the selected list box
+    ///</summary>
     onRightSelectChange(event){
         var array = [];
         array = this.getSelectedOptions(event.target);
@@ -213,6 +268,9 @@ class DualListBox extends React.Component {
             this.setState({isCurrentSelected:false});
     }
 
+    ///<summary>
+    /// this method renders filter text box component
+    ///</summary>
     renderFilter(controlKey, displayName) {
         const {
             canFilter,
@@ -237,6 +295,9 @@ class DualListBox extends React.Component {
         );
     }
 
+    ///<summary>
+    /// this method renders select box component
+    ///</summary>
     renderListBox(controlKey, displayName, options, actions) {
         const {
             canFilter,
