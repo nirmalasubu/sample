@@ -6,7 +6,6 @@ import validator from 'validator';
 import InfoOverlay from 'Components/Common/InfoOverlay';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
 import DualListBox from 'Components/Common/DualListBox/DualListBox';
-import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 @connect((store) => {
     return {

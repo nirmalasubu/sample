@@ -320,7 +320,7 @@ class AddEditProductBasic extends React.Component {
             <Col md={4} >
                                 <FormGroup
                                     controlId="externalId" validationState={this.state.validationStateExternalId}>
-                                    <span style={{paddingRight:23, fontWeight:"bold"}}>External ID</span>
+                                    <label class="control-label" style={{paddingRight:23, fontWeight:"bold"}}>External ID</label>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -335,7 +335,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4}>
                                 <FormGroup
                                     controlId="mappingId">
-                                    <span title="an identifier from another system that maps to this product like a Turniverse feed id" style={{paddingRight:10, fontWeight:"bold"}}>Mapping ID</span>
+                                    <label class="control-label" title="an identifier from another system that maps to this product like a Turniverse feed id" style={{paddingRight:10, fontWeight:"bold"}}>Mapping ID</label>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="number"
@@ -351,7 +351,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                     controlId="productName" validationState={this.state.validationStateName}>
-                                    <span style={{paddingRight:1, fontWeight:"bold"}}>Product Name</span>
+                                    <label class="control-label" style={{paddingRight:1, fontWeight:"bold"}}>Product Name</label>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -365,7 +365,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                     controlId="prdDescription" validationState={this.state.validationStateDescription}>
-                                    <span style={{paddingRight:10, fontWeight:"bold"}}>Description</span>
+                                    <label class="control-label" style={{paddingRight:10, fontWeight:"bold"}}>Description</label>
                                     <FormControl
                                         bsClass="form-control product-input"
                                         type="text"
@@ -381,7 +381,7 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                         controlId="prdTags">
-                                        <span style={{paddingRight:67, fontWeight:"bold"}}>Tags</span>
+                                        <label class="control-label" style={{paddingRight:67, fontWeight:"bold"}}>Tags</label>
                                         <ReactTags tags={this.state.productModel.tags}
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
