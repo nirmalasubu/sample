@@ -46,9 +46,11 @@ class AddEditProductDestination extends React.Component {
         var selectedArray = this.state.selected;
         var destinationNames = destinationAction.getDestinations();
         destinationNames.then(names => {
-            for(var i=0; i < names.length; i++)
+            var namesArray = names.map(val => val.name);
+            namesArray.sort();
+            for(var i=0; i < namesArray.length; i++)
             {
-                var option = {label:names[i].name, value:names[i].name};
+                var option = {label:namesArray[i], value:namesArray[i]};
                 optionsArray.push(option);
             }
 
