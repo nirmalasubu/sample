@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import validator from 'validator';
 import InfoOverlay from 'Components/Common/InfoOverlay';
 import * as destinationAction from 'Actions/Destination/DestinationActions';
-import DualListBox from 'react-dual-listbox';
+import DualListBox from 'Components/Common/DualListBox/DualListBox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 @connect((store) => {
@@ -85,7 +85,9 @@ class AddEditProductDestination extends React.Component {
     render() {
 
         return (
-            <DualListBox canFilter options={this.state.options} onChange={this.onChange.bind(this)} selected={this.state.selected}/>
+            <div>
+                <DualListBox canFilter moduleName="Destination" options={this.state.options} filterType="available" onChange={this.onChange.bind(this)} selected={this.state.selected} />
+            </div>
         )
     }
 }

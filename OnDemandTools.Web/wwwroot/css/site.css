@@ -453,6 +453,19 @@ p.shortDesc {
     max-width:260px;
 }
 
+.destination-head {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
 /*****************************************************/
 /******** category strike out styling starts******/
 .category-table td {
@@ -501,6 +514,11 @@ tr.strikeout td:before {
 .clearBoth
 {
     clear: both;
+}
+
+.availWidth
+{
+    max-width:70%;
 }
 
 /*****************************************************/
@@ -575,6 +593,36 @@ tr.strikeout td:before {
 }
 
 /******** Modal Table styling  ends ******/
+/*****************************************************/
+
+
+/******** List box styling  start ******/
+/*****************************************************/
+
+.rdl-control {
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 8px 12px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.btnList{
+    padding:0
+}
+
+.listBoxButton
+{
+    width: 90px;
+}
+
+.listBoxButtons
+{
+    margin-top:30px;
+}
+
+/******** List box styling  ends ******/
 /*****************************************************/
 
 /*****************************************************/
