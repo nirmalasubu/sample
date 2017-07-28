@@ -10,13 +10,12 @@ import $ from 'jquery';
 @connect((store) => {
     return {
         user: store.user,
+        serverPollTime:store.serverPollTime
     };
 })
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state=({IDLE_TIMEOUT:360,
-                     _idleSecondsCounter:0});
       
     }
 
@@ -25,17 +24,24 @@ class Header extends React.Component {
         this.props.dispatch(fetchUser());
         this.props.dispatch(fetchConfig());
         this.props.dispatch(fetchStatus());
-        setInterval(this.CheckIdleTime.bind(this), 1000);
+        setInterval(this.CheckIdleTime.bind(this), 60000);  // Timer for every 1 minutes
     }
 
-
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        console.log("serverPollTime "+nextProps.serverPollTime)
+    }
+    
     CheckIdleTime() {
-        //alert("Time expired!");
-        var count=this.state._idleSecondsCounter + 1;
-        this.setState ({_idleSecondsCounter:count});
-        console.log("this.state._idleSecondsCounter "+this.state._idleSecondsCounter)
-        if (this.state._idleSecondsCounter >= this.state.IDLE_TIMEOUT) {
-            alert("Time expired!");
+       
+        var today = new Date();
+        var servertime = new Date(this.props.serverPollTime);
+        var diffMs = ( today - servertime);
+        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
+        console.log("currenttime "+ today);
+        console.log("diffMins "+ diffMins);
+        if (diffMins >= 2) {
+            alert("Time expired!");  // Need design a modal popup instead of alert. 
         }
     }
 

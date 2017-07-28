@@ -28,7 +28,8 @@ export const fetchCategories = () => {
     return (dispatch) => {
         return Axios.get('/api/category')
             .then(response => {
-                dispatch(fetchCategorySuccess(response.data))
+                dispatch(fetchCategorySuccess(response.data)),
+                dispatch(timerSuccess())
             })
             .catch(error => {
                 throw (error);
@@ -40,7 +41,8 @@ export const saveCategory = (model) => {
     return (dispatch) => {        
         return Axios.post('/api/category', model)
             .then(response => {
-                dispatch(saveCategorySuccess(response.data))
+                dispatch(saveCategorySuccess(response.data)),
+                dispatch(timerSuccess())
             })
             .catch(error => {
                 throw (error);
@@ -49,8 +51,10 @@ export const saveCategory = (model) => {
 };
 
 export const getNewCategory = () => {
+    timerSuccess();
     return Axios.get('/api/category/newCategory')
         .then(response => {
+            
             return (response.data);
         })
         .catch(error => {
@@ -65,11 +69,20 @@ export const deleteCategorySuccess = (name) => {
     }
 };
 
+export const timerSuccess = () => {
+    return {
+        type: "TIMER_SUCCESS"
+        
+    }
+};
+
 export const deleteCategory = (name) => {
     return (dispatch) => {        
         return Axios.delete('/api/category/'+ name)
             .then(response => {
-                dispatch(deleteCategorySuccess(name))
+                dispatch(deleteCategorySuccess(name)),
+                dispatch(timerSuccess())  // need to update the store when server action happens
+
             })
             .catch(error => {
                 throw (error);
