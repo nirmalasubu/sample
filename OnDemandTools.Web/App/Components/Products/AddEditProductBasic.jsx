@@ -381,8 +381,9 @@ class AddEditProductBasic extends React.Component {
                             <Col md={4} >
                                 <FormGroup
                                         controlId="prdTags">
-                                        <label class="control-label" style={{paddingRight:67, fontWeight:"bold"}}>Tags</label>
+                                        <label class="control-label" style={{paddingRight:67, fontWeight:"bold", float:"left"}}>Tags</label>
                                         <ReactTags tags={this.state.productModel.tags}
+                                            classNames = {CLASS_NAMES}
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
                                             autocomplete={true}
@@ -408,5 +409,18 @@ class AddEditProductBasic extends React.Component {
         )
     }
 }
+
+const CLASS_NAMES = {
+    root: 'react-tags react-tags-product',
+    rootFocused: 'is-focused',
+    selected: 'react-tags__selected',
+    selectedTag: 'react-tags__selected-tag',
+    selectedTagName: 'react-tags__selected-tag-name',
+    search: 'react-tags__search',
+    searchInput: 'react-tags__search-input',
+    suggestions: 'react-tags__suggestions',
+    suggestionActive: 'is-active',
+    suggestionDisabled: 'is-disabled'
+};
 
 export default AddEditProductBasic

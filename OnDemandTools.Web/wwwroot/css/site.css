@@ -623,6 +623,14 @@ tr.strikeout td:before {
     margin-top:30px;
 }
 
+.react-tags-product
+{
+    float:left;
+    width:260px;
+    border: 1px solid #CCC !important;
+    border-radius: 4px !important;
+}
+
 /******** List box styling  ends ******/
 /*****************************************************/
 
