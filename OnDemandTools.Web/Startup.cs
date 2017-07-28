@@ -156,10 +156,8 @@ namespace OnDemandTools.Web
             {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromHours(12),
+                ExpireTimeSpan = TimeSpan.FromMinutes(3),
                 SlidingExpiration = true,
-                
-                
             }); 
 
             // Configure the OWIN pipeline to use OpenID Connect auth.

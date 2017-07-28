@@ -69,6 +69,7 @@ export const deleteCategorySuccess = (name) => {
     }
 };
 
+// update the store when  the server action is occured
 export const timerSuccess = () => {
     return {
         type: "TIMER_SUCCESS"
@@ -89,4 +90,20 @@ export const deleteCategory = (name) => {
             });
     };
 };
+
+/// call to make server active
+export const healthCheck = () => {
+    return (dispatch) => {        
+        return Axios.get('/api/category/check')
+            .then(response => {
+                console.log(JSON.stringify(response))
+                dispatch(timerSuccess())  // need to update the store when server action happens
+
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
 

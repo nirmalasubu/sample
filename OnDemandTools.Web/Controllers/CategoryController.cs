@@ -138,5 +138,12 @@ namespace OnDemandTools.Web.Controllers
             _destinationSvc.DeleteCategoryByName(name);
             return true;
         }
+
+        [Authorize]
+        [HttpGet("check")]
+        public string check()
+        {
+            return "ok";
+        }
     }
 }
