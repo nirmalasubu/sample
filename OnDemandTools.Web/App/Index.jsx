@@ -9,7 +9,10 @@ import configureStore from 'Store/ConfigureStore';
 import '../wwwroot/css/site.css';
 require('font-awesome/css/font-awesome.css');
 
+// Configure the store that will be used through out the application
 const store = configureStore();
+window.store = store;
+
 
 render(
     <Provider store={store}>

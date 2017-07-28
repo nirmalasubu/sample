@@ -4,8 +4,8 @@ import { DeliveryQueueReducer, SignalRQueueDataReducer, NotificationHistoryQueue
 import { DestinationReducer, FilterDestinationDataReducer } from 'Reducers/Destination/DestinationReducer';
 import { CategoryReducer, FilterCategoryDataReducer } from 'Reducers/Category/CategoryReducer';
 import { UserReducer } from 'Reducers/User/UserReducer';
-import { ConfigReducer } from 'Reducers/Config/ConfigReducer';
-import { StatusReducer, FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
+import { ConfigReducer, ApplicationErrorReducer } from 'Reducers/Config/ConfigReducer';
+import { StatusReducer,FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
 import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
 import { ContentTierReducer, FilterContentTierDataReducer } from 'Reducers/ContentTier/ContentTierReducer';
@@ -32,7 +32,9 @@ export default combineReducers({
     filterStatus: FilterStatusDataReducer,
     currentAiringIds: CurrentAiringIdReducer,
     filterDistribution: FilterAiringIdDataReducer,   
-    pathTranslations: PathTranslationReducer
+    pathTranslations: PathTranslationReducer,  
+    pathTranslationModel: PathTranslationReducer,
+    applicationError: ApplicationErrorReducer
     // More reducers if there are
     // can go here
 });

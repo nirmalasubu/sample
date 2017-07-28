@@ -1,19 +1,20 @@
 import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
+import PathTranslationModel from 'Components/PathTranslations/PathTranslationModel';
+import * as configActions from 'Actions/Config/ConfigActions'
 
 /****************** Actions ************************/
 /// <summary>
 /// Invoke 'FETCH_PATHTRANSLATION_SUCCESS' action
 /// which will be handled by the appropriate reducer
 /// </sumamry>
-export const fetchPathTranslation = (pathTranslations) => {
+export const fetchPathTranslationComplete = (pathTranslationObj) => {
     return {
         type: actionTypes.FETCH_PATHTRANSLATION_SUCCESS,
-        pathTranslations
+        pathTranslationObj
     }
 };
-
 
 
 
@@ -23,14 +24,16 @@ export const fetchPathTranslation = (pathTranslations) => {
 /// Asynchronously retrieve path translations from API. If successful
 /// dispatch the appropriate action for further processing
 /// </summary>
-export const fetchPathTranslations = () => {
+export const fetchPathTranslation = (object) => {
     return (dispatch) => {
-        return Axios.get('/api/pathtranslation')  // To work on
+       console.log('here');
+        return Axios.get('/api/destinatsion')  
             .then(response => {
-                dispatch(fetchPathTranslation(response.data))
+                let obj = new PathTranslationModel(response.data);              
+                dispatch(fetchPathTranslationComplete(obj));
             })
-            .catch(error => {
-                throw (error);
+            .catch(error => {            
+                dispatch(configActions.handleApplicationAPIError(error));               
             });
     };
 };
