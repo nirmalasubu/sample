@@ -34,7 +34,7 @@ class RemoveWorkflowStatusModal extends React.Component {
     ///</summary>
     onOpenModal() {
         this.setState({
-            message: "If you continue, '" + this.props.data.status.name + "' will be permantly deleted."
+            message: "If you continue, '" + this.props.data.status.name + "' will be permanently deleted."
         });
     }
 

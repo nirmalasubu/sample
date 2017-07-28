@@ -230,7 +230,7 @@ render() {
                     <Col sm={4}>
                     <FormGroup controlId="statusName" validationState={this.state.validateStatusName||this.state.validateUniqueStatusName}>
                     <ControlLabel>Status Name</ControlLabel>
-                    <FormControl type="text"  value={this.state.status.name} maxLength="20" ref="inputStatusName" placeholder="Status Name" 
+                    <FormControl type="text"  value={this.state.status.name} maxLength="20" ref="inputStatusName" placeholder="Enter letters for status name" 
                     onChange={(event) =>this.handleTextChange("name", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
                     </FormGroup>
                    </Col>
