@@ -4,6 +4,11 @@ import PropTypes from 'prop-types';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import ListBox from 'Components/Common/DualListBox/ListBox';
 
+const optionShape = PropTypes.shape({
+    value: PropTypes.any.isRequired,
+    label: PropTypes.string.isRequired,
+});
+
 class DualListBox extends React.Component {
     /// <summary>
     /// set the prop types
@@ -300,6 +305,7 @@ class DualListBox extends React.Component {
         return (
             <div >
                 <input
+                    class="form-control"
                     data-key={controlKey}
                     id={'filter-'+{controlKey}}
                     type="text"
@@ -381,10 +387,5 @@ class DualListBox extends React.Component {
             )
     }
 }
-
-const optionShape = PropTypes.shape({
-    value: PropTypes.any.isRequired,
-    label: PropTypes.string.isRequired,
-});
 
 export default DualListBox;
