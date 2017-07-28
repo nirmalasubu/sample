@@ -101,9 +101,8 @@ class DestinationTable extends React.Component {
             if (rowData.content.cx)
                 content.push("C(X)");
             if (rowData.content.nonCx)
-                content.push("Non-C(X)");
-        }
-        return '<p data-toggle="tooltip">' + content.toString() + '</p>';
+                content.push("Non-C(X)");        }
+        return <p> { content.toString() } </p>;
     }
 
     revertSortFunc(a, b, order) {   // order is desc or asc
@@ -116,7 +115,7 @@ class DestinationTable extends React.Component {
 
     codeFormat(val, rowData) {
         return (
-            '<p data-toggle="tooltip" class="shortDesc">' + val + '</p>'
+            <p> {val} </p>
         );
     }
 
