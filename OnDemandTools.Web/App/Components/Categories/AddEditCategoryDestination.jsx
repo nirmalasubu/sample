@@ -166,7 +166,7 @@ class AddEditCategoryDestination extends React.Component {
         //set the scroll to top
         let node = ReactDOM.findDOMNode(this.refs.categoryScroll);
         if (node) {
-            panel.scrollTop = 0;
+            node.scrollTop = 0;
         }
     }
 
