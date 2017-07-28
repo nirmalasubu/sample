@@ -399,7 +399,7 @@ class AddEditProductBasic extends React.Component {
                                 <FormGroup
                                             controlId="contents">
                                             <Checkbox inline name="Ad" onChange={this.handleCheckboxChange.bind(this)}
-                                            checked={this.state.productModel.dynamicAdTrigger}>Dynamic Ad Trigger</Checkbox>
+                                            checked={this.state.productModel.dynamicAdTrigger}><label class="control-label" style={{paddingRight:10, fontWeight:"bold"}}>Dynamic Ad Trigger</label></Checkbox>
                                     </FormGroup>
                                 </Col>
                             </Row>
