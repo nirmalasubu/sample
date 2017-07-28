@@ -164,12 +164,9 @@ class AddEditCategoryDestination extends React.Component {
         this.setState({ options: optionValues });
 
         //set the scroll to top
-        let panel, node;
-        panel = this.refs.categoryScroll;
-        node = ReactDOM.findDOMNode(this.refs.categoryScroll);
-
-        if (panel && node && (node.offsetTop > panel.scrollTop + panel.offsetHeight || node.offsetTop < panel.scrollTop)) {
-            panel.scrollTop = node.offsetTop - panel.offsetTop;
+        let node = ReactDOM.findDOMNode(this.refs.categoryScroll);
+        if (node) {
+            panel.scrollTop = 0;
         }
     }
 
@@ -303,34 +300,30 @@ class AddEditCategoryDestination extends React.Component {
                         <i class="fa fa-plus-square fa-2x"></i>
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
-                </div><br /><br />
-                <Panel >
-                    <div>
-                        <div class="category-height" ref="categoryScroll">
-                            <Grid componentClass="table" bsClass="modalTable">
-                                <thead>
-                                    <Row componentClass="tr" >
-                                        <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
-                                        <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
-                                        <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
-                                        <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
-                                    </Row>
-                                    <Row componentClass="tr">
-                                        <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>
-                                        <Col componentClass="th"  ><label>Title/Series</label></Col>
-                                    </Row>
-                                </thead>
-                                <tbody>
-                                    {row}
-                                </tbody>
-                            </Grid>
-                        </div>
-                        <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
-
-                        <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)} handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
-                    </div>
-                </Panel>
+                </div>
+                <div className="clearBoth modalTableContainer" ref="categoryScroll">
+                    <Grid componentClass="table" bsClass="modalTable">
+                        <thead>
+                            <Row componentClass="tr" >
+                                <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
+                                <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
+                                <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
+                                <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
+                            </Row>
+                            <Row componentClass="tr">
+                                <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>
+                                <Col componentClass="th"  ><label>Title/Series</label></Col>
+                            </Row>
+                        </thead>
+                        <tbody>
+                            {row}
+                        </tbody>
+                    </Grid>
+                </div>
+                <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
+                <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)} handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
             </div>
+
         )
     }
 }

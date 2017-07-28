@@ -557,12 +557,13 @@ tr.strikeout td:before {
 {
     width: 100%;
     max-height: 300px;
-    overflow-y: auto;
+    overflow-y: overlay;    
 }
 
 .modalTable
 {
-    table-layout: auto;
+    width: 99%;
+    table-layout: auto;    
 }
 
 .hideModalTable
