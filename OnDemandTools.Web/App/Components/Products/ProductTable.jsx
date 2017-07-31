@@ -146,11 +146,11 @@ class ProductTable extends React.Component {
     actionFormat(val, rowData) {
         return (
             <div>
-                <button class="btn-link" title="Edit Category" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <button class="btn-link" title="Edit Product" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Category" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                <button class="btn-link" title="Delete Product" onClick={(event) => this.openDeleteModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>

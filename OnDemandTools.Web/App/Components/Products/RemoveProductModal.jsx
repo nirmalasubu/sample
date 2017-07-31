@@ -35,7 +35,7 @@ class RemoveProductModal extends React.Component
     ///</summary>
     onOpenModal(){     
         this.setState({
-            message:"If you continue, '" + this.props.data.productDetails.name + "' will be permantly deleted."
+            message:"If you continue, '" + this.props.data.productDetails.name + "' will be permanently deleted."
         });
     }
 

@@ -36,7 +36,7 @@ class RemoveCategoryModal extends React.Component
     ///</summary>
     onOpenRemoveCategoryModal(){        
         this.setState({
-            message:"If you continue, '" + this.props.data.categoryDetails.name + "' will be permantly deleted."
+            message:"If you continue, '" + this.props.data.categoryDetails.name + "' will be permanently deleted."
         });
     }
 

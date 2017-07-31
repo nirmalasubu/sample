@@ -28,7 +28,7 @@ class RemoveQueueModal extends React.Component
 
     onOpenModal(){        
         this.setState({
-            message:"If you continue, '" + this.props.data.queueDetails.friendlyName + "' will be permantly deleted."
+            message:"If you continue, '" + this.props.data.queueDetails.friendlyName + "' will be permanently deleted."
         });
     }
 
