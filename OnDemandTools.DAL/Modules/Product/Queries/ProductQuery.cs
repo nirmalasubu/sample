@@ -29,7 +29,7 @@ namespace OnDemandTools.DAL.Modules.Product.Queries
         {
             return _database
              .GetCollection<Model.Product>("Product").AsQueryable()
-             .FirstOrDefault(e=>e.ExternalId.ToString() == externalId);
+             .FirstOrDefault(e=>e.ExternalId == Guid.Parse(externalId));
         }
 
         public IQueryable<Model.Product> GetByProductIds(List<Guid> productIds)
