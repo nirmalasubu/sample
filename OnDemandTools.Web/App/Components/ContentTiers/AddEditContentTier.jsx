@@ -66,7 +66,7 @@ class AddEditContentTier extends React.Component {
         if (this.state.validationStateName != "error") {
 
             if (!this.hasValidProducts()) {
-                NotificationManager.error('At-least one product required for contentTier.', 'Product required');
+                NotificationManager.error('At-least one product required for content tier.', 'Product required');
                 return false;
             }
             var model = this.state.contentTierDetails;
@@ -83,10 +83,10 @@ class AddEditContentTier extends React.Component {
             this.props.dispatch(contentTierActions.saveContentTier(this.state.contentTierDetails))
                 .then(() => {
                     if (this.state.contentTierDetails.id == null) {
-                        NotificationManager.success(this.state.contentTierDetails.name + ' contentTier successfully created.', '', 2000);
+                        NotificationManager.success(this.state.contentTierDetails.name + ' content tier successfully created.', '', 2000);
                     }
                     else {
-                        NotificationManager.success(this.state.contentTierDetails.name + ' contentTier updated successfully.', '', 2000);
+                        NotificationManager.success(this.state.contentTierDetails.name + ' content tier updated successfully.', '', 2000);
                     }
                     this.props.dispatch(contentTierActions.fetchContentTiers()); // Called to refresh the page data
                     setTimeout(function () {
@@ -94,10 +94,10 @@ class AddEditContentTier extends React.Component {
                     }, 3000);
                 }).catch(error => {
                     if (this.state.contentTierDetails.id == null) {
-                        NotificationManager.error(this.state.contentTierDetails.name + ' contentTier creation failed. ' + error, 'Failure');
+                        NotificationManager.error(this.state.contentTierDetails.name + ' content tier creation failed. ' + error, 'Failure');
                     }
                     else {
-                        NotificationManager.error(this.state.contentTierDetails.name + ' contentTier update failed. ' + error, 'Failure');
+                        NotificationManager.error(this.state.contentTierDetails.name + ' content tier update failed. ' + error, 'Failure');
                     }
                     this.setState({ isProcessing: false });
                 });
@@ -248,13 +248,13 @@ class AddEditContentTier extends React.Component {
                         {msg}
                         <FormGroup
                             controlId="contentTierName" validationState={this.state.validationStateName}>
-                            <ControlLabel>ContentTier Name</ControlLabel>
+                            <ControlLabel>Content Tier Name</ControlLabel>
                             <FormControl
                                 type="text"
                                 value={this.state.contentTierDetails.name}
                                 disabled={this.state.contentTierDetails.id != null}
                                 ref="inputContentTierName"
-                                placeholder="Enter a ContentTier Name"
+                                placeholder="Enter a Content Tier Name"
                                 onChange={this.handleTextChange.bind(this)}
                             />
                         </FormGroup>
