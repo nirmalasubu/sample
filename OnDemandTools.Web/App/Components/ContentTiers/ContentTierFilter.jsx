@@ -42,7 +42,7 @@ class ContentTierFilter extends React.Component {
                     <ControlLabel>Filter by: </ControlLabel>
                     {' '}
                     <FormGroup controlId="category">
-                        <FormControl type="text" inputRef={(input) => this.inputContentTier = input} onChange={this.handleChange.bind(this)} placeholder="ContentTier Name" />
+                        <FormControl type="text" inputRef={(input) => this.inputContentTier = input} onChange={this.handleChange.bind(this)} placeholder="Content Tier" />
                     </FormGroup>
                     {' '}
                     <FormGroup controlId="product">

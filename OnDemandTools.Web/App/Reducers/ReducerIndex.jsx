@@ -8,7 +8,7 @@ import { ConfigReducer } from 'Reducers/Config/ConfigReducer';
 import { StatusReducer, FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
 import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
-import { ContentTierReducer } from 'Reducers/ContentTier/ContentTierReducer';
+import { ContentTierReducer, FilterContentTierDataReducer } from 'Reducers/ContentTier/ContentTierReducer';
 
 export default combineReducers({
     queues: DeliveryQueueReducer,
@@ -24,6 +24,7 @@ export default combineReducers({
     titleSearch: TitleSearchReducer,
     categories: CategoryReducer,
     contentTiers: ContentTierReducer,
+    filterContentTier: FilterContentTierDataReducer,
     filterCategory: FilterCategoryDataReducer,
     filterProduct: FilterProductDataReducer,
     filterStatus: FilterStatusDataReducer

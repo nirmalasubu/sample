@@ -17,10 +17,10 @@ export const fetchContentTierSuccess = (contentTiers) => {
     }
 };
 
-export const saveContentTierSuccess = (ContentTier) => {
+export const saveContentTierSuccess = (contentTier) => {
     return {
         type: actionTypes.SAVE_CONTENT_TIER_SUCCESS,
-        ContentTier
+        contentTier
     }
 };
 

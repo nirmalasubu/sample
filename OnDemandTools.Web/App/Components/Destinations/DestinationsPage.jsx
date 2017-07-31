@@ -105,8 +105,6 @@ const getFilterVal = (destinations, filterVal) => {
 
         if (content == "") return filteredDestinations;
 
-        console.log(filteredDestinations);
-
         if (content == "None") {
             filteredDestinations = filteredDestinations.filter(function (dest) {
                 return dest.content == null || (

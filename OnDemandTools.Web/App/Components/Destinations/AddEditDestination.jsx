@@ -96,8 +96,6 @@ class AddEditDestinationModel extends React.Component {
                 });
             }
 
-            console.log(destinationToSave);
-
             this.props.dispatch(saveDestination(destinationToSave))
                 .then(() => {
                     if (this.state.destinationDetails.id == null) {

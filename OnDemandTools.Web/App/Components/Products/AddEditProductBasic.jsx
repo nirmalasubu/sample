@@ -155,7 +155,6 @@ class AddEditProductBasic extends React.Component {
             //    });
             //}
         //});
-        //console.log(this.state.suggestions);
     }
 
     /// <summary>

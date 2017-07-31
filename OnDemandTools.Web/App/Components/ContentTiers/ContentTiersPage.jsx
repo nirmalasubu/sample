@@ -53,6 +53,7 @@ class ContentTiersPage extends React.Component {
             stateFilterValue.contentTierName = "";
             stateFilterValue.product = "";
         }
+
         this.setState({
             filterValue: stateFilterValue
         });
@@ -63,14 +64,13 @@ class ContentTiersPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(contentTierActions.filterContentTierSuccess(this.state.filterValue));
         this.props.dispatch(contentTierActions.fetchContentTiers());
-
-        document.title = "ODT - ContentTiers";
+        document.title = "ODT - Content Tiers";
     }
 
     render() {
         return (
             <div>
-                <PageHeader pageName="ContentTiers" />
+                <PageHeader pageName="Content Tiers" />
                 <ContentTierFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <ContentTierTable RowData={this.props.filteredContentTiers} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
@@ -84,10 +84,7 @@ class ContentTiersPage extends React.Component {
 // If no filter criteria is provided then return the full 'contentTiers' list
 ///</summary>
 const getFilterVal = (contentTiers, filterVal) => {
-
-    if(filterVal==undefined) return;
-
-    if (filterVal.contentTierName != undefined) {
+    if (filterVal != undefined && filterVal.contentTierName != undefined) {
         var contentTierName = filterVal.contentTierName.toLowerCase();
         var product = filterVal.product.toLowerCase();
         return (contentTiers.filter(obj => (contentTierName != "" ? obj.name.toLowerCase().indexOf(contentTierName) != -1 : true)
