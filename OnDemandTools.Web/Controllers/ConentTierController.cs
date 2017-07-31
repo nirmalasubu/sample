@@ -53,6 +53,16 @@ namespace OnDemandTools.Web.Controllers
             }
 
             return contentTiersVM;
-        }        
+        } 
+
+        [Authorize]
+        [HttpGet("newContentTier")]
+        public ContentTierViewModel GetEmptyModel()
+        {
+            return new ContentTierViewModel
+            {                
+                Name = string.Empty
+            };
+        }       
     }
 }

@@ -3,21 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using OnDemandTools.Web.Models.Product;
 
-namespace OnDemandTools.Web.Models.ContentTier
+namespace OnDemandTools.Web.Models.Destination
 {
-    public class ContentTierViewModel
+    public class CategoryViewModel
     {
-        public ContentTierViewModel()
+        public CategoryViewModel()
         {
-            Products = new List<ProductViewModel>();
+            Destinations = new List<DestinationViewModel>();
         }
         
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public IEnumerable<ProductViewModel> Products { get; set; }
+        public IEnumerable<DestinationViewModel> Destinations { get; set; }
     }
 }

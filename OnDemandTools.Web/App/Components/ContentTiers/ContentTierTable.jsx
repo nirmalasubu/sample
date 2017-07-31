@@ -162,9 +162,9 @@ class ContentTierTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="New ContentTier" onClick={(event) => this.openCreateNewProductModel(event)}>
+                    <button class="btn-link pull-right addMarginRight" title="New Content Tier" onClick={(event) => this.openCreateNewProductModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New ContentTier</span>
+                        <span class="addVertialAlign"> New Content Tier</span>
                     </button>
                 </div>
                 <BootstrapTable
