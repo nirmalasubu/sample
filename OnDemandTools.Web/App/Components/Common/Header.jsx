@@ -19,8 +19,9 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
-            showSessionModel: false})
-      
+            showSessionModel: false});
+        this.SessionStartTime =  new Date();
+        this.SessionEndTime =  new Date();
     }
 
     //called on the page load
@@ -28,6 +29,12 @@ class Header extends React.Component {
         this.props.dispatch(fetchUser());
         this.props.dispatch(fetchConfig());
         this.props.dispatch(fetchStatus());
+        this.SessionStartTime =  new Date();
+        var sixMinutesLater = new Date();
+        sixMinutesLater.setMinutes(sixMinutesLater.getMinutes() + 6);
+        this.SessionEndTime =  sixMinutesLater;
+        console.log("SessionStartTime" +this.SessionStartTime);
+        console.log("SessionEndTime"+ this.SessionEndTime);
         setInterval(this.CheckIdleTime.bind(this), 60000);  // Timer for every 1 minutes
     }
 
@@ -41,14 +48,29 @@ class Header extends React.Component {
     ///  to check when server request has happend
     ///</summary>
     CheckIdleTime() {
+      
         var today = new Date();
         var serverActiveTime = new Date(this.props.serverPollTime);
-        var diffMs = ( today - serverActiveTime);
+        var diffMs = ( today -  this.SessionStartTime );
         var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
+        //var diffMs = (  this.SessionStartTime - serverActiveTime);
+        //var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
+
         console.log("currenttime "+ today);
         console.log("diffMins "+ diffMins);
-        if (diffMins >= 2) { // session is idle more than 2 minutes show a pop up warning
-            this.setState({ showSessionModel: true }); 
+        if (diffMins > 3) { // session is idle more than 2 minutes show a pop up warning  that means it cross half the slide expiration time of the server
+
+            var diffsMs = (this.SessionEndTime -   serverActiveTime );
+            var diffsMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
+            if (diffsMins > 3  &&  diffsMins <= 5)
+            {
+                this.setState({ showSessionModel: true });
+                console.log("session about time out in 2 minute ");
+            }else if(diffsMins < 0 ||  diffsMins > 5)
+            {
+                console.log("session timed out");
+            }
+          
         }
     }
 
@@ -69,7 +91,10 @@ class Header extends React.Component {
         this.props.dispatch(categoryActions.healthCheck())
            .then(() => {
                this.setState({ showSessionModel: false });
-               
+               this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
+               var sixMinutesLater = new Date();
+               sixMinutesLater.setMinutes(sixMinutesLater.getMinutes() + 6);
+               this.SessionEndTime =  sixMinutesLater;
            }).catch(error => {
                console.log("error "+ error)
                this.setState({ showSessionModel: false });

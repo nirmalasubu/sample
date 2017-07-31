@@ -24,7 +24,6 @@ using OnDemandTools.Web.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using OnDemandTools.Web.Utilities.Redis;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace OnDemandTools.Web
 {
@@ -126,7 +125,8 @@ namespace OnDemandTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache, Serilog.ILogger logger)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache, 
+            Serilog.ILogger logger)
         {
 
             // Add serilog and catch any internal errors
@@ -156,10 +156,11 @@ namespace OnDemandTools.Web
             {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromMinutes(3),
+                ExpireTimeSpan = TimeSpan.FromMinutes(6),
                 SlidingExpiration = true,
-            }); 
-
+               
+            });
+            
             // Configure the OWIN pipeline to use OpenID Connect auth.
             AppSettings settings = Configuration.Get<AppSettings>("Application");
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions

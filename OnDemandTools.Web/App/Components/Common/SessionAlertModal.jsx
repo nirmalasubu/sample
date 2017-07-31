@@ -18,7 +18,7 @@ class SessionAlertModal extends React.Component
         this.state = ({
             message: "",
             time: {}, 
-            seconds:50 
+            seconds:120 
         });
         
         this.timer = 0;
@@ -31,6 +31,7 @@ class SessionAlertModal extends React.Component
     ///  converts seconds to time
     ///</summary>
     secondsToTime(secs){
+      
         let hours = Math.floor(secs / (60 * 60));
 
         let divisor_for_minutes = secs % (60 * 60);
@@ -103,7 +104,7 @@ class SessionAlertModal extends React.Component
                 </Modal.Header>        
                 <Modal.Body>
            {
-                        <p>In {this.state.time.s} seconds {this.state.message}</p>
+                        <p>In {this.state.time.m} minutes: {this.state.time.s} seconds {this.state.message}</p>
            }
                 </Modal.Body>
                 <Modal.Footer>
