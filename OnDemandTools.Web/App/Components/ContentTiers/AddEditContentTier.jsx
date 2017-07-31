@@ -9,7 +9,7 @@ import { ModalTitle } from 'react-bootstrap';
 import { Tabs, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button, Well, Panel } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import AddEditContentTierProduct from 'Components/Categories/AddEditContentTierProduct';
+import AddEditContentTierProduct from 'Components/ContentTiers/AddEditContentTierProduct';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import * as contentTierActions from 'Actions/ContentTier/ContentTierActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
@@ -59,23 +59,23 @@ class AddEditContentTier extends React.Component {
     }
 
     /// <summary>
-    /// To save and update the contentTier to destinations table
+    /// To save and update the contentTier to products table
     /// </summary>
     handleSave() {
         var elem = this;
         if (this.state.validationStateName != "error") {
 
             if (!this.hasValidDestinations()) {
-                NotificationManager.error('At-least one destination required for contentTier.', 'Destination required');
+                NotificationManager.error('At-least one product required for contentTier.', 'Destination required');
                 return false;
             }
             var model = this.state.contentTierDetails;
 
-            for (var i = 0; i < model.destinations.length; i++) {
-                if (model.destinations[i].contentTiers[0].removed)
-                    model.destinations[i].contentTiers[0].name = "";
+            for (var i = 0; i < model.products.length; i++) {
+                if (model.products[i].contentTiers[0].removed)
+                    model.products[i].contentTiers[0].name = "";
                 else
-                    model.destinations[i].contentTiers[0].name = model.name;
+                    model.products[i].contentTiers[0].name = model.name;
             }
 
             this.setState({ contentTierDetails: model, isProcessing: true });
@@ -88,7 +88,7 @@ class AddEditContentTier extends React.Component {
                     else {
                         NotificationManager.success(this.state.contentTierDetails.name + ' contentTier updated successfully.', '', 2000);
                     }
-                    this.props.dispatch(contentTierActions.fetchCategories()); // Called to refresh the page data
+                    this.props.dispatch(contentTierActions.fetchContentTiers()); // Called to refresh the page data
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
@@ -108,9 +108,9 @@ class AddEditContentTier extends React.Component {
 
     hasValidDestinations() {
         var hasOneDestination = false;
-        for (var i = 0; i < this.state.contentTierDetails.destinations.length; i++) {
-            if (this.state.contentTierDetails.destinations[i].contentTiers[0].removed == undefined
-                && this.state.contentTierDetails.destinations[i].name.length > 2) {
+        for (var i = 0; i < this.state.contentTierDetails.products.length; i++) {
+            if (this.state.contentTierDetails.products[i].contentTiers[0].removed == undefined
+                && this.state.contentTierDetails.products[i].name.length > 2) {
                 hasOneDestination = true;
             }
         }
@@ -222,7 +222,7 @@ class AddEditContentTier extends React.Component {
     }
 
     componentDidMount() {
-        var initialContentTier={ "id": null, "name": "", "destinations":[]};
+        var initialContentTier={ "id": null, "name": "", "products":[]};
 
         //required to overcome form control warning of contentTierName
         this.setState({

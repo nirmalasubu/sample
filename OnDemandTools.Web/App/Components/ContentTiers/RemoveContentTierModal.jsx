@@ -8,20 +8,18 @@ import { ModalFooter } from 'react-bootstrap';
 import { ModalHeader } from 'react-bootstrap';
 import { ModalTitle } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import * as categoryActions from 'Actions/Category/CategoryActions';
+import * as contentTierActions from 'Actions/ContentTier/ContentTierActions';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 // To connect to store. Required for 'this.props.dispatch' to work
 @connect((store) => {
     return {
-        categories: store.categories
-       
+        contentTiers: store.contentTiers
     };
 })
 
-// Sub component used within Category page to delete category
-class RemoveCategoryModal extends React.Component
-{
+// Sub component used within ContentTier page to delete contentTier
+class RemoveContentTierModal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -32,49 +30,49 @@ class RemoveCategoryModal extends React.Component
     }
 
     ///<summary>
-    // React modal pop up control bubbles up when delete category modal up loads
+    // React modal pop up control bubbles up when delete contentTier modal up loads
     ///</summary>
-    onOpenRemoveCategoryModal(){        
+    onOpenRemoveContentTierModal() {
         this.setState({
-            message:"If you continue, '" + this.props.data.categoryDetails.name + "' will be permantly deleted."
+            message: "If you continue, '" + this.props.data.contentTierDetails.name + "' will be permantly deleted."
         });
     }
 
     ///<summary>
     //  when user conforms to delete categary
     ///</summary>
-    onContinue(){
-        this.setState({ isProcessing: true });           
-        this.props.dispatch(categoryActions.deleteCategory(this.props.data.categoryDetails.name))
+    onContinue() {
+        this.setState({ isProcessing: true });
+        this.props.dispatch(contentTierActions.deleteContentTier(this.props.data.contentTierDetails.name))
             .then(() => {
-                this.setState({ isProcessing: false }); 
+                this.setState({ isProcessing: false });
                 this.props.handleClose();
             }).catch(error => {
                 this.setState({ isProcessing: false });
             });
     }
 
-    render(){
+    render() {
 
         return (
-           <Modal show={this.props.data.showDeleteModal} onEntering={this.onOpenRemoveCategoryModal.bind(this)} onHide={this.props.handleClose}> 
+            <Modal show={this.props.data.showDeleteModal} onEntering={this.onOpenRemoveContentTierModal.bind(this)} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-           Remove: {this.props.data.categoryDetails.name}
-               </Modal.Title>
-           </Modal.Header>        
-           <Modal.Body>
-      {
-                   <p>{this.state.message}</p>
-      }
-           </Modal.Body>
-           <Modal.Footer>
-               <Button  onClick={this.props.handleClose}>Cancel</Button>  
-               <Button disabled={this.state.isProcessing} bsStyle="primary" onClick={(event) => this.onContinue(event)}>{this.state.isProcessing ? "Processing" : "Continue"}</Button>
-           </Modal.Footer>
-      </Modal>
-   )
-           }
+                        Remove: {this.props.data.contentTierDetails.name}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {
+                        <p>{this.state.message}</p>
+                    }
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.props.handleClose}>Cancel</Button>
+                    <Button disabled={this.state.isProcessing} bsStyle="primary" onClick={(event) => this.onContinue(event)}>{this.state.isProcessing ? "Processing" : "Continue"}</Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
 }
 
-export default RemoveCategoryModal;
+export default RemoveContentTierModal;

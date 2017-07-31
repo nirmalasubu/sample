@@ -5,9 +5,8 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 // Sub component used within category page to search the category and destination  values
-class ContentTierFilter extends React.Component
-{
-    
+class ContentTierFilter extends React.Component {
+
     constructor(props) {
         super(props);
     }
@@ -20,18 +19,18 @@ class ContentTierFilter extends React.Component
         var cd = this.inputContentTier.value;
         this.props.updateFilter(cd, "CN");  // CN is for ContentTier Name
 
-        var ds = this.inputDestination.value;
+        var ds = this.inputProduct.value;
         this.props.updateFilter(ds, "DS");   //DS is for Destination
-        
+
     }
 
     ///<summary>
     // React to 'Clear All Filter' event and
     // bubble up to parent component for further handling
     ///</summary>
-    clearFilter (){
+    clearFilter() {
         this.inputContentTier.value = "";
-        this.inputDestination.value = "";
+        this.inputProduct.value = "";
 
         this.props.updateFilter("", "CL");  // CL is for clear
     }
@@ -41,21 +40,21 @@ class ContentTierFilter extends React.Component
             <div>
                 <Form inline>
                     <ControlLabel>Filter by: </ControlLabel>
-        {' '}
-        <FormGroup controlId="category">
-                <FormControl type="text" inputRef = {(input) => this.inputContentTier = input } onChange={this.handleChange.bind(this) }  placeholder="ContentTier Name" />
-            </FormGroup>
-        {' '}
-        <FormGroup controlId="destination">
-            <FormControl type="text" inputRef = {(input) => this.inputDestination = input } onChange={this.handleChange.bind(this) }  placeholder="Destination" />
-        </FormGroup>
-        {' '}
-        <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
-            Clear All Filters
+                    {' '}
+                    <FormGroup controlId="category">
+                        <FormControl type="text" inputRef={(input) => this.inputContentTier = input} onChange={this.handleChange.bind(this)} placeholder="ContentTier Name" />
+                    </FormGroup>
+                    {' '}
+                    <FormGroup controlId="product">
+                        <FormControl type="text" inputRef={(input) => this.inputProduct = input} onChange={this.handleChange.bind(this)} placeholder="Product" />
+                    </FormGroup>
+                    {' '}
+                    <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
+                        Clear All Filters
         </Button>
-    </Form>
-</div>
-       )
+                </Form>
+            </div>
+        )
     }
 }
 

@@ -9,7 +9,7 @@ import * as productActions from 'Actions/Product/ProductActions';
 import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 import Select from 'react-select';
-import RemoveProductModal from 'Components/Categories/RemoveProductModal';
+import RemoveProductModal from 'Components/ContentTiers/RemoveProductModal';
 /// <summary>
 //Get all products from store
 /// </summary>
