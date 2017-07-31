@@ -25,6 +25,11 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
             collection.Remove(query);
         }
 
+        public void DeleteById(string Id)
+        {
+            Delete(new ObjectId(Id));
+        }
+
         public void Delete(ObjectId Id)
         {
             var collection = _database.GetCollection<CurrentAiringId>("CurrentAiringId");

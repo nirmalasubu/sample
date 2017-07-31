@@ -9,6 +9,7 @@ import { StatusReducer, FilterStatusDataReducer } from 'Reducers/Status/StatusRe
 import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
 import { ContentTierReducer, FilterContentTierDataReducer } from 'Reducers/ContentTier/ContentTierReducer';
+import { CurrentAiringIdReducer,FilterAiringIdDataReducer } from 'Reducers/CurrentAiringId/CurrentAiringIdReducer';
 
 export default combineReducers({
     queues: DeliveryQueueReducer,
@@ -28,6 +29,8 @@ export default combineReducers({
     filterCategory: FilterCategoryDataReducer,
     filterProduct: FilterProductDataReducer,
     filterStatus: FilterStatusDataReducer
+    currentAiringIds: CurrentAiringIdReducer,
+    filterDistribution: FilterAiringIdDataReducer
     // More reducers if there are
     // can go here
 });

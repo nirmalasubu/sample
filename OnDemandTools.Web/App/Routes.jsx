@@ -8,7 +8,8 @@ import Permissions from 'Components/Permissions/PermissionsPage';
 import PendingRequests from 'Components/PendingRequests/PendingRequestsPage';
 import ContentTiers from 'Components/ContentTiers/ContentTiersPage';
 import WorkflowStatuses from 'Components/WorkflowStatus/WorkflowStatusesPage';
-import CategoriesPage from 'Components/Categories/CategoriesPage'
+import CategoriesPage from 'Components/Categories/CategoriesPage';
+import airingIds from 'Components/IDDistribution/DistributionPage';
 import App from 'Components/App'
 
 
@@ -25,6 +26,7 @@ export default (
       <Route path="pendingRequests" component={PendingRequests}></Route>
       <Route path="contentTiers" component={ContentTiers}></Route>
       <Route path="workflowStatuses" component={WorkflowStatuses}></Route>
+      <Route path="airingIds" component={airingIds}></Route>
     </Route>
   </Router>
 )
