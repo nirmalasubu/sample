@@ -227,6 +227,7 @@ class AddEditContentTierProduct extends React.Component {
         model.products[index].name = value;
         var detailIndex = this.props.products.findIndex((obj => obj.name == value));
         model.products[index].description = this.props.products[detailIndex].description;
+        model.products[index].externalId = this.props.products[detailIndex].externalId;
         var optionValues = this.getOptions(model);
         this.setState({ contentTierDetails: model, options: optionValues });
     }
