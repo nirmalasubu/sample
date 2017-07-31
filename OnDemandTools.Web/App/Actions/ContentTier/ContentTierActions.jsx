@@ -60,7 +60,7 @@ export const getNewContentTier = () => {
 
 export const deleteContentTierSuccess = (name) => {
     return {
-        type: actionTypes.DELETE_ContentTier_SUCCESS,
+        type: actionTypes.DELETE_CONTENT_TIER_SUCCESS,
         name
     }
 };
