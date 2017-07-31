@@ -133,5 +133,13 @@ namespace OnDemandTools.Web.Controllers
 
             return viewModel;
         }
+
+        [Authorize]
+        [HttpDelete("{name}")]
+        public bool Delete(string name)
+        {
+            _productSvc.DeleteContentTierByName(name);
+            return true;
+        }
     }
 }

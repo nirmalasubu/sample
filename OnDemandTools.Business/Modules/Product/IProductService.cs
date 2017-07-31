@@ -51,5 +51,11 @@ namespace OnDemandTools.Business.Modules.Product
         /// <param name="externalId">product id</param>
         /// <returns></returns>
         Model.Product GetById(string externalId);
+
+        /// <summary>
+        /// Delete's content tier by name
+        /// </summary>
+        /// <param name="contentTierName">content tier name</param>
+        void DeleteContentTierByName(string contentTierName);
     }
 }

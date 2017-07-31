@@ -149,5 +149,14 @@ namespace OnDemandTools.Business.Modules.Product
             return (productHelper.GetById(externalId)
                .ToBusinessModel<DLModel.Product, BLModel.Product>());
         }
+
+        /// <summary>
+        /// Delete's content tier by name
+        /// </summary>
+        /// <param name="contentTierName"></param>
+        public void DeleteContentTierByName(string contentTierName)
+        {
+            productCommand.DeleteContentTierByName(contentTierName);
+        }
     }
 }

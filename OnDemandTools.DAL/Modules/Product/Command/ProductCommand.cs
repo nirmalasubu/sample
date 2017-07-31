@@ -33,5 +33,15 @@ namespace OnDemandTools.DAL.Modules.Product.Command
 
             collection.Remove(query);
         }
+
+        public void DeleteContentTierByName(string name)
+        {
+
+            var collection = _database.GetCollection<DLModel.Product>("Product");
+            var filter = Query.EQ("ContentTier.Name", name);
+            collection.Update(filter, Update.Pull("ContentTier", new BsonDocument() { { "Name", name } }), UpdateFlags.Multi);
+
+
+        }
     }
 }
