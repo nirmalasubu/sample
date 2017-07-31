@@ -2,12 +2,13 @@
 
 import { DeliveryQueueReducer, SignalRQueueDataReducer, NotificationHistoryQueueReducer, FilterQueueDataReducer } from 'Reducers/DeliveryQueue/DeliveryQueueReducer';
 import { DestinationReducer, FilterDestinationDataReducer } from 'Reducers/Destination/DestinationReducer';
-import { CategoryReducer ,FilterCategoryDataReducer } from 'Reducers/Category/CategoryReducer';
+import { CategoryReducer, FilterCategoryDataReducer } from 'Reducers/Category/CategoryReducer';
 import { UserReducer } from 'Reducers/User/UserReducer';
 import { ConfigReducer } from 'Reducers/Config/ConfigReducer';
-import { StatusReducer,FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
+import { StatusReducer, FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
 import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
+import { ContentTierReducer } from 'Reducers/ContentTier/ContentTierReducer';
 
 export default combineReducers({
     queues: DeliveryQueueReducer,
@@ -22,9 +23,10 @@ export default combineReducers({
     products: ProductReducer,
     titleSearch: TitleSearchReducer,
     categories: CategoryReducer,
+    contentTiers: ContentTierReducer,
     filterCategory: FilterCategoryDataReducer,
     filterProduct: FilterProductDataReducer,
-    filterStatus:FilterStatusDataReducer
+    filterStatus: FilterStatusDataReducer
     // More reducers if there are
     // can go here
 });
