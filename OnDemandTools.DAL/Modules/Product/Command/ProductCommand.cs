@@ -38,8 +38,8 @@ namespace OnDemandTools.DAL.Modules.Product.Command
         {
 
             var collection = _database.GetCollection<DLModel.Product>("Product");
-            var filter = Query.EQ("ContentTier.Name", name);
-            collection.Update(filter, Update.Pull("ContentTier", new BsonDocument() { { "Name", name } }), UpdateFlags.Multi);
+            var filter = Query.EQ("ContentTiers.Name", name);
+            collection.Update(filter, Update.Pull("ContentTiers", new BsonDocument() { { "Name", name } }), UpdateFlags.Multi);
 
 
         }
