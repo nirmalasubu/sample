@@ -65,13 +65,10 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("newContentTier")]
         public ContentTierViewModel GetEmptyModel()
         {
-            var model = new ContentTierViewModel
+            return new ContentTierViewModel
             {
-                Name = string.Empty,
-                Products = new List<ProductViewModel>() { new ProductViewModel() }
+                Name = string.Empty
             };
-            
-            return model;
         }
     }
 }

@@ -48,7 +48,11 @@ class AddEditContentTierProduct extends React.Component {
         if (this.props.data.products.length > 0)
             this.props.data.products.sort(this.sortProductsByName);
 
-        this.setState({ contentTierDetails: this.props.data });
+        this.setState({ contentTierDetails: this.props.data }, function () {
+            if (this.props.data.products.length == 0) {
+                this.addNewProduct();
+            }
+        });
     }
 
     /// <summary>
