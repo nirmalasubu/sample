@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using OnDemandTools.Business.Modules.Product;
 using OnDemandTools.Web.Models.ContentTier;
+using OnDemandTools.Web.Models.Product;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -49,20 +50,28 @@ namespace OnDemandTools.Web.Controllers
                     .ToViewModel<List<Business.Modules.Product.Model.Product>, List<Models.Product.ProductViewModel>>()
                 };
 
+                foreach (var product in contentTierVm.Products)
+                {
+                    product.ContentTiers = new List<Models.Product.ContentTier> { product.ContentTiers.First(e => e.Name == contentTier.Key) };
+                }
+
                 contentTiersVM.Add(contentTierVm);
             }
 
             return contentTiersVM;
-        } 
+        }
 
         [Authorize]
         [HttpGet("newContentTier")]
         public ContentTierViewModel GetEmptyModel()
         {
-            return new ContentTierViewModel
-            {                
-                Name = string.Empty
+            var model = new ContentTierViewModel
+            {
+                Name = string.Empty,
+                Products = new List<ProductViewModel>() { new ProductViewModel() }
             };
-        }       
+            
+            return model;
+        }
     }
 }
