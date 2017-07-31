@@ -34,7 +34,7 @@ class RemoveContentTierModal extends React.Component {
     ///</summary>
     onOpenRemoveContentTierModal() {
         this.setState({
-            message: "If you continue, '" + this.props.data.contentTierDetails.name + "' will be permantly deleted."
+            message: "If you continue, '" + this.props.data.contentTierDetails.name + "' will be permanently deleted."
         });
     }
 
