@@ -41,7 +41,6 @@ class AddEditContentTierProduct extends React.Component {
             productValue: "",
             propertiesRowIndex: -1,
             products: []
-
         });
     }
 
@@ -49,18 +48,7 @@ class AddEditContentTierProduct extends React.Component {
         if (this.props.data.products.length > 0)
             this.props.data.products.sort(this.sortProductsByName);
 
-        var productArray = productActions.getProducts();
-        productArray.then(message => {
-            this.setState({ products: message, contentTierDetails: this.props.data });
-
-            if (this.props.data.products.length == 0) {
-                this.addNewProduct();
-            }
-        })
-        productArray.catch(error => {
-            console.error(error);
-            this.setState({ products: [], contentTierDetails: this.props.data });
-        });
+        this.setState({ contentTierDetails: this.props.data });
     }
 
     /// <summary>
@@ -68,15 +56,15 @@ class AddEditContentTierProduct extends React.Component {
     /// </summary>
     getOptions(contentTierDetails) {
         var options = [];
-        for (var x = 0; x < this.state.products.length; x++) {
+        for (var x = 0; x < this.props.products.length; x++) {
 
             var detailIndex = -1;
 
             if (contentTierDetails.products.length > 0)
-                detailIndex = contentTierDetails.products.findIndex((obj => obj.name == this.state.products[x].name));
+                detailIndex = contentTierDetails.products.findIndex((obj => obj.name == this.props.products[x].name));
 
             if (detailIndex < 0) {
-                var optionValue = { value: this.state.products[x].name, label: this.state.products[x].name + "-" + this.state.products[x].description };
+                var optionValue = { value: this.props.products[x].name, label: this.props.products[x].name + "-" + this.props.products[x].description };
                 options.push(optionValue);
             }
         }
@@ -233,8 +221,8 @@ class AddEditContentTierProduct extends React.Component {
     handleChange(index, value) {
         var model = this.state.contentTierDetails;
         model.products[index].name = value;
-        var detailIndex = this.state.products.findIndex((obj => obj.name == value));
-        model.products[index].description = this.state.products[detailIndex].description;
+        var detailIndex = this.props.products.findIndex((obj => obj.name == value));
+        model.products[index].description = this.props.products[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ contentTierDetails: model, options: optionValues });
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as contentTierActions from 'Actions/ContentTier/ContentTierActions';
+import * as productActions from 'Actions/Product/ProductActions';
 import ContentTierTable from 'Components/ContentTiers/ContentTierTable';
 import ContentTierFilter from 'Components/ContentTiers/ContentTierFilter';
 import PageHeader from 'Components/Common/PageHeader';
@@ -64,6 +65,7 @@ class ContentTiersPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(contentTierActions.filterContentTierSuccess(this.state.filterValue));
         this.props.dispatch(contentTierActions.fetchContentTiers());
+        this.props.dispatch(productActions.fetchProducts());
         document.title = "ODT - Content Tiers";
     }
 
