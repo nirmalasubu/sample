@@ -12,14 +12,12 @@ namespace OnDemandTools.Business.Modules.Product
         /// <returns></returns>
         List<Model.Product> GetAll();
 
-
         /// <summary>
         /// Gets products by matching tags
         /// </summary>
         /// <param name="tags">The tags.</param>
         /// <returns></returns>
         List<Model.Product> GetByTags(List<string> tags);
-
 
         /// <summary>
         /// Gets products by matching product ids
@@ -47,5 +45,11 @@ namespace OnDemandTools.Business.Modules.Product
         /// <param name="id">Object Id</param>
         void Delete(string id);
 
+        /// <summary>
+        /// Gets the product by id
+        /// </summary>
+        /// <param name="externalId">product id</param>
+        /// <returns></returns>
+        Model.Product GetById(string externalId);
     }
 }

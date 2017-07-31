@@ -25,6 +25,13 @@ namespace OnDemandTools.DAL.Modules.Product.Queries
                 .AsQueryable();
         }
 
+        public Model.Product GetById(string externalId)
+        {
+            return _database
+             .GetCollection<Model.Product>("Product").AsQueryable()
+             .FirstOrDefault(e=>e.ExternalId.ToString() == externalId);
+        }
+
         public IQueryable<Model.Product> GetByProductIds(List<Guid> productIds)
         {
             return _database

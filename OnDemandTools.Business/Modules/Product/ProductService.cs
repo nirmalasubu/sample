@@ -1,17 +1,16 @@
 ﻿using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.Destination.Comparer;
+using OnDemandTools.DAL.Modules.Destination.Queries;
+using OnDemandTools.DAL.Modules.Product.Command;
 using OnDemandTools.DAL.Modules.Product.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BLModel = OnDemandTools.Business.Modules.Product.Model;
-using DLModel = OnDemandTools.DAL.Modules.Product.Model;
-using OnDemandTools.DAL.Modules.Destination.Comparer;
-using OnDemandTools.DAL.Modules.Destination.Queries;
-
-using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
-using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
 using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
-using OnDemandTools.DAL.Modules.Product.Command;
+using BLModel = OnDemandTools.Business.Modules.Product.Model;
+using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
+using DLDestinationModel = OnDemandTools.DAL.Modules.Destination.Model;
+using DLModel = OnDemandTools.DAL.Modules.Product.Model;
 
 namespace OnDemandTools.Business.Modules.Product
 {
@@ -137,6 +136,18 @@ namespace OnDemandTools.Business.Modules.Product
         public void Delete(string id)
         {
             productCommand.Delete(id);
+        }
+
+
+        /// <summary>
+        /// Get's the product by id
+        /// </summary>
+        /// <param name="externalId"> id of the product</param>
+        /// <returns></returns>
+        public BLModel.Product GetById(string externalId)
+        {
+            return (productHelper.GetById(externalId)
+               .ToBusinessModel<DLModel.Product, BLModel.Product>());
         }
     }
 }

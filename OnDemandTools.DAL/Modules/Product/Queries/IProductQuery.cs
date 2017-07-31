@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnDemandTools.DAL.Modules.Product.Queries
 {
@@ -10,5 +9,6 @@ namespace OnDemandTools.DAL.Modules.Product.Queries
         IQueryable<Model.Product> Get();
         IQueryable<Model.Product> GetByTags(List<string> tags);
         IQueryable<Model.Product> GetByProductIds(List<Guid> productIds);
+        Model.Product GetById(string externalId);
     }
 }
