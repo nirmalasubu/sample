@@ -31,7 +31,7 @@ class AddEditContentTier extends React.Component {
             contentTierUnModifiedData: "",
             isProcessing: false,
             validationStateName: null,
-            validationStateDestinationName: null,
+            validationStateProductName: null,
             contentTierDetails: {},
             showWarningModel: false,
             showError: false,
@@ -65,8 +65,8 @@ class AddEditContentTier extends React.Component {
         var elem = this;
         if (this.state.validationStateName != "error") {
 
-            if (!this.hasValidDestinations()) {
-                NotificationManager.error('At-least one product required for contentTier.', 'Destination required');
+            if (!this.hasValidProducts()) {
+                NotificationManager.error('At-least one product required for contentTier.', 'Product required');
                 return false;
             }
             var model = this.state.contentTierDetails;
@@ -106,24 +106,24 @@ class AddEditContentTier extends React.Component {
             return false;
     }
 
-    hasValidDestinations() {
-        var hasOneDestination = false;
+    hasValidProducts() {
+        var hasOneProduct = false;
         for (var i = 0; i < this.state.contentTierDetails.products.length; i++) {
             if (this.state.contentTierDetails.products[i].contentTiers[0].removed == undefined
                 && this.state.contentTierDetails.products[i].name.length > 2) {
-                hasOneDestination = true;
+                hasOneProduct = true;
             }
         }
 
-        return hasOneDestination;
+        return hasOneProduct;
     }
 
     //called from cancel warning component to close add edit pop up
     handleAddEditClose() {
-        var model = this.state.destinationUnModifiedData;
+        var model = this.state.productUnModifiedData;
         jQuery.extend(this.state.contentTierDetails, this.state.contentTierUnModifiedData);
 
-        this.setState({ validationStateDestinationName: null });
+        this.setState({ validationStateProductName: null });
         this.props.handleClose();
     }
 
@@ -191,8 +191,8 @@ class AddEditContentTier extends React.Component {
     }
 
     //callback function to update the validation
-    updateDestinationNameValidation(IsDestinationNameRequired) {
-        this.setState({ validationStateDestinationName: (IsDestinationNameRequired == true) ? 'error' : null });
+    updateProductNameValidation(IsProductNameRequired) {
+        this.setState({ validationStateProductName: (IsProductNameRequired == true) ? 'error' : null });
     }
 
     /// <summary>
@@ -259,7 +259,7 @@ class AddEditContentTier extends React.Component {
                             />
                         </FormGroup>
 
-                        <AddEditContentTierProduct data={this.props.data.contentTierDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
+                        <AddEditContentTierProduct data={this.props.data.contentTierDetails} validationStates={this.updateProductNameValidation.bind(this)} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>

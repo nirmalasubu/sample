@@ -32,13 +32,13 @@ class AddEditContentTierProduct extends React.Component {
             contentTierDetails: {},
             isContentTierNameRequired: false,
             propertiesRowRow: {},
-            destinationIndexToRemove: -1,
+            productIndexToRemove: -1,
             showProductsDeleteModal: false,
-            destinationTitles: [],
+            productTitles: [],
             titleText: "",
             showAddEditPropertiesFilter: false,
             options: [],
-            destinationValue: "",
+            productValue: "",
             propertiesRowIndex: -1,
             products: []
 
@@ -49,15 +49,15 @@ class AddEditContentTierProduct extends React.Component {
         if (this.props.data.products.length > 0)
             this.props.data.products.sort(this.sortProductsByName);
 
-        var destinationArray = productActions.getProducts();
-        destinationArray.then(message => {
+        var productArray = productActions.getProducts();
+        productArray.then(message => {
             this.setState({ products: message, contentTierDetails: this.props.data });
 
             if (this.props.data.products.length == 0) {
                 this.addNewProduct();
             }
         })
-        destinationArray.catch(error => {
+        productArray.catch(error => {
             console.error(error);
             this.setState({ products: [], contentTierDetails: this.props.data });
         });
@@ -119,7 +119,7 @@ class AddEditContentTierProduct extends React.Component {
     }
 
     /// <summary>
-    /// To delete  a destination of contentTier
+    /// To delete  a product of contentTier
     /// </summary>
     removeProductModel(index, value) {
         var contentTierData = [];
@@ -145,7 +145,7 @@ class AddEditContentTierProduct extends React.Component {
     }
 
     /// <summary>
-    //To add a new destination of contentTier
+    //To add a new product of contentTier
     /// </summary>
     addNewProduct() {
         var optionValues = this.getOptions(this.state.contentTierDetails);
@@ -171,14 +171,14 @@ class AddEditContentTierProduct extends React.Component {
     }
 
     /// <summary>
-    //To open delete destination warning window
+    //To open delete product warning window
     /// </summary>
     openProductsDeleteModel(item) {
-        this.setState({ showProductsDeleteModal: true, destinationIndexToRemove: item });
+        this.setState({ showProductsDeleteModal: true, productIndexToRemove: item });
     }
 
     /// <summary>
-    // To close destination delete modal window
+    // To close product delete modal window
     /// </summary>
     closeProductDeleteModel() {
         this.setState({ showProductsDeleteModal: false });
@@ -289,7 +289,7 @@ class AddEditContentTierProduct extends React.Component {
                 }.bind(this));
             }
             else {
-                row = <Row><Col sm={12}><p> No destination available</p></Col></Row>
+                row = <Row><Col sm={12}><p> No product available</p></Col></Row>
             }
         }
 

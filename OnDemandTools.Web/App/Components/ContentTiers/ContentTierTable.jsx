@@ -23,7 +23,7 @@ class ContentTierTable extends React.Component {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
                 expandRowBgColor: '#EAECEE',
-                expandBy: 'column',  
+                expandBy: 'column',
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -51,7 +51,7 @@ class ContentTierTable extends React.Component {
         });
     }
 
-    openCreateNewDestinationModel() {
+    openCreateNewProductModel() {
         this.setState({ showAddEditModel: true, contentTierDetails: jQuery.extend(true, {}, this.state.newContentTierModel) });
     }
     ///<summary>
@@ -80,7 +80,7 @@ class ContentTierTable extends React.Component {
     }
 
     isExpandableRow(row) {
-        if (row.destinations.length > 0) return true;
+        if (row.products.length > 0) return true;
         else return false;
     }
 
@@ -96,18 +96,18 @@ class ContentTierTable extends React.Component {
         );
     }
 
-        destinationFormat(val, rowData) {
-            var destinationNames = [];
-            var rows = [];
-           
-            for (var idx = 0; idx < rowData.destinations.length; idx++) {
-                destinationNames.push(rowData.destinations[idx].name);
-            }
-            //destination names are sorted before rendering 
-            if(destinationNames.length>0){
-                destinationNames.sort();
-                for (var idx = 0; idx < destinationNames.length; idx++) {
-                    rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
+    productFormat(val, rowData) {
+        var productNames = [];
+        var rows = [];
+
+        for (var idx = 0; idx < rowData.products.length; idx++) {
+            productNames.push(rowData.products[idx].name);
+        }
+        //product names are sorted before rendering 
+        if (productNames.length > 0) {
+            productNames.sort();
+            for (var idx = 0; idx < productNames.length; idx++) {
+                rows.push(<Button className="addMarginRight" key={idx.toString()}> {productNames[idx]} </Button>);
             }
         }
 
@@ -141,11 +141,11 @@ class ContentTierTable extends React.Component {
             if (item.label == "Name") {
                 return <TableHeaderColumn width="250px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.contentTierNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
-            else if (item.label == "Destinations") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
+            else if (item.label == "Products") {
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.productFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" expandable={false} dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
@@ -153,17 +153,16 @@ class ContentTierTable extends React.Component {
 
         }.bind(this));
 
-        var contentTierIdandNames=[];
-       
-            for (var i = 0; i < this.props.RowData.length; i++)
-            {
-                contentTierIdandNames.push({"id":this.props.RowData[i].id,"name":this.props.RowData[i].name});
-            }
-            
+        var contentTierIdandNames = [];
+
+        for (var i = 0; i < this.props.RowData.length; i++) {
+            contentTierIdandNames.push({ "id": this.props.RowData[i].id, "name": this.props.RowData[i].name });
+        }
+
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="New ContentTier" onClick={(event) => this.openCreateNewDestinationModel(event)}>
+                    <button class="btn-link pull-right addMarginRight" title="New ContentTier" onClick={(event) => this.openCreateNewProductModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
                         <span class="addVertialAlign"> New ContentTier</span>
                     </button>
@@ -177,13 +176,13 @@ class ContentTierTable extends React.Component {
                     keyField={this.props.KeyField}
                     pagination={true}
                     options={this.state.options}>
-                        {row}
+                    {row}
                 </BootstrapTable>
 
                 <AddEditContentTier data={this.state} contentTierIdandNames={contentTierIdandNames} handleClose={this.closeAddEditModel.bind(this)} />
-                            <RemoveContentTierModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
+                <RemoveContentTierModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
-                        }
+    }
 
 }
 

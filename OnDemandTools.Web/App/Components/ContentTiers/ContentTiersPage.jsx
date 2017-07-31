@@ -7,12 +7,12 @@ import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
-    // Retrieve filtered list of ContentTiers based on filterValue like contentTier name and destination
+    // Retrieve filtered list of ContentTiers based on filterValue like contentTier name and product
     // which are defined in Redux store
     var filteredContentTierValues = getFilterVal(store.contentTiers, store.filterContentTier);
     return {
         contentTiers: store.contentTiers,
-        filteredContentTiers: (filteredContentTierValues != undefined ? filteredContentTierValues : store.destinations)
+        filteredContentTiers: (filteredContentTierValues != undefined ? filteredContentTierValues : store.products)
     };
 })
 class ContentTiersPage extends React.Component {
@@ -25,12 +25,11 @@ class ContentTiersPage extends React.Component {
 
             filterValue: {
                 contentTierName: "",
-                destination: "",
-
+                product: "",
             },
 
             columns: [{ "label": "Name", "dataField": "name", "sort": true },
-            { "label": "Destinations", "dataField": "destinations", "sort": false },
+            { "label": "Products", "dataField": "products", "sort": false },
             { "label": "Actions", "dataField": "name", "sort": false }
             ],
             keyField: "name"
@@ -40,7 +39,7 @@ class ContentTiersPage extends React.Component {
     ///<summary>
     // Function to handle filtering of ContentTier data. This handler
     // is used within the ContentTier filter sub component. Filtering is currently
-    // supported for ContentTier name and destination
+    // supported for ContentTier name and product
     /// </summary>
     handleFilterUpdate(filtersValue, type) {
         var stateFilterValue = this.state.filterValue;
@@ -48,11 +47,11 @@ class ContentTiersPage extends React.Component {
             stateFilterValue.contentTierName = filtersValue;
 
         if (type == "DS")
-            stateFilterValue.destination = filtersValue;
+            stateFilterValue.product = filtersValue;
 
         if (type == "CL") {
             stateFilterValue.contentTierName = "";
-            stateFilterValue.destination = "";
+            stateFilterValue.product = "";
         }
         this.setState({
             filterValue: stateFilterValue
@@ -90,9 +89,9 @@ const getFilterVal = (contentTiers, filterVal) => {
 
     if (filterVal.contentTierName != undefined) {
         var contentTierName = filterVal.contentTierName.toLowerCase();
-        var destination = filterVal.destination.toLowerCase();
+        var product = filterVal.product.toLowerCase();
         return (contentTiers.filter(obj => (contentTierName != "" ? obj.name.toLowerCase().indexOf(contentTierName) != -1 : true)
-            && (destination != "" ? matchDestinations(obj.destinations, destination) : true)
+            && (product != "" ? matchProducts(obj.products, product) : true)
         ));
     }
     else
@@ -100,16 +99,16 @@ const getFilterVal = (contentTiers, filterVal) => {
 };
 
 ///<summary>
-// returns  true  if any of the search value  destination matches destination list 
+// returns  true  if any of the search value  product matches product list 
 ///</summary>
-const matchDestinations = (objDestinations, destination) => {
-    var destinationNames = [];
-    objDestinations.map(function (item) {
-        destinationNames.push(item.name);
+const matchProducts = (objProducts, product) => {
+    var productNames = [];
+    objProducts.map(function (item) {
+        productNames.push(item.name);
     });
     var flag = false;
-    destinationNames.map(function (name) {
-        if (name.toLowerCase().indexOf(destination) != -1) {
+    productNames.map(function (name) {
+        if (name.toLowerCase().indexOf(product) != -1) {
             flag = true;
         }
     });

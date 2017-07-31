@@ -4,7 +4,7 @@ import $ from 'jquery';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-// Sub component used within category page to search the category and destination  values
+// Sub component used within category page to search the category and product  values
 class ContentTierFilter extends React.Component {
 
     constructor(props) {
@@ -20,7 +20,7 @@ class ContentTierFilter extends React.Component {
         this.props.updateFilter(cd, "CN");  // CN is for ContentTier Name
 
         var ds = this.inputProduct.value;
-        this.props.updateFilter(ds, "DS");   //DS is for Destination
+        this.props.updateFilter(ds, "DS");   //DS is for Product
 
     }
 

@@ -48,8 +48,8 @@ class ContentTierExpandTable extends React.Component {
     };
     return (
       <div>
-        <BootstrapTable options={options} data={this.props.data.destinations} striped hover>
-          <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Destination</TableHeaderColumn>
+        <BootstrapTable options={options} data={this.props.data.products} striped hover>
+          <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Product</TableHeaderColumn>
           <TableHeaderColumn  dataSort={false} dataField="description" dataFormat={this.descriptionColumnFormat.bind(this)} >Description</TableHeaderColumn>
           <TableHeaderColumn width="200px" dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.titleOrSeriesFormat.bind(this)} >Title/Series</TableHeaderColumn>
