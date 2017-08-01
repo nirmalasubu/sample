@@ -5,6 +5,18 @@
         case 'FILTER_AIRINGID_SUCCESS':       // Required to obtain current airing id object state 
             const assignState = Object.assign([], state);
             return assignState;
+        case 'SAVE_AIRINGID_SUCCESS':
+            var objectIndex = state.findIndex((obj => obj.id == action.currentAiringId.id));
+            if (objectIndex < 0) { 
+                return [
+                    ...state.filter(obj => obj.id !== action.currentAiringId.id),
+                    Object.assign({}, action.currentAiringId)
+                ]
+            }
+            else {
+                state[objectIndex] = action.currentAiringId;
+                return state;
+            }
         case 'DELETE_AIRINGID_SUCCESS':
             const newState = Object.assign([], state);
             const indexOfObject = state.findIndex(obj => {

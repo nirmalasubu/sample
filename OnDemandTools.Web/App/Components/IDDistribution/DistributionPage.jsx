@@ -62,7 +62,7 @@ class DistributionPage extends React.Component {
         this.setState({
             filterValue: stateFilterValue
         });
-        this.props.dispatch(currentAiringIdActions.filterAiringIdSuccess(this.state.filterValue));  
+        this.props.dispatch(currentAiringIdActions.filterAiringIdSuccess(this.state.filterValue));
     }
 
     //called on the page load

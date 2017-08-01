@@ -1,13 +1,19 @@
 ﻿import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import $ from 'jquery';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveCurrentAiringIdModal from 'Components/IDDistribution/RemoveCurrentAiringIdModal';
 import TextOverlay from 'Components/Common/TextOverlay';
 import { getNewAiringId } from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
+import * as currentAiringIdActions  from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
 
+@connect((store) => {
+    return {
+        emptyResult:null
+    };
+})
 
 class DistributionTable extends React.Component {
     ///<summary>
@@ -77,6 +83,13 @@ class DistributionTable extends React.Component {
     }
 
     ///<summary>
+    ///This is to generate a new airing id using prefix.
+    ///</summary>
+    generateAiringId(val) {
+        this.props.dispatch(currentAiringIdActions.generateAiringId(val.prefix));
+    }
+
+    ///<summary>
     ///This is to open a modal popup to edit a airing id.
     ///</summary>
     openAddEditModel(val) {
@@ -119,6 +132,10 @@ class DistributionTable extends React.Component {
     actionFormat(val, rowData) {
         return (
             <div>
+                <button class="btn-link" title="generate next airing id in sequence" onClick={(event) => this.generateAiringId(rowData, event)} >
+                    <i class="fa fa-level-up" aria-hidden="true"></i>
+                </button>
+                
                 <button class="btn-link" title="Edit Current Airing ID" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o"></i>
                 </button>

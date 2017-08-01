@@ -38,6 +38,16 @@ namespace OnDemandTools.Web.Controllers
             return currentAiringIdModel;
         }
 
+        // GET: api/values
+        [Authorize]
+        [HttpGet("generate/{prefix}")]
+        public CurrentAiringIdViewModel GenerateAiringId(string prefix)
+        {
+            CurrentAiringIdViewModel currentAiringIdModel = airingSvc.Distribute(prefix).ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
+
+            return currentAiringIdModel;
+        }
+
         [Authorize]
         [HttpGet("newcurrentairingid")]
         public CurrentAiringIdViewModel GetEmptyModel()

@@ -41,6 +41,18 @@ export const getNewAiringId = () => {
         });
 };
 
+export const generateAiringId = (prefix) => {
+    return (dispatch) => { 
+        return Axios.get('/api/distribution/generate/'+prefix)
+            .then(response => {
+                dispatch(saveAiringIdSuccess(response.data))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
 export const saveAiringIdSuccess = (currentAiringId) => {
     return {
         type: actionTypes.SAVE_AIRINGID_SUCCESS,
@@ -52,7 +64,7 @@ export const saveCurrentAiringId = (model) => {
     return (dispatch) => {        
         return Axios.post('/api/distribution', model)
             .then(response => {
-                dispatch(saveProductSuccess(response.data))
+                dispatch(saveAiringIdSuccess(response.data))
             })
             .catch(error => {
                 throw (error);
