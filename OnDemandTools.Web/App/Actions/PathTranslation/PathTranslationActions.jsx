@@ -27,8 +27,9 @@ export const fetchPathTranslationComplete = (pathTranslationObj) => {
 export const fetchPathTranslation = (object) => {
     return (dispatch) => {
        console.log('here');
-        return Axios.get('/api/destinatsion')  
+        return Axios.get('/api/pathtranslation')  
             .then(response => {
+                console.log(response.data);
                 let obj = new PathTranslationModel(response.data);              
                 dispatch(fetchPathTranslationComplete(obj));
             })

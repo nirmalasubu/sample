@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
 
 namespace OnDemandTools.Common.Configuration
 {
@@ -6,6 +7,7 @@ namespace OnDemandTools.Common.Configuration
     {
         UserIdentity GetUser();
         string GetUserName();
+        IIdentity GetHttpIdentity();
     }
 
     public class HttpAPIContext : IApplicationContext
@@ -26,6 +28,11 @@ namespace OnDemandTools.Common.Configuration
         public string GetUserName()
         {
             return cntx.HttpContext.User.Identity.Name;
+        }
+        
+        public IIdentity GetHttpIdentity()
+        {
+            return cntx.HttpContext.User.Identity;
         }
     }
 }

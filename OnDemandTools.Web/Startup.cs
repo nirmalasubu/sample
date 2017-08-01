@@ -110,6 +110,7 @@ namespace OnDemandTools.Web
                      reporterType: appSettings.LogzIO.ReporterType,
                      environment: appSettings.LogzIO.Environment)
                      .CreateLogger();
+                c.For<IApplicationContext>().Use<HttpAPIContext>();
                 c.ForSingletonOf<AppSettings>().Use(appSettings);
                 c.ForSingletonOf<Serilog.ILogger>().Use(appLogger);
             });
