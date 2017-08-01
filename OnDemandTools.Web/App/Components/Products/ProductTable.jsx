@@ -26,7 +26,7 @@ class ProductTable extends React.Component {
             productDetails: "",
             options: {
                 defaultSortName: 'name',
-                defaultSortOrder: 'asc',  
+                defaultSortOrder: 'asc',
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -104,7 +104,7 @@ class ProductTable extends React.Component {
     ///<summary>
     ///This method returns a product description to display in the grid.
     ///</summary>
-    descriptionFormat(val) {        
+    descriptionFormat(val) {
         return <TextOverlay data={val} numberOfChar={30} />;
     }
 
@@ -114,17 +114,17 @@ class ProductTable extends React.Component {
     destinationFormat(val) {
         var destinationNames = [];
         var rows = [];
-           
+
         for (var idx = 0; idx < val.length; idx++) {
             destinationNames.push(val[idx]);
         }
         //destination names are sorted before rendering 
-        if(destinationNames.length>0){
+        if (destinationNames.length > 0) {
             destinationNames.sort();
             for (var idx = 0; idx < destinationNames.length; idx++)
                 rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
         }
-        
+
         return <DestinationOverlay rows={rows} numberOfDestinations={2} />;
     }
 
@@ -133,11 +133,10 @@ class ProductTable extends React.Component {
     ///</summary>
     tagFormat(val) {
         var tags = [];
-        for(var i=0; i < val.length; i++)
-        {
-            tags.push(val[i].name);
+        for (var i = 0; i < val.length; i++) {
+            tags.push(<Button className="addMarginRight" key={i.toString()}> {val[i].name} </Button>);
         }
-        return '<p data-toggle="tooltip">' + tags.toString() + '</p>';        
+        return <div> {tags} </div>;
     }
 
     ///<summary>
@@ -163,7 +162,7 @@ class ProductTable extends React.Component {
         row = this.props.ColumnData.map(function (item, index) {
 
             if (item.label == "Prodduct") {
-                return <TableHeaderColumn width="35%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.productNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="30%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.productNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Description") {
                 return <TableHeaderColumn width="28%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.descriptionFormat.bind(this)} >{item.label}</TableHeaderColumn>
@@ -172,17 +171,17 @@ class ProductTable extends React.Component {
                 return <TableHeaderColumn width="17%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Tags") {
-                return <TableHeaderColumn width="10%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.tagFormat.bind(this)} >{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="15%" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.tagFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="10%" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="10%" expandable={false} dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
             }
 
         }.bind(this));
-            
+
         return (
             <div>
                 <div>
@@ -198,12 +197,12 @@ class ProductTable extends React.Component {
                     keyField={this.props.KeyField}
                     pagination={true}
                     options={this.state.options}>
-                        {row}
+                    {row}
                 </BootstrapTable>
                 <AddEditProduct data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveProductModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
-                        }
+    }
 
 }
 
