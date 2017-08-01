@@ -67,7 +67,7 @@ export const deleteCategorySuccess = (name) => {
 
 export const deleteCategory = (name) => {
     return (dispatch) => {        
-        return Axios.delete('/api/category/'+ name)
+        return Axios.delete('/api/category',{data: { name: name }})  // Just passing name property of Category ViewModel to API
             .then(response => {
                 dispatch(deleteCategorySuccess(name))
             })

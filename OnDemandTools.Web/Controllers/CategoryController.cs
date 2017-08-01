@@ -132,10 +132,10 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{name}")]
-        public bool Delete( string name)
+        [HttpDelete]
+        public bool Delete([FromBody]CategoryViewModel viewModel)
         {
-            _destinationSvc.DeleteCategoryByName(name);
+            _destinationSvc.DeleteCategoryByName(viewModel.Name);
             return true;
         }
     }
