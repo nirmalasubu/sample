@@ -8,7 +8,7 @@ import AddEditContentTier from 'Components/ContentTiers/AddEditContentTier';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveContentTierModal from 'Components/ContentTiers/RemoveContentTierModal';
 import { getNewContentTier } from 'Actions/ContentTier/ContentTierActions';
-
+import TextsOverlay from 'Components/Common/TextsOverlay';
 
 class ContentTierTable extends React.Component {
     constructor(props) {
@@ -98,24 +98,16 @@ class ContentTierTable extends React.Component {
 
     productFormat(val, rowData) {
         var productNames = [];
-        var rows = [];
-
+        
         for (var idx = 0; idx < rowData.products.length; idx++) {
             productNames.push(rowData.products[idx].name);
         }
         //product names are sorted before rendering 
         if (productNames.length > 0) {
-            productNames.sort();
-            for (var idx = 0; idx < productNames.length; idx++) {
-                rows.push(<Button className="addMarginRight" key={idx.toString()}> {productNames[idx]} </Button>);
-            }
+            productNames.sort();          
         }
 
-        return (
-            <div>
-                {rows}
-            </div>
-        );
+        return <TextsOverlay data={productNames} numberOfCharToDisplay={80} />
 
     }
 
