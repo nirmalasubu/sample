@@ -180,8 +180,8 @@ class AddEditContentTier extends React.Component {
     handleTextChange(event) {
 
         var model = this.state.contentTierDetails;
-
         model.name = event.target.value;
+        model.name = model.name.trimLeft();
 
         this.setState({
             contentTierDetails: model

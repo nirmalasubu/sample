@@ -164,7 +164,7 @@ textarea.form-control-modal-Edit {
     width: 300px;
 }
 
-.category-select-control{
+.category-select-control, .contentTier-select-control  {
     max-width: 400px;
 }
 
