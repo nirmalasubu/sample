@@ -69,7 +69,7 @@ class PathTranslationsPage extends React.Component {
         return (
             <div>
                 <PageHeader pageName="Path Translations" />
-                <PathTranslationTable RowData={this.props.pathTranslationData.pathTranslations} ColumnData={this.state.columns}/>
+                <PathTranslationTable pathTranslationRecords={this.props.pathTranslationData.pathTranslations} ColumnData={this.state.columns}/>
 
                 {myComponent}
                 {error}

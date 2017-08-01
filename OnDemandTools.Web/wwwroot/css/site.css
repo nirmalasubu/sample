@@ -692,3 +692,15 @@ tr.strikeout td:before {
 
 /*****************************************************/
 /******** work flow styling  ends ******/
+
+
+
+
+
+
+/*****************************************************/
+/******** Path Translation styling *******************/
+.standout{
+    font-weight: bold;
+    color: grey
+}
