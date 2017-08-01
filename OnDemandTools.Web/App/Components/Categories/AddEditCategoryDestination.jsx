@@ -301,7 +301,7 @@ class AddEditCategoryDestination extends React.Component {
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
                 </div>
-                <div className="clearBoth modalTableContainer" ref="categoryScroll">
+                <div className="clearBoth modelTableContainerWithSelect" ref="categoryScroll">
                     <Grid componentClass="table" bsClass="modalTable">
                         <thead>
                             <Row componentClass="tr" >

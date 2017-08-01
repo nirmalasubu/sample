@@ -294,7 +294,7 @@ class AddEditContentTierProduct extends React.Component {
                         <span class="addVertialAlign"> New Product</span>
                     </button>
                 </div>
-                <div className="clearBoth modalTableContainer" ref="contentTierScroll">
+                <div className="clearBoth modelTableContainerWithSelect" ref="contentTierScroll">
                     <Grid componentClass="table" bsClass="modalTable">
                         <thead>
                             <Row componentClass="tr" >

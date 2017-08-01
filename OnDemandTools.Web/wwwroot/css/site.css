@@ -566,6 +566,14 @@ tr.strikeout td:before {
     overflow-y: overlay;    
 }
 
+.modelTableContainerWithSelect
+{
+    width: 100%;
+    max-height: 320px;
+    min-height: 320px;
+    overflow-y: overlay;    
+}
+
 .modalTable
 {
     width: 99%;
