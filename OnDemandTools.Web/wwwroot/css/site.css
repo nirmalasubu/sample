@@ -453,6 +453,12 @@ p.shortDesc {
     max-width:260px;
 }
 
+.product-input-width{
+    display: inline-block !important;
+    min-width:263px;
+    max-width:263px;
+}
+
 .destination-head {
     display: inline-block;
     padding: 6px 12px;
@@ -630,6 +636,33 @@ tr.strikeout td:before {
     width:260px;
     border: 1px solid #CCC !important;
     border-radius: 4px !important;
+}
+
+.react-tags-product_error
+{
+    float:left;
+    width:260px;
+    border-radius: 4px !important;
+    border: 1px solid #a94442!important;
+}
+
+.react-tags__search_error 
+{
+    display: inline-block;
+    padding: 7px 2px;
+    margin-bottom: 6px;
+    max-width: 100%;
+}
+
+.react-tags__search_error input {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    font-size: inherit;
+    line-height: inherit;
+    color: #ff0000;
 }
 
 /******** List box styling  ends ******/

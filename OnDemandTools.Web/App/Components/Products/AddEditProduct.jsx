@@ -47,7 +47,8 @@ class AddEditProduct extends React.Component {
                 tags: []
             },
             validationState: null,
-            showWarningModel: false
+            showWarningModel: false,
+            tagValue: null
         });
     }
     /// <summary>
@@ -80,11 +81,20 @@ class AddEditProduct extends React.Component {
     /// </summary>
     handleSave() {
         var elem = this;
-        if (this.state.validationStateName != "error" && this.state.validationStateDescription != "error") {
+        if (this.state.validationState != "error") {
 
             this.setState({ isProcessing: true });
 
             var productToSave = this.state.productDetails;
+            if(this.state.tagValue!=null)
+            {
+                var tagVal = this.state.tagValue;
+                tagVal=tagVal.replace(/ /g, '-');            
+                productToSave.tags.push({
+                    id: productToSave.tags.length + 1,
+                    name: tagVal
+                });
+            }
 
             this.props.dispatch(saveProduct(productToSave))
                 .then(() => {
@@ -139,9 +149,10 @@ class AddEditProduct extends React.Component {
     /// property of this component to reflect that change. This will enable/disable the
     /// save button
     /// </summary>
-    updateBasicValidateStates(error) {
+    updateBasicValidateStates(error, tagVal) {
         this.setState({
-            validationState: error ? 'error' : null
+            validationState: error ? 'error' : null,
+            tagValue: tagVal
         });
     }
 
@@ -160,14 +171,14 @@ class AddEditProduct extends React.Component {
                 onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.productDetails.id == null ? "Add Product" : "Edit Product " + this.props.data.productDetails.name}</div>
+                        <div>{this.props.data.productDetails.id == null ? "Add Product" : "Edit Product " + this.state.productUnModifiedData.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <AddEditProductBasic
                         data={this.props.data.productDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
-                    <Panel header="Destination" >
+                    <Panel header="Destinations" >
                         <AddEditProductDestination
                             data={this.props.data.productDetails} />
                     </Panel>

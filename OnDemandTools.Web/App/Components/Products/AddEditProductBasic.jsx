@@ -25,13 +25,16 @@ class AddEditProductBasic extends React.Component {
 
         this.state = ({
             productModel: {},
+            productUnModifiedData: {},
             validationStateName: null,
             validationStateDescription: null,
             validationStateExternalId: null,
+            validationStateTag: null,
             showError: false,
             componentJustMounted: true,
             allTags: this.getAllTags(),
-            suggestions: []
+            suggestions: [],
+            tagValue: ""
         });
     }
 
@@ -121,7 +124,8 @@ class AddEditProductBasic extends React.Component {
         );
 
         this.setState({
-            productModel: product
+            productModel: product,
+            productUnModifiedData: jQuery.extend(true, {}, product)
         });
     }
 
@@ -181,16 +185,20 @@ class AddEditProductBasic extends React.Component {
     /// This method validates the name, description and external id fields
     /// and updates the validationstate
     /// </summary>
-    validateForm() {
-        var name = this.state.productModel.name;
-        var description = this.state.productModel.description;
+    validateForm(tagVals) {
+        var name = this.state.productModel.name.trim();
+        var description = this.state.productModel.description.trim();
         var externalId = this.state.productModel.externalId;
+        if(tagVals==undefined)
+            tagVals = this.state.tagValue;
+        var tag = {name:tagVals};
         var hasError = false;
         var hasNameError = ((name == "" || !this.isProductUnique(this.state.productModel)));
         var hasDesError = (description == "");
         var hasExternalError = (externalId!=""?!validator.isUUID(externalId):false);
+        var hasTagError = ((tagVals.length>0 && tagVals.length<3) || (tagVals.length>2?this.isTagExist(tag):false))
 
-        if(hasNameError || hasDesError || hasExternalError)
+        if(hasNameError || hasDesError || hasExternalError || hasTagError)
             hasError = true;
         else
             hasError = false;
@@ -199,9 +207,12 @@ class AddEditProductBasic extends React.Component {
             validationStateName: hasNameError ? 'error' : null,
             validationStateDescription: hasDesError ? 'error' : null,
             validationStateExternalId: hasExternalError ? 'error' : null,
+            validationStateTag: hasTagError ? 'error' : null,
         });
 
-        this.props.validationStates(hasError);
+        var tagVal = tagVals.length>2?tagVals:null;
+
+        this.props.validationStates(hasError, tagVal);
     }    
 
     /// <summary>
@@ -284,12 +295,13 @@ class AddEditProductBasic extends React.Component {
     handleAddition(tag) {
         if(!this.isTagExist(tag) && tag.name.length>2)
         {
+            tag.name=tag.name.replace(/ /g, '-');
             let product = this.state.productModel;
             product.tags.push({
                 id: product.tags.length + 1,
                 name: tag.name
             });
-            this.setState({productModel: product});
+            this.setState({productModel: product, tagValue:""});
         }
     }
 
@@ -297,12 +309,15 @@ class AddEditProductBasic extends React.Component {
     /// this method is to handle the on change of the tags input value
     /// </summary>
     handleInputChange(value){
+        this.setState({tagValue:value});
+
         if(value.length>2){
             this.getTagsBy(value);
-        }
+        } 
+        this.validateForm(value);
     }
 
-    render() {
+    render() {        
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Product already exists. Please use a unique product name and external id.</label>);
@@ -320,9 +335,9 @@ class AddEditProductBasic extends React.Component {
             <Col md={4} >
                                 <FormGroup
                                     controlId="externalId" validationState={this.state.validationStateExternalId}>
-                                    <label class="control-label" style={{paddingRight:23, fontWeight:"bold"}}>External ID</label>
+                                    <label class="control-label" style={{paddingRight:21, fontWeight:"bold"}}>External ID</label>
                                     <FormControl
-                                        bsClass="form-control product-input"
+                                    bsClass="form-control product-input-width"
                                         type="text"
                                         disabled={this.state.productModel.id == null ? false : true}
                                         value={this.state.productModel.externalId}
@@ -353,6 +368,7 @@ class AddEditProductBasic extends React.Component {
                                     controlId="productName" validationState={this.state.validationStateName}>
                                     <label class="control-label" style={{paddingRight:1, fontWeight:"bold"}}>Product Name</label>
                                     <FormControl
+                                        maxLength="150"
                                         bsClass="form-control product-input"
                                         type="text"
                                         value={this.state.productModel.name}
@@ -367,7 +383,8 @@ class AddEditProductBasic extends React.Component {
                                     controlId="prdDescription" validationState={this.state.validationStateDescription}>
                                     <label class="control-label" style={{paddingRight:10, fontWeight:"bold"}}>Description</label>
                                     <FormControl
-                                        bsClass="form-control product-input"
+                                    bsClass="form-control product-input"
+                                        maxLength="150"
                                         type="text"
                                         value={this.state.productModel.description}
                                         ref="inputDescription"
@@ -383,9 +400,10 @@ class AddEditProductBasic extends React.Component {
                                         controlId="prdTags">
                                         <label class="control-label" style={{paddingRight:67, fontWeight:"bold", float:"left"}}>Tags</label>
                                         <ReactTags tags={this.state.productModel.tags}
-                                            classNames = {CLASS_NAMES}
+                                        classNames = {this.state.validationStateTag==null?CLASS_NAMES:CLASS_NAMES_ERRORS}
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
+                                            placeholder="Enter 3 or more letters"
                                             autocomplete={true}
                                             minQueryLength={3}
                                             allowNew={true}
@@ -417,6 +435,19 @@ const CLASS_NAMES = {
     selectedTag: 'react-tags__selected-tag',
     selectedTagName: 'react-tags__selected-tag-name',
     search: 'react-tags__search',
+    searchInput: 'react-tags__search-input',
+    suggestions: 'react-tags__suggestions',
+    suggestionActive: 'is-active',
+    suggestionDisabled: 'is-disabled'
+};
+
+const CLASS_NAMES_ERRORS = {
+    root: 'react-tags react-tags-product_error',
+    rootFocused: 'is-focused',
+    selected: 'react-tags__selected',
+    selectedTag: 'react-tags__selected-tag',
+    selectedTagName: 'react-tags__selected-tag-name',
+    search: 'react-tags__search_error',
     searchInput: 'react-tags__search-input',
     suggestions: 'react-tags__suggestions',
     suggestionActive: 'is-active',
