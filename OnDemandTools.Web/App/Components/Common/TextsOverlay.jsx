@@ -24,7 +24,7 @@ class TextsOverlay extends React.Component {
 
                 var rowData = this.props.data[i];
 
-                rows.push(<p>{rowData}</p>);
+                rows.push(<p key={i.toString()}>{rowData}</p>);
 
                 if (!hasOverlay) {
                     buttonRows.push(<Button className="addMarginRight" key={i.toString()}> {rowData} </Button>);

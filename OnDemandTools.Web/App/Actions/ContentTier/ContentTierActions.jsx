@@ -3,7 +3,7 @@ import Axios from 'axios';
 import $ from 'jquery';
 
 
-export const filterContentTierSuccess= (filterContentTier) => {
+export const filterContentTierSuccess = (filterContentTier) => {
     return {
         type: actionTypes.FILTER_CONTENT_TIER_SUCCESS,
         filterContentTier
@@ -37,7 +37,7 @@ export const fetchContentTiers = () => {
 };
 
 export const saveContentTier = (model) => {
-    return (dispatch) => {        
+    return (dispatch) => {
         return Axios.post('/api/ContentTier', model)
             .then(response => {
                 dispatch(saveContentTierSuccess(response.data))
@@ -65,11 +65,11 @@ export const deleteContentTierSuccess = (name) => {
     }
 };
 
-export const deleteContentTier = (name) => {
-    return (dispatch) => {        
-        return Axios.delete('/api/ContentTier/'+ name)
+export const deleteContentTier = (contentTier) => {
+    return (dispatch) => {
+        return Axios.delete('/api/ContentTier', { data: contentTier })
             .then(response => {
-                dispatch(deleteContentTierSuccess(name))
+                dispatch(deleteContentTierSuccess(contentTier.name))
             })
             .catch(error => {
                 throw (error);

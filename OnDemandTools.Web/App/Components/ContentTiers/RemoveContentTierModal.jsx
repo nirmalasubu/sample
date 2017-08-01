@@ -39,11 +39,11 @@ class RemoveContentTierModal extends React.Component {
     }
 
     ///<summary>
-    //  when user conforms to delete categary
+    //  when user conforms to delete Content tier
     ///</summary>
     onContinue() {
         this.setState({ isProcessing: true });
-        this.props.dispatch(contentTierActions.deleteContentTier(this.props.data.contentTierDetails.name))
+        this.props.dispatch(contentTierActions.deleteContentTier(this.props.data.contentTierDetails))
             .then(() => {
                 this.setState({ isProcessing: false });
                 this.props.handleClose();
