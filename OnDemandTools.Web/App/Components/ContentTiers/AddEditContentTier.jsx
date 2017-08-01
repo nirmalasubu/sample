@@ -234,7 +234,7 @@ class AddEditContentTier extends React.Component {
     render() {
         var msg = "";
         if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> ContentTier Name already exists. Please use a unique contentTier name.</label>);
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Content Tier Name already exists. Please use a unique Content Tier name.</label>);
 
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
