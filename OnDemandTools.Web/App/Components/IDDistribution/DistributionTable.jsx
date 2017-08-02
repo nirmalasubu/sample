@@ -9,9 +9,9 @@ import TextOverlay from 'Components/Common/TextOverlay';
 import { getNewAiringId } from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
 import * as currentAiringIdActions  from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
 
-@connect((store) => {
+@connect((store) => { 
     return {
-        emptyResult:null
+        
     };
 })
 
@@ -86,7 +86,7 @@ class DistributionTable extends React.Component {
     ///This is to generate a new airing id using prefix.
     ///</summary>
     generateAiringId(val) {
-        this.props.dispatch(currentAiringIdActions.generateAiringId(val.prefix));
+        this.props.levelUp(val);
     }
 
     ///<summary>

@@ -43,7 +43,7 @@ export const getNewAiringId = () => {
 
 export const generateAiringId = (prefix) => {
     return (dispatch) => { 
-        return Axios.get('/api/distribution/generate/'+prefix)
+        return Axios.post('/api/distribution/generate/'+prefix)
             .then(response => {
                 dispatch(saveAiringIdSuccess(response.data))
             })

@@ -73,12 +73,17 @@ class DistributionPage extends React.Component {
         document.title = "ODT - ID Distribution";
     }
 
+    //this is to refresh the current airing id
+    handleLevelUpdate(val) {
+        this.props.dispatch(currentAiringIdActions.generateAiringId(val.prefix));
+    }
+
     render() {
         return (
             <div>               
                 <PageHeader pageName="ID Distribution" />
                 <DistributionFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DistributionTable RowData={this.props.filteredDistributions} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <DistributionTable levelUp={this.handleLevelUpdate.bind(this)} RowData={this.props.filteredDistributions} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }

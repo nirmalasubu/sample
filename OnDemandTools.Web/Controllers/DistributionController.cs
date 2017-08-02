@@ -40,7 +40,7 @@ namespace OnDemandTools.Web.Controllers
 
         // GET: api/values
         [Authorize]
-        [HttpGet("generate/{prefix}")]
+        [HttpPost("generate/{prefix}")]
         public CurrentAiringIdViewModel GenerateAiringId(string prefix)
         {
             CurrentAiringIdViewModel currentAiringIdModel = airingSvc.Distribute(prefix).ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
