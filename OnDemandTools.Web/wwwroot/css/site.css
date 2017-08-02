@@ -453,10 +453,10 @@ p.shortDesc {
     max-width:260px;
 }
 
-.product-input-width{
+.product-input-left{
     display: inline-block !important;
-    min-width:263px;
-    max-width:263px;
+    min-width:300px;
+    max-width:300px;
 }
 
 .destination-head {
@@ -633,7 +633,7 @@ tr.strikeout td:before {
 .react-tags-product
 {
     float:left;
-    width:260px;
+    width:300px;
     border: 1px solid #CCC !important;
     border-radius: 4px !important;
 }
@@ -663,6 +663,10 @@ tr.strikeout td:before {
     font-size: inherit;
     line-height: inherit;
     color: #ff0000;
+}
+
+.col-md-prod-4 {
+    width: 37.33333333% !important;
 }
 
 /******** List box styling  ends ******/

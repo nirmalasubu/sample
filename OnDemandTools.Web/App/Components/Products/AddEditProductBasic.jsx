@@ -333,12 +333,12 @@ class AddEditProductBasic extends React.Component {
             </Col>
         </Row>
         <Row>
-            <Col md={4} >
+            <Col md={4} bsClass="col-md-prod-4 col" >
                                 <FormGroup
                                     controlId="externalId" validationState={this.state.validationStateExternalId}>
                                     <label class="control-label" style={{paddingRight:21, fontWeight:"bold"}}>External ID</label>
                                     <FormControl
-                                    bsClass="form-control product-input-width"
+                                        bsClass="form-control product-input-left"
                                         type="text"
                                         disabled={this.state.productModel.id == null ? false : true}
                                         value={this.state.productModel.externalId}
@@ -364,13 +364,13 @@ class AddEditProductBasic extends React.Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Col md={4} >
+                            <Col md={4} bsClass="col-md-prod-4 col" >
                                 <FormGroup
                                     controlId="productName" validationState={this.state.validationStateName}>
                                     <label class="control-label" style={{paddingRight:1, fontWeight:"bold"}}>Product Name</label>
                                     <FormControl
                                         maxLength="150"
-                                        bsClass="form-control product-input"
+                                        bsClass="form-control product-input-left"
                                         type="text"
                                         value={this.state.productModel.name}
                                         ref="inputProductName"
@@ -396,7 +396,7 @@ class AddEditProductBasic extends React.Component {
                             </Col>                                                        
                         </Row>
                         <Row>
-                            <Col md={4} >
+                            <Col md={4} bsClass="col-md-prod-4 col">
                                 <FormGroup
                                         controlId="prdTags">
                                         <label class="control-label" style={{paddingRight:67, fontWeight:"bold", float:"left"}}>Tags</label>
