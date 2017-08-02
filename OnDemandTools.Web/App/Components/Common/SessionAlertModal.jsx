@@ -89,7 +89,7 @@ class SessionAlertModal extends React.Component
     ///  when users yes to continue the session
     ///</summary>
     onContinue(){
-        this.props.handleClose();
+      
         this.props.handleContinueSession();
     }
 

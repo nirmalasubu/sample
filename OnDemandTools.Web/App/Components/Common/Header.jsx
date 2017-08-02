@@ -48,25 +48,27 @@ class Header extends React.Component {
     ///  to check when server request has happend
     ///</summary>
     CheckIdleTime() {
-      
+     
         var today = new Date();
-        var serverActiveTime = new Date(this.props.serverPollTime);
-        var diffMs = ( today -  this.SessionStartTime );
-        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
-        //var diffMs = (  this.SessionStartTime - serverActiveTime);
-        //var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
+        var serverPolledTime = new Date(this.props.serverPollTime);      
+        var activeSessionRemainingMinutes = Math.round((( (this.SessionEndTime - today ) % 86400000) % 3600000) / 60000); 
 
-        console.log("currenttime "+ today);
-        console.log("diffMins "+ diffMins);
-        if (diffMins > 3) { // session is idle more than 2 minutes show a pop up warning  that means it cross half the slide expiration time of the server
+        console.log("activeSessionRemainingMinutes"+activeSessionRemainingMinutes);
+      
+         var minutesBeforeSessionEnd=2; // No of minutes to verify before SessionEndTime
+         var sessionTime=Math.round((((this.SessionEndTime-   this.SessionStartTime) % 86400000) % 3600000) / 60000);
+       
+         if (activeSessionRemainingMinutes < minutesBeforeSessionEnd) { // verify the session before "minutesBeforeSessionEnd" session end time
 
-            var diffsMs = (this.SessionEndTime -   serverActiveTime );
+            var diffMs = (today -   serverPolledTime );
             var diffsMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); 
-            if (diffsMins > 3  &&  diffsMins <= 5)
+            console.log("serverPolledTime"+serverPolledTime);
+            console.log("diffMins "+ diffsMins);
+            if (diffsMins > Math.round(sessionTime/2)  &&  diffsMins < sessionTime)   // server is not yet polled. So show the pop up to make it active
             {
                 this.setState({ showSessionModel: true });
                 console.log("session about time out in 2 minute ");
-            }else if(diffsMins < 0 ||  diffsMins > 5)
+            }else if(diffsMins < 0 ||  diffsMins > sessionTime)
             {
                 console.log("session timed out");
             }
@@ -88,12 +90,13 @@ class Header extends React.Component {
     ///</summary>
     handleContinueSession()
     {
+       
         this.props.dispatch(categoryActions.healthCheck())
            .then(() => {
                this.setState({ showSessionModel: false });
                this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
                var sixMinutesLater = new Date();
-               sixMinutesLater.setMinutes(sixMinutesLater.getMinutes() + 6);
+               sixMinutesLater.setMinutes(sixMinutesLater.getMinutes() + 6); // Assuming expire time span is 6 minutes in startup.cs
                this.SessionEndTime =  sixMinutesLater;
            }).catch(error => {
                console.log("error "+ error)
