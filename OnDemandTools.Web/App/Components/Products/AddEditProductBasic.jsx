@@ -35,7 +35,7 @@ class AddEditProductBasic extends React.Component {
             allTags: this.getAllTags(),
             suggestions: [],
             tagValue: "",
-            delimit : [8, 13, 32]
+            delimit : [9, 13, 32]
         });
     }
 
