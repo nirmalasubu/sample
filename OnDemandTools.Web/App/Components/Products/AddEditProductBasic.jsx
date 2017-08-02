@@ -196,7 +196,7 @@ class AddEditProductBasic extends React.Component {
         var hasNameError = ((name == "" || !this.isProductUnique(this.state.productModel)));
         var hasDesError = (description == "");
         var hasExternalError = (externalId!=""?!validator.isUUID(externalId):false);
-        var hasTagError = ((tagVals.length>0 && tagVals.length<3) || (tagVals.length>2?this.isTagExist(tag):false))
+        var hasTagError = ((tagVals.trim().length>0 && tagVals.trim().length<3) || (tagVals.trim().length>2?this.isTagExist(tag):false))
 
         if(hasNameError || hasDesError || hasExternalError || hasTagError)
             hasError = true;
@@ -293,6 +293,7 @@ class AddEditProductBasic extends React.Component {
     /// this method is to handle the addition of tags to the state
     /// </summary>
     handleAddition(tag) {
+        tag.name=tag.name.trim();
         if(!this.isTagExist(tag) && tag.name.length>2)
         {
             tag.name=tag.name.replace(/ /g, '-');
