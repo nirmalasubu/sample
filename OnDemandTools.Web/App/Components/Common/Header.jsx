@@ -101,7 +101,7 @@ class Header extends React.Component {
            }).catch(error => {
                console.log("error "+ error)
                this.setState({ showSessionModel: false });
-               //window.location.reload();
+               window.location.reload();
            });
         
          
