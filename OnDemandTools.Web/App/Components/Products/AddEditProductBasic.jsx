@@ -34,7 +34,8 @@ class AddEditProductBasic extends React.Component {
             componentJustMounted: true,
             allTags: this.getAllTags(),
             suggestions: [],
-            tagValue: ""
+            tagValue: "",
+            delimit : [8, 13, 32]
         });
     }
 
@@ -294,15 +295,19 @@ class AddEditProductBasic extends React.Component {
     /// </summary>
     handleAddition(tag) {
         tag.name=tag.name.trim();
-        if(!this.isTagExist(tag) && tag.name.length>2)
+        if(tag.name.length>2)
         {
             tag.name=tag.name.replace(/ /g, '-');
-            let product = this.state.productModel;
-            product.tags.push({
-                id: product.tags.length + 1,
-                name: tag.name
-            });
-            this.setState({productModel: product, tagValue:""});
+            if(!this.isTagExist(tag))
+            {
+                let product = this.state.productModel;
+                product.tags.push({
+                    id: product.tags.length + 1,
+                    name: tag.name
+                });
+                this.setState({productModel: product, tagValue:""});
+                this.validateForm("");
+            }
         }
     }
 
@@ -404,6 +409,7 @@ class AddEditProductBasic extends React.Component {
                                         classNames = {this.state.validationStateTag==null?CLASS_NAMES:CLASS_NAMES_ERRORS}
                                             id = "inputTags"
                                             suggestions={this.state.suggestions}
+                                            delimiters = {this.state.delimit}
                                             placeholder="Enter 3 or more letters"
                                             autocomplete={true}
                                             minQueryLength={3}
