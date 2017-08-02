@@ -29,7 +29,7 @@ namespace OnDemandTools.Business.Modules.AiringId
 
             return new CurrentAiringId
             {
-                CreatedBy = appContenxt.GetUser().UserName,
+                CreatedBy = appContenxt.GetUser()!=null?appContenxt.GetUser().UserName: appContenxt.GetUserName(),
                 AiringId = builder.ToString(),
                 Prefix = prefix,
                 SequenceNumber = fiveDigitNumber,

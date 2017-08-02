@@ -29,6 +29,7 @@ namespace OnDemandTools.Web.Controllers
         [Route("/contentTiers")]
         [Route("/workflowStatuses")]
         [Route("/categories")]
+        [Route("/airingIds")]
         public IActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated && User.HasClaim(c => c.Value == "read"))

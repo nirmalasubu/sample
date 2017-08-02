@@ -105,7 +105,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
 
             try
             {
-                currentAiringId.ModifiedBy = _appContext.GetUser().UserName;
+                currentAiringId.ModifiedBy = _appContext.GetUser()!=null?_appContext.GetUser().UserName: _appContext.GetUserName();
 
                 var findAndModifyResult = currentAiringIds.FindAndModify(
                     new FindAndModifyArgs()

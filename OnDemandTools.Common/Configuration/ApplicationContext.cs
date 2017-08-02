@@ -5,6 +5,7 @@ namespace OnDemandTools.Common.Configuration
     public interface IApplicationContext
     {
         UserIdentity GetUser();
+        string GetUserName();
     }
 
     public class HttpAPIContext : IApplicationContext
@@ -20,6 +21,11 @@ namespace OnDemandTools.Common.Configuration
         public UserIdentity GetUser()
         {
             return cntx.HttpContext.User.Identity as UserIdentity;
+        }
+
+        public string GetUserName()
+        {
+            return cntx.HttpContext.User.Identity.Name;
         }
     }
 }
