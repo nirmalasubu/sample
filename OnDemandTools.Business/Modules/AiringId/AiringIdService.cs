@@ -33,6 +33,11 @@ namespace OnDemandTools.Business.Modules.AiringId
             return creator.Save(newAiringId);
         }
 
+        public CurrentAiringId Save(CurrentAiringId airingId)
+        {
+            return creator.Save(airingId);
+        }
+
         public void Delete(string prefix)
         {
             deleteCommand.Delete(prefix);

@@ -9,6 +9,8 @@ namespace OnDemandTools.Business.Modules.AiringId
 
         BLModel.CurrentAiringId Create(string prefix);
 
+        BLModel.CurrentAiringId Save(BLModel.CurrentAiringId airingId);
+
         void Delete(string prefix);
 
         void DeleteById(string id);

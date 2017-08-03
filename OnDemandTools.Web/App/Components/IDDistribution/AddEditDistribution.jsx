@@ -10,7 +10,7 @@ import { Tabs, Tab, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormG
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import * as statusActions from 'Actions/Status/StatusActions';
+import * as idActions from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
@@ -178,38 +178,35 @@ class AddEditDistribution extends React.Component {
     }
 
     /// <summary>
-    /// To Save the status details
+    /// To Save the airing Id details
     /// </summary>
     handleSave() {
         var elem = this;
-        if (this.state.validateStatusName != "error" && this.state.validateUser != "error"&& this.state.validateUniqueStatusName != "error") {
 
-            this.setState({ isProcessing: true });
+        this.setState({ isProcessing: true });
 
-            this.props.dispatch(statusActions.saveStatus(this.state.status))
-                .then(() => {
-                    if (this.state.status.id == null) {
-                        NotificationManager.success(this.state.status.name + ' status successfully created.', '', 2000);
-                    }
-                    else {
-                        NotificationManager.success(this.state.status.name + ' status updated successfully.', '', 2000);
-                    }
-                    this.props.dispatch(statusActions.fetchStatus());
-                    setTimeout(function () {
-                        elem.props.handleClose();
-                    }, 3000);
-                }).catch(error => {
-                    if (this.state.status.id == null) {
-                        NotificationManager.error(this.state.status.name + ' status creation failed. ' + error, 'Failure');
-                    }
-                    else {
-                        NotificationManager.error(this.state.status.name + ' status update failed. ' + error, 'Failure');
-                    }
-                    this.setState({ isProcessing: false });
-                });
-        }
-        else
-            return false;
+        this.props.dispatch(idActions.saveStatus(this.state.currentAiringId))
+            .then(() => {
+                if (this.state.status.id == null) {
+                    NotificationManager.success(this.state.status.name + ' Current Airing Id successfully created.', '', 2000);
+                }
+                else {
+                    NotificationManager.success(this.state.status.name + ' Current Airing Id updated successfully.', '', 2000);
+                }
+                this.props.dispatch(idActions.fetchCurrentAiringId());
+
+                setTimeout(function () {
+                    elem.props.handleClose();
+                }, 3000);
+            }).catch(error => {
+                if (this.state.status.id == null) {
+                    NotificationManager.error(this.state.status.name + ' Current Airing Id creation failed. ' + error, 'Failure');
+                }
+                else {
+                    NotificationManager.error(this.state.status.name + ' Current Airing Id update failed. ' + error, 'Failure');
+                }
+                this.setState({ isProcessing: false });
+            });        
     }
     
     componentDidMount() {

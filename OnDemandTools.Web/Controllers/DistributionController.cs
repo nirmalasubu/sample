@@ -48,6 +48,29 @@ namespace OnDemandTools.Web.Controllers
             return currentAiringIdModel;
         }
 
+        //save current airing Id details
+        [Authorize]
+        [HttpPost]
+        public CurrentAiringIdViewModel Post([FromBody]CurrentAiringIdViewModel viewModel)
+        {
+            CurrentAiringId blModel = viewModel.ToBusinessModel<CurrentAiringIdViewModel, CurrentAiringId>();
+
+            if (string.IsNullOrEmpty(blModel.Id))
+            {
+                blModel.CreatedDateTime = DateTime.UtcNow;
+                blModel.CreatedBy = HttpContext.User.Identity.Name;
+            }
+            else
+            {
+                blModel.ModifiedDateTime = DateTime.UtcNow;
+                blModel.ModifiedBy = HttpContext.User.Identity.Name;
+            }
+
+            blModel = airingSvc.Save(blModel);
+
+            return blModel.ToViewModel<CurrentAiringId, CurrentAiringIdViewModel>();
+        }
+
         [Authorize]
         [HttpGet("newcurrentairingid")]
         public CurrentAiringIdViewModel GetEmptyModel()
