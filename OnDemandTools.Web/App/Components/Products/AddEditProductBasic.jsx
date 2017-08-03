@@ -211,9 +211,9 @@ class AddEditProductBasic extends React.Component {
             validationStateTag: hasTagError ? 'error' : null,
         });
 
-        //var tagVal = tagVals.length>2?tagVals:null;
+        var tagVal = tagVals.trim().length>0?tagVals:null;
 
-        this.props.validationStates(hasError, tagVals);
+        this.props.validationStates(hasError, tagVal);
     }    
 
     /// <summary>

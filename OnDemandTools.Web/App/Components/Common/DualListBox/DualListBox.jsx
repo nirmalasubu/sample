@@ -106,7 +106,7 @@ class DualListBox extends React.Component {
 
                 filtered.push(option);
             }
-        });
+        });            
 
         return filtered;
     }
@@ -255,14 +255,11 @@ class DualListBox extends React.Component {
     /// this method checks whether the selected available option still exist after filter
     ///</summary>
     checkSelectionAfterFilterOptions(element) {
-        //$(element.id + "option:selected").removeAttr("selected");
+        this.arrayFrom(element.options).forEach(function(item) {
+            item.selected=false;
+        });
 
-        var array = [];
-        array = this.getSelectedOptions(element);
-        if(array.length>0)
-            this.setState({isAvailableSelected:true});
-        else
-            this.setState({isAvailableSelected:false});
+        this.setState({isAvailableSelected:false});
     }    
 
     ///<summary>
