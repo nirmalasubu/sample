@@ -104,7 +104,7 @@ class AddEditProduct extends React.Component {
                     else {
                         NotificationManager.success(productToSave.name + ' product updated successfully.', '', 2000);
                     }
-
+                    this.props.dispatch(productAction.fetchProducts());
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);

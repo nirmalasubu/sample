@@ -86,6 +86,8 @@ class DualListBox extends React.Component {
         this.setState({
             filter: filter
         });
+
+        this.checkSelectionAfterFilterOptions(this.available);
     }
 
     ///<summary>
@@ -248,6 +250,20 @@ class DualListBox extends React.Component {
             .filter(option => option.selected)
             .map(option => option.value);
     }
+
+    ///<summary>
+    /// this method checks whether the selected available option still exist after filter
+    ///</summary>
+    checkSelectionAfterFilterOptions(element) {
+        //$(element.id + "option:selected").removeAttr("selected");
+
+        var array = [];
+        array = this.getSelectedOptions(element);
+        if(array.length>0)
+            this.setState({isAvailableSelected:true});
+        else
+            this.setState({isAvailableSelected:false});
+    }    
 
     ///<summary>
     /// this method gets the array of values from the options shape
