@@ -26,8 +26,8 @@ namespace OnDemandTools.DAL.Modules.Pathing.Command
         /// <param name="id">Path translation object id</param>  
         public void Delete(string id)
         {
-            IMongoQuery query = Query.EQ("_id", new ObjectId(id));
-            WriteConcernResult remove = _pathTranslations.Remove(query);
+            IMongoQuery query = Query<DLModel.PathTranslation>.EQ(e => e.Id, new ObjectId(id));
+            _pathTranslations.Remove(query);
         }
 
 

@@ -16,6 +16,17 @@ export const fetchPathTranslationComplete = (pathTranslationObj) => {
     }
 };
 
+/// <summary>
+/// Invoke 'DELETE_PATHTRANSLATION_SUCCESS' action
+/// which will be handled by the appropriate reducer
+/// </sumamry>
+export const deletePathTranslationComplete = (pathTranslationObjId) => {
+    return {
+        type: actionTypes.DELETE_PATHTRANSLATION_SUCCESS,
+        pathTranslationObjId
+    }
+};
+
 
 
 
@@ -35,6 +46,23 @@ export const fetchPathTranslation = (object) => {
             })
             .catch(error => {            
                 dispatch(configActions.handleApplicationAPIError(error));               
+            });
+    };
+};
+
+/// <summary>
+/// Asynchronously delete path translations from API. If successful
+/// dispatch the appropriate action for further processing
+/// </summary>
+export const deletePathTranslation = (id) => {
+    return (dispatch) => {       
+        return Axios.delete('/api/pathtranslation/'+ id)  
+            .then(response => {
+                dispatch(deletePathTranslationComplete(id))
+            })
+            .catch(error => {            
+                dispatch(configActions.handleApplicationAPIError(error));           
+                throw (error);
             });
     };
 };

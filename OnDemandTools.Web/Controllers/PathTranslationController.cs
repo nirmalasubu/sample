@@ -76,7 +76,7 @@ namespace OnDemandTools.Web.Controllers
         /// Delete existing path translation. Return 404 if resource not found.
         /// </summary>        
         /// <returns></returns>
-        [Authorize]
+        // [Authorize]
         [HttpDelete("{id}")]
         public void DeletePathTranslation(string id)
         {
