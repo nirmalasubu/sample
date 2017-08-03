@@ -136,7 +136,7 @@ class AddEditProduct extends React.Component {
     /// Called to close the add edit pop up or open cancel warning pop up
     /// </summary>
     handleClose() {
-        if (JSON.stringify(this.state.productUnModifiedData) == JSON.stringify(this.state.productDetails)) {
+        if (JSON.stringify(this.state.productUnModifiedData) == JSON.stringify(this.state.productDetails) && (this.state.tagValue==null || this.state.tagValue=="" || this.state.tagValue==undefined)) {
             this.props.handleClose();
         }
         else {
