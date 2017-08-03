@@ -8,6 +8,7 @@ import RemoveCurrentAiringIdModal from 'Components/IDDistribution/RemoveCurrentA
 import TextOverlay from 'Components/Common/TextOverlay';
 import { getNewAiringId } from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
 import * as currentAiringIdActions  from 'Actions/AiringIdDistribution/AiringIdDistributionActions';
+import AddEditDistribution from 'Components/IDDistribution/AddEditDistribution';
 
 @connect((store) => { 
     return {
@@ -169,6 +170,12 @@ class DistributionTable extends React.Component {
             }
 
         }.bind(this));
+
+        var airingIdandPrefix=[];
+        for (var i = 0; i < this.props.RowData.length; i++)
+        {
+            airingIdandPrefix.push({"id":this.props.RowData[i].id,"name":this.props.RowData[i].prefix});
+        }
             
         return (
             <div>
@@ -187,6 +194,8 @@ class DistributionTable extends React.Component {
                     options={this.state.options}>
                         {row}
                 </BootstrapTable>
+
+                <AddEditDistribution data={this.state} airingIdandPrefix={airingIdandPrefix}  handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveCurrentAiringIdModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
                         }

@@ -453,6 +453,10 @@ p.shortDesc {
     max-width:260px;
 }
 
+.distribution-input{
+    max-width:360px;
+}
+
 .product-input-left{
     display: inline-block !important;
     min-width:300px;

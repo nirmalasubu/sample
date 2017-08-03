@@ -135,8 +135,8 @@ class AddEditDistribution extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (validationStateCode || validationStateSequence || validateStatusCurrent || validateStatusUpper ||
-            validateStatusLower || validateUniqueCode);
+        return (this.state.validationStateCode || this.state.validationStateSequence || this.state.validateStatusCurrent || this.state.validateStatusUpper ||
+            this.state.validateStatusLower || this.state.validateUniqueCode);
     }
 
     /// <summary>
@@ -213,6 +213,12 @@ class AddEditDistribution extends React.Component {
     }
     
     componentDidMount() {
+        var initialValue={ "id": null, "prefix": "", "sequenceNumber": 0, "billingNumberCurrent": 0, "billingNumberUpper": 0, "billingNumberLower": 0};
+
+        //required to overcome form control warning of categoryName
+        this.setState({
+            currentAiringId: initialValue            
+        });
       
     }
 
@@ -235,14 +241,14 @@ render() {
                      <Grid >
                      <Row>
                       <Form> 
-                        <Col sm={5}>
-                            <FormGroup controlId="prefix" validationState={this.state.validationStateCode||this.state.validateUniqueCode}>
+                        <Col sm={4}>
+                            <FormGroup controlId="prefixControl" validationState={this.state.validationStateCode||this.state.validateUniqueCode}>
                                 <ControlLabel>Code</ControlLabel>
                                 <FormControl type="text"  value={this.state.currentAiringId.prefix} maxLength="20" ref="inputCode" placeholder="Enter 4 letter upper case code" 
                                 onChange={(event) =>this.handleTextChange("code", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
                             </FormGroup>
                         </Col>
-                        <Col sm={5}>
+                        <Col sm={4}>
                             <FormGroup controlId="sequence" validationState={this.state.validationStateSequence}>
                                 <ControlLabel>Current Number</ControlLabel>
                                 <FormControl type="number"  value={this.state.currentAiringId.sequenceNumber} ref="inputSequenceNumber" placeholder="1 - 99,999" maxLength="5" 
@@ -260,7 +266,7 @@ render() {
                                 onChange={(event) =>this.handleTextChange("upper", event)} />
                             </FormGroup>
                         </Col>
-                        <Col sm={3}>
+                        <Col sm={2}>
                             <FormGroup controlId="current" validationState={this.state.validateStatusCurrent}>
                                 <ControlLabel>Current Billing Number</ControlLabel>
                                 <FormControl type="number"  value={this.state.currentAiringId.billingNumberCurrent} maxLength="5" ref="inputCurrent" placeholder="0" 
@@ -278,7 +284,7 @@ render() {
                     </Row>
                     <FormGroup controlId="urlpost">
                     <ControlLabel>URL</ControlLabel>
-                    <FormControl type="number" disabled rows="3" cols="40" value={this.state.currentAiringId.postUrl} ref="inputUrl"   placeholder="URL will be shown in edit page" 
+                    <FormControl type="text" disabled class="workflowStatus-description" value={this.state.currentAiringId.postUrl} ref="inputUrl"   placeholder="URL will be shown in edit page" 
                      onChange={(event) =>this.handleTextChange("url", event)}/>
                    </FormGroup>
                    </Grid>
