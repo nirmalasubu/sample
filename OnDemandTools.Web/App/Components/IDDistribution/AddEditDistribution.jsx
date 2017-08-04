@@ -38,6 +38,7 @@ class AddEditDistribution extends React.Component {
             validateStatusUpper:null,
             validateStatusLower:null,
             validateUniqueCode:null,
+            urlDomain: "POST: http://ondemand-tools-dev/api/v1/airingId/generate/",
             postUrl:""
         });
     }
@@ -59,17 +60,25 @@ class AddEditDistribution extends React.Component {
     /// <summary>
     /// This function is called after entering the modal pop up
     /// </summary>
-     onEnteredModel() {
-            this.validateForm();
-        }
+    onEnteredModel() {
+        this.validateForm();
+    }
 
     /// <summary>
     /// This function is called on entering the modal pop up
     /// </summary>
     onOpenModel() {
+        var url = "";
+        if(this.props.data.airingIdDetails.id != null)
+        {
+            url = this.state.postUrl;
+            url = this.state.urlDomain + this.props.data.airingIdDetails.prefix;
+        }
+
         this.setState({
             isProcessing: false,
             currentAiringId: this.props.data.airingIdDetails,
+            postUrl: url,
             airingIdUnModifiedData: jQuery.extend(true, {}, this.props.data.airingIdDetails)
         });
     }
@@ -103,17 +112,19 @@ class AddEditDistribution extends React.Component {
         var url = this.state.postUrl;
         var model = this.state.currentAiringId;
         if(value=="code")
-            model.prefix = event.target.value;
+        {
+            model.prefix = event.target.value.toUpperCase();
+            if(model.id!=null)
+                url = this.state.urlDomain + (model.prefix.length==4?model.prefix : "");
+        }
         if(value=="sequence")
             model.sequenceNumber = event.target.value;
         if(value=="current")
             model.billingNumberCurrent = event.target.value;
         if(value=="lower")
             model.billingNumberLower = event.target.value;
-        if(value=="uppper")
+        if(value=="upper")
             model.billingNumberUpper = event.target.value;
-        if(value=="url")
-            url = event.target.value.toUpperCase();
 
         this.setState({
             currentAiringId: model,
@@ -123,34 +134,27 @@ class AddEditDistribution extends React.Component {
         this.validateForm();
     }
 
-    //<summary>
-    /// capitalize the code or prefix text
-    ///</summary>
-    ConvertToUpperCase(event){
-        var val=event.target.value;
-        event.target.value=val.toUpperCase();
-    }
-    
     /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled() {
-        return (this.state.validationStateCode || this.state.validationStateSequence || this.state.validateStatusCurrent || this.state.validateStatusUpper ||
-            this.state.validateStatusLower || this.state.validateUniqueCode);
+        return (this.state.validationStateCode != null  || this.state.validationStateSequence != null || this.state.validateStatusCurrent != null || 
+            this.state.validateStatusUpper != null || this.state.validateStatusLower != null || this.state.validateUniqueCode != null);
     }
 
     /// <summary>
     /// This function is to set validations states value
     /// </summary>
     validateForm() {
+        var name = this.state.currentAiringId.prefix;
         var isNameValid = this.state.currentAiringId.prefix.match("^[a-zA-Z]+$")==null;  //validation to accept only aplhabets
-        var isSequenceEmpty = (this.state.currentAiringId.sequenceNumber == "");
-        var isCurrentEmpty = (this.state.currentAiringId.billingNumberCurrent == "");
-        var isUpperEmpty = (this.state.currentAiringId.billingNumberUpper == "");
-        var isLowerEmpty = (this.state.currentAiringId.billingNumberLower == "");
+        var isSequenceEmpty = (this.state.currentAiringId.sequenceNumber == "" || this.state.currentAiringId.sequenceNumber <= 0 || this.state.currentAiringId.sequenceNumber > 99999);
+        var isCurrentEmpty = (this.state.currentAiringId.billingNumberCurrent == "" || this.state.currentAiringId.billingNumberCurrent <= 0 || this.state.currentAiringId.billingNumberCurrent > 99999);
+        var isUpperEmpty = (this.state.currentAiringId.billingNumberUpper == "" || this.state.currentAiringId.billingNumberUpper <= 0 || this.state.currentAiringId.billingNumberUpper > 99999);
+        var isLowerEmpty = (this.state.currentAiringId.billingNumberLower == "" || this.state.currentAiringId.billingNumberLower <= 0 || this.state.currentAiringId.billingNumberLower > 99999);
 
         this.setState({
-            validationStateCode: isNameValid  ? 'error' : null,
+            validationStateCode: (isNameValid || (name.length <= 3 || name.length > 4))  ? 'error' : null,
             validationStateSequence: isSequenceEmpty ? 'error' : null,
             validateStatusCurrent: isCurrentEmpty ? 'error' : null,
             validateStatusUpper: isUpperEmpty ? 'error' : null,
@@ -165,7 +169,7 @@ class AddEditDistribution extends React.Component {
     isCodeUnique(airingId) {
         for (var x = 0; x < this.props.airingIdandPrefix.length; x++) {
             if (this.props.airingIdandPrefix[x].id != airingId.id) {
-                if (this.props.airingIdandPrefix[x].name == airingId.name) {
+                if (this.props.airingIdandPrefix[x].name.toUpperCase() == airingId.prefix.toUpperCase()) {
                     this.setState({showError: true });
                     return true;
                 }
@@ -185,13 +189,13 @@ class AddEditDistribution extends React.Component {
 
         this.setState({ isProcessing: true });
 
-        this.props.dispatch(idActions.saveStatus(this.state.currentAiringId))
+        this.props.dispatch(idActions.saveCurrentAiringId(this.state.currentAiringId))
             .then(() => {
-                if (this.state.status.id == null) {
-                    NotificationManager.success(this.state.status.name + ' Current Airing Id successfully created.', '', 2000);
+                if (this.state.currentAiringId.id == null) {
+                    NotificationManager.success(this.state.currentAiringId.prefix + ' Current Airing Id successfully created.', '', 2000);
                 }
                 else {
-                    NotificationManager.success(this.state.status.name + ' Current Airing Id updated successfully.', '', 2000);
+                    NotificationManager.success(this.state.currentAiringId.prefix + ' Current Airing Id updated successfully.', '', 2000);
                 }
                 this.props.dispatch(idActions.fetchCurrentAiringId());
 
@@ -199,18 +203,18 @@ class AddEditDistribution extends React.Component {
                     elem.props.handleClose();
                 }, 3000);
             }).catch(error => {
-                if (this.state.status.id == null) {
-                    NotificationManager.error(this.state.status.name + ' Current Airing Id creation failed. ' + error, 'Failure');
+                if (this.state.currentAiringId.id == null) {
+                    NotificationManager.error(this.state.currentAiringId.prefix + ' Current Airing Id creation failed. ' + error, 'Failure');
                 }
                 else {
-                    NotificationManager.error(this.state.status.name + ' Current Airing Id update failed. ' + error, 'Failure');
+                    NotificationManager.error(this.state.currentAiringId.prefix + ' Current Airing Id update failed. ' + error, 'Failure');
                 }
                 this.setState({ isProcessing: false });
             });        
     }
     
     componentDidMount() {
-        var initialValue={ "id": null, "prefix": "", "sequenceNumber": 0, "billingNumberCurrent": 0, "billingNumberUpper": 0, "billingNumberLower": 0};
+        var initialValue={ "id": null, "prefix": "", "sequenceNumber": "", "billingNumberCurrent": 0, "billingNumberUpper": 0, "billingNumberLower": 0};
 
         //required to overcome form control warning of categoryName
         this.setState({
@@ -242,13 +246,13 @@ render() {
                             <FormGroup controlId="prefixControl" validationState={this.state.validationStateCode||this.state.validateUniqueCode}>
                                 <ControlLabel>Code</ControlLabel>
                                 <FormControl type="text"  value={this.state.currentAiringId.prefix} maxLength="20" ref="inputCode" placeholder="Enter 4 letter upper case code" 
-                                onChange={(event) =>this.handleTextChange("code", event)} onKeyUp={(event) =>this.ConvertToUpperCase(event)}/>
+                                onChange={(event) =>this.handleTextChange("code", event)}/>
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
                             <FormGroup controlId="sequence" validationState={this.state.validationStateSequence}>
                                 <ControlLabel>Current Number</ControlLabel>
-                                <FormControl type="number"  value={this.state.currentAiringId.sequenceNumber} ref="inputSequenceNumber" placeholder="1 - 99,999" maxLength="5" 
+                                <FormControl type="number"  value={this.state.currentAiringId.sequenceNumber} ref="inputSequenceNumber" placeholder="1 - 99,999" min="1" max="99999"
                                  onChange={(event) =>this.handleTextChange("sequence", event)}/>
                             </FormGroup>
                          </Col>
@@ -259,21 +263,21 @@ render() {
                         <Col sm={3}>
                             <FormGroup controlId="upper" validationState={this.state.validateStatusUpper}>
                                 <ControlLabel>Upper Billing Number</ControlLabel>
-                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberUpper} maxLength="5" ref="inputUpper" placeholder="0" 
+                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberUpper} min="1" max="99999" ref="inputUpper" placeholder="0" 
                                 onChange={(event) =>this.handleTextChange("upper", event)} />
                             </FormGroup>
                         </Col>
                         <Col sm={2}>
                             <FormGroup controlId="current" validationState={this.state.validateStatusCurrent}>
                                 <ControlLabel>Current Billing Number</ControlLabel>
-                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberCurrent} maxLength="5" ref="inputCurrent" placeholder="0" 
+                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberCurrent} min="1" max="99999" ref="inputCurrent" placeholder="0" 
                                 onChange={(event) =>this.handleTextChange("current", event)} />
                             </FormGroup>
                         </Col>
                         <Col sm={3}>
                             <FormGroup controlId="lower" validationState={this.state.validateStatusLower}>
                                 <ControlLabel>Lower Billing Number</ControlLabel>
-                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberLower} maxLength="5" ref="inputLower" placeholder="0" 
+                                <FormControl type="number"  value={this.state.currentAiringId.billingNumberLower} min="1" max="99999" ref="inputLower" placeholder="0" 
                                 onChange={(event) =>this.handleTextChange("lower", event)} />
                             </FormGroup>
                         </Col>
@@ -281,8 +285,8 @@ render() {
                     </Row>
                     <FormGroup controlId="urlpost">
                     <ControlLabel>URL</ControlLabel>
-                    <FormControl type="text" disabled class="workflowStatus-description" value={this.state.currentAiringId.postUrl} ref="inputUrl"   placeholder="URL will be shown in edit page" 
-                     onChange={(event) =>this.handleTextChange("url", event)}/>
+                    <FormControl type="text" disabled class="workflowStatus-description" value={this.state.postUrl} ref="inputUrl" 
+                        placeholder="URL will be shown in edit page" />
                    </FormGroup>
                    </Grid>
                   </div>

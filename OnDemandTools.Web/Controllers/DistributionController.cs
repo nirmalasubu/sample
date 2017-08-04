@@ -75,13 +75,10 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("newcurrentairingid")]
         public CurrentAiringIdViewModel GetEmptyModel()
         {
-            //return new CurrentAiringIdViewModel
-            //{
-            //    Name = string.Empty,
-            //    Description = string.Empty,
-            //    ExternalId = string.Empty
-            //};
-            return null;
+            return new CurrentAiringIdViewModel
+            {
+                Prefix = string.Empty
+            };
         }
 
         [Authorize]
