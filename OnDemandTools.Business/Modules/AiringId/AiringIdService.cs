@@ -45,7 +45,7 @@ namespace OnDemandTools.Business.Modules.AiringId
 
         public void DeleteById(string id)
         {
-            deleteCommand.Delete(id);
+            deleteCommand.DeleteById(id);
         }
 
         public CurrentAiringId Distribute(string prefix)
