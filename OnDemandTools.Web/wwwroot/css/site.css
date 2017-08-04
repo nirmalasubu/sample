@@ -704,3 +704,8 @@ tr.strikeout td:before {
     font-weight: bold;
     color: grey
 }
+
+.softHead{
+    font-weight: bold;
+    text-decoration: underline;
+}

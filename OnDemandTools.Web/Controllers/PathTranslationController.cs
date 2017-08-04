@@ -44,17 +44,6 @@ namespace OnDemandTools.Web.Controllers
         }
 
 
-        /// <summary>
-        /// Generate a shell for new path translation model
-        /// </summary>        
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet("newPathTranslation")]
-        public VMModel.PathTranslationViewModel GetEmptyModel()
-        {
-            return new VMModel.PathTranslationViewModel();
-        }
-
 
         /// <summary>
         /// Add new path translation or Update an existing path translation.
@@ -76,7 +65,7 @@ namespace OnDemandTools.Web.Controllers
         /// Delete existing path translation. Return 404 if resource not found.
         /// </summary>        
         /// <returns></returns>
-        // [Authorize]
+        [Authorize]
         [HttpDelete("{id}")]
         public void DeletePathTranslation(string id)
         {

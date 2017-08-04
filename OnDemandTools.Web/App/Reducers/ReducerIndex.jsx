@@ -34,6 +34,8 @@ export default combineReducers({
     filterDistribution: FilterAiringIdDataReducer,   
     pathTranslations: PathTranslationReducer,  
     pathTranslationModel: PathTranslationReducer,
+    filterStatus:FilterStatusDataReducer,
+    pathTranslationRecords: PathTranslationReducer,
     applicationError: ApplicationErrorReducer
     // More reducers if there are
     // can go here

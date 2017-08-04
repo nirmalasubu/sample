@@ -4,8 +4,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import RemovePathTranslationModal from 'Components/PathTranslations/RemovePathTranslationModal';
-
-
+import AddEditPathTranslationModal from 'Components/PathTranslations/AddEditPathTranslationModal';
+import PathTranslationModel from './PathTranslationModel'
 
 /// <summary>
 //  Main table that displays all of the Path translations
@@ -18,11 +18,10 @@ class PathTranslationTable extends React.Component {
     ///</summary>
     constructor(props) {
         super(props);
-        this.state = {
-            newPathTranslationModel: {},
-            pathTranslationDetails: "",
+        this.state = {          
+            pathTranslationDetails: PathTranslationModel,
             showModal: false,
-            showAddEditModel: false,
+            showAddEditModal: false,
             showDeleteModal: false
         }
 
@@ -43,7 +42,7 @@ class PathTranslationTable extends React.Component {
     /// Open modal window to add path translations  
     /// </summary>
     openCreateNewPathTranslationModel() {
-        console.log('ohhh');
+       this.setState({ showAddEditModal: true, pathTranslationDetails: PathTranslationModel});
     }
 
 
@@ -74,12 +73,19 @@ class PathTranslationTable extends React.Component {
         );
     }
 
-  
+
     ///<summary>
     // Close delete confirmation modal
     ///</summary>
     closeDeleteModel(pathTranslationToDelete) {
         this.setState({ showDeleteModal: false });
+    }
+
+    ///<summary>
+    // Close add/edit confirmation modal
+    ///</summary>
+    closeAddEditModel(pathTranslationToDelete) {
+        this.setState({ showAddEditModal: false });
     }
 
 
@@ -98,17 +104,18 @@ class PathTranslationTable extends React.Component {
 
         // handle edit button click
         const onOpenEditModal = (record) => {
+            this.setState({ showAddEditModal: true, pathTranslationDetails: record });
             console.log(record);
         }
 
 
         return (
             <div>
-                <button class="btn-link" title="Edit Path Translation" onClick={() => {onOpenEditModal(row)}} >
+                <button class="btn-link" title="Edit Path Translation" onClick={() => { onOpenEditModal(row) }} >
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Path Translation" onClick={() => {onOpenDeleteModal(row)}} >
+                <button class="btn-link" title="Delete Path Translation" onClick={() => { onOpenDeleteModal(row) }} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -139,7 +146,7 @@ class PathTranslationTable extends React.Component {
                     <TableHeaderColumn dataFormat={this.actionsFormatter}>Actions</TableHeaderColumn>
                 </BootstrapTable >
                 <RemovePathTranslationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
-
+                <AddEditPathTranslationModal data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
             </div >
         )
     }

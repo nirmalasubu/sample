@@ -53,8 +53,7 @@ class RemovePathTranslationModal extends React.Component {
     /// <summary>
     /// Purge this component's state
     /// </summary>
-    purgeModalHistory = () => {
-        console.log('called');
+    purgeModalHistory = () => {       
         this.setState({
             message: "",
             pathTranslationId: "",

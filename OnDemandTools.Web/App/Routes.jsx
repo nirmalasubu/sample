@@ -8,9 +8,14 @@ import Permissions from 'Components/Permissions/PermissionsPage';
 import PendingRequests from 'Components/PendingRequests/PendingRequestsPage';
 import ContentTiers from 'Components/ContentTiers/ContentTiersPage';
 import WorkflowStatuses from 'Components/WorkflowStatus/WorkflowStatusesPage';
+<<<<<<< HEAD
 import CategoriesPage from 'Components/Categories/CategoriesPage';
 import airingIds from 'Components/IDDistribution/DistributionPage';
 import PathTranslations from 'Components/PathTranslations/PathTranslationsPage'
+=======
+import CategoriesPage from 'Components/Categories/CategoriesPage'
+import PathTranslations from 'Components/PathTranslations/PathTranslationPage' 
+>>>>>>> ODTD826/827/828 wip
 import App from 'Components/App'
 
 
