@@ -7,10 +7,13 @@ import * as actionTypes from 'Actions/ActionTypes';
 export const PathTranslationReducer = (state = [], action) => {
     switch (action.type) {
         case actionTypes.FETCH_PATHTRANSLATION_SUCCESS:
-            console.log(action.pathTranslationRecords);
+            // Return full list of path translation records
             return action.pathTranslationRecords;
+
         case actionTypes.SAVE_PATHTRANSLATION_SUCCESS:
-            return;
+            console.log(action);
+            return state;
+
         case actionTypes.DELETE_PATHTRANSLATION_SUCCESS: 
             // remove the deleted path translation and return new state           
             const newState = Object.assign([], state);
@@ -18,9 +21,8 @@ export const PathTranslationReducer = (state = [], action) => {
                 return obj.id == action.pathTranslationObjId
             })
             newState.splice(indexOfPathTranslation, 1);         
-            return newState;           
-        case actionTypes.DELETE_PATHTRANSLATION_SUCCESS:
-            return;
+            return newState;                 
+
         default:
             return state;
     }

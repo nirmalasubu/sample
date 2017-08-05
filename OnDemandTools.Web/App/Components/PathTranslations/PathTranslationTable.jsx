@@ -18,7 +18,7 @@ class PathTranslationTable extends React.Component {
     ///</summary>
     constructor(props) {
         super(props);
-        this.state = {          
+        this.state = {
             pathTranslationDetails: PathTranslationModel,
             showModal: false,
             showAddEditModal: false,
@@ -42,7 +42,7 @@ class PathTranslationTable extends React.Component {
     /// Open modal window to add path translations  
     /// </summary>
     openCreateNewPathTranslationModel() {
-       this.setState({ showAddEditModal: true, pathTranslationDetails: PathTranslationModel});
+        this.setState({ showAddEditModal: true, pathTranslationDetails: PathTranslationModel });
     }
 
 
@@ -104,7 +104,16 @@ class PathTranslationTable extends React.Component {
 
         // handle edit button click
         const onOpenEditModal = (record) => {
-            this.setState({ showAddEditModal: true, pathTranslationDetails: record });
+            // Before opening modal window, do some sanity check
+            const pathTranModel = record;
+            pathTranModel.id = pathTranModel.id ? pathTranModel.id : "";
+            pathTranModel.source.baseUrl = pathTranModel.source.baseUrl ? pathTranModel.source.baseUrl : "";
+            pathTranModel.source.brand = pathTranModel.source.brand ? pathTranModel.source.brand : "";
+            pathTranModel.target.baseUrl = pathTranModel.target.baseUrl ? pathTranModel.target.baseUrl : "";
+            pathTranModel.target.protectionType = pathTranModel.target.protectionType ? pathTranModel.target.protectionType : "";
+            pathTranModel.target.urlType = pathTranModel.target.urlType ? pathTranModel.target.urlType : "";
+
+            this.setState({ showAddEditModal: true, pathTranslationDetails: pathTranModel });
             console.log(record);
         }
 

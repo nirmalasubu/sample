@@ -51,32 +51,13 @@ class PathTranslationPage extends React.Component {
     }
 
 
-    render() {
-        // let myComponent;
-        // if (this.props.pathTranslationData.pathTranslations) {
-        //     myComponent = this.props.pathTranslationData.pathTranslations.length;
-        // }
-        // else {
-        //     myComponent = 0;
-        // }
-
-        // let error;
-        // if (this.props.applicationError) {
-        //     error = this.props.applicationError.stack;
-        // }
-        // else {
-        //     error = '';
-        // }
-
-
+    render() {    
 
         return (
             <div>
                 <PageHeader pageName="Path Translations" />
                 <PathTranslationTable pathTranslationRecords={this.props.pathTranslationRecords}/>
-
             </div>
-
         )
     }
 }

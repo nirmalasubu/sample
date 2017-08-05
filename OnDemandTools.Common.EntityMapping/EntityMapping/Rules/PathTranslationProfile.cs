@@ -13,29 +13,41 @@ namespace OnDemandTools.Common.EntityMapping
     {
 
         public PathTranslationProfile()
-        {            
+        {
             CreateMap<DLModel.PathTranslation, BLModel.PathTranslation>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()));
-            CreateMap<BLModel.PathTranslation, DLModel.PathTranslation>()
-               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => (src.Id != null) ? (new MongoDB.Bson.ObjectId(src.Id)) : (MongoDB.Bson.ObjectId.Empty)));
+                .ForMember(pth => pth.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            CreateMap<DLModel.PathInfo, BLModel.PathInfo>();
 
-            CreateMap<DLModel.PathInfo, BLModel.PathInfo>();           
+
+
+            CreateMap<BLModel.PathTranslation, DLModel.PathTranslation>()
+               .ForMember(pth => pth.Id, opt => opt.MapFrom(src => (!string.IsNullOrEmpty(src.Id)) ? (new MongoDB.Bson.ObjectId(src.Id)) : (MongoDB.Bson.ObjectId.Empty)));
+
             CreateMap<BLModel.PathInfo, DLModel.PathInfo>()
-                .ForMember(dest => dest.Brand, opt => opt.Ignore())
-                .AfterMap((src, dest) => {
+                .ForMember(pth => pth.Brand, opt => opt.Ignore())
+                .AfterMap((src, pth) =>
+                {
                     if (String.IsNullOrWhiteSpace(src.Brand))
-                        dest.Brand = null;
+                        pth.Brand = null;
                     else
-                        dest.Brand = src.Brand;
+                        pth.Brand = src.Brand;
                 })
-                .ForMember(dest => dest.ProtectionType, opt => opt.Ignore())
-                .AfterMap((src, dest) =>
+                .ForMember(pth => pth.ProtectionType, opt => opt.Ignore())
+                .AfterMap((src, pth) =>
                 {
                     if (String.IsNullOrWhiteSpace(src.ProtectionType))
-                        dest.ProtectionType = null;
+                        pth.ProtectionType = null;
                     else
-                        dest.ProtectionType = src.ProtectionType;
-                });
+                        pth.ProtectionType = src.ProtectionType;
+                })
+                .ForMember(pth => pth.UrlType, opt => opt.Ignore())
+                .AfterMap((src, pth) =>
+                {
+                    if (String.IsNullOrWhiteSpace(src.UrlType))
+                        pth.UrlType = null;
+                    else
+                        pth.UrlType = src.UrlType;
+                });;
         }
     }
 }

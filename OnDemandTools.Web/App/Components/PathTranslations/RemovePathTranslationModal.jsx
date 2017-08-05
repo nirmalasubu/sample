@@ -80,7 +80,7 @@ class RemovePathTranslationModal extends React.Component {
                 // bubble up the event further
                 this.props.handleClose();
             }).catch(error => {
-                NotificationManager.error(error.message, 'Failure');
+                NotificationManager.error(error.message, 'Failure', 800);
                 this.setState({ isProcessing: false });
             });
     }

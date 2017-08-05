@@ -26,7 +26,16 @@ export const deletePathTranslationComplete = (pathTranslationObjId) => {
     }
 };
 
-
+/// <summary>
+/// Invoke 'DELETE_PATHTRANSLATION_SUCCESS' action
+/// which will be handled by the appropriate reducer
+/// </sumamry>
+export const savePathTranslationComplete = (pathTranslationObj) => {
+    return {
+        type: actionTypes.SAVE_PATHTRANSLATION_SUCCESS,
+        pathTranslationObj
+    }
+};
 
 
 /******************* Helper methods *******************/
@@ -34,15 +43,14 @@ export const deletePathTranslationComplete = (pathTranslationObjId) => {
 /// Asynchronously retrieve path translations from API. If successful
 /// dispatch the appropriate action for further processing
 /// </summary>
-export const fetchPathTranslationRecords = (object) => {
-    return (dispatch) => {
-       console.log('here');
-        return Axios.get('/api/pathtranslation')  
-            .then(response => {             
+export const fetchPathTranslationRecords = () => {
+    return (dispatch) => {        
+        return Axios.get('/api/pathtranslation')
+            .then(response => {
                 dispatch(fetchPathTranslationComplete(response.data));
             })
-            .catch(error => {            
-                dispatch(configActions.handleApplicationAPIError(error));               
+            .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
             });
     };
 };
@@ -52,13 +60,33 @@ export const fetchPathTranslationRecords = (object) => {
 /// dispatch the appropriate action for further processing
 /// </summary>
 export const deletePathTranslation = (id) => {
-    return (dispatch) => {       
-        return Axios.delete('/api/pathtranslation/'+ id)  
+    return (dispatch) => {
+        return Axios.delete('/api/pathtranslation/' + id)
             .then(response => {
                 dispatch(deletePathTranslationComplete(id))
             })
-            .catch(error => {            
-                dispatch(configActions.handleApplicationAPIError(error));           
+            .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
+                throw (error);
+            });
+    };
+};
+
+
+/// <summary>
+/// Asynchronously add/update path translations from API. If successful
+/// dispatch the appropriate action for further processing
+/// </summary>
+export const savePathTranslation = (object) => {
+    return (dispatch) => {       
+        return Axios.post('/api/pathtranslation/', object)
+            .then(response => {
+                // No need for this currently, uncomment if need be
+                // dispatch(savePathTranslationComplete(response.data))
+                dispatch(fetchPathTranslationRecords());               
+            })
+            .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
