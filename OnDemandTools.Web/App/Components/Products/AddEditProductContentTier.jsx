@@ -92,7 +92,7 @@ class AddEditProductContentTier extends React.Component {
         }
 
         return (
-            <div className="clearBoth">
+            <div className="clearBoth modalTableContainer">
                 <Grid componentClass="table" bsClass="modalTable">
                     <thead>
                         <Row componentClass="tr">
