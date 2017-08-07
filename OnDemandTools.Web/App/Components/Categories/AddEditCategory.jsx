@@ -156,8 +156,8 @@ class AddEditCategory extends React.Component {
     /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
-    isSaveEnabled() {
-        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null);
+    isSaveDisabled() {
+        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null || this.state.isProcessing);
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ class AddEditCategory extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
-                    <Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                    <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>
