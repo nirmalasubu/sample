@@ -30,7 +30,8 @@ class TextsOverlay extends React.Component {
                     buttonRows.push(<Button className="addMarginRight" key={i.toString()}> {rowData} </Button>);
                     totalLength += rowData.length;
 
-                    if (totalLength > this.props.numberOfCharToDisplay) {
+                    if (this.props.data.length - 1 != i
+                        && totalLength > this.props.numberOfCharToDisplay) {
                         hasOverlay = true;
                     }
                 }
@@ -47,7 +48,7 @@ class TextsOverlay extends React.Component {
             return (
                 <OverlayTrigger trigger={['click']} rootClose placement="bottom" overlay={popoverDescLeft}>
                     <div className="cursorPointer">
-                        {buttonRows} <i class="fa fa-ellipsis-h"></i>
+                        {buttonRows} <i class="fa fa-ellipsis-h" title={this.props.title}></i>
                     </div>
                 </OverlayTrigger>
             );

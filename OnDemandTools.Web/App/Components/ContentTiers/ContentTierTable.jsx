@@ -107,7 +107,7 @@ class ContentTierTable extends React.Component {
             productNames.sort();          
         }
 
-        return <TextsOverlay data={productNames} numberOfCharToDisplay={80} />
+        return <TextsOverlay data={productNames} numberOfCharToDisplay={80} title="Click to view more products" />
 
     }
 
