@@ -12,5 +12,14 @@ namespace OnDemandTools.Jobs.Helpers
         {
             return new UserIdentity { UserName = "JobsTestUser" };
         }
+
+        /// <summary>
+        /// Pass in actual user details to implement proper Authentication/Authorization
+        /// </summary>
+        /// <returns></returns>
+        public string GetUserName()
+        {
+            return "JobsTestUser";
+        }
     }
 }

@@ -12,5 +12,14 @@ namespace OnDemandTools.Business.Tests.Helpers
         {
             return new UserIdentity { UserName = "BusinessUnitTest" };
         }
+
+        /// <summary>
+        /// Pass in actual user details to implement proper Authentication/Authorization
+        /// </summary>
+        /// <returns></returns>
+        public string GetUserName()
+        {
+            return "BusinessUnitTest";
+        }
     }
 }
