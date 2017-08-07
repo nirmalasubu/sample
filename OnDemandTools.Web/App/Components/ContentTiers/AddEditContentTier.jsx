@@ -240,7 +240,7 @@ class AddEditContentTier extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.contentTierDetails.id != null ? "Edit Content Tier - " + this.props.data.contentTierDetails.name : "Add ContentTier"}</div>
+                        <div>{this.props.data.contentTierDetails.id != null ? "Edit Content Tier - " + this.props.data.contentTierDetails.name : "Add Content Tier"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
