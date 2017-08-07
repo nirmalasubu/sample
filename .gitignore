@@ -259,4 +259,6 @@ paket-files/
 react.odtportal.bundle.js
 /OnDemandTools.Web/web.config
 
+/OnDemandTools.Web/wwwroot/css/site.min.css
+
 .DS_Store
