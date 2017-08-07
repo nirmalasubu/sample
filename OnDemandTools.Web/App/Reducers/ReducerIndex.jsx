@@ -28,7 +28,7 @@ export default combineReducers({
     filterContentTier: FilterContentTierDataReducer,
     filterCategory: FilterCategoryDataReducer,
     filterProduct: FilterProductDataReducer,
-    filterStatus: FilterStatusDataReducer
+    filterStatus: FilterStatusDataReducer,
     currentAiringIds: CurrentAiringIdReducer,
     filterDistribution: FilterAiringIdDataReducer
     // More reducers if there are
