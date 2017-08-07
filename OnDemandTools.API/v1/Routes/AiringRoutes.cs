@@ -421,6 +421,7 @@ namespace OnDemandTools.API.v1.Routes
                     // persisting the data. But first, populate remaining
                     // properties for the airing business model.
                     airing.ReleaseOn = DateTime.UtcNow;
+                    airing.UserName = user.UserName; //Get the username
 
                     // If flight information is provided in the airing, create
                     // the corresponding product to destination mapping as defined
@@ -443,6 +444,7 @@ namespace OnDemandTools.API.v1.Routes
                     // asset/airing belongs
                     if (airing.Versions.Any())
                         airingSvc.AugmentMediaId(ref airing);
+                    
 
                     // Finally, persist the airing data
                     var savedAiring = airingSvc.Save(airing, request.Instructions.DeliverImmediately, true);
@@ -498,6 +500,7 @@ namespace OnDemandTools.API.v1.Routes
 
                 existingAiring.ReleaseBy = airing.ReleaseBy;
                 existingAiring.ReleaseOn = DateTime.UtcNow;
+                existingAiring.UserName = Context.User().UserName;
                 existingAiring.DeliveredTo.Clear();
 
                 airingSvc.Delete(existingAiring);

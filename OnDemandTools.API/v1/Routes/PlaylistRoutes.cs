@@ -60,6 +60,8 @@ namespace OnDemandTools.API.v1.Routes
                         //Sets the date with the current date time
                         airing.ReleaseOn = DateTime.UtcNow;
 
+                        //Sets the user name
+                        airing.UserName = Context.User().UserName;
                     }
                     else
                     {

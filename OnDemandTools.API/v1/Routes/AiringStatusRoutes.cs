@@ -75,6 +75,9 @@ namespace OnDemandTools.API.v1.Routes
                         airing.Status[status.Key] = status.Value;
                     }
 
+                    //Set the user name who updates the status
+                    airing.UserName = Context.User().UserName;
+
                     // get all active queues
                     var statusQueues = queueService.GetByStatus(true);
 
@@ -133,6 +136,9 @@ namespace OnDemandTools.API.v1.Routes
                          {
                              airing.Status[status.Key] = status.Value;
                          }
+
+                         //Set the user name who updates the status
+                         airing.UserName = Context.User().UserName;
 
                          // get all active queues
                          var statusQueues = queueService.GetByStatus(true);

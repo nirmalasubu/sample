@@ -54,6 +54,8 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public virtual string ReleaseBy { get; set; }
 
+        public virtual string UserName { get; set; }
+
         public bool DisableTracking { get; set; }
 
         public Dictionary<string, object> Properties { get; set; }
