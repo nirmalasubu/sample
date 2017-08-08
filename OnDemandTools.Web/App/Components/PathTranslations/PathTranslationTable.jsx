@@ -98,8 +98,7 @@ class PathTranslationTable extends React.Component {
 
         // handle delete button click
         const onOpenDeleteModal = (record) => {
-            this.setState({ showDeleteModal: true, pathTranslationDetails: record });
-            console.log(record);
+            this.setState({ showDeleteModal: true, pathTranslationDetails: record });           
         }
 
         // handle edit button click
@@ -113,8 +112,7 @@ class PathTranslationTable extends React.Component {
             pathTranModel.target.protectionType = pathTranModel.target.protectionType ? pathTranModel.target.protectionType : "";
             pathTranModel.target.urlType = pathTranModel.target.urlType ? pathTranModel.target.urlType : "";
 
-            this.setState({ showAddEditModal: true, pathTranslationDetails: pathTranModel });
-            console.log(record);
+            this.setState({ showAddEditModal: true, pathTranslationDetails: pathTranModel });         
         }
 
 

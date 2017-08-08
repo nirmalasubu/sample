@@ -65,8 +65,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// <summary>
     /// Purge this component's state
     /// </summary>
-    purgeModalHistory = () => {
-        console.log('called');
+    purgeModalHistory = () => {      
         this.setState({
             pathTranslationDetails: PathTranslationModel,
             isProcessing: false,
@@ -200,6 +199,13 @@ class AddEditPathTranslationModal extends React.Component {
     }
 
     /// <summary>
+    /// Determine whether cancel button needs to be enabled or not
+    /// </summary>
+    isCancelEnabled = () => {
+        return (this.state.isProcessing);
+    }
+
+    /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled = () => {
@@ -256,8 +262,7 @@ class AddEditPathTranslationModal extends React.Component {
                     NotificationManager.success('Path translation updated successfully.', '', 500);
                 }
 
-                // Reset save button state and close window
-                this.setState({ isProcessing: false });
+                // Reset save button state and close window              
                 setTimeout(() => {
                     this.props.handleClose();
                 }, 1000);
@@ -355,7 +360,7 @@ class AddEditPathTranslationModal extends React.Component {
                     <CancelWarningModal data={this.state} handleClose={this.closeWarningModel} handleAddEditClose={this.handleAddEditClose} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.handleClose}>Cancel</Button>
+                    <Button disabled={this.isCancelEnabled()} onClick={this.handleClose}>Cancel</Button>
                     <Button disabled={this.isSaveEnabled()} onClick={this.handleSave} bsStyle="primary">{this.state.isProcessing ? "Processing" : "Continue"}</Button>
                 </Modal.Footer>
             </Modal>

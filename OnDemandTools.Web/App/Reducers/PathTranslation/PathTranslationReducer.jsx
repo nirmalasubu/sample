@@ -10,8 +10,7 @@ export const PathTranslationReducer = (state = [], action) => {
             // Return full list of path translation records
             return action.pathTranslationRecords;
 
-        case actionTypes.SAVE_PATHTRANSLATION_SUCCESS:
-            console.log(action);
+        case actionTypes.SAVE_PATHTRANSLATION_SUCCESS:            
             return state;
 
         case actionTypes.DELETE_PATHTRANSLATION_SUCCESS: 
