@@ -8,7 +8,7 @@ import AddEditContentTier from 'Components/ContentTiers/AddEditContentTier';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveContentTierModal from 'Components/ContentTiers/RemoveContentTierModal';
 import { getNewContentTier } from 'Actions/ContentTier/ContentTierActions';
-import TextsOverlay from 'Components/Common/TextsOverlay';
+import TextButtons from 'Components/Common/TextButtons';
 
 class ContentTierTable extends React.Component {
     constructor(props) {
@@ -107,7 +107,7 @@ class ContentTierTable extends React.Component {
             productNames.sort();          
         }
 
-        return <TextsOverlay data={productNames} numberOfCharToDisplay={80} title="Click to view more products" />
+        return <TextButtons data={productNames} numberOfCharToDisplay={80} title="Click to view more products" />
 
     }
 

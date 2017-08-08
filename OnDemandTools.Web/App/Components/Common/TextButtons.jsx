@@ -1,11 +1,9 @@
 import React from 'react';
-import $ from 'jquery';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 /// <summary>
-///  Displays Array strings in a Overlay
+///  Displays Array strings in a Button
 /// <summary>
-class TextsOverlay extends React.Component {
+class TextButtons extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -13,7 +11,6 @@ class TextsOverlay extends React.Component {
     render() {
 
         var displayString = "";
-        var rows = [];
         var buttonRows = [];
         var totalLength = 0;
         var hasOverlay = false;
@@ -23,8 +20,6 @@ class TextsOverlay extends React.Component {
             for (var i = 0; i < this.props.data.length; i++) {
 
                 var rowData = this.props.data[i];
-
-                rows.push(<p key={i.toString()}>{rowData}</p>);
 
                 if (!hasOverlay) {
                     buttonRows.push(<Button className="addMarginRight" key={i.toString()}> {rowData} </Button>);
@@ -39,24 +34,16 @@ class TextsOverlay extends React.Component {
         }
 
         if (hasOverlay) {
-            const popoverDescLeft = (
-                <Popover id="popover-positioned-left">
-                    <div class="TitleOverlay-height"> {rows} </div>
-                </Popover>
-            );
-
             return (
-                <OverlayTrigger trigger={['click']} rootClose placement="bottom" overlay={popoverDescLeft}>
-                    <div className="cursorPointer">
-                        {buttonRows} <i class="fa fa-ellipsis-h" title={this.props.title}></i>
-                    </div>
-                </OverlayTrigger>
+                <div className="cursorPointer">
+                    {buttonRows} <i class="fa fa-ellipsis-h" title={this.props.title}></i>
+                </div>
             );
         }
         else {
-            return (<div>{buttonRows}</div>);
+            return (<div className="cursorPointer">{buttonRows}</div>);
         }
     }
 }
 
-export default TextsOverlay;
+export default TextButtons;
