@@ -273,8 +273,8 @@ class AddEditContentTierProduct extends React.Component {
                             <Col componentClass="td">{this.contentTierBrandImageConstruct(item, index)}</Col>
                             <Col componentClass="td">{this.titleDetailConstruct(item, index)}</Col>
                             <Col componentClass="td">
-                                <button disabled={item.contentTiers[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
-                                <button disabled={item.contentTiers[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Delete Product" onClick={(event) => this.removeProductModel(index)} ><i class="fa fa-trash"></i></button>
+                                <button disabled={(item.contentTiers[0].removed || item.name == "")} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
+                                <button disabled={item.contentTiers[0].removed} type="button" class="btn-link img-height" title="Delete Product" onClick={(event) => this.removeProductModel(index)} ><i class="fa fa-trash"></i></button>
                             </Col>
 
                         </Row>)

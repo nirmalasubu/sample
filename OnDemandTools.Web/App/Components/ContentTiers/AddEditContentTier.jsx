@@ -70,7 +70,7 @@ class AddEditContentTier extends React.Component {
                 return false;
             }
             var model = this.state.contentTierDetails;
-
+            model.name = model.name.trim();
             for (var i = 0; i < model.products.length; i++) {
                 if (model.products[i].contentTiers[0].removed)
                     model.products[i].contentTiers[0].name = "";
@@ -164,9 +164,8 @@ class AddEditContentTier extends React.Component {
     /// This function is to set validations states value
     /// </summary>
     validateForm() {
-        var name = this.state.contentTierDetails.name;
-        var hasNameError = (name == "")
-
+        var name = this.state.contentTierDetails.name.trim();
+        var hasNameError = (name == "");
 
         this.setState({
             validationStateName: hasNameError ? 'error' : null,
@@ -203,7 +202,7 @@ class AddEditContentTier extends React.Component {
         for (var x = 0; x < this.props.contentTierIdandNames.length; x++) {
 
             if (this.props.contentTierIdandNames[x].id != contentTierDetails.id) {
-                if (this.props.contentTierIdandNames[x].name == contentTierDetails.name) {
+                if (this.props.contentTierIdandNames[x].name == contentTierDetails.name.trim()) {
                     this.setState({
                         showError: true
                     });
