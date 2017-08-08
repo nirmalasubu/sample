@@ -149,7 +149,12 @@ class AddEditContentTier extends React.Component {
             this.props.handleClose();
         }
         else {
-            this.openWarningModel();
+            var model = this.state.contentTierDetails;
+            if (model.name == "" && model.products.length == 1 && model.products[0].name == "") {
+                this.props.handleClose();
+            }
+            else
+                this.openWarningModel();
         }
     }
 
@@ -221,13 +226,13 @@ class AddEditContentTier extends React.Component {
     }
 
     componentDidMount() {
-        var initialContentTier={ "id": null, "name": "", "products":[]};
+        var initialContentTier = { "id": null, "name": "", "products": [] };
 
         //required to overcome form control warning of contentTierName
         this.setState({
-            contentTierDetails: initialContentTier 
+            contentTierDetails: initialContentTier
         });
-      
+
     }
 
     render() {
