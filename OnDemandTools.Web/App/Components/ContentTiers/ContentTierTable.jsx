@@ -14,6 +14,7 @@ class ContentTierTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            onRowClick: this.onRowClick,
             newContentTierModel: {},
             showModal: false,
             showAddEditModel: false,
@@ -54,6 +55,15 @@ class ContentTierTable extends React.Component {
     openCreateNewProductModel() {
         this.setState({ showAddEditModel: true, contentTierDetails: jQuery.extend(true, {}, this.state.newContentTierModel) });
     }
+
+    ///<summary>
+    // On row click
+    ///</summary>
+    onRowClick(row) {
+        console.log(row);
+    }
+
+
     ///<summary>
     // when delete contentTier button event handled
     ///</summary>
@@ -98,13 +108,13 @@ class ContentTierTable extends React.Component {
 
     productFormat(val, rowData) {
         var productNames = [];
-        
+
         for (var idx = 0; idx < rowData.products.length; idx++) {
             productNames.push(rowData.products[idx].name);
         }
         //product names are sorted before rendering 
         if (productNames.length > 0) {
-            productNames.sort();          
+            productNames.sort();
         }
 
         return <TextButtons data={productNames} numberOfCharToDisplay={80} title="Click to view more products" />
@@ -145,12 +155,6 @@ class ContentTierTable extends React.Component {
 
         }.bind(this));
 
-        var contentTierIdandNames = [];
-
-        for (var i = 0; i < this.props.RowData.length; i++) {
-            contentTierIdandNames.push({ "id": this.props.RowData[i].id, "name": this.props.RowData[i].name });
-        }
-
         return (
             <div>
                 <div>
@@ -170,8 +174,7 @@ class ContentTierTable extends React.Component {
                     options={this.state.options}>
                     {row}
                 </BootstrapTable>
-
-                <AddEditContentTier data={this.state} contentTierIdandNames={contentTierIdandNames} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditContentTier data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveContentTierModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

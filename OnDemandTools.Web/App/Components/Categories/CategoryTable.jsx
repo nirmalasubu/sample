@@ -23,7 +23,7 @@ class CategoryTable extends React.Component {
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
                 expandRowBgColor: '#EAECEE',
-                expandBy: 'column',  
+                expandBy: 'column',
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -96,18 +96,18 @@ class CategoryTable extends React.Component {
         );
     }
 
-        destinationFormat(val, rowData) {
-            var destinationNames = [];
-            var rows = [];
-           
-            for (var idx = 0; idx < rowData.destinations.length; idx++) {
-                destinationNames.push(rowData.destinations[idx].name);
-            }
-            //destination names are sorted before rendering 
-            if(destinationNames.length>0){
-                destinationNames.sort();
-                for (var idx = 0; idx < destinationNames.length; idx++) {
-                    rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
+    destinationFormat(val, rowData) {
+        var destinationNames = [];
+        var rows = [];
+
+        for (var idx = 0; idx < rowData.destinations.length; idx++) {
+            destinationNames.push(rowData.destinations[idx].name);
+        }
+        //destination names are sorted before rendering 
+        if (destinationNames.length > 0) {
+            destinationNames.sort();
+            for (var idx = 0; idx < destinationNames.length; idx++) {
+                rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
             }
         }
 
@@ -145,7 +145,7 @@ class CategoryTable extends React.Component {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Actions") {
-                return <TableHeaderColumn width="100px" expandable={ false } dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn width="100px" expandable={false} dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} >{item.label}</TableHeaderColumn>
@@ -153,13 +153,6 @@ class CategoryTable extends React.Component {
 
         }.bind(this));
 
-        var categoryIdandNames=[];
-       
-            for (var i = 0; i < this.props.RowData.length; i++)
-            {
-                categoryIdandNames.push({"id":this.props.RowData[i].id,"name":this.props.RowData[i].name});
-            }
-            
         return (
             <div>
                 <div>
@@ -177,13 +170,13 @@ class CategoryTable extends React.Component {
                     keyField={this.props.KeyField}
                     pagination={true}
                     options={this.state.options}>
-                        {row}
+                    {row}
                 </BootstrapTable>
 
-                <AddEditCategory data={this.state} categoryIdandNames={categoryIdandNames} handleClose={this.closeAddEditModel.bind(this)} />
-                            <RemoveCategoryModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
+                <AddEditCategory data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <RemoveCategoryModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
-                        }
+    }
 
 }
 
