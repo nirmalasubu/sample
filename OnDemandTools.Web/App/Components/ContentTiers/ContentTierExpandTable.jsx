@@ -22,27 +22,31 @@ class ContentTierExpandTable extends React.Component {
 
   titleOrSeriesFormat(data, row) {
     var ids = [];
+    if (this.props.data.clicked) {
+      for (var i = 0; i < row.contentTiers[0].seriesIds.length; i++) {
+        ids.push(row.contentTiers[0].seriesIds[i])
+      }
 
-    for (var i = 0; i < row.contentTiers[0].seriesIds.length; i++) {
-      ids.push(row.contentTiers[0].seriesIds[i])
+      for (var i = 0; i < row.contentTiers[0].titleIds.length; i++) {
+        ids.push(row.contentTiers[0].titleIds[i])
+      }
     }
 
-    for (var i = 0; i < row.contentTiers[0].titleIds.length; i++) {
-      ids.push(row.contentTiers[0].titleIds[i])
-    }
+
+
 
     return <TitleNameOverlay data={ids} />
   }
 
   descriptionColumnFormat(data, row) {
-      return <p> {data} </p>;
-      }
+    return <p> {data} </p>;
+  }
 
   render() {
 
-      const options = {
-       defaultSortName: 'name',
-       defaultSortOrder: 'asc',
+    const options = {
+      defaultSortName: 'name',
+      defaultSortOrder: 'asc',
       expandRowBgColor: 'rgb(242, 255, 163)',
       expandBy: 'column'  // Currently, available value is row and column, default is row
     };
@@ -50,7 +54,7 @@ class ContentTierExpandTable extends React.Component {
       <div>
         <BootstrapTable options={options} data={this.props.data.products} striped hover>
           <TableHeaderColumn isKey dataSort={true} dataField="name" dataFormat={this.stringColumnFormat.bind(this)} >Product</TableHeaderColumn>
-          <TableHeaderColumn  dataSort={false} dataField="description" dataFormat={this.descriptionColumnFormat.bind(this)} >Description</TableHeaderColumn>
+          <TableHeaderColumn dataSort={false} dataField="description" dataFormat={this.descriptionColumnFormat.bind(this)} >Description</TableHeaderColumn>
           <TableHeaderColumn width="200px" dataSort={false} dataField="name" dataFormat={this.brandColumnFormat.bind(this)} >Brands</TableHeaderColumn>
           <TableHeaderColumn dataSort={false} dataField="name" dataFormat={this.titleOrSeriesFormat.bind(this)} >Title/Series</TableHeaderColumn>
         </BootstrapTable>

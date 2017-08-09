@@ -9,18 +9,22 @@ require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveContentTierModal from 'Components/ContentTiers/RemoveContentTierModal';
 import { getNewContentTier } from 'Actions/ContentTier/ContentTierActions';
 import TextButtons from 'Components/Common/TextButtons';
+import * as contentTierActions from 'Actions/ContentTier/ContentTierActions';
 
+@connect((store) => {
+return {}
+})
 class ContentTierTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            onRowClick: this.onRowClick,
+        this.state = {            
             newContentTierModel: {},
             showModal: false,
             showAddEditModel: false,
             showDeleteModal: false,
             contentTierDetails: "",
             options: {
+                onRowClick: this.onRowClick.bind(this),
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
                 expandRowBgColor: '#EAECEE',
@@ -59,8 +63,8 @@ class ContentTierTable extends React.Component {
     ///<summary>
     // On row click
     ///</summary>
-    onRowClick(row) {
-        console.log(row);
+    onRowClick(row) {        
+       this.props.dispatch(contentTierActions.contentTierClickSuccess(row.id));
     }
 
 

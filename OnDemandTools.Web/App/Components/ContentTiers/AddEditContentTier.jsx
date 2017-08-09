@@ -87,8 +87,7 @@ class AddEditContentTier extends React.Component {
                     }
                     else {
                         NotificationManager.success(this.state.contentTierDetails.name + ' content tier updated successfully.', '', 2000);
-                    }
-                    this.props.dispatch(contentTierActions.fetchContentTiers()); // Called to refresh the page data
+                    }                    
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);

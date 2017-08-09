@@ -24,6 +24,13 @@ export const saveContentTierSuccess = (contentTier) => {
     }
 };
 
+export const contentTierClickSuccess = (id) => {
+    return {
+        type: actionTypes.CONTENT_TIER_CLICK_SUCCESS,
+        id
+    }
+};
+
 export const fetchContentTiers = () => {
     return (dispatch) => {
         return Axios.get('/api/ContentTier')
