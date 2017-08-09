@@ -16,7 +16,7 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
-
+        allContentTiers: store.contentTiers,
     };
 })
 
@@ -203,11 +203,9 @@ class AddEditContentTier extends React.Component {
     /// To validate the contentTier name is unique
     /// </summary>
     isNameUnique(contentTierDetails) {
-
-        for (var x = 0; x < this.props.contentTierIdandNames.length; x++) {
-
-            if (this.props.contentTierIdandNames[x].id != contentTierDetails.id) {
-                if (this.props.contentTierIdandNames[x].name == contentTierDetails.name.trim()) {
+        for (var x = 0; x < this.props.allContentTiers.length; x++) {
+            if (this.props.allContentTiers[x].id != contentTierDetails.id) {
+                if (this.props.allContentTiers[x].name == contentTierDetails.name.trim()) {
                     this.setState({
                         showError: true
                     });
