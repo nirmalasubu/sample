@@ -10,6 +10,7 @@ import TitleNameOverlay from 'Components/Common/TitleNameOverlay';
 import BrandsOverlay from 'Components/Common/BrandsOverlay';
 import Select from 'react-select';
 import RemoveDestinationModal from 'Components/Categories/RemoveDestinationModal';
+
 /// <summary>
 //Get all destinations from store
 /// </summary>
@@ -49,18 +50,12 @@ class AddEditCategoryDestination extends React.Component {
         if (this.props.data.destinations.length > 0)
             this.props.data.destinations.sort(this.sortDestinationsByName);
 
-        var destinationArray = destinationActions.getDestinations();
-        destinationArray.then(message => {
-            this.setState({ destinations: message, categoryDetails: this.props.data });
-
+        this.setState({ categoryDetails: this.props.data }, function () {
             if (this.props.data.destinations.length == 0) {
                 this.addNewDestination();
             }
-        })
-        destinationArray.catch(error => {
-            console.error(error);
-            this.setState({ destinations: [], categoryDetails: this.props.data });
         });
+       
     }
 
     /// <summary>
@@ -68,7 +63,7 @@ class AddEditCategoryDestination extends React.Component {
     /// </summary>
     getOptions(categoryDetails) {
         var options = [];
-        for (var x = 0; x < this.state.destinations.length; x++) {
+        for (var x = 0; x < this.props.destinations.length; x++) {
 
             var detailIndex = -1;
 
@@ -78,7 +73,7 @@ class AddEditCategoryDestination extends React.Component {
                 ));
 
             if (detailIndex < 0) {
-                var optionValue = { value: this.state.destinations[x].name, label: this.state.destinations[x].name + "-" + this.state.destinations[x].description };
+                var optionValue = { value: this.props.destinations[x].name, label: this.props.destinations[x].name + "-" + this.props.destinations[x].description };
                 options.push(optionValue);
             }
         }
@@ -235,8 +230,8 @@ class AddEditCategoryDestination extends React.Component {
     handleChange(index, value) {
         var model = this.state.categoryDetails;
         model.destinations[index].name = value;
-        var detailIndex = this.state.destinations.findIndex((obj => obj.name == value));
-        model.destinations[index].description = this.state.destinations[detailIndex].description;
+        var detailIndex = this.props.destinations.findIndex((obj => obj.name == value));
+        model.destinations[index].description = this.props.destinations[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });
     }
