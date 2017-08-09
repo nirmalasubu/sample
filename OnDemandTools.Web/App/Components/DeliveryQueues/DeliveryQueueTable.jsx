@@ -34,7 +34,6 @@ class DeliveryQueueTable extends React.Component {
             options: {
                 defaultSortName: 'friendlyName',
                 defaultSortOrder: 'asc',
-
                 sizePerPageList: [{
                     text: '10 ', value: 10
                 }, {
@@ -44,15 +43,16 @@ class DeliveryQueueTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+                onSortChange :this.onSortChange.bind(this)
             },
-            onSortChange :this.onSortChange.bind(this)
+           
         }
     }
 
     // Invoked immediately after queue component is mounted.
     componentDidMount() {
-
+      
         // Asychrnously retrieve an empty queue model
         let promise = getNewQueue();
         promise.then(message => {
@@ -69,10 +69,12 @@ class DeliveryQueueTable extends React.Component {
     ///<summary>
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
     ///</summary>
-    onSortChange() {
+    onSortChange(){
+       
         const sizePerPage = this.refs.deliveryQueueTable.state.sizePerPage;
         this.refs.deliveryQueueTable.handlePaginationData(1, sizePerPage);
     }
+
     openCreateNewQueueModel() {
         this.setState({ showAddEditModel: true, queueDetails: this.state.newQueueModel });
     }
@@ -226,11 +228,10 @@ class DeliveryQueueTable extends React.Component {
                 <div>
                     <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Queue</span>
+                        <span class="addVertialAlign"> New Queuesa</span>
                     </button>
                 </div>
-                <BootstrapTable  ref="deliveryQueueTable"
-                data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                <BootstrapTable  ref="deliveryQueueTable"  data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />
