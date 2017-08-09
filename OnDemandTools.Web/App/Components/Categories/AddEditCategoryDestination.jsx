@@ -64,11 +64,9 @@ class AddEditCategoryDestination extends React.Component {
     getOptions(categoryDetails) {
         var options = [];
         for (var x = 0; x < this.props.destinations.length; x++) {
-
             var detailIndex = -1;
-
             if (categoryDetails.destinations.length > 0)
-                detailIndex = categoryDetails.destinations.findIndex((obj => obj.name == this.state.destinations[x].name
+                detailIndex = categoryDetails.destinations.findIndex((obj => obj.name == this.props.destinations[x].name
                 && (obj.categories[0].removed == undefined || obj.categories[0].removed == false)
                 ));
 
