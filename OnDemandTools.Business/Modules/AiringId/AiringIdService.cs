@@ -58,5 +58,10 @@ namespace OnDemandTools.Business.Modules.AiringId
             return (query.Get().ToList()
                 .ToBusinessModel<List<DLModel.CurrentAiringId>, List<CurrentAiringId>>());
         }
+
+        public CurrentAiringId GetByPrefix(string prefix)
+        {
+            return query.Get(prefix).ToBusinessModel<DLModel.CurrentAiringId, CurrentAiringId>();
+        }
     }
 }

@@ -37,6 +37,7 @@ namespace OnDemandTools.API.v1.Routes
     {
         public AiringRoutes(
             IIdDistributor airingIdDistributorSvc,
+            IAiringIdService airingIdSvc,
             IAiringService airingSvc,
             IReportingService reporterSvc,
             IProductService productSvc,
@@ -60,9 +61,9 @@ namespace OnDemandTools.API.v1.Routes
                 // These timers are added for instrumentation and will be removed
                 // in the future
                 Dictionary<string, object> routeStats = new Dictionary<string, object>();
-                long start = Stopwatch.GetTimestamp();                
+                long start = Stopwatch.GetTimestamp();
                 var airing = airingSvc.GetBy((string)_.airingId);
-                routeStats.Add("rtAiring_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("rtAiring_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 var user = Context.User();
                 FilterDestinations(airing, user.Destinations.ToList());
@@ -70,15 +71,15 @@ namespace OnDemandTools.API.v1.Routes
 
                 var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
 
-                start = Stopwatch.GetTimestamp(); 
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.File.ToString().ToLower()))
                     airingSvc.AppendFile(ref airingLong);
-                routeStats.Add("appendFile_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendFile_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Title.ToString().ToLower()))
                     airingSvc.AppendTitle(ref airingLong);
-                routeStats.Add("appendTitle_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendTitle_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 if (options.Contains(Appenders.Series.ToString().ToLower())
                             && (options.Contains(Appenders.File.ToString().ToLower())))
@@ -91,45 +92,45 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.AppendFileBySeriesId(ref airingLong);
                 }
 
-                start = Stopwatch.GetTimestamp();                
+                start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Destination.ToString().ToLower()))
                     airingSvc.AppendDestinations(ref airingLong);
-                routeStats.Add("appendDestination_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendDestination_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Change.ToString().ToLower()))
                     airingSvc.AppendChanges(ref airingLong);
-                routeStats.Add("appendChanges_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendChanges_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 // Append status information if requested
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Status.ToString().ToLower()))
                     airingSvc.AppendStatus(ref airingLong);
-                routeStats.Add("appendStatus_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendStatus_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Package.ToString().ToLower()))
                     airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
-                routeStats.Add("appendPackage_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendPackage_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
 
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Premiere.ToString().ToLower()))
                     airingSvc.AppendPremiere(ref airingLong);
-                routeStats.Add("appendPremiere_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));
+                routeStats.Add("appendPremiere_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
 
                 start = Stopwatch.GetTimestamp();
                 var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();
-                routeStats.Add("BLtoVM_ElapsedMS", GetElapsedMilliseconds(start,Stopwatch.GetTimestamp()));                
+                routeStats.Add("BLtoVM_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 if (!options.Contains(Appenders.Package.ToString().ToLower()))
                     model.Options.Packages = null;
 
-                routeStats.Add("context","Instrumentation-GET-Airing-Route");
-                routeStats.Add("requestMethod",this.Request.Method);
-                routeStats.Add("path", this.Request.Path);                                               
-                logger.Information("Request -"+this.Request.Path+"{@info}", routeStats); 
+                routeStats.Add("context", "Instrumentation-GET-Airing-Route");
+                routeStats.Add("requestMethod", this.Request.Method);
+                routeStats.Add("path", this.Request.Path);
+                logger.Information("Request -" + this.Request.Path + "{@info}", routeStats);
 
                 return model;
             });
@@ -399,6 +400,8 @@ namespace OnDemandTools.API.v1.Routes
                         currentAiringId = airingIdDistributorSvc.Distribute((string)_.prefix);
                         request.AiringId = currentAiringId.AiringId;
                     }
+                    else
+                        currentAiringId = airingIdSvc.GetByPrefix((string)_.prefix);
 
                     // Translate data contract to airing business model
                     var airing = Mapper.Map<BLAiringModel.Airing>(request);
@@ -447,7 +450,7 @@ namespace OnDemandTools.API.v1.Routes
                         destinationSvc.GetAiringDestinationRelatedData(ref airing);
                         destinationSvc.FilterDestinationPropertiesDeliverablesAndCategoriesAndTransformTokens(ref airing);
                     }
-                    
+
                     // If the versions exist, create a mediaid based on the
                     // provided version informtion,playlists and the network to which this
                     // asset/airing belongs

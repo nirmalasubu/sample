@@ -16,5 +16,7 @@ namespace OnDemandTools.Business.Modules.AiringId
         void DeleteById(string id);
 
         List<BLModel.CurrentAiringId> GetAllCurrentAiringIds();
+
+        BLModel.CurrentAiringId GetByPrefix(string prefix);
     }
 }
