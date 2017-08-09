@@ -64,8 +64,10 @@ class AddEditContentTierProduct extends React.Component {
 
             var detailIndex = -1;
 
-            if (contentTierDetails.products.length > 0)
-                detailIndex = contentTierDetails.products.findIndex((obj => obj.name == this.props.products[x].name));
+            if (contentTierDetails.products.length > 0){
+                detailIndex = contentTierDetails.products.findIndex((obj => obj.name == this.props.products[x].name
+                    && (obj.contentTiers[0].removed == undefined || obj.contentTiers[0].removed == false)));
+            }
 
             if (detailIndex < 0) {
                 var optionValue = { value: this.props.products[x].name, label: this.props.products[x].name + "-" + this.props.products[x].description };
