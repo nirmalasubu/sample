@@ -16,7 +16,7 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
-
+        allCategories: store.categories
     };
 })
 
@@ -200,10 +200,10 @@ class AddEditCategory extends React.Component {
     /// </summary>
     isNameUnique(categoryDetails) {
 
-        for (var x = 0; x < this.props.categoryIdandNames.length; x++) {
+        for (var x = 0; x < this.props.allCategories.length; x++) {
 
-            if (this.props.categoryIdandNames[x].id != categoryDetails.id) {
-                if (this.props.categoryIdandNames[x].name == categoryDetails.name) {
+            if (this.props.allCategories[x].id != categoryDetails.id) {
+                if (this.props.allCategories[x].name == categoryDetails.name) {
                     this.setState({
                         showError: true
                     });
@@ -222,13 +222,13 @@ class AddEditCategory extends React.Component {
     }
 
     componentDidMount() {
-        var initialCategory={ "id": null, "name": "", "destinations":[]};
+        var initialCategory = { "id": null, "name": "", "destinations": [] };
 
         //required to overcome form control warning of categoryName
         this.setState({
-            categoryDetails: initialCategory 
+            categoryDetails: initialCategory
         });
-      
+
     }
 
     render() {
