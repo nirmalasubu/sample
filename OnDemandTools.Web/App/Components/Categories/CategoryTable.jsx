@@ -8,7 +8,7 @@ import AddEditCategory from 'Components/Categories/AddEditCategory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
-import TextsOverlay from 'Components/Common/TextsOverlay';
+import TextButtons from 'Components/Common/TextButtons';
 
 
 class CategoryTable extends React.Component {
@@ -35,7 +35,7 @@ class CategoryTable extends React.Component {
                 {
                     text: 'All ', value: 10000000
                 }],
-               onSortChange :this.onSortChange.bind(this)
+                onSortChange: this.onSortChange.bind(this)
             }
         }
     }
@@ -118,7 +118,7 @@ class CategoryTable extends React.Component {
             destinationNames.sort();
         }
 
-        return <TextsOverlay data={destinationNames} numberOfCharToDisplay={20} />
+        return <TextButtons data={destinationNames} numberOfCharToDisplay={30} title={"Click to view more destinations"} />
 
     }
 
