@@ -36,7 +36,8 @@ class ProductTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+                onSortChange :this.onSortChange.bind(this)
             }
         }
     }
@@ -55,6 +56,14 @@ class ProductTable extends React.Component {
                 newProductModel: {}
             });
         });
+    }
+
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.productTable.state.sizePerPage;
+        this.refs.productTable.handlePaginationData(1, sizePerPage);
     }
 
     ///<summary>
@@ -190,7 +199,7 @@ class ProductTable extends React.Component {
                         <span class="addVertialAlign"> New Product</span>
                     </button>
                 </div>
-                <BootstrapTable
+                <BootstrapTable ref="productTable"
                     data={this.props.RowData}
                     striped={true}
                     hover={true}

@@ -45,7 +45,8 @@ class DeliveryQueueTable extends React.Component {
                 {
                     text: 'All ', value: 10000000
                 }]
-            }
+            },
+            onSortChange :this.onSortChange.bind(this)
         }
     }
 
@@ -65,6 +66,13 @@ class DeliveryQueueTable extends React.Component {
         });
     }
 
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.deliveryQueueTable.state.sizePerPage;
+        this.refs.deliveryQueueTable.handlePaginationData(1, sizePerPage);
+    }
     openCreateNewQueueModel() {
         this.setState({ showAddEditModel: true, queueDetails: this.state.newQueueModel });
     }
@@ -221,7 +229,8 @@ class DeliveryQueueTable extends React.Component {
                         <span class="addVertialAlign"> New Queue</span>
                     </button>
                 </div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                <BootstrapTable  ref="deliveryQueueTable"
+                data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />

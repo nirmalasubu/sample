@@ -38,7 +38,8 @@ class DestinationTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+                onSortChange :this.onSortChange.bind(this)
             }
         }
     }
@@ -56,6 +57,13 @@ class DestinationTable extends React.Component {
         });
     }
 
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.destinationTable.state.sizePerPage;
+        this.refs.destinationTable.handlePaginationData(1, sizePerPage);
+    }
     openCreateNewDestinationModel() {
         this.setState({ showAddEditModel: true, destinationDetails: jQuery.extend(true, {}, this.state.newDestinationModel) });
     }
@@ -164,7 +172,7 @@ class DestinationTable extends React.Component {
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
                 </div>
-                <BootstrapTable data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                <BootstrapTable  ref="destinationTable" data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
 

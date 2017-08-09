@@ -41,7 +41,8 @@ class DistributionTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+                onSortChange :this.onSortChange.bind(this)
             }
         }
     }
@@ -60,6 +61,14 @@ class DistributionTable extends React.Component {
                 newAiringIdModel: {}
             });
         });
+    }
+
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.idDistributionTable.state.sizePerPage;
+        this.refs.idDistributionTable.handlePaginationData(1, sizePerPage);
     }
 
     ///<summary>
@@ -185,7 +194,7 @@ class DistributionTable extends React.Component {
                         <span class="addVertialAlign"> New ID</span>
                     </button>
                 </div>
-                <BootstrapTable
+                <BootstrapTable ref="idDistributionTable"
                     data={this.props.RowData}
                     striped={true}
                     hover={true}

@@ -38,7 +38,8 @@ class ContentTierTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+               onSortChange :this.onSortChange.bind(this)
             }
         }
     }
@@ -61,13 +62,21 @@ class ContentTierTable extends React.Component {
     }
 
     ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.contentTierTable.state.sizePerPage;
+        this.refs.contentTierTable.handlePaginationData(1, sizePerPage);
+    }
+
+     ///<summary>
     // On row click
     ///</summary>
     onRowClick(row) {        
        this.props.dispatch(contentTierActions.contentTierClickSuccess(row.id));
     }
 
-
+    
     ///<summary>
     // when delete contentTier button event handled
     ///</summary>
@@ -167,7 +176,7 @@ class ContentTierTable extends React.Component {
                         <span class="addVertialAlign"> New Content Tier</span>
                     </button>
                 </div>
-                <BootstrapTable
+                <BootstrapTable ref="contentTierTable"
                     expandableRow={this.isExpandableRow}
                     expandComponent={this.expandComponent}
                     data={this.props.RowData}

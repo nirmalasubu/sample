@@ -34,9 +34,18 @@ class WorkflowStatusesTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+                onSortChange :this.onSortChange.bind(this)
             }
         }
+    }
+
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.WorkflowStatusTable.state.sizePerPage;
+        this.refs.WorkflowStatusTable.handlePaginationData(1, sizePerPage);
     }
 
     ///<summary>
@@ -173,7 +182,7 @@ class WorkflowStatusesTable extends React.Component {
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New Status</span>
                 </button>
-                <BootstrapTable
+                <BootstrapTable ref="WorkflowStatusTable"
                     data={this.props.RowData}
                     striped={true}
                     hover={true}
