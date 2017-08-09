@@ -64,6 +64,10 @@ namespace OnDemandTools.Business.Modules.Airing.Model
 
         public List<ChangeNotification> ChangeNotifications { get; set; }
 
+        public int SequenceNumber { get; set; }
+
+        public BillingNumber BillingNumber { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();
@@ -76,6 +80,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model
             Duration = new Duration();
             Title = new Title();
             Flags = new Flags();
+            BillingNumber = new BillingNumber();
             DeliveredTo = new List<string>();
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();

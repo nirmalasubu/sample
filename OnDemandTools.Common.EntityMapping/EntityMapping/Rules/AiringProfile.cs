@@ -43,7 +43,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.TVRating, DLModel.TVRating>();
             CreateMap<BLModel.Version, DLModel.Version>();
             CreateMap<BLModel.ChangeNotification, DLModel.ChangeNotification>();
-
+            CreateMap<BLModel.BillingNumber, DLModel.BillingNumber>();
 
 
             CreateMap<DLModel.Airing, BLModel.Airing>()
@@ -80,6 +80,7 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<DLModel.TVRating, BLModel.TVRating>();
             CreateMap<DLModel.Version, BLModel.Version>();
             CreateMap<DLModel.ChangeNotification, BLModel.ChangeNotification>();
+            CreateMap<DLModel.BillingNumber, BLModel.BillingNumber>();
 
             // DAL to long BL
             CreateMap<DLModel.Airing, BLAiringLongModel.Airing>()

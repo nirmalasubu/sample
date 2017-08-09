@@ -66,6 +66,10 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public IList<ChangeNotification> ChangeNotifications { get; set; }
 
+        public int SequenceNumber { get; set; }
+
+        public BillingNumber BillingNumber { get; set; }
+
         public Airing()
         {
             Airings = new List<AiringLink>();
@@ -77,6 +81,7 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
             Duration = new Duration();
             Title = new Title();
             Flags = new Flags();
+            BillingNumber = new BillingNumber();
             DeliveredTo = new List<string>();
             IgnoredQueues = new List<string>();
             Properties = new Dictionary<string, object>();

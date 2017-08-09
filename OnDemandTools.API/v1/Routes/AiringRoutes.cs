@@ -28,6 +28,7 @@ using OnDemandTools.Common.Configuration;
 using OnDemandTools.Common.Exceptions;
 using OnDemandTools.Business.Modules.Destination;
 using System.Diagnostics;
+using OnDemandTools.Business.Modules.AiringId.Model;
 
 namespace OnDemandTools.API.v1.Routes
 {
@@ -392,8 +393,12 @@ namespace OnDemandTools.API.v1.Routes
                 {
                     // If the Airing provided in the request doesn't have an
                     // AiringId, create new one.
+                    CurrentAiringId currentAiringId = null;
                     if (string.IsNullOrEmpty(request.AiringId))
-                        request.AiringId = airingIdDistributorSvc.Distribute((string)_.prefix).AiringId;
+                    {
+                        currentAiringId = airingIdDistributorSvc.Distribute((string)_.prefix);
+                        request.AiringId = currentAiringId.AiringId;
+                    }
 
                     // Translate data contract to airing business model
                     var airing = Mapper.Map<BLAiringModel.Airing>(request);
@@ -420,6 +425,10 @@ namespace OnDemandTools.API.v1.Routes
                     // Now that the validation is succesful, proceed to
                     // persisting the data. But first, populate remaining
                     // properties for the airing business model.
+                    airing.SequenceNumber = currentAiringId.SequenceNumber;
+                    airing.BillingNumber.Lower = currentAiringId.BillingNumber.Lower;
+                    airing.BillingNumber.Current = currentAiringId.BillingNumber.Current;
+                    airing.BillingNumber.Upper = currentAiringId.BillingNumber.Upper;
                     airing.ReleaseOn = DateTime.UtcNow;
                     airing.UserName = user.UserName; //Get the username
 
