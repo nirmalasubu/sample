@@ -8,6 +8,7 @@ import AddEditCategory from 'Components/Categories/AddEditCategory';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
+import TextsOverlay from 'Components/Common/TextsOverlay';
 
 
 class CategoryTable extends React.Component {
@@ -33,7 +34,8 @@ class CategoryTable extends React.Component {
                 },
                 {
                     text: 'All ', value: 10000000
-                }]
+                }],
+               onSortChange :this.onSortChange.bind(this)
             }
         }
     }
@@ -49,6 +51,14 @@ class CategoryTable extends React.Component {
                 newCategoryModel: {}
             });
         });
+    }
+
+    ///<summary>
+    /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
+    ///</summary>
+    onSortChange() {
+        const sizePerPage = this.refs.categoryTable.state.sizePerPage;
+        this.refs.categoryTable.handlePaginationData(1, sizePerPage);
     }
 
     openCreateNewDestinationModel() {
@@ -106,16 +116,9 @@ class CategoryTable extends React.Component {
         //destination names are sorted before rendering 
         if (destinationNames.length > 0) {
             destinationNames.sort();
-            for (var idx = 0; idx < destinationNames.length; idx++) {
-                rows.push(<Button className="addMarginRight" key={idx.toString()}> {destinationNames[idx]} </Button>);
-            }
         }
 
-        return (
-            <div>
-                {rows}
-            </div>
-        );
+        return <TextsOverlay data={destinationNames} numberOfCharToDisplay={20} />
 
     }
 
@@ -161,7 +164,7 @@ class CategoryTable extends React.Component {
                         <span class="addVertialAlign"> New Category</span>
                     </button>
                 </div>
-                <BootstrapTable
+                <BootstrapTable ref="categoryTable"
                     expandableRow={this.isExpandableRow}
                     expandComponent={this.expandComponent}
                     data={this.props.RowData}

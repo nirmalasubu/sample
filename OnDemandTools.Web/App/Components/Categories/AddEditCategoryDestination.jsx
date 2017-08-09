@@ -303,7 +303,10 @@ class AddEditCategoryDestination extends React.Component {
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
                 </div>
+                
                 <div className="clearBoth modelTableContainerWithSelect" ref="categoryScroll">
+                    <div class="panel panel-default">
+                  <div class="panel-body">
                     <Grid componentClass="table" bsClass="modalTable">
                         <thead>
                             <Row componentClass="tr" >
@@ -322,10 +325,12 @@ class AddEditCategoryDestination extends React.Component {
                         </tbody>
                     </Grid>
                 </div>
+                </div>
+                </div>
                 <PropertiesFilter data={this.state} handleClose={this.closePropertiesFilter.bind(this)} handleSave={this.SavePropertiesFilterData.bind(this)} />
                 <RemoveDestinationModal data={this.state} handleClose={this.closeDestinationDeleteModel.bind(this)} handleRemoveAndClose={this.removeDestinationModel.bind(this)} />
             </div>
-
+          
         )
     }
 }

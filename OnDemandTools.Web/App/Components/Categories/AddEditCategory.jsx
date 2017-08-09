@@ -180,8 +180,8 @@ class AddEditCategory extends React.Component {
     handleTextChange(event) {
 
         var model = this.state.categoryDetails;
-
         model.name = event.target.value;
+        model.name = model.name.trimLeft();
 
         this.setState({
             categoryDetails: model
