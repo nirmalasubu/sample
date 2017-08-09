@@ -19,42 +19,40 @@ import { fetchProducts } from 'Actions/Product/ProductActions';
     };
 })
 
-class RemoveDestinationModal extends React.Component
-{
+class RemoveDestinationModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = ({
             message: "",
             isProcessing: false,
-            inProduct:false,
-            products:[]
+            inProduct: false,
+            products: []
         });
     }
 
-    onEnteredModal(){
-        if(this.isDestinationBeingUsed(this.props.data.destinationDetails.name))
-        {
+    onEnteredModal() {
+        if (this.isDestinationBeingUsed(this.props.data.destinationDetails.name)) {
             this.setState({
-                inProduct:true,
-                message:"This destination is being used by product(s). Remove the destination from all products before deleting.",
+                inProduct: true,
+                message: "This destination is being used by product(s). Remove the destination from all products before deleting.",
                 isProcessing: false
             });
         }
-        else{
+        else {
             this.setState({
-                inProduct:false,
-                message:"If you continue, the destination '" + this.props.data.destinationDetails.name + "' will be completely deleted which could cause a problem if this destination has been used.",
+                inProduct: false,
+                message: "If you continue, the destination '" + this.props.data.destinationDetails.name + "' will be completely deleted which could cause a problem if this destination has been used.",
                 isProcessing: false
             });
         }
     }
 
-    onOpenModal(){
+    onOpenModal() {
         this.props.dispatch(fetchProducts());
     }
 
-    isDestinationBeingUsed(destination) {        
+    isDestinationBeingUsed(destination) {
         var prod = this.props.products;
         for (var p = 0; p < prod.length; p++) {
             if (prod[p].destinations.indexOf(destination) > -1) {
@@ -64,10 +62,9 @@ class RemoveDestinationModal extends React.Component
         return false;
     }
 
-    onContinue(){
-        if(!this.state.inProduct)
-        {
-            this.setState({ isProcessing: true });            
+    onContinue() {
+        if (!this.state.inProduct) {
+            this.setState({ isProcessing: true });
             this.props.dispatch(destinationAction.deleteDestination(this.props.data.destinationDetails.id))
                 .then(() => {
                     this.props.handleClose();
@@ -79,25 +76,34 @@ class RemoveDestinationModal extends React.Component
             this.props.handleClose();
     }
 
-    render(){
+    render() {
+
+        var buttonText = "Continue";
+
+        if (this.state.inProduct) {
+            buttonText = "Ok";
+        }
+        else if (this.state.isProcessing) {
+            buttonText = "Processing";
+        }
 
         return (
-           <Modal show={this.props.data.showModal} onEntering={this.onOpenModal.bind(this)} onEntered={this.onEnteredModal.bind(this)} onHide={this.props.handleClose}> 
+            <Modal show={this.props.data.showModal} onEntering={this.onOpenModal.bind(this)} onEntered={this.onEnteredModal.bind(this)} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-           Remove {this.props.data.destinationDetails.name}
+                        Remove {this.props.data.destinationDetails.name}
                     </Modal.Title>
-                </Modal.Header>        
+                </Modal.Header>
                 <Modal.Body>
-           {
+                    {
                         <p>{this.state.message}</p>
-           }
+                    }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button  onClick={this.props.handleClose}>Cancel</Button>  
-                    <Button disabled={this.state.isProcessing} bsStyle="primary" onClick={(event) => this.onContinue(event)}>{this.state.isProcessing ? "Processing" : "Continue"}</Button>
+                    <Button className={this.state.inProduct ? "hideModalTable" : ""} onClick={this.props.handleClose}>Cancel</Button>
+                    <Button disabled={this.state.isProcessing} bsStyle="primary" onClick={(event) => this.onContinue(event)}>{buttonText}</Button>
                 </Modal.Footer>
-           </Modal>
+            </Modal>
         )
     }
 }
