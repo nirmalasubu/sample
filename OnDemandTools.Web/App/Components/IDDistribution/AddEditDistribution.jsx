@@ -139,7 +139,7 @@ class AddEditDistribution extends React.Component {
     /// </summary>
     isSaveEnabled() {
         return (this.state.validationStateCode != null  || this.state.validationStateSequence != null || this.state.validateStatusCurrent != null || 
-            this.state.validateStatusUpper != null || this.state.validateStatusLower != null || this.state.validateUniqueCode != null);
+            this.state.validateStatusUpper != null || this.state.validateStatusLower != null || this.state.validateUniqueCode != null||this.state.isProcessing);
     }
 
     /// <summary>

@@ -65,7 +65,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// <summary>
     /// Purge this component's state
     /// </summary>
-    purgeModalHistory = () => {      
+    purgeModalHistory = () => {
         this.setState({
             pathTranslationDetails: PathTranslationModel,
             isProcessing: false,
@@ -209,6 +209,11 @@ class AddEditPathTranslationModal extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveEnabled = () => {
+
+        if (this.state.isProcessing) {
+            return true;
+        }
+
         return !(this.getsourceBaseURLValidationState() == null && this.gettargetBaseURLValidationState() == null &&
             this.gettargetprocTypeValidationState() == null && this.gettargetURLTypeValidationState() == null);
     }
