@@ -177,7 +177,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// Return validate state for targetprocType
     /// </summary>
     gettargetprocTypeValidationState = () => {
-        return this.state.pathTranslationDetails.target.protectionType ? null : 'error';
+        return $.trim(this.state.pathTranslationDetails.target.protectionType) ? null : 'error';
     }
 
     /// <summary>
@@ -195,13 +195,13 @@ class AddEditPathTranslationModal extends React.Component {
     /// Return validate state for targetURLType
     /// </summary>
     gettargetURLTypeValidationState = () => {
-        return this.state.pathTranslationDetails.target.urlType ? null : 'error';
+        return $.trim(this.state.pathTranslationDetails.target.urlType) ? null : 'error';
     }
 
     /// <summary>
     /// Determine whether cancel button needs to be enabled or not
     /// </summary>
-    isCancelEnabled = () => {
+    isCloseEnabled = () => {
         return (this.state.isProcessing);
     }
 
@@ -365,8 +365,8 @@ class AddEditPathTranslationModal extends React.Component {
                     <CancelWarningModal data={this.state} handleClose={this.closeWarningModel} handleAddEditClose={this.handleAddEditClose} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={this.isCancelEnabled()} onClick={this.handleClose}>Cancel</Button>
-                    <Button disabled={this.isSaveEnabled()} onClick={this.handleSave} bsStyle="primary">{this.state.isProcessing ? "Processing" : "Continue"}</Button>
+                    <Button disabled={this.isCloseEnabled()} onClick={this.handleClose}>Close</Button>
+                    <Button disabled={this.isSaveEnabled()} onClick={this.handleSave} bsStyle="primary">{this.state.isProcessing ? "Processing" : "Save"}</Button>
                 </Modal.Footer>
             </Modal>
         )
