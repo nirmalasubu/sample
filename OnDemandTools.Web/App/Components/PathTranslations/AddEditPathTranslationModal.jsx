@@ -167,7 +167,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// </summary>
     handletargetprocTypeChange = (event) => {
         var model = this.state.pathTranslationDetails;
-        model.target.protectionType = event.target.value;
+        model.target.protectionType = $.trim(event.target.value);
         this.setState({
             pathTranslationDetails: model
         });
@@ -185,7 +185,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// </summary>
     handletargetURLTypeChange = (event) => {
         var model = this.state.pathTranslationDetails;
-        model.target.urlType = event.target.value;
+        model.target.urlType = $.trim(event.target.value);        
         this.setState({
             pathTranslationDetails: model
         });
@@ -254,7 +254,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// <summary>
     /// Save path translation
     /// </summary>
-    handleSave = () => {
+    handleSave = () => {        
         this.setState({ isProcessing: true });
 
         this.props.dispatch(PathTranslationHelper.savePathTranslation(this.state.pathTranslationDetails))
