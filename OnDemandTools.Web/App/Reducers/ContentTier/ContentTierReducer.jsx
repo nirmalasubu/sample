@@ -14,8 +14,9 @@
                 ]
             }
             else {
-                state[contentTierIndex] = updatedContentTier;
-                return state;
+                var newState = Object.assign([], state);
+                newState[contentTierIndex] = updatedContentTier;
+                return newState;
             }
         case 'FILTER_CONTENT_TIER_SUCCESS':       // Required to obtain  contentTier object state 
             const assignState = Object.assign([], state);

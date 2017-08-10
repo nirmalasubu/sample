@@ -119,19 +119,25 @@ namespace OnDemandTools.Web.Controllers
                 }
             }
 
-            if (string.IsNullOrEmpty(viewModel.Id))
-                viewModel.Id = Guid.NewGuid().ToString();
+            var newModel = new ContentTierViewModel();
+            newModel.Id = viewModel.Id;
+            if (newModel.Id == null)
+            {
+                newModel.Id = new Guid().ToString();
+            }
+            newModel.Name = viewModel.Name;
 
-            viewModel.Products = destinations.Where(d => d.ContentTiers.Any()).ToList();
+            var newProducts = new List<ProductViewModel>();
 
             foreach (var product in viewModel.Products)
             {
-                product.ContentTiers = new List<ContentTier> { product.ContentTiers.FirstOrDefault(e => e.Name == viewModel.Name) };
+                if (product.ContentTiers.Any() && !string.IsNullOrWhiteSpace(product.ContentTiers.First().Name))
+                    newProducts.Add(product);
             }
 
-            viewModel.Products = viewModel.Products.Where(d => d.ContentTiers.FirstOrDefault() != null).ToList();
+            newModel.Products = newProducts;
 
-            return viewModel;
+            return newModel;
         }
 
         [Authorize]
