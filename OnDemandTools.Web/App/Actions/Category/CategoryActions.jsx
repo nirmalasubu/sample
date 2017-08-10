@@ -77,3 +77,10 @@ export const deleteCategory = (name) => {
     };
 };
 
+export const categoryExpandRowClickSuccess = (id) => {
+    return {
+        type: actionTypes.CATEGORY_EXPAND_ROW_CLICK_SUCCESS,
+        id
+    }
+};
+

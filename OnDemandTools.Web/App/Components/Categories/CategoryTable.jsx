@@ -9,8 +9,12 @@ require('react-bootstrap-table/css/react-bootstrap-table.css');
 import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
 import TextButtons from 'Components/Common/TextButtons';
+import * as categoryActions from 'Actions/Category/CategoryActions';
 
 
+@connect((store) => {
+    return {}
+})
 class CategoryTable extends React.Component {
     constructor(props) {
         super(props);
@@ -21,6 +25,7 @@ class CategoryTable extends React.Component {
             showDeleteModal: false,
             categoryDetails: "",
             options: {
+                onRowClick: this.onRowClick.bind(this),
                 defaultSortName: 'name',
                 defaultSortOrder: 'asc',
                 expandRowBgColor: '#EAECEE',
@@ -53,6 +58,13 @@ class CategoryTable extends React.Component {
         });
     }
 
+
+    ///<summary>
+    // On row click invoke the action to make the property clicked true corresponding row
+    ///</summary>
+    onRowClick(row) {
+        this.props.dispatch(categoryActions.categoryExpandRowClickSuccess(row.id));
+    }
     ///<summary>
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
     ///</summary>
@@ -109,14 +121,13 @@ class CategoryTable extends React.Component {
     destinationFormat(val, rowData) {
         var destinationNames = [];
         var rows = [];
-
         for (var idx = 0; idx < rowData.destinations.length; idx++) {
-            destinationNames.push(rowData.destinations[idx].name);
-        }
-        //destination names are sorted before rendering 
-        if (destinationNames.length > 0) {
-            destinationNames.sort();
-        }
+                destinationNames.push(rowData.destinations[idx].name);
+         }
+            //destination names are sorted before rendering 
+            if (destinationNames.length > 0) {
+                destinationNames.sort();
+              }
 
         return <TextButtons data={destinationNames} numberOfCharToDisplay={30} title={"Click to view more destinations"} />
 
