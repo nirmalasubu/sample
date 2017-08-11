@@ -228,7 +228,7 @@ class DeliveryQueueTable extends React.Component {
                 <div>
                     <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Queuesa</span>
+                        <span class="addVertialAlign"> New Queue</span>
                     </button>
                 </div>
                 <BootstrapTable  ref="deliveryQueueTable"  data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
