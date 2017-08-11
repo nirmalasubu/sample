@@ -125,7 +125,10 @@ class DeliveryQueueAddEdit extends React.Component {
 
             this.setState({ isProcessing: true });
 
-            this.props.dispatch(saveQueue(this.state.queueModel))
+            var model = this.state.queueModel;
+            model.friendlyName = model.friendlyName.trim();
+
+            this.props.dispatch(saveQueue(model))
                 .then(() => {
                     if (this.props.data.queueDetails.id == null) {
                         NotificationManager.success(this.state.queueModel.friendlyName + ' queue successfully created.', '', 2000);
@@ -190,7 +193,7 @@ class DeliveryQueueAddEdit extends React.Component {
     isNameUnique(queue) {
         for (var x = 0; x < this.props.queues.length; x++) {
             if (this.props.queues[x].id != queue.id) {
-                if (this.props.queues[x].friendlyName.toLowerCase() == queue.friendlyName.toLowerCase()) {
+                if (this.props.queues[x].friendlyName.toLowerCase().trim() == queue.friendlyName.toLowerCase().trim()) {
                     this.setState({
                         showError: true
                     });
@@ -311,7 +314,7 @@ class DeliveryQueueAddEdit extends React.Component {
         var msg=""
         
         if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>Queue Name already exists. Please use a unique queue name.</label>);
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Queue Name already exists. Please use a unique queue name.</label>);
                             
         return (
             <Modal bsSize="large" backdrop="static" className="addEditQueueModel" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
