@@ -81,7 +81,7 @@ class RemoveDestinationModal extends React.Component {
         var buttonText = "Continue";
 
         if (this.state.inProduct) {
-            buttonText = "Ok";
+            buttonText = "OK";
         }
         else if (this.state.isProcessing) {
             buttonText = "Processing";
