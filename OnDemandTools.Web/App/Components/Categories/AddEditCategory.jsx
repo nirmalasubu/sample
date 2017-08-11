@@ -50,12 +50,12 @@ class AddEditCategory extends React.Component {
     /// This function is called on entering the modal pop up
     /// </summary>
     onOpenModel() {
+      
         this.setState({
             isProcessing: false,
             categoryDetails: this.props.data.categoryDetails,
             categoryUnModifiedData: jQuery.extend(true, {}, this.props.data.categoryDetails)
         });
-
     }
 
     /// <summary>
@@ -149,7 +149,14 @@ class AddEditCategory extends React.Component {
             this.props.handleClose();
         }
         else {
-            this.openWarningModel();
+            var model = this.state.categoryDetails;
+            if (model.name == "" &&( model.destinations.length == 1 && model.destinations[0].name == ""&& model.destinations[0].categories[0].brands.length==0
+                && model.destinations[0].categories[0].titleIds.length==0 &&model.destinations[0].categories[0].seriesIds.length==0)) {
+                this.props.handleClose();
+            }
+            else
+                this.openWarningModel();
+         
         }
     }
 
@@ -222,7 +229,7 @@ class AddEditCategory extends React.Component {
     }
 
     componentDidMount() {
-        var initialCategory = { "id": null, "name": "", "destinations": [] };
+        var initialCategory = { "id": null, "name": "", "destinations":[]};
 
         //required to overcome form control warning of categoryName
         this.setState({

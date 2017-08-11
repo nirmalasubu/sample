@@ -20,7 +20,8 @@ import InfoOverlay from 'Components/Common/InfoOverlay';
 
 @connect((store) => {
     return {
-        statuses: store.statuses
+        statuses: store.statuses,
+        queues: store.queues
     };
 })
 class DeliveryQueueAddEdit extends React.Component {
@@ -31,6 +32,7 @@ class DeliveryQueueAddEdit extends React.Component {
         super(props);
 
         this.state = ({
+            validationStateUniqueName: null,
             validationStateName: null,
             validationStateEmail: null,
             validationQueryState: null,
@@ -38,7 +40,8 @@ class DeliveryQueueAddEdit extends React.Component {
             isProcessing: false,
             queueModel: {},
             options: [],
-            selectAllArray: []
+            selectAllArray: [],
+            showError:false
         });
     }
 
@@ -148,6 +151,7 @@ class DeliveryQueueAddEdit extends React.Component {
     }
 
     validateForm() {
+        this.isNameUnique(this.state.queueModel);
         var name = this.state.queueModel.friendlyName;
         var email = this.state.queueModel.contactEmailAddress;
         var value = this.state.queueModel.query;
@@ -167,13 +171,46 @@ class DeliveryQueueAddEdit extends React.Component {
         this.setState({
             validationStateName: (name == "") ? 'error' : null,
             validationStateEmail: (email != "" && validator.isEmail(email)) ? null : 'error',
-            validationQueryState: hasError ? 'error' : null
+            validationQueryState: hasError ? 'error' : null,
+            validationStateUniqueName: this.isNameUnique(this.state.queueModel) ? 'error' : null
         });
     }
 
+    /// <summary>
+    /// Determine whether save button needs to be enabled or not
+    /// </summary>
+    isSaveDisabled() {
+        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null
+            || this.state.isProcessing||this.state.validationStateEmail!=null||this.state.validationQueryState != null);
+    }
+
+    /// <summary>
+    /// To validate the queue name is unique
+    /// </summary>
+    isNameUnique(queue) {
+        for (var x = 0; x < this.props.queues.length; x++) {
+            if (this.props.queues[x].id != queue.id) {
+                if (this.props.queues[x].friendlyName.toLowerCase() == queue.friendlyName.toLowerCase()) {
+                    this.setState({
+                        showError: true
+                    });
+
+                    return true;
+                }
+                else {
+                    this.setState({
+                        showError: false
+                    });
+                }
+            }
+        }
+
+        return false;
+    }
     handleFriendlyNameChange(event) {
         var model = this.state.queueModel;
         model.friendlyName = event.target.value;
+        model.friendlyName = model.friendlyName.trimLeft();
         this.setState({ queueModel: model });
         this.validateForm();
     }
@@ -271,6 +308,11 @@ class DeliveryQueueAddEdit extends React.Component {
     }
 
     render() {
+        var msg=""
+        
+        if (this.state.showError)
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>Queue Name already exists. Please use a unique queue name.</label>);
+                            
         return (
             <Modal bsSize="large" backdrop="static" className="addEditQueueModel" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
@@ -281,6 +323,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
+                        {msg}
                             <Grid>
                                 <Form>
                                     <Row>
@@ -459,7 +502,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.props.handleClose}>Cancel</Button>
-                    <Button disabled={(this.state.validationStateName != null || this.state.validationStateEmail != null || this.state.validationQueryState != null || this.state.isProcessing)} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                    <Button disabled={this.isSaveDisabled()}  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                         {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>
