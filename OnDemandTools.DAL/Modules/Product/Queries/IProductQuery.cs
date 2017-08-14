@@ -10,5 +10,6 @@ namespace OnDemandTools.DAL.Modules.Product.Queries
         IQueryable<Model.Product> GetByTags(List<string> tags);
         IQueryable<Model.Product> GetByProductIds(List<Guid> productIds);
         Model.Product GetById(string externalId);
+        Model.Product GetByMappingId(int mappingId);
     }
 }

@@ -6,6 +6,7 @@ using OnDemandTools.DAL.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OnDemandTools.DAL.Modules.Product.Model;
 
 namespace OnDemandTools.DAL.Modules.Product.Queries
 {
@@ -30,6 +31,13 @@ namespace OnDemandTools.DAL.Modules.Product.Queries
             return _database
              .GetCollection<Model.Product>("Product").AsQueryable()
              .FirstOrDefault(e=>e.ExternalId == Guid.Parse(externalId));
+        }
+
+        public Model.Product GetByMappingId(int mappingId)
+        {
+            return _database
+            .GetCollection<Model.Product>("Product").AsQueryable()
+            .FirstOrDefault(e => e.MappingId == mappingId);
         }
 
         public IQueryable<Model.Product> GetByProductIds(List<Guid> productIds)

@@ -151,6 +151,17 @@ namespace OnDemandTools.Business.Modules.Product
         }
 
         /// <summary>
+        /// Get's the product by mapping id
+        /// </summary>
+        /// <param name="mappingId"> id of the product</param>
+        /// <returns></returns>
+        public BLModel.Product GetByMappingId(int mappingId)
+        {
+            return (productHelper.GetByMappingId(mappingId)
+               .ToBusinessModel<DLModel.Product, BLModel.Product>());
+        }
+
+        /// <summary>
         /// Delete's content tier by name
         /// </summary>
         /// <param name="contentTierName"></param>

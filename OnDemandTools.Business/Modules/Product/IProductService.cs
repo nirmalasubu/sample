@@ -53,6 +53,13 @@ namespace OnDemandTools.Business.Modules.Product
         Model.Product GetById(string externalId);
 
         /// <summary>
+        /// Gets the product by mapping id
+        /// </summary>
+        /// <param name="mappingId">mapping id</param>
+        /// <returns></returns>
+        Model.Product GetByMappingId(int mappingId);
+
+        /// <summary>
         /// Delete's content tier by name
         /// </summary>
         /// <param name="contentTierName">content tier name</param>

@@ -140,6 +140,40 @@ namespace OnDemandTools.Web.Controllers
             return newModel;
         }
 
+        [HttpPost("import")]
+        public string ImportCategory([FromBody]ContentTierImportViewModel viewModel)
+        {
+
+            var product = _productSvc.GetByMappingId(viewModel.MappingId);
+
+            if (product != null)
+            {
+                bool hasChanges = false;
+                foreach (var contentTier in viewModel.ContentTiers)
+                {
+                    if (!product.ContentTiers.Any(e => e.Name == contentTier.Name))
+                    {
+                        hasChanges = true;
+                        var newCategory = new Business.Modules.Product.Model.ContentTier
+                        {
+                            Name = contentTier.Name,
+                            Brands = contentTier.Brands,
+                            TitleIds = contentTier.TitleIds,
+                            SeriesIds = contentTier.SeriesIds
+                        };
+
+                        product.ContentTiers.Add(newCategory);
+                    }
+
+                    if (hasChanges)
+                        _productSvc.Save(product);
+                }
+            }
+
+
+            return "Success";
+        }
+
         [Authorize]
         [HttpDelete]
         public bool Delete([FromBody]ContentTierViewModel viewModel)
