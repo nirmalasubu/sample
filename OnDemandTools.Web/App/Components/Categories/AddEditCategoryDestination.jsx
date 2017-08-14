@@ -53,6 +53,7 @@ class AddEditCategoryDestination extends React.Component {
         this.setState({ categoryDetails: this.props.data }, function () {
             if (this.props.data.destinations.length == 0) {
                 this.addNewDestination();
+                this.props.validationStates(false);
             }
         });
        
@@ -137,6 +138,7 @@ class AddEditCategoryDestination extends React.Component {
         }
         var optionValues = this.getOptions(categoryData);
         this.setState({ options: optionValues });
+        this.props.validationStates(this.hasValidDestinations());
     }
 
     /// <summary>
@@ -232,6 +234,39 @@ class AddEditCategoryDestination extends React.Component {
         model.destinations[index].description = this.props.destinations[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });
+        this.props.validationStates(this.hasValidDestinations());
+    }
+
+
+
+    /// <summary>
+    //To validate the delete and filter button to be disabled when no destination is selected.
+    /// </summary>
+    isActionbuttonEnabled(item, index) {
+       
+        if(item.name!=""  && item.categories[0].removed == undefined)
+        {
+            return false;
+        }
+       
+        return true;
+    }
+
+    /// <summary>
+    // To make save button to be enabled . when it has atleast one valid destination
+    /// </summary>
+    hasValidDestinations() {
+        var hasOneDestination = false;
+        if(this.state.categoryDetails.destinations!= undefined)
+        {
+            for (var i = 0; i < this.state.categoryDetails.destinations.length; i++) {
+                if (this.state.categoryDetails.destinations[i].categories[0].removed == undefined
+                    && this.state.categoryDetails.destinations[i].name.length > 2) {
+                    hasOneDestination = true;
+                }
+            }
+        }
+        return hasOneDestination;
     }
 
     /// <summary>
@@ -246,13 +281,13 @@ class AddEditCategoryDestination extends React.Component {
                         let col = null, colDesc = null;
                         if (item.name == "") {
                             col = (<Col componentClass="td" colSpan={2} sm={6}  >
-                                <FormGroup controlId={index.toString()}>
+                                <FormGroup controlId={index.toString()} validationState="error">
                                     <Select
                                         searchable={true}
                                         simpleValue className="category-select-control"
                                         options={this.state.options}
                                         onChange={(event) => this.handleChange(index, event)}
-                                        value={item.name} />
+                                      value={item.name}  />
                                 </FormGroup>
                             </Col>
                             );
@@ -275,16 +310,13 @@ class AddEditCategoryDestination extends React.Component {
                             <Col componentClass="td">{this.categoryBrandImageConstruct(item, index)}</Col>
                             <Col componentClass="td">{this.titleDetailConstruct(item, index)}</Col>
                             <Col componentClass="td">
-                                <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
-                                <button disabled={item.categories[0].removed == undefined ? false : true} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
+                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
+                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
                             </Col>
 
                         </Row>)
                     }
                 }.bind(this));
-            }
-            else {
-                row = <Row><Col sm={12}><p> No destination available</p></Col></Row>
             }
         }
 

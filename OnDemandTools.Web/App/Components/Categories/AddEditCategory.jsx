@@ -108,13 +108,16 @@ class AddEditCategory extends React.Component {
 
     hasValidDestinations() {
         var hasOneDestination = false;
-        for (var i = 0; i < this.state.categoryDetails.destinations.length; i++) {
-            if (this.state.categoryDetails.destinations[i].categories[0].removed == undefined
-                && this.state.categoryDetails.destinations[i].name.length > 2) {
-                hasOneDestination = true;
+
+        if(this.state.categoryDetails.destinations!= undefined)
+        {
+            for (var i = 0; i < this.state.categoryDetails.destinations.length; i++) {
+                if (this.state.categoryDetails.destinations[i].categories[0].removed == undefined
+                    && this.state.categoryDetails.destinations[i].name.length > 2) {
+                    hasOneDestination = true;
+                }
             }
         }
-
         return hasOneDestination;
     }
 
@@ -164,7 +167,7 @@ class AddEditCategory extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null || this.state.isProcessing);
+        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null || this.state.isProcessing|| this.state.validationStateDestinationName!=null);
     }
 
     /// <summary>
@@ -197,24 +200,23 @@ class AddEditCategory extends React.Component {
         this.validateForm();
     }
 
-    //callback function to update the validation
-    updateDestinationNameValidation(IsDestinationNameRequired) {
-        this.setState({ validationStateDestinationName: (IsDestinationNameRequired == true) ? 'error' : null });
+    /// <summary>
+    /// callback function to update the validate destination . alteast one destination should be there for a category.
+    /// </summary>
+   destinationNameValidation(IsDestinationNameRequired) {
+        this.setState({ validationStateDestinationName: (IsDestinationNameRequired != true) ? 'error' : null });
     }
 
     /// <summary>
     /// To validate the category name is unique
     /// </summary>
     isNameUnique(categoryDetails) {
-
         for (var x = 0; x < this.props.allCategories.length; x++) {
-
             if (this.props.allCategories[x].id != categoryDetails.id) {
                 if (this.props.allCategories[x].name == categoryDetails.name) {
                     this.setState({
                         showError: true
                     });
-
                     return true;
                 }
                 else {
@@ -266,7 +268,7 @@ class AddEditCategory extends React.Component {
                             />
                         </FormGroup>
 
-                        <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.updateDestinationNameValidation.bind(this)} />
+                        <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.destinationNameValidation.bind(this)} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>
