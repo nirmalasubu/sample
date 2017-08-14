@@ -7,6 +7,7 @@ using OnDemandTools.Web.Models.Destination;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using OnDemandTools.Web.Models.Category;
 
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -116,9 +117,47 @@ namespace OnDemandTools.Web.Controllers
                 destination.Categories = new List<Category> { destination.Categories.FirstOrDefault(e => e.Name == viewModel.Name) };
             }
 
-            viewModel.Destinations = viewModel.Destinations.Where(d => d.Categories.FirstOrDefault()!=null).ToList();
+            viewModel.Destinations = viewModel.Destinations.Where(d => d.Categories.FirstOrDefault() != null).ToList();
 
             return viewModel;
+        }
+
+        [HttpPost("import")]
+        public string ImportCategory([FromBody]CategoryImportViewModel viewModel)
+        {
+            foreach (var category in viewModel.Categories)
+            {
+                category.Id = Guid.NewGuid().ToString();
+            }
+
+            var destinations = _destinationSvc.GetByMappingId(viewModel.MappingId);
+
+            foreach (var destination in destinations)
+            {
+                bool hasChanges = false;
+                foreach (var category in viewModel.Categories)
+                {
+                    if (!destination.Categories.Any(e => e.Name == category.Name))
+                    {
+                        hasChanges = true;
+                        var newCategory = new Business.Modules.Destination.Model.Category
+                        {
+                            Name = category.Name,
+                            Brands = category.Brands,
+                            TitleIds = category.TitleIds,
+                            SeriesIds = category.SeriesIds
+                        };
+
+                        destination.Categories.Add(newCategory);
+                    }
+                }
+
+                if (hasChanges)
+                    _destinationSvc.Save(destination);
+            }
+
+
+            return "Success";
         }
 
         [Authorize]
@@ -126,7 +165,7 @@ namespace OnDemandTools.Web.Controllers
         public CategoryViewModel GetEmptyModel()
         {
             return new CategoryViewModel
-            {                
+            {
                 Name = string.Empty
             };
         }
