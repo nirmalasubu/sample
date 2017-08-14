@@ -15,7 +15,8 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
 
 @connect((store) => {
     return {
-
+        config: store.config,
+        currentAiringIds: store.currentAiringIds
     };
 })
 
@@ -38,7 +39,7 @@ class AddEditDistribution extends React.Component {
             validateStatusUpper:null,
             validateStatusLower:null,
             validateUniqueCode:null,
-            urlDomain: "POST: http://ondemand-tools-dev/api/v1/airingId/generate/",
+            urlDomain: "",
             postUrl:""
         });
     }
@@ -46,8 +47,10 @@ class AddEditDistribution extends React.Component {
     /// <summary>
     /// Called to open the cancel warning pop up
     /// </summary>
-    openWarningModel() {
-        this.setState({ showWarningModel: true });
+    openWarningModel() {        
+        this.setState({ 
+            showWarningModel: true            
+        });
     }
 
     /// <summary>
@@ -72,13 +75,14 @@ class AddEditDistribution extends React.Component {
         if(this.props.data.airingIdDetails.id != null)
         {
             url = this.state.postUrl;
-            url = this.state.urlDomain + this.props.data.airingIdDetails.prefix;
+            url = "POST : " + this.props.config.portalSettings.environmentUrl + "/api/v1/airingId/generate/" + this.props.data.airingIdDetails.prefix;
         }
 
         this.setState({
             isProcessing: false,
             currentAiringId: this.props.data.airingIdDetails,
             postUrl: url,
+            urlDomain: "POST : " + this.props.config.portalSettings.environmentUrl + "/api/v1/airingId/generate/",
             airingIdUnModifiedData: jQuery.extend(true, {}, this.props.data.airingIdDetails)
         });
     }
@@ -115,7 +119,7 @@ class AddEditDistribution extends React.Component {
         {
             model.prefix = event.target.value.toUpperCase();
             if(model.id!=null)
-                url = this.state.urlDomain + (model.prefix.length==4?model.prefix : "");
+                url = this.state.urlDomain + (model.prefix.length==4 && model.prefix.match("^[a-zA-Z]+$")!=null?model.prefix : "");
         }
         if(value=="sequence")
             model.sequenceNumber = event.target.value;
@@ -167,9 +171,9 @@ class AddEditDistribution extends React.Component {
     /// To validate the status name is unique
     /// </summary>
     isCodeUnique(airingId) {
-        for (var x = 0; x < this.props.airingIdandPrefix.length; x++) {
-            if (this.props.airingIdandPrefix[x].id != airingId.id) {
-                if (this.props.airingIdandPrefix[x].name.toUpperCase() == airingId.prefix.toUpperCase()) {
+        for (var x = 0; x < this.props.currentAiringIds.length; x++) {
+            if (this.props.currentAiringIds[x].id != airingId.id) {
+                if (this.props.currentAiringIds[x].prefix.toUpperCase() == airingId.prefix.toUpperCase()) {
                     this.setState({showError: true });
                     return true;
                 }
@@ -192,10 +196,10 @@ class AddEditDistribution extends React.Component {
         this.props.dispatch(idActions.saveCurrentAiringId(this.state.currentAiringId))
             .then(() => {
                 if (this.state.currentAiringId.id == null) {
-                    NotificationManager.success(this.state.currentAiringId.prefix + ' Current Airing Id successfully created.', '', 2000);
+                    NotificationManager.success(this.state.currentAiringId.prefix + ' Code successfully created.', '', 2000);
                 }
                 else {
-                    NotificationManager.success(this.state.currentAiringId.prefix + ' Current Airing Id updated successfully.', '', 2000);
+                    NotificationManager.success(this.state.currentAiringId.prefix + ' Code updated successfully.', '', 2000);
                 }
                 this.props.dispatch(idActions.fetchCurrentAiringId());
 
@@ -204,10 +208,10 @@ class AddEditDistribution extends React.Component {
                 }, 3000);
             }).catch(error => {
                 if (this.state.currentAiringId.id == null) {
-                    NotificationManager.error(this.state.currentAiringId.prefix + ' Current Airing Id creation failed. ' + error, 'Failure');
+                    NotificationManager.error(this.state.currentAiringId.prefix + ' Code creation failed. ' + error, 'Failure');
                 }
                 else {
-                    NotificationManager.error(this.state.currentAiringId.prefix + ' Current Airing Id update failed. ' + error, 'Failure');
+                    NotificationManager.error(this.state.currentAiringId.prefix + ' Code update failed. ' + error, 'Failure');
                 }
                 this.setState({ isProcessing: false });
             });        
@@ -232,7 +236,7 @@ render() {
         <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <div>{this.props.data.airingIdDetails.id != null ? "Edit ID -" + this.state.airingIdUnModifiedData.prefix : "Add ID"}</div>
+                    <div>{this.props.data.airingIdDetails.id != null ? "Edit Code -" + this.state.airingIdUnModifiedData.prefix : "Add Code"}</div>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

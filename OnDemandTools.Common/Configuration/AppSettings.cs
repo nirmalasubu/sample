@@ -38,6 +38,8 @@ namespace OnDemandTools.Common.Configuration
         public string HangFireUrl { get; set; }
 
         public string TitleSearchApiUrl { get; set; }
+
+        public string EnvironmentUrl { get; set; }
     }
 
     public class CloudQueue

@@ -100,7 +100,7 @@ const getFilterVal = (currentAiringIds, filterVal) => {
         var code = filterVal.code.toLowerCase();
         var airingId = filterVal.airingId.toLowerCase();
         return (currentAiringIds.filter(obj=> (code != "" ? obj.prefix.toLowerCase().indexOf(code) != -1 : true)
-              &&(airingId != "" ? obj.airingId.toLowerCase().indexOf(airingId) != -1 : true)
+              &&(airingId != "" ? (obj.airingId != null ? obj.airingId.toLowerCase().indexOf(airingId) != -1 : false) : true)
             ));
     }
     else

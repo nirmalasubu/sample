@@ -60,6 +60,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
                     {
                         Query = query,
                         Update = Update.Set("State", "locked")
+                                       .Set("Locked", true)
                                        .Inc("SequenceNumber", 1),
                         VersionReturned = FindAndModifyDocumentVersion.Modified
                     });
@@ -93,7 +94,8 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
             var query = Query.EQ("Prefix", prefix);
 
             currentAiringIds.Update(query,
-                                            Update.Set("State", "unlocked"),
+                                            Update.Set("State", "unlocked")
+                                                  .Set("Locked", false),
                                             WriteConcern.W2);
         }
 
@@ -101,7 +103,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
         {
             var currentAiringIds =  _databaseWithNewClient.GetCollection<CurrentAiringId>("CurrentAiringId");
 
-            var query = Query.And(Query.EQ("Prefix", currentAiringId.Prefix), Query.EQ("State", "locked"));
+            var query = Query.And(Query.EQ("Prefix", currentAiringId.Prefix), Query.Or(Query.EQ("State", "locked"), Query.EQ("Locked", true)));
 
             try
             {
@@ -112,6 +114,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
                     {
                         Query = query,
                         Update = Update.Set("State", "unlocked")
+                                       .Set("Locked", false)
                                        .Set("BillingNumber.Current", currentAiringId.BillingNumber.Current)
                                        .Set("SequenceNumber", currentAiringId.SequenceNumber)
                                        .Set("AiringId", currentAiringId.AiringId)

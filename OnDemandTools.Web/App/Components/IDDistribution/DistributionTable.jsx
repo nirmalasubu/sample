@@ -140,17 +140,18 @@ class DistributionTable extends React.Component {
     ///This method construct the edit and delete action buttons
     ///</summary>
     actionFormat(val, rowData) {
+        var removeTitle = "remove " + rowData.prefix + " code for airing id generation";
         return (
             <div>
                 <button class="btn-link" title="generate next airing id in sequence" onClick={(event) => this.generateAiringId(rowData, event)} >
                     <i class="fa fa-level-up" aria-hidden="true"></i>
                 </button>
                 
-                <button class="btn-link" title="Edit Current Airing ID" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <button class="btn-link" title="Edit Code" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o"></i>
                 </button>
 
-                <button class="btn-link" title="Delete Current Airing ID" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                <button class="btn-link" title={removeTitle} onClick={(event) => this.openDeleteModel(rowData, event)} >
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
@@ -189,9 +190,9 @@ class DistributionTable extends React.Component {
         return (
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Product" onClick={(event) => this.openCreateNewAiringIdModel(event)}>
+                    <button class="btn-link pull-right addMarginRight" title="New Code" onClick={(event) => this.openCreateNewAiringIdModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New ID</span>
+                        <span class="addVertialAlign"> New Code</span>
                     </button>
                 </div>
                 <BootstrapTable ref="idDistributionTable"
