@@ -531,6 +531,16 @@ tr.strikeout td:before {
     max-width:70%;
 }
 
+.whiteColorText
+{
+    color: white;
+}
+
+.blueColorText
+{
+    color: #337ab7;
+}
+
 /*****************************************************/
 /******** category strike out styling ends******/
 

@@ -12,8 +12,8 @@ class InfoOverlay extends React.Component {
             </Popover>
         );
         return (
-            <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={popoverLeft}>
-                <a href="#"><i class="glyphicon glyphicon-info-sign"></i></a>
+            <OverlayTrigger trigger={['hover', 'focus']} placement={this.props.placement ? this.props.placement : "top"} overlay={popoverLeft}>
+                <i class={this.props.className ? "glyphicon glyphicon-info-sign " + this.props.className : "glyphicon glyphicon-info-sign blueColorText"} ></i>
             </OverlayTrigger>)
     }
 }
