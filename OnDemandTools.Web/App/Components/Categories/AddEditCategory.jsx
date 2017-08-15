@@ -167,7 +167,7 @@ class AddEditCategory extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null || this.state.isProcessing|| this.state.validationStateDestinationName!=null);
+        return (this.state.validationStateName != null || this.state.validationStateUniqueName != null || this.state.isProcessing);
     }
 
     /// <summary>
@@ -200,12 +200,6 @@ class AddEditCategory extends React.Component {
         this.validateForm();
     }
 
-    /// <summary>
-    /// callback function to update the validate destination . alteast one destination should be there for a category.
-    /// </summary>
-   destinationNameValidation(IsDestinationNameRequired) {
-        this.setState({ validationStateDestinationName: (IsDestinationNameRequired != true) ? 'error' : null });
-    }
 
     /// <summary>
     /// To validate the category name is unique
@@ -268,7 +262,7 @@ class AddEditCategory extends React.Component {
                             />
                         </FormGroup>
 
-                        <AddEditCategoryDestination data={this.props.data.categoryDetails} validationStates={this.destinationNameValidation.bind(this)} />
+                        <AddEditCategoryDestination data={this.props.data.categoryDetails} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>

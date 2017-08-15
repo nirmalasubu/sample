@@ -234,7 +234,6 @@ class AddEditCategoryDestination extends React.Component {
         model.destinations[index].description = this.props.destinations[detailIndex].description;
         var optionValues = this.getOptions(model);
         this.setState({ categoryDetails: model, options: optionValues });
-        this.props.validationStates(this.hasValidDestinations());
     }
 
 
@@ -250,23 +249,6 @@ class AddEditCategoryDestination extends React.Component {
         }
        
         return true;
-    }
-
-    /// <summary>
-    // To make save button to be enabled . when it has atleast one valid destination
-    /// </summary>
-    hasValidDestinations() {
-        var hasOneDestination = false;
-        if(this.state.categoryDetails.destinations!= undefined)
-        {
-            for (var i = 0; i < this.state.categoryDetails.destinations.length; i++) {
-                if (this.state.categoryDetails.destinations[i].categories[0].removed == undefined
-                    && this.state.categoryDetails.destinations[i].name.length > 2) {
-                    hasOneDestination = true;
-                }
-            }
-        }
-        return hasOneDestination;
     }
 
     /// <summary>
