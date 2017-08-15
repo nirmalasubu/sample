@@ -15,27 +15,7 @@ class TitleNameOverlay extends React.Component {
             titles: [],
             isProcessing: false
         }
-    }
-
-    //<summary>
-    ///  fetchAndUpdateTitles when component is initially loaded
-    ///</summary>
-    fetchAndUpdateTitles() {
-
-        this.setState({ isProcessing: true });
-
-        var titleIds = this.props.data;
-
-        let searchPromise = searchByTitleIds(titleIds);
-
-        searchPromise.then(message => {
-            this.setState({ titles: message, isProcessing: false });
-        })
-        searchPromise.catch(error => {
-            console.error(error);
-            this.setState({ titles: [], isProcessing: false });
-        });
-    }
+    }    
 
     componentDidMount() {
         this.setState({
@@ -43,7 +23,7 @@ class TitleNameOverlay extends React.Component {
         });
 
         if (this.props.data.length > 0)
-            this.fetchAndUpdateTitles();
+            this.fetchAndUpdateTitles(this.props.data);
     }
 
 
@@ -51,7 +31,9 @@ class TitleNameOverlay extends React.Component {
     ///<summary>
     /// update the state when  titles are added  or removed with new properties
     ///</summary>
-    fetchAndUpdateTitleswithNextProps(titleIds) {
+    fetchAndUpdateTitles(titleIds) {
+        this.setState({ titles: [], isProcessing: true });
+
         let searchPromise = searchByTitleIds(titleIds);
 
         searchPromise.then(message => {
@@ -70,12 +52,12 @@ class TitleNameOverlay extends React.Component {
 
         if (nextProps.data.length != this.props.data.length) {
             this.setState({ titlesIds: nextProps.data });
-            this.fetchAndUpdateTitleswithNextProps(nextProps.data);
+            this.fetchAndUpdateTitles(nextProps.data);
         } else {
             for (var i = 0; i < this.props.data.length; i++) {
                 if (nextProps.data[i] != this.props.data[i]) { // if titleIds are not same . then update the titles
                     this.setState({ titlesIds: nextProps.data });
-                    this.fetchAndUpdateTitleswithNextProps(nextProps.data);
+                    this.fetchAndUpdateTitles(nextProps.data);
                     return false;
                 }
             }
@@ -84,7 +66,6 @@ class TitleNameOverlay extends React.Component {
 
 
     render() {
-
         var titleNames = [];
         var sortedTitleRows = [];
         var titleText = "";
@@ -108,7 +89,7 @@ class TitleNameOverlay extends React.Component {
             </Popover>
         );
 
-        if (this.state.isProcessing) {
+        if (this.state.isProcessing) {       
             return <div>Loading...</div>
         }
         else if (this.state.titles.length == 0) {
