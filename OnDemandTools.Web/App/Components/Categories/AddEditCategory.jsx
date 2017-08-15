@@ -191,12 +191,12 @@ class AddEditCategory extends React.Component {
 
         var model = this.state.categoryDetails;
         model.name = event.target.value;
-        model.name = model.name.trimLeft();
+        model.name =model.name.replace(/\s+/g, " ").trimLeft();
 
         this.setState({
             categoryDetails: model
         });
-
+     
         this.validateForm();
     }
 
