@@ -10,6 +10,7 @@ import RemoveCategoryModal from 'Components/Categories/RemoveCategoryModal';
 import { getNewCategory } from 'Actions/Category/CategoryActions';
 import TextButtons from 'Components/Common/TextButtons';
 import * as categoryActions from 'Actions/Category/CategoryActions';
+import TextOverlay from 'Components/Common/TextOverlay';
 
 
 @connect((store) => {
@@ -113,9 +114,7 @@ class CategoryTable extends React.Component {
     }
 
     categoryNameFormat(val, rowData) {
-        return (
-            <p data-toggle="tooltip"> {val}</p>
-        );
+            return <TextOverlay data={val} numberOfChar={60} />;
     }
 
     destinationFormat(val, rowData) {
@@ -129,7 +128,7 @@ class CategoryTable extends React.Component {
                 destinationNames.sort();
               }
 
-        return <TextButtons data={destinationNames} numberOfCharToDisplay={30} title={"Click to view more destinations"} />
+        return <TextButtons data={destinationNames} numberOfCharToDisplay={9} title={"Click to view more destinations"} />
 
     }
 
@@ -152,8 +151,8 @@ class CategoryTable extends React.Component {
         var row;
         row = this.props.ColumnData.map(function (item, index) {
 
-            if (item.label == "Name") {
-                return <TableHeaderColumn width="250px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.categoryNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
+            if (item.label == "Name" ) {
+                return <TableHeaderColumn  width="600px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.categoryNameFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Destinations") {
                 return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.destinationFormat.bind(this)} >{item.label}</TableHeaderColumn>
