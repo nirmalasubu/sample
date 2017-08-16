@@ -152,10 +152,10 @@ class AddEditDistribution extends React.Component {
     validateForm() {
         var name = this.state.currentAiringId.prefix;
         var isNameValid = this.state.currentAiringId.prefix.match("^[a-zA-Z]+$")==null;  //validation to accept only aplhabets
-        var isSequenceEmpty = (this.state.currentAiringId.sequenceNumber == "" || this.state.currentAiringId.sequenceNumber <= 0 || this.state.currentAiringId.sequenceNumber > 99999);
-        var isCurrentEmpty = (this.state.currentAiringId.billingNumberCurrent == "" || this.state.currentAiringId.billingNumberCurrent <= 0 || this.state.currentAiringId.billingNumberCurrent > 99999);
-        var isUpperEmpty = (this.state.currentAiringId.billingNumberUpper == "" || this.state.currentAiringId.billingNumberUpper <= 0 || this.state.currentAiringId.billingNumberUpper > 99999);
-        var isLowerEmpty = (this.state.currentAiringId.billingNumberLower == "" || this.state.currentAiringId.billingNumberLower <= 0 || this.state.currentAiringId.billingNumberLower > 99999);
+        var isSequenceEmpty = (this.state.currentAiringId.sequenceNumber.toString().indexOf(".")!=-1 || this.state.currentAiringId.sequenceNumber == "" || this.state.currentAiringId.sequenceNumber <= 0 || this.state.currentAiringId.sequenceNumber > 99999);
+        var isCurrentEmpty = (this.state.currentAiringId.billingNumberCurrent.toString().indexOf(".")!=-1 || this.state.currentAiringId.billingNumberCurrent == "" || this.state.currentAiringId.billingNumberCurrent <= 0 || this.state.currentAiringId.billingNumberCurrent > 99999);
+        var isUpperEmpty = (this.state.currentAiringId.billingNumberUpper.toString().indexOf(".")!=-1 || this.state.currentAiringId.billingNumberUpper == "" || this.state.currentAiringId.billingNumberUpper <= 0 || this.state.currentAiringId.billingNumberUpper > 99999);
+        var isLowerEmpty = (this.state.currentAiringId.billingNumberLower.toString().indexOf(".")!=-1 || this.state.currentAiringId.billingNumberLower == "" || this.state.currentAiringId.billingNumberLower <= 0 || this.state.currentAiringId.billingNumberLower > 99999);
 
         this.setState({
             validationStateCode: (isNameValid || (name.length <= 3 || name.length > 4))  ? 'error' : null,
