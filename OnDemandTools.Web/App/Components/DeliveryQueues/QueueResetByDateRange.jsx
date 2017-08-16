@@ -239,14 +239,14 @@ class QueueResetByDateRange extends React.Component {
                                                 <span data-toggle="tooltip" data-placement="right" title="Click to view the Mongo query syntax official documentation." class="glyphicon glyphicon-info-sign"></span>
                                             </a>
                                             &nbsp;&nbsp;
-                                        <span>{this.state.validationQueryState != '' ? "Please provide valid query criteria" : ""}</span>
+                                        <span>{this.state.validationQueryState != null ? "Please provide valid query criteria" : ""}</span>
                                         </ControlLabel>
                                         <FormControl bsClass="form-control form-control-modal" onChange={this.onQueryChange.bind(this)} value={(this.state.deliverCriteria.query === "initialstage" ? this.state.queryValue : this.state.deliverCriteria.query)} componentClass="textarea" />
                                     </FormGroup>
                                 </Col>
                                 <Col md={4}>
                                     <ControlLabel>
-                                        <Button disabled={this.state.validationQueryState != ''} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query Criteria</Button>
+                                        <Button disabled={this.state.validationQueryState != null} class="btn-link noPadding" onClick={(event) => this.syntaxChecker(event)}>Validate Query Criteria</Button>
                                     </ControlLabel>
                                     <FormGroup controlId="queryResults">
                                         <FormControl bsClass="form-control form-control-modal" componentClass="textarea" value={this.state.syntaxCheckerResults} placeholder="Results" />
