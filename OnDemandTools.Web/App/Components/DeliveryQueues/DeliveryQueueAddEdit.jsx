@@ -213,7 +213,7 @@ class DeliveryQueueAddEdit extends React.Component {
     handleFriendlyNameChange(event) {
         var model = this.state.queueModel;
         model.friendlyName = event.target.value;
-        model.friendlyName = model.friendlyName.trimLeft();
+        model.friendlyName = model.friendlyName.replace(/\s+/g, " ").trimLeft(); 
         this.setState({ queueModel: model });
         this.validateForm();
     }
