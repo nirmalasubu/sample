@@ -75,14 +75,14 @@ class AddEditDistribution extends React.Component {
         if(this.props.data.airingIdDetails.id != null)
         {
             url = this.state.postUrl;
-            url = "POST : " + this.props.config.portalSettings.environmentUrl + "/api/v1/airingId/generate/" + this.props.data.airingIdDetails.prefix;
+            url = "GET : " + this.props.config.portalSettings.odtApiUrl + "/v1/airingId/generate/" + this.props.data.airingIdDetails.prefix;
         }
 
         this.setState({
             isProcessing: false,
             currentAiringId: this.props.data.airingIdDetails,
             postUrl: url,
-            urlDomain: "POST : " + this.props.config.portalSettings.environmentUrl + "/api/v1/airingId/generate/",
+            urlDomain: "GET : " + this.props.config.portalSettings.odtApiUrl + "/v1/airingId/generate/",
             airingIdUnModifiedData: jQuery.extend(true, {}, this.props.data.airingIdDetails)
         });
     }

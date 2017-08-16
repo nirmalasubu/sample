@@ -39,7 +39,7 @@ namespace OnDemandTools.Common.Configuration
 
         public string TitleSearchApiUrl { get; set; }
 
-        public string EnvironmentUrl { get; set; }
+        public string OdtApiUrl { get; set; }
     }
 
     public class CloudQueue
