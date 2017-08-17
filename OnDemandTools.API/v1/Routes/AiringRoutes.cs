@@ -401,7 +401,22 @@ namespace OnDemandTools.API.v1.Routes
                         request.AiringId = currentAiringId.AiringId;
                     }
                     else
-                        currentAiringId = airingIdSvc.GetByPrefix((string)_.prefix);
+                    {
+                        var assetDetails = airingSvc.GetBy(request.AiringId);
+                        if (assetDetails.SequenceNumber != 0)
+                        {
+                            currentAiringId = new CurrentAiringId
+                            {
+                                SequenceNumber = assetDetails.SequenceNumber,
+                                BillingNumber = new BillingNumber
+                                {
+                                    Current = assetDetails.BillingNumber.Current,
+                                    Lower = assetDetails.BillingNumber.Lower,
+                                    Upper = assetDetails.BillingNumber.Upper
+                                }
+                            };
+                        }
+                    }
 
                     // Translate data contract to airing business model
                     var airing = Mapper.Map<BLAiringModel.Airing>(request);
@@ -428,10 +443,16 @@ namespace OnDemandTools.API.v1.Routes
                     // Now that the validation is succesful, proceed to
                     // persisting the data. But first, populate remaining
                     // properties for the airing business model.
-                    airing.SequenceNumber = currentAiringId.SequenceNumber;
-                    airing.BillingNumber.Lower = currentAiringId.BillingNumber.Lower;
-                    airing.BillingNumber.Current = currentAiringId.BillingNumber.Current;
-                    airing.BillingNumber.Upper = currentAiringId.BillingNumber.Upper;
+                    if (currentAiringId != null)
+                    {
+                        airing.SequenceNumber = currentAiringId.SequenceNumber;
+                        airing.BillingNumber.Lower = currentAiringId.BillingNumber.Lower;
+                        airing.BillingNumber.Current = currentAiringId.BillingNumber.Current;
+                        airing.BillingNumber.Upper = currentAiringId.BillingNumber.Upper;
+                    }
+                    else
+                        airing.BillingNumber = null;
+
                     airing.ReleaseOn = DateTime.UtcNow;
                     airing.UserName = user.UserName; //Get the username
 
