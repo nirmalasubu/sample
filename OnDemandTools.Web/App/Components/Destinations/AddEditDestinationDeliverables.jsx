@@ -231,7 +231,7 @@ class AddEditDestinationDeliverables extends React.Component {
     return (
       <div>
         <div>
-          <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDeliverable(event)}>
+          <button class="btn-link pull-right addMarginRight" title="Add New Deliverable" onClick={(event) => this.addNewDeliverable(event)}>
             <i class="fa fa-plus-square fa-2x"></i>
             <span class="addVertialAlign"> New Deliverable</span>
           </button>
