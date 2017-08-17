@@ -116,24 +116,22 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
             if (!titleIds.Any())
                 return new List<Airing>().AsQueryable();
 
-            var titleIdsQuery = new List<IMongoQuery>();
-
+            List<IMongoQuery> lstTitleIdsorRelatedTitleIdsQuery = new List<IMongoQuery>();
             foreach (var titleId in titleIds)
             {
-                var document = new BsonDocument();
-
-                document.Add("Authority", "Turner");
-                document.Add("Value", titleId.ToString());
-
                 var titleIdQuery = Query.ElemMatch("Title.TitleIds", Query.And(
-                    Query.EQ("Authority", "Turner"),
-                    Query.EQ("Value", titleId.ToString())));
+                                   Query.EQ("Authority", "Turner"),
+                                   Query.EQ("Value", titleId.ToString())));
 
-                titleIdsQuery.Add(titleIdQuery);
+                var relatedTitleIdQuery = Query.ElemMatch("Title.RelatedTitleIds", Query.And(
+                                          Query.EQ("Authority", "Turner"),
+                                          Query.EQ("Value", titleId.ToString())));
+
+                var titleIdOrRelatedTitleIdQuery = Query.And(Query.Or(titleIdQuery, relatedTitleIdQuery));   //given titleId should exists either in TitleIds or RelatedTitleIds array
+                lstTitleIdsorRelatedTitleIdsQuery.Add(titleIdOrRelatedTitleIdQuery);
             }
 
-            var query = Query.And(
-                   Query.Or(titleIdsQuery),
+            var query = Query.And(Query.Or(lstTitleIdsorRelatedTitleIdsQuery),
                    Query.In("DeliveredTo", new BsonArray(queueNames)),
                    Query.GTE("Flights.End", cutOffDateTime.ToUniversalTime()));
 
