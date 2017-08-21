@@ -1,7 +1,6 @@
-﻿using MongoDB.Bson;
-using System;
+﻿using System;
 
-namespace OnDemandTools.DAL.Modules.UserPermissions.Model
+namespace OnDemandTools.Web.Models.UserPermissions
 {
     public class UserPermission
     {
@@ -10,7 +9,7 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Model
             UserName = "";
         }
 
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

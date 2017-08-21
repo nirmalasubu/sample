@@ -7,8 +7,8 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Model
     {
         public Portal()
         {
-            Modules = new Dictionary<string, Permission>();
-            DeliveryQueue = new Dictionary<string, Permission>();
+            ModulePermissions = new Dictionary<string, Permission>();
+            DeliveryQueuePermissions = new Dictionary<string, Permission>();
         }
 
         public bool IsAdmin { get; set; }
@@ -17,8 +17,8 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 
         public DateTime LastLoginTime { get; set; }
 
-        public Dictionary<string, Permission> Modules { get; set; }
+        public Dictionary<string, Permission> ModulePermissions { get; set; }
 
-        public Dictionary<string, Permission> DeliveryQueue { get; set; }
+        public Dictionary<string, Permission> DeliveryQueuePermissions { get; set; }
     }
 }

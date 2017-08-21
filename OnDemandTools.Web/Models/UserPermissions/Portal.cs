@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnDemandTools.Business.Modules.UserPermissions.Model
+namespace OnDemandTools.Web.Models.UserPermissions
 {
     public class Portal
     {
