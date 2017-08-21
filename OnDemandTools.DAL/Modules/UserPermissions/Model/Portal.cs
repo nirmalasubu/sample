@@ -1,17 +1,14 @@
-﻿using MongoDB.Bson;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace OnDemandTools.DAL.UserPermissions.Model
+namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 {
     public class Portal
     {
         public Portal()
         {
             Modules = new Dictionary<string, Permission>();
-            DeliveryQueue = new Dictionary<ObjectId, Permission>();
+            DeliveryQueue = new Dictionary<string, Permission>();
         }
 
         public bool IsAdmin { get; set; }
@@ -22,6 +19,6 @@ namespace OnDemandTools.DAL.UserPermissions.Model
 
         public Dictionary<string, Permission> Modules { get; set; }
 
-        public Dictionary<ObjectId, Permission> DeliveryQueue { get; set; }
+        public Dictionary<string, Permission> DeliveryQueue { get; set; }
     }
 }
