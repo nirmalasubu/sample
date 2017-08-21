@@ -21,11 +21,10 @@ namespace OnDemandTools.DAL.UserPermissions.Model
         public string Notes { get; set; }
 
         public UserType UserType { get; set; }
-
         public Api Api { get; set; }
         public Portal Portal { get; set; }
 
-        public DateTime ActivateDateTime { get; set; }
+        public DateTime ActiveDateTime { get; set; }
        
         public string CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }

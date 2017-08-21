@@ -16,6 +16,8 @@ namespace OnDemandTools.DAL.UserPermissions.Model
 
         public bool IsAdmin { get; set; }
 
+        public bool IsActive { get; set; }
+
         public DateTime LastLoginTime { get; set; }
 
         public Dictionary<string, Permission> Modules { get; set; }

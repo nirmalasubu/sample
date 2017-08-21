@@ -16,6 +16,9 @@ namespace OnDemandTools.DAL.UserPermissions.Model
         }
 
         public bool IsMasterApiUser { get; set; }
+
+        public bool IsActive { get; set; }
+
         public Guid ApiKey { get; set; }
 
         public DateTime LastAccessTime { get; set; }
