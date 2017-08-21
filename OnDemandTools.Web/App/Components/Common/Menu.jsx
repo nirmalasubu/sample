@@ -37,8 +37,8 @@ class Menu extends React.Component {
           <NavItem eventKey={"airingIds"}>ID Distribution</NavItem>
           <NavItem eventKey={"pathTranslations"}>Path Translations</NavItem>          
           <NavDropdown title="Access Management" id="nav-dropdown">
-            <MenuItem eventKey={"permissions"}>User</MenuItem>
-            <MenuItem eventKey="4.2">System</MenuItem>
+            <MenuItem eventKey={"userManagement"}>User</MenuItem>
+            <MenuItem eventKey={"systemManagement"}>System</MenuItem>
           </NavDropdown>
         </Nav>
       </div>

@@ -4,13 +4,14 @@ import Home from 'Components/Home/HomePage';
 import DestinationPage from 'Components/Destinations/DestinationsPage';
 import Products from 'Components/Products/ProductsPage';
 import DeliveryQueues from 'Components/DeliveryQueues/DeliveryQueuesPage';
-import Permissions from 'Components/Permissions/PermissionsPage';
+import UserPermissions from 'Components/Permissions/UserPermissionsPage';
+import SystemPermissions from 'Components/Permissions/SystemPermissionsPage';
 import PendingRequests from 'Components/PendingRequests/PendingRequestsPage';
 import ContentTiers from 'Components/ContentTiers/ContentTiersPage';
 import WorkflowStatuses from 'Components/WorkflowStatus/WorkflowStatusesPage';
 import CategoriesPage from 'Components/Categories/CategoriesPage';
 import airingIds from 'Components/IDDistribution/DistributionPage';
-import PathTranslations from 'Components/PathTranslations/PathTranslationPage'; 
+import PathTranslations from 'Components/PathTranslations/PathTranslationPage';
 import App from 'Components/App';
 
 
@@ -23,12 +24,13 @@ export default (
       <Route path="categories" component={CategoriesPage}></Route>
       <Route path="products" component={Products}></Route>
       <Route path="deliveryQueues" component={DeliveryQueues}></Route>
-      <Route path="permissions" component={Permissions}></Route>
       <Route path="pendingRequests" component={PendingRequests}></Route>
       <Route path="contentTiers" component={ContentTiers}></Route>
       <Route path="workflowStatuses" component={WorkflowStatuses}></Route>
       <Route path="airingIds" component={airingIds}></Route>
       <Route path="pathTranslations" component={PathTranslations}></Route>
+      <Route path="userManagement" component={UserPermissions}></Route>
+      <Route path="systemManagement" component={SystemPermissions}></Route>
     </Route>
   </Router>
 )

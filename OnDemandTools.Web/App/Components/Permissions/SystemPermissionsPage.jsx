@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import PageHeader from 'Components/Common/PageHeader';
-import PermissionsTable from 'Components/Permissions/PermissionsTable';
+import PermissionsTable from 'Components/Permissions/UserPermissionsTable';
 
 @connect((store) => {
     ///<summary>
@@ -16,7 +16,7 @@ import PermissionsTable from 'Components/Permissions/PermissionsTable';
         filteredPermissions: store.permissions
     };
 })
-class PermissionsPage extends React.Component {
+class SystemPermissionsPage extends React.Component {
 
     constructor(props) {
 
@@ -56,14 +56,14 @@ class PermissionsPage extends React.Component {
     componentDidMount() {
         this.props.dispatch(permissionActions.fetchPermissionRecords());
 
-        document.title = "ODT - User Management";
+        document.title = "ODT - System Management";
 
     }
 
     render() {
         return (
             <div>
-                <PageHeader pageName="User Management" />
+                <PageHeader pageName="System Management" />
                 <PermissionsTable RowData={this.props.filteredPermissions} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
@@ -87,7 +87,7 @@ const matchDescription = (objdescription, description) => {
 
     return objdescription.toLowerCase().indexOf(description) != -1;
 };
-export default PermissionsPage
+export default SystemPermissionsPage
 
 
 

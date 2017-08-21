@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
-class PermissionTable extends React.Component {
+class UserPermissionTable extends React.Component {
 
     ///<summary>
     /// Define default component state information. This will
@@ -141,4 +141,4 @@ class PermissionTable extends React.Component {
 
 }
 
-export default PermissionTable;
+export default UserPermissionTable;
