@@ -444,7 +444,10 @@ namespace OnDemandTools.Business.Modules.Airing
                 {
                     airing.MediaId = String.Empty;
                 }
-                var files = fileQueryHelper.Get(airing.AiringId).ToList();
+
+                var titleIds = ExtractTitleAndSeriesIdsFrom(airing);
+                var versionIds = ExtractVersionIdsFrom(airing);
+                var files = fileQueryHelper.GetBy(versionIds, titleIds, airing.AiringId, airing.MediaId).ToList();
 
                 if (!files.IsNullOrEmpty())
                 {
