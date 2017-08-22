@@ -52,7 +52,7 @@ namespace OnDemandTools.Business.Modules.AiringId
 
         public virtual CurrentAiringId Create(string prefix)
         {
-            if (!Regex.IsMatch(prefix, "^[A-Z]{4}?"))
+            if (!Regex.IsMatch(prefix, "(^[A-Z]{4}?)$"))
                 throw new ArgumentException("must be four capital letters only", "prefix");
 
             if (getAiringIdQuery.Get(prefix) != null)
@@ -65,7 +65,7 @@ namespace OnDemandTools.Business.Modules.AiringId
 
         public virtual CurrentAiringId Create(string prefix, int nextFiveDigitNumber)
         {
-            if (!Regex.IsMatch(prefix, "^[A-Z]{4}?"))
+            if (!Regex.IsMatch(prefix, "(^[A-Z]{4}?)$"))
                 throw new ArgumentException("must be four capital letters only", "prefix");
 
             if (nextFiveDigitNumber > 99999 || nextFiveDigitNumber < 1)
