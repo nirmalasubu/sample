@@ -27,7 +27,8 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public IEnumerable<UserPermission> Get()
         {
-            return _service.GetAll(UserType.Portal).ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
+            return _service.GetAll(UserType.Portal).OrderBy(e => e.UserName).ToList()
+            .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
         }
 
         // GET api/values/5
@@ -35,6 +36,6 @@ namespace OnDemandTools.Web.Controllers
         public string Get(int id)
         {
             return "value";
-        }       
+        }
     }
 }

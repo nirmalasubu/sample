@@ -11,7 +11,7 @@ import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
 import { ContentTierReducer, FilterContentTierDataReducer } from 'Reducers/ContentTier/ContentTierReducer';
 import { CurrentAiringIdReducer,FilterAiringIdDataReducer } from 'Reducers/CurrentAiringId/CurrentAiringIdReducer';
 import { PathTranslationReducer } from 'Reducers/PathTranslation/PathTranslationReducer';
-import { PermissionReducer } from 'Reducers/Permission/PermissionReducer';
+import { PermissionReducer,FilterPermissionDataReducer } from 'Reducers/Permission/PermissionReducer';
 
 export default combineReducers({
     queues: DeliveryQueueReducer,
@@ -37,6 +37,7 @@ export default combineReducers({
     pathTranslationModel: PathTranslationReducer,
     pathTranslationRecords: PathTranslationReducer,
     permissions: PermissionReducer,
+    filterPermission: FilterPermissionDataReducer,
     applicationError: ApplicationErrorReducer,
 
     // More reducers if there are

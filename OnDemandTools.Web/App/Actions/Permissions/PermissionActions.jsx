@@ -16,7 +16,7 @@ export const fetchPermissionComplete = (permissionRecords) => {
 };
 
 
-export const filterPermissionSuccess= (filterPermissions) => {
+export const filterPermissionSuccess= (filterPermissions) => {    
     return {
         type: actionTypes.FILTER_PERMISSION_SUCCESS,
         filterPermissions

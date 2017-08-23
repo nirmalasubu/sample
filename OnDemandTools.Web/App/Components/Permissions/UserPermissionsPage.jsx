@@ -4,16 +4,17 @@ import { connect } from 'react-redux';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import PageHeader from 'Components/Common/PageHeader';
 import PermissionsTable from 'Components/Permissions/UserPermissionsTable';
+import PermissionsFilter from 'Components/Permissions/UserPermissionsFilter';
 
 @connect((store) => {
     ///<summary>
     /// Retrieve filtered list of permission based on filterValue like permission name, description and destination
     /// which are defined in Redux store
     ///</summary>
-    var filteredPermissionValues = getFilterVal(store.permissions, store.filterPermissions);
+    var filteredValues = getFilterVal(store.permissions, store.filterPermission);
     return {
         permissions: store.permissions,
-        filteredPermissions: store.permissions
+        filteredPermissions: filteredValues == undefined ? store.permissions : filteredValues
     };
 })
 class UserPermissionsPage extends React.Component {
@@ -26,8 +27,8 @@ class UserPermissionsPage extends React.Component {
             permission: [],
             filterValue: {
                 name: "",
-                description: "",
-                user: ""
+                userId: "",
+                includeInactive: false
             },
 
             columns: [{ "label": "User Id", "dataField": "userName", "sort": true },
@@ -39,23 +40,40 @@ class UserPermissionsPage extends React.Component {
             keyField: "userName"
         }
     }
+
     ///<summary>
     ///callback function to get the filter value from filter component
     ///</summary>
-    handleFilterUpdate(filtersValue, type) {
+    handleFilterUpdate(filterValue, type) {
 
         var stateFilterValue = this.state.filterValue;
+
+        switch (type) {
+            case "Name":
+                stateFilterValue.name = filterValue;
+                break;
+            case "UserId":
+                stateFilterValue.userId = filterValue;
+                break;
+            case "IncludeInactive":
+                stateFilterValue.includeInactive = filterValue;
+                break;
+            case "Clear":
+                stateFilterValue.name = "";
+                stateFilterValue.userId = "";
+                stateFilterValue.includeInactive = false;
+                break;
+        }
 
         this.setState({
             filterValue: stateFilterValue
         });
-        this.props.dispatch(permissionActions.filterPermissionSuccess(this.state.filterValue));
+        this.props.dispatch(permissionActions.filterPermissionSuccess(stateFilterValue));
 
     }
 
     componentDidMount() {
         this.props.dispatch(permissionActions.fetchPermissionRecords());
-
         document.title = "ODT - User Management";
 
     }
@@ -64,6 +82,7 @@ class UserPermissionsPage extends React.Component {
         return (
             <div>
                 <PageHeader pageName="User Management" />
+                <PermissionsFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <PermissionsTable RowData={this.props.filteredPermissions} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
@@ -74,19 +93,20 @@ class UserPermissionsPage extends React.Component {
 // based on user provided filter criteria and return the refined 'permission' list.
 // If no filter criteria is provided then return the full 'permission' list
 const getFilterVal = (permissions, filterVal) => {
+    if (filterVal.name != undefined) {
+
+        var filteredRows = permissions;
+
+        if (filterVal.name != '') {
+            filteredRows = filteredRows.filter(obj => obj.userName.toLowerCase().indexOf(filterVal.name.toLowerCase() > -1));
+        }
+
+        return filteredRows;
+
+    }
     return permissions;
 };
 
-///<summary>
-// returns  true  if any of the search value matches description 
-///</summary>
-const matchDescription = (objdescription, description) => {
-
-    if (objdescription == null) // skip the null description values 
-        return false;
-
-    return objdescription.toLowerCase().indexOf(description) != -1;
-};
 export default UserPermissionsPage
 
 
