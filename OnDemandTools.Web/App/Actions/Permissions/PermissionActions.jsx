@@ -15,14 +15,6 @@ export const fetchPermissionComplete = (permissionRecords) => {
     }
 };
 
-
-export const filterPermissionSuccess= (filterPermissions) => {    
-    return {
-        type: actionTypes.FILTER_PERMISSION_SUCCESS,
-        filterPermissions
-    }
-};
-
 /// <summary>
 /// Invoke 'SAVE_PERMISSION_SUCCESS' action
 /// which will be handled by the appropriate reducer

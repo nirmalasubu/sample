@@ -7,14 +7,8 @@ import PermissionsTable from 'Components/Permissions/UserPermissionsTable';
 import PermissionsFilter from 'Components/Permissions/UserPermissionsFilter';
 
 @connect((store) => {
-    ///<summary>
-    /// Retrieve filtered list of permission based on filterValue like permission name, description and destination
-    /// which are defined in Redux store
-    ///</summary>
-    var filteredValues = getFilterVal(store.permissions, store.filterPermission);
     return {
-        permissions: store.permissions,
-        filteredPermissions: filteredValues == undefined ? store.permissions : filteredValues
+        permissions: store.permissions
     };
 })
 class UserPermissionsPage extends React.Component {
@@ -68,8 +62,6 @@ class UserPermissionsPage extends React.Component {
         this.setState({
             filterValue: stateFilterValue
         });
-        this.props.dispatch(permissionActions.filterPermissionSuccess(stateFilterValue));
-
     }
 
     componentDidMount() {
@@ -78,34 +70,55 @@ class UserPermissionsPage extends React.Component {
 
     }
 
+    // The goal of this function is to filter 'permission' (which is stored in Redux store)
+    // based on user provided filter criteria and return the refined 'permission' list.
+    // If no filter criteria is provided then return the full 'permission' list
+    applyFilter(permissions, filter) {
+        if (filter.name != undefined) {
+            var filteredPermissions = permissions;
+
+            if (filter.includeInactive == false) {
+                filteredPermissions = filteredPermissions.filter(function (permission) {
+                    return permission.portal.isActive
+                });
+            }
+
+            var name = filter.name.toLowerCase();
+
+            if (name != "") {
+                filteredPermissions = filteredPermissions.filter(function (permission) {
+                    return permission.firstName.toLowerCase().indexOf(name) > -1 ||
+                        permission.lastName.toLowerCase().indexOf(name) > -1
+                });
+            }
+
+
+            var userId = filter.userId.toLowerCase();
+
+            if (userId != "") {
+                filteredPermissions = filteredPermissions.filter(function (permission) {
+                    return permission.userName.toLowerCase().indexOf(userId) > -1
+                });
+            }
+
+            return filteredPermissions;
+
+        }
+        return permissions;
+    }
+
     render() {
+        var filteredRows = this.applyFilter(this.props.permissions, this.state.filterValue);
+
         return (
             <div>
                 <PageHeader pageName="User Management" />
                 <PermissionsFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <PermissionsTable RowData={this.props.filteredPermissions} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <PermissionsTable RowData={filteredRows} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }
 }
-
-// The goal of this function is to filter 'permission' (which is stored in Redux store)
-// based on user provided filter criteria and return the refined 'permission' list.
-// If no filter criteria is provided then return the full 'permission' list
-const getFilterVal = (permissions, filterVal) => {
-    if (filterVal.name != undefined) {
-
-        var filteredRows = permissions;
-
-        if (filterVal.name != '') {
-            filteredRows = filteredRows.filter(obj => obj.userName.toLowerCase().indexOf(filterVal.name.toLowerCase() > -1));
-        }
-
-        return filteredRows;
-
-    }
-    return permissions;
-};
 
 export default UserPermissionsPage
 

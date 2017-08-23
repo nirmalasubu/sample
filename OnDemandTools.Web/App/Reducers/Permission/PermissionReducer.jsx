@@ -14,12 +14,3 @@ export const PermissionReducer = (state = [], action) => {
             return state;
     }
 };
-
-export const FilterPermissionDataReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'FILTER_PERMISSION_SUCCESS':
-            return action.filterPermissions;   // search  criteria for permissions
-        default:
-            return state;
-    }
-};
