@@ -48,7 +48,18 @@ namespace OnDemandTools.DAL.Modules.File.Queries
                 mediaId = airing.MediaId;
             }
 
-            var query = Query.Or(Query.EQ("MediaId", mediaId), Query.EQ("AiringId", airingId));
+            // Extract title and series id's
+            var titleIds = airing.Title.TitleIds
+                .Where(t => t.Authority == "Turner" && t.Value != null)
+                .Select(t => int.Parse(t.Value))
+                .ToList();
+
+            if (airing.Title.Series.Id.HasValue)
+            {
+                titleIds.Add(airing.Title.Series.Id.Value);
+            }
+
+            var query = Query.Or(Query.EQ("MediaId", mediaId), Query.EQ("AiringId", airingId), Query.In("TitleId", new BsonArray(titleIds)));
             return fileCollection.Find(query).Select(c=> {c.AiringId = airingId; return c;}).ToList();
         }
 
