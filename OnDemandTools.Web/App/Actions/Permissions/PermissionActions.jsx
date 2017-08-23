@@ -62,3 +62,13 @@ export const savePermission = (object) => {
     };
 };
 
+export const getNewUserPermission = () => {
+    return Axios.get('/api/userpermission/newuserpermission')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            throw (error);
+        });
+};
+

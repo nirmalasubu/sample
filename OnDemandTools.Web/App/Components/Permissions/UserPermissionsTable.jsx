@@ -4,6 +4,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
+import AddEditUserPermissions from 'Components/Permissions/AddEditUserPermissions';
+import * as permissionActions from 'Actions/Permissions/PermissionActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 class UserPermissionTable extends React.Component {
@@ -111,7 +113,17 @@ class UserPermissionTable extends React.Component {
     }
 
     componentDidMount() {
-
+       
+        let promise = permissionActions.getNewUserPermission();
+        promise.then(response => {
+            this.setState({
+                newPermissionModel: response
+            });
+        }).catch(error => {
+            this.setState({
+                newPermissionModel: {}
+            });
+        });
     }
 
     render() {
@@ -146,6 +158,7 @@ class UserPermissionTable extends React.Component {
                 >
                     {row}
                 </BootstrapTable>
+                 <AddEditUserPermissions data={this.state}  handleClose={this.closeAddEditModel.bind(this)} />
             </div>)
     }
 

@@ -7,6 +7,7 @@ using OnDemandTools.Web.Models.UserPermissions;
 using OnDemandTools.Business.Modules.UserPermissions;
 using OnDemandTools.Common.Model;
 using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -36,6 +37,20 @@ namespace OnDemandTools.Web.Controllers
         public string Get(int id)
         {
             return "value";
+        }
+
+        [Authorize]
+        [HttpGet("newuserpermission")]
+        public UserPermission GetEmptyModel()
+        {
+            return new UserPermission
+            {
+                UserName =string.Empty,
+                FirstName = string.Empty,
+                LastName = string.Empty,
+                PhoneNumber = string.Empty,
+                Notes = string.Empty
+            };
         }
     }
 }
