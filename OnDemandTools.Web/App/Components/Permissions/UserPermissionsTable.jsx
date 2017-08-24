@@ -65,6 +65,11 @@ class UserPermissionTable extends React.Component {
         }
     }
 
+    onActiveCheckboxChange(val, event) {
+        console.log(val);
+        console.log(event.target.checked);
+    }
+
     ///<summary>
     //Format the action column
     ///</summary>
@@ -72,8 +77,13 @@ class UserPermissionTable extends React.Component {
         return (
             <div>
                 <button class="btn-link" title="Edit User" onClick={(event) => this.openAddEditModel(rowData, event)} >
-                    <i class="fa fa-pencil-square-o"></i>
+                    <i class="fa fa-pencil-square-o fa-lg"></i>
                 </button>
+
+                <label class="switch gridSwitch">
+                  <input type="checkbox" checked={rowData.portal.isActive} onChange={(event) => this.onActiveCheckboxChange(rowData, event)} />
+                    <span class="slider round"></span>
+                </label>
             </div>
         );
     }
