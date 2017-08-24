@@ -19,10 +19,10 @@ export const fetchPermissionComplete = (permissionRecords) => {
 /// Invoke 'SAVE_PERMISSION_SUCCESS' action
 /// which will be handled by the appropriate reducer
 /// </summary>
-export const savePermissionComplete = (permissionObj) => {
+export const savePermissionComplete = (permission) => {
     return {
         type: actionTypes.SAVE_PERMISSION_SUCCESS,
-        permissionObj
+        permission
     }
 };
 
