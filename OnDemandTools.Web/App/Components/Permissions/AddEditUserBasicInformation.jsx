@@ -24,7 +24,8 @@ class AddEditUserBasicInformation extends React.Component {
             userBasicInfoModel:"",
             userBasicInfounmodifiedModel:"",
             componentJustMounted: true,
-            isChecked: true
+            isChecked: true,
+            validationStateEmail:null
         });
     }
       
@@ -40,6 +41,7 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id == null) {
             this.setState({ userBasicInfoModel: model, componentJustMounted: true });
         }
+        this.validateForm();
         console.log("componentDidMount userBasicInfoModel :"+JSON.stringify(this.state.userBasicInfoModel));
     }
 
@@ -78,12 +80,43 @@ class AddEditUserBasicInformation extends React.Component {
                                 </FormGroup>);
         }
     }
+
     activeStatusChange()
     {
+        var model = this.state.userBasicInfoModel;
+        model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
+
         this.setState({
-            isChecked: !this.state.isChecked // flip boolean value
+            userBasicInfoModel: model
         });
-        
+    }
+
+    isAdminChange()
+    {
+        var model = this.state.userBasicInfoModel;
+        model.portal.isAdmin = !this.state.userBasicInfoModel.portal.isAdmin;
+
+        this.setState({
+            userBasicInfoModel: model
+        });
+    }
+
+    handleTextChange(event) {
+        var username=event.target.value;
+
+        var model = this.state.userBasicInfoModel;
+        model.name =  username;
+        this.setState({
+            userBasicInfoModel: model
+        });
+        this.validateForm();
+        //this.props.updateDestination(this.state.destinationModel);
+    }
+
+    validateForm() {
+        var email = this.state.userBasicInfoModel.userName;
+        this.setState({
+            validationStateEmail: (email != "" && validator.isEmail(email)) ? null : 'error'});
     }
 
     render() {
@@ -93,9 +126,10 @@ class AddEditUserBasicInformation extends React.Component {
                     <Row>
                         <Form>
                             <Col sm={4}>
-                                <FormGroup controlId="userId">
+                                <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                    <FormControl type="text" value= {this.state.userBasicInfoModel.name} ref="inputUserId" placeholder="Enter email for valid user id" />
+                                    <FormControl type="text"  
+                                    onChange={this.handleTextChange.bind(this)} placeholder="Enter email for valid user id"   value={this.state.userBasicInfoModel.userName}/>
                                 </FormGroup>
                             </Col>
                             <Col sm={4}>
@@ -109,7 +143,7 @@ class AddEditUserBasicInformation extends React.Component {
                                 <ControlLabel>Active Status</ControlLabel>
                                 <div>
                                     <label class="switch">
-                                        <input type="checkbox"  value= {this.state.userBasicInfoModel.isChecked}  onChange={(event) => this.activeStatusChange()} />
+                                        <input type="checkbox"  checked= {this.state.userBasicInfoModel.portal.isActive}  onChange={(event) => this.activeStatusChange()} />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
@@ -120,7 +154,7 @@ class AddEditUserBasicInformation extends React.Component {
                                 <ControlLabel>Admin</ControlLabel>
                                 <div>
                                     <label class="switch">
-                                        <input type="checkbox"    onChange={(event) => this.isAdminChange()} />
+                                        <input type="checkbox"   checked= {this.state.userBasicInfoModel.portal.isAdmin}  onChange={(event) => this.isAdminChange()} />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
