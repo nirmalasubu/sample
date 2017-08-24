@@ -12,7 +12,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import * as statusActions from 'Actions/Status/StatusActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
-
+import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPersonalInformation';
+import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
 @connect((store) => {
     return {
 
@@ -33,9 +34,9 @@ class AddEditUserPermissions extends React.Component {
             showWarningModel: false,
             showError: false,
             validationStateUniqueName: null,
-            validateStatusName:null,
-            validateUser:null,
-            validateUniqueStatusName:null
+            validateStatusName: null,
+            validateUser: null,
+            validateUniqueStatusName: null
         });
     }
 
@@ -69,7 +70,7 @@ class AddEditUserPermissions extends React.Component {
             isProcessing: false,
             permission: this.props.data.permission,
             permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permissions)
-          
+
         });
 
     }
@@ -87,48 +88,48 @@ class AddEditUserPermissions extends React.Component {
     handleAddEditClose() {
         this.props.handleClose();
     }
-    
+
     /// <summary>
     /// Updating the user/description/name in the state on change of text
     /// </summary>
-    handleTextChange(value,event) {
+    handleTextChange(value, event) {
 
-      
+
     }
 
-    
-    
+
+
     /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-       
+
     }
 
     /// <summary>
     /// This function is to set validations states value
     /// </summary>
     validateForm() {
-      
+
     }
 
     /// <summary>
     /// To validate the status name is unique
     /// </summary>
     isStatusNameUnique(status) {
-       
+
     }
 
     /// <summary>
     /// To Save the status details
     /// </summary>
     handleSave() {
-       
+
     }
-    
+
     componentDidMount() {
-       // console.log(JSON.stringify(this.props.data));
-      
+        // console.log(JSON.stringify(this.props.data));
+
     }
 
     render() {
@@ -140,81 +141,50 @@ class AddEditUserPermissions extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                      <div>{this.props.data.permission != null ? "Edit Status -" + this.state.permissionsUnModifiedData.userName : "Add User"}</div>
+                        <div>{this.props.data.permission != null ? "Edit User" : "Add User"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div class="panel panel-default">
-                       <div class="panel-body">
-                        {msg}
-                         <Grid >
-                         <Row>
-                          <Form> 
-                    <Col sm={4}>
-                    <FormGroup controlId="UserId">
-                    <ControlLabel>User ID:</ControlLabel>
-                    <FormControl type="text"  value={this.state.permission.userName}  ref="inputUserId" placeholder="Enter email for valid user id" />
-                    </FormGroup>
-                   </Col>
-                   <Col sm={4}>
-                   <FormGroup controlId="ActiveDate" >
-                    <ControlLabel>Active Date:</ControlLabel>
-                    <FormControl type="text"  value={this.state.permission.createdDateTime}  />
-                    </FormGroup>
-                     </Col>
-                         </Form >
-                        </Row>
-                         <Row>
-                              <Col sm={2}>
-                         <FormGroup controlId="ActiveStatus" >
-                    <ControlLabel>Active Status:</ControlLabel>
-                    <div>
-                    <label class="switch">
-                    <input type="checkbox" />
-                    <span class="slider round"></span>
-                        </label>
+                        <div class="panel-body">
+                            {msg}
+                            <AddEditUserBasicInformation />
+                            <Panel header="Personal information" >
+                                <AddEditUserPersonalInformation />
+                            </Panel>
+                            <Panel header="Permissions" >
+                                <Tabs id="addeditpermission" defaultActiveKey={1} >
+                                    <Tab eventKey={1} title="ODT portal">
+
+                                    </Tab>
+                                    <Tab eventKey={2} title="Delivery Queues">
+
+                                    </Tab>
+                                    <Tab eventKey={3} title="ODT API">
+
+                                    </Tab>
+                                    <Tab eventKey={4} title="Destinations">
+
+                                    </Tab>
+                                    <Tab eventKey={5} title="Brands">
+
+                                    </Tab>
+                                </Tabs>
+                            </Panel>
                         </div>
-                    </FormGroup>
-                    </Col>
-                      <Col sm={2}>
-                     <FormGroup controlId="IsAdmin" >
-                    <ControlLabel>Admin:</ControlLabel>
-                    <div>
-                    <label class="switch">
-                    <input type="checkbox" />
-                    <span class="slider round"></span>
-                        </label>
-                        </div>
-                    </FormGroup>
-                    </Col>
-                     <Col sm={4}>
-                   <FormGroup controlId="lastlogin " >
-                    <ControlLabel>last login:</ControlLabel>
-                    <FormControl type="text"  value={this.state.permission.createdDateTime}  />
-                    </FormGroup>
-                     </Col>
-                        </Row>
-                       </Grid>
-                                           <Panel header="Personal information" >
-                      
-                    </Panel>
-                    <Panel header="Permissions" >
-                      
-                    </Panel>
-                      </div>
-                      </div>
-                        <NotificationContainer />
-                        <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
+                    </div>
+                    <NotificationContainer />
+                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
                     <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                    {this.state.isProcessing ? "Processing" : "Save"}
+                        {this.state.isProcessing ? "Processing" : "Save"}
                     </Button>
                 </Modal.Footer>
             </Modal>
         )
-                    }
-            }
+    }
+}
 
-    export default AddEditUserPermissions
+export default AddEditUserPermissions
