@@ -402,19 +402,27 @@ namespace OnDemandTools.API.v1.Routes
                     }
                     else
                     {
-                        var assetDetails = airingSvc.GetBy(request.AiringId);
-                        if (assetDetails.SequenceNumber != 0)
+                        try
                         {
-                            currentAiringId = new CurrentAiringId
+                            var assetDetails = airingSvc.GetBy(request.AiringId);
+
+                            if (assetDetails.SequenceNumber != 0)
                             {
-                                SequenceNumber = assetDetails.SequenceNumber,
-                                BillingNumber = new BillingNumber
+                                currentAiringId = new CurrentAiringId
                                 {
-                                    Current = assetDetails.BillingNumber.Current,
-                                    Lower = assetDetails.BillingNumber.Lower,
-                                    Upper = assetDetails.BillingNumber.Upper
-                                }
-                            };
+                                    SequenceNumber = assetDetails.SequenceNumber,
+                                    BillingNumber = new BillingNumber
+                                    {
+                                        Current = assetDetails.BillingNumber.Current,
+                                        Lower = assetDetails.BillingNumber.Lower,
+                                        Upper = assetDetails.BillingNumber.Upper
+                                    }
+                                };
+                            }
+                        }
+                        catch(AiringNotFoundException e)
+                        {
+                            logger.Information("Airing released from other systems like turniverse");
                         }
                     }
 
