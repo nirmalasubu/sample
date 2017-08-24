@@ -6,8 +6,14 @@ import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
 import AddEditUserPermissions from 'Components/Permissions/AddEditUserPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
+import UserInactivateModal from 'Components/Permissions/UserInactivateModal';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
+@connect((store) => {
+    return {
+
+    }
+})
 class UserPermissionTable extends React.Component {
 
     ///<summary>
@@ -20,7 +26,8 @@ class UserPermissionTable extends React.Component {
             newPermissionModel: {},
             showModal: false,
             showAddEditModel: false,
-            showDeleteModal: false,
+            showInactiveModal: false,
+            inActiveModal: {},
             permission: "",
             options: {
                 defaultSortName: 'name',
@@ -67,9 +74,22 @@ class UserPermissionTable extends React.Component {
         }
     }
 
-    onActiveCheckboxChange(val, event) {
-        console.log(val);
-        console.log(event.target.checked);
+    onActiveCheckboxChange(rowValue, event) {
+        if (event.target.checked == false) {
+            this.setState({
+                showInactiveModal: true,
+                inActiveModal: rowValue
+            });
+        }
+        else {
+            var model = rowValue;
+            model.portal.isActive = true;
+            this.props.dispatch(permissionActions.savePermission(model));
+        }
+    }
+
+    closeInactivateModal() {
+        this.setState({ showInactiveModal: false })
     }
 
     ///<summary>
@@ -83,7 +103,7 @@ class UserPermissionTable extends React.Component {
                 </button>
 
                 <label class="switch gridSwitch">
-                  <input type="checkbox" checked={rowData.portal.isActive} onChange={(event) => this.onActiveCheckboxChange(rowData, event)} />
+                    <input type="checkbox" checked={rowData.portal.isActive} onChange={(event) => this.onActiveCheckboxChange(rowData, event)} />
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -159,6 +179,7 @@ class UserPermissionTable extends React.Component {
                     {row}
                 </BootstrapTable>
                  <AddEditUserPermissions data={this.state}  handleClose={this.closeAddEditModel.bind(this)} />
+                <UserInactivateModal data={this.state} handleClose={this.closeInactivateModal.bind(this)} />
             </div>)
     }
 
