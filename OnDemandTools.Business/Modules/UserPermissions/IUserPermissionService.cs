@@ -12,5 +12,12 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         /// </summary>
         /// <returns></returns>
         List<Model.UserPermission> GetAll(UserType userType);
+
+        /// <summary>
+        /// Saves User Permission to database
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        Model.UserPermission Save(Model.UserPermission userPermission);
     }
 }

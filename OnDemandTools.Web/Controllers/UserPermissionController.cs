@@ -24,19 +24,30 @@ namespace OnDemandTools.Web.Controllers
             _service = service;
         }
 
-        // GET: api/values
-        [HttpGet]
+
+        [Authorize]
+        [HttpGet]        
         public IEnumerable<UserPermission> Get()
         {
             return _service.GetAll(UserType.Portal).OrderBy(e => e.UserName).ToList()
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
         }
 
-        // GET api/values/5
+
+        [Authorize]
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
+        }
+
+        [Authorize]
+        [HttpPost]
+        public UserPermission Post([FromBody]UserPermission viewModel)
+        {
+            BLModel.UserPermission model = _service.Save(viewModel.ToBusinessModel<UserPermission, BLModel.UserPermission>());
+
+            return model.ToViewModel<BLModel.UserPermission, UserPermission>();
         }
 
         [Authorize]
