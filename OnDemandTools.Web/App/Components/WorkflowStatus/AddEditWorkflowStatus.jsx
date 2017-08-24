@@ -198,13 +198,13 @@ class AddEditWorkflowStatus extends React.Component {
     }
     
     componentDidMount() {
-        //var initialStatus={ "id": null, "name": "", "description":"","user":""};
+        var initialStatus={ "id": null, "name": "", "description":"","user":""};
 
-        ////required to overcome form control warning of categoryName
-        //this.setState({
-        //    status: initialStatus
+        //required to overcome form control warning of categoryName
+        this.setState({
+            status: initialStatus
             
-        //});
+        });
       
     }
 
