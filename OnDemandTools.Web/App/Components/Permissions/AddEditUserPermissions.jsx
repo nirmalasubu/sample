@@ -64,8 +64,7 @@ class AddEditUserPermissions extends React.Component {
     /// <summary>
     /// This function is called on entering the modal pop up
     /// </summary>
-    onOpenModel() {
-        console.log(JSON.stringify(this.props.data));
+    onOpenModel() {        
         this.setState({
             isProcessing: false,
             permission: this.props.data.permission,
@@ -133,6 +132,7 @@ class AddEditUserPermissions extends React.Component {
     }
 
     render() {
+       // console.log("this.state.permission :"+JSON.stringify(this.state.permission));  
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
@@ -141,16 +141,16 @@ class AddEditUserPermissions extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.permission != null ? "Edit User" : "Add User"}</div>
+                        <div>{this.props.data.permission.id != null ? "Edit User" : "Add User"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
                             {msg}
-                            <AddEditUserBasicInformation />
+                            <AddEditUserBasicInformation data={this.props.data.permission} />
                             <Panel header="Personal information" >
-                                <AddEditUserPersonalInformation />
+                                <AddEditUserPersonalInformation info={this.props.data.permission} />
                             </Panel>
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} >

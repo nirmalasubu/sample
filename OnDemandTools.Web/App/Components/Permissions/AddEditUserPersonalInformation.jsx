@@ -20,10 +20,23 @@ class AddEditUserPersonalInformation extends React.Component {
         super(props);
 
         this.state = ({
-
+            personalInfoData: "",
         });
     }
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            personalInfoData: nextProps.info
+        }, function () {
+            if (this.state.componentJustMounted) {
+                this.setState({ componentJustMounted: false }, function () {
+                    this.validateForm();
+                });
+            }
+        });
+        console.log("personalInfoData"+JSON.stringify(this.state.personalInfoData));
 
+    }
 
     render() {
 
