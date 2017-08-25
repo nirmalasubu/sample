@@ -25,6 +25,27 @@ body {
     border-bottom-color: transparent;
 }
 
+.dropdownAccess.open>.dropdown-menu {
+    display: block;
+}
+
+.dropdownAccess .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    float: left;
+    min-width: 195px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: right;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+}
+
 hr {
   -moz-border-bottom-colors: none;
   -moz-border-image: none;

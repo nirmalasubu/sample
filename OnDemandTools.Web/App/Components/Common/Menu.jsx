@@ -19,6 +19,11 @@ class Menu extends React.Component {
 
   }
 
+    handleOpen(){
+        if(this.state.activeKey != "userManagement" && this.state.activeKey != "systemManagement")
+            this.setState({ activeKey: "open" });           
+    }
+
   handleSelect(selectedKey) {
     browserHistory.push(selectedKey);
     this.setState({ activeKey: selectedKey });
@@ -36,7 +41,9 @@ class Menu extends React.Component {
           <NavItem eventKey={"workflowStatuses"}>Workflow Statuses</NavItem>
           <NavItem eventKey={"airingIds"}>ID Distribution</NavItem>
           <NavItem eventKey={"pathTranslations"}>Path Translations</NavItem>          
-          <NavDropdown title="Access Management" id="nav-dropdown">
+          <NavDropdown class="dropdownAccess" open={ (this.state.activeKey == "userManagement" || this.state.activeKey == "systemManagement" || this.state.activeKey == "open") ? true : false } 
+              title="Access Management" id="nav-dropdown"
+                  onClick = { this.handleOpen.bind(this) }>
             <MenuItem eventKey={"userManagement"}>User</MenuItem>
             <MenuItem eventKey={"systemManagement"}>System</MenuItem>
           </NavDropdown>
