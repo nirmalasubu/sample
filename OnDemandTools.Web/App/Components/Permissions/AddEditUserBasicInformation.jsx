@@ -24,7 +24,6 @@ class AddEditUserBasicInformation extends React.Component {
             userBasicInfoModel:"",
             userBasicInfounmodifiedModel:"",
             componentJustMounted: true,
-            isChecked: true,
             validationStateEmail:null
         });
     }
@@ -33,7 +32,6 @@ class AddEditUserBasicInformation extends React.Component {
         this.setState({
             userBasicInfoModel: this.props.data
         });
-        console.log(" componentWillMount userBasicInfoModel :"+JSON.stringify(this.state.userBasicInfoModel));
     }
 
     componentDidMount() {
@@ -42,7 +40,6 @@ class AddEditUserBasicInformation extends React.Component {
             this.setState({ userBasicInfoModel: model, componentJustMounted: true });
         }
         this.validateForm();
-        console.log("componentDidMount userBasicInfoModel :"+JSON.stringify(this.state.userBasicInfoModel));
     }
 
     //receives prop changes to update state
@@ -52,11 +49,11 @@ class AddEditUserBasicInformation extends React.Component {
         }, function () {
             if (this.state.componentJustMounted) {
                 this.setState({ componentJustMounted: false }, function () {
-                    //this.validateForm();
+                    this.validateForm();
                 });
             }
         });
-        console.log("componentWillReceiveProps userBasicInfoModel :"+JSON.stringify(this.state.userBasicInfoModel));
+      
     }
 
     lastloginDisplay()
@@ -89,6 +86,7 @@ class AddEditUserBasicInformation extends React.Component {
         this.setState({
             userBasicInfoModel: model
         });
+        this.props.updatePermission(model);
     }
 
     isAdminChange()
@@ -99,18 +97,19 @@ class AddEditUserBasicInformation extends React.Component {
         this.setState({
             userBasicInfoModel: model
         });
+        this.props.updatePermission(model);
     }
 
-    handleTextChange(event) {
-        var username=event.target.value;
+    handleTextChange(event ) {
 
         var model = this.state.userBasicInfoModel;
-        model.name =  username;
+        model.userName = event.target.value;
+
         this.setState({
             userBasicInfoModel: model
         });
         this.validateForm();
-        //this.props.updateDestination(this.state.destinationModel);
+        this.props.updatePermission(model);
     }
 
     validateForm() {
@@ -126,14 +125,14 @@ class AddEditUserBasicInformation extends React.Component {
                     <Row>
                         <Form>
                             <Col sm={4}>
-                                <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
+                                <FormGroup controlId="userId"  validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                    <FormControl type="text"  
-                                    onChange={this.handleTextChange.bind(this)} placeholder="Enter email for valid user id"   value={this.state.userBasicInfoModel.userName}/>
+                                     <FormControl type="text"  ref="inputUserName" placeholder="Enter email for user name" 
+                                    onChange={(event) =>this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName}/>
                                 </FormGroup>
                             </Col>
                             <Col sm={4}>
-                                {this.activeDateDisplay()}
+                    {this.activeDateDisplay()}
                             </Col>
                         </Form >
                     </Row>
@@ -161,14 +160,14 @@ class AddEditUserBasicInformation extends React.Component {
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
-                            {this.lastloginDisplay()}
+                                        {this.lastloginDisplay()}
                            
                         </Col>
                     </Row>
                 </Grid>
             </div>
         )
-                                }
-                                }
+                        }
+                                    }
 
 export default AddEditUserBasicInformation

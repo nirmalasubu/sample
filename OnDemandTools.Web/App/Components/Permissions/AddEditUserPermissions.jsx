@@ -14,6 +14,8 @@ import * as statusActions from 'Actions/Status/StatusActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
 import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPersonalInformation';
 import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
+import * as permissionActions from 'Actions/Permissions/PermissionActions';
+import validator from 'validator';
 @connect((store) => {
     return {
 
@@ -103,6 +105,8 @@ class AddEditUserPermissions extends React.Component {
     /// </summary>
     isSaveDisabled() {
 
+        var isvalidUserId=(this.state.permission.userName != "" || validator.isEmail(this.state.permission.userName));
+        return !isvalidUserId;
     }
 
     /// <summary>
@@ -112,18 +116,46 @@ class AddEditUserPermissions extends React.Component {
 
     }
 
-    /// <summary>
-    /// To validate the status name is unique
-    /// </summary>
-    isStatusNameUnique(status) {
-
+    updatePermission(permission)
+    {
+        this.setState({ permission: permission });
     }
 
     /// <summary>
-    /// To Save the status details
+    /// To Save the user details
     /// </summary>
     handleSave() {
+        console.log("button enable");
+        var elem = this;
+        if (!this.isSaveDisabled()) {
 
+            this.setState({ isProcessing: true });
+
+            this.props.dispatch(permissionActions.savePermission(this.state.permission))
+                .then(() => {
+                    if (this.state.permission.id == null) {
+                        NotificationManager.success(this.state.permission.userName + ' userId successfully created.', '', 2000);
+                    }
+                    else {
+                        NotificationManager.success(this.state.permission.userName + ' userId updated successfully.', '', 2000);
+                    }
+                    this.setState({ isProcessing: false });
+                    setTimeout(function () {
+                        elem.props.handleClose();
+                    }, 3000);
+                }).catch(error => {
+                    if (this.state.permission.id == null) {
+                        NotificationManager.error(this.state.permission.userName + ' userId creation failed. ' + error, 'Failure');
+                    }
+                    else {
+                        NotificationManager.error(this.state.permission.userName + ' userId update failed. ' + error, 'Failure');
+                    }
+                    this.setState({ isProcessing: false });
+                });
+        }
+        else
+            return false;
+        
     }
 
     componentDidMount() {
@@ -148,9 +180,9 @@ class AddEditUserPermissions extends React.Component {
                     <div class="panel panel-default">
                         <div class="panel-body">
                             {msg}
-                            <AddEditUserBasicInformation data={this.props.data.permission} />
+                            <AddEditUserBasicInformation data={this.props.data.permission} updatePermission={this.updatePermission.bind(this)} />
                             <Panel header="Personal information" >
-                                <AddEditUserPersonalInformation info={this.props.data.permission} />
+                                <AddEditUserPersonalInformation data={this.props.data.permission} updatePermission={this.updatePermission.bind(this)} />
                             </Panel>
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} >

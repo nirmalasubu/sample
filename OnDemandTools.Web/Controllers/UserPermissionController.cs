@@ -45,7 +45,21 @@ namespace OnDemandTools.Web.Controllers
         [HttpPost]
         public UserPermission Post([FromBody]UserPermission viewModel)
         {
+
+
+            if (string.IsNullOrEmpty(viewModel.Id))
+            {
+                viewModel.Api.ApiKey = Guid.NewGuid().ToString();
+                viewModel.CreatedDateTime = DateTime.UtcNow;
+                viewModel.CreatedBy = HttpContext.User.Identity.Name;
+            }
+            else
+            {
+                viewModel.ModifiedDateTime = DateTime.UtcNow;
+                viewModel.ModifiedBy = HttpContext.User.Identity.Name;
+            }
             BLModel.UserPermission model = _service.Save(viewModel.ToBusinessModel<UserPermission, BLModel.UserPermission>());
+           
 
             return model.ToViewModel<BLModel.UserPermission, UserPermission>();
         }
@@ -61,7 +75,8 @@ namespace OnDemandTools.Web.Controllers
                 LastName = string.Empty,
                 PhoneNumber = string.Empty,
                 Notes = string.Empty,
-                Portal=new Portal { IsActive=true}
+                Portal=new Portal { IsActive=true},
+                Api = new Api { }
             };
         }
     }

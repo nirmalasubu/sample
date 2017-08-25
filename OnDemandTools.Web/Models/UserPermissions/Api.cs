@@ -19,7 +19,7 @@ namespace OnDemandTools.Web.Models.UserPermissions
 
         public bool IsActive { get; set; }
 
-        public Guid ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         public DateTime LastAccessTime { get; set; }
 
