@@ -30,7 +30,7 @@ class UserPermissionTable extends React.Component {
             inActiveModal: {},
             permission: "",
             options: {
-                defaultSortName: 'name',
+                defaultSortName: 'userName',
                 defaultSortOrder: 'asc',
                 sizePerPageList: [{
                     text: '10 ', value: 10
@@ -168,7 +168,7 @@ class UserPermissionTable extends React.Component {
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New User</span>
                 </button>
-                <BootstrapTable ref="WorkflowPermissionTable"
+                <BootstrapTable ref="PermissionTable"
                     data={this.props.RowData}
                     striped={true}
                     hover={true}
