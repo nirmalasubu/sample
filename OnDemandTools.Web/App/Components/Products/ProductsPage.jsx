@@ -7,14 +7,8 @@ import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
-    ///<summary>
-    /// Retrieve filtered list of products based on filterValue like product name, description, tags and destination
-    /// which are defined in Redux store
-    ///</summary>
-    var filteredProductValues = getFilterVal(store.products, store.filterProduct);
     return {
-        products: store.products,
-        filteredProducts: (filteredProductValues!=undefined?filteredProductValues:store.products)
+        products: store.products
     };
 })
 class ProductsPage extends React.Component {
@@ -68,63 +62,62 @@ class ProductsPage extends React.Component {
         this.setState({
             filterValue: stateFilterValue
         });
-        this.props.dispatch(productActions.filterProductSuccess(this.state.filterValue));  
     }
 
     //called on the page load
     componentDidMount() {
-        this.props.dispatch(productActions.filterProductSuccess(this.state.filterValue));
         this.props.dispatch(productActions.fetchProducts());
 
         document.title = "ODT - Products";
     }
 
+    // The goal of this function is to filter 'products' (which is stored in Redux store)
+    // based on user provided filter criteria and return the refined 'product' list.
+    // If no filter criteria is provided then return the full 'product' list
+    applyFilter(products, filterVal) {
+        if(filterVal.productName!=undefined)
+        {
+            var productName = filterVal.productName.toLowerCase();
+            var description = filterVal.description.toLowerCase();
+            var tag = filterVal.tag.toLowerCase();
+            return (products.filter(obj=> (productName != "" ? obj.name.toLowerCase().indexOf(productName) != -1 : true)
+                  &&(description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
+                  &&(tag!="" ? this.matchTags(obj.tags,tag) : true)  
+                ));
+        }
+        else
+            return products;
+    }
+
+    ///<summary>
+    // returns  true  if any of the search value tag matches tags list 
+    ///</summary>
+    matchTags(objTags,tag){
+        var tagTexts=[];
+        objTags.map(function(item){
+            tagTexts.push(item.name);
+        });
+        var flag= false;
+        tagTexts.map(function(text){
+            if(text.toLowerCase().indexOf(tag)!=-1)
+            {
+                flag=true;
+            }
+        });
+        return flag;
+    }
+
     render() {
+        var filteredRows = this.applyFilter(this.props.products, this.state.filterValue);
+
         return (
             <div>               
                 <PageHeader pageName="Products" />
                 <ProductFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <ProductTable RowData={this.props.filteredProducts} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <ProductTable RowData={filteredRows} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }
 }
 
-///<summary>
-// The goal of this function is to filter 'Products' (which is stored in Redux store)
-// based on user provided filter criteria and return the refined 'products' list.
-// If no filter criteria is provided then return the full 'products' list
-///</summary>
-const getFilterVal = (products, filterVal) => {
-    if(filterVal.productName!=undefined)
-    {
-        var productName = filterVal.productName.toLowerCase();
-        var description = filterVal.description.toLowerCase();
-        var tag = filterVal.tag.toLowerCase();
-        return (products.filter(obj=> (productName != "" ? obj.name.toLowerCase().indexOf(productName) != -1 : true)
-              &&(description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
-              &&(tag!=""?matchTags(obj.tags,tag) :true)  
-            ));
-    }
-    else
-        return products;
-};
-
-///<summary>
-// returns  true  if any of the search value tag matches tags list 
-///</summary>
-const matchTags = (objTags,tag) => {
-    var tagTexts=[];
-    objTags.map(function(item){
-        tagTexts.push(item.name);
-    });
-    var flag= false;
-    tagTexts.map(function(text){
-        if(text.toLowerCase().indexOf(tag)!=-1)
-        {
-            flag=true;
-        }
-    });
-    return flag;
-};
 export default ProductsPage;

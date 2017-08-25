@@ -12,13 +12,6 @@ export const fetchProductSuccess = (products) => {
     }
 };
 
-export const filterProductSuccess= (filterProduct) => {
-    return {
-        type: actionTypes.FILTER_PRODUCTS_SUCCESS,
-        filterProduct
-    }
-};
-
 export const fetchProducts = () => {
     return (dispatch) => {
         return Axios.get('/api/product')

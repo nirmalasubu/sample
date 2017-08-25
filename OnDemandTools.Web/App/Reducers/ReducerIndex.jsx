@@ -5,8 +5,8 @@ import { DestinationReducer, FilterDestinationDataReducer } from 'Reducers/Desti
 import { CategoryReducer, FilterCategoryDataReducer } from 'Reducers/Category/CategoryReducer';
 import { UserReducer } from 'Reducers/User/UserReducer';
 import { ConfigReducer, ApplicationErrorReducer } from 'Reducers/Config/ConfigReducer';
-import { StatusReducer,FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
-import { ProductReducer, FilterProductDataReducer } from 'Reducers/Product/ProductReducer';
+import { StatusReducer, FilterStatusDataReducer } from 'Reducers/Status/StatusReducer';
+import { ProductReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
 import { ContentTierReducer, FilterContentTierDataReducer } from 'Reducers/ContentTier/ContentTierReducer';
 import { CurrentAiringIdReducer,FilterAiringIdDataReducer } from 'Reducers/CurrentAiringId/CurrentAiringIdReducer';
@@ -29,7 +29,6 @@ export default combineReducers({
     contentTiers: ContentTierReducer,
     filterContentTier: FilterContentTierDataReducer,
     filterCategory: FilterCategoryDataReducer,
-    filterProduct: FilterProductDataReducer,
     filterStatus: FilterStatusDataReducer,
     currentAiringIds: CurrentAiringIdReducer,
     filterDistribution: FilterAiringIdDataReducer,   
