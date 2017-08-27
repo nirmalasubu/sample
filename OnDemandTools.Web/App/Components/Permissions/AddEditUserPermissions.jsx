@@ -57,12 +57,7 @@ class AddEditUserPermissions extends React.Component {
         this.setState({ showWarningModel: false });
     }
 
-    /// <summary>
-    /// This function is called after entering the modal pop up
-    /// </summary>
-    onEnteredModel() {
-        this.validateForm();
-    }
+    
 
     /// <summary>
     /// This function is called on entering the modal pop up
@@ -184,7 +179,7 @@ class AddEditUserPermissions extends React.Component {
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
 
         return (
-            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.permission.id != null ? "Edit User" : "Add User"}</div>

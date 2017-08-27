@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import ReactPhoneInput from 'react-phone-number-input';
+import Phone from 'react-phone-number-input'
 import rrui from 'react-phone-number-input/rrui.css'
+import rpni from 'react-phone-number-input/style.css'
 import Moment from 'moment';
 import validator from 'validator';
 
@@ -25,9 +26,9 @@ class AddEditUserPersonalInformation extends React.Component {
         this.state = ({
             personalInfoModel: "",
             componentJustMounted: true,
-            phone:"",
-            validationStateFirstName:null,
-            validationStateLastName:null
+            phone: "",
+            validationStateFirstName: null,
+            validationStateLastName: null
         });
     }
 
@@ -64,44 +65,42 @@ class AddEditUserPersonalInformation extends React.Component {
     /// <summary>
     /// to hide and show api last Accessed field
     /// </summary>
-    apiLastAccessedDisplay()
-    {
-        if (this.state.personalInfoModel.id != null)
-        {
-            return(  <FormGroup controlId="api last Accessed" >
-                                    <ControlLabel>API last Accessed</ControlLabel>
-                                    <FormControl type="text" ref="inputAPIlastAccessed" placeholder="API last Accessed" />
-                                </FormGroup>);
+    apiLastAccessedDisplay() {
+        if (this.state.personalInfoModel.id != null) {
+            return (<FormGroup controlId="api last Accessed" >
+                <ControlLabel>API last Accessed</ControlLabel>
+                <FormControl type="text" ref="inputAPIlastAccessed" placeholder="API last Accessed" />
+            </FormGroup>);
         }
     }
 
     /// <summary>
     /// to hide and show  contact for field
     /// </summary>
-    contactforDisplay()
-    {
-        if (this.state.personalInfoModel.id != null)
-        {
-            return(<FormGroup controlId="contactfor" >
-                                <ControlLabel>Contact for</ControlLabel>
-                                <FormControl type="text" ref="inputContactfor" placeholder="Contact for" />
-                            </FormGroup>);
+    contactforDisplay() {
+        if (this.state.personalInfoModel.id != null) {
+            return (<FormGroup controlId="contactfor" >
+                <ControlLabel>Contact for</ControlLabel>
+                <FormControl type="text" ref="inputContactfor" placeholder="Contact for" />
+            </FormGroup>);
         }
     }
 
     /// <summary>
     /// Updating the first/last/name in the state on change of text
     /// </summary>
-    handleTextChange(value,event) {
-     
-        var model = this.state.personalInfoModel;
-        if(value=="firstName")
-            model.firstName = event.target.value.trimLeft();;
-        if(value=="lastName")
-            model.lastName = event.target.value.trimLeft();;
-        if(value=="phoneNumber")
-            model.phoneNumber = event.target.value();
+    handleTextChange(value, event) {
 
+        var model = this.state.personalInfoModel;
+        console.log(" value "+ value);
+        console.log(" model.phoneNumber  "+ event);
+        if (value == "firstName")
+            model.firstName = event.target.value.trimLeft();;
+        if (value == "lastName")
+            model.lastName = event.target.value.trimLeft();;
+        if (value == "phoneNumber")
+           model.phoneNumber = event;
+      
         this.setState({
             personalInfoModel: model
         });
@@ -113,8 +112,7 @@ class AddEditUserPersonalInformation extends React.Component {
     /// <summary>
     /// updating active api on checkbox change
     /// </summary>
-    activeApiChange()
-    {
+    activeApiChange() {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
 
@@ -128,22 +126,22 @@ class AddEditUserPersonalInformation extends React.Component {
     /// validate the form
     /// </summary>
     validateForm() {
-       
-        var isvalidFirstName=(this.state.personalInfoModel.firstName != undefined)?
-            (this.state.personalInfoModel.firstName!="" && validator.isAlpha(this.state.personalInfoModel.firstName))  : false;
-        var isvalidLastName=(this.state.personalInfoModel.lastName != undefined)?
-            (this.state.personalInfoModel.lastName!="" && validator.isAlpha(this.state.personalInfoModel.lastName))  : false;
+
+        var isvalidFirstName = (this.state.personalInfoModel.firstName != undefined) ?
+            (this.state.personalInfoModel.firstName != "" && validator.isAlpha(this.state.personalInfoModel.firstName)) : false;
+        var isvalidLastName = (this.state.personalInfoModel.lastName != undefined) ?
+            (this.state.personalInfoModel.lastName != "" && validator.isAlpha(this.state.personalInfoModel.lastName)) : false;
         this.setState({
-            validationStateFirstName :isvalidFirstName ? null : 'error',
-            validationStateLastName :isvalidLastName ? null : 'error',
+            validationStateFirstName: isvalidFirstName ? null : 'error',
+            validationStateLastName: isvalidLastName ? null : 'error',
         });
 
-        this.props.validationStates(isvalidFirstName,isvalidLastName);
+        this.props.validationStates(isvalidFirstName, isvalidLastName);
     }
 
 
     render() {
-        
+
         return (
             <div>
                 <Grid >
@@ -152,59 +150,61 @@ class AddEditUserPersonalInformation extends React.Component {
                             <Col sm={3}>
                                 <FormGroup controlId="firstName" validationState={this.state.validationStateFirstName}>
                                     <ControlLabel>First Name</ControlLabel>
-                                    <FormControl type="text" ref="inputFirstName" placeholder="First Name"  value={this.state.personalInfoModel.firstName}
-                                     onChange={(event) =>this.handleTextChange("firstName", event)}/>
+                                    <FormControl type="text" ref="inputFirstName" placeholder="First Name" value={this.state.personalInfoModel.firstName}
+                                        onChange={(event) => this.handleTextChange("firstName", event)} />
                                 </FormGroup>
                             </Col>
                             <Col sm={3}>
                                 <FormGroup controlId="lastName" validationState={this.state.validationStateLastName} >
                                     <ControlLabel>Last Name</ControlLabel>
-                                    <FormControl type="text" ref="inputLastName" placeholder="Last Name"  value={this.state.personalInfoModel.lastName}
-                                     onChange={(event) =>this.handleTextChange("lastName", event)}/>
+                                    <FormControl type="text" ref="inputLastName" placeholder="Last Name" value={this.state.personalInfoModel.lastName}
+                                        onChange={(event) => this.handleTextChange("lastName", event)} />
                                 </FormGroup>
                             </Col>
                             <Col sm={2}>
                                 <FormGroup controlId="phoneNumber" >
-
-                                  
-                                
-                                    </FormGroup>
-                                </Col>
-                            </Form >
-                        </Row>
-                        <Row>
-                            <Form>
-                                <Col sm={3}>
-                                    <FormGroup controlId="userAPIKey" >
-                                        <ControlLabel>User API Key</ControlLabel>
-                                        <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} disabled="true"/>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm={3}>
-                                    <FormGroup controlId="activeAPI" >
-                                        <ControlLabel>Active API:</ControlLabel>
-                                        <div>
-                                            <label class="switch">
-                                                <input type="checkbox" checked= {this.state.personalInfoModel.api.isActive}  onChange={(event) => this.activeApiChange()} />
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm={2}>
-                                                {this.apiLastAccessedDisplay()}
-                                </Col>
-                            </Form >
-                        </Row>
-                        <Row>
-                            <Col sm={3}>
-                                                {this.contactforDisplay()}
+                                    <ControlLabel>Phone Number </ControlLabel>
+                                    <Phone
+                                        placeholder="Enter phone number"
+                                        value={this.state.personalInfoModel.phoneNumber}
+                                        onChange={(event) => this.handleTextChange("phoneNumber", event)} />
+                                </FormGroup>
                             </Col>
-                        </Row>
-                    </Grid>
-                </div>
-            )
-                            }
-                                            }
+                        </Form >
+                    </Row>
+                    <Row>
+                        <Form>
+                            <Col sm={3}>
+                                <FormGroup controlId="userAPIKey" >
+                                    <ControlLabel>User API Key</ControlLabel>
+                                    <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} disabled="true" />
+                                </FormGroup>
+                            </Col>
+                            <Col sm={3}>
+                                <FormGroup controlId="activeAPI" >
+                                    <ControlLabel>Active API:</ControlLabel>
+                                    <div>
+                                        <label class="switch">
+                                            <input type="checkbox" checked={this.state.personalInfoModel.api.isActive} onChange={(event) => this.activeApiChange()} />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </FormGroup>
+                            </Col>
+                            <Col sm={2}>
+                                {this.apiLastAccessedDisplay()}
+                            </Col>
+                        </Form >
+                    </Row>
+                    <Row>
+                        <Col sm={3}>
+                            {this.contactforDisplay()}
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
+        )
+    }
+}
 
 export default AddEditUserPersonalInformation

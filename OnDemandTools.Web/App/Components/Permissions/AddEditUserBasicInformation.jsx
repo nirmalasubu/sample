@@ -22,15 +22,15 @@ class AddEditUserBasicInformation extends React.Component {
         super(props);
 
         this.state = ({
-            userBasicInfoModel:"",
-            userBasicInfounmodifiedModel:"",
+            userBasicInfoModel: "",
+            userBasicInfounmodifiedModel: "",
             componentJustMounted: true,
-            validationStateEmail:null,
-            validateUniqueUserName:null,
-            showError:false
+            validationStateEmail: null,
+            validateUniqueUserName: null,
+            showError: false
         });
     }
-      
+
     componentWillMount() {
         this.setState({
             userBasicInfoModel: this.props.data
@@ -56,44 +56,39 @@ class AddEditUserBasicInformation extends React.Component {
                 });
             }
         });
-      
+
     }
 
 
     /// <summary>
     /// To show/hide lastlogin property
     /// </summary>
-    lastloginDisplay()
-    {
-        if (this.state.userBasicInfoModel.id != null)
-        {
-            return( <FormGroup controlId="lastlogin " >
-                                <ControlLabel>last login</ControlLabel>
-                                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')}/>
-                            </FormGroup>);
+    lastloginDisplay() {
+        if (this.state.userBasicInfoModel.id != null) {
+            return (<FormGroup controlId="lastlogin " >
+                <ControlLabel>last login</ControlLabel>
+                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')} />
+            </FormGroup>);
         }
     }
 
     /// <summary>
     /// To show/hide isactive property
     /// </summary>
-    activeDateDisplay()
-    {
+    activeDateDisplay() {
 
-        if (this.state.userBasicInfoModel.id != null)
-        {
-            return(<FormGroup controlId="activeDate" >
-                                    <ControlLabel>Active Date</ControlLabel>
-                                    <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')}/>
-                                </FormGroup>);
+        if (this.state.userBasicInfoModel.id != null) {
+            return (<FormGroup controlId="activeDate" >
+                <ControlLabel>Active Date</ControlLabel>
+                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')} />
+            </FormGroup>);
         }
     }
 
     /// <summary>
     /// To update isactive property
     /// </summary>
-    activeStatusChange()
-    {
+    activeStatusChange() {
         var model = this.state.userBasicInfoModel;
         model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
 
@@ -107,8 +102,7 @@ class AddEditUserBasicInformation extends React.Component {
     /// <summary>
     /// To update isadmin property
     /// </summary>
-    isAdminChange()
-    {
+    isAdminChange() {
         var model = this.state.userBasicInfoModel;
         model.portal.isAdmin = !this.state.userBasicInfoModel.portal.isAdmin;
 
@@ -122,7 +116,7 @@ class AddEditUserBasicInformation extends React.Component {
     /// <summary>
     /// To user name on the text box change
     /// </summary>
-    handleTextChange(event ) {
+    handleTextChange(event) {
 
         var model = this.state.userBasicInfoModel;
         model.userName = event.target.value;
@@ -139,12 +133,13 @@ class AddEditUserBasicInformation extends React.Component {
     /// To validate the form
     /// </summary>
     validateForm() {
-       
-        var isvalidUserId=(this.state.userBasicInfoModel.userName != undefined)?
-            (this.state.userBasicInfoModel.userName!="" && validator.isEmail(this.state.userBasicInfoModel.userName))  : false;
-        var hasNameError=isvalidUserId && !(this.isUserNameUnique(this.state.userBasicInfoModel));
+
+        var isvalidUserId = (this.state.userBasicInfoModel.userName != undefined) ?
+            (this.state.userBasicInfoModel.userName != "" && validator.isEmail(this.state.userBasicInfoModel.userName)) : false;
+        var hasNameError = isvalidUserId && !(this.isUserNameUnique(this.state.userBasicInfoModel));
         this.setState({
-            validationStateEmail:hasNameError ? null : 'error'});
+            validationStateEmail: hasNameError ? null : 'error'
+        });
 
         this.props.validationStates(hasNameError);
     }
@@ -154,7 +149,7 @@ class AddEditUserBasicInformation extends React.Component {
     /// To validate the user name is unique
     /// </summary>
     isUserNameUnique(user) {
-        
+
         for (var x = 0; x < this.props.permissions.length; x++) {
             if (this.props.permissions[x].id != user.id) {
                 if (this.props.permissions[x].userName.trim() == user.userName.trim()) {
@@ -176,7 +171,7 @@ class AddEditUserBasicInformation extends React.Component {
     }
 
     render() {
-        var msg=""
+        var msg = ""
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> User Id already exists. Please use a unique User Id.</label>);
         return (
@@ -186,14 +181,14 @@ class AddEditUserBasicInformation extends React.Component {
                     <Row>
                         <Form>
                             <Col sm={4}>
-                                <FormGroup controlId="userId"  validationState={this.state.validationStateEmail}>
+                                <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                     <FormControl type="text"  ref="inputUserName" placeholder="Enter email for user name" 
-                                    onChange={(event) =>this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName}/>
+                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for user name"
+                                        onChange={(event) => this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName} />
                                 </FormGroup>
                             </Col>
                             <Col sm={4}>
-                    {this.activeDateDisplay()}
+                                {this.activeDateDisplay()}
                             </Col>
                         </Form >
                     </Row>
@@ -203,7 +198,7 @@ class AddEditUserBasicInformation extends React.Component {
                                 <ControlLabel>Active Status</ControlLabel>
                                 <div>
                                     <label class="switch">
-                                        <input type="checkbox"  checked= {this.state.userBasicInfoModel.portal.isActive}  onChange={(event) => this.activeStatusChange()} />
+                                        <input type="checkbox" checked={this.state.userBasicInfoModel.portal.isActive} onChange={(event) => this.activeStatusChange()} />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
@@ -214,21 +209,21 @@ class AddEditUserBasicInformation extends React.Component {
                                 <ControlLabel>Admin</ControlLabel>
                                 <div>
                                     <label class="switch">
-                                        <input type="checkbox"   checked= {this.state.userBasicInfoModel.portal.isAdmin}  onChange={(event) => this.isAdminChange()} />
+                                        <input type="checkbox" checked={this.state.userBasicInfoModel.portal.isAdmin} onChange={(event) => this.isAdminChange()} />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
-                                        {this.lastloginDisplay()}
-                           
+                            {this.lastloginDisplay()}
+
                         </Col>
                     </Row>
                 </Grid>
             </div>
         )
-                        }
-                                    }
+    }
+}
 
 export default AddEditUserBasicInformation
