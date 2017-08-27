@@ -76,7 +76,7 @@ namespace OnDemandTools.Web.Controllers
                 PhoneNumber = string.Empty,
                 Notes = string.Empty,
                 Portal=new Portal { IsActive=true},
-                Api = new Api { }
+                Api = new Api {ApiKey="" }
             };
         }
     }

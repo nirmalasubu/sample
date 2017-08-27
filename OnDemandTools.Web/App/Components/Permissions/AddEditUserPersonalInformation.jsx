@@ -3,6 +3,8 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import { connect } from 'react-redux';
 import ReactPhoneInput from 'react-phone-number-input';
 import rrui from 'react-phone-number-input/rrui.css'
+import Moment from 'moment';
+import validator from 'validator';
 
 @connect((store) => {
     return {
@@ -23,9 +25,12 @@ class AddEditUserPersonalInformation extends React.Component {
         this.state = ({
             personalInfoModel: "",
             componentJustMounted: true,
-            phone:""
+            phone:"",
+            validationStateFirstName:null,
+            validationStateLastName:null
         });
     }
+
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -33,10 +38,11 @@ class AddEditUserPersonalInformation extends React.Component {
         }, function () {
             if (this.state.componentJustMounted) {
                 this.setState({ componentJustMounted: false }, function () {
+                    this.validateForm();
                 });
             }
         });
-        console.log("personalInfoModel"+JSON.stringify(this.state.personalInfoModel));
+
 
     }
 
@@ -45,15 +51,19 @@ class AddEditUserPersonalInformation extends React.Component {
             personalInfoModel: this.props.data
         });
     }
+
     componentDidMount() {
         var model = this.state.personalInfoModel;
         if (this.state.personalInfoModel.id == null) {
             this.setState({ personalInfoModel: model, componentJustMounted: true });
         }
-       
-        console.log("componentDidMount personalInfoModel :"+JSON.stringify(this.state.personalInfoModel));
+        this.validateForm();
     }
 
+
+    /// <summary>
+    /// to hide and show api last Accessed field
+    /// </summary>
     apiLastAccessedDisplay()
     {
         if (this.state.personalInfoModel.id != null)
@@ -65,6 +75,9 @@ class AddEditUserPersonalInformation extends React.Component {
         }
     }
 
+    /// <summary>
+    /// to hide and show  contact for field
+    /// </summary>
     contactforDisplay()
     {
         if (this.state.personalInfoModel.id != null)
@@ -77,7 +90,7 @@ class AddEditUserPersonalInformation extends React.Component {
     }
 
     /// <summary>
-    /// Updating the user/description/name in the state on change of text
+    /// Updating the first/last/name in the state on change of text
     /// </summary>
     handleTextChange(value,event) {
      
@@ -92,10 +105,14 @@ class AddEditUserPersonalInformation extends React.Component {
         this.setState({
             personalInfoModel: model
         });
+        this.validateForm();
         this.props.updatePermission(model);
     }
 
 
+    /// <summary>
+    /// updating active api on checkbox change
+    /// </summary>
     activeApiChange()
     {
         var model = this.state.personalInfoModel;
@@ -107,6 +124,23 @@ class AddEditUserPersonalInformation extends React.Component {
         this.props.updatePermission(model);
     }
 
+    /// <summary>
+    /// validate the form
+    /// </summary>
+    validateForm() {
+       
+        var isvalidFirstName=(this.state.personalInfoModel.firstName != undefined)?
+            (this.state.personalInfoModel.firstName!="" && validator.isAlpha(this.state.personalInfoModel.firstName))  : false;
+        var isvalidLastName=(this.state.personalInfoModel.lastName != undefined)?
+            (this.state.personalInfoModel.lastName!="" && validator.isAlpha(this.state.personalInfoModel.lastName))  : false;
+        this.setState({
+            validationStateFirstName :isvalidFirstName ? null : 'error',
+            validationStateLastName :isvalidLastName ? null : 'error',
+        });
+
+        this.props.validationStates(isvalidFirstName,isvalidLastName);
+    }
+
 
     render() {
         
@@ -116,14 +150,14 @@ class AddEditUserPersonalInformation extends React.Component {
                     <Row>
                         <Form>
                             <Col sm={3}>
-                                <FormGroup controlId="firstName">
+                                <FormGroup controlId="firstName" validationState={this.state.validationStateFirstName}>
                                     <ControlLabel>First Name</ControlLabel>
                                     <FormControl type="text" ref="inputFirstName" placeholder="First Name"  value={this.state.personalInfoModel.firstName}
                                      onChange={(event) =>this.handleTextChange("firstName", event)}/>
                                 </FormGroup>
                             </Col>
                             <Col sm={3}>
-                                <FormGroup controlId="lastName" >
+                                <FormGroup controlId="lastName" validationState={this.state.validationStateLastName} >
                                     <ControlLabel>Last Name</ControlLabel>
                                     <FormControl type="text" ref="inputLastName" placeholder="Last Name"  value={this.state.personalInfoModel.lastName}
                                      onChange={(event) =>this.handleTextChange("lastName", event)}/>
@@ -143,7 +177,7 @@ class AddEditUserPersonalInformation extends React.Component {
                                 <Col sm={3}>
                                     <FormGroup controlId="userAPIKey" >
                                         <ControlLabel>User API Key</ControlLabel>
-                                        <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key" />
+                                        <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} disabled="true"/>
                                     </FormGroup>
                                 </Col>
                                 <Col sm={3}>

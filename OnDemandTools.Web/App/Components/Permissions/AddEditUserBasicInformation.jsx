@@ -2,15 +2,16 @@
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import Moment from 'moment';
 
 
 @connect((store) => {
     return {
-
+        permissions: store.permissions
     };
 })
 /// <summary>
-/// Sub component of product page to  add ,edit product destination details
+/// Sub component of product page to  add ,edit user basic details
 /// </summary>
 class AddEditUserBasicInformation extends React.Component {
     /// <summary>
@@ -24,7 +25,9 @@ class AddEditUserBasicInformation extends React.Component {
             userBasicInfoModel:"",
             userBasicInfounmodifiedModel:"",
             componentJustMounted: true,
-            validationStateEmail:null
+            validationStateEmail:null,
+            validateUniqueUserName:null,
+            showError:false
         });
     }
       
@@ -56,28 +59,39 @@ class AddEditUserBasicInformation extends React.Component {
       
     }
 
+
+    /// <summary>
+    /// To show/hide lastlogin property
+    /// </summary>
     lastloginDisplay()
     {
         if (this.state.userBasicInfoModel.id != null)
         {
             return( <FormGroup controlId="lastlogin " >
                                 <ControlLabel>last login</ControlLabel>
-                                <FormControl type="text" />
+                                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')}/>
                             </FormGroup>);
         }
     }
 
+    /// <summary>
+    /// To show/hide isactive property
+    /// </summary>
     activeDateDisplay()
     {
+
         if (this.state.userBasicInfoModel.id != null)
         {
             return(<FormGroup controlId="activeDate" >
                                     <ControlLabel>Active Date</ControlLabel>
-                                    <FormControl type="text" />
+                                    <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')}/>
                                 </FormGroup>);
         }
     }
 
+    /// <summary>
+    /// To update isactive property
+    /// </summary>
     activeStatusChange()
     {
         var model = this.state.userBasicInfoModel;
@@ -89,6 +103,10 @@ class AddEditUserBasicInformation extends React.Component {
         this.props.updatePermission(model);
     }
 
+
+    /// <summary>
+    /// To update isadmin property
+    /// </summary>
     isAdminChange()
     {
         var model = this.state.userBasicInfoModel;
@@ -100,6 +118,10 @@ class AddEditUserBasicInformation extends React.Component {
         this.props.updatePermission(model);
     }
 
+
+    /// <summary>
+    /// To user name on the text box change
+    /// </summary>
     handleTextChange(event ) {
 
         var model = this.state.userBasicInfoModel;
@@ -112,15 +134,54 @@ class AddEditUserBasicInformation extends React.Component {
         this.props.updatePermission(model);
     }
 
+
+    /// <summary>
+    /// To validate the form
+    /// </summary>
     validateForm() {
-        var email = this.state.userBasicInfoModel.userName;
+       
+        var isvalidUserId=(this.state.userBasicInfoModel.userName != undefined)?
+            (this.state.userBasicInfoModel.userName!="" && validator.isEmail(this.state.userBasicInfoModel.userName))  : false;
+        var hasNameError=isvalidUserId && !(this.isUserNameUnique(this.state.userBasicInfoModel));
         this.setState({
-            validationStateEmail: (email != "" && validator.isEmail(email)) ? null : 'error'});
+            validationStateEmail:hasNameError ? null : 'error'});
+
+        this.props.validationStates(hasNameError);
+    }
+
+
+    /// <summary>
+    /// To validate the user name is unique
+    /// </summary>
+    isUserNameUnique(user) {
+        
+        for (var x = 0; x < this.props.permissions.length; x++) {
+            if (this.props.permissions[x].id != user.id) {
+                if (this.props.permissions[x].userName.trim() == user.userName.trim()) {
+                    this.setState({
+                        showError: true
+                    });
+
+                    return true;
+                }
+                else {
+                    this.setState({
+                        showError: false
+                    });
+                }
+            }
+        }
+
+        return false;
     }
 
     render() {
+        var msg=""
+        if (this.state.showError)
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> User Id already exists. Please use a unique User Id.</label>);
         return (
             <div>
+                {msg}
                 <Grid >
                     <Row>
                         <Form>

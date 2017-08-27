@@ -36,9 +36,10 @@ class AddEditUserPermissions extends React.Component {
             showWarningModel: false,
             showError: false,
             validationStateUniqueName: null,
-            validateStatusName: null,
-            validateUser: null,
-            validateUniqueStatusName: null
+            validationStateUserName: null,
+            validationStateFirstName:null,
+            validationStateLastName:null
+        
         });
     }
 
@@ -76,11 +77,18 @@ class AddEditUserPermissions extends React.Component {
 
     }
 
+
     /// <summary>
     /// Called to close the add edit pop up or open cancel warning pop up
     /// </summary>
     handleClose() {
-        this.props.handleClose();
+        if (JSON.stringify(this.state.permissionsUnModifiedData) == JSON.stringify(this.state.permission)) {
+            this.props.handleClose();
+        }
+        else {
+            this.openWarningModel();
+        }
+        
     }
 
     /// <summary>
@@ -90,42 +98,50 @@ class AddEditUserPermissions extends React.Component {
         this.props.handleClose();
     }
 
-    /// <summary>
-    /// Updating the user/description/name in the state on change of text
-    /// </summary>
-    handleTextChange(value, event) {
-
-
-    }
-
-
 
     /// <summary>
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-
-        var isvalidUserId=(this.state.permission.userName != "" || validator.isEmail(this.state.permission.userName));
-        return !isvalidUserId;
+        return (this.state.isProcessing || this.state.validationStateUserName != null||this.state.validationStateFirstName != null||this.state.validationStateLastName != null)
     }
 
     /// <summary>
-    /// This function is to set validations states value
+    /// property method to called in the sub component to update the model
     /// </summary>
-    validateForm() {
-
-    }
-
     updatePermission(permission)
     {
         this.setState({ permission: permission });
     }
 
     /// <summary>
+    /// property method to called in the sub component to validate user basic info
+    /// </summary>
+    updateBasicValidateStates(isValidUserName)
+    {
+        this.setState({
+            validationStateUserName: isValidUserName ? null : 'error'
+            
+        });
+
+    }
+
+    /// <summary>
+    /// property method to called in the sub component to validate user personal info
+    /// </summary>
+    updatePersonalInfoValidateStates(isValidFirstName,isValidLastName)
+    {
+        this.setState({
+            validationStateFirstName: isValidFirstName ? null : 'error',
+            validationStateLastName: isValidLastName ? null : 'error'
+        });
+    }
+
+    /// <summary>
     /// To Save the user details
     /// </summary>
     handleSave() {
-        console.log("button enable");
+      
         var elem = this;
         if (!this.isSaveDisabled()) {
 
@@ -159,12 +175,10 @@ class AddEditUserPermissions extends React.Component {
     }
 
     componentDidMount() {
-        // console.log(JSON.stringify(this.props.data));
 
     }
 
     render() {
-       // console.log("this.state.permission :"+JSON.stringify(this.state.permission));  
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
@@ -180,9 +194,11 @@ class AddEditUserPermissions extends React.Component {
                     <div class="panel panel-default">
                         <div class="panel-body">
                             {msg}
-                            <AddEditUserBasicInformation data={this.props.data.permission} updatePermission={this.updatePermission.bind(this)} />
+                            <AddEditUserBasicInformation data={this.props.data.permission} 
+                            updatePermission={this.updatePermission.bind(this)}  validationStates={this.updateBasicValidateStates.bind(this)}/>
                             <Panel header="Personal information" >
-                                <AddEditUserPersonalInformation data={this.props.data.permission} updatePermission={this.updatePermission.bind(this)} />
+                                <AddEditUserPersonalInformation data={this.props.data.permission}
+                            updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)}/>
                             </Panel>
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} >
