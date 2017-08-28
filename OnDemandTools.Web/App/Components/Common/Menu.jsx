@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router';
 import { ListGroup } from 'react-bootstrap';
-import { ListGroupItem, Nav, NavItem, NavDropdown, MenuItem  } from 'react-bootstrap';
+import { ListGroupItem, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { browserHistory } from 'react-router';
 
 
@@ -23,6 +23,11 @@ class Menu extends React.Component {
     browserHistory.push(selectedKey);
     this.setState({ activeKey: selectedKey });
   }
+
+  onToggle() {
+
+  }
+
   render() {
     return (
       <div>
@@ -35,9 +40,9 @@ class Menu extends React.Component {
           <NavItem eventKey={"contentTiers"}>Content Tiers</NavItem>
           <NavItem eventKey={"workflowStatuses"}>Workflow Statuses</NavItem>
           <NavItem eventKey={"airingIds"}>ID Distribution</NavItem>
-          <NavItem eventKey={"pathTranslations"}>Path Translations</NavItem>          
-          <NavDropdown class="dropdownAccess" open={true} noCaret
-              title="Access Management" id="nav-dropdown">
+          <NavItem eventKey={"pathTranslations"}>Path Translations</NavItem>
+          <NavDropdown class="dropdownAccess" open={true} onToggle={this.onToggle.bind(this)} noCaret
+            title="Access Management" id="nav-dropdown">
             <MenuItem eventKey={"userManagement"}>User</MenuItem>
             <MenuItem eventKey={"systemManagement"}>System</MenuItem>
           </NavDropdown>
