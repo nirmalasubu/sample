@@ -11,7 +11,7 @@ import TextOverlay from 'Components/Common/TextOverlay';
 
 @connect((store) => {
     return {
-        filterDestination: store.filterDestination
+        destinations: store.destinations
     };
 })
 
@@ -39,7 +39,7 @@ class DestinationTable extends React.Component {
                 {
                     text: 'All ', value: 10000000
                 }],
-                onSortChange :this.onSortChange.bind(this)
+                onSortChange: this.onSortChange.bind(this)
             }
         }
     }
@@ -77,10 +77,10 @@ class DestinationTable extends React.Component {
     }
 
     openAddEditModel(val) {
-        this.setState({ showAddEditModel: true, destinationDetails: val });        
+        this.setState({ showAddEditModel: true, destinationDetails: val });
     }
 
-    closeAddEditModel() {        
+    closeAddEditModel() {
         this.setState({ showAddEditModel: false, destinationDetails: this.state.newDestinationModel });
     }
 
@@ -109,8 +109,9 @@ class DestinationTable extends React.Component {
             if (rowData.content.cx)
                 content.push("C(X)");
             if (rowData.content.nonCx)
-                content.push("Non-C(X)");        }
-        return <p> { content.toString() } </p>;
+                content.push("Non-C(X)");
+        }
+        return <p> {content.toString()} </p>;
     }
 
     revertSortFunc(a, b, order) {   // order is desc or asc
@@ -142,7 +143,7 @@ class DestinationTable extends React.Component {
     }
 
     render() {
-        if(this.props.RowData.length<=0 && (this.props.filterDestination.length<=0 || (this.props.filterDestination.code=="" && this.props.filterDestination.description=="" && this.props.filterDestination.content=="")))
+        if (this.props.RowData.length <= 0 && this.props.destinations.length <= 0 )
             this.state.options.noDataText = <div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>;
         else
             this.state.options.noDataText = <i>There is no data to display</i>;
@@ -160,7 +161,7 @@ class DestinationTable extends React.Component {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} sortFunc={ this.revertSortFunc.bind(this) } dataFormat={this.contentSortFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} sortFunc={this.revertSortFunc.bind(this)} dataFormat={this.contentSortFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
 
         }.bind(this));
@@ -168,16 +169,16 @@ class DestinationTable extends React.Component {
             <div>
                 <div>
                     <button class="btn-link pull-right addMarginRight" title="New Destination" onClick={(event) => this.openCreateNewDestinationModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i> 
+                        <i class="fa fa-plus-square fa-2x"></i>
                         <span class="addVertialAlign"> New Destination</span>
                     </button>
                 </div>
-                <BootstrapTable  ref="destinationTable" data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                <BootstrapTable ref="destinationTable" data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
 
                 <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
-                <RemoveDestinationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />                
+                <RemoveDestinationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }
 

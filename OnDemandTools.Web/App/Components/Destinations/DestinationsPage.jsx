@@ -7,13 +7,10 @@ import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
-    var arr = getFilterVal(store.destinations, store.filterDestination);
     return {
-        destinations: store.destinations,
-        filteredDestinations: (arr != undefined ? arr : store.destinations)
+        destinations: store.destinations
     };
 })
-
 class DestinationPage extends React.Component {
 
     constructor(props) {
@@ -58,88 +55,93 @@ class DestinationPage extends React.Component {
         this.setState({
             filterValue: valuess
         });
-
-        this.props.dispatch(destinationActions.filterDestinationSuccess(this.state.filterValue));
-
     }
 
     //called on the page load
     componentDidMount() {
-        this.props.dispatch(destinationActions.filterDestinationSuccess(this.state.filterValue));
         this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Destinations";
     }
 
+    //filter the states using filter values
+    getFilterVal(destinations, filterVal) {
+        if (filterVal.code != undefined) {
+            var code = filterVal.code.toLowerCase();
+            var description = filterVal.description.toLowerCase();
+            var content = filterVal.content;
+
+            var filteredDestinations = destinations;
+
+            if (code != "") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.name.toLowerCase().indexOf(code) != -1
+                });
+            }
+
+            if (description != "") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.description.toLowerCase().indexOf(description) != -1
+                });
+            }
+
+            if (content == "") return filteredDestinations;
+
+            if (content == "None") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.content == null || (
+                        dest.content.highDefinition == false
+                        && dest.content.standardDefinition == false
+                        && dest.content.cx == false
+                        && dest.content.nonCx == false)
+                });
+            }
+            else if (content == "HD") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.content != null && dest.content.highDefinition == true
+                });
+            }
+            else if (content == "SD") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.content != null && dest.content.standardDefinition == true
+                });
+            }
+            else if (content == "C3") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.content != null && dest.content.cx == true
+                });
+            }
+            else if (content == "NonC3") {
+                filteredDestinations = filteredDestinations.filter(function (dest) {
+                    return dest.content != null && dest.content.nonCx == true
+                });
+            }
+
+            return filteredDestinations;
+        }
+        else
+            return destinations;
+    };
+
     render() {
+
+        console.log(this.props.destinations);
+
+        var filteredDestinations = this.getFilterVal(this.props.destinations, this.state.filterValue);
+
+        console.log(filteredDestinations);
+
         return (
             <div>
                 <PageHeader pageName="Destinations" />
                 <DestinationFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DestinationTable RowData={this.props.filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <DestinationTable RowData={filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }
 }
 
-//filter the states using filter values
-const getFilterVal = (destinations, filterVal) => {
-    if (filterVal.code != undefined) {
-        var code = filterVal.code.toLowerCase();
-        var description = filterVal.description.toLowerCase();
-        var content = filterVal.content;
 
-        var filteredDestinations = destinations;
-
-        if (code != "") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.name.toLowerCase().indexOf(code) != -1
-            });
-        }
-
-        if (description != "") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.description.toLowerCase().indexOf(description) != -1
-            });
-        }
-
-        if (content == "") return filteredDestinations;
-
-        if (content == "None") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.content == null || (
-                    dest.content.highDefinition == false
-                    && dest.content.standardDefinition == false
-                    && dest.content.cx == false
-                    && dest.content.nonCx == false)
-            });
-        }
-        else if (content == "HD") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.content != null && dest.content.highDefinition == true
-            });
-        }
-        else if (content == "SD") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.content != null && dest.content.standardDefinition == true
-            });
-        }
-        else if (content == "C3") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.content != null && dest.content.cx == true
-            });
-        }
-        else if (content == "NonC3") {
-            filteredDestinations = filteredDestinations.filter(function (dest) {
-                return dest.content != null && dest.content.nonCx == true
-            });
-        }
-
-        return filteredDestinations;
-    }
-    else
-        return destinations;
-};
 
 
 export default DestinationPage;
