@@ -1,8 +1,10 @@
-﻿export const ContentTierReducer = (state = [], action) => {
+﻿import * as actionTypes from 'Actions/ActionTypes';
+
+export const ContentTierReducer = (state = [], action) => {
     switch (action.type) {
-        case 'FETCH_CONTENT_TIER_SUCCESS':
+        case actionTypes.FETCH_CONTENT_TIER_SUCCESS:
             return action.contentTiers;
-        case 'SAVE_CONTENT_TIER_SUCCESS':
+        case actionTypes.SAVE_CONTENT_TIER_SUCCESS:
             var updatedContentTier = action.contentTier;
             updatedContentTier.clicked = true;            
             var contentTierIndex = state.findIndex((obj => obj.id == updatedContentTier.id));
@@ -18,10 +20,10 @@
                 newState[contentTierIndex] = updatedContentTier;
                 return newState;
             }
-        case 'FILTER_CONTENT_TIER_SUCCESS':       // Required to obtain  contentTier object state 
+        case actionTypes.FILTER_CONTENT_TIER_SUCCESS:       // Required to obtain  contentTier object state 
             const assignState = Object.assign([], state);
             return assignState;
-        case 'CONTENT_TIER_CLICK_SUCCESS':
+        case actionTypes.CONTENT_TIER_CLICK_SUCCESS:
             const contentTiers = Object.assign([], state);
             for (var i = 0; i < contentTiers.length; i++) {
                 if (contentTiers[i].id == action.id) {
@@ -29,7 +31,7 @@
                 }
             }
             return contentTiers;
-        case 'DELETE_CONTENT_TIER_SUCCESS':
+        case actionTypes.DELETE_CONTENT_TIER_SUCCESS:
             const newState = Object.assign([], state);
             var dIndex = state.findIndex((obj => obj.name == action.name));
             if (dIndex >= 0) {

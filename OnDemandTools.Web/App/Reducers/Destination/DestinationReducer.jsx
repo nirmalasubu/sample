@@ -1,8 +1,10 @@
-﻿export const DestinationReducer = (state = [], action) => {
+﻿import * as actionTypes from 'Actions/ActionTypes';
+
+export const DestinationReducer = (state = [], action) => {
     switch (action.type) {
-        case 'FETCH_DESTINATIONS_SUCCESS':
+        case actionTypes.FETCH_DESTINATIONS_SUCCESS:
             return action.destinations;
-        case 'SAVE_DESTINATION_SUCCESS':
+        case actionTypes.SAVE_DESTINATION_SUCCESS:
             var destinationIndex = state.findIndex((obj => obj.id == action.destination.id));
             if (destinationIndex < 0) {                
                 //state.push(action.destination);
@@ -15,14 +17,14 @@
                 state[destinationIndex] = action.destination;
                 return state;
             }            
-        case 'DELETE_DESTINATION_SUCCESS':
+        case actionTypes.DELETE_DESTINATION_SUCCESS:
             const newState = Object.assign([], state);
             const indexOfDestination = state.findIndex(obj => {
                 return obj.id == action.objectId
             })
             newState.splice(indexOfDestination, 1);
             return newState;
-        case 'FILTER_DESTINATION_SUCCESS':
+        case actionTypes.FILTER_DESTINATION_SUCCESS:
             const assignState = Object.assign([], state);
             return assignState;
         default:

@@ -1,12 +1,13 @@
 ﻿import $ from 'jquery';
+import * as actionTypes from 'Actions/ActionTypes';
 
 export const TitleSearchReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'TITLE_SEARCH_SUCCESS':
+        case actionTypes.TITLE_SEARCH_SUCCESS:
             return action.titles;
-        case 'CLEAR_TITLE_SUCCESS':
+        case actionTypes.CLEAR_TITLE_SUCCESS:
             return action.titles;
-        case 'FILTER_TITLE_SUCCESS':
+        case actionTypes.FILTER_TITLE_SUCCESS:
             var existingData = $.extend(true, {}, state);
             if (action.filter.value == "") {
                 existingData.titles = $.extend(true, [], existingData.titlesBackup);

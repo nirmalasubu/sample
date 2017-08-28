@@ -1,8 +1,10 @@
-﻿export const DeliveryQueueReducer = (state = [], action) => {
+﻿import * as actionTypes from 'Actions/ActionTypes';
+
+export const DeliveryQueueReducer = (state = [], action) => {
     switch (action.type) {
-        case 'FETCH_QUEUES_SUCCESS':
+        case actionTypes.FETCH_QUEUES_SUCCESS:
             return action.queues;
-        case 'SAVE_QUEUE_SUCCESS':
+        case actionTypes.SAVE_QUEUE_SUCCESS:
             var queueIndex = state.findIndex((obj => obj.id == action.queue.id));
             if (queueIndex < 0) {
                 state.push(action.queue);
@@ -11,7 +13,7 @@
                 state[queueIndex] = action.queue;
             }
             return state;
-        case 'DELETE_QUEUE_SUCCESS':
+        case actionTypes.DELETE_QUEUE_SUCCESS:
             var dIndex = state.findIndex((obj => obj.id == action.objectId));
             if (dIndex >= 0)
                 state.splice(dIndex,1);
@@ -23,7 +25,7 @@
 
 export const NotificationHistoryQueueReducer = (state = [], action) => {
     switch (action.type) {
-        case 'FETCH_NOTIFICATIONHISTORY_SUCCESS':
+        case actionTypes.FETCH_NOTIFICATIONHISTORY_SUCCESS:
             return action.notificationHistory;
         default:
             return state;
@@ -32,7 +34,7 @@ export const NotificationHistoryQueueReducer = (state = [], action) => {
 
 export const SignalRQueueDataReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'FETCH_SIGNALRQUEUES_SUCCESS':
+        case actionTypes.FETCH_SIGNALRQUEUES_SUCCESS:
             return action.queueCountData;
         default:
             return state;
