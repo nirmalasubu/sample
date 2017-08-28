@@ -2,14 +2,6 @@
 import Axios from 'axios';
 import $ from 'jquery';
 
-
-export const filterCategorySuccess= (filterCategory) => {
-    return {
-        type: actionTypes.FILTER_CATEGORIES_SUCCESS,
-        filterCategory
-    }
-};
-
 export const fetchCategorySuccess = (categories) => {
     return {
         type: actionTypes.FETCH_CATEGORIES_SUCCESS,

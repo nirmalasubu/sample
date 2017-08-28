@@ -21,13 +21,6 @@ export const fetchStatus = () => {
     };
 };
 
-export const filterStatusSuccess= (filterStatus) => {
-    return {
-        type: actionTypes.FILTER_STATUS_SUCCESS,
-        filterStatus
-    }
-};
-
 
 export const deleteStatusSuccess = (objectId) => {
     return {

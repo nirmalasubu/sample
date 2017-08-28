@@ -28,13 +28,3 @@
             return state;
     }
 };
-
-
-export const FilterStatusDataReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'FILTER_STATUS_SUCCESS':
-            return action.filterStatus;   // search  criteria for status
-        default:
-            return state;
-    }
-};

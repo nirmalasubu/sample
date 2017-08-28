@@ -19,13 +19,6 @@ export const saveDestinationSuccess = (destination) => {
     }
 };
 
-export const filterDestinationSuccess= (filterDestination) => {
-    return {
-        type: actionTypes.FILTER_DESTINATION_SUCCESS,
-        filterDestination
-    }
-};
-
 export const deleteDestinationSuccess = (objectId) => {
     return {
         type: actionTypes.DELETE_DESTINATION_SUCCESS,

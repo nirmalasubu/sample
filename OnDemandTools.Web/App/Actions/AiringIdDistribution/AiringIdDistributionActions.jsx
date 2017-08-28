@@ -12,13 +12,6 @@ export const fetchAiringIdSuccess = (currentAiringIds) => {
     }
 };
 
-export const filterAiringIdSuccess= (filterDistribution) => {
-    return {
-        type: actionTypes.FILTER_AIRINGID_SUCCESS,
-        filterDistribution
-    }
-};
-
 export const fetchCurrentAiringId = () => {
     return (dispatch) => {
         return Axios.get('/api/distribution')

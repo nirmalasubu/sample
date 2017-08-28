@@ -29,12 +29,3 @@
             return state;
     }
 };
-
-export const FilterAiringIdDataReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'FILTER_AIRINGID_SUCCESS':
-            return action.filterDistribution;   // search  criteria for airing id
-        default:
-            return state;
-    }
-};

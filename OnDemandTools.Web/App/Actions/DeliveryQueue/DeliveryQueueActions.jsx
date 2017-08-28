@@ -14,13 +14,6 @@ export const fetchQueuesSuccess = (queues) => {
     }
 };
 
-export const filterQueuesSuccess= (filterValue) => {
-    return {
-        type: actionTypes.FILTER_QUEUES_SUCCESS,
-        filterValue
-    }
- };
-
 export const saveQueueSuccess = (queue) => {
     return {
         type: actionTypes.SAVE_QUEUE_SUCCESS,
@@ -47,11 +40,6 @@ export const fetchQueues = () => {
     };
 };
 
-export const filterQueues = (filterValue) => {
-    return (dispatch) => {
-        dispatch(filterQueuesSuccess(filterValue));
-    };
-};
 
 // Asynchronously retrieve an empty queue model
 // from API service
@@ -76,7 +64,6 @@ export const saveQueue = (model) => {
             });
     };
 };
-
 
 export const fetchNotificationHistorySuccess = (notificationHistory) => {
     return {

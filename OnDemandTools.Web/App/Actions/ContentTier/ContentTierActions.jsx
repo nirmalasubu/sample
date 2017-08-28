@@ -3,13 +3,6 @@ import Axios from 'axios';
 import $ from 'jquery';
 
 
-export const filterContentTierSuccess = (filterContentTier) => {
-    return {
-        type: actionTypes.FILTER_CONTENT_TIER_SUCCESS,
-        filterContentTier
-    }
-};
-
 export const fetchContentTierSuccess = (contentTiers) => {
     return {
         type: actionTypes.FETCH_CONTENT_TIER_SUCCESS,

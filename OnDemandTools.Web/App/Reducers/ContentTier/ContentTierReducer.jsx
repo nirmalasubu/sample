@@ -40,12 +40,3 @@
             return state;
     }
 };
-
-export const FilterContentTierDataReducer = (state = [], action) => {
-    switch (action.type) {
-        case 'FILTER_CONTENT_TIER_SUCCESS':
-            return action.filterContentTier;   // search  criteria for contentTier
-        default:
-            return state;
-    }
-};
