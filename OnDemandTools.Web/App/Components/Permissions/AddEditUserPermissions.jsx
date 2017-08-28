@@ -14,6 +14,7 @@ import * as statusActions from 'Actions/Status/StatusActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
 import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPersonalInformation';
 import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
+import AddEditUserPortalPermissions from 'Components/Permissions/AddEditUserPortalPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
 @connect((store) => {
@@ -68,7 +69,7 @@ class AddEditUserPermissions extends React.Component {
             permission: this.props.data.permission,
             permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission)
         });
-
+        console.log(" this.props.data.permission :"+  JSON.stringify(this.props.data.permission));
     }
 
 
@@ -198,7 +199,7 @@ class AddEditUserPermissions extends React.Component {
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} >
                                     <Tab eventKey={1} title="ODT portal">
-
+                                        <AddEditUserPortalPermissions data={this.props.data.permission}/>
                                     </Tab>
                                     <Tab eventKey={2} title="Delivery Queues">
 

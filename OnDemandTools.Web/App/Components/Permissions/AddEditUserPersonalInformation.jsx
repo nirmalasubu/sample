@@ -186,7 +186,7 @@ class AddEditUserPersonalInformation extends React.Component {
                                <Col sm={1}>
                                                                 <FormGroup controlId="Extension" class="user-permission-formgroup" validationState={this.state.validationStateExtension} >
                                     <ControlLabel>Extension </ControlLabel>
-                                  <FormControl type="tel" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
+                                  <FormControl type="text" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
                                     onChange={(event) => this.handleTextChange("extension", event)}/>
                                 </FormGroup>
                             </Col>
@@ -200,9 +200,9 @@ class AddEditUserPersonalInformation extends React.Component {
                                     <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} disabled="true" />
                                 </FormGroup>
                             </Col>
-                            <Col sm={3}>
+                            <Col sm={2}>
                                 <FormGroup controlId="activeAPI" >
-                                    <ControlLabel>Active API:</ControlLabel>
+                                    <ControlLabel>Active API</ControlLabel>
                                     <div>
                                         <label class="switch">
                                             <input type="checkbox" checked={this.state.personalInfoModel.api.isActive} onChange={(event) => this.activeApiChange()} />
@@ -211,7 +211,7 @@ class AddEditUserPersonalInformation extends React.Component {
                                     </div>
                                 </FormGroup>
                             </Col>
-                            <Col sm={2}>
+                            <Col sm={3}>
                                 {this.apiLastAccessedDisplay()}
                             </Col>
                         </Form >

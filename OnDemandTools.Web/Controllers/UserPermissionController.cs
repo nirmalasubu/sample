@@ -26,7 +26,7 @@ namespace OnDemandTools.Web.Controllers
 
 
         [Authorize]
-        [HttpGet]        
+        [HttpGet]
         public IEnumerable<UserPermission> Get()
         {
             return _service.GetAll(UserType.Portal).OrderBy(e => e.UserName).ToList()
@@ -59,7 +59,7 @@ namespace OnDemandTools.Web.Controllers
                 viewModel.ModifiedBy = HttpContext.User.Identity.Name;
             }
             BLModel.UserPermission model = _service.Save(viewModel.ToBusinessModel<UserPermission, BLModel.UserPermission>());
-           
+
 
             return model.ToViewModel<BLModel.UserPermission, UserPermission>();
         }
@@ -70,14 +70,30 @@ namespace OnDemandTools.Web.Controllers
         {
             return new UserPermission
             {
-                UserName =string.Empty,
+                UserName = string.Empty,
                 FirstName = string.Empty,
                 LastName = string.Empty,
                 PhoneNumber = string.Empty,
                 Extension = string.Empty,
                 Notes = string.Empty,
-                Portal=new Portal { IsActive=true},
-                Api = new Api {ApiKey="" }
+                Portal = new Portal
+                {
+                    IsActive = true,
+                    ModulePermissions = new Dictionary<string, Permission>()
+               {
+                   { "Delivery Queues",new Permission { } },
+                   { "Destinations", new Permission { } },
+                   { "Categories", new Permission { } },
+                   { "Products", new Permission { } },
+                   { "Content Tiers", new Permission { } },
+                   { "Workflow Status", new Permission { } },
+                   { "ID Distribution", new Permission { } },
+                   { "path Translation", new Permission { } },
+                   { "Access Management- User", new Permission { } },
+                   { "Access Management- System", new Permission { } },
+               }
+                },
+                Api = new Api { ApiKey = "" }
             };
         }
     }

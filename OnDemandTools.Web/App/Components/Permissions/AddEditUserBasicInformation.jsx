@@ -66,8 +66,8 @@ class AddEditUserBasicInformation extends React.Component {
     lastloginDisplay() {
         if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="lastlogin " >
-                <ControlLabel>last login</ControlLabel>
-                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')} />
+                <ControlLabel>Last login</ControlLabel>
+                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')}  disabled="true"/>
             </FormGroup>);
         }
     }
@@ -80,7 +80,7 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="activeDate" >
                 <ControlLabel>Active Date</ControlLabel>
-                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')} />
+                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')}  disabled="true"/>
             </FormGroup>);
         }
     }
