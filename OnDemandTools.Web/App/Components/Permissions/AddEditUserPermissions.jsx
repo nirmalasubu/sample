@@ -178,12 +178,9 @@ class AddEditUserPermissions extends React.Component {
     }
 
     render() {
-        var msg = "";
-        if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
 
         return (
-            <Modal bsSize="large" backdrop="static"  onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static"   onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.permission.id != null ? "Edit User" : "Add User"}</div>
@@ -192,7 +189,6 @@ class AddEditUserPermissions extends React.Component {
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            {msg}
                             <AddEditUserBasicInformation data={this.props.data.permission} 
                             updatePermission={this.updatePermission.bind(this)}  validationStates={this.updateBasicValidateStates.bind(this)}/>
                             <Panel header="Personal information" >
