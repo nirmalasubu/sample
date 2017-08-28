@@ -38,7 +38,9 @@ class AddEditUserPermissions extends React.Component {
             validationStateUniqueName: null,
             validationStateUserName: null,
             validationStateFirstName:null,
-            validationStateLastName:null
+            validationStateLastName:null,
+            validationStatePhoneNumber: null,
+            validationStateExtension: null
         
         });
     }
@@ -56,9 +58,7 @@ class AddEditUserPermissions extends React.Component {
     closeWarningModel() {
         this.setState({ showWarningModel: false });
     }
-
     
-
     /// <summary>
     /// This function is called on entering the modal pop up
     /// </summary>
@@ -66,8 +66,7 @@ class AddEditUserPermissions extends React.Component {
         this.setState({
             isProcessing: false,
             permission: this.props.data.permission,
-            permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permissions)
-
+            permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission)
         });
 
     }
@@ -98,7 +97,10 @@ class AddEditUserPermissions extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-        return (this.state.isProcessing || this.state.validationStateUserName != null||this.state.validationStateFirstName != null||this.state.validationStateLastName != null)
+        return (this.state.isProcessing || 
+            this.state.validationStateUserName != null||
+            this.state.validationStateFirstName != null||this.state.validationStateLastName != null||
+             this.state.validationStatePhoneNumber != null||this.state.validationStateExtension != null)
     }
 
     /// <summary>
@@ -124,11 +126,13 @@ class AddEditUserPermissions extends React.Component {
     /// <summary>
     /// property method to called in the sub component to validate user personal info
     /// </summary>
-    updatePersonalInfoValidateStates(isValidFirstName,isValidLastName)
+    updatePersonalInfoValidateStates(isValidFirstName,isValidLastName,isvalidPhoneNumber,isvalidextension)
     {
         this.setState({
             validationStateFirstName: isValidFirstName ? null : 'error',
-            validationStateLastName: isValidLastName ? null : 'error'
+            validationStateLastName: isValidLastName ? null : 'error',
+            validationStatePhoneNumber: isvalidPhoneNumber ? null : 'error',
+            validationStateExtension: isvalidextension ? null : 'error',
         });
     }
 
@@ -150,7 +154,7 @@ class AddEditUserPermissions extends React.Component {
                     else {
                         NotificationManager.success(this.state.permission.userName + ' userId updated successfully.', '', 2000);
                     }
-                    this.setState({ isProcessing: false });
+                    
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
@@ -179,7 +183,7 @@ class AddEditUserPermissions extends React.Component {
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Status Name already exists. Please use a unique status name.</label>);
 
         return (
-            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static"  onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.permission.id != null ? "Edit User" : "Add User"}</div>

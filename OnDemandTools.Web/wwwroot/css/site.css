@@ -825,3 +825,15 @@ tr.strikeout td:before {
   {
       margin-bottom: -3px;
   }
+
+/*****************************************************/
+/******** user permission personal info component styling starts  *******************/
+  .user-permission-personalinfo-row{
+      width:1000px
+  }
+
+  .user-permission-personalinfo-extension{
+      width:75px
+  }
+/*****************************************************/
+/******** user permission personal info component styling  ends *******************/

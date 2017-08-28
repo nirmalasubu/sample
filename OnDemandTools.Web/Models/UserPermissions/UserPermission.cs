@@ -14,6 +14,7 @@ namespace OnDemandTools.Web.Models.UserPermissions
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
+        public string Extension { get; set; }
         public string Notes { get; set; }
 
         public UserType UserType { get; set; }

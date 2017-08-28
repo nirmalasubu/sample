@@ -28,7 +28,9 @@ class AddEditUserPersonalInformation extends React.Component {
             componentJustMounted: true,
             phone: "",
             validationStateFirstName: null,
-            validationStateLastName: null
+            validationStateLastName: null,
+            validationStatePhoneNumber: null,
+            validationStateExtension: null
         });
     }
 
@@ -92,14 +94,16 @@ class AddEditUserPersonalInformation extends React.Component {
     handleTextChange(value, event) {
 
         var model = this.state.personalInfoModel;
-        console.log(" value "+ value);
-        console.log(" model.phoneNumber  "+ event);
+      
         if (value == "firstName")
-            model.firstName = event.target.value.trimLeft();;
+            model.firstName = event.target.value.trimLeft();
         if (value == "lastName")
-            model.lastName = event.target.value.trimLeft();;
+            model.lastName = event.target.value.trimLeft();
         if (value == "phoneNumber")
-           model.phoneNumber = event;
+            model.phoneNumber = event.target.value;
+        if (value == "extension")
+            model.extension = event.target.value;
+          
       
         this.setState({
             personalInfoModel: model
@@ -131,12 +135,20 @@ class AddEditUserPersonalInformation extends React.Component {
             (this.state.personalInfoModel.firstName != "" && validator.isAlpha(this.state.personalInfoModel.firstName)) : false;
         var isvalidLastName = (this.state.personalInfoModel.lastName != undefined) ?
             (this.state.personalInfoModel.lastName != "" && validator.isAlpha(this.state.personalInfoModel.lastName)) : false;
+        var phoneno = /^\+?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+     
+        var isvalidPhoneNumber=this.state.personalInfoModel.phoneNumber==""||this.state.personalInfoModel.phoneNumber.match(phoneno)!=null?true : false;
+       
+        var extn=/^(?:\d{1}|\d{2}|\d{3}|\d{4}|\d{5})$/;
+        var isvalidextension=this.state.personalInfoModel.extension==""||this.state.personalInfoModel.extension.match(extn)!=null?true : false;
         this.setState({
             validationStateFirstName: isvalidFirstName ? null : 'error',
             validationStateLastName: isvalidLastName ? null : 'error',
+            validationStatePhoneNumber: isvalidPhoneNumber ? null : 'error',
+            validationStateExtension: isvalidextension ? null : 'error'
         });
 
-        this.props.validationStates(isvalidFirstName, isvalidLastName);
+        this.props.validationStates(isvalidFirstName, isvalidLastName,isvalidPhoneNumber,isvalidextension);
     }
 
 
@@ -145,7 +157,7 @@ class AddEditUserPersonalInformation extends React.Component {
         return (
             <div>
                 <Grid >
-                    <Row>
+                    <Row class="user-permission-personalinfo-row">
                         <Form>
                             <Col sm={3}>
                                 <FormGroup controlId="firstName" validationState={this.state.validationStateFirstName}>
@@ -162,12 +174,17 @@ class AddEditUserPersonalInformation extends React.Component {
                                 </FormGroup>
                             </Col>
                             <Col sm={2}>
-                                <FormGroup controlId="phoneNumber" >
+                                <FormGroup controlId="phoneNumber"  validationState={this.state.validationStatePhoneNumber} >
                                     <ControlLabel>Phone Number </ControlLabel>
-                                    <Phone
-                                        placeholder="Enter phone number"
-                                        value={this.state.personalInfoModel.phoneNumber}
-                                        onChange={(event) => this.handleTextChange("phoneNumber", event)} />
+                                  <FormControl type="tel" ref="inputPhoneNumber" placeholder="XXX-XXX-XXXX" value={this.state.personalInfoModel.phoneNumber} 
+                                    onChange={(event) => this.handleTextChange("phoneNumber", event)}/>
+                                </FormGroup>
+                            </Col>
+                               <Col sm={1}>
+                                                                <FormGroup controlId="Extension"  validationState={this.state.validationStateExtension} >
+                                    <ControlLabel>Extension </ControlLabel>
+                                  <FormControl type="tel" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
+                                    onChange={(event) => this.handleTextChange("extension", event)}/>
                                 </FormGroup>
                             </Col>
                         </Form >
