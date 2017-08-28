@@ -12,7 +12,7 @@ import * as queueAction from 'Actions/DeliveryQueue/DeliveryQueueActions';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 @connect((store) => {
-    
+    return {}
 })
 
 class RemoveQueueModal extends React.Component

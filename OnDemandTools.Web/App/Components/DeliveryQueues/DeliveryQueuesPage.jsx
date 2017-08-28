@@ -14,7 +14,7 @@ class Queue extends React.Component {
     // get modified further based on how the user interacts with it
     constructor(props) {
         super(props);
-       
+
         this.state = {
             stateQueue: [],
 
@@ -33,8 +33,10 @@ class Queue extends React.Component {
             ],
             keyField: "friendlyName",
             deliveryQueueHub: $.connection.deliveryQueueCountHub,
-            deliveryQueueSignalRData: {"queues":[{"friendlyName":"","name":"","messageCount":0,"pendingDeliveryCount":0,"processedDateTime":"0001-01-01T00:00:00"}],
-                "jobcount":0,"jobLastRun":""}
+            deliveryQueueSignalRData: {
+                "queues": [{ "friendlyName": "", "name": "", "messageCount": 0, "pendingDeliveryCount": 0, "processedDateTime": "0001-01-01T00:00:00" }],
+                "jobcount": 0, "jobLastRun": ""
+            }
         }
     }
 
@@ -61,12 +63,12 @@ class Queue extends React.Component {
         if (type == "CB")
             valuess.isInActive = filtersValue;
 
-         // Clear queue filter selections
+        // Clear queue filter selections
         if (type == "CL") {
             valuess.queueName = "";
             valuess.contactName = "";
             valuess.queueId = "";
-            valuess.isInActive = false;            
+            valuess.isInActive = false;
         }
 
         // Replace component state with the correct
@@ -74,26 +76,14 @@ class Queue extends React.Component {
         this.setState({
             filterValue: valuess
         });
-
-        // Finally filter in memory queue data based on
-        // filter criteria identified above. Deep within,
-        // this dispatches an action, along with a state (filterValue - in this case),
-        // that gets handled by an appropriate reducer
-        this.props.filterQueue(this.state.filterValue);
-
     }
 
     // Invoked immediately after queue component is mounted.
     componentDidMount() {
-      
+
         // // Setup communication with SignalR hub/service
         this.state.deliveryQueueHub.client.GetQueueDeliveryCount = this.GetQueueDeliveryCount.bind(this);
         $.connection.hub.start();
-
-        // Dispatch an action to filter queue data based on 
-        // initial filter criteria. This guarantees that Redux
-        // store starts out with the correct filtervalue
-        this.props.filterQueue(this.state.filterValue);
 
         // Dispatch another action to asynchronously fetch full list of queue data
         // from server. Once it is fetched, the data will be stored
@@ -106,53 +96,49 @@ class Queue extends React.Component {
 
     // Dispatch action to asynchronously communicate with SignalR service
     // to render real time queue stats
-    GetQueueDeliveryCount(data){
+    GetQueueDeliveryCount(data) {
         this.props.signal(data);
     }
 
+    // The goal of this function is to filter 'queues' (which is stored in Redux store)
+    // based on user provided filter criteria and return the refined 'queues' list.
+    // If no filter criteria is provided then return the full 'queues' list
+    getFilterVal(queues, filterVal) {
+        if (filterVal.queueName != undefined) {
+            var friendlyName = filterVal.queueName.toLowerCase();
+            var contactName = filterVal.contactName.toLowerCase();
+            var queueId = filterVal.queueId.toLowerCase();
+            var inActive = filterVal.isInActive;
+
+            return queues.filter(obj => ((friendlyName != "" ? obj.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
+                && (contactName != "" ? obj.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
+                && (queueId != "" ? obj.name.toLowerCase().indexOf(queueId) != -1 : true)
+                && (!inActive ? obj.active : true)));
+        }
+        else
+            queues;
+    };
+
     render() {
+
+        var filteredQueues = this.getFilterVal(this.props.queues, this.state.filterValue);
         return (
-            <div>               
+            <div>
                 <PageHeader pageName="Delivery Queues" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable RowData={this.props.filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
+                <DeliveryQueueTable RowData={filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
             </div>
-
         )
     }
 }
-
-// The goal of this function is to filter 'queues' (which is stored in Redux store)
-// based on user provided filter criteria and return the refined 'queues' list.
-// If no filter criteria is provided then return the full 'queues' list
-const getFilterVal = (queues, filterVal) => {
-    if(filterVal.queueName!=undefined)
-    {
-        var friendlyName = filterVal.queueName.toLowerCase();
-        var contactName = filterVal.contactName.toLowerCase();
-        var queueId = filterVal.queueId.toLowerCase();
-        var inActive = filterVal.isInActive;
-        
-        return queues.filter(obj=> ((friendlyName != "" ? obj.friendlyName.toLowerCase().indexOf(friendlyName) != -1 : true)
-                && (contactName != "" ? obj.contactEmailAddress.toLowerCase().indexOf(contactName) != -1 : true)
-                && (queueId != "" ? obj.name.toLowerCase().indexOf(queueId) != -1 : true) 
-                && (!inActive?obj.active:true)));
-    }
-    else
-        queues;
-};
 
 // Define props for component that are inferred
 // directly or indirectly from state variables. Note that these states
 // are inherited from Redux store. 
 const mapStateToProps = (state, ownProps) => {
-    // Retrieve filtered list of queues based on queues (list) and filterValue
-    // which are defined in Redux store
-    var arr = getFilterVal(state.queues, state.filterValue);
-
-    return {        
-        signalRQueueData:state.queueCountData,
-        filteredQueues: (arr!=undefined?arr:state.queues)
+    return {
+        signalRQueueData: state.queueCountData,
+        queues: state.queues
     }
 };
 
@@ -162,8 +148,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchQueue: () => dispatch(queueActions.fetchQueues()),
-        signal: (signalRdata) =>dispatch(queueActions.signalRStart(signalRdata)),
-        filterQueue: (filterVal) =>dispatch(queueActions.filterQueues(filterVal))
+        signal: (signalRdata) => dispatch(queueActions.signalRStart(signalRdata))
     };
 };
 
