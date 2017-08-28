@@ -65,7 +65,7 @@ class UserPermissionsPage extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(permissionActions.fetchPermissionRecords());
+        this.props.dispatch(permissionActions.fetchPermissionRecords("portal"));
         document.title = "ODT - User Management";
 
     }

@@ -32,13 +32,16 @@ export const savePermissionComplete = (permission) => {
 /// Asynchronously retrieve path translations from API. If successful
 /// dispatch the appropriate action for further processing
 /// </summary>
-export const fetchPermissionRecords = () => {
+export const fetchPermissionRecords = (type) => {
+    console.log(type);
     return (dispatch) => {        
-        return Axios.get('/api/userpermission')
+        return Axios.get('/api/userpermission/' + type)
             .then(response => {
+                console.log("test");
                 dispatch(fetchPermissionComplete(response.data));
             })
             .catch(error => {
+                console.log(error);
                 dispatch(configActions.handleApplicationAPIError(error));
             });
     };

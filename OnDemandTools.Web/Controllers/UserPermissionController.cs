@@ -26,10 +26,10 @@ namespace OnDemandTools.Web.Controllers
 
 
         [Authorize]
-        [HttpGet]
-        public IEnumerable<UserPermission> Get()
+        [HttpGet("{type}")]        
+        public IEnumerable<UserPermission> Get(string type)
         {
-            return _service.GetAll(UserType.Portal).OrderBy(e => e.UserName).ToList()
+            return _service.GetAll(type == "system"? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
         }
 
