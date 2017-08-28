@@ -28,7 +28,7 @@ class UserPermissionsPage extends React.Component {
             columns: [{ "label": "User Id", "dataField": "userName", "sort": true },
             { "label": "First Name", "dataField": "firstName", "sort": true },
             { "label": "Last Name", "dataField": "lastName", "sort": true },
-            { "label": "Last Login", "dataField": "userName", "sort": false },
+            { "label": "Last Login", "dataField": "portal.lastLoginTime", "sort": true },
             { "label": "Actions", "dataField": "userName", "sort": false }
             ],
             keyField: "userName"

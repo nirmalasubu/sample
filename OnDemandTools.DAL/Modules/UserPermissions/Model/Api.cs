@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 {
+    [BsonIgnoreExtraElements]
     public class Api
     {
         public Api()

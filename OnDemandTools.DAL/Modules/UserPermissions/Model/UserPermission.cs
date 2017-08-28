@@ -1,8 +1,10 @@
 ﻿using MongoDB.Bson;
 using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 {
+    [BsonIgnoreExtraElements]
     public class UserPermission
     {
         public UserPermission()

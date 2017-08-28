@@ -1,5 +1,8 @@
-﻿namespace OnDemandTools.DAL.Modules.UserPermissions.Model
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 {
+    [BsonIgnoreExtraElements]
     public class Permission
     {
         public Permission()

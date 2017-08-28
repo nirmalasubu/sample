@@ -72,13 +72,14 @@ class UserPermissionTable extends React.Component {
 
             var d = new Date(rowData.portal.lastLoginTime);
             var year = d.getFullYear();
-            if(year<2000){
-                    return <p>{"never"}</p>;
-                }
-                else{
+            if (year < 2000) {
+                return <p>{"never"}</p>;
+            }
+            else {
 
-                    var dateFormat = Moment(rowData.portal.lastLoginTime).format('lll');
-                    return <p> {dateFormat}</p>}
+                var dateFormat = Moment(rowData.portal.lastLoginTime).format('lll');
+                return <p> {dateFormat}</p>
+            }
         }
     }
 
@@ -141,7 +142,7 @@ class UserPermissionTable extends React.Component {
     }
 
     componentDidMount() {
-       
+
         let promise = permissionActions.getNewUserPermission();
         promise.then(response => {
             this.setState({
@@ -154,6 +155,24 @@ class UserPermissionTable extends React.Component {
         });
     }
 
+    ///<summary>
+    // Custom sort logic for Last Login time
+    ///</summary>
+    lastLoginCustomSort(a, b, sortOrder) {
+        var date1 = new Date(b.portal.lastLoginTime);
+        var date2 = new Date(a.portal.lastLoginTime);
+
+        var time1 = date1.getTime();
+        var time2 = date2.getTime();
+
+        if (sortOrder == "desc") {
+            return time1 - time2;
+        }
+        else {
+            return time2 - time1;
+        }
+    }
+
     render() {
         var row;
         row = this.props.ColumnData.map(function (item, index) {
@@ -162,7 +181,7 @@ class UserPermissionTable extends React.Component {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "Last Login") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.lastLoginFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort sortFunc={this.lastLoginCustomSort} dataFormat={this.lastLoginFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.dataField == "userName" || item.dataField == "firstName" || item.dataField == "lastName") {
                 return <TableHeaderColumn dataField={item.dataField} key={index.toString()} dataSort={item.sort} dataFormat={this.stringFormat.bind(this)}>{item.label}</TableHeaderColumn>
@@ -186,7 +205,7 @@ class UserPermissionTable extends React.Component {
                 >
                     {row}
                 </BootstrapTable>
-                 <AddEditUserPermissions data={this.state}  handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditUserPermissions data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <UserInactivateModal data={this.state} handleClose={this.closeInactivateModal.bind(this)} />
             </div>)
     }
