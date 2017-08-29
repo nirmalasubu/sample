@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 {
+    [BsonIgnoreExtraElements]
     public class PortalModule
     {
         public string ModuleName { get; set; }
