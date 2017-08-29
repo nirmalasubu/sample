@@ -33,15 +33,12 @@ export const savePermissionComplete = (permission) => {
 /// dispatch the appropriate action for further processing
 /// </summary>
 export const fetchPermissionRecords = (type) => {
-    console.log(type);
     return (dispatch) => {        
         return Axios.get('/api/userpermission/' + type)
             .then(response => {
-                console.log("test");
                 dispatch(fetchPermissionComplete(response.data));
             })
             .catch(error => {
-                console.log(error);
                 dispatch(configActions.handleApplicationAPIError(error));
             });
     };

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import PageHeader from 'Components/Common/PageHeader';
 import PermissionsTable from 'Components/Permissions/SystemPermissionsTable';
-import PermissionsFilter from 'Components/Permissions/UserPermissionsFilter';
+import PermissionsFilter from 'Components/Permissions/SystemPermissionsFilter';
 
 @connect((store) => {
     return {
@@ -21,14 +21,14 @@ class SystemPermissionsPage extends React.Component {
             permission: [],
             filterValue: {
                 name: "",
-                userId: "",
+                systemId: "",
                 includeInactive: false
             },
 
             columns: [{ "label": "System Id", "dataField": "userName", "sort": true },
             { "label": "API Key", "dataField": "ApiKey", "sort": false },
-            { "label": "System Contact", "dataField": "FunctionalContactId", "sort": true },
-            { "label": "API Last Accessed", "dataField": "LastAccessTime", "sort": false },
+            { "label": "System Contact", "dataField": "FunctionalContactId", "sort": false },
+            { "label": "API Last Accessed", "dataField": "LastAccessTime", "sort": true },
             { "label": "Actions", "dataField": "userName", "sort": false }
             ],
             keyField: "userName"
@@ -46,15 +46,15 @@ class SystemPermissionsPage extends React.Component {
             case "Name":
                 stateFilterValue.name = filterValue;
                 break;
-            case "UserId":
-                stateFilterValue.userId = filterValue;
+            case "SystemId":
+                stateFilterValue.systemId = filterValue;
                 break;
             case "IncludeInactive":
                 stateFilterValue.includeInactive = filterValue;
                 break;
             case "Clear":
                 stateFilterValue.name = "";
-                stateFilterValue.userId = "";
+                stateFilterValue.systemId = "";
                 stateFilterValue.includeInactive = false;
                 break;
         }
@@ -76,7 +76,6 @@ class SystemPermissionsPage extends React.Component {
     applyFilter(permissions, filter) {
         if (filter.name != undefined) {
             var filteredPermissions = permissions;
-            console.log(filteredPermissions);
             if (filter.includeInactive == false) {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
                     return permission.api.isActive
@@ -87,17 +86,16 @@ class SystemPermissionsPage extends React.Component {
 
             if (name != "") {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
-                    return permission.firstName.toLowerCase().indexOf(name) > -1 ||
-                        permission.lastName.toLowerCase().indexOf(name) > -1
+                    return permission.api.technicalContactId.toLowerCase().indexOf(name) > -1
                 });
             }
 
 
-            var userId = filter.userId.toLowerCase();
+            var systemId = filter.systemId.toLowerCase();
 
-            if (userId != "") {
+            if (systemId != "") {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
-                    return permission.userName.toLowerCase().indexOf(userId) > -1
+                    return permission.userName.toLowerCase().indexOf(systemId) > -1
                 });
             }
 
@@ -113,6 +111,7 @@ class SystemPermissionsPage extends React.Component {
         return (
             <div>
                 <PageHeader pageName="System Management" />
+                <PermissionsFilter updateFilter={this.handleFilterUpdate.bind(this)} />
                 <PermissionsTable RowData={filteredRows} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )

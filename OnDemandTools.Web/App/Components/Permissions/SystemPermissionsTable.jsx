@@ -70,7 +70,7 @@ class SystemPermissionsTable extends React.Component {
         return <p>  {rowData.api.apiKey} </p>;
     }
 
-    lastLoginFormat(val, rowData) {
+    lastAccessFormat(val, rowData) {
         if (rowData.api.lastAccessTime == null) {
             return <p>{"never"}</p>;
         }
@@ -87,6 +87,24 @@ class SystemPermissionsTable extends React.Component {
                 var dateFormat = Moment(rowData.api.lastAccessTime).format('lll');
                 return <p> {dateFormat}</p>
             }
+        }
+    }
+
+    ///<summary>
+    // Custom sort logic for Last Login time
+    ///</summary>
+    lastAccessLoginCustomSort(a, b, sortOrder) {
+        var date1 = new Date(b.api.lastAccessTime);
+        var date2 = new Date(a.api.lastAccessTime);
+
+        var time1 = date1.getTime();
+        var time2 = date2.getTime();
+
+        if (sortOrder == "desc") {
+            return time1 - time2;
+        }
+        else {
+            return time2 - time1;
         }
     }
 
@@ -170,7 +188,7 @@ class SystemPermissionsTable extends React.Component {
                 return <TableHeaderColumn width="100px" dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.actionFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "API Last Accessed") {
-                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort={item.sort} dataFormat={this.lastLoginFormat.bind(this)}>{item.label}</TableHeaderColumn>
+                return <TableHeaderColumn dataField={item.dataField} key={index++} dataSort sortFunc={this.lastAccessCustomSort} dataFormat={this.lastAccessFormat.bind(this)}>{item.label}</TableHeaderColumn>
             }
             else if (item.label == "System Contact") {
                 return <TableHeaderColumn key={index++} dataSort={item.sort} dataFormat={this.systemContactFormat.bind(this)}>{item.label}</TableHeaderColumn>

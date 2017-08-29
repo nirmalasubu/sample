@@ -33,14 +33,6 @@ namespace OnDemandTools.Web.Controllers
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
         }
 
-
-        [Authorize]
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         [Authorize]
         [HttpPost]
         public UserPermission Post([FromBody]UserPermission viewModel)

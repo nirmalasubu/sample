@@ -21,7 +21,7 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         }
         public List<BLModel.UserPermission> GetAll(UserType userType)
         {
-            return _query.Get().ToList().ToBusinessModel<List<DLModel.UserPermission>, List<BLModel.UserPermission>>();
+            return _query.Get().Where(p=>p.UserType == userType).ToList().ToBusinessModel<List<DLModel.UserPermission>, List<BLModel.UserPermission>>();
         }
 
         public BLModel.UserPermission Save(BLModel.UserPermission userPermission)
