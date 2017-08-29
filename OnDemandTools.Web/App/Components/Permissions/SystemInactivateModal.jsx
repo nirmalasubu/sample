@@ -52,7 +52,7 @@ class SystemInactivateModal extends React.Component {
             <Modal show={this.props.data.showInactiveModal} onEntering={this.onOpenModal.bind(this)} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Deactivate User: {this.props.data.inActiveModal.userName}
+                        Deactivate System: {this.props.data.inActiveModal.userName}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
