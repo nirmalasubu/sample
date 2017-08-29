@@ -19,5 +19,12 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         /// <param name=""></param>
         /// <returns></returns>
         Model.UserPermission Save(Model.UserPermission userPermission);
+
+        /// <summary>
+        /// Get User Permission by Object Id
+        /// </summary>
+        /// <param name="id">object id</param>
+        /// <returns></returns>
+        Model.UserPermission GetById(string id);
     }
 }

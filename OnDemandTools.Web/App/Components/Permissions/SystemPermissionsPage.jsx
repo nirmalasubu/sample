@@ -86,7 +86,9 @@ class SystemPermissionsPage extends React.Component {
 
             if (name != "") {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
-                    return permission.api.technicalContactId.toLowerCase().indexOf(name) > -1
+                    return permission.api.technicalContactUser.firstName.toLowerCase().indexOf(name) > -1 ||
+                            permission.api.technicalContactUser.lastName.toLowerCase().indexOf(name) > -1 ||
+                        (permission.api.technicalContactUser.firstName.toLowerCase()+" "+permission.api.technicalContactUser.lastName.toLowerCase()).indexOf(name) > -1
                 });
             }
 

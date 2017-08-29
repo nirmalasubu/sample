@@ -29,5 +29,8 @@ namespace OnDemandTools.Web.Models.UserPermissions
 
         public string TechnicalContactId { get; set; }
         public string FunctionalContactId { get; set; }
+
+        public UserPermission TechnicalContactUser { get; set; }
+        public UserPermission FunctionalContactUser { get; set; }
     }
 }

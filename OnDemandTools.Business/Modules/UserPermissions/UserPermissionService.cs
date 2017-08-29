@@ -24,6 +24,11 @@ namespace OnDemandTools.Business.Modules.UserPermissions
             return _query.Get().Where(p=>p.UserType == userType).ToList().ToBusinessModel<List<DLModel.UserPermission>, List<BLModel.UserPermission>>();
         }
 
+        public BLModel.UserPermission GetById(string id)
+        {
+            return _query.GetById(id).ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
+        }
+
         public BLModel.UserPermission Save(BLModel.UserPermission userPermission)
         {
             var model = _command.Save(userPermission.ToDataModel<BLModel.UserPermission, DLModel.UserPermission>());

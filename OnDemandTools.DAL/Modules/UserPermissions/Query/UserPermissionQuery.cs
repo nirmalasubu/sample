@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using OnDemandTools.DAL.Database;
 using System.Linq;
@@ -21,6 +22,13 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Query
                 .AsQueryable();
 
             return destinations.AsQueryable();
+        }
+
+        public Model.UserPermission GetById(string objectId)
+        {
+            return _database
+             .GetCollection<Model.UserPermission>("UserPermission").AsQueryable()
+             .FirstOrDefault(e => e.Id == new ObjectId(objectId));
         }
     }
 }

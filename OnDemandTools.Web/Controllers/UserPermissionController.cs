@@ -29,8 +29,21 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("{type}")]        
         public IEnumerable<UserPermission> Get(string type)
         {
-            return _service.GetAll(type == "system"? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
+            var permissionLists = _service.GetAll(type == "system"? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
+
+            if (type == "system")
+            {
+                foreach (var permission in permissionLists)
+                {
+                    if (!string.IsNullOrEmpty(permission.Api.TechnicalContactId))
+                        permission.Api.TechnicalContactUser = _service.GetById(permission.Api.TechnicalContactId).ToViewModel<BLModel.UserPermission, UserPermission>();
+                    if (!string.IsNullOrEmpty(permission.Api.FunctionalContactId))
+                        permission.Api.FunctionalContactUser = _service.GetById(permission.Api.FunctionalContactId).ToViewModel<BLModel.UserPermission, UserPermission>();
+                }
+            }
+
+            return permissionLists;
         }
 
         [Authorize]

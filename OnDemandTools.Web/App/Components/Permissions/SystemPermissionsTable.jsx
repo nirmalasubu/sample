@@ -56,10 +56,11 @@ class SystemPermissionsTable extends React.Component {
 
 
     ///<summary>
-    // Format the userName, first Name, and Last name column
+    // Format the technical contact user name
     ///</summary>
     systemContactFormat(val, rowData) {
-        return <p>  {rowData.api.technicalContactId} </p>;
+        if(rowData.api.technicalContactUser!=undefined)
+            return <p>  {rowData.api.technicalContactUser.firstName + " " + rowData.api.technicalContactUser.lastName} </p>;
     }
 
     nameFormat(val) {

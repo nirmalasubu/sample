@@ -8,5 +8,7 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Query
     public interface IUserPermissionQuery
     {
         IQueryable<Model.UserPermission> Get();
+
+        Model.UserPermission GetById(string objectId);
     }
 }
