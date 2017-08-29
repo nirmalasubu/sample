@@ -14,7 +14,7 @@ import validator from 'validator';
     };
 })
 /// <summary>
-/// Sub component of product page to  add ,edit product destination details
+/// Sub component of user permission page to  add ,edit personal info details
 /// </summary>
 class AddEditUserPersonalInformation extends React.Component {
     /// <summary>

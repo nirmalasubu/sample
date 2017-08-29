@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 @connect((store) => {
     return {
-        permissions: store.permissions
+        config: store.config
     };
 })
 /// <summary>
@@ -55,7 +55,9 @@ class AddEditUserPortalPermissions extends React.Component {
 
     }
 
-
+    /// <summary>
+    /// to activate and deactivate portal permissions
+    /// </summary>
     activechkChange(key, value, event) {
         var model = this.state.userPortalPermissionModel;
 
@@ -72,28 +74,47 @@ class AddEditUserPortalPermissions extends React.Component {
         this.props.updatePermission(model);
     }
 
-    
+    /// <summary>
+    /// to display portal module names
+    /// </summary>
+    constructPortalDisplayName(key){
+     
+        for(var i=0;i<=this.props.config.portalModules.length;i++)
+        {
+            if(this.props.config.portalModules[i].moduleName==key)
+            {
+                return <p>{this.props.config.portalModules[i].moduleDisplayName}</p>
+            }
+        }
+    }
 
+    /// <summary>
+    /// to enable and disable  permission checkbox
+    /// </summary>
+    isPortalcheckboxEnabled(key){
+        return this.state.userPortalPermissionModel.portal.isAdmin||(key=="UserManagement"||key=="SystemManagement");
+    }
 
     render() {
         let row = null;
         let vals = null;
         row = this.state.userPortalPermissionModel.portal.modulePermissions;
+       
         vals = Object.keys(row).map(function (key, index) {
-
             return (<Row componentClass="tr" key={index.toString()}>
-
-                <Col componentClass="td" class="user-permission-portal-module">{key}</Col>
+                <Col componentClass="td" class="user-permission-portal-module">{this.constructPortalDisplayName(key)}</Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
                 onChange={(event) => this.activechkChange(key, "canRead", event)} 
-                    disabled={this.state.userPortalPermissionModel.portal.isAdmin || (row[key]["canAdd"]||row[key]["canEdit"]||row[key]["canDelete"])? true : false} /></Col>
+                    disabled={this.isPortalcheckboxEnabled(key) || (row[key]["canAdd"]||row[key]["canEdit"]||row[key]["canDelete"])? true : false} /></Col>
                 <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
-                    onChange={(event) => this.activechkChange(key, "canAdd", event)} disabled={this.state.userPortalPermissionModel.portal.isAdmin ? true : false} /></Col>
+                onChange={(event) => this.activechkChange(key, "canAdd", event)} 
+                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
-                    onChange={(event) => this.activechkChange(key, "canEdit", event)} disabled={this.state.userPortalPermissionModel.portal.isAdmin ? true : false} /></Col>
+                onChange={(event) => this.activechkChange(key, "canEdit", event)} 
+                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canDelete}
-                    onChange={(event) => this.activechkChange(key, "canDelete", event)} disabled={this.state.userPortalPermissionModel.portal.isAdmin ? true : false} /></Col>
-
+                onChange={(event) => this.activechkChange(key, "canDelete", event)} 
+                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
             </Row>)
         }.bind(this));
 

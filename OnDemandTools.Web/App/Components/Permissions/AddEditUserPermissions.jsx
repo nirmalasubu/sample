@@ -69,7 +69,6 @@ class AddEditUserPermissions extends React.Component {
             permission: this.props.data.permission,
             permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission)
         });
-        console.log(" this.props.data.permission :"+  JSON.stringify(this.props.data.permission));
     }
 
 
