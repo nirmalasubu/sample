@@ -61,11 +61,18 @@ class AddEditUserPortalPermissions extends React.Component {
 
         model.portal.modulePermissions[key][value] = !this.state.userPortalPermissionModel.portal.modulePermissions[key][value];
 
+        if((value=="canAdd"|| value=="canEdit"|| value=="canDelete") && model.portal.modulePermissions[key][value])
+        {
+                model.portal.modulePermissions[key]["canRead"]=true;
+        }
+
         this.setState({
             userPortalPermissionModel: model
         });
         this.props.updatePermission(model);
     }
+
+    
 
 
     render() {
@@ -78,7 +85,8 @@ class AddEditUserPortalPermissions extends React.Component {
 
                 <Col componentClass="td" class="user-permission-portal-module">{key}</Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
-                    onChange={(event) => this.activechkChange(key, "canRead", event)} disabled={this.state.userPortalPermissionModel.portal.isAdmin ? true : false} /></Col>
+                onChange={(event) => this.activechkChange(key, "canRead", event)} 
+                    disabled={this.state.userPortalPermissionModel.portal.isAdmin || (row[key]["canAdd"]||row[key]["canEdit"]||row[key]["canDelete"])? true : false} /></Col>
                 <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
                     onChange={(event) => this.activechkChange(key, "canAdd", event)} disabled={this.state.userPortalPermissionModel.portal.isAdmin ? true : false} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
