@@ -105,7 +105,27 @@ class AddEditUserBasicInformation extends React.Component {
     isAdminChange() {
         var model = this.state.userBasicInfoModel;
         model.portal.isAdmin = !this.state.userBasicInfoModel.portal.isAdmin;
-
+        if(model.portal.isAdmin)
+        {
+           
+            Object.keys(model.portal.modulePermissions).map(function(key,index) {
+                model.portal.modulePermissions[key].canRead=true;
+                model.portal.modulePermissions[key].canAdd=true;
+                model.portal.modulePermissions[key].canEdit=true;
+                model.portal.modulePermissions[key].canDelete=true;
+            });
+        }
+        else{
+            if (model.id == null)
+            {
+                Object.keys(model.portal.modulePermissions).map(function(key,index) {
+                    model.portal.modulePermissions[key].canRead=false;
+                    model.portal.modulePermissions[key].canAdd=false;
+                    model.portal.modulePermissions[key].canEdit=false;
+                    model.portal.modulePermissions[key].canDelete=false;
+                });
+            }
+        }
         this.setState({
             userBasicInfoModel: model
         });

@@ -70,8 +70,7 @@ class AddEditUserPortalPermissions extends React.Component {
         var model=this.state.userPortalPermissionModel;
             
         model.portal.modulePermissions[key][value]=!this.state.userPortalPermissionModel.portal.modulePermissions[key][value];
-        console.log(model.portal.modulePermissions[key][value]);
-        console.log(this.state.userPortalPermissionModel.portal.modulePermissions[key][value]);
+        
         this.setState({
             userPortalPermissionModel: model
         });
@@ -87,11 +86,11 @@ class AddEditUserPortalPermissions extends React.Component {
     
                     <Col componentClass="td">{key}</Col>
                     <Col componentClass="td">
-                         <input type="checkbox"  value={row[key].canRead} onChange={(event) => this.activechkChange(key, "canRead", event)} />
+                         <input type="checkbox"  checked={row[key].canRead} onChange={(event) => this.activechkChange(key, "canRead", event)} />
                                      </Col>
-                    <Col componentClass="td"> <input type="checkbox"  value={row[key].canAdd} onChange={(event) => this.activechkChange(key, "canAdd", event)} /></Col>
-                    <Col componentClass="td"><input type="checkbox"  value={row[key].canEdit} onChange={(event) => this.activechkChange(key, "canEdit", event)} /></Col>
-                     <Col componentClass="td"><input type="checkbox"  value={row[key].canDelete} onChange={(event) => this.activechkChange(key, "canDelete", event)} /></Col>
+                    <Col componentClass="td"> <input type="checkbox"  checked={row[key].canAdd} onChange={(event) => this.activechkChange(key, "canAdd", event)} /></Col>
+                    <Col componentClass="td"><input type="checkbox"  checked={row[key].canEdit} onChange={(event) => this.activechkChange(key, "canEdit", event)} /></Col>
+                     <Col componentClass="td"><input type="checkbox"  checked={row[key].canDelete} onChange={(event) => this.activechkChange(key, "canDelete", event)} /></Col>
            
                 </Row>)
         }.bind(this));
