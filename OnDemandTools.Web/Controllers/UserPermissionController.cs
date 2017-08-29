@@ -26,11 +26,13 @@ namespace OnDemandTools.Web.Controllers
 
 
         [Authorize]
-        [HttpGet("{type}")]        
+        [HttpGet("{type}")]
         public IEnumerable<UserPermission> Get(string type)
         {
-            var permissionLists = _service.GetAll(type == "system"? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
+            var permissionLists = _service.GetAll(type == "system" ? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
+
+
 
             if (type == "system")
             {
@@ -41,6 +43,22 @@ namespace OnDemandTools.Web.Controllers
                     if (!string.IsNullOrEmpty(permission.Api.FunctionalContactId))
                         permission.Api.FunctionalContactUser = _service.GetById(permission.Api.FunctionalContactId).ToViewModel<BLModel.UserPermission, UserPermission>();
                 }
+            }
+            else
+            {
+                var modules = _service.GetAllPortalModules();
+
+                foreach (var module in modules)
+                {
+                    foreach (var permission in permissionLists)
+                    {
+                        if (!permission.Portal.ModulePermissions.ContainsKey(module.ModuleName))
+                        {
+                            permission.Portal.ModulePermissions.Add(module.ModuleName, new Permission(permission.Portal.IsAdmin));
+                        }
+                    }
+                }
+
             }
 
             return permissionLists;
@@ -83,7 +101,7 @@ namespace OnDemandTools.Web.Controllers
                 Notes = string.Empty,
                 Portal = new Portal
                 {
-                    IsActive = true,                 
+                    IsActive = true,
                 },
                 Api = new Api { ApiKey = "" }
             };
