@@ -105,13 +105,23 @@ class UserPermissionTable extends React.Component {
     //Format the action column
     ///</summary>
     actionFormat(val, rowData) {
+
+        var onOffToolTip = "";
+
+        if (rowData.portal.isActive) {
+            onOffToolTip = "This user is active in ODT";
+        }
+        else {
+            onOffToolTip = "This user is inactive in ODT"
+        }
+
         return (
             <div>
                 <button class="btn-link" title="Edit User" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o fa-lg"></i>
                 </button>
 
-                <label class="switch gridSwitch">
+                <label class="switch gridSwitch" title={onOffToolTip}>
                     <input type="checkbox" checked={rowData.portal.isActive} onChange={(event) => this.onActiveCheckboxChange(rowData, event)} />
                     <span class="slider round"></span>
                 </label>
