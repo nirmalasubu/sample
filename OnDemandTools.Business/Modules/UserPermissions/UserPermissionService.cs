@@ -35,5 +35,11 @@ namespace OnDemandTools.Business.Modules.UserPermissions
 
             return model.ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
         }
+
+        public List<BLModel.PortalModule> GetAllPortalModules()
+        {
+            return _query.GetAllPortalModules().OrderBy(p => p.DisplayOrder)
+                .ToList().ToBusinessModel<List<DLModel.PortalModule>, List<BLModel.PortalModule>>();
+        }
     }
 }

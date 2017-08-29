@@ -15,13 +15,15 @@ namespace OnDemandTools.Common.EntityMapping
             CreateMap<BLModel.Api, DLModel.Api>();
             CreateMap<BLModel.Portal, DLModel.Portal>();
             CreateMap<BLModel.Permission, DLModel.Permission>();
-          
+            CreateMap<BLModel.PortalModule, DLModel.PortalModule>();
+
             //Data layer to business
             CreateMap<DLModel.UserPermission, BLModel.UserPermission>()
              .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()));
             CreateMap<DLModel.Api, BLModel.Api>();
             CreateMap<DLModel.Portal, BLModel.Portal>();
             CreateMap<DLModel.Permission, BLModel.Permission>();
+            CreateMap<DLModel.PortalModule, BLModel.PortalModule>();
         }
     }
 }

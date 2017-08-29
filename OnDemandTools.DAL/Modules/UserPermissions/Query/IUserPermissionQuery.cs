@@ -9,6 +9,8 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Query
     {
         IQueryable<Model.UserPermission> Get();
 
+        IQueryable<Model.PortalModule> GetAllPortalModules();
+
         Model.UserPermission GetById(string objectId);
     }
 }

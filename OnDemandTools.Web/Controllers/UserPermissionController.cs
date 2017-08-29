@@ -47,6 +47,14 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("/portalmodules")]
+        public IEnumerable<PortalModule> GetAllPotalModules(string type)
+        {
+            return _service.GetAllPortalModules().ToList().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>();
+  
+        }
+
+        [Authorize]
         [HttpPost]
         public UserPermission Post([FromBody]UserPermission viewModel)
         {
@@ -73,7 +81,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("newuserpermission")]
         public UserPermission GetEmptyModel()
         {
-            return new UserPermission
+            var model = new UserPermission
             {
                 UserName = string.Empty,
                 FirstName = string.Empty,
@@ -83,23 +91,19 @@ namespace OnDemandTools.Web.Controllers
                 Notes = string.Empty,
                 Portal = new Portal
                 {
-                    IsActive = true,
-                    ModulePermissions = new Dictionary<string, Permission>()
-               {
-                   { "Delivery Queues",new Permission { } },
-                   { "Destinations", new Permission { } },
-                   { "Categories", new Permission { } },
-                   { "Products", new Permission { } },
-                   { "Content Tiers", new Permission { } },
-                   { "Workflow Status", new Permission { } },
-                   { "ID Distribution", new Permission { } },
-                   { "path Translation", new Permission { } },
-                   { "Access Management- User", new Permission { } },
-                   { "Access Management- System", new Permission { } },
-               }
+                    IsActive = true,                 
                 },
                 Api = new Api { ApiKey = "" }
             };
+
+            var modules = _service.GetAllPortalModules();
+
+            foreach (var module in modules)
+            {
+                model.Portal.ModulePermissions[module.ModuleName] = new Permission();
+            }
+
+            return model;
         }
     }
 }

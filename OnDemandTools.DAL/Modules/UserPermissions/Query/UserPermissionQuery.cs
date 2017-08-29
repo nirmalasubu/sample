@@ -3,6 +3,8 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using OnDemandTools.DAL.Database;
 using System.Linq;
+using OnDemandTools.DAL.Modules.UserPermissions.Model;
+using System;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Query
 {
@@ -17,11 +19,20 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Query
 
         public IQueryable<Model.UserPermission> Get()
         {
-            var destinations = _database
+            var userPermission = _database
                 .GetCollection<Model.UserPermission>("UserPermission")
                 .AsQueryable();
 
-            return destinations.AsQueryable();
+            return userPermission.AsQueryable();
+        }
+
+        public IQueryable<PortalModule> GetAllPortalModules()
+        {
+            var modules = _database
+                .GetCollection<Model.PortalModule>("PortalModules")
+                .AsQueryable();
+
+            return modules.AsQueryable();
         }
 
         public Model.UserPermission GetById(string objectId)

@@ -15,13 +15,14 @@ namespace OnDemandTools.Web.Mappings
             CreateMap<UserPermission, BLModel.UserPermission>();
             CreateMap<Portal, BLModel.Portal>();
             CreateMap<Permission, BLModel.Permission>();
-
+            CreateMap<PortalModule, BLModel.PortalModule>();
 
             //Business Model to view Model
             CreateMap<BLModel.Api, Api>();
             CreateMap<BLModel.UserPermission, UserPermission>();
             CreateMap<BLModel.Portal, Portal>();
-            CreateMap<BLModel.Permission, Permission>();                       
+            CreateMap<BLModel.Permission, Permission>();
+            CreateMap<BLModel.PortalModule, PortalModule>();
         }
     }
 }
