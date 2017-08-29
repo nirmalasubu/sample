@@ -47,14 +47,6 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("/portalmodules")]
-        public IEnumerable<PortalModule> GetAllPotalModules(string type)
-        {
-            return _service.GetAllPortalModules().ToList().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>();
-  
-        }
-
-        [Authorize]
         [HttpPost]
         public UserPermission Post([FromBody]UserPermission viewModel)
         {
