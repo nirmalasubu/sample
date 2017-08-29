@@ -869,8 +869,11 @@ tr.strikeout td:before {
 }
 
 .user-permission-portal-table{
-    margin-left: -103px;
+    margin-left: -75px;
     width: 100%;
+}
+.user-permission-portal-module{
+    width: 275px;
 }
 /*****************************************************/
 /******** user permission personal info component styling  ends *******************/
