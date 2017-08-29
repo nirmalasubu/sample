@@ -199,7 +199,8 @@ class AddEditUserPermissions extends React.Component {
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} >
                                     <Tab eventKey={1} title="ODT portal">
-                                        <AddEditUserPortalPermissions data={this.props.data.permission}/>
+                                        <AddEditUserPortalPermissions data={this.props.data.permission}
+                                    updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={2} title="Delivery Queues">
 
