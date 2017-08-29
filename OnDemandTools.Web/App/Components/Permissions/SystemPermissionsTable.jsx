@@ -130,13 +130,22 @@ class SystemPermissionsTable extends React.Component {
     //Format the action column
     ///</summary>
     actionFormat(val, rowData) {
+        var onOffToolTip = "";
+        
+        if (rowData.api.isActive) {
+            onOffToolTip = "This system is active in ODT";
+        }
+        else {
+            onOffToolTip = "This system is inactive in ODT"
+        }
+
         return (
             <div>
                 <button class="btn-link" title="Edit System" onClick={(event) => this.openAddEditModel(rowData, event)} >
                     <i class="fa fa-pencil-square-o fa-lg"></i>
                 </button>
 
-                <label class="switch gridSwitch">
+                <label class="switch gridSwitch" title={onOffToolTip}>
                     <input type="checkbox" checked={rowData.api.isActive} onChange={(event) => this.onActiveCheckboxChange(rowData, event)} />
                     <span class="slider round"></span>
                 </label>

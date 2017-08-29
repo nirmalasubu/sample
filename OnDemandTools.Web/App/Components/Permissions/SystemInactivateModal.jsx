@@ -28,7 +28,7 @@ class SystemInactivateModal extends React.Component {
 
     onOpenModal() {
         this.setState({
-            message: "If you continue, '" + this.props.data.inActiveModal.userName + "' will no longer be able to access ODT API.",
+            message: "If you continue, '" + this.props.data.inActiveModal.userName + "' will no longer be able to access ODT.",
             isProcessing: false
         });
     }
