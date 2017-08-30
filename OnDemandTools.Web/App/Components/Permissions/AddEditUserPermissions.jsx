@@ -142,7 +142,7 @@ class AddEditUserPermissions extends React.Component {
     /// To Save the user details
     /// </summary>
     handleSave() {
-      
+        console.log("model :"+ JSON.stringify(this.state.permission))
         var elem = this;
         if (!this.isSaveDisabled()) {
 
@@ -191,7 +191,7 @@ class AddEditUserPermissions extends React.Component {
     render() {
 
         return (
-            <Modal bsSize="large" backdrop="static"   onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
+            <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <div>{this.props.data.permission.id != null ? "Edit User" : "Add User"}</div>
@@ -200,7 +200,7 @@ class AddEditUserPermissions extends React.Component {
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <AddEditUserBasicInformation data={this.props.data.permission} 
+                            <AddEditUserBasicInformation data={this.state.permission} 
                             updatePermission={this.updatePermission.bind(this)}  validationStates={this.updateBasicValidateStates.bind(this)}/>
                             <Panel header="Personal information" >
                                 <AddEditUserPersonalInformation data={this.props.data.permission}

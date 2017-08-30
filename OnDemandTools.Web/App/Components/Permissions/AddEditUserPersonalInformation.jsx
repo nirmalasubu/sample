@@ -81,6 +81,24 @@ class AddEditUserPersonalInformation extends React.Component {
     }
 
 
+    formatDate(val) {
+        if (val == null) {
+            return "never"
+        }
+        else {
+
+            var d = new Date(val);
+            var year = d.getFullYear();
+            if (year < 2000) {
+                return "never";
+            }
+            else {
+
+                var dateFormat = Moment(val).format('lll');
+                return Moment(val).format('lll');
+            }
+        }
+    }
     /// <summary>
     /// to hide and show api last Accessed field
     /// </summary>
@@ -88,7 +106,7 @@ class AddEditUserPersonalInformation extends React.Component {
         if (this.state.personalInfoModel.id != null) {
             return (<FormGroup controlId="api last Accessed" >
                 <ControlLabel>API last Accessed</ControlLabel>
-                <FormControl type="text" ref="inputAPIlastAccessed" placeholder="API last Accessed" />
+                <FormControl type="text" ref="inputAPIlastAccessed"  defaultValue={ this.formatDate(this.state.personalInfoModel.api.lastAccessTime)} placeholder="API last Accessed" />
             </FormGroup>);
         }
     }

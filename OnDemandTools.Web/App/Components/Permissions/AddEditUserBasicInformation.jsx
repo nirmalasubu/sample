@@ -59,6 +59,24 @@ class AddEditUserBasicInformation extends React.Component {
 
     }
 
+    formatDate(val) {
+        if (val == null) {
+            return "never"
+        }
+        else {
+
+            var d = new Date(val);
+            var year = d.getFullYear();
+            if (year < 2000) {
+                return "never";
+            }
+            else {
+
+                var dateFormat = Moment(val).format('lll');
+                return Moment(val).format('lll');
+            }
+        }
+    }
 
     /// <summary>
     /// To show/hide lastlogin property
@@ -67,7 +85,7 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="lastlogin " >
                 <ControlLabel>Last login</ControlLabel>
-                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.api.lastAccessTime).format('lll')}  disabled="true"/>
+                <FormControl type="text" defaultValue={ this.formatDate(this.state.userBasicInfoModel.portal.lastLoginTime)}  disabled="true"/>
             </FormGroup>);
         }
     }
@@ -77,10 +95,10 @@ class AddEditUserBasicInformation extends React.Component {
     /// </summary>
     activeDateDisplay() {
 
-        if (this.state.userBasicInfoModel.id != null) {
+        if (this.state.userBasicInfoModel.id != null ) {
             return (<FormGroup controlId="activeDate" >
-                <ControlLabel>Active Date</ControlLabel>
-                <FormControl type="text" defaultValue={Moment(this.state.userBasicInfoModel.activeDateTime).format('lll')}  disabled="true"/>
+                <ControlLabel>{this.state.userBasicInfoModel.portal.isActive?"Active Date":"Last Active Date"}</ControlLabel>
+                <FormControl type="text" defaultValue={this.formatDate(this.state.userBasicInfoModel.activeDateTime)}  disabled="true"/>
             </FormGroup>);
         }
     }
@@ -91,7 +109,10 @@ class AddEditUserBasicInformation extends React.Component {
     activeStatusChange() {
         var model = this.state.userBasicInfoModel;
         model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
-
+        var date =new Date();
+        model.activeDateTime=date;
+        console.log(" model.activeDateTime :"+ model.activeDateTime);
+        console.log("date :"+date);
         this.setState({
             userBasicInfoModel: model
         });
