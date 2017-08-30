@@ -90,6 +90,7 @@ class AddEditUserPermissions extends React.Component {
     //called from cancel warning component to close add edit pop up
     /// </summary>
     handleAddEditClose() {
+        jQuery.extend(this.state.permission, this.state.permissionsUnModifiedData);
         this.props.handleClose();
     }
 
