@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 
 namespace OnDemandTools.Business.Modules.UserPermissions.Model
 {
@@ -14,5 +11,7 @@ namespace OnDemandTools.Business.Modules.UserPermissions.Model
         public string ModuleType { get; set; }
 
         public float DisplayOrder { get; set; }
+
+        public Permission ModulePermission { get; set; }
     }
 }

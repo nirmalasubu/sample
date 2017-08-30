@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Model
@@ -16,5 +13,7 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Model
         public string ModuleType { get; set; }
 
         public float DisplayOrder { get; set; }
+
+        public Permission ModulePermission { get; set; }
     }
 }

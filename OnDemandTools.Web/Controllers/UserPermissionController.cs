@@ -75,6 +75,10 @@ namespace OnDemandTools.Web.Controllers
                 viewModel.Api.ApiKey = Guid.NewGuid().ToString();
                 viewModel.CreatedDateTime = DateTime.UtcNow;
                 viewModel.CreatedBy = HttpContext.User.Identity.Name;
+                if (viewModel.Portal.IsActive)
+                {
+                    viewModel.ActiveDateTime = DateTime.UtcNow;
+                }
             }
             else
             {

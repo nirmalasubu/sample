@@ -14,5 +14,7 @@ namespace OnDemandTools.Web.Models.UserPermissions
         public string ModuleType { get; set; }
 
         public float DisplayOrder { get; set; }
+
+        public Permission ModulePermission { get; set; }
     }
 }
