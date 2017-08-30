@@ -120,12 +120,7 @@ namespace OnDemandTools.Business.Modules.Product
                         {
                             if (!IsContentTierExistsInDestination(des, contentTier))
                             {
-                                DLDestinationModel.Property property = new DLDestinationModel.Property();
-                                property.Name = "ContentTier";
-                                property.Value = contentTier.Name;
-                                property.Brands = contentTier.Brands;
-                                property.TitleIds = contentTier.TitleIds;
-                                property.SeriesIds = contentTier.SeriesIds;
+                                DLDestinationModel.Property property = contentTier.ToDataModel<DLModel.ContentTier, DLDestinationModel.Property>();
                                 des.Properties.Add(property);
                             }
                         }
@@ -171,12 +166,7 @@ namespace OnDemandTools.Business.Modules.Product
                 {
                     foreach (DLDestinationModel.Category cat in des.Categories)
                     {
-                        DLDestinationModel.Property property = new DLDestinationModel.Property();
-                        property.Name = "Category";
-                        property.Value = cat.Name;
-                        property.Brands = cat.Brands;
-                        property.TitleIds = cat.TitleIds;
-                        property.SeriesIds = cat.SeriesIds;
+                        DLDestinationModel.Property property = cat.ToDataModel<DLDestinationModel.Category, DLDestinationModel.Property>();
                         des.Properties.Add(property);
                     }
                 }

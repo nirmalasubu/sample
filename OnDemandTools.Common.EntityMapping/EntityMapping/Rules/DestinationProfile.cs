@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MongoDB.Bson;
-using BLModel = OnDemandTools.Business.Modules.Destination.Model;
-using DLModel = OnDemandTools.DAL.Modules.Destination.Model;
-using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
-using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
+using OnDemandTools.DAL.Modules.Product.Model;
 using BLAiringLongModel = OnDemandTools.Business.Modules.Airing.Model.Alternate;
-using OnDemandTools.Business.Modules.Airing.Model.Alternate.Long;
+using BLAiringModel = OnDemandTools.Business.Modules.Airing.Model;
+using BLModel = OnDemandTools.Business.Modules.Destination.Model;
+using DLAiringModel = OnDemandTools.DAL.Modules.Airings.Model;
+using DLModel = OnDemandTools.DAL.Modules.Destination.Model;
 
 namespace OnDemandTools.Common.EntityMapping
 {
@@ -45,7 +45,18 @@ namespace OnDemandTools.Common.EntityMapping
             // Mapping betweeen business models in different domain
             CreateMap<BLModel.Destination, BLAiringModel.Destination>();
             CreateMap <BLModel.Property, BLAiringModel.Property> ();
-            CreateMap<BLModel.Category, BLAiringModel.Property>();
+            CreateMap<BLModel.Category, BLAiringModel.Property>().
+                ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+                ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
+
+            CreateMap<DLModel.Category, DLModel.Property>().
+               ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+               ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
+
+            CreateMap<ContentTier, DLModel.Property>().
+                 ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+               ForMember(d => d.Name, opt => opt.UseValue<string>("ContentTier"));
+
             CreateMap<BLModel.Deliverable, BLAiringModel.Deliverable>();
 
         }
