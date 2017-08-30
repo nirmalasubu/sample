@@ -15,6 +15,7 @@ import CancelWarningModal from 'Components/Common/CancelWarningModal';
 import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPersonalInformation';
 import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
 import AddEditUserPortalPermissions from 'Components/Permissions/AddEditUserPortalPermissions';
+import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/AddEditUserDeliveryQueuePermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
 @connect((store) => {
@@ -211,7 +212,8 @@ class AddEditUserPermissions extends React.Component {
                                     updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={2} title="Delivery Queues">
-
+                                        <AddEditUserDeliveryQueuePermissions data={this.state.permission} 
+                                    updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={3} title="ODT API">
 

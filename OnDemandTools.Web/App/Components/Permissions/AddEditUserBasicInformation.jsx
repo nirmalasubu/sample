@@ -114,6 +114,13 @@ class AddEditUserBasicInformation extends React.Component {
                 model.portal.modulePermissions[key].canEdit=true;
                 model.portal.modulePermissions[key].canDelete=true;
             });
+
+            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
+                model.portal.deliveryQueuePermissions[key].canRead=true;
+                model.portal.deliveryQueuePermissions[key].canAdd=true;
+                model.portal.deliveryQueuePermissions[key].canEdit=true;
+                model.portal.deliveryQueuePermissions[key].canDelete=true;
+            });
         }
         else{
             if (model.id == null)
@@ -123,6 +130,13 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canAdd=false;
                     model.portal.modulePermissions[key].canEdit=false;
                     model.portal.modulePermissions[key].canDelete=false;
+                });
+
+                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
+                    model.portal.deliveryQueuePermissions[key].canRead=false;
+                    model.portal.deliveryQueuePermissions[key].canAdd=false;
+                    model.portal.deliveryQueuePermissions[key].canEdit=false;
+                    model.portal.deliveryQueuePermissions[key].canDelete=false;
                 });
             }
         }

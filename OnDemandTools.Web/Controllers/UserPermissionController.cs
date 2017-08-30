@@ -8,6 +8,7 @@ using OnDemandTools.Business.Modules.UserPermissions;
 using OnDemandTools.Common.Model;
 using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using Microsoft.AspNetCore.Authorization;
+using OnDemandTools.Business.Modules.Queue;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,10 +19,12 @@ namespace OnDemandTools.Web.Controllers
     {
 
         IUserPermissionService _service;
+        IQueueService _queueSvc;
 
-        public UserPermissionController(IUserPermissionService service)
+        public UserPermissionController(IUserPermissionService service, IQueueService queueSvc)
         {
             _service = service;
+            _queueSvc = queueSvc;
         }
 
 
@@ -55,6 +58,19 @@ namespace OnDemandTools.Web.Controllers
                         if (!permission.Portal.ModulePermissions.ContainsKey(module.ModuleName))
                         {
                             permission.Portal.ModulePermissions.Add(module.ModuleName, new Permission(permission.Portal.IsAdmin));
+                        }
+                    }
+                }
+
+                var queues = _queueSvc.GetQueues();
+
+                foreach (var queue in queues)
+                {
+                    foreach (var permission in permissionLists)
+                    {
+                        if (!permission.Portal.DeliveryQueuePermissions.ContainsKey(queue.Name))
+                        {
+                            permission.Portal.DeliveryQueuePermissions.Add(queue.Name, new Permission(permission.Portal.IsAdmin));
                         }
                     }
                 }
@@ -115,6 +131,13 @@ namespace OnDemandTools.Web.Controllers
             foreach (var module in modules)
             {
                 model.Portal.ModulePermissions[module.ModuleName] = new Permission();
+            }
+
+            var queues = _queueSvc.GetQueues();
+
+            foreach (var queue in queues)
+            {
+                model.Portal.DeliveryQueuePermissions[queue.Name] = new Permission();
             }
 
             return model;
