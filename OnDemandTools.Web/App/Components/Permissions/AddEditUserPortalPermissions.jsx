@@ -88,13 +88,13 @@ class AddEditUserPortalPermissions extends React.Component {
     /// <summary>
     /// to enable and disable  permission checkbox
     /// </summary>
-    isPortalcheckboxEnabled(key) {
+    isPortalcheckboxEnabled(key,permissionType) {
         if (this.state.userPortalPermissionModel.portal.isAdmin)
             return true;
 
         for (var i = 0; i <= this.props.config.portalModules.length; i++) {
             if (this.props.config.portalModules[i].moduleName == key) {
-                return this.props.config.portalModules[i].moduleType == "Admin";
+                return this.props.config.portalModules[i].moduleType == "Admin" || (this.props.config.portalModules[i].moduleType == "PortalUser" && permissionType!="canRead");
             }
         }
 
@@ -111,16 +111,16 @@ class AddEditUserPortalPermissions extends React.Component {
                 <Col componentClass="td" class="user-permission-portal-module">{this.constructPortalDisplayName(key)}</Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
                     onChange={(event) => this.activechkChange(key, "canRead", event)}
-                    disabled={this.isPortalcheckboxEnabled(key) || (row[key]["canAdd"] || row[key]["canEdit"] || row[key]["canDelete"]) ? true : false} /></Col>
+                    disabled={this.isPortalcheckboxEnabled(key,"canRead") || (row[key]["canAdd"] || row[key]["canEdit"] || row[key]["canDelete"]) ? true : false} /></Col>
                 <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
                     onChange={(event) => this.activechkChange(key, "canAdd", event)}
-                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
+                    disabled={this.isPortalcheckboxEnabled(key, "canAdd")} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
                     onChange={(event) => this.activechkChange(key, "canEdit", event)}
-                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
+                    disabled={this.isPortalcheckboxEnabled(key, "canEdit")} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canDelete}
                     onChange={(event) => this.activechkChange(key, "canDelete", event)}
-                    disabled={this.isPortalcheckboxEnabled(key)} /></Col>
+                    disabled={this.isPortalcheckboxEnabled(key,"canDelete")} /></Col>
             </Row>)
         }.bind(this));
 

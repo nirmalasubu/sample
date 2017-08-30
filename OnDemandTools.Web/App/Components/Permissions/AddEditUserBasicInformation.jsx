@@ -203,7 +203,7 @@ class AddEditUserBasicInformation extends React.Component {
                             <Col sm={4}>
                                 <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for user name"
+                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for User Id"
                                         onChange={(event) => this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName} />
                                 </FormGroup>
                             </Col>
