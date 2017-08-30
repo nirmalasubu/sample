@@ -20,7 +20,7 @@ namespace OnDemandTools.Business.Modules.Product
         IProductCommand productCommand;
         IDestinationQuery destionationQueryHelper;
 
-        public ProductService(IProductQuery productHelper, 
+        public ProductService(IProductQuery productHelper,
             IDestinationQuery destionationQueryHelper,
             IProductCommand productCommand
             )
@@ -49,7 +49,7 @@ namespace OnDemandTools.Business.Modules.Product
         public List<Model.Product> GetByProductIds(List<Guid> productIds)
         {
             return (productHelper.GetByProductIds(productIds).ToList<DLModel.Product>()
-                .ToBusinessModel<List<DLModel.Product>, List<BLModel.Product>>()) ;
+                .ToBusinessModel<List<DLModel.Product>, List<BLModel.Product>>());
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace OnDemandTools.Business.Modules.Product
         /// <param name="tags">The tags.</param>
         /// <returns></returns>
         public List<Model.Product> GetByTags(List<string> tags)
-        {         
+        {
             return (productHelper.GetByTags(tags).ToList<DLModel.Product>()
-                .ToBusinessModel<List<DLModel.Product>,List<BLModel.Product>>());
+                .ToBusinessModel<List<DLModel.Product>, List<BLModel.Product>>());
         }
 
         public void ProductDestinationConverter(ref Airing.Model.Airing airing)
@@ -73,12 +73,15 @@ namespace OnDemandTools.Business.Modules.Product
                     DestinationName = destination,
                     AuthorizationRequired = flight.Products.Where(p => p.ExternalId.Equals(product.ExternalId)).FirstOrDefault().IsAuth
                 });
+
                 var destinationData = destionationQueryHelper
                     .GetByDestinationNames(destinationMapping.Select(d => d.DestinationName).ToList())
                     .Distinct(new DestinationDataModelComparer())
                     .ToList();
 
                 AddCategoriesToDestinationProperties(destinationData);
+
+                AddContentTierToDestinationProperties(destinationData, products);
 
                 var destinations = destinationData.ToDataModel<List<DLDestinationModel.Destination>, List<DLAiringModel.Destination>>();
 
@@ -96,7 +99,70 @@ namespace OnDemandTools.Business.Modules.Product
             }
         }
 
+        /// <summary>
+        /// Add's Content Tiers to Destination Properties
+        /// </summary>
+        /// <param name="destinationData"></param>
+        /// <param name="products"></param>
+        private void AddContentTierToDestinationProperties(List<DLDestinationModel.Destination> destinationData, IQueryable<DLModel.Product> products)
+        {
+            if (products == null || !products.Any()) return;
 
+            if (destinationData == null || !destinationData.Any()) return;
+
+            foreach (DLModel.Product product in products)
+            {
+                if (product.ContentTiers != null && product.ContentTiers.Any())
+                {
+                    foreach (DLModel.ContentTier contentTier in product.ContentTiers)
+                    {
+                        foreach (DLDestinationModel.Destination des in destinationData)
+                        {
+                            if (!IsContentTierExistsInDestination(des, contentTier))
+                            {
+                                DLDestinationModel.Property property = new DLDestinationModel.Property();
+                                property.Name = "ContentTier";
+                                property.Value = contentTier.Name;
+                                property.Brands = contentTier.Brands;
+                                property.TitleIds = contentTier.TitleIds;
+                                property.SeriesIds = contentTier.SeriesIds;
+                                des.Properties.Add(property);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks the given content tier already added to Destination property or not.
+        /// </summary>
+        /// <param name="des"></param>
+        /// <param name="contentTier"></param>
+        /// <returns></returns>
+        private bool IsContentTierExistsInDestination(DLDestinationModel.Destination des, DLModel.ContentTier contentTier)
+        {
+            DLDestinationModel.Property destProperty = des.Properties.FirstOrDefault(e => e.Name == "ContentTier" && e.Value == contentTier.Name);
+
+            if (destProperty == null) return false;
+
+            bool brandsAreEquivalent = (destProperty.Brands.Count == destProperty.Brands.Count)
+                && !destProperty.Brands.Except(destProperty.Brands).Any();
+
+            bool titlesAreEquivalent = (destProperty.TitleIds.Count == destProperty.TitleIds.Count)
+                && !destProperty.TitleIds.Except(destProperty.TitleIds).Any();
+
+            bool seriesAreEquivalent = (destProperty.SeriesIds.Count == destProperty.SeriesIds.Count)
+                && !destProperty.SeriesIds.Except(destProperty.SeriesIds).Any();
+
+            return (brandsAreEquivalent && titlesAreEquivalent && seriesAreEquivalent);
+        }
+
+        /// <summary>
+        /// Add's the Categories to Destination Properties
+        /// </summary>
+        /// <param name="destinationData"></param>
         private static void AddCategoriesToDestinationProperties(List<DLDestinationModel.Destination> destinationData)
         {
             foreach (DLDestinationModel.Destination des in destinationData)  //verify each destination has categories . if yes then combine categories and properties.
@@ -106,7 +172,8 @@ namespace OnDemandTools.Business.Modules.Product
                     foreach (DLDestinationModel.Category cat in des.Categories)
                     {
                         DLDestinationModel.Property property = new DLDestinationModel.Property();
-                        property.Name = cat.Name;
+                        property.Name = "Category";
+                        property.Value = cat.Name;
                         property.Brands = cat.Brands;
                         property.TitleIds = cat.TitleIds;
                         property.SeriesIds = cat.SeriesIds;
