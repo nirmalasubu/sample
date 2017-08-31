@@ -98,7 +98,7 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id != null ) {
             return (<FormGroup controlId="activeDate" >
                 <ControlLabel>{this.state.userBasicInfoModel.portal.isActive?"Active Date":"Last Active Date"}</ControlLabel>
-                <FormControl type="text" defaultValue={this.formatDate(this.state.userBasicInfoModel.activeDateTime)}  disabled="true"/>
+                <FormControl type="text" value={this.formatDate(this.state.userBasicInfoModel.activeDateTime)} readOnly disabled="true"/>
             </FormGroup>);
         }
     }
@@ -111,8 +111,6 @@ class AddEditUserBasicInformation extends React.Component {
         model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
         var date =new Date();
         model.activeDateTime=date;
-        console.log(" model.activeDateTime :"+ model.activeDateTime);
-        console.log("date :"+date);
         this.setState({
             userBasicInfoModel: model
         });
