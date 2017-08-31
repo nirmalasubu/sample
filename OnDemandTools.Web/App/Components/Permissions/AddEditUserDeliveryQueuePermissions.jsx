@@ -23,7 +23,10 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
         this.state = ({
             userQueuePermissionModel: "",
             userQueuePermissionunmodifiedModel: "",
-            componentJustMounted: true
+            componentJustMounted: true,
+            filterValue : {
+                queueName : ""
+            }
         });
 
     }
@@ -101,6 +104,43 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
             return true;
     }
 
+    /// <summary>
+    /// handles the filter value onchange
+    /// </summary>
+    handleChange(val) {
+        console.log(val);
+
+        var filterState = this.state.filterValue;
+        filterState.queueName = val;
+        this.setState({filterValue : filterState});
+    }
+
+    // The goal of this function is to filter 'queues'
+    // based on user provided filter criteria and return the refined 'queue' list.
+    // If no filter criteria is provided then return the full 'queue' list
+    applyFilter(permissions, filter) {
+        //console.log(permissions);
+        //if (filter.queueName != undefined && permissions != undefined) {
+        //    var filteredPermissions = permissions;
+
+        //    var queueName = filter.queueName.toLowerCase();
+
+        //    var filteredQueues = this.props.queues.filter(function(queue) {
+        //        return queue.friendlyName.toLowerCase().indexOf(queueName) > -1
+        //    });            
+
+        //    if (queueName != "") {
+        //        filteredPermissions = filteredPermissions.filter(function (permission) {
+        //            return true //filteredQueues.indexOf(permission) > -1
+        //        });
+        //    }
+
+        //    return filteredPermissions;
+
+        //}
+        return permissions;
+    }
+
     render() {
         let row = null;
         let vals = null;
@@ -125,7 +165,16 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
 
         return (
             <div>
-
+                <Form inline>
+                  <ControlLabel>Filter by: </ControlLabel>
+                    {' '}
+                    <FormGroup controlId="name">
+                      <FormControl type="text" inputRef={(input) => this.inputQueue = input} onChange={(event) => this.handleChange(event)} placeholder="Queue Name" />
+                    </FormGroup>
+                    <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
+                        Clear All Filters
+                    </Button>
+                </Form>
                 <div className="clearBoth modalTableContainer">
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
