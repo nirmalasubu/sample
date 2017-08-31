@@ -139,7 +139,7 @@ class AddEditUserBasicInformation extends React.Component {
     handleTextChange(event) {
 
         var model = this.state.userBasicInfoModel;
-        model.userName = event.target.value;
+        model.userName = event.target.value.toLowerCase().trim();
 
         this.setState({
             userBasicInfoModel: model
@@ -172,7 +172,7 @@ class AddEditUserBasicInformation extends React.Component {
 
         for (var x = 0; x < this.props.permissions.length; x++) {
             if (this.props.permissions[x].id != user.id) {
-                if (this.props.permissions[x].userName.trim() == user.userName.trim()) {
+                if (this.props.permissions[x].userName.toLowerCase().trim() == user.userName.toLowerCase().trim()) {
                     this.setState({
                         showError: true
                     });
@@ -203,7 +203,7 @@ class AddEditUserBasicInformation extends React.Component {
                             <Col sm={4}>
                                 <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for User Id"
+                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for User ID"
                                         onChange={(event) => this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName} />
                                 </FormGroup>
                             </Col>

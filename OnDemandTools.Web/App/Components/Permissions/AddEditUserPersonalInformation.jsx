@@ -140,14 +140,16 @@ class AddEditUserPersonalInformation extends React.Component {
        
         var extn=/^(?:\d{1}|\d{2}|\d{3}|\d{4}|\d{5})$/;
         var isvalidextension=this.state.personalInfoModel.extension==""||this.state.personalInfoModel.extension.match(extn)!=null?true : false;
+
+        var phoneAndExtensionvalidation=(this.state.personalInfoModel.extension!="" && this.state.personalInfoModel.phoneNumber!="")|| this.state.personalInfoModel.extension==""? true:false;
         this.setState({
             validationStateFirstName: isvalidFirstName ? null : 'error',
             validationStateLastName: isvalidLastName ? null : 'error',
-            validationStatePhoneNumber: isvalidPhoneNumber ? null : 'error',
+            validationStatePhoneNumber: isvalidPhoneNumber && (phoneAndExtensionvalidation) ? null : 'error',
             validationStateExtension: isvalidextension ? null : 'error'
         });
 
-        this.props.validationStates(isvalidFirstName, isvalidLastName,isvalidPhoneNumber,isvalidextension);
+        this.props.validationStates(isvalidFirstName, isvalidLastName,isvalidPhoneNumber && (phoneAndExtensionvalidation),isvalidextension);
     }
 
 
@@ -186,7 +188,7 @@ class AddEditUserPersonalInformation extends React.Component {
                                <Col sm={1}>
                                                                 <FormGroup controlId="Extension" class="user-permission-formgroup" validationState={this.state.validationStateExtension} >
                                     <ControlLabel>Extension </ControlLabel>
-                                  <FormControl type="text" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
+                                  <FormControl type="number" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
                                     onChange={(event) => this.handleTextChange("extension", event)}/>
                                 </FormGroup>
                             </Col>

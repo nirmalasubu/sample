@@ -93,6 +93,12 @@ class AddEditUserPortalPermissions extends React.Component {
         var row = this.state.userPortalPermissionModel.portal.modulePermissions;
         for (var i = 0; i <= this.props.config.portalModules.length; i++) {
             if (this.props.config.portalModules[i].moduleName == key) {
+                if(permissionType=="canRead")
+                {
+                    return (<input type="checkbox" checked={row[key][permissionType]}  
+                disabled={isAdmin||!this.props.config.portalModules[i].modulePermission[permissionType] ||(row[key]["canAdd"] || row[key]["canEdit"] || row[key]["canDelete"])} 
+                onChange={(event) => this.activechkChange(key, permissionType, event)}  /> );
+                }
              return <input type="checkbox" checked={row[key][permissionType]}  disabled={isAdmin||!this.props.config.portalModules[i].modulePermission[permissionType]}  onChange={(event) => this.activechkChange(key, permissionType, event)}  /> 
         }
         }

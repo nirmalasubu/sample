@@ -834,6 +834,7 @@ tr.strikeout td:before {
 
 .user-permission-personalinfo-extension {
     width: 75px;
+    padding:5px;
 }
 
 .user-permission-formgroup {
