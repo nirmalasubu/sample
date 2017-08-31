@@ -188,7 +188,7 @@ class AddEditUserPersonalInformation extends React.Component {
                                <Col sm={1}>
                                                                 <FormGroup controlId="Extension" class="user-permission-formgroup" validationState={this.state.validationStateExtension} >
                                     <ControlLabel>Extension </ControlLabel>
-                                  <FormControl type="number" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
+                                  <FormControl type="text" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
                                     onChange={(event) => this.handleTextChange("extension", event)}/>
                                 </FormGroup>
                             </Col>
