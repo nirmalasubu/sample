@@ -27,6 +27,7 @@ export const savePermissionComplete = (permission) => {
 };
 
 
+
 /******************* Helper methods *******************/
 /// <summary>
 /// Asynchronously retrieve path translations from API. If successful
@@ -62,6 +63,21 @@ export const savePermission = (object) => {
     };
 };
 
+/// <summary>
+/// Asynchronously retrieve user contact from API. If successful
+/// dispatch the appropriate action for further processing
+/// </summary>
+export const fetchContactForRecords = (id) => {
+        return Axios.get('/api/userpermission/getcontactforbyuserid/' + id)
+            .then(response => {
+                return (response.data);
+            })
+            .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
+            });
+   
+    
+};
 export const getNewUserPermission = () => {
     return Axios.get('/api/userpermission/newuserpermission')
         .then(response => {

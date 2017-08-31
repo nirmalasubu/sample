@@ -1,11 +1,12 @@
 ﻿using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using DLModel = OnDemandTools.DAL.Modules.UserPermissions.Model;
-using OnDemandTools.DAL.Modules.UserPermissions.Query;
+using OnDemandTools.DAL.Modules.UserPermissions.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using OnDemandTools.Common.Model;
 using OnDemandTools.DAL.Modules.UserPermissions.Command;
+using OnDemandTools.DAL.Modules.UserPermissions.Queries;
 
 namespace OnDemandTools.Business.Modules.UserPermissions
 {
@@ -40,6 +41,11 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         {
             return _query.GetAllPortalModules().OrderBy(p => p.DisplayOrder)
                 .ToList().ToBusinessModel<List<DLModel.PortalModule>, List<BLModel.PortalModule>>();
+        }
+
+        public IList<BLModel.UserPermission> GetContactForByUserId(string id)
+        {
+            return _query.GetContactForByUserId(id).ToList<DLModel.UserPermission>().ToBusinessModel<List<DLModel.UserPermission>, List<BLModel.UserPermission>>();
         }
     }
 }

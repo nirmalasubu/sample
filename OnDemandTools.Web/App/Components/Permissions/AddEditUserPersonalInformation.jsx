@@ -7,6 +7,7 @@ import rrui from 'react-phone-number-input/rrui.css'
 import rpni from 'react-phone-number-input/style.css'
 import Moment from 'moment';
 import validator from 'validator';
+import {fetchContactForRecords} from 'Actions/Permissions/PermissionActions';
 
 @connect((store) => {
     return {
@@ -31,7 +32,8 @@ class AddEditUserPersonalInformation extends React.Component {
             validationStateFirstName: null,
             validationStateLastName: null,
             validationStatePhoneNumber: null,
-            validationStateExtension: null
+            validationStateExtension: null,
+            contactFor:null
         });
     }
 
@@ -61,6 +63,20 @@ class AddEditUserPersonalInformation extends React.Component {
         if (this.state.personalInfoModel.id == null) {
             this.setState({ personalInfoModel: model, componentJustMounted: true });
         }
+        else{
+           
+            let promise=fetchContactForRecords(this.state.personalInfoModel.id);
+            promise.then(response => {
+                this.setState({
+                    contactFor: response
+                });
+            }).catch(error => {
+                this.setState({
+                    contactFor: {}
+                });
+            })
+            
+        }
         this.validateForm();
     }
 
@@ -82,10 +98,42 @@ class AddEditUserPersonalInformation extends React.Component {
     /// </summary>
     contactforDisplay() {
         if (this.state.personalInfoModel.id != null) {
-            return (<FormGroup controlId="contactfor" >
-                <ControlLabel>Contact for</ControlLabel>
-                <FormControl type="text" ref="inputContactfor" placeholder="Contact for" />
-            </FormGroup>);
+          
+            if(this.state.contactFor!=null)
+            {
+               
+                if(this.state.contactFor.technicalContactFor!="" && this.state.contactFor.functionalContactFor!="")
+                {
+                   
+                    return (<Row><Col sm={3}><FormGroup controlId="technicaContactfor" >
+                 <ControlLabel> Technical Contact for</ControlLabel>
+              <FormControl type="text" ref="inputContactfor"  value={this.state.contactFor.technicalContactFor} placeholder="Contact for" />
+                  </FormGroup></Col>
+                  <Col sm={3}><FormGroup controlId="functionalContactfor" >
+                 <ControlLabel> Functional Contact for</ControlLabel>
+              <FormControl type="text" ref="inputContactfor"  value={this.state.contactFor.functionalContactFor} placeholder="Contact for" />
+                  </FormGroup></Col></Row>
+                  );
+                         }
+
+        if(this.state.contactFor.technicalContactFor!="")
+            {
+             
+                return (<Row><Col sm={3}><FormGroup controlId="technicaContactfor" >
+              <ControlLabel> Technical Contact for</ControlLabel>
+              <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.technicalContactFor} placeholder="Contact for" />
+          </FormGroup></Col></Row>);
+              }
+
+              if(this.state.contactFor.functionalContactFor!="")
+            {
+                  return (<Row><Col sm={3}><FormGroup controlId="functionalContactfor" >
+                         <ControlLabel> Functional Contact for</ControlLabel>
+                     <FormControl type="text" ref="inputContactfor" placeholder="Contact for" />
+                     </FormGroup></Col></Row>);
+            }
+            }
+          
         }
     }
 
@@ -218,11 +266,11 @@ class AddEditUserPersonalInformation extends React.Component {
                             </Col>
                         </Form >
                     </Row>
-                    <Row>
-                        <Col sm={3}>
+                   
+                        
                             {this.contactforDisplay()}
-                        </Col>
-                    </Row>
+                       
+                    
                 </Grid>
             </div>
         )

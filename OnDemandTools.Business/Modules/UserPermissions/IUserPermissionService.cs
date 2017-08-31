@@ -32,5 +32,7 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         /// <param name="id">object id</param>
         /// <returns></returns>
         Model.UserPermission GetById(string id);
+
+        IList<Model.UserPermission> GetContactForByUserId(string id);
     }
 }

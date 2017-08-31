@@ -9,6 +9,7 @@ using OnDemandTools.Common.Model;
 using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using Microsoft.AspNetCore.Authorization;
 using OnDemandTools.Business.Modules.Queue;
+using System.Collections;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -78,6 +79,17 @@ namespace OnDemandTools.Web.Controllers
             }
 
             return permissionLists;
+        }
+
+        [Authorize]
+        [HttpGet("getcontactforbyuserid/{id}")]
+        public UserContactFor GetContactForByUserId(string id)
+        {
+            IList <BLModel.UserPermission> lstUser = _service.GetContactForByUserId(id);
+            UserContactFor contactfor = new UserContactFor();
+            contactfor.TechnicalContactFor = lstUser.Where(s => s.Api.TechnicalContactId == id).Select(p => p.UserName).ToList();
+            contactfor.FunctionalContactFor = lstUser.Where(s => s.Api.FunctionalContactId == id).Select(p => p.UserName).ToList();
+            return contactfor;
         }
 
         [Authorize]
