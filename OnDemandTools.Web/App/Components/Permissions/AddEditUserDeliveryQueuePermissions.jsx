@@ -107,11 +107,9 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
     /// <summary>
     /// handles the filter value onchange
     /// </summary>
-    handleChange(val) {
-        console.log(val);
-
+    handleChange(event) {
         var filterState = this.state.filterValue;
-        filterState.queueName = val;
+        filterState.queueName = event.target.value;
         this.setState({filterValue : filterState});
     }
 
@@ -119,32 +117,39 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
     // based on user provided filter criteria and return the refined 'queue' list.
     // If no filter criteria is provided then return the full 'queue' list
     applyFilter(permissions, filter) {
-        //console.log(permissions);
-        //if (filter.queueName != undefined && permissions != undefined) {
-        //    var filteredPermissions = permissions;
+        const newObj = {};
 
-        //    var queueName = filter.queueName.toLowerCase();
+        if (filter.queueName != undefined && permissions != undefined) {
+            var filteredPermissions = permissions;
 
-        //    var filteredQueues = this.props.queues.filter(function(queue) {
-        //        return queue.friendlyName.toLowerCase().indexOf(queueName) > -1
-        //    });            
+            var queueName = filter.queueName.toLowerCase();
 
-        //    if (queueName != "") {
-        //        filteredPermissions = filteredPermissions.filter(function (permission) {
-        //            return true //filteredQueues.indexOf(permission) > -1
-        //        });
-        //    }
+            if (queueName != "") {
+                
+                $.each(this.props.queues, function( key, value ) { 
+                    if(value.friendlyName.toLowerCase().indexOf(queueName) > -1)
+                    {
+                        newObj[value.name] = filteredPermissions[value.name];
+                    }
+                });
 
-        //    return filteredPermissions;
+                return newObj;
+            }
+        }
 
-        //}
         return permissions;
+    }
+
+    clearFilter()
+    {
     }
 
     render() {
         let row = null;
         let vals = null;
-        row = this.state.userQueuePermissionModel.portal.deliveryQueuePermissions;
+        row = this.applyFilter(this.state.userQueuePermissionModel.portal.deliveryQueuePermissions, this.state.filterValue);
+
+        console.log(row);
 
         vals = Object.keys(row).map(function (key, index) {
             return (<Row componentClass="tr" key={index.toString()}>

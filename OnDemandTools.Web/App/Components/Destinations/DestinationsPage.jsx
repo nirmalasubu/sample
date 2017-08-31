@@ -125,11 +125,7 @@ class DestinationPage extends React.Component {
 
     render() {
 
-        console.log(this.props.destinations);
-
         var filteredDestinations = this.getFilterVal(this.props.destinations, this.state.filterValue);
-
-        console.log(filteredDestinations);
 
         return (
             <div>
