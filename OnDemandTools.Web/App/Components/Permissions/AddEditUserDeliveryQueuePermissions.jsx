@@ -149,8 +149,6 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
         let vals = null;
         row = this.applyFilter(this.state.userQueuePermissionModel.portal.deliveryQueuePermissions, this.state.filterValue);
 
-        console.log(row);
-
         vals = Object.keys(row).map(function (key, index) {
             return (<Row componentClass="tr" key={index.toString()}>
                 <Col componentClass="td" class="user-permission-portal-module">{this.constructQueueDisplayName(key)}</Col>
@@ -170,6 +168,7 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
 
         return (
             <div>
+                <br/>
                 <Form inline>
                   <ControlLabel>Filter by: </ControlLabel>
                     {' '}
