@@ -8,7 +8,7 @@ using Xunit;
 
 namespace OnDemandTools.API.Tests.DestinationRoute
 {
-   
+
     [TestCaseOrderer("OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.API.Tests")]
     [Collection("API Collection")]
     public class GetDestinationRule
@@ -50,8 +50,8 @@ namespace OnDemandTools.API.Tests.DestinationRoute
             JArray properties = response.Value<JArray>(@"properties");
 
 
-            Assert.True(responseDestinationName == destinationName, string.Format("UTEST destination name is passed but it is returned as {0}",responseDestinationName));
-          
+            Assert.True(responseDestinationName == destinationName, string.Format("UTEST destination name is passed but it is returned as {0}", responseDestinationName));
+
         }
 
 
@@ -77,7 +77,7 @@ namespace OnDemandTools.API.Tests.DestinationRoute
                 Assert.True(false, string.Format("destination name has been created {0}", destinationName));
             }
 
-            Assert.True(value!=null, string.Format("destination name does not exists or user has no permission to the destination :{0}", destinationName));
+            Assert.True(value != null, string.Format("destination name does not exists or user has no permission to the destination :{0}", destinationName));
         }
 
         /// <summary>
@@ -109,13 +109,14 @@ namespace OnDemandTools.API.Tests.DestinationRoute
             {
                 var itemProperties = item.Children<JProperty>();
                 var nameProperty = itemProperties.FirstOrDefault(x => x.Name == "name");
-                if (nameProperty.Value.ToString() == "UNITTESTCategory")
+                var valueProperty = itemProperties.FirstOrDefault(x => x.Name == "value");
+                if (nameProperty.Value.ToString().Equals("Category") && valueProperty.Value.ToString().Equals("UNITTESTCategory"))
                 {
                     isCategoryExists = true;
                 }
 
             }
-            Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not eixists with the destinstion properties" ));
+            Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not eixists with the destinstion properties"));
         }
 
     }

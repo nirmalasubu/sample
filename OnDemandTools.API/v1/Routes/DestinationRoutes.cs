@@ -56,13 +56,8 @@ namespace OnDemandTools.API.v1.Routes
                 if (des.Categories.Any())
                 {
                     foreach (Category cat in des.Categories)
-                    {
-                        Property property = new Property();
-                        property.Name = cat.Name;
-                        property.Brands = cat.Brands;
-                        property.TitleIds = cat.TitleIds;
-                        property.SeriesIds = cat.SeriesIds;
-                        des.Properties.Add(property);
+                    {                        
+                        des.Properties.Add(cat.ToBusinessModel<Category, Property>());
                     }
                 }
             }
@@ -80,12 +75,7 @@ namespace OnDemandTools.API.v1.Routes
             {
                 foreach (Category cat in destination.Categories)
                 {
-                    Property property = new Property();
-                    property.Name = cat.Name;
-                    property.Brands = cat.Brands;
-                    property.TitleIds = cat.TitleIds;
-                    property.SeriesIds = cat.SeriesIds;
-                    destination.Properties.Add(property);
+                     destination.Properties.Add(cat.ToBusinessModel<Category, Property>());
                 }
             }
             return destination;

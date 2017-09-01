@@ -9,7 +9,7 @@ using DLModel = OnDemandTools.DAL.Modules.Destination.Model;
 
 namespace OnDemandTools.Common.EntityMapping
 {
-    public class DestinationProfile: Profile
+    public class DestinationProfile : Profile
     {
         public DestinationProfile()
         {
@@ -44,7 +44,12 @@ namespace OnDemandTools.Common.EntityMapping
 
             // Mapping betweeen business models in different domain
             CreateMap<BLModel.Destination, BLAiringModel.Destination>();
-            CreateMap <BLModel.Property, BLAiringModel.Property> ();
+            CreateMap<BLModel.Property, BLAiringModel.Property>();
+
+            CreateMap<BLModel.Category, BLModel.Property>().
+                 ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+                ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
+
             CreateMap<BLModel.Category, BLAiringModel.Property>().
                 ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
                 ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
