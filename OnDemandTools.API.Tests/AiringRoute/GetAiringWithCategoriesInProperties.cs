@@ -8,7 +8,7 @@ using Xunit;
 
 namespace OnDemandTools.API.Tests.AiringRoute
 {
-  
+
     [TestCaseOrderer("OnDemandTools.API.Tests.Helpers.CustomTestCaseOrderer", "OnDemandTools.API.Tests")]
     [Collection("API Collection")]
     public class GetAiringWithCategoriesInProperties
@@ -46,14 +46,15 @@ namespace OnDemandTools.API.Tests.AiringRoute
             }
 
             JArray flights = response.Value<JArray>(@"flights");
-            JArray destinations = flights.First.Value <JArray>(@"destinations");
+            JArray destinations = flights.First.Value<JArray>(@"destinations");
             JArray properties = destinations.First.Value<JArray>(@"properties");
             bool isCategoryExists = false;
             foreach (var item in properties.Children())
             {
                 var itemProperties = item.Children<JProperty>();
                 var nameProperty = itemProperties.FirstOrDefault(x => x.Name == "name");
-                if(nameProperty.Value.ToString()== "UNITTESTCategory")
+                var valueProperty = itemProperties.FirstOrDefault(x => x.Name == "value");
+                if (nameProperty.Value.ToString().Equals("Category") && valueProperty.Value.ToString().Equals("UNITTESTCategory"))
                 {
                     isCategoryExists = true;
                 }
@@ -62,7 +63,7 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not exists"));
         }
-        
+
 
 
         #region Private Mathods 
