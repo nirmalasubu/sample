@@ -1,13 +1,15 @@
 ﻿import React from 'react';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Phone,{parsePhoneNumber,
-    isValidPhoneNumber} from 'react-phone-number-input'
+import Phone, {
+    parsePhoneNumber,
+    isValidPhoneNumber
+} from 'react-phone-number-input'
 import rrui from 'react-phone-number-input/rrui.css'
 import rpni from 'react-phone-number-input/style.css'
 import Moment from 'moment';
 import validator from 'validator';
-import {fetchContactForRecords} from 'Actions/Permissions/PermissionActions';
+import { fetchContactForRecords } from 'Actions/Permissions/PermissionActions';
 
 @connect((store) => {
     return {
@@ -33,7 +35,7 @@ class AddEditUserPersonalInformation extends React.Component {
             validationStateLastName: null,
             validationStatePhoneNumber: null,
             validationStateExtension: null,
-            contactFor:null
+            contactFor: null
         });
     }
 
@@ -63,9 +65,8 @@ class AddEditUserPersonalInformation extends React.Component {
         if (this.state.personalInfoModel.id == null) {
             this.setState({ personalInfoModel: model, componentJustMounted: true });
         }
-        else{
-           
-            let promise=fetchContactForRecords(this.state.personalInfoModel.id);
+        else {
+            let promise = fetchContactForRecords(this.state.personalInfoModel.id);
             promise.then(response => {
                 this.setState({
                     contactFor: response
@@ -75,12 +76,14 @@ class AddEditUserPersonalInformation extends React.Component {
                     contactFor: {}
                 });
             })
-            
+
         }
         this.validateForm();
     }
 
-
+    /// <summary>
+    /// format the date
+    /// </summary>
     formatDate(val) {
         if (val == null) {
             return "never"
@@ -99,6 +102,8 @@ class AddEditUserPersonalInformation extends React.Component {
             }
         }
     }
+
+
     /// <summary>
     /// to hide and show api last Accessed field
     /// </summary>
@@ -106,7 +111,7 @@ class AddEditUserPersonalInformation extends React.Component {
         if (this.state.personalInfoModel.id != null) {
             return (<FormGroup controlId="api last Accessed" >
                 <ControlLabel>API last Accessed</ControlLabel>
-                <FormControl type="text" ref="inputAPIlastAccessed"  defaultValue={ this.formatDate(this.state.personalInfoModel.api.lastAccessTime)} placeholder="API last Accessed" />
+                <FormControl type="text" ref="inputAPIlastAccessed" defaultValue={this.formatDate(this.state.personalInfoModel.api.lastAccessTime)} placeholder="API last Accessed" />
             </FormGroup>);
         }
     }
@@ -116,42 +121,36 @@ class AddEditUserPersonalInformation extends React.Component {
     /// </summary>
     contactforDisplay() {
         if (this.state.personalInfoModel.id != null) {
-          
-            if(this.state.contactFor!=null)
-            {
-               
-                if(this.state.contactFor.technicalContactFor!="" && this.state.contactFor.functionalContactFor!="")
-                {
-                   
+
+            if (this.state.contactFor != null) {
+                if (this.state.contactFor.technicalContactFor != "" && this.state.contactFor.functionalContactFor != "") {
+
                     return (<Row><Col sm={3}><FormGroup controlId="technicaContactfor" >
-                 <ControlLabel> Technical Contact for</ControlLabel>
-              <FormControl type="text" ref="inputContactfor"  value={this.state.contactFor.technicalContactFor} placeholder="Contact for" />
-                  </FormGroup></Col>
-                  <Col sm={3}><FormGroup controlId="functionalContactfor" >
-                 <ControlLabel> Functional Contact for</ControlLabel>
-              <FormControl type="text" ref="inputContactfor"  value={this.state.contactFor.functionalContactFor} placeholder="Contact for" />
-                  </FormGroup></Col></Row>
-                  );
-                         }
+                        <ControlLabel> Technical Contact for</ControlLabel>
+                        <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.technicalContactFor} readOnly />
+                    </FormGroup></Col>
+                        <Col sm={3}><FormGroup controlId="functionalContactfor" >
+                            <ControlLabel> Functional Contact for</ControlLabel>
+                            <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.functionalContactFor} readOnly />
+                        </FormGroup></Col></Row>
+                    );
+                }
 
-        if(this.state.contactFor.technicalContactFor!="")
-            {
-             
-                return (<Row><Col sm={3}><FormGroup controlId="technicaContactfor" >
-              <ControlLabel> Technical Contact for</ControlLabel>
-              <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.technicalContactFor} placeholder="Contact for" />
-          </FormGroup></Col></Row>);
-              }
+                if (this.state.contactFor.technicalContactFor != "") {
+                    return (<Row><Col sm={3}><FormGroup controlId="technicaContactfor" >
+                        <ControlLabel> Technical Contact for</ControlLabel>
+                        <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.technicalContactFor} readOnly />
+                    </FormGroup></Col></Row>);
+                }
 
-              if(this.state.contactFor.functionalContactFor!="")
-            {
-                  return (<Row><Col sm={3}><FormGroup controlId="functionalContactfor" >
-                         <ControlLabel> Functional Contact for</ControlLabel>
-                     <FormControl type="text" ref="inputContactfor" placeholder="Contact for" />
-                     </FormGroup></Col></Row>);
+                if (this.state.contactFor.functionalContactFor != "") {
+                    return (<Row><Col sm={3}><FormGroup controlId="functionalContactfor" >
+                        <ControlLabel> Functional Contact for</ControlLabel>
+                        <FormControl type="text" ref="inputContactfor" value={this.state.contactFor.functionalContactFor} readOnly />
+                    </FormGroup></Col></Row>);
+                }
             }
-            }
-          
+
         }
     }
 
@@ -161,7 +160,7 @@ class AddEditUserPersonalInformation extends React.Component {
     handleTextChange(value, event) {
 
         var model = this.state.personalInfoModel;
-      
+
         if (value == "firstName")
             model.firstName = event.target.value.trimLeft();
         if (value == "lastName")
@@ -170,8 +169,7 @@ class AddEditUserPersonalInformation extends React.Component {
             model.phoneNumber = event;
         if (value == "extension")
             model.extension = event.target.value;
-          
-      
+
         this.setState({
             personalInfoModel: model
         });
@@ -202,12 +200,12 @@ class AddEditUserPersonalInformation extends React.Component {
             (this.state.personalInfoModel.firstName != "" && validator.isAlpha(this.state.personalInfoModel.firstName)) : false;
         var isvalidLastName = (this.state.personalInfoModel.lastName != undefined) ?
             (this.state.personalInfoModel.lastName != "" && validator.isAlpha(this.state.personalInfoModel.lastName)) : false;
-        var isvalidPhoneNumber=this.state.personalInfoModel.phoneNumber==""||isValidPhoneNumber(this.state.personalInfoModel.phoneNumber)?true : false;
-       
-        var extn=/^(?:\d{1}|\d{2}|\d{3}|\d{4}|\d{5})$/;
-        var isvalidextension=this.state.personalInfoModel.extension==""||this.state.personalInfoModel.extension.match(extn)!=null?true : false;
+        var isvalidPhoneNumber = this.state.personalInfoModel.phoneNumber == "" || isValidPhoneNumber(this.state.personalInfoModel.phoneNumber) ? true : false;
 
-        var phoneAndExtensionvalidation=(this.state.personalInfoModel.extension!="" && this.state.personalInfoModel.phoneNumber!="")|| this.state.personalInfoModel.extension==""? true:false;
+        var extn = /^(?:\d{1}|\d{2}|\d{3}|\d{4}|\d{5})$/;
+        var isvalidextension = this.state.personalInfoModel.extension == null || this.state.personalInfoModel.extension == "" || this.state.personalInfoModel.extension.match(extn) != null ? true : false;
+
+        var phoneAndExtensionvalidation = (this.state.personalInfoModel.extension != "" && this.state.personalInfoModel.phoneNumber != "") || this.state.personalInfoModel.extension == "" ? true : false;
         this.setState({
             validationStateFirstName: isvalidFirstName ? null : 'error',
             validationStateLastName: isvalidLastName ? null : 'error',
@@ -215,7 +213,7 @@ class AddEditUserPersonalInformation extends React.Component {
             validationStateExtension: isvalidextension ? null : 'error'
         });
 
-        this.props.validationStates(isvalidFirstName, isvalidLastName,isvalidPhoneNumber && (phoneAndExtensionvalidation),isvalidextension);
+        this.props.validationStates(isvalidFirstName, isvalidLastName, isvalidPhoneNumber && (phoneAndExtensionvalidation), isvalidextension);
     }
 
 
@@ -241,21 +239,21 @@ class AddEditUserPersonalInformation extends React.Component {
                                 </FormGroup>
                             </Col>
                             <Col sm={3}>
-                                <FormGroup controlId="phoneNumber"  validationState={this.state.validationStatePhoneNumber} >
+                                <FormGroup controlId="phoneNumber" validationState={this.state.validationStatePhoneNumber} >
                                     <ControlLabel>Phone Number </ControlLabel>
-                                    
-                                   <Phone class="user-permission-personalinfo-phone"
+
+                                    <Phone class="user-permission-personalinfo-phone"
                                         placeholder="Enter phone number" country="US"
                                         value={this.state.personalInfoModel.phoneNumber}
                                         onChange={(event) => this.handleTextChange("phoneNumber", event)} />
-                                
+
                                 </FormGroup>
                             </Col>
-                               <Col sm={1}>
-                                                                <FormGroup controlId="Extension" class="user-permission-formgroup" validationState={this.state.validationStateExtension} >
+                            <Col sm={1}>
+                                <FormGroup controlId="Extension" class="user-permission-formgroup" validationState={this.state.validationStateExtension} >
                                     <ControlLabel>Extension </ControlLabel>
-                                  <FormControl type="text" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension} 
-                                    onChange={(event) => this.handleTextChange("extension", event)}/>
+                                    <FormControl type="text" class="user-permission-personalinfo-extension" ref="inputExtension" placeholder="XXXXX" value={this.state.personalInfoModel.extension}
+                                        onChange={(event) => this.handleTextChange("extension", event)} />
                                 </FormGroup>
                             </Col>
                         </Form >
@@ -265,7 +263,7 @@ class AddEditUserPersonalInformation extends React.Component {
                             <Col sm={3}>
                                 <FormGroup controlId="userAPIKey" >
                                     <ControlLabel>User API Key</ControlLabel>
-                                    <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} disabled="true" />
+                                    <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} readOnly />
                                 </FormGroup>
                             </Col>
                             <Col sm={2}>
@@ -284,11 +282,7 @@ class AddEditUserPersonalInformation extends React.Component {
                             </Col>
                         </Form >
                     </Row>
-                   
-                        
-                            {this.contactforDisplay()}
-                       
-                    
+                    {this.contactforDisplay()}
                 </Grid>
             </div>
         )

@@ -42,6 +42,9 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id == null) {
             this.setState({ userBasicInfoModel: model, componentJustMounted: true });
         }
+        this.setState({
+            userBasicInfounmodifiedModel: jQuery.extend(true, {}, this.props.data)
+        });
         this.validateForm();
     }
 
@@ -85,7 +88,7 @@ class AddEditUserBasicInformation extends React.Component {
         if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="lastlogin " >
                 <ControlLabel>Last login</ControlLabel>
-                <FormControl type="text" defaultValue={ this.formatDate(this.state.userBasicInfoModel.portal.lastLoginTime)}  disabled="true"/>
+                <FormControl type="text" defaultValue={this.formatDate(this.state.userBasicInfoModel.portal.lastLoginTime)} disabled="true" />
             </FormGroup>);
         }
     }
@@ -95,10 +98,11 @@ class AddEditUserBasicInformation extends React.Component {
     /// </summary>
     activeDateDisplay() {
 
-        if (this.state.userBasicInfoModel.id != null ) {
+
+        if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="activeDate" >
-                <ControlLabel>{this.state.userBasicInfoModel.portal.isActive?"Active Date":"Last Active Date"}</ControlLabel>
-                <FormControl type="text" value={this.formatDate(this.state.userBasicInfoModel.activeDateTime)} readOnly disabled="true"/>
+                <ControlLabel>{this.state.userBasicInfoModel.portal.isActive ? "Active Date" : "Last Active Date"}</ControlLabel>
+                <FormControl type="text" value={this.formatDate(this.state.userBasicInfoModel.activeDateTime)} readOnly />
             </FormGroup>);
         }
     }
@@ -109,8 +113,15 @@ class AddEditUserBasicInformation extends React.Component {
     activeStatusChange() {
         var model = this.state.userBasicInfoModel;
         model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
-        var date =new Date();
-        model.activeDateTime=date;
+
+        if (model.portal.isActive != this.state.userBasicInfounmodifiedModel.portal.isActive) {
+            var date = new Date();
+            model.activeDateTime = model.id != null ? date : this.state.userBasicInfounmodifiedModel.activeDateTime;
+        } else {
+            model.activeDateTime = this.state.userBasicInfounmodifiedModel.activeDateTime;
+
+        }
+
         this.setState({
             userBasicInfoModel: model
         });
@@ -123,41 +134,33 @@ class AddEditUserBasicInformation extends React.Component {
     /// </summary>
     isAdminChange() {
         var model = this.state.userBasicInfoModel;
+        var unmodifiedModel = this.state.userBasicInfounmodifiedModel;
         model.portal.isAdmin = !this.state.userBasicInfoModel.portal.isAdmin;
-        if(model.portal.isAdmin)
-        {
-           
-            Object.keys(model.portal.modulePermissions).map(function(key,index) {
-                model.portal.modulePermissions[key].canRead=true;
-                model.portal.modulePermissions[key].canAdd=true;
-                model.portal.modulePermissions[key].canEdit=true;
-                model.portal.modulePermissions[key].canDelete=true;
-            });
+        if (model.portal.isAdmin) {
 
-            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                model.portal.deliveryQueuePermissions[key].canRead=true;
-                model.portal.deliveryQueuePermissions[key].canAdd=true;
-                model.portal.deliveryQueuePermissions[key].canEdit=true;
-                model.portal.deliveryQueuePermissions[key].canDelete=true;
+            Object.keys(model.portal.modulePermissions).map(function (key, index) {
+                model.portal.modulePermissions[key].canRead = true;
+                model.portal.modulePermissions[key].canAdd = true;
+                model.portal.modulePermissions[key].canEdit = true;
+                model.portal.modulePermissions[key].canDelete = true;
             });
         }
-        else{
-            if (model.id == null)
-            {
-                Object.keys(model.portal.modulePermissions).map(function(key,index) {
-                    model.portal.modulePermissions[key].canRead=false;
-                    model.portal.modulePermissions[key].canAdd=false;
-                    model.portal.modulePermissions[key].canEdit=false;
-                    model.portal.modulePermissions[key].canDelete=false;
-                });                
+        else {
+            if (unmodifiedModel.portal.isAdmin) {
+                Object.keys(model.portal.modulePermissions).map(function (key, index) {
+                    model.portal.modulePermissions[key].canRead = false;
+                    model.portal.modulePermissions[key].canAdd = false;
+                    model.portal.modulePermissions[key].canEdit = false;
+                    model.portal.modulePermissions[key].canDelete = false;
+                });
+            } else {
+                Object.keys(model.portal.modulePermissions).map(function (key, index) {
+                    model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
+                    model.portal.modulePermissions[key].canAdd = unmodifiedModel.portal.modulePermissions[key].canAdd;
+                    model.portal.modulePermissions[key].canEdit = unmodifiedModel.portal.modulePermissions[key].canEdit;
+                    model.portal.modulePermissions[key].canDelete = unmodifiedModel.portal.modulePermissions[key].canDelete;
+                })
             }
-
-            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                model.portal.deliveryQueuePermissions[key].canRead=true;
-                model.portal.deliveryQueuePermissions[key].canAdd=false;
-                model.portal.deliveryQueuePermissions[key].canEdit=false;
-                model.portal.deliveryQueuePermissions[key].canDelete=false;
-            });
         }
         this.setState({
             userBasicInfoModel: model
@@ -194,8 +197,7 @@ class AddEditUserBasicInformation extends React.Component {
             validationStateEmail: hasNameError ? null : 'error'
         });
 
-        if(!isvalidUserId)
-        {
+        if (!isvalidUserId) {
             this.setState({
                 showError: false
             });

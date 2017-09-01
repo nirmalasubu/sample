@@ -88,23 +88,21 @@ class AddEditUserPortalPermissions extends React.Component {
     /// <summary>
     /// portal checkbox construction based on permission types
     /// </summary>
-    constructPortalCheckbox(key,permissionType){
-        var isAdmin=this.state.userPortalPermissionModel.portal.isAdmin;
+    constructPortalCheckbox(key, permissionType) {
+        var isAdmin = this.state.userPortalPermissionModel.portal.isAdmin;
         var row = this.state.userPortalPermissionModel.portal.modulePermissions;
         for (var i = 0; i < this.props.config.portalModules.length; i++) {
             if (this.props.config.portalModules[i].moduleName == key) {
-                if(permissionType=="canRead")
-                {
-                    return (<input type="checkbox" checked={row[key][permissionType]}  
-                disabled={isAdmin||!this.props.config.portalModules[i].modulePermission[permissionType] ||(row[key]["canAdd"] || row[key]["canEdit"] || row[key]["canDelete"])} 
-                onChange={(event) => this.activechkChange(key, permissionType, event)}  /> );
+                if (permissionType == "canRead") {
+                    return (<input type="checkbox" checked={row[key][permissionType]}
+                        disabled={isAdmin || !this.props.config.portalModules[i].modulePermission[permissionType] || (row[key]["canAdd"] || row[key]["canEdit"] || row[key]["canDelete"])}
+                        onChange={(event) => this.activechkChange(key, permissionType, event)} />);
                 }
-             return <input type="checkbox" checked={row[key][permissionType]}  disabled={isAdmin||!this.props.config.portalModules[i].modulePermission[permissionType]}  onChange={(event) => this.activechkChange(key, permissionType, event)}  /> 
+                return <input type="checkbox" checked={row[key][permissionType]} disabled={isAdmin || !this.props.config.portalModules[i].modulePermission[permissionType]} onChange={(event) => this.activechkChange(key, permissionType, event)} />
+            }
         }
-        }
-        }
+    }
 
-    
 
     render() {
         let row = null;
@@ -114,16 +112,15 @@ class AddEditUserPortalPermissions extends React.Component {
         vals = Object.keys(row).map(function (key, index) {
             return (<Row componentClass="tr" key={index.toString()}>
                 <Col componentClass="td" class="user-permission-portal-module">{this.constructPortalDisplayName(key)}</Col>
-                <Col componentClass="td">{this.constructPortalCheckbox(key,"canRead")}</Col>
-                <Col componentClass="td"> {this.constructPortalCheckbox(key,"canAdd")}</Col>
-                <Col componentClass="td">{this.constructPortalCheckbox(key,"canEdit")}</Col>
-                <Col componentClass="td">{this.constructPortalCheckbox(key,"canDelete")}</Col>
+                <Col componentClass="td">{this.constructPortalCheckbox(key, "canRead")}</Col>
+                <Col componentClass="td"> {this.constructPortalCheckbox(key, "canAdd")}</Col>
+                <Col componentClass="td">{this.constructPortalCheckbox(key, "canEdit")}</Col>
+                <Col componentClass="td">{this.constructPortalCheckbox(key, "canDelete")}</Col>
             </Row>)
         }.bind(this));
 
         return (
             <div>
-
                 <div className="clearBoth modalTableContainer">
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
