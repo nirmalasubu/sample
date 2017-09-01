@@ -181,6 +181,7 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
                     <FormGroup controlId="name">
                       <FormControl type="text" inputRef={(input) => this.inputQueue = input} onChange={(event) => this.handleChange(event)} placeholder="Queue Name" />
                     </FormGroup>
+                    {' '}
                     <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
                         Clear All Filters
                     </Button>
