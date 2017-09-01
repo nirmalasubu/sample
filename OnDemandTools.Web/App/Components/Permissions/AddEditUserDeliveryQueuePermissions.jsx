@@ -99,9 +99,9 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
     /// </summary>
     isQueuecheckboxEnabled(key) {
         if (this.state.userQueuePermissionModel.portal.isAdmin)
-            return false;
-        else
             return true;
+        else
+            return false;
     }
 
     /// <summary>
@@ -142,6 +142,11 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
 
     clearFilter()
     {
+        this.inputQueue.value = "";
+        var filterState = this.state.filterValue;
+        filterState.queueName = "";
+
+        this.setState({ filterValue: filterState });
     }
 
     render() {
@@ -153,7 +158,8 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
             return (<Row componentClass="tr" key={index.toString()}>
                 <Col componentClass="td" class="user-permission-portal-module">{this.constructQueueDisplayName(key)}</Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
-                    onChange={(event) => this.activechkChange(key, "canRead", event)} /></Col>
+                    onChange={(event) => this.activechkChange(key, "canRead", event)} 
+                    disabled={this.state.userQueuePermissionModel.portal.isAdmin} /></Col>
                 <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
                     onChange={(event) => this.activechkChange(key, "canAdd", event)}
                     disabled={this.isQueuecheckboxEnabled(key)} /></Col>
