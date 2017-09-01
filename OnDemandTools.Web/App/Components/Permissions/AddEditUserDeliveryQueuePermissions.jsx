@@ -162,13 +162,13 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
                     disabled={this.state.userQueuePermissionModel.portal.isAdmin} /></Col>
                 <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
                     onChange={(event) => this.activechkChange(key, "canAdd", event)}
-                    disabled={this.isQueuecheckboxEnabled(key)} /></Col>
+                    disabled={true} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
                     onChange={(event) => this.activechkChange(key, "canEdit", event)}
-                    disabled={this.isQueuecheckboxEnabled(key)} /></Col>
+                    disabled={true} /></Col>
                 <Col componentClass="td"><input type="checkbox" checked={row[key].canDelete}
                     onChange={(event) => this.activechkChange(key, "canDelete", event)}
-                    disabled={this.isQueuecheckboxEnabled(key)} /></Col>
+                    disabled={true} /></Col>
             </Row>)
         }.bind(this));
 
