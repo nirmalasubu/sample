@@ -78,7 +78,7 @@ class AddEditUserPortalPermissions extends React.Component {
     /// </summary>
     constructPortalDisplayName(key) {
 
-        for (var i = 0; i <= this.props.config.portalModules.length; i++) {
+        for (var i = 0; i < this.props.config.portalModules.length; i++) {
             if (this.props.config.portalModules[i].moduleName == key) {
                 return <p>{this.props.config.portalModules[i].moduleDisplayName}</p>
             }
@@ -91,7 +91,7 @@ class AddEditUserPortalPermissions extends React.Component {
     constructPortalCheckbox(key,permissionType){
         var isAdmin=this.state.userPortalPermissionModel.portal.isAdmin;
         var row = this.state.userPortalPermissionModel.portal.modulePermissions;
-        for (var i = 0; i <= this.props.config.portalModules.length; i++) {
+        for (var i = 0; i < this.props.config.portalModules.length; i++) {
             if (this.props.config.portalModules[i].moduleName == key) {
                 if(permissionType=="canRead")
                 {

@@ -200,7 +200,7 @@ class AddEditUserBasicInformation extends React.Component {
     render() {
         var msg = ""
         if (this.state.showError)
-            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> User Id already exists. Please use a unique User Id.</label>);
+            msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> User ID already exists. Please use a unique User ID.</label>);
         return (
             <div>
                 {msg}
