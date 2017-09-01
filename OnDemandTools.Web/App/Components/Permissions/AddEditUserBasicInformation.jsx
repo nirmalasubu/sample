@@ -161,6 +161,13 @@ class AddEditUserBasicInformation extends React.Component {
             validationStateEmail: hasNameError ? null : 'error'
         });
 
+        if(!isvalidUserId)
+        {
+            this.setState({
+                showError: false
+            });
+        }
+
         this.props.validationStates(hasNameError);
     }
 
