@@ -63,11 +63,11 @@ namespace OnDemandTools.Web.Controllers
                     }
                 }
 
-                var queues = _queueSvc.GetQueues();
+                var queues = _queueSvc.GetQueues().OrderBy(o => o.FriendlyName).ToList();
 
-                foreach (var queue in queues)
+                foreach (var permission in permissionLists)
                 {
-                    foreach (var permission in permissionLists)
+                    foreach (var queue in queues)
                     {
                         if (!permission.Portal.DeliveryQueuePermissions.ContainsKey(queue.Name))
                         {
@@ -75,7 +75,6 @@ namespace OnDemandTools.Web.Controllers
                         }
                     }
                 }
-
             }
 
             return permissionLists;

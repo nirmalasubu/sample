@@ -86,7 +86,6 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
     /// to display queue names
     /// </summary>
     constructQueueDisplayName(key) {
-
         for (var i = 0; i < this.props.queues.length; i++) {
             if (this.props.queues[i].name == key) {
                 return <p>{this.props.queues[i].friendlyName}</p>
@@ -154,23 +153,33 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
         let vals = null;
         row = this.applyFilter(this.state.userQueuePermissionModel.portal.deliveryQueuePermissions, this.state.filterValue);
 
-        vals = Object.keys(row).map(function (key, index) {
-            return (<Row componentClass="tr" key={index.toString()}>
-                <Col componentClass="td" class="user-permission-portal-module">{this.constructQueueDisplayName(key)}</Col>
-                <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
-                    onChange={(event) => this.activechkChange(key, "canRead", event)} 
-                    disabled={this.state.userQueuePermissionModel.portal.isAdmin} /></Col>
-                <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
-                    onChange={(event) => this.activechkChange(key, "canAdd", event)}
-                    disabled={true} /></Col>
-                <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
-                    onChange={(event) => this.activechkChange(key, "canEdit", event)}
-                    disabled={true} /></Col>
-                <Col componentClass="td"><input type="checkbox" checked={row[key].canDelete}
-                    onChange={(event) => this.activechkChange(key, "canDelete", event)}
-                    disabled={true} /></Col>
-            </Row>)
-        }.bind(this));
+        if(Object.keys(row).length>0)
+        {
+            vals = Object.keys(row).map(function (key, index) {
+                return (<Row componentClass="tr" key={index.toString()}>
+                    <Col componentClass="td" class="user-permission-portal-module">{this.constructQueueDisplayName(key)}</Col>
+                    <Col componentClass="td"><input type="checkbox" checked={row[key].canRead}
+                        onChange={(event) => this.activechkChange(key, "canRead", event)} 
+                        disabled={this.state.userQueuePermissionModel.portal.isAdmin} /></Col>
+                    <Col componentClass="td"> <input type="checkbox" checked={row[key].canAdd}
+                        onChange={(event) => this.activechkChange(key, "canAdd", event)}
+                        disabled={true} /></Col>
+                    <Col componentClass="td"><input type="checkbox" checked={row[key].canEdit}
+                        onChange={(event) => this.activechkChange(key, "canEdit", event)}
+                        disabled={true} /></Col>
+                    <Col componentClass="td"><input type="checkbox" checked={row[key].canDelete}
+                        onChange={(event) => this.activechkChange(key, "canDelete", event)}
+                        disabled={true} /></Col>
+                </Row>)
+            }.bind(this));
+        }
+        else{
+            vals = (
+                    <Row componentClass="tr">
+                        <Col componentClass="td" colSpan={5} >There is no data to display</Col>
+                    </Row>
+                );
+        }
 
         return (
             <div>
