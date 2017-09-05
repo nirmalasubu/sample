@@ -38,6 +38,8 @@ class UserInactivateModal extends React.Component {
 
         var model = this.props.data.inActiveModal;
         model.portal.isActive = false;
+        var date = new Date();
+        model.activeDateTime = date;
         this.props.dispatch(permissionAction.savePermission(model))
             .then(() => {
                 this.props.handleClose();

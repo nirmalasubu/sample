@@ -94,6 +94,8 @@ class UserPermissionTable extends React.Component {
         else {
             var model = rowValue;
             model.portal.isActive = true;
+            var date = new Date();
+            model.activeDateTime = date;
             this.props.dispatch(permissionActions.savePermission(model));
         }
     }
