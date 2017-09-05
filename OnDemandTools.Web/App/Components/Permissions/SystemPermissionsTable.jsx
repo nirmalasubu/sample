@@ -51,7 +51,8 @@ class SystemPermissionsTable extends React.Component {
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
     ///</summary>
     onSortChange() {
-
+        const sizePerPage = this.refs.SystemTable.state.sizePerPage;
+        this.refs.SystemTable.handlePaginationData(1, sizePerPage);
     }
 
 
@@ -218,7 +219,7 @@ class SystemPermissionsTable extends React.Component {
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New System</span>
                 </button>
-                <BootstrapTable ref="PermissionTable"
+                <BootstrapTable ref="SystemTable"
                     data={this.props.RowData}
                     striped={true}
                     hover={true}

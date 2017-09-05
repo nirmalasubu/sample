@@ -51,7 +51,8 @@ class UserPermissionTable extends React.Component {
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
     ///</summary>
     onSortChange() {
-
+        const sizePerPage = this.refs.PermissionTable.state.sizePerPage;
+        this.refs.PermissionTable.handlePaginationData(1, sizePerPage);
     }
 
 
