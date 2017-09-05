@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
 
         IQueryable<Model.Queue> Get();
 
-        Model.Queue Get(int id);
+        Model.Queue Get(ObjectId id);
 
         Model.Queue GetByApiKey(string apiKey);
 

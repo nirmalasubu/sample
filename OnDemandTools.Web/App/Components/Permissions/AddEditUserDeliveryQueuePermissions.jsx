@@ -192,7 +192,7 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
                     </FormGroup>
                     {' '}
                     <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
-                        Clear All Filters
+                        Clear Filter
                     </Button>
                 </Form>
                 <div className="clearBoth modalTableContainer">

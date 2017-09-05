@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using OnDemandTools.DAL.Database;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.Builders;
+using MongoDB.Bson;
 
 namespace OnDemandTools.DAL.Modules.Queue.Queries
 {
@@ -23,9 +24,12 @@ namespace OnDemandTools.DAL.Modules.Queue.Queries
             return queues;
         }
 
-        public Model.Queue Get(int id)
+        public Model.Queue Get(ObjectId id)
         {
-            throw new NotImplementedException();
+            var query = Query<Model.Queue>.EQ(q => q.Id, id);
+            var queue = _database.GetCollection<Model.Queue>("DeliveryQueue").FindOne(query);
+
+            return queue;
         }
 
         public Model.Queue GetByApiKey(string apiKey)
