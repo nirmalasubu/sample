@@ -53,24 +53,23 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             if (response.Count > 0)
             {
-                var my_obj = response.First.Value<JArray>(@"flights").First.Value<JArray>(@"destinations").ToList();
-                var message = my_obj.Any(i => i.Value<String>(@"name") == "DISHB") ? "Test Passed" : "User do not have access to destination";
-                Assert.True(my_obj.Any(i => i.Value<String>(@"name") == "DISHB"), message);
+                var testCasePassed = true;
 
                 foreach (var jobj in response)
                 {
-                    var flightsDestinationToken = jobj[@"flights"].First["destinations"];
-                    var propertiesToken = flightsDestinationToken.First["properties"];
-                    if (propertiesToken.HasValues)
+                    var my_obj = jobj.Value<JArray>(@"flights").First.Value<JArray>(@"destinations").ToList();
+                    var airingContainDestination = my_obj.Any(i => i.Value<String>(@"name") == "DISHB");
+
+                    if (!airingContainDestination)
                     {
-                        Assert.True((flightsDestinationToken.First["name"].ToString() == "DISHB"),
-                            string.Format("Destination should be " + flightsDestinationToken.First["name"].ToString() + "and but the returned {0}", flightsDestinationToken.First["name"].ToString()));
-                        Assert.True((propertiesToken.First["name"].ToString() == "Description"),
-                            string.Format("Property name should be " + propertiesToken.First["name"].ToString() + "and but the returned {0}", propertiesToken.First["name"].ToString()));
-                        Assert.True((propertiesToken.First["value"].ToString() == "Dish for Broadband"),
-                            string.Format("Property value should be " + propertiesToken.First["value"].ToString() + "and but the returned {0}", propertiesToken.First["value"].ToString()));
-                        break;
+                        testCasePassed = false;
+                        Assert.True(false, "User do not have access to destination");
                     }
+                }
+
+                if (testCasePassed)
+                {
+                    Assert.True(true, "All Airings contains DISHB destination");
                 }
             }
         }
