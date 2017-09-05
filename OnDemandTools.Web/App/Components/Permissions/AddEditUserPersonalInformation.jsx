@@ -111,7 +111,7 @@ class AddEditUserPersonalInformation extends React.Component {
         if (this.state.personalInfoModel.id != null) {
             return (<FormGroup controlId="api last Accessed" >
                 <ControlLabel>API last Accessed</ControlLabel>
-                <FormControl type="text" ref="inputAPIlastAccessed" defaultValue={this.formatDate(this.state.personalInfoModel.api.lastAccessTime)} placeholder="API last Accessed" />
+                <FormControl type="text" ref="inputAPIlastAccessed" value={this.formatDate(this.state.personalInfoModel.api.lastAccessTime)} placeholder="API last Accessed" readOnly />
             </FormGroup>);
         }
     }
