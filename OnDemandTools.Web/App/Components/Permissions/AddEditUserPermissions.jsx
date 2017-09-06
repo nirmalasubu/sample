@@ -16,6 +16,7 @@ import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPe
 import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
 import AddEditUserPortalPermissions from 'Components/Permissions/AddEditUserPortalPermissions';
 import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/AddEditUserDeliveryQueuePermissions';
+import AddEditUserApiPermissions from 'Components/Permissions/AddEditUserAPIPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
 @connect((store) => {
@@ -42,9 +43,13 @@ class AddEditUserPermissions extends React.Component {
             validationStateFirstName:null,
             validationStateLastName:null,
             validationStatePhoneNumber: null,
-            validationStateExtension: null
-        
+            validationStateExtension: null,
+            Key: 1,
+            selectedKey: 1,
+            isApi: false
         });
+
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     /// <summary>
@@ -109,8 +114,21 @@ class AddEditUserPermissions extends React.Component {
     /// property method to called in the sub component to update the model
     /// </summary>
     updatePermission(permission)
-    {
-        this.setState({ permission: permission });
+    {  
+        var activeKey = this.state.key;
+        var selectedkey = this.state.selectedKey;
+        if(!permission.api.isActive && selectedkey == 3)
+        {
+            activeKey= 1;
+            selectedkey= 1;
+        }
+
+        this.setState({ 
+            permission: permission,
+            isApi: permission.api.isActive,
+            key: activeKey,
+            selectedKey: selectedkey
+        });
     }
 
     /// <summary>
@@ -187,7 +205,11 @@ class AddEditUserPermissions extends React.Component {
 
     }
 
-    render() {
+    handleSelect(key) {
+        this.setState({key: key, selectedKey: key});
+    }
+
+    render() {       
 
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
@@ -206,7 +228,7 @@ class AddEditUserPermissions extends React.Component {
                             updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)}/>
                             </Panel>
                             <Panel header="Permissions" >
-                                <Tabs id="addeditpermission" defaultActiveKey={1} >
+                                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
                                     <Tab eventKey={1} title="ODT portal">
                                         <AddEditUserPortalPermissions data={this.state.permission}
                                     updatePermission={this.updatePermission.bind(this)} />
@@ -215,8 +237,9 @@ class AddEditUserPermissions extends React.Component {
                                         <AddEditUserDeliveryQueuePermissions data={this.state.permission} 
                                     updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab eventKey={3} title="ODT API">
-
+                                    <Tab disabled={!this.state.isApi} eventKey={3} title="ODT API">
+                                        <AddEditUserApiPermissions data={this.state.permission} 
+                                    updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={4} title="Destinations">
 

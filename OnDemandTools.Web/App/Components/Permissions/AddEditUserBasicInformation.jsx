@@ -151,6 +151,9 @@ class AddEditUserBasicInformation extends React.Component {
                 model.portal.deliveryQueuePermissions[key].canEdit=true;
                 model.portal.deliveryQueuePermissions[key].canDelete=true;
             });
+
+            model.api.claims = [];
+            model.api.claims.push(["get","post","delete"]);
         }
         else {
             if (unmodifiedModel.portal.isAdmin) {
