@@ -36,10 +36,6 @@ class AddEditDestinationCategories extends React.Component {
     titleDetailConstruct(item, index) {
         var ids = [];
 
-        for (var i = 0; i < item.seriesIds.length; i++) {
-            ids.push(item.seriesIds[i]);
-        }
-
         for (var i = 0; i < item.titleIds.length; i++) {
             ids.push(item.titleIds[i]);
         }

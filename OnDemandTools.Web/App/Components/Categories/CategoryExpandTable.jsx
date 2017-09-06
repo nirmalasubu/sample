@@ -25,9 +25,6 @@ class CategoryExpandTable extends React.Component {
    
       //The values are pushed only when the expand button is clicked.
       if (this.props.data.clicked) { 
-        for (var i = 0; i < row.categories[0].seriesIds.length; i++) {
-            ids.push(row.categories[0].seriesIds[i])
-        }
 
         for (var i = 0; i < row.categories[0].titleIds.length; i++) {
             ids.push(row.categories[0].titleIds[i])

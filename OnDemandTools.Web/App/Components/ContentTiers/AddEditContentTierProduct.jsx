@@ -127,7 +127,6 @@ class AddEditContentTierProduct extends React.Component {
                 name: "",
                 brands: contentTierData.products[index].contentTiers[0].brands,
                 titleIds: contentTierData.products[index].contentTiers[0].titleIds,
-                seriesIds: contentTierData.products[index].contentTiers[0].seriesIds,
                 removed: true
             };
             contentTierData.products[index].contentTiers.length = 0;
@@ -147,8 +146,7 @@ class AddEditContentTierProduct extends React.Component {
         var contentTier = {
             name: this.state.contentTierDetails.name,
             brands: [],
-            titleIds: [],
-            seriesIds: []
+            titleIds: []
         };
         newProduct.contentTiers.push(contentTier);
         var contentTierData = [];
@@ -183,7 +181,6 @@ class AddEditContentTierProduct extends React.Component {
         var model = this.state.contentTierDetails;
         model.products[this.state.propertiesRowIndex].contentTiers[0].brands = selectedFilterValues.brands;
         model.products[this.state.propertiesRowIndex].contentTiers[0].titleIds = selectedFilterValues.titleIds;
-        model.products[this.state.propertiesRowIndex].contentTiers[0].seriesIds = selectedFilterValues.seriesIds;
         this.setState({ contentTierDetails: model, showAddEditPropertiesFilter: false });
 
     }
@@ -194,11 +191,7 @@ class AddEditContentTierProduct extends React.Component {
     titleDetailConstruct(item, index) {
 
         var ids = [];
-        if (item.contentTiers.length > 0) {
-            for (var i = 0; i < item.contentTiers[0].seriesIds.length; i++) {
-                ids.push(item.contentTiers[0].seriesIds[i]);
-            }
-
+        if (item.contentTiers.length > 0) {           
             for (var i = 0; i < item.contentTiers[0].titleIds.length; i++) {
                 ids.push(item.contentTiers[0].titleIds[i]);
             }

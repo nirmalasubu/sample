@@ -154,7 +154,7 @@ class AddEditCategory extends React.Component {
         else {
             var model = this.state.categoryDetails;
             if (model.name == "" &&( model.destinations.length == 1 && model.destinations[0].name == ""&& model.destinations[0].categories[0].brands.length==0
-                && model.destinations[0].categories[0].titleIds.length==0 &&model.destinations[0].categories[0].seriesIds.length==0)) {
+                && model.destinations[0].categories[0].titleIds.length==0)) {
                 this.props.handleClose();
             }
             else

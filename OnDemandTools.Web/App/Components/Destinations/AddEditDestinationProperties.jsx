@@ -58,7 +58,7 @@ class AddEditDestinationProperties extends React.Component {
 
     //To add a new property of destination
     addNewProperty() {
-        var newProperty = { name: "", value: "", brands: [], titleIds: [], seriesIds: [], titles: [], deleted: false }
+        var newProperty = { name: "", value: "", brands: [], titleIds: [], titles: [], deleted: false }
         var model = {};
         model = this.state.destinationDetails;
         model.properties.unshift(newProperty);
@@ -110,10 +110,6 @@ class AddEditDestinationProperties extends React.Component {
     //To show all titles.
     titledetailConstruct(item, index) {
         var ids = [];
-
-        for (var i = 0; i < item.seriesIds.length; i++) {
-            ids.push(item.seriesIds[i]);
-        }
 
         for (var i = 0; i < item.titleIds.length; i++) {
             ids.push(item.titleIds[i]);

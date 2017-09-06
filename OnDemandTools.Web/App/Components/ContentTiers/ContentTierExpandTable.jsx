@@ -23,10 +23,6 @@ class ContentTierExpandTable extends React.Component {
   titleOrSeriesFormat(data, row) {
     var ids = [];
     if (this.props.data.clicked) {
-      for (var i = 0; i < row.contentTiers[0].seriesIds.length; i++) {
-        ids.push(row.contentTiers[0].seriesIds[i])
-      }
-
       for (var i = 0; i < row.contentTiers[0].titleIds.length; i++) {
         ids.push(row.contentTiers[0].titleIds[i])
       }

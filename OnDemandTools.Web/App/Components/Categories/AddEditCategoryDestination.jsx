@@ -129,7 +129,6 @@ class AddEditCategoryDestination extends React.Component {
                 name: "",
                 brands: categoryData.destinations[index].categories[0].brands,
                 titleIds: categoryData.destinations[index].categories[0].titleIds,
-                seriesIds: categoryData.destinations[index].categories[0].seriesIds,
                 removed: true
             };
             categoryData.destinations[index].categories.length = 0;
@@ -150,8 +149,7 @@ class AddEditCategoryDestination extends React.Component {
         var category = {
             name: this.state.categoryDetails.name,
             brands: [],
-            titleIds: [],
-            seriesIds: []
+            titleIds: []
         };
         newDestination.categories.push(category);
         var categoryData = [];
@@ -186,7 +184,6 @@ class AddEditCategoryDestination extends React.Component {
         var model = this.state.categoryDetails;
         model.destinations[this.state.propertiesRowIndex].categories[0].brands = selectedFilterValues.brands;
         model.destinations[this.state.propertiesRowIndex].categories[0].titleIds = selectedFilterValues.titleIds;
-        model.destinations[this.state.propertiesRowIndex].categories[0].seriesIds = selectedFilterValues.seriesIds;
         this.setState({ categoryDetails: model, showAddEditPropertiesFilter: false });
 
     }
@@ -198,9 +195,6 @@ class AddEditCategoryDestination extends React.Component {
 
         var ids = [];
         if (item.categories.length > 0) {
-            for (var i = 0; i < item.categories[0].seriesIds.length; i++) {
-                ids.push(item.categories[0].seriesIds[i]);
-            }
 
             for (var i = 0; i < item.categories[0].titleIds.length; i++) {
                 ids.push(item.categories[0].titleIds[i]);

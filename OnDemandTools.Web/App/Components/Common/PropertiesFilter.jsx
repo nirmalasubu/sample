@@ -75,7 +75,6 @@ class PropertiesFilter extends React.Component {
         var titles = [];
 
         var titleIds = this.props.data.propertiesRow.titleIds;
-        titleIds = titleIds.concat(this.props.data.propertiesRow.seriesIds);
 
         if (titleIds.length > 0) {
             this.setState({ loadingTable: true });
@@ -142,19 +141,14 @@ class PropertiesFilter extends React.Component {
         }
 
         var titleIds = [];
-        var seriesIds = [];
         for (var t = 0; t < this.state.selectedTitles.length; t++) {
 
             var selectedTitle = this.state.selectedTitles[t];
 
-            if (selectedTitle.titleType.name.indexOf("Series") > -1) {
-                seriesIds.push(selectedTitle.titleId);
-            }
-            else {
                 titleIds.push(selectedTitle.titleId);
-            }
+            
         }
-        var selectedFilterValues = { "brands": selectedBrands, "titleIds": titleIds, "seriesIds": seriesIds };
+        var selectedFilterValues = { "brands": selectedBrands, "titleIds": titleIds };
         this.props.handleSave(selectedFilterValues);
     }
 
