@@ -414,7 +414,6 @@ namespace OnDemandTools.Business.Modules.Airing
                         property.Name = cat.Name;
                         property.Brands = cat.Brands;
                         property.TitleIds = cat.TitleIds;
-                        property.SeriesIds = cat.SeriesIds;
                         des.Properties.Add(property);
                     }
                 }

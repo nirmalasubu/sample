@@ -148,10 +148,8 @@ namespace OnDemandTools.Business.Modules.Product
             bool titlesAreEquivalent = (destProperty.TitleIds.Count == destProperty.TitleIds.Count)
                 && !destProperty.TitleIds.Except(destProperty.TitleIds).Any();
 
-            bool seriesAreEquivalent = (destProperty.SeriesIds.Count == destProperty.SeriesIds.Count)
-                && !destProperty.SeriesIds.Except(destProperty.SeriesIds).Any();
 
-            return (brandsAreEquivalent && titlesAreEquivalent && seriesAreEquivalent);
+            return (brandsAreEquivalent && titlesAreEquivalent);
         }
 
         /// <summary>

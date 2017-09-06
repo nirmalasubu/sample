@@ -83,7 +83,6 @@ namespace OnDemandTools.Web.Controllers
                             category.Name = destination.Categories.First().Name;
                             category.Brands = destination.Categories.First().Brands;
                             category.TitleIds = destination.Categories.First().TitleIds;
-                            category.SeriesIds = destination.Categories.First().SeriesIds;
                         }
                         else
                         {
@@ -91,8 +90,7 @@ namespace OnDemandTools.Web.Controllers
                             {
                                 Name = destination.Categories.First().Name,
                                 Brands = destination.Categories.First().Brands,
-                                TitleIds = destination.Categories.First().TitleIds,
-                                SeriesIds = destination.Categories.First().SeriesIds
+                                TitleIds = destination.Categories.First().TitleIds
                             };
 
                             destinationDetail.Categories.Add(newCategory);
@@ -144,8 +142,7 @@ namespace OnDemandTools.Web.Controllers
                         {
                             Name = category.Name,
                             Brands = category.Brands,
-                            TitleIds = category.TitleIds,
-                            SeriesIds = category.SeriesIds
+                            TitleIds = category.TitleIds
                         };
 
                         destination.Categories.Add(newCategory);

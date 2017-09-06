@@ -95,7 +95,6 @@ namespace OnDemandTools.Web.Controllers
                             category.Name = product.ContentTiers.First().Name;
                             category.Brands = product.ContentTiers.First().Brands;
                             category.TitleIds = product.ContentTiers.First().TitleIds;
-                            category.SeriesIds = product.ContentTiers.First().SeriesIds;
                         }
                         else
                         {
@@ -103,8 +102,7 @@ namespace OnDemandTools.Web.Controllers
                             {
                                 Name = product.ContentTiers.First().Name,
                                 Brands = product.ContentTiers.First().Brands,
-                                TitleIds = product.ContentTiers.First().TitleIds,
-                                SeriesIds = product.ContentTiers.First().SeriesIds
+                                TitleIds = product.ContentTiers.First().TitleIds
                             };
 
                             productDetail.ContentTiers.Add(contentTier);
@@ -158,8 +156,7 @@ namespace OnDemandTools.Web.Controllers
                         {
                             Name = contentTier.Name,
                             Brands = contentTier.Brands,
-                            TitleIds = contentTier.TitleIds,
-                            SeriesIds = contentTier.SeriesIds
+                            TitleIds = contentTier.TitleIds
                         };
 
                         product.ContentTiers.Add(newCategory);
