@@ -23,3 +23,19 @@ export const ApplicationErrorReducer = (state = [], action) => {
             return state;
     }
 };
+
+
+/// <summary>
+/// Timer for session time out handling
+/// from within whole application
+/// </sumamry>
+export const TimerReducer = (state = "", action) => {
+    switch (action.type) {
+        case actionTypes.TIMER_SUCCESS:
+            var currentdate = new Date(); 
+            const newState = currentdate 
+            return newState
+        default:
+            return state;
+    }
+};

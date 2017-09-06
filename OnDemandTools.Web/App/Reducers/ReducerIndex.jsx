@@ -4,7 +4,7 @@ import { DeliveryQueueReducer, SignalRQueueDataReducer, NotificationHistoryQueue
 import { DestinationReducer } from 'Reducers/Destination/DestinationReducer';
 import { CategoryReducer } from 'Reducers/Category/CategoryReducer';
 import { UserReducer } from 'Reducers/User/UserReducer';
-import { ConfigReducer, ApplicationErrorReducer } from 'Reducers/Config/ConfigReducer';
+import { ConfigReducer, ApplicationErrorReducer,TimerReducer } from 'Reducers/Config/ConfigReducer';
 import { StatusReducer } from 'Reducers/Status/StatusReducer';
 import { ProductReducer } from 'Reducers/Product/ProductReducer';
 import { TitleSearchReducer } from 'Reducers/TitleSearch/TitleSearchReducer';
@@ -31,7 +31,7 @@ export default combineReducers({
     pathTranslationRecords: PathTranslationReducer,
     permissions: PermissionReducer,
     applicationError: ApplicationErrorReducer,
-
+    serverPollTime:TimerReducer
     // More reducers if there are
     // can go here
 });

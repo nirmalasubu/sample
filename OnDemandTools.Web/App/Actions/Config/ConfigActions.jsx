@@ -22,6 +22,13 @@ export const handleApplicationAPIError = (error) => {
 };
 
 
+// update the store when  the server action is occured
+export const timerSuccess = () => {
+    return {
+        type: actionTypes.TIMER_SUCCESS
+        
+    }
+};
 
 /******************* Helper methods *******************/
 export const fetchConfig = () => {
@@ -35,6 +42,23 @@ export const fetchConfig = () => {
           });
     };
 };
+
+
+/// call to make server active
+export const healthCheck = () => {
+    return (dispatch) => {        
+        return Axios.get('/api/config/check')
+            .then(response => {
+                dispatch(timerSuccess())
+                //console.log(JSON.stringify(response))
+            })
+            .catch(error => {
+                throw (error);
+            });
+    };
+};
+
+
 
 
 

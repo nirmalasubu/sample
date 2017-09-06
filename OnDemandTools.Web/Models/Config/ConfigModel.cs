@@ -13,5 +13,6 @@ namespace OnDemandTools.Web.Models.Config
         public List<string> Brands { get; set; }
         public List<PortalModule> PortalModules { get; set; }
         public PortalSettings PortalSettings { get; set; }
+        public int SessionExpirationTime { get; set; }
     }
 }

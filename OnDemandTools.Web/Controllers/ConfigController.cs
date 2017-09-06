@@ -36,8 +36,17 @@ namespace OnDemandTools.Web.Controllers
             {
                 PortalSettings = _appSettings.PortalSettings,
                 PortalModules = _userPermissions.GetAllPortalModules().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>(),
-                Brands = _brandService.GetAllBrands()
+                Brands = _brandService.GetAllBrands(),
+                SessionExpirationTime= int.Parse(_appSettings.SessionExpirationTime)
+
             };
+        }
+
+        [Authorize]
+        [HttpGet("check")]
+        public string HealthCheck()
+        {
+            return "ok";
         }
     }
 }

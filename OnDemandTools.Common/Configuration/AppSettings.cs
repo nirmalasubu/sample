@@ -20,6 +20,7 @@ namespace OnDemandTools.Common.Configuration
         public List<Service> Services { get; set; }
         public string HostingProvider { get; set; }
         public string AiringIdLockExpiredSeconds { get; set; }
+        public string SessionExpirationTime { get; set; }
         public string AiringDeportGraceDays { get; set; }
         public string HealthAgentLifetimeInMinutes { get; set; }
         public JobSchedules JobSchedules { get; set; }

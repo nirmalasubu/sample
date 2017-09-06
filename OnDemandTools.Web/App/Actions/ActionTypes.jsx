@@ -61,3 +61,5 @@ export const SAVE_PERMISSION_SUCCESS = 'SAVE_PERMISSION_SUCCESS';
 /// Action types specifically used for Application errors/handling
 export const APPLICATION_API_ERROR = 'APPLICATION_API_ERROR';
 
+/// Action types specifically used for session handling
+export const TIMER_SUCCESS = 'TIMER_SUCCESS';

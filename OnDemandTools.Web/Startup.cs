@@ -126,7 +126,8 @@ namespace OnDemandTools.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache, Serilog.ILogger logger)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory, IServiceProvider provider, IDeliveryQueueData deliveryQueueData, IDistributedCache cache, Serilog.ILogger logger)
         {
 
             // Add serilog and catch any internal errors
@@ -151,12 +152,13 @@ namespace OnDemandTools.Web
 
             app.UseSignalR();
 
+            var appSettings = Configuration.Get<AppSettings>("Application");
             // Configure the OWIN pipeline to use cookie auth.
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromHours(12),
+                ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(appSettings.SessionExpirationTime)),
                 SlidingExpiration = true
             });
 
