@@ -840,6 +840,13 @@ tr.strikeout td:before {
     margin-left: -25px;
 }
 
+.user-permission-personalinfo-activeapi {
+    width: 100px;
+}
+.user-permission-personalinfo-apikey {
+    width: 310px;
+}
+
 .user-permission-personalinfo-phone input {
     display: block;
     width: 100%;

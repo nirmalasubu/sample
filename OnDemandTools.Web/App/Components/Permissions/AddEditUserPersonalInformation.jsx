@@ -260,13 +260,13 @@ class AddEditUserPersonalInformation extends React.Component {
                     </Row>
                     <Row>
                         <Form>
-                            <Col sm={3}>
-                                <FormGroup controlId="userAPIKey" >
+                            <Col sm={4}>
+                                <FormGroup controlId="userAPIKey" class="user-permission-personalinfo-apikey"  >
                                     <ControlLabel>User API Key</ControlLabel>
                                     <FormControl type="text" ref="inputUserAPIKey" placeholder="User API Key Automatically generated" value={this.state.personalInfoModel.api.apiKey} readOnly />
                                 </FormGroup>
                             </Col>
-                            <Col sm={2}>
+                            <Col sm={1} class="user-permission-personalinfo-activeapi">
                                 <FormGroup controlId="activeAPI" >
                                     <ControlLabel>Active API</ControlLabel>
                                     <div>
