@@ -38,16 +38,7 @@ class AddEditUserAPIPermissions extends React.Component {
     }
 
     componentDidMount() {
-        var isget = ($.inArray('get', this.state.userPermissionModel.api.claims) > -1);
-        var isPost = ($.inArray('post', this.state.userPermissionModel.api.claims) > -1);
-        var isDelete = ($.inArray('delete', this.state.userPermissionModel.api.claims) > -1);
 
-        this.setState({ 
-            isGetChecked: isget,
-            isPostChecked: isPost,
-            isDeleteChecked: isDelete,
-            componentJustMounted: true
-        });
     }
 
     /// <summary>
@@ -55,13 +46,13 @@ class AddEditUserAPIPermissions extends React.Component {
     /// </summary>
     activechkChange(value, event) {
         var model = this.state.userPermissionModel;
-        var isGet = this.state.isGetChecked;
-        var isPost = this.state.isPostChecked;
-        var isDelete = this.state.isDeleteChecked;
+        var isGet = ($.inArray('get', model.api.claims) > -1);
+        var isPost = ($.inArray('post', model.api.claims) > -1);
+        var isDelete = ($.inArray('delete', model.api.claims) > -1);
 
         switch (value) {            
             case "get":
-                isGet = !this.state.isGetChecked;
+                isGet = !($.inArray('get', model.api.claims) > -1);
                 if(isGet)
                 {
                     if($.inArray(value, model.api.claims) == -1)
@@ -71,7 +62,7 @@ class AddEditUserAPIPermissions extends React.Component {
                     model.api.claims.splice($.inArray(value, model.api.claims), 1);
                 break;
             case "post":
-                isPost = !this.state.isPostChecked;
+                isPost = !($.inArray('post', model.api.claims) > -1);
                 if(isPost)
                 {
                     if($.inArray(value, model.api.claims) == -1)
@@ -81,7 +72,7 @@ class AddEditUserAPIPermissions extends React.Component {
                     model.api.claims.splice($.inArray(value, model.api.claims), 1);
                 break;
             case "delete":
-                isDelete = !this.state.isDeleteChecked;
+                isDelete = !($.inArray('delete', model.api.claims) > -1);
                 if(isDelete)
                 {
                     if($.inArray(value, model.api.claims) == -1)
@@ -93,10 +84,7 @@ class AddEditUserAPIPermissions extends React.Component {
         }
 
         this.setState({
-            userPermissionModel: model,
-            isGetChecked : isGet,
-            isPostChecked : isPost,
-            isDeleteChecked : isDelete
+            userPermissionModel: model
         });
 
         this.props.updatePermission(model);
@@ -113,7 +101,9 @@ class AddEditUserAPIPermissions extends React.Component {
     }
 
     render() {
-
+        var isget = ($.inArray('get', this.state.userPermissionModel.api.claims) > -1);
+        var isPost = ($.inArray('post', this.state.userPermissionModel.api.claims) > -1);
+        var isDelete = ($.inArray('delete', this.state.userPermissionModel.api.claims) > -1);
         return (
             <div>
                 <div className="clearBoth">
@@ -129,15 +119,15 @@ class AddEditUserAPIPermissions extends React.Component {
                         <tbody>
                             <Row componentClass="tr" >
                                 <Col componentClass="td" class="user-permission-portal-module">API</Col>
-                                <Col componentClass="td"><input type="checkbox" checked={this.state.isGetChecked}
+                                <Col componentClass="td"><input type="checkbox" checked={isget}
                                     onChange={(event) => this.activechkChange("get", event)} 
-                                    disabled={false} /></Col>
-                                <Col componentClass="td"><input type="checkbox" checked={(this.state.isPostChecked)}
+                                    disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
+                                <Col componentClass="td"><input type="checkbox" checked={isPost}
                                     onChange={(event) => this.activechkChange("post", event)} 
-                                    disabled={false} /></Col>
-                                <Col componentClass="td"><input type="checkbox" checked={this.state.isDeleteChecked}
+                                    disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
+                                <Col componentClass="td"><input type="checkbox" checked={isDelete}
                                     onChange={(event) => this.activechkChange("delete", event)} 
-                                    disabled={false} /></Col>
+                                    disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
                             </Row>
                         </tbody>
                     </Grid>

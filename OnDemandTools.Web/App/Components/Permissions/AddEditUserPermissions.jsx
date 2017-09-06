@@ -73,7 +73,10 @@ class AddEditUserPermissions extends React.Component {
         this.setState({
             isProcessing: false,
             permission: this.props.data.permission,
-            permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission)
+            permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission),
+            isApi: this.props.data.permission.api.isActive,
+            key: 1,
+            selectedKey: 1
         });
     }
 
@@ -193,7 +196,6 @@ class AddEditUserPermissions extends React.Component {
     }
 
     componentDidMount() {
-
     }
 
     
