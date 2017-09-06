@@ -160,21 +160,28 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canEdit = false;
                     model.portal.modulePermissions[key].canDelete = false;
                 });
+
+                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
+                    model.portal.deliveryQueuePermissions[key].canRead=false;
+                    model.portal.deliveryQueuePermissions[key].canAdd=false;
+                    model.portal.deliveryQueuePermissions[key].canEdit=false;
+                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                });
             } else {
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
                     model.portal.modulePermissions[key].canAdd = unmodifiedModel.portal.modulePermissions[key].canAdd;
                     model.portal.modulePermissions[key].canEdit = unmodifiedModel.portal.modulePermissions[key].canEdit;
                     model.portal.modulePermissions[key].canDelete = unmodifiedModel.portal.modulePermissions[key].canDelete;
-                })
-            }
+                });
 
-            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                model.portal.deliveryQueuePermissions[key].canRead=unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
-                model.portal.deliveryQueuePermissions[key].canAdd=false;
-                model.portal.deliveryQueuePermissions[key].canEdit=false;
-                model.portal.deliveryQueuePermissions[key].canDelete=false;
-            });
+                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
+                    model.portal.deliveryQueuePermissions[key].canRead=unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
+                    model.portal.deliveryQueuePermissions[key].canAdd=false;
+                    model.portal.deliveryQueuePermissions[key].canEdit=false;
+                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                });
+            }            
         }
         this.setState({
             userBasicInfoModel: model

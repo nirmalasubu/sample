@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import ReactDOM from 'react-dom';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as queueActions from 'Actions/DeliveryQueue/DeliveryQueueActions';
@@ -146,6 +147,12 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
         filterState.queueName = "";
 
         this.setState({ filterValue: filterState });
+
+        //Moves the scroll bar to top if there is too many contents
+        let node = ReactDOM.findDOMNode(this.refs.queueContainer);
+        if (node) {
+            node.scrollTop = 0;
+        }
     }
 
     render() {
@@ -195,7 +202,7 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
                         Clear Filter
                     </Button>
                 </Form>
-                <div className="clearBoth modalTableContainer">
+                <div className="clearBoth modalTableContainer" ref="queueContainer">
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
                             <Row componentClass="tr">
