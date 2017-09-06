@@ -81,7 +81,7 @@ class SessionAlertModal extends React.Component
     onOpenModal(){ 
         this.timer=0;
         this.setState({
-            message:"Session about to end. you will be logged out, if no server request is made. Would you like to continue?",
+            message:"session is about to end. you will be automatically logged out, if no server request is made. Would you like to extend the session?",
             time: {}, 
             seconds:120 
         });
@@ -119,8 +119,8 @@ class SessionAlertModal extends React.Component
            }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button  onClick={(event) => this.onCancel(event)}>NO</Button>  
-                    <Button bsStyle="primary" onClick={(event) => this.onContinue(event)}>YES</Button>
+                    <Button  onClick={(event) => this.onCancel(event)}>No</Button>  
+                    <Button bsStyle="primary" onClick={(event) => this.onContinue(event)}>Extend</Button>
                 </Modal.Footer>
            </Modal>
         )
