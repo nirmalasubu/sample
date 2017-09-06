@@ -115,7 +115,7 @@ class DestinationPropertiesFilter extends React.Component {
 
       var selectedTitle = this.state.selectedTitles[t];
 
-      if (selectedTitle.titleType.name == "Series") {
+      if (selectedTitle.titleType.name.indexOf("Series") > -1) {
         seriesIds.push(selectedTitle.titleId);
       }
       else {

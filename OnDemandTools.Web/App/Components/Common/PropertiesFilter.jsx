@@ -34,7 +34,7 @@ class PropertiesFilter extends React.Component {
             selectedTitles: [],
             hasChange: false,
             showWarningModel: false,
-            loadingTable:false
+            loadingTable: false
         }
     }
 
@@ -69,7 +69,7 @@ class PropertiesFilter extends React.Component {
     /// Loaded with data  when the pop up opens 
     /// </summary>
     loadForm() {
-        
+
         this.props.dispatch(clearTitles());
         var brands = [];
         var titles = [];
@@ -82,24 +82,24 @@ class PropertiesFilter extends React.Component {
             let searchPromise = searchByTitleIds(titleIds);
             searchPromise.then(message => {
                 //Title Data  is fetched asynchronously .  and sorted by titlename on loading
-                message.sort(function(a, b){                   
+                message.sort(function (a, b) {
                     var firstTitle = a.titleName.toLowerCase();
                     var SecondTitle = b.titleName.toLowerCase();
-                    if (firstTitle < SecondTitle) {return -1;}
-                    if (firstTitle > SecondTitle) {return 1;}
+                    if (firstTitle < SecondTitle) { return -1; }
+                    if (firstTitle > SecondTitle) { return 1; }
                     return 0;
                 });
-                this.setState({ selectedTitles: message ,loadingTable: false});   
+                this.setState({ selectedTitles: message, loadingTable: false });
             })
             searchPromise.catch(error => {
                 console.error(error);
                 titles = [];
             });
         }
-        else{
+        else {
             this.setState({ loadingTable: false });
         }
-       
+
         for (var i = 0; i < this.props.config.brands.length; i++) {
             var brandName = this.props.config.brands[i];
             var brandObject = {};
@@ -107,10 +107,10 @@ class PropertiesFilter extends React.Component {
             brandObject.selected = $.inArray(brandName, this.props.data.propertiesRow.brands) > -1;
             brands.push(brandObject);
         }
-        
+
 
         this.setState({ brandsSelection: brands, selectedTitles: titles, hasChange: false });
-      
+
     }
 
     /// <summary>
@@ -140,21 +140,21 @@ class PropertiesFilter extends React.Component {
                 selectedBrands.push(brands[i].brandName);
             }
         }
-       
+
         var titleIds = [];
         var seriesIds = [];
         for (var t = 0; t < this.state.selectedTitles.length; t++) {
 
             var selectedTitle = this.state.selectedTitles[t];
 
-            if (selectedTitle.titleType.name == "Series") {
+            if (selectedTitle.titleType.name.indexOf("Series") > -1) {
                 seriesIds.push(selectedTitle.titleId);
             }
             else {
                 titleIds.push(selectedTitle.titleId);
             }
         }
-        var selectedFilterValues={"brands":selectedBrands,"titleIds":titleIds,"seriesIds":seriesIds};
+        var selectedFilterValues = { "brands": selectedBrands, "titleIds": titleIds, "seriesIds": seriesIds };
         this.props.handleSave(selectedFilterValues);
     }
 
@@ -203,50 +203,50 @@ class PropertiesFilter extends React.Component {
         // ImageCheckBox sub component used to render list brand images
         var rows = [];
         for (var i = 0; i < this.state.brandsSelection.length; i++) {
-            
+
             var brand = this.state.brandsSelection[i];
             // span with key is required to remove the console warning "Each child in an array or iterator should have a unique "key" prop".
-            rows.push( <span key={i.toString()}><ImageCheckBox brandName={brand.brandName} brandkey={i} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /></span>);
-    }
+            rows.push(<span key={i.toString()}><ImageCheckBox brandName={brand.brandName} brandkey={i} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /></span>);
+        }
 
-    return (
-      <Modal className="destinationPropertiesFilterModel" bsSize="large"
-        backdrop="static"
-        onEntering={this.loadForm.bind(this)}
-        show={this.props.data.showAddEditPropertiesFilter}
-        onHide={this.handleClose.bind(this)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <div>Filters</div>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-             <div class="panel panel-default">
-             <div class="panel-body">
-          <div >
-            <ControlLabel> Brands</ControlLabel><br />
-             {rows}
-            <hr />
-           
-            <ControlLabel>Title/Series Associations</ControlLabel>
-            <TitleSearch  
-              selectedTitles={this.state.selectedTitles}
-              hasTitles={this.state.loadingTable}
-              onAddTitles={this.onAddTitles.bind(this)}
-              onRemoveTitles={this.onRemoveTitles.bind(this)}
-            />
-            </div>
-            </div>
-          </div>
-          <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.props.handleClose.bind(this)} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
-          <Button className="btn btn-primary btn-large" onClick={this.onClickSave.bind(this)}>Save</Button>
-        </Modal.Footer>
-      </Modal>
-    )
-          }
-          }
+        return (
+            <Modal className="destinationPropertiesFilterModel" bsSize="large"
+                backdrop="static"
+                onEntering={this.loadForm.bind(this)}
+                show={this.props.data.showAddEditPropertiesFilter}
+                onHide={this.handleClose.bind(this)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        <div>Filters</div>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div >
+                                <ControlLabel> Brands</ControlLabel><br />
+                                {rows}
+                                <hr />
+
+                                <ControlLabel>Title/Series Associations</ControlLabel>
+                                <TitleSearch
+                                    selectedTitles={this.state.selectedTitles}
+                                    hasTitles={this.state.loadingTable}
+                                    onAddTitles={this.onAddTitles.bind(this)}
+                                    onRemoveTitles={this.onRemoveTitles.bind(this)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.props.handleClose.bind(this)} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
+                    <Button className="btn btn-primary btn-large" onClick={this.onClickSave.bind(this)}>Save</Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+}
 
 export default PropertiesFilter
