@@ -325,14 +325,16 @@ namespace OnDemandTools.Business.Modules.Destination
                     return true;
             }
             return false;
-        }
-        
-
-
+        }        
 
         private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(Airing.Model.Airing airing, Property property)
         {
             var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+
+            if (airing.Title.Series != null && airing.Title.Series.Id.HasValue)
+            {
+                titleIds.Add(airing.Title.Series.Id.Value);
+            }
             if (titleIds.Any())
             {
                 if (!property.TitleIds.Any(titleIds.Contains))
@@ -346,23 +348,6 @@ namespace OnDemandTools.Business.Modules.Destination
             }
             return true;
         }
-
-        private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(Airing.Model.Airing airing, Property property)
-        {
-            //if (airing.Title.Series != null && airing.Title.Series.Id.HasValue)
-            //{
-            //    if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
-            //    {
-            //        return false;
-            //    }
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return true;
-        }
-
         #endregion
     }
 }

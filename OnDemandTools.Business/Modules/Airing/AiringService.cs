@@ -342,17 +342,17 @@ namespace OnDemandTools.Business.Modules.Airing
 
             // Get the first title listed as Primary from the airing
             var primaryTitleId = airing.Title.TitleIds.FirstOrDefault(t => t.Primary);
-           
+
             if (primaryTitleId != null && !titles.IsNullOrEmpty())
             {
                 // The assumption here is that 'primaryTitleId' will exist in 'titles'. If it doesn't then
                 // from a business perspective it is not valid. However, we don't want to throw any errors
                 // here but silently ignore it
-                if(titles.Exists(t => t.TitleId == int.Parse(primaryTitleId.Value)))
+                if (titles.Exists(t => t.TitleId == int.Parse(primaryTitleId.Value)))
                 {
                     var primaryTitle = titles.First(t => t.TitleId == int.Parse(primaryTitleId.Value));
                     UpdateTitleFieldsFor(ref airing, primaryTitle);
-                }               
+                }
             }
 
             airing.Options.Titles = titles;
@@ -404,11 +404,11 @@ namespace OnDemandTools.Business.Modules.Airing
             var destinations = destinationQueryHelper.GetByDestinationNames(destinationNames)
                                 .ToBusinessModel<List<DLDestinationModel.Destination>, List<BLModel.Alternate.Destination.Destination>>();
 
-                foreach(BLModel.Alternate.Destination.Destination des in destinations)  //verify each destination has categories . if yes then conbine categories and properties.
+            foreach (BLModel.Alternate.Destination.Destination des in destinations)  //verify each destination has categories . if yes then conbine categories and properties.
+            {
+                if (des.Categories.Any())
                 {
-                if(des.Categories.Any())
-                {
-                  foreach(BLModel.Alternate.Destination.Category cat in des.Categories)
+                    foreach (BLModel.Alternate.Destination.Category cat in des.Categories)
                     {
                         BLModel.Alternate.Destination.Property property = new Model.Alternate.Destination.Property();
                         property.Name = cat.Name;
@@ -417,7 +417,7 @@ namespace OnDemandTools.Business.Modules.Airing
                         des.Properties.Add(property);
                     }
                 }
-            }        
+            }
             FilterPropertiesByBrand(destinations, ref airing);
             new BLModel.Alternate.Destination.DeliverableFormatter(airing).Format(destinations); // destinations passed by reference for formatting
             new BLModel.Alternate.Destination.PropertyFormatter(airing).Format(destinations); // destinations passed by reference for formatting
@@ -508,7 +508,7 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="changeNotificaitonType">change notificaiton type</param>
         /// <param name="queuesToBeNotified">queues to be notified</param>
         /// <param name="changedValues">changed values</param>
-   
+
 
         /// <summary>
         /// update the status change notifcation
@@ -518,7 +518,7 @@ namespace OnDemandTools.Business.Modules.Airing
         public void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> changeNotifications)
         {
             changeNotificationCommand.Save(assetId, changeNotifications.ToDataModel<List<BLModel.ChangeNotification>, List<DLModel.ChangeNotification>>());
-              
+
         }
 
         #endregion
@@ -538,7 +538,7 @@ namespace OnDemandTools.Business.Modules.Airing
             else return -1;
         }
 
-       
+
         private void FilterPropertiesByBrand(IEnumerable<BLModel.Alternate.Destination.Destination> dataModels, ref BLModel.Alternate.Long.Airing airing)
         {
             var propertiesToRemove = new List<BLModel.Alternate.Destination.Property>();
@@ -566,25 +566,10 @@ namespace OnDemandTools.Business.Modules.Airing
             }
         }
 
-        private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Property property)
-        {
-            //if (airing.Title.Series.Id.HasValue)
-            //{
-            //    if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
-            //    {
-            //        return false;
-            //    }
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return true;
-        }
-
         private bool IsPropertyTitleIdsAssociatedwithAiringTitleIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Property property)
         {
-            var titleIds = airing.Title.TitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList();
+            var titleIds = ExtractTitleAndSeriesIdsFrom(airing);            
+
             if (titleIds.Any())
             {
                 if (!property.TitleIds.Any(titleIds.Contains))
@@ -599,7 +584,7 @@ namespace OnDemandTools.Business.Modules.Airing
             return true;
 
         }
-       
+
 
         private void UpdateTitleFieldsFor(ref BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Title.Title primaryTitle)
         {
@@ -898,7 +883,7 @@ namespace OnDemandTools.Business.Modules.Airing
             purgeAiringCommand.PurgeAirings(airingIds);
         }
 
-       
+
         #endregion
         #endregion
 
