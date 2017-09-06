@@ -153,7 +153,7 @@ class AddEditUserBasicInformation extends React.Component {
             });
 
             model.api.claims = [];
-            model.api.claims.push(["get","post","delete"]);
+            model.api.claims = ["get","post","delete"];
         }
         else {
             if (unmodifiedModel.portal.isAdmin) {
@@ -170,6 +170,8 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.deliveryQueuePermissions[key].canEdit=false;
                     model.portal.deliveryQueuePermissions[key].canDelete=false;
                 });
+
+                model.api.claims = [];
             } else {
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
@@ -184,6 +186,9 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.deliveryQueuePermissions[key].canEdit=false;
                     model.portal.deliveryQueuePermissions[key].canDelete=false;
                 });
+
+                model.api.claims = [];
+                model.api.claims = unmodifiedModel.api.claims;
             }            
         }
         this.setState({
