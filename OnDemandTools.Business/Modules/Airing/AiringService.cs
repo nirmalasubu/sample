@@ -554,26 +554,9 @@ namespace OnDemandTools.Business.Modules.Airing
                         continue;
                     }
 
-                    if (property.TitleIds.Any() && property.SeriesIds.Any()) // Property has both title and series id . any one of the title/series Id should match
-                    {
-                        if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property) && !IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property))
-                        {
-                            propertiesToRemove.Add(property);
-                        }
-                        continue;
-                    }
-
                     if (property.TitleIds.Any())
                     {
                         if (!IsPropertyTitleIdsAssociatedwithAiringTitleIds(airing, property)) // Any one of the title Id should match
-                        {
-                            propertiesToRemove.Add(property);
-                        }
-                    }
-
-                    if (property.SeriesIds.Any())
-                    {
-                        if (!IsPropertySeriesIdsAssociatedwithAiringSeriesIds(airing, property)) // Any one of the series Id should match
                         {
                             propertiesToRemove.Add(property);
                         }
@@ -586,17 +569,17 @@ namespace OnDemandTools.Business.Modules.Airing
 
         private bool IsPropertySeriesIdsAssociatedwithAiringSeriesIds(BLModel.Alternate.Long.Airing airing, BLModel.Alternate.Destination.Property property)
         {
-            if (airing.Title.Series.Id.HasValue)
-            {
-                if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            //if (airing.Title.Series.Id.HasValue)
+            //{
+            //    if (!property.SeriesIds.Contains(airing.Title.Series.Id.Value))
+            //    {
+            //        return false;
+            //    }
+            //}
+            //else
+            //{
+            //    return false;
+            //}
             return true;
         }
 

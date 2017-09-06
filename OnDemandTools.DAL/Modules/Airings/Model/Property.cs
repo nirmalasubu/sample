@@ -4,13 +4,14 @@ using System.Linq;
 
 namespace OnDemandTools.DAL.Modules.Airings.Model
 {
+    [BsonIgnoreExtraElements]
     public class Property
     {
         public Property()
         {
             Brands = new List<string>();
             TitleIds = new List<int>();
-            SeriesIds = new List<int>();
+          
         }
 
         public string Name { get; set; }
@@ -22,18 +23,11 @@ namespace OnDemandTools.DAL.Modules.Airings.Model
 
         public List<int> TitleIds { get; set; }
 
-        public List<int> SeriesIds { get; set; }
-
         #region Serialisation
 
         public bool ShouldSerializeTitleIds()
         {
             return TitleIds.Any();
-        }
-
-        public bool ShouldSerializeSeriesIds()
-        {
-            return SeriesIds.Any();
         }
         #endregion
     }

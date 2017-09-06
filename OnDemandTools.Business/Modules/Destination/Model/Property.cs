@@ -8,7 +8,6 @@ namespace OnDemandTools.Business.Modules.Destination.Model
         {
             Brands = new List<string>();
             TitleIds = new List<int>();
-            SeriesIds = new List<int>();
         }
 
         public string Name { get; set; }
@@ -18,7 +17,5 @@ namespace OnDemandTools.Business.Modules.Destination.Model
         public List<string> Brands { get; set; }
 
         public List<int> TitleIds { get; set; }
-
-        public List<int> SeriesIds { get; set; }
     }
 }

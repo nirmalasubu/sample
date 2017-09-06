@@ -10,8 +10,7 @@ namespace OnDemandTools.Web.Models.Destination
         {
             Brands=new List<string>();
             Titles=new List<Title>();
-            TitleIds=new List<int>();
-            SeriesIds=new List<int>();
+            TitleIds=new List<int>();            
         }
         public string Id { get; set; }
 
@@ -22,7 +21,5 @@ namespace OnDemandTools.Web.Models.Destination
         public List<Title> Titles { get; set; }
 
         public List<int> TitleIds { get; set; }
-
-        public List<int> SeriesIds { get; set; }
     }
 }

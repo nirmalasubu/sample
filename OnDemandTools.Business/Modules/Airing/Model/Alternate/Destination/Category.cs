@@ -8,7 +8,6 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination
         {
             Brands = new List<string>();
             TitleIds = new List<int>();
-            SeriesIds = new List<int>();
         }
 
         public string Name { get; set; }
@@ -16,7 +15,5 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Destination
         public List<string> Brands { get; set; }
 
         public List<int> TitleIds { get; set; }
-
-        public List<int> SeriesIds { get; set; }
     }
 }
