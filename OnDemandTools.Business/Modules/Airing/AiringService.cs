@@ -410,10 +410,7 @@ namespace OnDemandTools.Business.Modules.Airing
                 {
                     foreach (BLModel.Alternate.Destination.Category cat in des.Categories)
                     {
-                        BLModel.Alternate.Destination.Property property = new Model.Alternate.Destination.Property();
-                        property.Name = cat.Name;
-                        property.Brands = cat.Brands;
-                        property.TitleIds = cat.TitleIds;
+                        BLModel.Alternate.Destination.Property property = cat.ToBusinessModel<BLModel.Alternate.Destination.Category, BLModel.Alternate.Destination.Property>();
                         des.Properties.Add(property);
                     }
                 }

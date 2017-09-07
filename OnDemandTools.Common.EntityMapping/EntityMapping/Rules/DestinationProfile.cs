@@ -58,6 +58,15 @@ namespace OnDemandTools.Common.EntityMapping
                ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
                ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
 
+            CreateMap<DLModel.Category, DLModel.Property>().
+              ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+              ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
+
+            CreateMap<BLAiringLongModel.Destination.Category, BLAiringLongModel.Destination.Property>().
+             ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
+             ForMember(d => d.Name, opt => opt.UseValue<string>("Category"));
+            
+
             CreateMap<ContentTier, DLModel.Property>().
                  ForMember(d => d.Value, opt => opt.MapFrom(s => s.Name)).
                ForMember(d => d.Name, opt => opt.UseValue<string>("ContentTier"));
