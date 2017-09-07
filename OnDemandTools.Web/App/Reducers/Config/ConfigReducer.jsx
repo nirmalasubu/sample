@@ -16,7 +16,8 @@ export const ConfigReducer = (state = {}, action) => {
 /// </sumamry>
 export const ApplicationErrorReducer = (state = [], action) => {
     switch (action.type) {
-        case actionTypes.APPLICATION_API_ERROR:  
+        case actionTypes.APPLICATION_API_ERROR: 
+            console.log("reducer error"+action.error)
             //TODO: add code to report error back to server   
            return action.error;
         default:
