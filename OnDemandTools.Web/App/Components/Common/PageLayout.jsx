@@ -6,6 +6,7 @@ import {Grid} from 'react-bootstrap';
 import {Row} from 'react-bootstrap';
 import {Col} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
+import SessionPage from './SessionHandling/SessionPage';
 
 
 const Layout = (props) => {
@@ -23,7 +24,7 @@ const Layout = (props) => {
               <Col xs={14} md={10} lg={10} ><Well style={wellStyles} >{props.content.children}</Well></Col>
             </Row>
           </Grid>
-          
+          <SessionPage />
               
       </div>
   );

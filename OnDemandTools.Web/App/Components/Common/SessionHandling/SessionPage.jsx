@@ -25,24 +25,31 @@ class SessionPage extends React.Component {
 
     //called on the page load
     componentDidMount() {
-        this.SessionExpirationTime=this.props.data;
-        this.SessionStartTime =  new Date();
-        var minutesLater = new Date();
-        minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
-        this.SessionEndTime =  minutesLater;      
-        setInterval(this.CheckIdleTime.bind(this), 60000);  // Timer for every 1 minutes
+        let promise= this.props.dispatch(fetchConfig());
+        promise.then(m=>{
+            this.SessionExpirationTime=this.props.config.sessionExpirationTime;
+            this.SessionStartTime =  new Date();
+            var minutesLater = new Date();
+            minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
+            this.SessionEndTime =  minutesLater;      
+            setInterval(this.CheckIdleTime.bind(this), 60000);  // Timer for every 1 minutes
+        });
+       
+        
+      
     }
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
-        var slideexpirationMinutes = Math.round((( (nextProps.serverPollTime - this.SessionStartTime ) % 86400000) % 3600000) / 60000); 
-        if(slideexpirationMinutes>=( Math.round(this.SessionExpirationTime)/2))
-        {
-            this.SessionStartTime =  new Date();
-            var minutesLater = new Date();
-            minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
-            this.SessionEndTime =  minutesLater;
-        }
+        
+            var slideexpirationMinutes = Math.round((( (nextProps.serverPollTime - this.SessionStartTime ) % 86400000) % 3600000) / 60000); 
+            if(slideexpirationMinutes>( Math.round(this.SessionExpirationTime)/2))
+            {
+                this.SessionStartTime =  new Date();
+                var minutesLater = new Date();
+                minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
+                this.SessionEndTime =  minutesLater;
+            }
       
     }
 
@@ -50,7 +57,7 @@ class SessionPage extends React.Component {
     ///  to check when server request has happend
     ///</summary>
     CheckIdleTime() {
-     
+      
         var today = new Date();
         var serverPolledTime = new Date(this.props.serverPollTime);  
       
@@ -88,7 +95,7 @@ class SessionPage extends React.Component {
                this.setState({ showSessionModel: false });
                this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
                var minutesLater = new Date();
-               minutesLater.setMinutes(minutesLater.getMinutes() + 6); // Assuming expire time span is 6 minutes in startup.cs
+               minutesLater.setMinutes(minutesLater.getMinutes() + this.SessionExpirationTime); // Assuming expire time span is 6 minutes in startup.cs
                this.SessionEndTime =  minutesLater;
            }).catch(error => {
                console.log("error "+ error)

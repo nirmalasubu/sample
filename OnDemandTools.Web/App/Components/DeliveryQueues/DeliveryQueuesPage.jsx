@@ -5,6 +5,9 @@ import DeliveryQueueFilter from 'Components/DeliveryQueues/DeliveryQueueFilter';
 import DeliveryQueueTable from 'Components/DeliveryQueues/DeliveryQueueTable';
 import PageHeader from 'Components/Common/PageHeader';
 import 'react-notifications/lib/notifications.css';
+import { fetchStatus } from 'Actions/Status/StatusActions';
+
+
 
 // Parent component for all things related to Queue. Individual features
 // and layouts are defined further within sub components
@@ -90,6 +93,11 @@ class Queue extends React.Component {
         // in redux store
         this.props.fetchQueue();
 
+        // Dispatch another action to asynchronously fetch full list of status data
+        // from server. Once it is fetched, the data will be stored
+        // in redux store
+        this.props.fetchStatus();
+
         // Set page title
         document.title = "ODT - Delivery Queues";
     }
@@ -148,7 +156,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchQueue: () => dispatch(queueActions.fetchQueues()),
-        signal: (signalRdata) => dispatch(queueActions.signalRStart(signalRdata))
+        signal: (signalRdata) => dispatch(queueActions.signalRStart(signalRdata)),
+        fetchStatus: () => dispatch(fetchStatus())
     };
 };
 
