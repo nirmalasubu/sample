@@ -51,13 +51,14 @@ class SessionPage extends React.Component {
 
         if(this.state.isSessiontimeSet)
         {
+            console.log(" nextProps.serverPollTime :"+  nextProps.serverPollTime);
             var slideexpirationMinutes = Math.round((( (nextProps.serverPollTime - this.SessionStartTime ) % 86400000) % 3600000) / 60000); 
             console.log(" slideexpirationMinutes :"+  slideexpirationMinutes);
             if(slideexpirationMinutes>(Math.round(this.SessionExpirationTime)/2))
             {
                 console.log("inside if")
-                this.SessionStartTime =  new Date();
-                var minutesLater = new Date();
+                this.SessionStartTime =  nextProps.serverPollTime;
+                var minutesLater = nextProps.serverPollTime;
                 minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
                 this.SessionEndTime =  minutesLater;
             }
@@ -106,11 +107,11 @@ class SessionPage extends React.Component {
         this.props.dispatch(ConfigActions.healthCheck())
            .then(() => {
                this.setState({ showSessionModel: false });
-               this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
-               var minutesLater = new Date();
-               console.log("in method"+ this.SessionExpirationTime);
-               minutesLater.setMinutes(minutesLater.getMinutes() + this.SessionExpirationTime); // Assuming expire time span is 6 minutes in startup.cs
-               this.SessionEndTime =  minutesLater;
+               //this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
+               //var minutesLater = new Date();
+               //console.log("in method"+ this.SessionExpirationTime);
+               //minutesLater.setMinutes(minutesLater.getMinutes() + this.SessionExpirationTime); // Assuming expire time span is 6 minutes in startup.cs
+               //this.SessionEndTime =  minutesLater;
            }).catch(error => {
                console.log("error "+ error)
                this.setState({ showSessionModel: false });
