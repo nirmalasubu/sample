@@ -34,17 +34,17 @@ class AddEditUserBasicInformation extends React.Component {
     }
 
     componentWillMount() {
+        // Dispatch another action to asynchronously fetch full list of destination data
+        // from server. Once it is fetched, the data will be stored
+        // in redux store
+        this.props.dispatch(destinationActions.fetchDestinations());        
+
         this.setState({
             userBasicInfoModel: this.props.data
         });
     }
 
     componentDidMount() {
-        // Dispatch another action to asynchronously fetch full list of destination data
-        // from server. Once it is fetched, the data will be stored
-        // in redux store
-        this.props.dispatch(destinationActions.fetchDestinations());
-
         var model = this.state.userBasicInfoModel;
         if (this.state.userBasicInfoModel.id == null) {
             this.setState({ userBasicInfoModel: model, componentJustMounted: true });
@@ -53,7 +53,7 @@ class AddEditUserBasicInformation extends React.Component {
             userBasicInfounmodifiedModel: jQuery.extend(true, {}, this.props.data)
         });
         this.validateForm();
-    }
+    }    
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
@@ -162,8 +162,8 @@ class AddEditUserBasicInformation extends React.Component {
             model.api.claims = [];
             model.api.claims = ["get","post","delete"];
 
-            for (var i = 0; i < this.props.destinations.length; i++) {
-                model.api.destinations = [];
+            model.api.destinations = [];
+            for (var i = 0; i < this.props.destinations.length; i++) {                
                 model.api.destinations.push(this.props.destinations[i].name);
             }
         }
@@ -184,6 +184,7 @@ class AddEditUserBasicInformation extends React.Component {
                 });
 
                 model.api.claims = [];
+                model.api.destinations = [];
             } else {
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;

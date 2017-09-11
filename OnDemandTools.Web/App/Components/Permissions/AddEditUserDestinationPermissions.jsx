@@ -33,6 +33,15 @@ class AddEditUserDestinationPermissions extends React.Component {
 
     }
 
+    /// <summary>
+    //This will sort your destinations array
+    /// </summary>
+    sortDestinationsByName(a, b) {
+        var aName = a.name.toLowerCase();
+        var bName = b.name.toLowerCase();
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }
+
     componentWillMount() {
         this.setState({
             userPermissionModel: this.props.data
@@ -40,12 +49,19 @@ class AddEditUserDestinationPermissions extends React.Component {
     }
 
     componentDidMount() {
-        var model = this.state.userPermissionModel;
+        var model = this.state.userPermissionModel;       
     }
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
         
+    }
+
+    isChecked(value)
+    {
+        var model = this.state.userPermissionModel;
+        var isGet = ($.inArray(value, model.api.destinations) > -1);
+        return isGet;
     }
 
     activechkChange(value, event) {
@@ -68,17 +84,6 @@ class AddEditUserDestinationPermissions extends React.Component {
     }
 
     /// <summary>
-    /// to display destination description
-    /// </summary>
-    constructDescription(item) {
-        for (var i = 0; i < this.props.destinations.length; i++) {
-            if (this.props.destinations[i].name == item) {
-                return <p>{this.props.destinations[i].description}</p>
-            }
-        }
-    }
-
-    /// <summary>
     /// handles the filter value onchange
     /// </summary>
     handleChange(chr, event) {
@@ -96,34 +101,35 @@ class AddEditUserDestinationPermissions extends React.Component {
     // The goal of this function is to filter 'destinations'
     // based on user provided filter criteria and return the refined 'destination' list.
     // If no filter criteria is provided then return the full 'destination' list
-    applyFilter(permissions, filter) {        
+    applyFilter(permissions, filter) {
+        var destinations = this.props.destinations.sort(this.sortDestinationsByName);
         var filteredPermissions = permissions;
         if (filter.code != undefined && permissions != undefined) {
             var code = filter.code.toLowerCase();
             var description = filter.description.toLowerCase();
 
-            var filteredDestination = (this.props.destinations.filter(obj=> (code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
+            var filteredDestination = (destinations.filter(obj=> (code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
                   &&(description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
                 ));
-            if(filteredDestination.length > 0)
-            {
-                return filteredDestination.filter(function(e){return (this.indexOf(e.name) < 0); } , filteredPermissions.api.destinations);
-            }
+
+            return filteredDestination
         }
 
-        return this.props.destinations;
+        return destinations;
     }
 
     clearFilter()
     {
-        this.inputQueue.value = "";
+        this.inputCode.value = "";
+        this.inputDes.value = "";
         var filterState = this.state.filterValue;
-        filterState.queueName = "";
+        filterState.code = "";
+        filterState.description = "";
 
         this.setState({ filterValue: filterState });
 
         //Moves the scroll bar to top if there is too many contents
-        let node = ReactDOM.findDOMNode(this.refs.queueContainer);
+        let node = ReactDOM.findDOMNode(this.refs.destContainer);
         if (node) {
             node.scrollTop = 0;
         }
@@ -140,7 +146,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                 return (<Row componentClass="tr" key={index.toString()}>
                     <Col componentClass="td" class="user-permission-portal-module">{item.name}</Col>
                     <Col componentClass="td">{item.description}</Col>
-                    <Col componentClass="td"> <input type="checkbox" checked={false}
+                    <Col componentClass="td"> <input type="checkbox" checked={this.isChecked(item.name)}
                         onChange={(event) => this.activechkChange(item.name, event)}
                         disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
                 </Row>)
@@ -172,7 +178,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                         Clear Filter
                     </Button>
                 </Form>
-                <div className="clearBoth modalTableContainer" ref="queueContainer">
+                <div className="clearBoth modalTableContainer" ref="destContainer">
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
                             <Row componentClass="tr">
