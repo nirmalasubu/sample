@@ -247,8 +247,7 @@ class AddEditUserPermissions extends React.Component {
                                     </Tab>
                                     <Tab eventKey={4} title="Destinations">
                                         <AddEditUserDestinationPermissions data={this.state.permission} 
-                                    updatePermission={this.updatePermission.bind(this)} />
-                                    tet                                        
+                                    updatePermission={this.updatePermission.bind(this)} />                                        
                                     </Tab>
                                     <Tab eventKey={5} title="Brands">
 

@@ -3,11 +3,13 @@ import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGr
 import { connect } from 'react-redux';
 import validator from 'validator';
 import Moment from 'moment';
+import * as destinationActions from 'Actions/Destination/DestinationActions';
 
 
 @connect((store) => {
     return {
-        permissions: store.permissions
+        permissions: store.permissions,
+        destinations: store.destinations
     };
 })
 /// <summary>
@@ -38,6 +40,11 @@ class AddEditUserBasicInformation extends React.Component {
     }
 
     componentDidMount() {
+        // Dispatch another action to asynchronously fetch full list of destination data
+        // from server. Once it is fetched, the data will be stored
+        // in redux store
+        this.props.dispatch(destinationActions.fetchDestinations());
+
         var model = this.state.userBasicInfoModel;
         if (this.state.userBasicInfoModel.id == null) {
             this.setState({ userBasicInfoModel: model, componentJustMounted: true });
@@ -154,6 +161,11 @@ class AddEditUserBasicInformation extends React.Component {
 
             model.api.claims = [];
             model.api.claims = ["get","post","delete"];
+
+            for (var i = 0; i < this.props.destinations.length; i++) {
+                model.api.destinations = [];
+                model.api.destinations.push(this.props.destinations[i].name);
+            }
         }
         else {
             if (unmodifiedModel.portal.isAdmin) {

@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom';
 import { Checkbox, Grid, Row, Col, InputGroup, Radio, Form, ControlLabel, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import * as destinationActions from 'Actions/Destination/DestinationActions';
+
 
 @connect((store) => {
     return {
@@ -34,11 +34,6 @@ class AddEditUserDestinationPermissions extends React.Component {
     }
 
     componentWillMount() {
-        // Dispatch another action to asynchronously fetch full list of destination data
-        // from server. Once it is fetched, the data will be stored
-        // in redux store
-        this.props.dispatch(destinationActions.fetchDestinations());
-
         this.setState({
             userPermissionModel: this.props.data
         });
@@ -46,9 +41,6 @@ class AddEditUserDestinationPermissions extends React.Component {
 
     componentDidMount() {
         var model = this.state.userPermissionModel;
-        if (this.state.userPermissionModel.id == null) {
-            this.setState({ userPermissionModel: model, componentJustMounted: true });
-        }
     }
 
     //receives prop changes to update state
@@ -104,10 +96,8 @@ class AddEditUserDestinationPermissions extends React.Component {
     // The goal of this function is to filter 'destinations'
     // based on user provided filter criteria and return the refined 'destination' list.
     // If no filter criteria is provided then return the full 'destination' list
-    applyFilter(permissions, filter) {
-        console.log(permissions);
+    applyFilter(permissions, filter) {        
         var filteredPermissions = permissions;
-
         if (filter.code != undefined && permissions != undefined) {
             var code = filter.code.toLowerCase();
             var description = filter.description.toLowerCase();
@@ -115,11 +105,13 @@ class AddEditUserDestinationPermissions extends React.Component {
             var filteredDestination = (this.props.destinations.filter(obj=> (code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
                   &&(description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
                 ));
-
-            return filteredPermissions.api.destinations.filter(function(e){return this.indexOf(e)<0;}, filteredDestination.map(val => val.name));
+            if(filteredDestination.length > 0)
+            {
+                return filteredDestination.filter(function(e){return (this.indexOf(e.name) < 0); } , filteredPermissions.api.destinations);
+            }
         }
 
-        return permissions;
+        return this.props.destinations;
     }
 
     clearFilter()
@@ -140,17 +132,17 @@ class AddEditUserDestinationPermissions extends React.Component {
     render() {
         let row = null;
         let vals = null;
-        row = this.applyFilter(this.state.userPermissionModel.api.destinations, this.state.filterValue);        
+        row = this.applyFilter(this.state.userPermissionModel, this.state.filterValue);        
 
         if(row.length > 0)
         {
             vals = row.map(function (item, index) {
                 return (<Row componentClass="tr" key={index.toString()}>
-                    <Col componentClass="td" class="user-permission-portal-module">{item}</Col>
-                    <Col componentClass="td">{this.constructDescription(item)}</Col>
+                    <Col componentClass="td" class="user-permission-portal-module">{item.name}</Col>
+                    <Col componentClass="td">{item.description}</Col>
                     <Col componentClass="td"> <input type="checkbox" checked={false}
-                        onChange={(event) => this.activechkChange(item, "canAdd", event)}
-                        disabled={true} /></Col>
+                        onChange={(event) => this.activechkChange(item.name, event)}
+                        disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
                 </Row>)
             }.bind(this));
         }
@@ -184,8 +176,8 @@ class AddEditUserDestinationPermissions extends React.Component {
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
                             <Row componentClass="tr">
-                                <Col componentClass="th" class="user-permission-portal-module"><label>Cade</label></Col>
-                                <Col componentClass="th"> <label>Description</label></Col>
+                                <Col componentClass="th" ><label>Code</label></Col>
+                                <Col componentClass="th" class="user-permission-portal-module"> <label>Description</label></Col>
                                 <Col componentClass="th"><label >Get</label></Col>
                             </Row>
                         </thead>
