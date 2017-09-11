@@ -67,14 +67,14 @@ class UserPermissionTable extends React.Component {
 
     lastLoginFormat(val, rowData) {
         if (rowData.portal.lastLoginTime == null) {
-            return <p>{"never"}</p>;
+            return <p>{"Never"}</p>;
         }
         else {
 
             var d = new Date(rowData.portal.lastLoginTime);
             var year = d.getFullYear();
             if (year < 2000) {
-                return <p>{"never"}</p>;
+                return <p>{"Never"}</p>;
             }
             else {
 

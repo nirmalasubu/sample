@@ -25,7 +25,7 @@ class SystemPermissionsPage extends React.Component {
                 includeInactive: false
             },
 
-            columns: [{ "label": "System Id", "dataField": "userName", "sort": true },
+            columns: [{ "label": "System ID", "dataField": "userName", "sort": true },
             { "label": "API Key", "dataField": "ApiKey", "sort": false },
             { "label": "System Contact", "dataField": "FunctionalContactId", "sort": false },
             { "label": "API Last Accessed", "dataField": "LastAccessTime", "sort": true },

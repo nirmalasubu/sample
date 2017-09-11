@@ -74,7 +74,7 @@ class SystemPermissionsTable extends React.Component {
 
     lastAccessFormat(val, rowData) {
         if (rowData.api.lastAccessTime == null) {
-            return <p>{"never"}</p>;
+            return <p>{"Never"}</p>;
         }
         else {
 
@@ -82,7 +82,7 @@ class SystemPermissionsTable extends React.Component {
             var year = d.getFullYear();
             if(year<2000)
             {
-                return <p>{"never"}</p>;
+                return <p>{"Never"}</p>;
             }
             else
             {
@@ -93,9 +93,9 @@ class SystemPermissionsTable extends React.Component {
     }
 
     ///<summary>
-    // Custom sort logic for Last Login time
+    // Custom sort logic for Last Access time
     ///</summary>
-    lastAccessLoginCustomSort(a, b, sortOrder) {
+    lastAccessCustomSort(a, b, sortOrder) {
         var date1 = new Date(b.api.lastAccessTime);
         var date2 = new Date(a.api.lastAccessTime);
 
