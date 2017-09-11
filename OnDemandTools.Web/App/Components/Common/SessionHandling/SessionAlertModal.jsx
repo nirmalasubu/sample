@@ -18,16 +18,11 @@ class SessionAlertModal extends React.Component
         this.state = ({
             seconds:"" 
         });
-        
     }
-    componentWillReceiveProps(nextProps) {
 
+    componentWillReceiveProps(nextProps) {
         this.setState({seconds:nextProps.data.activeSessionRemainingSeconds});
     }
-
-    
-
-  
 
     //<summary>
     ///  when the pop up is bubbled up
@@ -36,7 +31,6 @@ class SessionAlertModal extends React.Component
         this.setState({
             seconds:this.props.data.activeSessionRemainingSeconds
         });
-       
     }
 
     //<summary>
@@ -47,13 +41,15 @@ class SessionAlertModal extends React.Component
         this.props.handleContinueSession();
     }
 
+    ///<summary>
+    ///  when users clicks No
+    ///</summary>
     onCancel(){
         clearInterval(this.timer);
         this.props.handleClose();
     }
 
     render(){
-        
         let seconds="";
         seconds=this.props.data.secondsBeforeSessionEnd>0?this.props.data.secondsBeforeSessionEnd:0;
         return (
@@ -74,7 +70,8 @@ class SessionAlertModal extends React.Component
                 </Modal.Footer>
            </Modal>
         )
-                    }
-                    }
+                    
+    }
+}
 
 export default SessionAlertModal;
