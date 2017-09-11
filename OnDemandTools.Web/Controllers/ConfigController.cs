@@ -38,7 +38,7 @@ namespace OnDemandTools.Web.Controllers
                 PortalSettings = _appSettings.PortalSettings,
                 PortalModules = _userPermissions.GetAllPortalModules().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>(),
                 Brands = _brandService.GetAllBrands(),
-                SessionExpirationTime= int.Parse(_appSettings.SessionExpirationTime)
+                SessionExpirationTimeMinutes = int.Parse(_appSettings.SessionExpirationTimeMinutes)
 
             };
         }

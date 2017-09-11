@@ -158,7 +158,7 @@ namespace OnDemandTools.Web
             {
                 AuthenticationScheme = "Cookies",
                 AutomaticAuthenticate = true,
-                ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(appSettings.SessionExpirationTime)),
+                ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(appSettings.SessionExpirationTimeMinutes)),
                 SlidingExpiration = true
             });
 

@@ -18,16 +18,13 @@ class SessionPage extends React.Component {
         super(props);
         this.state = ({
             showSessionModel: false,
-            isSessionExtended:false,
             isSessiontimeSet:false,
-            activeSessionRemainingSeconds:""
+            activeSessionRemainingSeconds:"",
+            secondsBeforeSessionEnd:15// No of minutes/seconds to verify before SessionEndTime
         });
         this.SessionStartTime ="";
         this.SessionEndTime =new Date();
-        this.SessionExpirationTime="";
-        this.SecondsBeforeSessionEnd=45; // No of minutes to verify before SessionEndTime
-      //  this.activeSessionRemainingSeconds="",
-       this.counter=0;
+        this.SessionExpirationTimeMinutes="";
     }
 
    
@@ -41,32 +38,28 @@ class SessionPage extends React.Component {
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
    
-        if(this.props.config.sessionExpirationTime!=undefined && !this.state.isSessiontimeSet)
+        if(this.props.config.sessionExpirationTimeMinutes!=undefined && !this.state.isSessiontimeSet)
         {
            
-            this.SessionExpirationTime=this.props.config.sessionExpirationTime;
+            this.SessionExpirationTimeMinutes=this.props.config.sessionExpirationTimeMinutes;
             this.SessionStartTime =  new Date();
             var minutesLater =new Date();
-            minutesLater.setMinutes(minutesLater.getMinutes() +  (this.SessionExpirationTime));
+            minutesLater.setMinutes(minutesLater.getMinutes() +  (this.SessionExpirationTimeMinutes));
             this.SessionEndTime =  minutesLater;  
             this.setState({isSessiontimeSet:true});
         }
 
         if(this.state.isSessiontimeSet)
         {   
-            console.log(" this.props.serverPollTime :"+  JSON.stringify(nextProps.serverPollTime));
-            console.log(" this.SessionStartTime :"+  this.SessionStartTime);
-            var slideexpirationSeconds = Math.round( (nextProps.serverPollTime- this.SessionStartTime)/1000);
-            console.log(" slideexpirationSeconds :"+  slideexpirationSeconds);
-            console.log(" (Math.round(this.SessionExpirationTime)/2) :"+  Math.round(this.SessionExpirationTime/2*60));
            
-            if(slideexpirationSeconds > Math.round((this.SessionExpirationTime/2)*60) )   // calculation based on this  reference https://msdn.microsoft.com/en-us/library/system.web.configuration.formsauthenticationconfiguration.slidingexpiration(v=vs.110).aspx
+            var slideexpirationSeconds = Math.round( (nextProps.serverPollTime- this.SessionStartTime)/1000);   // converting time into seconds
+           
+            if(slideexpirationSeconds > Math.round((this.SessionExpirationTimeMinutes/2)*60) )   // calculation based on this  reference https://msdn.microsoft.com/en-us/library/system.web.configuration.formsauthenticationconfiguration.slidingexpiration(v=vs.110).aspx
             {
                 this.SessionStartTime =  new Date();
                 var minutesLater = new Date();
-                minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
+                minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTimeMinutes);
                 this.SessionEndTime =  minutesLater;
-                console.log(" inside if this.SessionEndTime  2 :"+this.SessionEndTime);
             }
         }
        
@@ -80,19 +73,15 @@ class SessionPage extends React.Component {
        
         var datetimeNow = new Date();
 
-        this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime-datetimeNow)/1000) });
+        this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime-datetimeNow)/1000) }); // converting time into seconds
        
-       
-       // this.activeSessionRemainingSeconds =Math.round((this.SessionEndTime-datetimeNow)/1000); 
-
-        //console.log(" activeSessionRemainingSeconds : " +this.activeSessionRemainingSeconds, this.SessionEndTime   )
-        console.log(" activeSessionRemainingSeconds : " +this.state.activeSessionRemainingSeconds, this.SessionEndTime   )
-        if (this.state.activeSessionRemainingSeconds == this.SecondsBeforeSessionEnd) {
+       // console.log(" activeSessionRemainingSeconds : " +this.state.activeSessionRemainingSeconds, this.SessionEndTime   )
+        if (this.state.activeSessionRemainingSeconds == this.state.secondsBeforeSessionEnd) {
            
             this.setState({ showSessionModel: true });
         }
       
-        if (this.state.activeSessionRemainingSeconds <-2) {   // need to check for zero < 0
+        if (this.state.activeSessionRemainingSeconds < 0) {   
                  window.location.reload();
            
         }
@@ -120,7 +109,7 @@ class SessionPage extends React.Component {
            }).catch(error => {
                console.log("error "+ error)
                this.setState({ showSessionModel: false});
-               //window.location.reload();
+               window.location.reload();
            });
         
         
