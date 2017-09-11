@@ -17,8 +17,10 @@ import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasic
 import AddEditUserPortalPermissions from 'Components/Permissions/AddEditUserPortalPermissions';
 import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/AddEditUserDeliveryQueuePermissions';
 import AddEditUserApiPermissions from 'Components/Permissions/AddEditUserAPIPermissions';
+import AddEditUserDestinationPermissions from 'Components/Permissions/AddEditUserDestinationPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
+
 @connect((store) => {
     return {
 
@@ -244,7 +246,9 @@ class AddEditUserPermissions extends React.Component {
                                     updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={4} title="Destinations">
-
+                                        <AddEditUserDestinationPermissions data={this.state.permission} 
+                                    updatePermission={this.updatePermission.bind(this)} />
+                                    tet                                        
                                     </Tab>
                                     <Tab eventKey={5} title="Brands">
 
