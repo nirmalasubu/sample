@@ -18,49 +18,55 @@ class SessionPage extends React.Component {
         super(props);
         this.state = ({
             showSessionModel: false,
-        isSessiontimeSet:false});
+            isSessionExtended:false,
+            isSessiontimeSet:false,
+            activeSessionRemainingSeconds:""
+        });
         this.SessionStartTime ="";
-        this.SessionEndTime ="";
+        this.SessionEndTime =new Date();
         this.SessionExpirationTime="";
+        this.SecondsBeforeSessionEnd=45; // No of minutes to verify before SessionEndTime
+      //  this.activeSessionRemainingSeconds="",
+       this.counter=0;
     }
 
    
     //called on the page load
     componentDidMount() {
-        console.log(" componentDidMount" );
+       
        this.props.dispatch(fetchConfig());
-      setInterval(this.CheckIdleTime.bind(this), 60000);  // Timer for every 1 minutes
+      setInterval(this.CheckIdleTime.bind(this), 1000);  // Timer for every 1 second
     }
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
-       
+   
         if(this.props.config.sessionExpirationTime!=undefined && !this.state.isSessiontimeSet)
         {
            
             this.SessionExpirationTime=this.props.config.sessionExpirationTime;
             this.SessionStartTime =  new Date();
             var minutesLater =new Date();
-            minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
-            this.SessionEndTime =  minutesLater;    
-            console.log( " this.SessionStartTime  :"+this.SessionStartTime );
-            console.log( " this.SessionEndTime  :"+this.SessionEndTime );
-            console.log( " this.SessionExpirationTime  :"+this.SessionExpirationTime );
+            minutesLater.setMinutes(minutesLater.getMinutes() +  (this.SessionExpirationTime));
+            this.SessionEndTime =  minutesLater;  
             this.setState({isSessiontimeSet:true});
         }
 
         if(this.state.isSessiontimeSet)
-        {
-            console.log(" nextProps.serverPollTime :"+  nextProps.serverPollTime);
-            var slideexpirationMinutes = Math.round((( (nextProps.serverPollTime - this.SessionStartTime ) % 86400000) % 3600000) / 60000); 
-            console.log(" slideexpirationMinutes :"+  slideexpirationMinutes);
-            if(slideexpirationMinutes>(Math.round(this.SessionExpirationTime)/2))
+        {   
+            console.log(" this.props.serverPollTime :"+  JSON.stringify(nextProps.serverPollTime));
+            console.log(" this.SessionStartTime :"+  this.SessionStartTime);
+            var slideexpirationSeconds = Math.round( (nextProps.serverPollTime- this.SessionStartTime)/1000);
+            console.log(" slideexpirationSeconds :"+  slideexpirationSeconds);
+            console.log(" (Math.round(this.SessionExpirationTime)/2) :"+  Math.round(this.SessionExpirationTime/2*60));
+           
+            if(slideexpirationSeconds > Math.round((this.SessionExpirationTime/2)*60) )   // calculation based on this  reference https://msdn.microsoft.com/en-us/library/system.web.configuration.formsauthenticationconfiguration.slidingexpiration(v=vs.110).aspx
             {
-                console.log("inside if")
-                this.SessionStartTime =  nextProps.serverPollTime;
-                var minutesLater = nextProps.serverPollTime;
+                this.SessionStartTime =  new Date();
+                var minutesLater = new Date();
                 minutesLater.setMinutes(minutesLater.getMinutes() +  this.SessionExpirationTime);
                 this.SessionEndTime =  minutesLater;
+                console.log(" inside if this.SessionEndTime  2 :"+this.SessionEndTime);
             }
         }
        
@@ -71,22 +77,26 @@ class SessionPage extends React.Component {
     ///  to check when server request has happend
     ///</summary>
     CheckIdleTime() {
-        console.log(" CheckIdleTime this.SessionEndTime :"+this.SessionEndTime );
-     
-        var today = new Date();
-        var serverPolledTime = new Date(this.props.serverPollTime);  
-      
-        var activeSessionRemainingMinutes = Math.round((( (this.SessionEndTime - today ) % 86400000) % 3600000) / 60000); 
+       
+        var datetimeNow = new Date();
 
-        var minutesBeforeSessionEnd=2; // No of minutes to verify before SessionEndTime
-        console.log(" CheckIdleTime activeSessionRemainingMinutes :"+activeSessionRemainingMinutes );
-        if (activeSessionRemainingMinutes == minutesBeforeSessionEnd) {
+        this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime-datetimeNow)/1000) });
+       
+       
+       // this.activeSessionRemainingSeconds =Math.round((this.SessionEndTime-datetimeNow)/1000); 
+
+        //console.log(" activeSessionRemainingSeconds : " +this.activeSessionRemainingSeconds, this.SessionEndTime   )
+        console.log(" activeSessionRemainingSeconds : " +this.state.activeSessionRemainingSeconds, this.SessionEndTime   )
+        if (this.state.activeSessionRemainingSeconds == this.SecondsBeforeSessionEnd) {
+           
             this.setState({ showSessionModel: true });
         }
       
-        if (activeSessionRemainingMinutes <= 0) {          
-            window.location.reload();
+        if (this.state.activeSessionRemainingSeconds <-2) {   // need to check for zero < 0
+                 window.location.reload();
+           
         }
+       
     }
 
 
@@ -106,25 +116,20 @@ class SessionPage extends React.Component {
        
         this.props.dispatch(ConfigActions.healthCheck())
            .then(() => {
-               this.setState({ showSessionModel: false });
-               //this.SessionStartTime =  new Date();  // reset the value once user wishes to continue
-               //var minutesLater = new Date();
-               //console.log("in method"+ this.SessionExpirationTime);
-               //minutesLater.setMinutes(minutesLater.getMinutes() + this.SessionExpirationTime); // Assuming expire time span is 6 minutes in startup.cs
-               //this.SessionEndTime =  minutesLater;
+               this.setState({ showSessionModel: false});
            }).catch(error => {
                console.log("error "+ error)
-               this.setState({ showSessionModel: false });
-               window.location.reload();
+               this.setState({ showSessionModel: false});
+               //window.location.reload();
            });
         
-         
+        
     }
 
     render() {
         return (
             <div >
-                 <SessionAlertModal data={this.state} handleContinueSession={this.handleContinueSession.bind(this)} handleClose={this.closeSessionModel.bind(this)} />
+                 <SessionAlertModal data={this.state}  handleContinueSession={this.handleContinueSession.bind(this)} handleClose={this.closeSessionModel.bind(this)} />
             </div>
         )
     }

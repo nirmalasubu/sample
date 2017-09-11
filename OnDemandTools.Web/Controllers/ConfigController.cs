@@ -8,6 +8,7 @@ using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using OnDemandTools.Common.Model;
 using OnDemandTools.Web.Models.UserPermissions;
 using OnDemandTools.Business.Modules.UserPermissions;
+using System;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,7 +47,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("check")]
         public string HealthCheck()
         {
-            return "ok";
+            return DateTime.UtcNow.ToString();
         }
     }
 }

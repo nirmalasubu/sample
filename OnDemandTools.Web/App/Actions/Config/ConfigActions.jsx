@@ -26,7 +26,6 @@ export const handleApplicationAPIError = (error) => {
 export const timerSuccess = () => {
     return {
         type: actionTypes.TIMER_SUCCESS
-        
     }
 };
 
@@ -49,6 +48,7 @@ export const healthCheck = () => {
     return (dispatch) => {        
         return Axios.get('/api/config/check')
             .then(response => {
+               
                 dispatch(timerSuccess())
                 //console.log(JSON.stringify(response))
             })
