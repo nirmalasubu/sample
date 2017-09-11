@@ -86,9 +86,9 @@ class SystemPermissionsPage extends React.Component {
 
             if (name != "") {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
-                    return (permission.api.technicalContactUser.firstName != null ? permission.api.technicalContactUser.firstName.toLowerCase().indexOf(name) > -1 : false) ||
-                            (permission.api.technicalContactUser.lastName != null ? permission.api.technicalContactUser.lastName.toLowerCase().indexOf(name) > -1 : false) ||
-                        (permission.api.technicalContactUser.lastName != null && permission.api.technicalContactUser.firstName != null ?(permission.api.technicalContactUser.firstName.toLowerCase()+" "+permission.api.technicalContactUser.lastName.toLowerCase()).indexOf(name) > -1 : false)
+                    return (permission.api.technicalContactUser != null ? permission.api.technicalContactUser.firstName.toLowerCase().indexOf(name) > -1 : false) ||
+                            (permission.api.technicalContactUser != null ? permission.api.technicalContactUser.lastName.toLowerCase().indexOf(name) > -1 : false) ||
+                        (permission.api.technicalContactUser != null ?(permission.api.technicalContactUser.firstName.toLowerCase()+" "+permission.api.technicalContactUser.lastName.toLowerCase()).indexOf(name) > -1 : false)
                 });
             }
 
