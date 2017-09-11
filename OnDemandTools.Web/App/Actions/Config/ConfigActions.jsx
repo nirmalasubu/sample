@@ -48,7 +48,6 @@ export const healthCheck = () => {
     return (dispatch) => {        
         return Axios.get('/api/config/check')
             .then(response => {
-               
                 dispatch(timerSuccess())
                 //console.log(JSON.stringify(response))
             })
@@ -57,6 +56,8 @@ export const healthCheck = () => {
             });
     };
 };
+
+
 
 
 

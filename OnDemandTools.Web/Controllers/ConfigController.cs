@@ -47,7 +47,7 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("check")]
         public string HealthCheck()
         {
-            return DateTime.UtcNow.ToString();
+            return "ok";
         }
     }
 }
