@@ -18,6 +18,8 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Model
 
         public bool IsActive { get; set; }
 
+        public bool PermitAll { get; set; }
+
         public Guid ApiKey { get; set; }
 
         public DateTime LastAccessTime { get; set; }

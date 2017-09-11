@@ -10,6 +10,7 @@ using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using Microsoft.AspNetCore.Authorization;
 using OnDemandTools.Business.Modules.Queue;
 using System.Collections;
+using OnDemandTools.Business.Modules.Destination;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,11 +22,13 @@ namespace OnDemandTools.Web.Controllers
 
         IUserPermissionService _service;
         IQueueService _queueSvc;
+        IDestinationService _destinationSvc;
 
-        public UserPermissionController(IUserPermissionService service, IQueueService queueSvc)
+        public UserPermissionController(IUserPermissionService service, IQueueService queueSvc, IDestinationService destinationSvc)
         {
             _service = service;
             _queueSvc = queueSvc;
+            _destinationSvc = destinationSvc;
         }
 
 
@@ -74,7 +77,15 @@ namespace OnDemandTools.Web.Controllers
                             permission.Portal.DeliveryQueuePermissions.Add(queue.Name, new Permission(permission.Portal.IsAdmin));
                         }
                     }
+
+                    if (permission.Api.PermitAll)
+                    {
+                        List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+                        permission.Api.Destinations = null;
+                        permission.Api.Destinations = destinations.Select(s => s.Name).ToList();
+                    }
                 }
+                
             }
 
             return permissionLists;

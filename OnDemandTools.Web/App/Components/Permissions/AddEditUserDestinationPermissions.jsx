@@ -135,6 +135,19 @@ class AddEditUserDestinationPermissions extends React.Component {
         }
     }
 
+    permitChange()
+    {
+        var model = this.state.userPermissionModel;
+        model.api.permitAll = !this.state.userPermissionModel.api.permitAll;
+
+        model.api.destinations = [];
+        for (var i = 0; i < this.props.destinations.length; i++) {                
+            model.api.destinations.push(this.props.destinations[i].name);
+        }
+    
+        this.setState({userPermissionModel : model});
+    }
+
     render() {
         let row = null;
         let vals = null;
@@ -148,7 +161,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                     <Col componentClass="td">{item.description}</Col>
                     <Col componentClass="td"> <input type="checkbox" checked={this.isChecked(item.name)}
                         onChange={(event) => this.activechkChange(item.name, event)}
-                        disabled={this.state.userPermissionModel.portal.isAdmin} /></Col>
+                        disabled={(this.state.userPermissionModel.portal.isAdmin || this.state.userPermissionModel.api.permitAll)} /></Col>
                 </Row>)
             }.bind(this));
         }
@@ -178,7 +191,18 @@ class AddEditUserDestinationPermissions extends React.Component {
                         Clear Filter
                     </Button>
                 </Form>
-                <div className="clearBoth modalTableContainer" ref="destContainer">
+                <Form inline>
+                    <FormGroup controlId="permit" >
+                        <label for="permit" class="control-label" style={{float:"left", paddingRight:10}}>Permit All</label>                        
+                        <div style={{float:"left"}}>
+                            <label class="switch">
+                                <input type="checkbox" checked={this.state.userPermissionModel.api.permitAll} onChange={(event) => this.permitChange()} />
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </FormGroup>
+                </Form>
+                <div className="clearBoth modalTableContainer" ref="destContainer">                    
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
                             <Row componentClass="tr">

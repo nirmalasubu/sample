@@ -19,6 +19,8 @@ namespace OnDemandTools.Business.Modules.UserPermissions.Model
 
         public bool IsActive { get; set; }
 
+        public bool PermitAll { get; set; }
+
         public string ApiKey { get; set; }
 
         public DateTime LastAccessTime { get; set; }
