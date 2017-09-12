@@ -191,11 +191,13 @@ class AddEditUserPersonalInformation extends React.Component {
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
         if(!model.api.isActive)
         {
+            model.api.permitAll = false;
             model.api.claims = [];
+            model.api.destinations = [];
         }
         else
         {
-            model.api.claims=[];
+            model.api.claims = [];
             if (model.portal.isAdmin) 
             {
                 model.api.claims = ["get","post","delete"];
@@ -205,7 +207,14 @@ class AddEditUserPersonalInformation extends React.Component {
                 for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
                 {
                     model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
-                }
+            }
+
+            model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
+
+            model.api.destinations=[];
+            for(var i=0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++)
+            {
+                model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
             }
         }
         this.setState({
