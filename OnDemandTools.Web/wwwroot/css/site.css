@@ -25,6 +25,10 @@ body {
     border-bottom-color: transparent;
 }
 
+li.disabled {
+    cursor: not-allowed;
+}
+
 .dropdownAccess>.dropdown-menu>li>a {
     color: #337ab7;
     text-decoration: none;

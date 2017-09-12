@@ -40,10 +40,11 @@ class SystemInactivateModal extends React.Component {
         model.api.isActive = false;
         this.props.dispatch(permissionAction.savePermission(model))
             .then(() => {
+                this.props.dispatch(permissionAction.fetchPermissionRecords("system"));
                 this.props.handleClose();
             }).catch(error => {
                 this.setState({ isProcessing: false });
-            });
+            });        
     }
 
     render() {

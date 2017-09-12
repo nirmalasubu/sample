@@ -29,6 +29,7 @@ class AddEditUserPersonalInformation extends React.Component {
 
         this.state = ({
             personalInfoModel: "",
+            personalInfoUnModifiedModel: "",
             componentJustMounted: true,
             phone: "",
             validationStateFirstName: null,
@@ -78,6 +79,10 @@ class AddEditUserPersonalInformation extends React.Component {
             })
 
         }
+
+        this.setState({
+            personalInfoUnModifiedModel: jQuery.extend(true, {}, this.props.data)
+        });
         this.validateForm();
     }
 
@@ -181,10 +186,21 @@ class AddEditUserPersonalInformation extends React.Component {
     /// <summary>
     /// updating active api on checkbox change
     /// </summary>
-    activeApiChange() {
+    activeApiChange() {        
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
-
+        if(!model.api.isActive)
+        {
+            model.api.claims = [];
+        }
+        else
+        {
+            model.api.claims=[];
+            for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
+            {
+                model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
+            }
+        }
         this.setState({
             personalInfoModel: model
         });

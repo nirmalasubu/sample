@@ -38,7 +38,6 @@ class AddEditUserAPIPermissions extends React.Component {
     }
 
     componentDidMount() {
-
     }
 
     /// <summary>

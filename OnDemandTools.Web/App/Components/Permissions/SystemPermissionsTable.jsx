@@ -60,8 +60,10 @@ class SystemPermissionsTable extends React.Component {
     // Format the technical contact user name
     ///</summary>
     systemContactFormat(val, rowData) {
-        if(rowData.api.technicalContactUser!=undefined)
+        if(rowData.api.technicalContactUser!=null)
+        {
             return <p>  {rowData.api.technicalContactUser.firstName + " " + rowData.api.technicalContactUser.lastName} </p>;
+        }    
     }
 
     nameFormat(val) {
@@ -121,6 +123,7 @@ class SystemPermissionsTable extends React.Component {
             var model = rowValue;
             model.api.isActive = true;
             this.props.dispatch(permissionActions.savePermission(model));
+            this.props.dispatch(permissionActions.fetchPermissionRecords("system"));
         }
     }
 
