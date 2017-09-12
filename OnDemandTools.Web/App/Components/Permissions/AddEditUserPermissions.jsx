@@ -122,7 +122,7 @@ class AddEditUserPermissions extends React.Component {
     {  
         var activeKey = this.state.key;
         var selectedkey = this.state.selectedKey;
-        if(!permission.api.isActive && selectedkey == 3)
+        if(!permission.api.isActive && (selectedkey == 3 || selectedkey == 4))
         {
             activeKey= 1;
             selectedkey= 1;
@@ -245,7 +245,7 @@ class AddEditUserPermissions extends React.Component {
                                         <AddEditUserApiPermissions data={this.state.permission} 
                                     updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab eventKey={4} title="Destinations">
+                                    <Tab disabled={!this.state.isApi} eventKey={4} title="Destinations">
                                         <AddEditUserDestinationPermissions data={this.state.permission} 
                                     updatePermission={this.updatePermission.bind(this)} />                                        
                                     </Tab>
