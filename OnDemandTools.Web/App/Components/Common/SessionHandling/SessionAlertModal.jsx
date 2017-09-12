@@ -50,8 +50,8 @@ class SessionAlertModal extends React.Component
     }
 
     render(){
-        let seconds="";
-        seconds=this.props.data.secondsBeforeSessionEnd>0?this.props.data.secondsBeforeSessionEnd:0;
+        let minutes="";
+        minutes=this.props.data.secondsBeforeSessionEnd>0?Math.floor(this.props.data.secondsBeforeSessionEnd/60):0;
         return (
            <Modal show={this.props.data.showSessionModel} onEntering={this.onOpenModal.bind(this)} onHide={this.props.handleClose}> 
                 <Modal.Header closeButton>
@@ -61,7 +61,7 @@ class SessionAlertModal extends React.Component
                 </Modal.Header>        
                 <Modal.Body>
            {
-                        <p>Your session is about to expire in {seconds} seconds. Do you want to extend the session?</p>
+                        <p>Your session is about to expire in {minutes} minutes. Do you want to extend the session?</p>
            }
                 </Modal.Body>
                 <Modal.Footer>
