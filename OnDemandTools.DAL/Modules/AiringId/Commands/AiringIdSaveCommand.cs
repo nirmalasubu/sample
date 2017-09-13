@@ -119,8 +119,7 @@ namespace OnDemandTools.DAL.Modules.AiringId.Commands
                                        .Set("SequenceNumber", currentAiringId.SequenceNumber)
                                        .Set("AiringId", currentAiringId.AiringId)
                                        .Set("ModifiedBy", currentAiringId.ModifiedBy)
-                                       .Set("ModifiedDateTime", currentAiringId.ModifiedDateTime)
-                                       .Push("GenratedAiringIds", currentAiringId.AiringId),
+                                       .Set("ModifiedDateTime", currentAiringId.ModifiedDateTime),
                         VersionReturned = FindAndModifyDocumentVersion.Modified
                     });
 
