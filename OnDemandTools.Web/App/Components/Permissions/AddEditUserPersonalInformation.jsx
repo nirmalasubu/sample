@@ -196,9 +196,16 @@ class AddEditUserPersonalInformation extends React.Component {
         else
         {
             model.api.claims=[];
-            for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
+            if (model.portal.isAdmin) 
             {
-                model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
+                model.api.claims = ["get","post","delete"];
+            }
+            else
+            {
+                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
+                {
+                    model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
+                }
             }
         }
         this.setState({
