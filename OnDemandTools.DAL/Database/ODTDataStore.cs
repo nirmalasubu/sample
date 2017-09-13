@@ -150,8 +150,8 @@ namespace OnDemandTools.DAL.Database
 
         public ODTPrimaryDatastore(AppSettings appSettings)
         {
-            _primaryDatabaseWithNewClient = GetDatabaseAdhocClient(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
-            _primaryDatabase = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsDefault);
+            _primaryDatabaseWithNewClient = GetDatabaseAdhocClient(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsPrimary);
+            _primaryDatabase = GetDatabase(appSettings.MongoDB.ConnectionString, appSettings.MongoDB.ConnectionOptionsPrimary);
         }
 
         private MongoDatabase GetDatabase(string connectionString, string options)
