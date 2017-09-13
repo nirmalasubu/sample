@@ -21,7 +21,7 @@ class SessionPage extends React.Component {
             showSessionModel: false,
             isSessiontimeSet: false,
             activeSessionRemainingSeconds: "",
-            secondsBeforeSessionEnd: 15// No of minutes/seconds to verify before SessionEndTime
+            secondsBeforeSessionEnd: 120// No of seconds to verify before SessionEndTime
         });
         this.SessionStartTime = "";
         this.SessionEndTime = new Date();
