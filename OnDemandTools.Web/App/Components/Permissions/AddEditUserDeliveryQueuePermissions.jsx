@@ -113,20 +113,36 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
         this.setState({filterValue : filterState});
     }
 
+    /// <summary>
+    //This will sort your queue array
+    /// </summary>
+    sortQueuesByName(a, b) {
+        var aName = a.friendlyName.toLowerCase();
+        var bName = b.friendlyName.toLowerCase();
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }
+
     // The goal of this function is to filter 'queues'
     // based on user provided filter criteria and return the refined 'queue' list.
     // If no filter criteria is provided then return the full 'queue' list
     applyFilter(permissions, filter) {
         const newObj = {};
+        var filteredPermissions = {};
+        var queues = this.props.queues.sort(this.sortQueuesByName);
+
+        if(permissions != undefined)
+        {
+            $.each(queues, function( key, value ) {
+                filteredPermissions[value.name] = permissions[value.name];
+            });
+        }
 
         if (filter.queueName != undefined && permissions != undefined) {
-            var filteredPermissions = permissions;
-
             var queueName = filter.queueName.toLowerCase();
 
             if (queueName != "") {
                 
-                $.each(this.props.queues, function( key, value ) { 
+                $.each(queues, function( key, value ) { 
                     if(value.friendlyName.toLowerCase().indexOf(queueName) > -1)
                     {
                         newObj[value.name] = filteredPermissions[value.name];
@@ -137,7 +153,7 @@ class AddEditUserDeliveryQueuePermissions extends React.Component {
             }
         }
 
-        return permissions;
+        return filteredPermissions;
     }
 
     clearFilter()
