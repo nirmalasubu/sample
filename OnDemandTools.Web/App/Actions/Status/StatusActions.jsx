@@ -69,7 +69,7 @@ export const getNewStatus = () => {
             return (response.data);
         })
         .catch(error => {
-            dispatch(configActions.handleApplicationAPIError(error));
+           configActions.handleApplicationAPIError(error);
             throw (error);
         });
 };

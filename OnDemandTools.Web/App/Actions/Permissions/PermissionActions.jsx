@@ -73,7 +73,7 @@ export const fetchContactForRecords = (id) => {
                 return (response.data);
             })
             .catch(error => {
-                dispatch(configActions.handleApplicationAPIError(error));
+                configActions.handleApplicationAPIError(error);
             });
    
     
@@ -84,7 +84,7 @@ export const getNewUserPermission = () => {
             return (response.data);
         })
         .catch(error => {
-            dispatch(configActions.handleApplicationAPIError(error));
+            configActions.handleApplicationAPIError(error);
             throw (error);
         });
 };
