@@ -1,7 +1,7 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
-
+import * as configActions from 'Actions/Config/ConfigActions'
 
 // Future  we get data through Axios or fetch
 
@@ -33,6 +33,7 @@ export const fetchDestinations = () => {
                 dispatch(fetchDestinationSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -44,6 +45,7 @@ export const getNewDestination = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -54,6 +56,7 @@ export const getDestinations = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -65,6 +68,7 @@ export const saveDestination = (model) => {
                 dispatch(saveDestinationSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -77,6 +81,7 @@ export const deleteDestination = (id) => {
                 dispatch(deleteDestinationSuccess(id))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };

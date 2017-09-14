@@ -84,6 +84,7 @@ export const getNewUserPermission = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };

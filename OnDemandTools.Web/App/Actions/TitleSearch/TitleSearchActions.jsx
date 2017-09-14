@@ -1,6 +1,7 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
+import * as configActions from 'Actions/Config/ConfigActions'
 
 // Future  we get data through Axios or fetch
 const emptyTitles = {
@@ -39,6 +40,7 @@ export const titleSearch = (param) => {
                 dispatch(titleSearchSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -68,6 +70,7 @@ export const searchByTitleIds = (titleIds) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };

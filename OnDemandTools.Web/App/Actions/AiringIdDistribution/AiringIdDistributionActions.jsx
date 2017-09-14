@@ -1,6 +1,8 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
+import * as configActions from 'Actions/Config/ConfigActions'
+
 
 
 // Future  we get data through Axios or fetch
@@ -19,6 +21,7 @@ export const fetchCurrentAiringId = () => {
                 dispatch(fetchAiringIdSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -30,6 +33,7 @@ export const getNewAiringId = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -41,6 +45,7 @@ export const generateAiringId = (prefix) => {
                 dispatch(saveAiringIdSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -60,6 +65,7 @@ export const saveCurrentAiringId = (model) => {
                 dispatch(saveAiringIdSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -79,6 +85,7 @@ export const deleteCurrentAiringId = (id) => {
                 dispatch(deleteCurrentAiringIdSuccess(id))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };

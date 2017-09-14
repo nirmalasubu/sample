@@ -1,7 +1,7 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
-
+import * as configActions from 'Actions/Config/ConfigActions'
 
 export const fetchContentTierSuccess = (contentTiers) => {
     return {
@@ -31,6 +31,7 @@ export const fetchContentTiers = () => {
                 dispatch(fetchContentTierSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -43,6 +44,7 @@ export const saveContentTier = (model) => {
                 dispatch(saveContentTierSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -54,6 +56,7 @@ export const getNewContentTier = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -72,6 +75,7 @@ export const deleteContentTier = (contentTier) => {
                 dispatch(deleteContentTierSuccess(contentTier.name))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };

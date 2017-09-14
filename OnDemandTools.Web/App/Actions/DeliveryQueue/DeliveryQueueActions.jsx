@@ -1,7 +1,7 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
-
+import * as configActions from 'Actions/Config/ConfigActions'
 
 // Future  we get data through Axios or fetch
 const queue = [];
@@ -35,6 +35,7 @@ export const fetchQueues = () => {
                 dispatch(fetchQueuesSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -49,6 +50,7 @@ export const getNewQueue = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -60,6 +62,7 @@ export const saveQueue = (model) => {
                 dispatch(saveQueueSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -79,6 +82,7 @@ export const fetchNotificationHistory = (name) => {
                 dispatch(fetchNotificationHistorySuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -91,6 +95,7 @@ export const fetchNotificationHistoryByAiringId = (name, airingIds) => {
                 dispatch(fetchNotificationHistorySuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -108,6 +113,7 @@ export const resetQueues = (name) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -118,6 +124,7 @@ export const resetQueuesByAiringId = (name, airingId) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -128,6 +135,7 @@ export const resetQueueByCriteria = (criteria) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -138,6 +146,7 @@ export const getResultsForQuery = (criteria) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -148,6 +157,7 @@ export const purgeQueues = (name) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -158,6 +168,7 @@ export const clearQueues = (name) => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -169,6 +180,7 @@ export const deleteQueues = (id, name) => {
                 dispatch(deleteQueueSuccess(id))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };

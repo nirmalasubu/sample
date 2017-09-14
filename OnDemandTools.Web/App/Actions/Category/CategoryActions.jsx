@@ -1,6 +1,7 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
 import $ from 'jquery';
+import * as configActions from 'Actions/Config/ConfigActions'
 
 export const fetchCategorySuccess = (categories) => {
     return {
@@ -23,6 +24,7 @@ export const fetchCategories = () => {
                 dispatch(fetchCategorySuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -35,6 +37,7 @@ export const saveCategory = (model) => {
                 dispatch(saveCategorySuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -46,6 +49,7 @@ export const getNewCategory = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
@@ -64,6 +68,7 @@ export const deleteCategory = (name) => {
                 dispatch(deleteCategorySuccess(name))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };

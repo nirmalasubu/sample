@@ -53,7 +53,7 @@ class SessionAlertModal extends React.Component
         let minutes="";
         minutes=this.props.data.secondsBeforeSessionEnd>0?Math.floor(this.props.data.secondsBeforeSessionEnd/60):0;
         return (
-           <Modal show={this.props.data.showSessionModel} onEntering={this.onOpenModal.bind(this)} onHide={this.props.handleClose}> 
+           <Modal backdrop="static" show={this.props.data.showSessionModel} onEntering={this.onOpenModal.bind(this)} onHide={this.props.handleClose}> 
                 <Modal.Header closeButton>
                     <Modal.Title>
            Warning !

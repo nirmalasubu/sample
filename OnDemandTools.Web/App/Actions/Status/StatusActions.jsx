@@ -1,6 +1,6 @@
 ﻿import * as actionTypes from 'Actions/ActionTypes';
 import Axios from 'axios';
-
+import * as configActions from 'Actions/Config/ConfigActions'
 
 export const fetchStatusSuccess = (statuses) => {    
     return {
@@ -16,6 +16,7 @@ export const fetchStatus = () => {
               dispatch(fetchStatusSuccess(response.data))
           })
           .catch(error => {
+              dispatch(configActions.handleApplicationAPIError(error));
               throw(error);
           });
     };
@@ -36,6 +37,7 @@ export const deleteStatus = (id) => {
                 dispatch(deleteStatusSuccess(id))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -55,6 +57,7 @@ export const saveStatus = (model) => {
                 dispatch(saveStatusSuccess(response.data))
             })
             .catch(error => {
+                dispatch(configActions.handleApplicationAPIError(error));
                 throw (error);
             });
     };
@@ -66,6 +69,7 @@ export const getNewStatus = () => {
             return (response.data);
         })
         .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
             throw (error);
         });
 };
