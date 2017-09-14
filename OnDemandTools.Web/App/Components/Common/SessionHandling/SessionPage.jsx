@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import SessionAlertModal from 'Components/Common/SessionHandling/SessionAlertModal';
+import SessionServerUnavailableModal from 'Components/Common/SessionHandling/SessionServerUnavailableModal';
 import * as ConfigActions from 'Actions/Config/ConfigActions';
 import { fetchConfig } from 'Actions/Config/ConfigActions';
 
@@ -11,7 +12,7 @@ import { fetchConfig } from 'Actions/Config/ConfigActions';
     return {
         config: store.config,
         serverPollTime: store.serverPollTime,  // gets updated when server action happens.
-        applicationError:store.applicationError
+        applicationError: store.applicationError
     };
 })
 
@@ -19,15 +20,17 @@ class SessionPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
+            showServerUnavailableModal: false,
             showSessionModel: false,
             isSessiontimeSet: false,
             activeSessionRemainingSeconds: "",
-            secondsBeforeSessionEnd: 180// No of seconds to verify before SessionEndTime
+            secondsBeforeSessionEnd: 180// No of seconds to verify before SessionEndTime,
+
         });
         this.SessionStartTime = "";
         this.SessionEndTime = new Date();
         this.SessionExpirationTimeMinutes = "";
-        this.APIError="";
+        this.APIError = "";
     }
 
     //called on the page load
@@ -44,14 +47,14 @@ class SessionPage extends React.Component {
             var minutesLater = new Date();
             minutesLater.setMinutes(minutesLater.getMinutes() + (this.SessionExpirationTimeMinutes));
             this.SessionEndTime = minutesLater;
-            this.APIError=this.props.applicationError.toString();
+            this.APIError = this.props.applicationError.toString();
             this.setState({ isSessiontimeSet: true });
         }
 
         if (this.state.isSessiontimeSet) {
-          
+
             //console.log("nextProps.serverPollTime :"+nextProps.serverPollTime);
-            this.APIError=nextProps.applicationError.toString();
+            this.APIError = nextProps.applicationError.toString();
             var slideexpirationSeconds = Math.round((nextProps.serverPollTime - this.SessionStartTime) / 1000);   // converting time into seconds
             if (slideexpirationSeconds > Math.round((this.SessionExpirationTimeMinutes / 2) * 60))   // calculation based on this  reference https://msdn.microsoft.com/en-us/library/system.web.configuration.formsauthenticationconfiguration.slidingexpiration(v=vs.110).aspx
             {
@@ -67,13 +70,10 @@ class SessionPage extends React.Component {
     ///  to check when server request has happend
     ///</summary>
     CheckIdleTime() {
-        if(this.APIError.includes("Network"))
-            {
-            console.log(" inside if APIerror "+this.APIError);
-            window.location.reload();
-            }
-           // window.location.replace("/account/logoff");
-       
+        if (this.APIError.includes("Network")) {
+            this.setState({ showServerUnavailableModal: true });
+        }
+
         var datetimeNow = new Date();
         this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime - datetimeNow) / 1000) }); // converting time into seconds
         // console.log(" activeSessionRemainingSeconds : " +this.state.activeSessionRemainingSeconds, this.SessionEndTime   )
@@ -107,10 +107,19 @@ class SessionPage extends React.Component {
             });
     }
 
+    //<summary>
+    /// when server is rebooted and take back to login page 
+    ///</summary>
+    closeServerUnavailableModal() {
+        this.setState({ showServerUnavailableModal: false });
+        window.location.reload();
+    }
+
     render() {
         return (
             <div >
                 <SessionAlertModal data={this.state} handleContinueSession={this.handleContinueSession.bind(this)} handleClose={this.closeSessionModel.bind(this)} />
+                <SessionServerUnavailableModal data={this.state} handleClose={this.closeServerUnavailableModal.bind(this)} />
             </div>
         )
     }

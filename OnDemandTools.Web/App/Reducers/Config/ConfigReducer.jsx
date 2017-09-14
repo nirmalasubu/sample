@@ -17,9 +17,14 @@ export const ConfigReducer = (state = {}, action) => {
 export const ApplicationErrorReducer = (state = [], action) => {
     switch (action.type) {
         case actionTypes.APPLICATION_API_ERROR: 
-            console.log("reducer error"+action.error)
-            //TODO: add code to report error back to server   
-           return action.error;
+            if (action.error.response) {
+                console.log("reducer error status code :"+action.error.response.status);
+            }
+            else{ //assuming if there is no response code returned . the server is not reachable
+                console.log("reducer error :"+action.error);
+                return "Network Error" 
+            }
+            return action.error; //TODO: add code to report error back to server   
         default:
             return state;
     }
