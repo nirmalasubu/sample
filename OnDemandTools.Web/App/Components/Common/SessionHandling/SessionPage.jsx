@@ -111,8 +111,9 @@ class SessionPage extends React.Component {
     /// when server is rebooted and take back to login page 
     ///</summary>
     closeServerUnavailableModal() {
-        this.setState({ showServerUnavailableModal: false });
         window.location.reload();
+        this.setState({ showServerUnavailableModal: false });
+       
     }
 
     render() {
