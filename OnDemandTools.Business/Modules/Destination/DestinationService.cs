@@ -335,6 +335,12 @@ namespace OnDemandTools.Business.Modules.Destination
             {
                 titleIds.Add(airing.Title.Series.Id.Value);
             }
+
+            if(airing.Title.RelatedTitleIds!=null && airing.Title.RelatedTitleIds.Any())
+            {
+                titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)));
+            }
+
             if (titleIds.Any())
             {
                 if (!property.TitleIds.Any(titleIds.Contains))
