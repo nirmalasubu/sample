@@ -112,7 +112,9 @@ class SessionPage extends React.Component {
     ///</summary>
     closeServerUnavailableModal() {
         window.location.reload();
-        this.setState({ showServerUnavailableModal: false });
+        setTimeout(function () {
+            this.setState({ showServerUnavailableModal: false });
+        }, 4000);
        
     }
 
