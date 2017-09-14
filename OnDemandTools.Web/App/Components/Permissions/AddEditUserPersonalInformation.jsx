@@ -13,7 +13,7 @@ import { fetchContactForRecords } from 'Actions/Permissions/PermissionActions';
 
 @connect((store) => {
     return {
-
+        destinations: store.destinations
     };
 })
 /// <summary>
@@ -190,31 +190,35 @@ class AddEditUserPersonalInformation extends React.Component {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
         if(!model.api.isActive)
-        {
-            model.api.permitAll = false;
+        {            
             model.api.claims = [];
+            model.api.permitAll = false;
             model.api.destinations = [];
         }
         else
         {
             model.api.claims = [];
+            model.api.destinations = [];
+            model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
             if (model.portal.isAdmin) 
             {
                 model.api.claims = ["get","post","delete"];
+                
+                for (var i = 0; i < this.props.destinations.length; i++) {                
+                    model.api.destinations.push(this.props.destinations[i].name);
+                }
             }
             else
             {
                 for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
                 {
                     model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
-            }
+                }
 
-            model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
-
-            model.api.destinations=[];
-            for(var i=0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++)
-            {
-                model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
+                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++)
+                {
+                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
+                }
             }
         }
         this.setState({
