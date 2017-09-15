@@ -18,7 +18,7 @@ class SessionServerUnavailableModal extends React.Component {
     render() {
         return (
             <Modal backdrop="static" show={this.props.data.showServerUnavailableModal} onHide={this.props.handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title>
                         Warning !
                     </Modal.Title>
