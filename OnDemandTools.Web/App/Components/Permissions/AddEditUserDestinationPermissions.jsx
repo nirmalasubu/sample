@@ -49,7 +49,11 @@ class AddEditUserDestinationPermissions extends React.Component {
     }
 
     componentDidMount() {
-        var model = this.state.userPermissionModel;       
+        var model = this.state.userPermissionModel;  
+        
+        this.setState({
+            userPermissionunmodifiedModel: jQuery.extend(true, {}, this.props.data)
+        });
     }
 
     //receives prop changes to update state
@@ -140,9 +144,19 @@ class AddEditUserDestinationPermissions extends React.Component {
         var model = this.state.userPermissionModel;
         model.api.permitAll = !this.state.userPermissionModel.api.permitAll;
 
-        model.api.destinations = [];
-        for (var i = 0; i < this.props.destinations.length; i++) {                
-            model.api.destinations.push(this.props.destinations[i].name);
+        if(model.api.permitAll || model.portal.isAdmin)
+        {
+            model.api.destinations = [];
+            for (var i = 0; i < this.props.destinations.length; i++) {                
+                model.api.destinations.push(this.props.destinations[i].name);
+            }
+        }
+        else
+        {
+            model.api.destinations = [];
+            for (var i = 0; i < this.state.userPermissionunmodifiedModel.length; i++) {                
+                model.api.destinations.push(this.state.userPermissionunmodifiedModel[i]);
+            }            
         }
     
         this.setState({userPermissionModel : model});
