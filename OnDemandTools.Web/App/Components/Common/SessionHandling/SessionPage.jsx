@@ -24,7 +24,7 @@ class SessionPage extends React.Component {
             showSessionModel: false,
             isSessiontimeSet: false,
             activeSessionRemainingSeconds: "",
-            secondsBeforeSessionEnd: 180// No of seconds to verify before SessionEndTime,
+            secondsBeforeSessionEnd: 120// No of seconds to verify before SessionEndTime,
 
         });
         this.SessionStartTime = "";
@@ -76,8 +76,7 @@ class SessionPage extends React.Component {
 
         var datetimeNow = new Date();
         this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime - datetimeNow) / 1000) }); // converting time into seconds
-        // console.log(" activeSessionRemainingSeconds : " +this.state.activeSessionRemainingSeconds, this.SessionEndTime   )
-        if (this.state.activeSessionRemainingSeconds == this.state.secondsBeforeSessionEnd) {
+        if (this.state.activeSessionRemainingSeconds == this.state.secondsBeforeSessionEnd && !this.state.showServerUnavailableModal) {
             this.setState({ showSessionModel: true });
         }
 
@@ -112,10 +111,6 @@ class SessionPage extends React.Component {
     ///</summary>
     closeServerUnavailableModal() {
         window.location.reload();
-        setTimeout(function () {
-            this.setState({ showServerUnavailableModal: false });
-        }, 4000);
-       
     }
 
     render() {
