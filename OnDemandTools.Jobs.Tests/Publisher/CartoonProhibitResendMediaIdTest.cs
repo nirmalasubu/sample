@@ -59,7 +59,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
 
         }
 
-        [Fact, Order(3)]
+       [Fact (Skip="MediaID"), Order(3)]
         public void VerifyClientDeliveryQueueForDeliverTest()
         {
             _queueTester.VerifyClientQueueDelivery();
@@ -83,7 +83,7 @@ namespace OnDemandTools.Jobs.Tests.Publisher
             _queueTester.AddAiringToDataStore(airingId, "ProhibitResendMediaIdToQueue:  prohibit Resend Media ID  to  Queue Repeated Test", "", fixture.Configuration["CartoonProhibitResendMediaIdToQueueKey"]);
         }
 
-        [Fact, Order(99)]
+        [Fact (Skip="MediaID"), Order(99)]
         public void VerifyClientDeliveryQueueForNotDeliverTest()
         {
             _queueTester.VerifyClientQueueDelivery();
