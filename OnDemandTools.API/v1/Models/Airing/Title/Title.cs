@@ -26,6 +26,10 @@ namespace OnDemandTools.API.v1.Models.Airing.Title
         public string EpisodeNumber { get; set; }
         public string SeasonEpisodeNumber { get; set; }
         public string SeriesItemNumber { get; set; }
+        public string ExternalSeriesItemNumber { get; set; }
+        public string SeasonElementNumber { get; set; }
+
+        public int? AiringSequenceNumber {get; set;}
 
         public List<Genre> Genres {get; set;}
         public List<Rating> Ratings { get; set; }
