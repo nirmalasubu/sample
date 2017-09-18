@@ -119,9 +119,9 @@ class AddEditSystemBasicInformation extends React.Component {
     /// </summary>
     activeStatusChange() {
         var model = this.state.userBasicInfoModel;
-        model.portal.isActive = !this.state.userBasicInfoModel.portal.isActive;
+        model.api.isActive = !this.state.userBasicInfoModel.api.isActive;
 
-        if (model.portal.isActive != this.state.userBasicInfounmodifiedModel.portal.isActive) {
+        if (model.api.isActive != this.state.userBasicInfounmodifiedModel.api.isActive) {
             var date = new Date();
             model.activeDateTime = model.id != null ? date : this.state.userBasicInfounmodifiedModel.activeDateTime;
         } else {
@@ -129,83 +129,6 @@ class AddEditSystemBasicInformation extends React.Component {
 
         }
 
-        this.setState({
-            userBasicInfoModel: model
-        });
-        this.props.updatePermission(model);
-    }
-
-
-    /// <summary>
-    /// To update isadmin property
-    /// </summary>
-    isAdminChange() {
-        var model = this.state.userBasicInfoModel;
-        var unmodifiedModel = this.state.userBasicInfounmodifiedModel;
-        model.portal.isAdmin = !this.state.userBasicInfoModel.portal.isAdmin;
-        if (model.portal.isAdmin) {
-
-            Object.keys(model.portal.modulePermissions).map(function (key, index) {
-                model.portal.modulePermissions[key].canRead = true;
-                model.portal.modulePermissions[key].canAdd = true;
-                model.portal.modulePermissions[key].canEdit = true;
-                model.portal.modulePermissions[key].canDelete = true;
-            });
-
-            Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
-                model.portal.deliveryQueuePermissions[key].canRead = true;
-                model.portal.deliveryQueuePermissions[key].canAdd = true;
-                model.portal.deliveryQueuePermissions[key].canEdit = true;
-                model.portal.deliveryQueuePermissions[key].canDelete = true;
-            });
-
-            model.api.claims = [];
-            model.api.claims = ["get", "post", "delete"];
-
-            model.api.destinations = [];
-            for (var i = 0; i < this.props.destinations.length; i++) {
-                model.api.destinations.push(this.props.destinations[i].name);
-            }
-        }
-        else {
-            if (unmodifiedModel.portal.isAdmin) {
-                Object.keys(model.portal.modulePermissions).map(function (key, index) {
-                    model.portal.modulePermissions[key].canRead = false;
-                    model.portal.modulePermissions[key].canAdd = false;
-                    model.portal.modulePermissions[key].canEdit = false;
-                    model.portal.modulePermissions[key].canDelete = false;
-                });
-
-                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
-                    model.portal.deliveryQueuePermissions[key].canRead = false;
-                    model.portal.deliveryQueuePermissions[key].canAdd = false;
-                    model.portal.deliveryQueuePermissions[key].canEdit = false;
-                    model.portal.deliveryQueuePermissions[key].canDelete = false;
-                });
-
-                model.api.claims = [];
-                model.api.destinations = [];
-            } else {
-                Object.keys(model.portal.modulePermissions).map(function (key, index) {
-                    model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
-                    model.portal.modulePermissions[key].canAdd = unmodifiedModel.portal.modulePermissions[key].canAdd;
-                    model.portal.modulePermissions[key].canEdit = unmodifiedModel.portal.modulePermissions[key].canEdit;
-                    model.portal.modulePermissions[key].canDelete = unmodifiedModel.portal.modulePermissions[key].canDelete;
-                });
-
-                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
-                    model.portal.deliveryQueuePermissions[key].canRead = unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
-                    model.portal.deliveryQueuePermissions[key].canAdd = false;
-                    model.portal.deliveryQueuePermissions[key].canEdit = false;
-                    model.portal.deliveryQueuePermissions[key].canDelete = false;
-                });
-
-                model.api.claims = [];
-                for (var i = 0; i < unmodifiedModel.api.claims.length; i++) {
-                    model.api.claims.push(unmodifiedModel.api.claims[i]);
-                }
-            }
-        }
         this.setState({
             userBasicInfoModel: model
         });
@@ -301,7 +224,7 @@ class AddEditSystemBasicInformation extends React.Component {
                         <Form>
                             <Col sm={4}>
                                 <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
-                                    <ControlLabel>User ID</ControlLabel>
+                                    <ControlLabel>System ID</ControlLabel>
                                     <FormControl type="text" ref="inputUserName" placeholder="Enter System Id"
                                         onChange={(event) => this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName} />
                                 </FormGroup>
@@ -310,7 +233,7 @@ class AddEditSystemBasicInformation extends React.Component {
                                 <ControlLabel>Active Status</ControlLabel>
                                 <div>
                                     <label class="switch">
-                                        <input type="checkbox" checked={this.state.userBasicInfoModel.portal.isActive} onChange={(event) => this.activeStatusChange()} />
+                                        <input type="checkbox" checked={this.state.userBasicInfoModel.api.isActive} onChange={(event) => this.activeStatusChange()} />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
