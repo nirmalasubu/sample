@@ -22,7 +22,10 @@ export const ApplicationErrorReducer = (state = [], action) => {
             }
             else{ //assuming if there is no response code returned . the server is not reachable
                 console.log("reducer error :"+action.error);
-                return "Network Error" 
+                if(action.error.toString().includes("Network"))
+                {
+                    return "Network Error" 
+                }
             }
             return action.error; //TODO: add code to report error back to server   
         default:
