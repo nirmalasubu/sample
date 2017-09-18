@@ -108,7 +108,7 @@ class AddEditSystemBasicInformation extends React.Component {
 
         if (this.state.userBasicInfoModel.id != null) {
             return (<FormGroup controlId="activeDate" >
-                <ControlLabel>{this.state.userBasicInfoModel.portal.isActive ? "Active Date" : "Last Active Date"}</ControlLabel>
+                <ControlLabel>{this.state.userBasicInfoModel.api.isActive ? "Active Date" : "Last Active Date"}</ControlLabel>
                 <FormControl type="text" value={this.formatDate(this.state.userBasicInfoModel.activeDateTime)} readOnly />
             </FormGroup>);
         }
