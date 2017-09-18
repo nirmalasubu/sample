@@ -168,10 +168,10 @@ class AddEditSystemPermissions extends React.Component {
             this.props.dispatch(permissionActions.savePermission(this.state.permission))
                 .then(() => {
                     if (this.state.permission.id == null) {
-                        NotificationManager.success(this.state.permission.userName + ' user ID successfully created.', '', 2000);
+                        NotificationManager.success(this.state.permission.userName + ' System successfully created.', '', 2000);
                     }
                     else {
-                        NotificationManager.success(this.state.permission.userName + ' userID updated successfully.', '', 2000);
+                        NotificationManager.success(this.state.permission.userName + ' System updated successfully.', '', 2000);
                     }
 
                     setTimeout(function () {
@@ -179,10 +179,10 @@ class AddEditSystemPermissions extends React.Component {
                     }, 3000);
                 }).catch(error => {
                     if (this.state.permission.id == null) {
-                        NotificationManager.error(this.state.permission.userName + ' user ID creation failed. ' + error, 'Failure');
+                        NotificationManager.error(this.state.permission.userName + ' System creation failed. ' + error, 'Failure');
                     }
                     else {
-                        NotificationManager.error(this.state.permission.userName + ' user ID update failed. ' + error, 'Failure');
+                        NotificationManager.error(this.state.permission.userName + ' System update failed. ' + error, 'Failure');
                     }
                     this.setState({ isProcessing: false });
                 });
@@ -222,7 +222,7 @@ class AddEditSystemPermissions extends React.Component {
                         <div class="panel-body">
                             <AddEditSystemBasicInformation data={this.state.permission}
                                 updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
-                            <Panel header="Personal information" >
+                            <Panel header="System Information" >
                                 <AddEditSystemContact data={this.props.data.permission}
                                     updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
                             </Panel>

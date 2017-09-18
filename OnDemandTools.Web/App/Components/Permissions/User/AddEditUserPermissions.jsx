@@ -224,7 +224,7 @@ class AddEditUserPermissions extends React.Component {
                         <div class="panel-body">
                             <AddEditUserBasicInformation data={this.state.permission}
                                 updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
-                            <Panel header="Personal information" >
+                            <Panel header="Personal Information" >
                                 <AddEditUserPersonalInformation data={this.props.data.permission}
                                     updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
                             </Panel>
