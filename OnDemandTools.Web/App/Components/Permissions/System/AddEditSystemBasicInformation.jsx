@@ -324,7 +324,6 @@ class AddEditSystemBasicInformation extends React.Component {
                         </Col>
                         <Col sm={4}>
                             {this.lastloginDisplay()}
-
                         </Col>
                     </Row>
                 </Grid>

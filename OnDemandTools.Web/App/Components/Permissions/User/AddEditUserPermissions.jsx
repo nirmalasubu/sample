@@ -18,6 +18,7 @@ import AddEditUserPortalPermissions from 'Components/Permissions/User/AddEditUse
 import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/User/AddEditUserDeliveryQueuePermissions';
 import AddEditUserApiPermissions from 'Components/Permissions/Common/AddEditUserAPIPermissions';
 import AddEditUserDestinationPermissions from 'Components/Permissions/Common/AddEditUserDestinationPermissions';
+import AddEditBrandPermissions from 'Components/Permissions/Common/AddEditBrandPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
 
@@ -42,8 +43,8 @@ class AddEditUserPermissions extends React.Component {
             showError: false,
             validationStateUniqueName: null,
             validationStateUserName: null,
-            validationStateFirstName:null,
-            validationStateLastName:null,
+            validationStateFirstName: null,
+            validationStateLastName: null,
             validationStatePhoneNumber: null,
             validationStateExtension: null,
             Key: 1,
@@ -67,11 +68,11 @@ class AddEditUserPermissions extends React.Component {
     closeWarningModel() {
         this.setState({ showWarningModel: false });
     }
-    
+
     /// <summary>
     /// This function is called on entering the modal pop up
     /// </summary>
-    onOpenModel() {        
+    onOpenModel() {
         this.setState({
             isProcessing: false,
             permission: this.props.data.permission,
@@ -93,7 +94,7 @@ class AddEditUserPermissions extends React.Component {
         else {
             this.openWarningModel();
         }
-        
+
     }
 
     /// <summary>
@@ -109,26 +110,24 @@ class AddEditUserPermissions extends React.Component {
     /// Determine whether save button needs to be enabled or not
     /// </summary>
     isSaveDisabled() {
-        return (this.state.isProcessing || 
-            this.state.validationStateUserName != null||
-            this.state.validationStateFirstName != null||this.state.validationStateLastName != null||
-             this.state.validationStatePhoneNumber != null||this.state.validationStateExtension != null)
+        return (this.state.isProcessing ||
+            this.state.validationStateUserName != null ||
+            this.state.validationStateFirstName != null || this.state.validationStateLastName != null ||
+            this.state.validationStatePhoneNumber != null || this.state.validationStateExtension != null)
     }
 
     /// <summary>
     /// property method to called in the sub component to update the model
     /// </summary>
-    updatePermission(permission)
-    {  
+    updatePermission(permission) {
         var activeKey = this.state.key;
         var selectedkey = this.state.selectedKey;
-        if(!permission.api.isActive && (selectedkey == 3 || selectedkey == 4))
-        {
-            activeKey= 1;
-            selectedkey= 1;
+        if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4)) {
+            activeKey = 1;
+            selectedkey = 1;
         }
 
-        this.setState({ 
+        this.setState({
             permission: permission,
             isApi: permission.api.isActive,
             key: activeKey,
@@ -139,11 +138,10 @@ class AddEditUserPermissions extends React.Component {
     /// <summary>
     /// property method to called in the sub component to validate user basic info
     /// </summary>
-    updateBasicValidateStates(isValidUserName)
-    {
+    updateBasicValidateStates(isValidUserName) {
         this.setState({
             validationStateUserName: isValidUserName ? null : 'error'
-            
+
         });
 
     }
@@ -151,8 +149,7 @@ class AddEditUserPermissions extends React.Component {
     /// <summary>
     /// property method to called in the sub component to validate user personal info
     /// </summary>
-    updatePersonalInfoValidateStates(isValidFirstName,isValidLastName,isvalidPhoneNumber,isvalidextension)
-    {
+    updatePersonalInfoValidateStates(isValidFirstName, isValidLastName, isvalidPhoneNumber, isvalidextension) {
         this.setState({
             validationStateFirstName: isValidFirstName ? null : 'error',
             validationStateLastName: isValidLastName ? null : 'error',
@@ -178,7 +175,7 @@ class AddEditUserPermissions extends React.Component {
                     else {
                         NotificationManager.success(this.state.permission.userName + ' userID updated successfully.', '', 2000);
                     }
-                    
+
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
@@ -194,13 +191,13 @@ class AddEditUserPermissions extends React.Component {
         }
         else
             return false;
-        
+
     }
 
     componentDidMount() {
     }
 
-    
+
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -210,47 +207,48 @@ class AddEditUserPermissions extends React.Component {
     }
 
     handleSelect(key) {
-        this.setState({key: key, selectedKey: key});
+        this.setState({ key: key, selectedKey: key });
     }
 
-    render() {       
+    render() {
 
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.permission.id != null ? "Edit User - " + this.state.permissionsUnModifiedData.firstName +" "+  this.state.permissionsUnModifiedData.lastName : "Add User"}</div>
+                        <div>{this.props.data.permission.id != null ? "Edit User - " + this.state.permissionsUnModifiedData.firstName + " " + this.state.permissionsUnModifiedData.lastName : "Add User"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <AddEditUserBasicInformation data={this.state.permission}  
-                            updatePermission={this.updatePermission.bind(this)}  validationStates={this.updateBasicValidateStates.bind(this)}/>
+                            <AddEditUserBasicInformation data={this.state.permission}
+                                updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
                             <Panel header="Personal information" >
                                 <AddEditUserPersonalInformation data={this.props.data.permission}
-                            updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)}/>
+                                    updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
                             </Panel>
                             <Panel header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
                                     <Tab eventKey={1} title="ODT portal">
                                         <AddEditUserPortalPermissions data={this.state.permission}
-                                    updatePermission={this.updatePermission.bind(this)} />
+                                            updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={2} title="Delivery Queues">
-                                        <AddEditUserDeliveryQueuePermissions data={this.state.permission} 
-                                    updatePermission={this.updatePermission.bind(this)} />
+                                        <AddEditUserDeliveryQueuePermissions data={this.state.permission}
+                                            updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab disabled={!this.state.isApi} eventKey={3} title="ODT API">
-                                        <AddEditUserApiPermissions data={this.state.permission} 
-                                    updatePermission={this.updatePermission.bind(this)} />
+                                        <AddEditUserApiPermissions data={this.state.permission}
+                                            updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab disabled={!this.state.isApi} eventKey={4} title="Destinations">
-                                        <AddEditUserDestinationPermissions data={this.state.permission} 
-                                    updatePermission={this.updatePermission.bind(this)} />                                        
+                                        <AddEditUserDestinationPermissions data={this.state.permission}
+                                            updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                     <Tab eventKey={5} title="Brands">
-
+                                        <AddEditBrandPermissions data={this.state.permission}
+                                            updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
                                 </Tabs>
                             </Panel>
