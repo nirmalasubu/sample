@@ -12,10 +12,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import * as statusActions from 'Actions/Status/StatusActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
-import AddEditUserPersonalInformation from 'Components/Permissions/User/AddEditUserPersonalInformation';
-import AddEditUserBasicInformation from 'Components/Permissions/User/AddEditUserBasicInformation';
-import AddEditUserPortalPermissions from 'Components/Permissions/User/AddEditUserPortalPermissions';
-import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/User/AddEditUserDeliveryQueuePermissions';
+import AddEditSystemContact from 'Components/Permissions/System/AddEditSystemContact';
+import AddEditSystemBasicInformation from 'Components/Permissions/System/AddEditSystemBasicInformation';
 import AddEditUserApiPermissions from 'Components/Permissions/Common/AddEditUserAPIPermissions';
 import AddEditUserDestinationPermissions from 'Components/Permissions/Common/AddEditUserDestinationPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
@@ -225,31 +223,23 @@ class AddEditSystemPermissions extends React.Component {
                 <Modal.Body>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <AddEditUserBasicInformation data={this.state.permission}  
+                            <AddEditSystemBasicInformation data={this.state.permission}  
                             updatePermission={this.updatePermission.bind(this)}  validationStates={this.updateBasicValidateStates.bind(this)}/>
                             <Panel header="Personal information" >
-                                <AddEditUserPersonalInformation data={this.props.data.permission}
+                                <AddEditSystemContact data={this.props.data.permission}
                             updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)}/>
                             </Panel>
                             <Panel header="Permissions" >
-                                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
-                                    <Tab eventKey={1} title="ODT portal">
-                                        <AddEditUserPortalPermissions data={this.state.permission}
-                                    updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab eventKey={2} title="Delivery Queues">
-                                        <AddEditUserDeliveryQueuePermissions data={this.state.permission} 
-                                    updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab disabled={!this.state.isApi} eventKey={3} title="ODT API">
+                                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >                                    
+                                    <Tab disabled={!this.state.isApi} eventKey={1} title="ODT API">
                                         <AddEditUserApiPermissions data={this.state.permission} 
                                     updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab disabled={!this.state.isApi} eventKey={4} title="Destinations">
+                                    <Tab disabled={!this.state.isApi} eventKey={2} title="Destinations">
                                         <AddEditUserDestinationPermissions data={this.state.permission} 
                                     updatePermission={this.updatePermission.bind(this)} />                                        
                                     </Tab>
-                                    <Tab eventKey={5} title="Brands">
+                                    <Tab eventKey={3} title="Brands">
 
                                     </Tab>
                                 </Tabs>
