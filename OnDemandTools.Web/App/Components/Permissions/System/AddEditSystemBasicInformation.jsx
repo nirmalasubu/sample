@@ -37,7 +37,7 @@ class AddEditSystemBasicInformation extends React.Component {
         // Dispatch another action to asynchronously fetch full list of destination data
         // from server. Once it is fetched, the data will be stored
         // in redux store
-        this.props.dispatch(destinationActions.fetchDestinations());        
+        this.props.dispatch(destinationActions.fetchDestinations());
 
         this.setState({
             userBasicInfoModel: this.props.data
@@ -53,7 +53,7 @@ class AddEditSystemBasicInformation extends React.Component {
             userBasicInfounmodifiedModel: jQuery.extend(true, {}, this.props.data)
         });
         this.validateForm();
-    }    
+    }
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
@@ -152,18 +152,18 @@ class AddEditSystemBasicInformation extends React.Component {
                 model.portal.modulePermissions[key].canDelete = true;
             });
 
-            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                model.portal.deliveryQueuePermissions[key].canRead=true;
-                model.portal.deliveryQueuePermissions[key].canAdd=true;
-                model.portal.deliveryQueuePermissions[key].canEdit=true;
-                model.portal.deliveryQueuePermissions[key].canDelete=true;
+            Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                model.portal.deliveryQueuePermissions[key].canRead = true;
+                model.portal.deliveryQueuePermissions[key].canAdd = true;
+                model.portal.deliveryQueuePermissions[key].canEdit = true;
+                model.portal.deliveryQueuePermissions[key].canDelete = true;
             });
 
             model.api.claims = [];
-            model.api.claims = ["get","post","delete"];
+            model.api.claims = ["get", "post", "delete"];
 
             model.api.destinations = [];
-            for (var i = 0; i < this.props.destinations.length; i++) {                
+            for (var i = 0; i < this.props.destinations.length; i++) {
                 model.api.destinations.push(this.props.destinations[i].name);
             }
         }
@@ -176,11 +176,11 @@ class AddEditSystemBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canDelete = false;
                 });
 
-                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                    model.portal.deliveryQueuePermissions[key].canRead=false;
-                    model.portal.deliveryQueuePermissions[key].canAdd=false;
-                    model.portal.deliveryQueuePermissions[key].canEdit=false;
-                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                    model.portal.deliveryQueuePermissions[key].canRead = false;
+                    model.portal.deliveryQueuePermissions[key].canAdd = false;
+                    model.portal.deliveryQueuePermissions[key].canEdit = false;
+                    model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
 
                 model.api.claims = [];
@@ -193,19 +193,18 @@ class AddEditSystemBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canDelete = unmodifiedModel.portal.modulePermissions[key].canDelete;
                 });
 
-                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                    model.portal.deliveryQueuePermissions[key].canRead=unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
-                    model.portal.deliveryQueuePermissions[key].canAdd=false;
-                    model.portal.deliveryQueuePermissions[key].canEdit=false;
-                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                    model.portal.deliveryQueuePermissions[key].canRead = unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
+                    model.portal.deliveryQueuePermissions[key].canAdd = false;
+                    model.portal.deliveryQueuePermissions[key].canEdit = false;
+                    model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
 
                 model.api.claims = [];
-                for(var i=0; i < unmodifiedModel.api.claims.length; i++)
-                {
+                for (var i = 0; i < unmodifiedModel.api.claims.length; i++) {
                     model.api.claims.push(unmodifiedModel.api.claims[i]);
                 }
-            }            
+            }
         }
         this.setState({
             userBasicInfoModel: model
@@ -220,7 +219,21 @@ class AddEditSystemBasicInformation extends React.Component {
     handleTextChange(event) {
 
         var model = this.state.userBasicInfoModel;
-        model.userName = event.target.value.toLowerCase().trim();
+        model.userName = event.target.value.trim();
+
+        this.setState({
+            userBasicInfoModel: model
+        });
+        this.validateForm();
+        this.props.updatePermission(model);
+    }
+
+    /// <summary>
+    /// To user name on the text box change
+    /// </summary>
+    handleNotesChange(event) {
+        var model = this.state.userBasicInfoModel;
+        model.notes = event.target.value.trimLeft();
 
         this.setState({
             userBasicInfoModel: model
@@ -235,8 +248,7 @@ class AddEditSystemBasicInformation extends React.Component {
     /// </summary>
     validateForm() {
 
-        var isvalidUserId = (this.state.userBasicInfoModel.userName != undefined) ?
-            (this.state.userBasicInfoModel.userName != "" && validator.isEmail(this.state.userBasicInfoModel.userName)) : false;
+        var isvalidUserId = true;
         var hasNameError = isvalidUserId && !(this.isUserNameUnique(this.state.userBasicInfoModel));
         this.setState({
             validationStateEmail: hasNameError ? null : 'error'
@@ -290,18 +302,11 @@ class AddEditSystemBasicInformation extends React.Component {
                             <Col sm={4}>
                                 <FormGroup controlId="userId" validationState={this.state.validationStateEmail}>
                                     <ControlLabel>User ID</ControlLabel>
-                                    <FormControl type="text" ref="inputUserName" placeholder="Enter email for User ID"
+                                    <FormControl type="text" ref="inputUserName" placeholder="Enter System Id"
                                         onChange={(event) => this.handleTextChange(event)} value={this.state.userBasicInfoModel.userName} />
                                 </FormGroup>
                             </Col>
                             <Col sm={4}>
-                                {this.activeDateDisplay()}
-                            </Col>
-                        </Form >
-                    </Row>
-                    <Row>
-                        <Col sm={2}>
-                            <FormGroup controlId="activeStatus" >
                                 <ControlLabel>Active Status</ControlLabel>
                                 <div>
                                     <label class="switch">
@@ -309,23 +314,23 @@ class AddEditSystemBasicInformation extends React.Component {
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
-                            </FormGroup>
-                        </Col>
-                        <Col sm={2}>
-                            <FormGroup controlId="isAdmin" >
-                                <ControlLabel>Admin</ControlLabel>
-                                <div>
-                                    <label class="switch">
-                                        <input type="checkbox" checked={this.state.userBasicInfoModel.portal.isAdmin} onChange={(event) => this.isAdminChange()} />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </FormGroup>
-                        </Col>
-                        <Col sm={4}>
-                            {this.lastloginDisplay()}
-                        </Col>
+                            </Col>
+                        </Form >
                     </Row>
+                    <Row>
+                        <Form>
+                            <Col sm={4}>
+                                <FormGroup controlId="notes" validationState={this.state.validationStateNotes}>
+                                    <ControlLabel>Notes</ControlLabel>
+                                    <FormControl type="text" ref="inputNotes" placeholder="Enter System Notes"
+                                        onChange={(event) => this.handleNotesChange(event)} value={this.state.userBasicInfoModel.notes} />
+                                </FormGroup>
+                            </Col>
+                            <Col sm={4}>
+                                {this.activeDateDisplay()}
+                            </Col>
+                        </Form >
+                    </Row>                    
                 </Grid>
             </div>
         )

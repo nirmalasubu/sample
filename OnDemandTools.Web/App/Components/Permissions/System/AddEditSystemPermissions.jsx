@@ -214,7 +214,7 @@ class AddEditSystemPermissions extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.permission.id != null ? "Edit User - " + this.state.permissionsUnModifiedData.firstName + " " + this.state.permissionsUnModifiedData.lastName : "Add User"}</div>
+                        <div>{this.props.data.permission.id != null ? "Edit System - " + this.state.permissionsUnModifiedData.userName : "Add System"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
