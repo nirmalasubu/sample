@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import PageHeader from 'Components/Common/PageHeader';
-import PermissionsTable from 'Components/Permissions/SystemPermissionsTable';
-import PermissionsFilter from 'Components/Permissions/SystemPermissionsFilter';
+import PermissionsTable from 'Components/Permissions/System/SystemPermissionsTable';
+import PermissionsFilter from 'Components/Permissions/System/SystemPermissionsFilter';
 
 @connect((store) => {
     return {

@@ -4,9 +4,9 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import { Popover, OverlayTrigger, Button } from 'react-bootstrap';
-import AddEditSystemPermissions from 'Components/Permissions/AddEditSystemPermissions';
+import AddEditSystemPermissions from 'Components/Permissions/System/AddEditSystemPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
-import UserInactivateModal from 'Components/Permissions/SystemInactivateModal';
+import UserInactivateModal from 'Components/Permissions/System/SystemInactivateModal';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
 
 @connect((store) => {

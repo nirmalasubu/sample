@@ -16,7 +16,7 @@ import AddEditUserPersonalInformation from 'Components/Permissions/User/AddEditU
 import AddEditUserBasicInformation from 'Components/Permissions/User/AddEditUserBasicInformation';
 import AddEditUserPortalPermissions from 'Components/Permissions/User/AddEditUserPortalPermissions';
 import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/User/AddEditUserDeliveryQueuePermissions';
-import AddEditUserApiPermissions from 'Components/Permissions/Commmon/AddEditUserAPIPermissions';
+import AddEditUserApiPermissions from 'Components/Permissions/Common/AddEditUserAPIPermissions';
 import AddEditUserDestinationPermissions from 'Components/Permissions/Common/AddEditUserDestinationPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';

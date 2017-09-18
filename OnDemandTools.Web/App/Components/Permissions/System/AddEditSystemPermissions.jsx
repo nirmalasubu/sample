@@ -12,12 +12,12 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import * as statusActions from 'Actions/Status/StatusActions';
 import CancelWarningModal from 'Components/Common/CancelWarningModal';
-import AddEditUserPersonalInformation from 'Components/Permissions/AddEditUserPersonalInformation';
-import AddEditUserBasicInformation from 'Components/Permissions/AddEditUserBasicInformation';
-import AddEditUserPortalPermissions from 'Components/Permissions/AddEditUserPortalPermissions';
-import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/AddEditUserDeliveryQueuePermissions';
-import AddEditUserApiPermissions from 'Components/Permissions/AddEditUserAPIPermissions';
-import AddEditUserDestinationPermissions from 'Components/Permissions/AddEditUserDestinationPermissions';
+import AddEditUserPersonalInformation from 'Components/Permissions/User/AddEditUserPersonalInformation';
+import AddEditUserBasicInformation from 'Components/Permissions/User/AddEditUserBasicInformation';
+import AddEditUserPortalPermissions from 'Components/Permissions/User/AddEditUserPortalPermissions';
+import AddEditUserDeliveryQueuePermissions from 'Components/Permissions/User/AddEditUserDeliveryQueuePermissions';
+import AddEditUserApiPermissions from 'Components/Permissions/Common/AddEditUserAPIPermissions';
+import AddEditUserDestinationPermissions from 'Components/Permissions/Common/AddEditUserDestinationPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
 
