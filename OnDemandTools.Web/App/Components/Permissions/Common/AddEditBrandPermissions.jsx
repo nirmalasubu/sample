@@ -47,7 +47,6 @@ class AddEditBrandPermissions extends React.Component {
         this.setState({
             userPermissionModel: nextProps.data
         });
-        console.log("inerew"+nextProps.data.api.brands);
        this.pushBrandsPropstoState(nextProps.data.api.brands);
     }
 
@@ -89,7 +88,6 @@ class AddEditBrandPermissions extends React.Component {
 
         this.setState({ userPermissionModel: model });
         this.props.updatePermission(model);
-       // this.pushBrandsPropstoState(this.state.userPermissionModel.api.brands);
     }
 
     /// <summary>
