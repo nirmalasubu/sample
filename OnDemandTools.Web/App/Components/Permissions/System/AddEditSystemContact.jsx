@@ -34,8 +34,8 @@ class AddEditSystemContact extends React.Component {
 
     populateContactOptions(portalUsers) {
 
-        var technicalContactId = this.props.data.technicalContactId;
-        var functionalContactId = this.props.data.functionalContactId;
+        var technicalContactId = this.props.data.api.technicalContactId;
+        var functionalContactId = this.props.data.api.functionalContactId;
 
         var functionalContacts = portalUsers.filter(function (user) {
             return user.portal.isActive && user.id != technicalContactId
@@ -51,6 +51,12 @@ class AddEditSystemContact extends React.Component {
 
         var technicalOptions = technicalContacts.map(person => ({ value: person.id, label: person.firstName + " " + person.lastName }));
         this.setState({ technicalContactOptions: technicalOptions });
+
+        console.log(technicalContactId);
+        console.log(technicalOptions);
+
+        console.log(functionalContactId);
+        console.log(functionalOptions);
 
     }
 
@@ -73,6 +79,7 @@ class AddEditSystemContact extends React.Component {
         model.api.technicalContactId = value;
         this.props.updatePermission(model);
         this.populateContactOptions(this.props.portalUsers);
+
     }
 
     handleFunctionalContactChange(value) {
@@ -80,6 +87,7 @@ class AddEditSystemContact extends React.Component {
         model.api.functionalContactId = value;
         this.props.updatePermission(model);
         this.populateContactOptions(this.props.portalUsers);
+
     }
 
     render() {
@@ -101,7 +109,7 @@ class AddEditSystemContact extends React.Component {
                                     <Select simpleValue options={this.state.technicalContactOptions}
                                         clearable={true}
                                         searchable={true}
-                                        value={this.props.data.technicalContactId}
+                                        value={this.props.data.api.technicalContactId}
                                         onChange={this.handleTechnicalContactChange.bind(this)}
                                         placeholder={"Select Technical Contact"} />
                                 </FormGroup>
@@ -123,7 +131,7 @@ class AddEditSystemContact extends React.Component {
                                     <Select simpleValue options={this.state.functionalContactOptions}
                                         clearable={true}
                                         searchable={true}
-                                        value={this.props.data.functionalContactId}
+                                        value={this.props.data.api.functionalContactId}
                                         onChange={this.handleFunctionalContactChange.bind(this)}
                                         placeholder={"Select Functional Contact"} />
                                 </FormGroup>
