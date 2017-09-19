@@ -223,7 +223,7 @@ class AddEditSystemPermissions extends React.Component {
                             <AddEditSystemBasicInformation data={this.state.permission}
                                 updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
                             <Panel header="System Information" >
-                                <AddEditSystemContact data={this.props.data.permission}
+                                <AddEditSystemContact data={this.props.data.permission} portalUsers={this.props.portalUsers}
                                     updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
                             </Panel>
                             <Panel header="Permissions" >

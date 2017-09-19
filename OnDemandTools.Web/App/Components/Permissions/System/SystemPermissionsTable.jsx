@@ -232,7 +232,7 @@ class SystemPermissionsTable extends React.Component {
                 >
                     {row}
                 </BootstrapTable>
-                 <AddEditSystemPermissions data={this.state}  handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditSystemPermissions data={this.state} portalUsers={this.props.portalUsers}  handleClose={this.closeAddEditModel.bind(this)} />
                 <UserInactivateModal data={this.state} handleClose={this.closeInactivateModal.bind(this)} />
             </div>)
     }

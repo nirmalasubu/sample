@@ -22,7 +22,8 @@ class SystemPermissionsPage extends React.Component {
             filterValue: {
                 name: "",
                 systemId: "",
-                includeInactive: false
+                includeInactive: false,
+                portalUsers: []
             },
 
             columns: [{ "label": "System ID", "dataField": "userName", "sort": true },
@@ -66,6 +67,12 @@ class SystemPermissionsPage extends React.Component {
 
     componentDidMount() {
         this.props.dispatch(permissionActions.fetchPermissionRecords("system"));
+
+        let promise = permissionActions.getPortalUsers();
+
+        promise.then(response => {
+            this.setState({ portalUsers: response });
+        });
         document.title = "ODT - System Management";
 
     }
@@ -87,8 +94,8 @@ class SystemPermissionsPage extends React.Component {
             if (name != "") {
                 filteredPermissions = filteredPermissions.filter(function (permission) {
                     return (permission.api.technicalContactUser != null ? permission.api.technicalContactUser.firstName.toLowerCase().indexOf(name) > -1 : false) ||
-                            (permission.api.technicalContactUser != null ? permission.api.technicalContactUser.lastName.toLowerCase().indexOf(name) > -1 : false) ||
-                        (permission.api.technicalContactUser != null ?(permission.api.technicalContactUser.firstName.toLowerCase()+" "+permission.api.technicalContactUser.lastName.toLowerCase()).indexOf(name) > -1 : false)
+                        (permission.api.technicalContactUser != null ? permission.api.technicalContactUser.lastName.toLowerCase().indexOf(name) > -1 : false) ||
+                        (permission.api.technicalContactUser != null ? (permission.api.technicalContactUser.firstName.toLowerCase() + " " + permission.api.technicalContactUser.lastName.toLowerCase()).indexOf(name) > -1 : false)
                 });
             }
 
@@ -114,7 +121,7 @@ class SystemPermissionsPage extends React.Component {
             <div>
                 <PageHeader pageName="System Management" />
                 <PermissionsFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <PermissionsTable RowData={filteredRows} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <PermissionsTable RowData={filteredRows} portalUsers={this.state.portalUsers} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }

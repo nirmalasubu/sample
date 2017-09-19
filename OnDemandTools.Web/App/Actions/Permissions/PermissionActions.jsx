@@ -34,7 +34,7 @@ export const savePermissionComplete = (permission) => {
 /// dispatch the appropriate action for further processing
 /// </summary>
 export const fetchPermissionRecords = (type) => {
-    return (dispatch) => {        
+    return (dispatch) => {
         return Axios.get('/api/userpermission/' + type)
             .then(response => {
                 dispatch(fetchPermissionComplete(response.data));
@@ -45,16 +45,29 @@ export const fetchPermissionRecords = (type) => {
     };
 };
 
+/// <summary>
+/// Gets the Portal users
+/// </summary>
+export const getPortalUsers = () => {
+    return Axios.get('/api/userpermission/portal')
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            dispatch(configActions.handleApplicationAPIError(error));
+        });
+};
+
 
 /// <summary>
 /// Asynchronously add/update path translations from API. If successful
 /// dispatch the appropriate action for further processing
 /// </summary>
 export const savePermission = (object) => {
-    return (dispatch) => {       
+    return (dispatch) => {
         return Axios.post('/api/userpermission/', object)
             .then(response => {
-                dispatch(savePermissionComplete(response.data));               
+                dispatch(savePermissionComplete(response.data));
             })
             .catch(error => {
                 dispatch(configActions.handleApplicationAPIError(error));
@@ -68,15 +81,15 @@ export const savePermission = (object) => {
 /// dispatch the appropriate action for further processing
 /// </summary>
 export const fetchContactForRecords = (id) => {
-        return Axios.get('/api/userpermission/getcontactforbyuserid/' + id)
-            .then(response => {
-                return (response.data);
-            })
-            .catch(error => {
-                configActions.handleApplicationAPIError(error);
-            });
-   
-    
+    return Axios.get('/api/userpermission/getcontactforbyuserid/' + id)
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            configActions.handleApplicationAPIError(error);
+        });
+
+
 };
 export const getNewUserPermission = () => {
     return Axios.get('/api/userpermission/newuserpermission')
