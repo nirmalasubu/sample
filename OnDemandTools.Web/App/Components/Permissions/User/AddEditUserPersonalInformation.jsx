@@ -13,7 +13,8 @@ import { fetchContactForRecords } from 'Actions/Permissions/PermissionActions';
 
 @connect((store) => {
     return {
-        destinations: store.destinations
+        destinations: store.destinations,
+        config:store.config
     };
 })
 /// <summary>
@@ -186,7 +187,8 @@ class AddEditUserPersonalInformation extends React.Component {
     /// <summary>
     /// updating active api on checkbox change
     /// </summary>
-    activeApiChange() {        
+    activeApiChange() {  
+       
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
         if(!model.api.isActive)
@@ -194,9 +196,11 @@ class AddEditUserPersonalInformation extends React.Component {
             model.api.claims = [];
             model.api.permitAll = false;
             model.api.destinations = [];
+            model.api.brands = [];
         }
         else
         {
+            model.api.brands = [];
             model.api.claims = [];
             model.api.destinations = [];
             model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
@@ -206,6 +210,9 @@ class AddEditUserPersonalInformation extends React.Component {
                 
                 for (var i = 0; i < this.props.destinations.length; i++) {                
                     model.api.destinations.push(this.props.destinations[i].name);
+                }
+                for (var i = 0; i < this.props.config.brands.length; i++) {                
+                    model.api.brands.push(this.props.config.brands[i]);
                 }
             }
             else
@@ -219,12 +226,18 @@ class AddEditUserPersonalInformation extends React.Component {
                 {
                     model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
                 }
+
+                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++)
+                {
+                    model.api.brands.push(this.state.personalInfoUnModifiedModel.api.brands[i]);
+                }
             }
         }
         this.setState({
             personalInfoModel: model
         });
         this.props.updatePermission(model);
+      
     }
 
     /// <summary>

@@ -9,7 +9,8 @@ import * as destinationActions from 'Actions/Destination/DestinationActions';
 @connect((store) => {
     return {
         permissions: store.permissions,
-        destinations: store.destinations
+        destinations: store.destinations,
+        config: store.config
     };
 })
 /// <summary>
@@ -166,6 +167,13 @@ class AddEditUserBasicInformation extends React.Component {
             for (var i = 0; i < this.props.destinations.length; i++) {                
                 model.api.destinations.push(this.props.destinations[i].name);
             }
+            model.api.brands = [];
+            for (var i = 0; i < this.props.config.brands.length; i++) {                
+                model.api.brands.push(this.props.config.brands[i]);
+            }
+            model.api.brandPermitAll=true;
+            model.api.destinationPermitAll=true;
+            
         }
         else {
             if (unmodifiedModel.portal.isAdmin) {
@@ -185,7 +193,16 @@ class AddEditUserBasicInformation extends React.Component {
 
                 model.api.claims = [];
                 model.api.destinations = [];
+                model.api.brands = [];
+                model.api.brandPermitAll=false;
+                model.api.destinationPermitAll=false;
             } else {
+                model.api.brandPermitAll=false;
+                model.api.destinationPermitAll=false;
+                model.api.brands = [];
+                for (var i = 0; i <  unmodifiedModel.api.brands.length; i++) {                
+                    model.api.brands.push( unmodifiedModel.api.brands[i]);
+                }
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
                     model.portal.modulePermissions[key].canAdd = unmodifiedModel.portal.modulePermissions[key].canAdd;

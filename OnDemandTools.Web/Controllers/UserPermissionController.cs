@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using OnDemandTools.Business.Modules.Queue;
 using System.Collections;
 using OnDemandTools.Business.Modules.Destination;
+using OnDemandTools.Business.Modules.Brands;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,12 +24,14 @@ namespace OnDemandTools.Web.Controllers
         IUserPermissionService _service;
         IQueueService _queueSvc;
         IDestinationService _destinationSvc;
+        IBrandService _brandSvc;
 
-        public UserPermissionController(IUserPermissionService service, IQueueService queueSvc, IDestinationService destinationSvc)
+        public UserPermissionController(IUserPermissionService service, IQueueService queueSvc, IDestinationService destinationSvc, IBrandService brandSvc)
         {
             _service = service;
             _queueSvc = queueSvc;
             _destinationSvc = destinationSvc;
+            _brandSvc = brandSvc;
         }
 
 
@@ -78,11 +81,17 @@ namespace OnDemandTools.Web.Controllers
                         }
                     }
 
-                    if (permission.Api.PermitAll)
+                    if (permission.Api.DestinationPermitAll)
                     {
                         List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
                         permission.Api.Destinations = null;
                         permission.Api.Destinations = destinations.Select(s => s.Name).ToList();
+                    }
+
+                    if (permission.Api.BrandPermitAll)
+                    {
+                        permission.Api.Brands = null;
+                        permission.Api.Brands = _brandSvc.GetAllBrands();
                     }
                 }
                 

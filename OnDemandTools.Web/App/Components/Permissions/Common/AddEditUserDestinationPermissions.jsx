@@ -142,9 +142,9 @@ class AddEditUserDestinationPermissions extends React.Component {
     permitChange()
     {
         var model = this.state.userPermissionModel;
-        model.api.permitAll = !this.state.userPermissionModel.api.permitAll;
+        model.api.destinationPermitAll = !this.state.userPermissionModel.api.destinationPermitAll;
 
-        if(model.api.permitAll || model.portal.isAdmin)
+        if(model.api.destinationPermitAll || model.portal.isAdmin)
         {
             model.api.destinations = [];
             for (var i = 0; i < this.props.destinations.length; i++) {                
@@ -175,7 +175,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                     <Col componentClass="td">{item.description}</Col>
                     <Col componentClass="td"> <input type="checkbox" checked={this.isChecked(item.name)}
                         onChange={(event) => this.activechkChange(item.name, event)}
-                        disabled={(this.state.userPermissionModel.portal.isAdmin || this.state.userPermissionModel.api.permitAll)} /></Col>
+                        disabled={(this.state.userPermissionModel.portal.isAdmin || this.state.userPermissionModel.api.destinationPermitAll)} /></Col>
                 </Row>)
             }.bind(this));
         }
@@ -210,7 +210,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                         <label for="permit" class="control-label" style={{float:"left", paddingRight:10}}>Permit All</label>                        
                         <div style={{float:"left"}}>
                             <label class="switch">
-                                <input type="checkbox" checked={this.state.userPermissionModel.api.permitAll} onChange={(event) => this.permitChange()} />
+                                <input type="checkbox" checked={this.state.userPermissionModel.api.destinationPermitAll} onChange={(event) => this.permitChange()} />
                                 <span class="slider round"></span>
                             </label>
                         </div>

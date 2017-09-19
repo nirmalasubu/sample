@@ -19,7 +19,9 @@ namespace OnDemandTools.Web.Models.UserPermissions
 
         public bool IsActive { get; set; }
 
-        public bool PermitAll { get; set; }
+        public bool DestinationPermitAll { get; set; }
+
+        public bool BrandPermitAll { get; set; }
 
         public string ApiKey { get; set; }
 

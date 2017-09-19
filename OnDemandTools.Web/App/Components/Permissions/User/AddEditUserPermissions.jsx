@@ -28,7 +28,7 @@ import validator from 'validator';
     };
 })
 
-// Sub component of category page to  add ,edit and delete category details
+// Sub component of user management page to  add ,edit and delete user details
 class AddEditUserPermissions extends React.Component {
 
     // Define default component state information. This will
@@ -122,7 +122,7 @@ class AddEditUserPermissions extends React.Component {
     updatePermission(permission) {
         var activeKey = this.state.key;
         var selectedkey = this.state.selectedKey;
-        if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4)) {
+        if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4||selectedkey == 5)) {
             activeKey = 1;
             selectedkey = 1;
         }
@@ -246,7 +246,7 @@ class AddEditUserPermissions extends React.Component {
                                         <AddEditUserDestinationPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab eventKey={5} title="Brands">
+                                    <Tab disabled={!this.state.isApi} eventKey={5} title="Brands">
                                         <AddEditBrandPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
