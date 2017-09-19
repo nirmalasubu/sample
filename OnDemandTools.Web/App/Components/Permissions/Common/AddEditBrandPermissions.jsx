@@ -118,13 +118,10 @@ class AddEditBrandPermissions extends React.Component {
         var rows = [];
         for (var i = 0; i < this.state.brandsSelection.length; i++) {
             var brand = this.state.brandsSelection[i];
-            if(i%3===0){
-                rows.push(<br key={"br"+i.toString()}/>);
-            }
             rows.push(<span key={i.toString()} ><ImageCheckBox brandName={brand.brandName} brandkey={i} selected={brand.selected} handleBrandChange={this.handleBrandChange.bind(this)} /></span>);
         }
 
-        return <div> <Form inline>
+    return <div>  <br/><Form inline>
             <FormGroup controlId="permit" >
                 <label for="permit" class="control-label" style={{ float: "left", paddingRight: 10 }}>Permit All</label>
                 <div style={{ float: "left" }}>

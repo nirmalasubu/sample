@@ -224,7 +224,7 @@ class AddEditUserPersonalInformation extends React.Component {
 
                 for(var i=0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++)
                 {
-                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
+                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i].name);
                 }
 
                 for(var i=0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++)

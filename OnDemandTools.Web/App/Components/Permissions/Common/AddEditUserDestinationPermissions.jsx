@@ -210,7 +210,7 @@ class AddEditUserDestinationPermissions extends React.Component {
                         <label for="permit" class="control-label" style={{float:"left", paddingRight:10}}>Permit All</label>                        
                         <div style={{float:"left"}}>
                             <label class="switch">
-                                <input type="checkbox" checked={this.state.userPermissionModel.api.destinationPermitAll} onChange={(event) => this.permitChange()} />
+                                <input type="checkbox" checked={this.state.userPermissionModel.api.destinationPermitAll} onChange={(event) => this.permitChange()}  disabled={this.state.userPermissionModel.portal.isAdmin }/>
                                 <span class="slider round"></span>
                             </label>
                         </div>

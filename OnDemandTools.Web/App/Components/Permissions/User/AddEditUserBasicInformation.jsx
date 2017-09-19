@@ -220,7 +220,13 @@ class AddEditUserBasicInformation extends React.Component {
                 {
                     model.api.claims.push(unmodifiedModel.api.claims[i]);
                 }
-            }            
+
+                model.api.destinations = [];               
+                for (var i = 0; i < unmodifiedModel.destinations.length; i++) {                
+                    model.api.destinations.push(unmodifiedModel.destinations[i].name);
+                }
+            }       
+            
         }
         this.setState({
             userBasicInfoModel: model
