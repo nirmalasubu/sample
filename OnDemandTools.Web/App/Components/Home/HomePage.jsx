@@ -21,7 +21,7 @@ class Home extends React.Component {
     return (
       <div>
         <PageHeader pageName="Home"/>
-        <p>Welcome {this.props.user}!</p>
+        <p>Welcome {this.props.user.firstName + " " + this.props.user.lastName}!</p>
       </div>
     )
   }
