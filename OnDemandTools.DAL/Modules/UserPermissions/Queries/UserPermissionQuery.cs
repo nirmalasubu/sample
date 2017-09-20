@@ -36,11 +36,20 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
             return modules.AsQueryable();
         }
 
+        
+
         public Model.UserPermission GetById(string objectId)
         {
             return _database
              .GetCollection<Model.UserPermission>("UserPermission").AsQueryable()
              .FirstOrDefault(e => e.Id == new ObjectId(objectId));
+        }
+
+        public Model.UserPermission GetByUserName(string emailAddress)
+        {
+            return _database
+             .GetCollection<Model.UserPermission>("UserPermission").AsQueryable()
+             .FirstOrDefault(e => e.UserName.ToLower() == emailAddress.ToLower());
         }
 
         public IQueryable<UserPermission> GetContactForByUserId(string id)

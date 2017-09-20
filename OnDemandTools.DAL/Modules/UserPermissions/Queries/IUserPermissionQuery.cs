@@ -13,6 +13,8 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
 
         Model.UserPermission GetById(string objectId);
 
+        Model.UserPermission GetByUserName(string emailAddress);
+
         IQueryable<Model.UserPermission> GetContactForByUserId(string id);
     }
 }

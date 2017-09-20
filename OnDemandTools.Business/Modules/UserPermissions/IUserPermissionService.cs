@@ -33,6 +33,13 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         /// <returns></returns>
         Model.UserPermission GetById(string id);
 
+        /// <summary>
+        /// Get the user permissions based on Email address
+        /// </summary>
+        /// <param name="emailAddress"></param>
+        /// <returns></returns>
+        Model.UserPermission GetByUserName(string emailAddress);
+
         IList<Model.UserPermission> GetContactForByUserId(string id);
     }
 }
