@@ -111,7 +111,7 @@ class AddEditSystemPermissions extends React.Component {
         return (this.state.isProcessing ||
             this.state.validationStateUserName != null ||
             this.state.validationStateFirstName != null || this.state.validationStateLastName != null ||
-            this.state.validationStatePhoneNumber != null || this.state.validationStateExtension != null)
+            this.state.validationStatePhoneNumber != null || this.state.validationStateExtension != null || this.state.validationStateContact != null)
     }
 
     /// <summary>
@@ -145,6 +145,16 @@ class AddEditSystemPermissions extends React.Component {
     }
 
     /// <summary>
+    /// property method to called in the sub component to validate user basic info
+    /// </summary>
+    updateContactValidateStates(isValidUserName) {
+        this.setState({
+            validationStateContact: isValidUserName ? null : 'error'
+
+        });
+    }
+
+    /// <summary>
     /// property method to called in the sub component to validate user personal info
     /// </summary>
     updatePersonalInfoValidateStates(isValidFirstName, isValidLastName, isvalidPhoneNumber, isvalidextension) {
@@ -173,7 +183,7 @@ class AddEditSystemPermissions extends React.Component {
                     else {
                         NotificationManager.success(this.state.permission.userName + ' System updated successfully.', '', 2000);
                     }
-
+                    this.props.dispatch(permissionActions.fetchPermissionRecords("system"));
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
@@ -224,19 +234,19 @@ class AddEditSystemPermissions extends React.Component {
                                 updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
                             <Panel header="System Information" >
                                 <AddEditSystemContact data={this.props.data.permission} portalUsers={this.props.portalUsers}
-                                    updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
+                                updatePermission={this.updatePermission.bind(this)} validationStates={this.updateContactValidateStates.bind(this)} />
                             </Panel>
-                            <Panel header="Permissions" >
+                            <Panel collapsible expanded={this.state.isApi} header="Permissions" >
                                 <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
-                                    <Tab disabled={!this.state.isApi} eventKey={1} title="ODT API">
+                                    <Tab eventKey={1} title="ODT API">
                                         <AddEditUserApiPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab disabled={!this.state.isApi} eventKey={2} title="Destinations">
+                                    <Tab eventKey={2} title="Destinations">
                                         <AddEditUserDestinationPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab disabled={!this.state.isApi} eventKey={3} title="Brands">
+                                    <Tab eventKey={3} title="Brands">
                                         <AddEditBrandPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>

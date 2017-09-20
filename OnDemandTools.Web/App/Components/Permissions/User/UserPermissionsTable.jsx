@@ -156,7 +156,7 @@ class UserPermissionTable extends React.Component {
 
     componentDidMount() {
 
-        let promise = permissionActions.getNewUserPermission();
+        let promise = permissionActions.getNewUserPermission("portal");
         promise.then(response => {
             this.setState({
                 newPermissionModel: response

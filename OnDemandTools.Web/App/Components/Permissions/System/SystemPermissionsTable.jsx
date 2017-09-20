@@ -182,7 +182,7 @@ class SystemPermissionsTable extends React.Component {
 
     componentDidMount() {
        
-        let promise = permissionActions.getNewUserPermission();
+        let promise = permissionActions.getNewUserPermission("system");
         promise.then(response => {
             this.setState({
                 newPermissionModel: response

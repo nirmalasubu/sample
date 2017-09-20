@@ -91,8 +91,8 @@ export const fetchContactForRecords = (id) => {
 
 
 };
-export const getNewUserPermission = () => {
-    return Axios.get('/api/userpermission/newuserpermission')
+export const getNewUserPermission = (type) => {
+    return Axios.get('/api/userpermission/newuserpermission/' + type)
         .then(response => {
             return (response.data);
         })

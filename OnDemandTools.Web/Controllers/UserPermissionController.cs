@@ -52,6 +52,19 @@ namespace OnDemandTools.Web.Controllers
                         permission.Api.TechnicalContactUser = _service.GetById(permission.Api.TechnicalContactId).ToViewModel<BLModel.UserPermission, UserPermission>();
                     if (!string.IsNullOrEmpty(permission.Api.FunctionalContactId))
                         permission.Api.FunctionalContactUser = _service.GetById(permission.Api.FunctionalContactId).ToViewModel<BLModel.UserPermission, UserPermission>();
+
+                    if (permission.Api.DestinationPermitAll)
+                    {
+                        List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+                        permission.Api.Destinations = null;
+                        permission.Api.Destinations = destinations.Select(s => s.Name).ToList();
+                    }
+
+                    if (permission.Api.BrandPermitAll)
+                    {
+                        permission.Api.Brands = null;
+                        permission.Api.Brands = _brandSvc.GetAllBrands();
+                    }
                 }
             }
             else
@@ -139,8 +152,8 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("newuserpermission")]
-        public UserPermission GetEmptyModel()
+        [HttpGet("newuserpermission/{type}")]
+        public UserPermission GetEmptyModel(string type)
         {
             var model = new UserPermission
             {
@@ -150,6 +163,7 @@ namespace OnDemandTools.Web.Controllers
                 PhoneNumber = string.Empty,
                 Extension = string.Empty,
                 Notes = string.Empty,
+                UserType = (type == "system" ? UserType.Api : UserType.Portal),
                 Portal = new Portal
                 {
                     IsActive = true,

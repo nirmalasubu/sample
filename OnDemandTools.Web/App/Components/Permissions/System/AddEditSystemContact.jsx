@@ -18,7 +18,9 @@ class AddEditSystemContact extends React.Component {
 
         this.state = ({
             technicalContactOptions: [],
-            functionalContactOptions: []
+            functionalContactOptions: [],
+            validationStateTech: null,
+            validationStateFunc: null
         });
 
 
@@ -30,6 +32,7 @@ class AddEditSystemContact extends React.Component {
 
     componentDidMount() {
         this.populateContactOptions(this.props.portalUsers);
+        this.validateForm();
     }
 
     populateContactOptions(portalUsers) {
@@ -52,12 +55,6 @@ class AddEditSystemContact extends React.Component {
         var technicalOptions = technicalContacts.map(person => ({ value: person.id, label: person.firstName + " " + person.lastName }));
         this.setState({ technicalContactOptions: technicalOptions });
 
-        console.log(technicalContactId);
-        console.log(technicalOptions);
-
-        console.log(functionalContactId);
-        console.log(functionalOptions);
-
     }
 
     //receives prop changes to update state
@@ -71,7 +68,18 @@ class AddEditSystemContact extends React.Component {
     /// To validate the form
     /// </summary>
     validateForm() {
-        return true;
+        var technicalContactId = this.props.data.api.technicalContactId;
+        var functionalContactId = this.props.data.api.functionalContactId;
+        var hasContactError = (technicalContactId != "" && technicalContactId != null && functionalContactId != "" && functionalContactId != null);
+        var hasTechError = (technicalContactId=="" || technicalContactId==null);
+        var hasFuncError = (functionalContactId=="" || functionalContactId==null);
+
+        this.setState({
+            validationStateTech: hasTechError ? 'error' : null,
+            validationStateFunc: hasFuncError ? 'error' : null
+        });
+
+        this.props.validationStates(hasContactError);
     }
 
     handleTechnicalContactChange(value) {
@@ -79,7 +87,7 @@ class AddEditSystemContact extends React.Component {
         model.api.technicalContactId = value;
         this.props.updatePermission(model);
         this.populateContactOptions(this.props.portalUsers);
-
+        this.validateForm();
     }
 
     handleFunctionalContactChange(value) {
@@ -87,7 +95,7 @@ class AddEditSystemContact extends React.Component {
         model.api.functionalContactId = value;
         this.props.updatePermission(model);
         this.populateContactOptions(this.props.portalUsers);
-
+        this.validateForm();
     }
 
     render() {
@@ -103,7 +111,7 @@ class AddEditSystemContact extends React.Component {
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
-                            <FormGroup>
+                            <FormGroup validationState={this.state.validationStateTech}>
                                 <ControlLabel>Technical Contact</ControlLabel>
                                 <FormGroup>
                                     <Select simpleValue options={this.state.technicalContactOptions}
@@ -127,7 +135,7 @@ class AddEditSystemContact extends React.Component {
                         <Col sm={4}>
                             <FormGroup>
                                 <ControlLabel>Functional Contact</ControlLabel>
-                                <FormGroup>
+                                <FormGroup validationState={this.state.validationStateFunc}>
                                     <Select simpleValue options={this.state.functionalContactOptions}
                                         clearable={true}
                                         searchable={true}
