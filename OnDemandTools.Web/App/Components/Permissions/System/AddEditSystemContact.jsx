@@ -41,11 +41,11 @@ class AddEditSystemContact extends React.Component {
         var functionalContactId = this.props.data.api.functionalContactId;
 
         var functionalContacts = portalUsers.filter(function (user) {
-            return user.portal.isActive && user.id != technicalContactId
+            return user.id == functionalContactId || (user.portal.isActive && user.id != technicalContactId)
         });
 
         var technicalContacts = portalUsers.filter(function (user) {
-            return user.portal.isActive && user.id != functionalContactId
+            return user.id == technicalContactId || (user.portal.isActive && user.id != functionalContactId)
         });
 
         var functionalOptions = functionalContacts.map(person => ({ value: person.id, label: person.firstName + " " + person.lastName }));
