@@ -133,9 +133,9 @@ class AddEditSystemContact extends React.Component {
                             </FormGroup>
                         </Col>
                         <Col sm={4}>
-                            <FormGroup>
+                            <FormGroup validationState={this.state.validationStateFunc}>
                                 <ControlLabel>Functional Contact</ControlLabel>
-                                <FormGroup validationState={this.state.validationStateFunc}>
+                                <FormGroup >
                                     <Select simpleValue options={this.state.functionalContactOptions}
                                         clearable={true}
                                         searchable={true}
