@@ -71,8 +71,8 @@ class AddEditSystemContact extends React.Component {
         var technicalContactId = this.props.data.api.technicalContactId;
         var functionalContactId = this.props.data.api.functionalContactId;
         var hasContactError = (technicalContactId != "" && technicalContactId != null && functionalContactId != "" && functionalContactId != null);
-        var hasTechError = (technicalContactId=="" || technicalContactId==null);
-        var hasFuncError = (functionalContactId=="" || functionalContactId==null);
+        var hasTechError = (technicalContactId == "" || technicalContactId == null);
+        var hasFuncError = (functionalContactId == "" || functionalContactId == null);
 
         this.setState({
             validationStateTech: hasTechError ? 'error' : null,
@@ -96,6 +96,37 @@ class AddEditSystemContact extends React.Component {
         this.props.updatePermission(model);
         this.populateContactOptions(this.props.portalUsers);
         this.validateForm();
+    }
+
+    formatDate(val) {
+        if (val == null) {
+            return "never"
+        }
+        else {
+
+            var d = new Date(val);
+            var year = d.getFullYear();
+            if (year < 2000) {
+                return "never";
+            }
+            else {
+
+                var dateFormat = Moment(val).format('lll');
+                return Moment(val).format('lll');
+            }
+        }
+    }
+
+    /// <summary>
+    /// To show/hide isactive property
+    /// </summary>
+    apiLastAccessedDisplay() {
+        if (this.props.data.id != null) {
+            return (<FormGroup>
+                <ControlLabel>{"API Last Accessed"}</ControlLabel>
+                <FormControl type="text" value={this.formatDate(this.props.data.api.lastAccessTime)} readOnly />
+            </FormGroup>);
+        }
     }
 
     render() {
@@ -128,9 +159,7 @@ class AddEditSystemContact extends React.Component {
                 <Row>
                     <Form>
                         <Col sm={4}>
-                            <FormGroup>
-                                <ControlLabel>API Last Accessed</ControlLabel>
-                            </FormGroup>
+                            {this.apiLastAccessedDisplay()}
                         </Col>
                         <Col sm={4}>
                             <FormGroup validationState={this.state.validationStateFunc}>
