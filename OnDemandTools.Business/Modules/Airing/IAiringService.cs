@@ -212,6 +212,12 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="airing">The airing.</param>
         void AppendDestinations(ref BLModel.Alternate.Long.Airing airing);
 
+        /// <summary>
+        /// Get version information from Flow and appends it to the airing
+        /// </summary>
+        /// <param name="airing">The airing.</param>
+        /// <returns></returns>
+        void AppendVersion(ref BLModel.Alternate.Long.Airing airing);
 
         /// <summary>
         /// Appends the video status as true if this airing has at least one video

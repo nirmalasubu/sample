@@ -22,10 +22,15 @@ namespace OnDemandTools.API.v1.Models.Airing.Long
             Changes = new List<VMChangeModel.Change>();
             Status = new SerializableDictionary<string, bool>();
             Premieres = new JArray();
+            Versions = new JArray();
         }
 
         [XmlIgnoreAttribute]
         public JArray Premieres { get; set; }
+
+        [XmlIgnoreAttribute]
+        public JArray Versions { get; set; }
+
         public List<File> Files { get; set; }
 
         public List<VMTitleModel.Title> Titles { get; set; }

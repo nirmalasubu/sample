@@ -21,12 +21,15 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Long
             Changes = new List<VMChangeModel.Change>();
             Status = new SerializableDictionary<string, bool>();
             Premieres = new JArray();
+            Versions = new JArray();
         }
       
         public List<File> Files { get; set; }
 
 
         public JArray Premieres { get; set; }
+
+        public JArray Versions { get; set; }
 
         public List<VMTitleModel.Title> Titles { get; set; }
 

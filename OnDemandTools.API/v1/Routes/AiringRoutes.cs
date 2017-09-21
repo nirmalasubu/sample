@@ -113,12 +113,15 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.AppendPackage(ref airingLong, Request.Headers.Accept);
                 routeStats.Add("appendPackage_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
-
                 start = Stopwatch.GetTimestamp();
                 if (options.Contains(Appenders.Premiere.ToString().ToLower()))
                     airingSvc.AppendPremiere(ref airingLong);
                 routeStats.Add("appendPremiere_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
+                start = Stopwatch.GetTimestamp();
+                if (options.Contains(Appenders.Version.ToString().ToLower()))
+                    airingSvc.AppendVersion(ref airingLong);
+                routeStats.Add("appendVersion_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 start = Stopwatch.GetTimestamp();
                 var model = airingLong.ToViewModel<BLAiringLongModel.Airing, VMAiringLongModel.Airing>();

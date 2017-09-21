@@ -14,6 +14,7 @@ namespace OnDemandTools.API.Helpers
         Series,
         Status,
         Package,
-        Premiere        
+        Premiere,
+        Version        
     }
 }
