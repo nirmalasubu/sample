@@ -125,10 +125,11 @@ class DestinationPage extends React.Component {
     };
 
     render() {
-
-        if(this.props.user.portal==undefined || !this.props.user.portal.modulePermissions.Destinations.canRead)
-        {
-            return <h1>Unauthorized to view this page</h1>;
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.props.user.portal.modulePermissions.Destinations.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
         }
 
         var filteredDestinations = this.getFilterVal(this.props.destinations, this.state.filterValue);
