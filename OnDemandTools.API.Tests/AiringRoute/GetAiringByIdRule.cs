@@ -213,5 +213,47 @@ namespace OnDemandTools.API.Tests.AiringRoute
             Assert.Null(deliverablesToken.First);
         }
 
+        [Fact]
+        public void GetAiringById_PassingValidId_With_Version()
+        {
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/CARE1007291600012449?options=version", Method.GET);
+            Task.Run(async () =>
+            {
+                response = await client.RetrieveRecord(request);
+
+            }).Wait();
+
+            // Assert 
+            string value = response.Value<String>(@"StatusCode");
+            if (value != null)
+            {
+                Assert.True(false, "AiringId : CARE1007291600012449 is deleted");
+            }
+            var versionToken = response[@"options"]["versions"];
+            Assert.NotNull(versionToken.First);
+        }
+
+        [Fact]
+        public void GetAiringById_PassingValidId_With_Version_Returns_EmptyVersion()
+        {
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/CARE1007291600012447?options=version", Method.GET);
+            Task.Run(async () =>
+            {
+                response = await client.RetrieveRecord(request);
+
+            }).Wait();
+
+            // Assert 
+            string value = response.Value<String>(@"StatusCode");
+            if (value != null)
+            {
+                Assert.True(false, "AiringId : CARE1007291600012447 is deleted");
+            }
+            var versionToken = response[@"options"]["versions"];
+            Assert.Null(versionToken.First);
+        }
+
     }
 }
