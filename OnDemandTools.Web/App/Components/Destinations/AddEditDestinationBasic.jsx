@@ -60,7 +60,7 @@ class AddEditDestinationBasic extends React.Component {
 
     validateForm() {
 
-        this.setState({showError: false});
+        this.setState({ showError: false });
 
         var name = this.state.destinationModel.name;
         var description = this.state.destinationModel.description;
@@ -155,6 +155,14 @@ class AddEditDestinationBasic extends React.Component {
 
     render() {
 
+        var disable = true
+        if (this.props.permissions) {
+            console.log(this.props.permissions);
+            disable = this.props.permissions.disableControl;
+        }
+
+        console.log(this.props.permissions);
+
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Destination already exists. Please use a unique destination code.</label>);
@@ -194,7 +202,7 @@ class AddEditDestinationBasic extends React.Component {
                                 <FormGroup
                                     controlId="destinationDescription" validationState={this.state.validationStateDescription}>
                                     <ControlLabel>Destination Description</ControlLabel>
-                                    <FormControl disabled={this.props.permissions.disableControl}  bsClass="form-control form-control-modal"
+                                    <FormControl disabled={disable} bsClass="form-control form-control-modal"
                                         componentClass="textarea" value={this.state.destinationModel.description}
                                         placeholder="Enter a description for the destination code"
                                         onChange={this.handleDescriptionChange.bind(this)} />
@@ -204,19 +212,19 @@ class AddEditDestinationBasic extends React.Component {
                                 <ControlLabel>Content</ControlLabel>
                                 <FormGroup
                                     controlId="contents">
-                                    <Checkbox inline name="hd" onChange={this.handleCheckboxChange.bind(this)}
+                                    <Checkbox disabled={disable} inline name="hd" onChange={this.handleCheckboxChange.bind(this)}
                                         checked={this.state.destinationModel.content.highDefinition}> HD <InfoOverlay data="High definition content can be delivered to this destination." /></Checkbox>
-                                    <Checkbox inline name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                                    <Checkbox disabled={disable} inline name="sd" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
                                         checked={this.state.destinationModel.content.standardDefinition}> SD <InfoOverlay data="Standard definition content can be delivered to this destination." /></Checkbox>
-                                    <Checkbox inline name="cx" onChange={this.handleCheckboxChange.bind(this)}
+                                    <Checkbox disabled={disable} inline name="cx" onChange={this.handleCheckboxChange.bind(this)}
                                         checked={this.state.destinationModel.content.cx}> C(X) <InfoOverlay data="C(X) content can be delivered to this destination." /></Checkbox>
-                                    <Checkbox inline name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
+                                    <Checkbox disabled={disable} inline name="nonCx" className="marginLeftRight" onChange={this.handleCheckboxChange.bind(this)}
                                         checked={this.state.destinationModel.content.nonCx}> Non-C(X) <InfoOverlay data="Non-C(X) content can be delivered to this destination." /></Checkbox>
                                 </FormGroup>
                                 <ControlLabel>Options</ControlLabel>
                                 <FormGroup controlId="options">
                                     <Checkbox inline name="auditDelivery" onChange={this.handleCheckboxChange.bind(this)}
-                                        checked={this.state.destinationModel.auditDelivery}> Audit Delivery <InfoOverlay data="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." /></Checkbox>
+                                    disabled={disable}  checked={this.state.destinationModel.auditDelivery}> Audit Delivery <InfoOverlay data="Digital Fulfillment requires a completed status to this destination before the content is considered delivered." /></Checkbox>
                                 </FormGroup>
                             </Col>
                         </Row>

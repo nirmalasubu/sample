@@ -169,6 +169,15 @@ class AddEditDestinationModel extends React.Component {
     }
 
     render() {
+
+        var saveButton = null;
+
+        if (this.props.permissions.canAddOrEdit) {
+            saveButton = <Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                {this.state.isProcessing ? "Processing" : "Save"}
+            </Button>;
+        }
+
         return (
             <Modal bsSize="large" backdrop="static"
                 onEntering={this.onOpenModel.bind(this, this.props.data.destinationDetails)}
@@ -181,24 +190,28 @@ class AddEditDestinationModel extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <AddEditDestinationBasic
+                        permissions={this.props.permissions}
                         updateDestination={this.updateDestination.bind(this)}
                         data={this.state.destinationDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
                     <Tabs id="addeditdestination" defaultActiveKey={1} >
                         <Tab eventKey={1} title="Properties">
                             <AddEditDestinationProperties
+                                permissions={this.props.permissions}
                                 updateDestination={this.updateDestination.bind(this)}
                                 data={this.state.destinationDetails}
                                 validationStates={this.updatePropertyNameValidation.bind(this)} />
                         </Tab>
                         <Tab eventKey={2} title="Deliverables">
                             <AddEditDestinationDeliverables
+                                permissions={this.props.permissions}
                                 updateDestination={this.updateDestination.bind(this)}
                                 data={this.state.destinationDetails}
                                 validationStates={this.updateDeliverablesValidation.bind(this)} />
                         </Tab>
                         <Tab eventKey={3} title="Categories">
                             <AddEditDestinationCategories
+                                permissions={this.props.permissions}
                                 updateDestination={this.updateDestination.bind(this)}
                                 data={this.state.destinationDetails} />
                         </Tab>
@@ -211,9 +224,7 @@ class AddEditDestinationModel extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
-                    <Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                        {this.state.isProcessing ? "Processing" : "Save"}
-                    </Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
 

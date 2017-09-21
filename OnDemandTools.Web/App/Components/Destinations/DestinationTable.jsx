@@ -20,7 +20,7 @@ class DestinationTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: false },
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             showModal: false,
             newDestinationModel: {},
             showAddEditModel: false,
