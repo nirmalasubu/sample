@@ -10,8 +10,7 @@ import SessionPage from 'Components/Common/SessionHandling/SessionPage';
 
 @connect((store) => {
     return {
-        user: store.user
-       
+        user: store.user       
     };
 })
 class Header extends React.Component {
