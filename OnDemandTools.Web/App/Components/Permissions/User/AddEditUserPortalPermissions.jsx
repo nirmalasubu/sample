@@ -36,9 +36,11 @@ class AddEditUserPortalPermissions extends React.Component {
 
     componentDidMount() {
         var model = this.state.userPortalPermissionModel;
+        
         if (this.state.userPortalPermissionModel.id == null) {
             this.setState({ userPortalPermissionModel: model, componentJustMounted: true });
         }
+        this.setState({userPortalPermissionunmodifiedModel: jQuery.extend(true, {}, this.props.data)});
     }
 
     //receives prop changes to update state
@@ -67,9 +69,20 @@ class AddEditUserPortalPermissions extends React.Component {
             model.portal.modulePermissions[key]["canRead"] = true;
         }
 
+        var unmodifiedModel = this.state.userPortalPermissionunmodifiedModel;
+        if(!model.portal.modulePermissions["DeliveryQueues"]["canRead"])  // if read  is false  restore back to original state.
+        {
+            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
+                model.portal.deliveryQueuePermissions[key].canRead=unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
+                model.portal.deliveryQueuePermissions[key].canAdd=false;
+                model.portal.deliveryQueuePermissions[key].canEdit=false;
+                model.portal.deliveryQueuePermissions[key].canDelete=false;
+            });
+        }
         this.setState({
             userPortalPermissionModel: model
         });
+
         this.props.updatePermission(model);
     }
 

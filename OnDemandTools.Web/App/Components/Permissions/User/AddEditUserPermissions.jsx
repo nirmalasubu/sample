@@ -50,7 +50,8 @@ class AddEditUserPermissions extends React.Component {
             validationStateExtension: null,
             Key: 1,
             selectedKey: 1,
-            isApi: false
+            isApi: false,
+            isDeliveryQueueEnabled:false
         });
 
         this.handleSelect = this.handleSelect.bind(this);
@@ -80,8 +81,10 @@ class AddEditUserPermissions extends React.Component {
             permissionsUnModifiedData: jQuery.extend(true, {}, this.props.data.permission),
             isApi: this.props.data.permission.api.isActive,
             key: 1,
-            selectedKey: 1
+            selectedKey: 1,
+            isDeliveryQueueEnabled:this.props.data.permission.portal.modulePermissions["DeliveryQueues"]["canRead"]
         });
+
     }
 
 
@@ -139,7 +142,8 @@ class AddEditUserPermissions extends React.Component {
             permission: permission,
             isApi: permission.api.isActive,
             key: activeKey,
-            selectedKey: selectedkey
+            selectedKey: selectedkey,
+            isDeliveryQueueEnabled:permission.portal.modulePermissions["DeliveryQueues"]["canRead"]
         });
     }
 

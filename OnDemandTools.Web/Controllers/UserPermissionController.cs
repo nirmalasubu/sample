@@ -144,6 +144,20 @@ namespace OnDemandTools.Web.Controllers
                 viewModel.ModifiedDateTime = DateTime.UtcNow;
                 viewModel.ModifiedBy = HttpContext.User.Identity.Name;
             }
+
+            if(viewModel.Portal.ModulePermissions.ContainsKey("DeliveryQueues"))
+            {
+                Permission permissionValues = viewModel.Portal.ModulePermissions["DeliveryQueues"];
+                if(!permissionValues.CanRead)  //if delivery queue read is false then remove all queue permission while saving
+                {                  
+                    foreach (var key in viewModel.Portal.DeliveryQueuePermissions.Keys.ToList())
+                    {
+                        viewModel.Portal.DeliveryQueuePermissions[key] = new Permission(false);
+                    }
+
+                }
+            }
+
             BLModel.UserPermission model = _service.Save(viewModel.ToBusinessModel<UserPermission, BLModel.UserPermission>());
 
 
