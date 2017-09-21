@@ -372,7 +372,16 @@ namespace OnDemandTools.Business.Modules.Airing
             airing.Options.Premieres = premieres;
         }
 
+        public void AppendVersion(ref BLModel.Alternate.Long.Airing airing)
+        {
+            List<string> contentIds = airing.Versions
+                .Select(t => t.ContentId).ToList();
 
+            // Find version information for all content ids within the airing versions that exists in Flow
+            JArray versions = GetVersionData(contentIds);
+
+            airing.Options.Versions = versions;
+        }
 
         public void AppendSeries(ref BLModel.Alternate.Long.Airing airing)
         {
@@ -647,9 +656,7 @@ namespace OnDemandTools.Business.Modules.Airing
             }
 
             return titles;
-        }
-
-
+        }        
 
         private JArray GetPremiereData(IEnumerable<int> titleIds)
         {
@@ -682,6 +689,29 @@ namespace OnDemandTools.Business.Modules.Airing
             }
 
             return premieres;
+        }
+
+        private JArray GetVersionData(IEnumerable<string> contentIds)
+        {
+            var listsOfContentIds = contentIds.Distinct().Partition(25).ToList();
+            RestClient client = new RestClient(appSettings.GetExternalService("Flow").Url);
+            var versions = new JArray();
+
+            foreach (var list in listsOfContentIds)
+            {
+                var request = new RestRequest("v1/versions/{ids}?api_key={api_key}", Method.GET);
+                request.AddUrlSegment("ids", string.Join(",", list));
+                request.AddUrlSegment("api_key", appSettings.GetExternalService("Flow").ApiKey);
+
+                Task.Run(async () =>
+                {
+                    var rs = await client.RetrieveRecords(request);
+                    versions = rs;
+
+                }).Wait();
+            }
+
+            return versions;
         }
 
         private Task<List<BLModel.Alternate.Title.Title>> GetFlowTitleAsync(RestClient theClient, RestRequest theRequest)
