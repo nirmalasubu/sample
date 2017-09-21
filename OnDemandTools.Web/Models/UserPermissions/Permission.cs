@@ -15,11 +15,27 @@
             CanDelete = isAdmin;
         }
 
+        public bool CanAddOrEdit
+        {
+            get
+            {
+                return CanAdd || CanEdit;
+            }
+        }
+
+        public bool DisableControl
+        {
+            get
+            {
+                return CanRead && !CanAdd && !CanEdit;
+            }
+        }
+
         public bool CanRead { get; set; }
 
         public bool CanAdd { get; set; }
 
-        public bool CanEdit { get; set;  }
+        public bool CanEdit { get; set; }
 
         public bool CanDelete { get; set; }
     }

@@ -8,7 +8,8 @@ import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
     return {
-        destinations: store.destinations
+        destinations: store.destinations,
+        user: store.user
     };
 })
 class DestinationPage extends React.Component {
@@ -124,6 +125,11 @@ class DestinationPage extends React.Component {
     };
 
     render() {
+
+        if(this.props.user.portal==undefined || !this.props.user.portal.modulePermissions.Destinations.canRead)
+        {
+            return <h1>Unauthorized to view this page</h1>;
+        }
 
         var filteredDestinations = this.getFilterVal(this.props.destinations, this.state.filterValue);
 

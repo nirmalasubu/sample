@@ -194,7 +194,7 @@ class AddEditDestinationBasic extends React.Component {
                                 <FormGroup
                                     controlId="destinationDescription" validationState={this.state.validationStateDescription}>
                                     <ControlLabel>Destination Description</ControlLabel>
-                                    <FormControl bsClass="form-control form-control-modal"
+                                    <FormControl disabled={this.props.permissions.disableControl}  bsClass="form-control form-control-modal"
                                         componentClass="textarea" value={this.state.destinationModel.description}
                                         placeholder="Enter a description for the destination code"
                                         onChange={this.handleDescriptionChange.bind(this)} />

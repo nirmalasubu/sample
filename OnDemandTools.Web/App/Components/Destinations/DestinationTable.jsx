@@ -11,7 +11,8 @@ import TextOverlay from 'Components/Common/TextOverlay';
 
 @connect((store) => {
     return {
-        destinations: store.destinations
+        destinations: store.destinations,
+        user: store.user
     };
 })
 
@@ -19,6 +20,7 @@ class DestinationTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: false },
             showModal: false,
             newDestinationModel: {},
             showAddEditModel: false,
@@ -55,6 +57,17 @@ class DestinationTable extends React.Component {
                 newDestinationModel: {}
             });
         });
+
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.Destinations })
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.Destinations });
+        }
     }
 
     ///<summary>
@@ -129,21 +142,51 @@ class DestinationTable extends React.Component {
     }
 
     actionFormat(val, rowData) {
+
+        var readOrEditButton = null;
+        if (this.state.permissions.canEdit) {
+            readOrEditButton = <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-pencil-square-o"></i>
+            </button>;
+        }
+        else if (this.state.permissions.canRead) {
+            readOrEditButton = <button class="btn-link" title="View Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-book"></i>
+            </button>;
+        }
+
+        var deleteButton = null;
+
+        if (this.state.permissions.canDelete) {
+            deleteButton = <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                <i class="fa fa-trash"></i>
+            </button>;
+        }
+
         return (
             <div>
-                <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
-                    <i class="fa fa-pencil-square-o"></i>
-                </button>
-
-                <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
-                    <i class="fa fa-trash"></i>
-                </button>
+                {readOrEditButton}
+                {deleteButton}
             </div>
         );
     }
 
     render() {
-        if (this.props.RowData.length <= 0 && this.props.destinations.length <= 0 )
+
+        var permissions = this.state.permissions;
+        var addButton = null;
+
+        if (this.state.permissions.canAdd) {
+            addButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="New Destination" onClick={(event) => this.openCreateNewDestinationModel(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Destination</span>
+                </button>
+            </div>;
+        }
+
+
+        if (this.props.RowData.length <= 0 && this.props.destinations.length <= 0)
             this.state.options.noDataText = <div><i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i> <i>Loading...</i></div>;
         else
             this.state.options.noDataText = <i>There is no data to display</i>;
@@ -167,17 +210,12 @@ class DestinationTable extends React.Component {
         }.bind(this));
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Destination" onClick={(event) => this.openCreateNewDestinationModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Destination</span>
-                    </button>
-                </div>
+                {addButton}
                 <BootstrapTable ref="destinationTable" data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
 
-                <AddEditDestinationModel data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditDestinationModel permissions={this.state.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveDestinationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }
