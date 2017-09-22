@@ -10,6 +10,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Title
             Participants = new List<Participant>();
             Storylines = new List<Storyline>();
             Genres = new List<Genre>();
+            Keywords = new List<Keyword>();
         }
 
         public int TitleId { get; set; }
@@ -34,6 +35,7 @@ namespace OnDemandTools.API.v1.Models.Airing.Title
         public List<Genre> Genres {get; set;}
         public List<Rating> Ratings { get; set; }
         public List<Participant> Participants { get; set; }
+        public List<Keyword> Keywords { get; set; }
         public List<Storyline> Storylines { get; set; }
         public List<OtherName> OtherNames { get; set; }
         public List<ExternalSource> ExternalSources { get; set; }

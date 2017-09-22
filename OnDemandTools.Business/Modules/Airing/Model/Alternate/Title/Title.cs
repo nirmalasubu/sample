@@ -10,6 +10,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Title
             Participants = new List<Participant>();
             Storylines = new List<Storyline>();
             Genres = new List<Genre>();
+            Keywords = new List<Keyword>();
         }
 
         public int TitleId { get; set; }
@@ -33,6 +34,7 @@ namespace OnDemandTools.Business.Modules.Airing.Model.Alternate.Title
         public int? AiringSequenceNumber {get; set;}
 
         public List<Genre> Genres {get; set;}
+        public List<Keyword> Keywords { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<Participant> Participants { get; set; }
         public List<Storyline> Storylines { get; set; }

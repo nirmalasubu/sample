@@ -167,8 +167,10 @@ namespace OnDemandTools.API.Helpers.MappingRules.Airing
             CreateMap<BLAiringModel.Alternate.Change.NewReleaseChange, Change>();
 
             CreateMap<BLAiringModel.Alternate.Title.Title, Title>()
-                          .ForMember(dest => dest.ExternalSources, opt => opt.Condition(src => (!src.ExternalSources.IsNullOrEmpty() && src.ExternalSources.Count > 0)));
+                          .ForMember(dest => dest.ExternalSources, opt => opt.Condition(src => (!src.ExternalSources.IsNullOrEmpty() && src.ExternalSources.Count > 0)))
+                          .ForMember(dest => dest.Keywords, opt => opt.Condition(src => (!src.Keywords.IsNullOrEmpty() && src.Keywords.Count > 0)));
             CreateMap<BLAiringModel.Alternate.Title.ExternalSource, ExternalSource>();
+            CreateMap<BLAiringModel.Alternate.Title.Keyword, Keyword>();
 
 
             // BL to VM  for Post Airing ResponseModel

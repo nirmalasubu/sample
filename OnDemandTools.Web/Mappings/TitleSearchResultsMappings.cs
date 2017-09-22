@@ -19,7 +19,8 @@ namespace OnDemandTools.Web.Mappings
                 .ForSourceMember(d => d.SeriesItemNumber, opt => opt.Ignore())
                 .ForSourceMember(d => d.SeriesTitleId, opt => opt.Ignore())
                 .ForSourceMember(d => d.Storylines, opt => opt.Ignore())
-                 .ForSourceMember(d => d.EpisodeNumber, opt => opt.Ignore());
+                .ForSourceMember(d => d.EpisodeNumber, opt => opt.Ignore())
+                .ForSourceMember(d => d.Keywords, opt => opt.Ignore());
         }
     }
 }
