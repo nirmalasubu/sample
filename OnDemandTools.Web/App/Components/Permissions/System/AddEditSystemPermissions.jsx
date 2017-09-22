@@ -219,7 +219,11 @@ class AddEditSystemPermissions extends React.Component {
     }
 
     render() {
-
+        var isget = false;
+        if(this.state.permission.api != undefined)
+        {
+            isget = ($.inArray('get', this.state.permission.api.claims) > -1);
+        }
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
@@ -242,11 +246,11 @@ class AddEditSystemPermissions extends React.Component {
                                         <AddEditUserApiPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab eventKey={2} title="Destinations">
+                                    <Tab eventKey={2} disabled={!isget} title="Destinations">
                                         <AddEditUserDestinationPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>
-                                    <Tab eventKey={3} title="Brands">
+                                    <Tab eventKey={3} disabled={!isget} title="Brands">
                                         <AddEditBrandPermissions data={this.state.permission}
                                             updatePermission={this.updatePermission.bind(this)} />
                                     </Tab>

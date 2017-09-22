@@ -211,7 +211,6 @@ class AddEditUserPermissions extends React.Component {
     }
 
     render() {
-        console.log(this.state.permission.api);
         var isget = false;
         if(this.state.permission.api != undefined)
         {
