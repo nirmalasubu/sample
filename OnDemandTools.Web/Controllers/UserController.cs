@@ -46,9 +46,9 @@ namespace OnDemandTools.Web.Controllers
         }
 
         [HttpGet("migrate")]
-        public string Migrate()
+        public List<string> Migrate()
         {
-            StringBuilder response = new StringBuilder();
+            List<string> response = new List<string>();
 
             var users = _oldUser.GetUsers();
             var modules = _userSvc.GetAllPortalModules();
@@ -62,7 +62,7 @@ namespace OnDemandTools.Web.Controllers
 
                     if (existingUser != null)
                     {
-                        response.Append(string.Format("{0} user already added.<br/>", user.UserName));
+                        response.Add(string.Format("{0} user already added.", user.UserName));
                         continue;
                     }
 
@@ -75,7 +75,7 @@ namespace OnDemandTools.Web.Controllers
 
                         if (adUser == null)
                         {
-                            response.Append(string.Format("{0} unable to find user form Azure AD email address {1}.<br/>", user.UserName, user.EmailAddress));
+                            response.Add(string.Format("{0} unable to find user form Azure AD email address {1}.", user.UserName, user.EmailAddress));
                             continue;
                         }
 
@@ -103,15 +103,15 @@ namespace OnDemandTools.Web.Controllers
                     newPermission.ModifiedDateTime = user.ModifiedDateTime;
 
                     _userSvc.Save(newPermission);
-                    response.Append(string.Format("{0} user successfully migrated.<br/>", user.UserName));
+                    response.Add(string.Format("{0} user successfully migrated.", user.UserName));
                 }
                 catch (Exception exp)
                 {
-                    response.Append(string.Format("{0} unexpected error occurred. {1}.<br/>", user.UserName, exp.Message + exp.StackTrace));
+                    response.Add(string.Format("{0} unexpected error occurred. {1}.", user.UserName, exp.Message + exp.StackTrace));
                 }
             }
 
-            return response.ToString();
+            return response;
         }
 
         private void FillDeliveryQueue(UserIdentity user, BLModel.UserPermission newPermission, List<Queue> queues)
