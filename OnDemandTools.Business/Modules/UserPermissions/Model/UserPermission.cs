@@ -1,8 +1,9 @@
-﻿using System;
+﻿using OnDemandTools.Common.Model;
+using System;
 
 namespace OnDemandTools.Business.Modules.UserPermissions.Model
 {
-    public class UserPermission
+    public class UserPermission : IModel
     {
         public UserPermission()
         {

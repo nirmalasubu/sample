@@ -15,8 +15,6 @@ namespace OnDemandTools.Web.Models.UserPermissions
             Brands = new List<string>();
         }
 
-        public bool IsMasterApiUser { get; set; }
-
         public bool IsActive { get; set; }
 
         public bool DestinationPermitAll { get; set; }

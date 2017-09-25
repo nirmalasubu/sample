@@ -45,6 +45,13 @@ namespace OnDemandTools.Business.Adapters.ActiveDirectoryQuery
                 response = await client.RetrieveRecord(request);
             }).Wait();
 
+            var apiStatusCode = response.Value<string>(@"StatusCode");
+
+            if (!string.IsNullOrEmpty(apiStatusCode) && apiStatusCode.Equals("NotFound"))
+            {
+                return null; //User not found in Azure AD
+            }
+
             var user = Newtonsoft.Json.JsonConvert.DeserializeObject<AzureAdUser>(response.ToString());
 
             return user;

@@ -15,15 +15,13 @@ namespace OnDemandTools.Business.Modules.UserPermissions.Model
             Brands = new List<string>();
         }
 
-        public bool IsMasterApiUser { get; set; }
-
         public bool IsActive { get; set; }
 
         public bool DestinationPermitAll { get; set; }
 
         public bool BrandPermitAll { get; set; }
 
-        public string ApiKey { get; set; }
+        public Guid ApiKey { get; set; }
 
         public DateTime LastAccessTime { get; set; }
 
