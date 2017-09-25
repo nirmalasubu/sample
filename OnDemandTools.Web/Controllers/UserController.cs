@@ -12,6 +12,7 @@ using System.Linq;
 using System.Collections.Generic;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,50 +48,70 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet("migrate")]
         public string Migrate()
         {
+            StringBuilder response = new StringBuilder();
+
             var users = _oldUser.GetUsers();
             var modules = _userSvc.GetAllPortalModules();
             var queues = _queueService.GetByStatus(true);
 
             foreach (var user in users)
             {
-                var existingUser = _userSvc.GetByUserName(string.IsNullOrEmpty(user.EmailAddress) ? user.UserName : user.EmailAddress);
-
-                if (existingUser != null) continue;
-
-                BLModel.UserPermission newPermission = new BLModel.UserPermission();
-
-                //If email address exists then it is Portal user otherwise "System/API" user
-                if (!string.IsNullOrEmpty(user.EmailAddress) && user.EmailAddress.Contains("@"))
+                try
                 {
-                    var adUser = _adQuery.GetUserByEmailId(user.EmailAddress);
+                    var existingUser = _userSvc.GetByUserName(string.IsNullOrEmpty(user.EmailAddress) ? user.UserName.Replace(" ", "") : user.EmailAddress);
 
-                    FillPortalUser(user, adUser, newPermission, modules);
+                    if (existingUser != null)
+                    {
+                        response.Append(string.Format("{0} user already added.<br/>", user.UserName));
+                        continue;
+                    }
 
-                    FillDeliveryQueue(user, newPermission, queues);
+                    BLModel.UserPermission newPermission = new BLModel.UserPermission();
 
-                    FillApiUser(user, newPermission);
+                    //If email address exists then it is Portal user otherwise "System/API" user
+                    if (!string.IsNullOrEmpty(user.EmailAddress) && user.EmailAddress.Contains("@"))
+                    {
+                        var adUser = _adQuery.GetUserByEmailId(user.EmailAddress);
+
+                        if (adUser == null)
+                        {
+                            response.Append(string.Format("{0} unable to find user form Azure AD email address {1}.<br/>", user.UserName, user.EmailAddress));
+                            continue;
+                        }
+
+                        FillPortalUser(user, adUser, newPermission, modules);
+
+                        FillDeliveryQueue(user, newPermission, queues);
+
+                        FillApiUser(user, newPermission);
+                    }
+                    else //System or API user
+                    {
+                        newPermission.Portal = new BLModel.Portal();
+                        newPermission.Portal.IsAdmin = false;
+                        newPermission.Portal.IsActive = false;
+                        newPermission.UserType = UserType.Api;
+                        newPermission.UserName = user.UserName.Replace(" ", "");
+                        newPermission.Notes = user.Description;
+                        FillApiUser(user, newPermission);
+                    }
+
+                    newPermission.ActiveDateTime = user.CreatedDateTime;
+                    newPermission.CreatedBy = user.CreatedBy;
+                    newPermission.ModifiedBy = user.ModifiedBy;
+                    newPermission.CreatedDateTime = user.CreatedDateTime;
+                    newPermission.ModifiedDateTime = user.ModifiedDateTime;
+
+                    _userSvc.Save(newPermission);
+                    response.Append(string.Format("{0} user successfully migrated.<br/>", user.UserName));
                 }
-                else //System or API user
+                catch (Exception exp)
                 {
-                    newPermission.Portal = new BLModel.Portal();
-                    newPermission.Portal.IsAdmin = false;
-                    newPermission.Portal.IsActive = false;
-                    newPermission.UserType = UserType.Api;
-                    newPermission.UserName = user.UserName.Replace(" ", "");
-                    newPermission.Notes = user.Description;
-                    FillApiUser(user, newPermission);
+                    response.Append(string.Format("{0} unexpected error occurred. {1}.<br/>", user.UserName, exp.Message + exp.StackTrace));
                 }
-
-                newPermission.ActiveDateTime = user.CreatedDateTime;
-                newPermission.CreatedBy = user.CreatedBy;
-                newPermission.ModifiedBy = user.ModifiedBy;
-                newPermission.CreatedDateTime = user.CreatedDateTime;
-                newPermission.ModifiedDateTime = user.ModifiedDateTime;
-
-                _userSvc.Save(newPermission);
             }
 
-            return "success";
+            return response.ToString();
         }
 
         private void FillDeliveryQueue(UserIdentity user, BLModel.UserPermission newPermission, List<Queue> queues)
