@@ -122,11 +122,14 @@ class AddEditUserPermissions extends React.Component {
     updatePermission(permission) {
         var activeKey = this.state.key;
         var selectedkey = this.state.selectedKey;
+        var isget = false;
+        isget = ($.inArray('get', permission.api.claims) > -1);
+
         if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4||selectedkey == 5)) {
             activeKey = 1;
             selectedkey = 1;
         }
-        else if(!permission.portal.isAdmin && (selectedkey == 4||selectedkey == 5)){
+        else if(!permission.portal.isAdmin && !isget && (selectedkey == 4||selectedkey == 5)){
             activeKey = 3;
             selectedkey = 3;
         }
