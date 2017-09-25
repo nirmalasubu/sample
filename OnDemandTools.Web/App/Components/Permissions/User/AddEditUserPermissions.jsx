@@ -126,6 +126,10 @@ class AddEditUserPermissions extends React.Component {
             activeKey = 1;
             selectedkey = 1;
         }
+        else if(!permission.portal.isAdmin && (selectedkey == 4||selectedkey == 5)){
+            activeKey = 3;
+            selectedkey = 3;
+        }
 
         this.setState({
             permission: permission,
