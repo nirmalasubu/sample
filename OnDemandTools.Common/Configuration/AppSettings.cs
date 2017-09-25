@@ -130,6 +130,7 @@ namespace OnDemandTools.Common.Configuration
 
     public class AzureAd {
         public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
         public string Tenant { get; set; }
 
         public string AadInstance { get; set; }

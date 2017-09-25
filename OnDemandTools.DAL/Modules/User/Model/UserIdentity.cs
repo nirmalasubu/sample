@@ -20,6 +20,7 @@ namespace OnDemandTools.DAL.Modules.User.Model
 
         public ObjectId Id { get; set; }
         public string UserName { get; set; }
+        public string EmailAddress { get; set; }
         public string Description { get; set; }
         public Guid ApiKey { get; set; }
         public IEnumerable<string> Claims { get; set; }
