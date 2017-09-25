@@ -85,11 +85,22 @@ namespace OnDemandTools.API.Tests.AiringRoute
             {
                 Assert.True(false, "AiringId : CARE1007291600012447 is deleted");
             }
+          
             var titleToken = response[@"options"]["titles"];
-
-            Assert.NotNull(titleToken.First);
-
-
+            Assert.NotNull(titleToken.First);        
+            Assert.IsType<int>(titleToken.First.Value<int>(@"titleId"));
+            Assert.IsType<int>(titleToken.First.Value<int>(@"seasonNumber"));
+            Assert.IsType<int>(titleToken.First.Value<int>(@"releaseYear"));
+            Assert.IsType<string>(titleToken.First.Value<string>(@"titleName"));
+            Assert.IsType<string>(titleToken.First.Value<string>(@"titleNameSortable"));
+            //JArray values can be empty . So this is to verify correct Json structure is returned back
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"genres"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"ratings"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"participants"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"keywords"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"storylines"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"otherNames"));
+            Assert.IsType<JArray>(titleToken.First.Value<JArray>(@"externalSources"));
         }
 
         [Fact]
