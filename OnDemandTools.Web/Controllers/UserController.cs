@@ -100,7 +100,7 @@ namespace OnDemandTools.Web.Controllers
             {
                 foreach (var queue in queues)
                 {
-                    newPermission.Portal.DeliveryQueuePermissions[queue.Id] = new BLModel.Permission(true);
+                    newPermission.Portal.DeliveryQueuePermissions[queue.Name] = new BLModel.Permission(true);
                 }
             }
             else
@@ -115,9 +115,9 @@ namespace OnDemandTools.Web.Controllers
 
                     if (customQueue != null)
                     {
-                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Id] = new BLModel.Permission(false);
+                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Name] = new BLModel.Permission(false);
 
-                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Id].CanRead = true;
+                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Name].CanRead = true;
                     }
                 }
             }

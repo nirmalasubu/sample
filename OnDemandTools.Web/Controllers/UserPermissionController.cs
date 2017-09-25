@@ -42,7 +42,10 @@ namespace OnDemandTools.Web.Controllers
             var permissionLists = _service.GetAll(type == "system" ? UserType.Api : UserType.Portal).OrderBy(e => e.UserName).ToList()
             .ToViewModel<List<BLModel.UserPermission>, List<UserPermission>>();
 
-
+            List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+            var modules = _service.GetAllPortalModules();
+            var queues = _queueSvc.GetQueues().OrderBy(o => o.FriendlyName).ToList();
+            var brands= _brandSvc.GetAllBrands();
 
             if (type == "system")
             {
@@ -55,7 +58,7 @@ namespace OnDemandTools.Web.Controllers
 
                     if (permission.Api.DestinationPermitAll)
                     {
-                        List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+                        
                         permission.Api.Destinations = null;
                         permission.Api.Destinations = destinations.Select(s => s.Name).ToList();
                     }
@@ -63,13 +66,13 @@ namespace OnDemandTools.Web.Controllers
                     if (permission.Api.BrandPermitAll)
                     {
                         permission.Api.Brands = null;
-                        permission.Api.Brands = _brandSvc.GetAllBrands();
+                        permission.Api.Brands = brands;
                     }
                 }
             }
             else
             {
-                var modules = _service.GetAllPortalModules();
+               
 
                 foreach (var module in modules)
                 {
@@ -81,9 +84,6 @@ namespace OnDemandTools.Web.Controllers
                         }
                     }
                 }
-
-                var queues = _queueSvc.GetQueues().OrderBy(o => o.FriendlyName).ToList();
-
                 foreach (var permission in permissionLists)
                 {
                     foreach (var queue in queues)
@@ -95,8 +95,7 @@ namespace OnDemandTools.Web.Controllers
                     }
 
                     if (permission.Api.DestinationPermitAll)
-                    {
-                        List<Business.Modules.Destination.Model.Destination> destinations = _destinationSvc.GetAll();
+                    {                        
                         permission.Api.Destinations = null;
                         permission.Api.Destinations = destinations.Select(s => s.Name).ToList();
                     }
@@ -104,7 +103,7 @@ namespace OnDemandTools.Web.Controllers
                     if (permission.Api.BrandPermitAll)
                     {
                         permission.Api.Brands = null;
-                        permission.Api.Brands = _brandSvc.GetAllBrands();
+                        permission.Api.Brands = brands;
                     }
                 }
                 
