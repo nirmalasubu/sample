@@ -10,6 +10,8 @@ using OnDemandTools.Web.Models.UserPermissions;
 using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
 using System.Linq;
 using System.Collections.Generic;
+using OnDemandTools.Business.Modules.Queue;
+using OnDemandTools.Business.Modules.Queue.Model;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,12 +23,14 @@ namespace OnDemandTools.Web.Controllers
         IUserPermissionService _userSvc;
         IUserHelper _oldUser;
         IActiveDirectoryQuery _adQuery;
+        IQueueService _queueService;
 
-        public UserController(IUserPermissionService userSvc, IUserHelper oldUser, IActiveDirectoryQuery adQuery)
+        public UserController(IUserPermissionService userSvc, IUserHelper oldUser, IActiveDirectoryQuery adQuery, IQueueService queueService)
         {
             _userSvc = userSvc;
             _oldUser = oldUser;
             _adQuery = adQuery;
+            _queueService = queueService;
         }
 
         // GET: api/values
@@ -45,6 +49,7 @@ namespace OnDemandTools.Web.Controllers
         {
             var users = _oldUser.GetUsers();
             var modules = _userSvc.GetAllPortalModules();
+            var queues = _queueService.GetByStatus(true);
 
             foreach (var user in users)
             {
@@ -61,16 +66,22 @@ namespace OnDemandTools.Web.Controllers
 
                     FillPortalUser(user, adUser, newPermission, modules);
 
+                    FillDeliveryQueue(user, newPermission, queues);
+
                     FillApiUser(user, newPermission);
                 }
                 else //System or API user
                 {
+                    newPermission.Portal = new BLModel.Portal();
+                    newPermission.Portal.IsAdmin = false;
+                    newPermission.Portal.IsActive = false;
                     newPermission.UserType = UserType.Api;
-                    newPermission.UserName = user.UserName;
+                    newPermission.UserName = user.UserName.Replace(" ", "");
                     newPermission.Notes = user.Description;
                     FillApiUser(user, newPermission);
                 }
 
+                newPermission.ActiveDateTime = user.CreatedDateTime;
                 newPermission.CreatedBy = user.CreatedBy;
                 newPermission.ModifiedBy = user.ModifiedBy;
                 newPermission.CreatedDateTime = user.CreatedDateTime;
@@ -80,6 +91,36 @@ namespace OnDemandTools.Web.Controllers
             }
 
             return "success";
+        }
+
+        private void FillDeliveryQueue(UserIdentity user, BLModel.UserPermission newPermission, List<Queue> queues)
+        {
+
+            if (newPermission.Portal.IsAdmin)
+            {
+                foreach (var queue in queues)
+                {
+                    newPermission.Portal.DeliveryQueuePermissions[queue.Id] = new BLModel.Permission(true);
+                }
+            }
+            else
+            {
+                foreach (var claim in user.Claims)
+                {
+                    var claimCode = claim.Value.ToLower().Trim();
+
+                    if (claimCode == "get" || claimCode == "post" || claimCode == "delete" || claimCode == "admin") continue;
+
+                    var customQueue = queues.FirstOrDefault(e => e.FriendlyName.ToLower() == claimCode);
+
+                    if (customQueue != null)
+                    {
+                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Id] = new BLModel.Permission(false);
+
+                        newPermission.Portal.DeliveryQueuePermissions[customQueue.Id].CanRead = true;
+                    }
+                }
+            }
         }
 
         private void FillPortalUser(UserIdentity user, AzureAdUser adUser, BLModel.UserPermission newPermission, List<BLModel.PortalModule> modules)
