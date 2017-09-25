@@ -23,13 +23,12 @@ namespace OnDemandTools.Business.Modules.User
 
         public List<BLModel.UserIdentity> GetUsers()
         {
-            userQuery.GetUsers().ToList();
-            throw new NotImplementedException();
+           return userQuery.GetUsers().ToList().ToBusinessModel<List<DLModel.UserIdentity>, List<BLModel.UserIdentity>>();
         }
 
         public ClaimsPrincipal GetBy(Guid apiKey)
         {
-            BLModel.UserIdentity user = apiUserQuery.GetBy(apiKey).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();            
+            BLModel.UserIdentity user = apiUserQuery.GetBy(apiKey).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();
             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
             return (userClaim);
         }
@@ -42,9 +41,9 @@ namespace OnDemandTools.Business.Modules.User
 
         public ClaimsPrincipal GetByUserName(string userName)
         {
-            BLModel.UserIdentity user = userQuery.GetBy(userName).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>(); 
-             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
-            return (userClaim);          
+            BLModel.UserIdentity user = userQuery.GetBy(userName).ToBusinessModel<DLModel.UserIdentity, BLModel.UserIdentity>();
+            ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
+            return (userClaim);
         }
 
     }

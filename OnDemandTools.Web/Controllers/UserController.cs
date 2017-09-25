@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnDemandTools.Business.Modules.User;
 using OnDemandTools.Business.Modules.UserPermissions;
 using OnDemandTools.Common.Model;
 using OnDemandTools.Web.Models.UserPermissions;
@@ -12,9 +13,11 @@ namespace OnDemandTools.Web.Controllers
     public class UserController : Controller
     {
         public IUserPermissionService _userSvc;
-        public UserController(IUserPermissionService userSvc)
+        public IUserHelper _oldUser;
+        public UserController(IUserPermissionService userSvc, IUserHelper oldUser)
         {
             _userSvc = userSvc;
+            _oldUser = oldUser;
         }
 
         // GET: api/values
@@ -25,6 +28,19 @@ namespace OnDemandTools.Web.Controllers
             UserPermission user = _userSvc.GetByUserName(HttpContext.User.Identity.Name).ToViewModel<Business.Modules.UserPermissions.Model.UserPermission, UserPermission>();
 
             return user;
+        }
+
+        [HttpGet("migrate")]
+        public string Migrate()
+        {
+            var users = _oldUser.GetUsers();
+
+            foreach (var user in users)
+            {
+
+            }
+
+            return "success";
         }
     }
 }
