@@ -311,8 +311,15 @@ class DeliveryQueueAddEdit extends React.Component {
     }
 
     render() {
-        var msg=""
-        
+
+        var saveButton = null;
+
+        if (this.props.isAdmin) {
+            saveButton= <Button disabled={this.isSaveDisabled()}  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                         {this.state.isProcessing ? "Processing" : "Save"}
+                     </Button>;
+        }
+        var msg=""        
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Queue Name already exists. Please use a unique queue name.</label>);
                             
@@ -505,9 +512,7 @@ class DeliveryQueueAddEdit extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.props.handleClose}>Cancel</Button>
-                    <Button disabled={this.isSaveDisabled()}  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                        {this.state.isProcessing ? "Processing" : "Save"}
-                    </Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
         )

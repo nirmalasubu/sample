@@ -129,7 +129,8 @@ class Queue extends React.Component {
 
     getUserQueues(queues,user)
     {
-        if(userQueues.portal.isAdmin)
+       
+        if(user.portal.isAdmin)
         {
             return queues // Admin has permission to all queues
         }

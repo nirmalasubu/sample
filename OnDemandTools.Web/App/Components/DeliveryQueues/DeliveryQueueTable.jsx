@@ -10,8 +10,6 @@ import DeliveryQueueAddEdit from 'Components/DeliveryQueues/DeliveryQueueAddEdit
 import RemoveQueueModal from 'Components/DeliveryQueues/RemoveQueueModal';
 import { getNewQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
-import { connect } from 'react-redux';
-
 
 @connect((store) => {
     return {
@@ -27,6 +25,8 @@ class DeliveryQueueTable extends React.Component {
         super(props);
 
         this.state = {
+            isAdmin: false,
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             showModal: false,
             newQueueModel: {},
             showDateRangeResetModel: false,
@@ -71,7 +71,22 @@ class DeliveryQueueTable extends React.Component {
                 newQueueModel: {}
             });
         });
+
+        
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.DeliveryQueues,
+                isAdmin:this.props.user.portal.isAdmin})
+        }
     }
+
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.DeliveryQueues,
+                isAdmin:nextProps.user.portal.isAdmin});
+        }
+    }
+
 
     ///<summary>
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
@@ -128,6 +143,9 @@ class DeliveryQueueTable extends React.Component {
 
     // Format for displaying the action column details within grid
     actionFormat(val, rowData) {
+
+        if(this.state.isAdmin)
+            {
         return (<div>
 
             <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
@@ -146,6 +164,20 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-trash"></i>
             </button>
         </div>)
+                }
+                    
+            return (<div>
+
+            <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-book"></i>
+            </button>
+
+            <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(rowData, event)}>
+                <i class="fa fa-history" aria-hidden="true"></i>
+            </button>
+
+            </div>)
+                   
     }
 
     // Format for displaying remote queue column details
@@ -209,7 +241,17 @@ class DeliveryQueueTable extends React.Component {
 
 
     render() {
+     
+        var addButton = null;
 
+        if (this.state.permissions.canAdd) {
+            addButton =  <div>
+                    <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
+                        <i class="fa fa-plus-square fa-2x"></i>
+                        <span class="addVertialAlign"> New Queue</span>
+                    </button>
+                </div>;
+        }
         var row;
         row = this.props.ColumnData.map(function (item, index) {
             if (item.label == "Queue Name") {
@@ -232,12 +274,7 @@ class DeliveryQueueTable extends React.Component {
         
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Queue</span>
-                    </button>
-                </div>
+               {addButton}
                 <BootstrapTable  ref="deliveryQueueTable"  data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
