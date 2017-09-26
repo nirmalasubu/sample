@@ -812,6 +812,7 @@ tr.strikeout td:before {
   
    input:disabled + .slider {
      cursor: not-allowed;
+     background-color: #ccc;
   }
   input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;

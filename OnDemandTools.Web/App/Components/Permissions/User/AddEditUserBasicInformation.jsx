@@ -176,8 +176,7 @@ class AddEditUserBasicInformation extends React.Component {
 
         }
         else {
-            model.api.brandPermitAll = false;
-            model.api.destinationPermitAll = false;
+           
             if (unmodifiedModel.portal.isAdmin) {
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = false;
@@ -192,8 +191,12 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.deliveryQueuePermissions[key].canEdit = false;
                     model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
+                model.api.brandPermitAll = false;
+                model.api.destinationPermitAll = false;
 
             } else {
+                model.api.brandPermitAll = unmodifiedModel.api.brandPermitAll;
+                model.api.destinationPermitAll = unmodifiedModel.api.destinationPermitAll;;
                 model.api.brands = [];
                 for (var i = 0; i < unmodifiedModel.api.brands.length; i++) {
                     model.api.brands.push(unmodifiedModel.api.brands[i]);
