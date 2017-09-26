@@ -190,13 +190,7 @@ class AddEditUserPersonalInformation extends React.Component {
     activeApiChange() {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
-        if (!model.api.isActive) {
-            model.api.claims = [];
-            model.api.permitAll = false;
-            model.api.destinations = [];
-            model.api.brands = [];
-        }
-        else {            
+        if (model.api.isActive) {
             model.api.brands = [];
             model.api.claims = [];
             model.api.destinations = [];

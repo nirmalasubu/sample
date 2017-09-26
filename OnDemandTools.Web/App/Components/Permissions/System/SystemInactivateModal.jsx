@@ -38,11 +38,6 @@ class SystemInactivateModal extends React.Component {
 
         var model = this.props.data.inActiveModal;
         model.api.isActive = false;
-        model.api.claims = [];
-        model.api.destinations = [];
-        model.api.brands = [];
-        model.api.brandPermitAll=false;
-        model.api.destinationPermitAll=false;
 
         this.props.dispatch(permissionAction.savePermission(model))
             .then(() => {

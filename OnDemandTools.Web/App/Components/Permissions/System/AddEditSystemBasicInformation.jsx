@@ -121,8 +121,6 @@ class AddEditSystemBasicInformation extends React.Component {
         var model = this.state.userBasicInfoModel;
         var unmodifiedModel = this.state.userBasicInfounmodifiedModel;
 
-        console.log(unmodifiedModel);
-
         model.api.isActive = !this.state.userBasicInfoModel.api.isActive;
 
         if (model.api.isActive != this.state.userBasicInfounmodifiedModel.api.isActive) {
@@ -150,7 +148,7 @@ class AddEditSystemBasicInformation extends React.Component {
             }
 
             model.api.brandPermitAll = unmodifiedModel.api.brandPermitAll;
-            model.api.destinationPermitAll = unmodifiedModel.api.brandPermitAll;
+            model.api.destinationPermitAll = unmodifiedModel.api.destinationPermitAll;
         }
 
         this.setState({

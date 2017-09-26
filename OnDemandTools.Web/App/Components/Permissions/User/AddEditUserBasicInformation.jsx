@@ -193,10 +193,6 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
 
-                model.api.claims = [];
-                model.api.destinations = [];
-                model.api.brands = [];
-
             } else {
                 model.api.brands = [];
                 for (var i = 0; i < unmodifiedModel.api.brands.length; i++) {

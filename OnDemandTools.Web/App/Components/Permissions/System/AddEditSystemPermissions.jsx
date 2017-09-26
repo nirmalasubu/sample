@@ -219,11 +219,31 @@ class AddEditSystemPermissions extends React.Component {
     }
 
     render() {
-        var isget = false;
-        if(this.state.permission.api != undefined)
-        {
-            isget = ($.inArray('get', this.state.permission.api.claims) > -1);
+        var permissionsTab = null;
+        var hasGet = false;
+        if (this.state.permission.api != undefined) {
+            hasGet = ($.inArray('get', this.state.permission.api.claims) > -1);
+
+            if (this.state.permission.api.isActive) {
+                permissionsTab = (<Panel collapsible expanded={this.state.isApi} header="Permissions" >
+                    <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
+                        <Tab eventKey={1} title="ODT API">
+                            <AddEditUserApiPermissions data={this.state.permission}
+                                updatePermission={this.updatePermission.bind(this)} />
+                        </Tab>
+                        <Tab eventKey={2} disabled={!hasGet} title="Destinations">
+                            <AddEditUserDestinationPermissions data={this.state.permission}
+                                updatePermission={this.updatePermission.bind(this)} />
+                        </Tab>
+                        <Tab eventKey={3} disabled={!hasGet} title="Brands">
+                            <AddEditBrandPermissions data={this.state.permission}
+                                updatePermission={this.updatePermission.bind(this)} />
+                        </Tab>
+                    </Tabs>
+                </Panel>);
+            }
         }
+
         return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
@@ -238,24 +258,9 @@ class AddEditSystemPermissions extends React.Component {
                                 updatePermission={this.updatePermission.bind(this)} validationStates={this.updateBasicValidateStates.bind(this)} />
                             <Panel header="System Information" >
                                 <AddEditSystemContact data={this.props.data.permission} portalUsers={this.props.portalUsers}
-                                updatePermission={this.updatePermission.bind(this)} validationStates={this.updateContactValidateStates.bind(this)} />
+                                    updatePermission={this.updatePermission.bind(this)} validationStates={this.updateContactValidateStates.bind(this)} />
                             </Panel>
-                            <Panel collapsible expanded={this.state.isApi} header="Permissions" >
-                                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
-                                    <Tab eventKey={1} title="ODT API">
-                                        <AddEditUserApiPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab eventKey={2} disabled={!isget} title="Destinations">
-                                        <AddEditUserDestinationPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab eventKey={3} disabled={!isget} title="Brands">
-                                        <AddEditBrandPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                </Tabs>
-                            </Panel>
+                            {permissionsTab}
                         </div>
                     </div>
                     <NotificationContainer />
