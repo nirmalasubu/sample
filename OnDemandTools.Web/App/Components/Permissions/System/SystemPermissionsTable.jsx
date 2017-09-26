@@ -60,16 +60,15 @@ class SystemPermissionsTable extends React.Component {
     // Format the technical contact user name
     ///</summary>
     systemContactFormat(val, rowData) {
-        if(rowData.api.technicalContactUser!=null)
-        {
+        if (rowData.api.technicalContactUser != null) {
             return <p>  {rowData.api.technicalContactUser.firstName + " " + rowData.api.technicalContactUser.lastName} </p>;
-        }    
+        }
     }
 
     nameFormat(val) {
         return <p>{val}</p>;
     }
-        
+
     apiFormat(val, rowData) {
         return <p>  {rowData.api.apiKey} </p>;
     }
@@ -82,12 +81,10 @@ class SystemPermissionsTable extends React.Component {
 
             var d = new Date(rowData.api.lastAccessTime);
             var year = d.getFullYear();
-            if(year<2000)
-            {
+            if (year < 2000) {
                 return <p>{"Never"}</p>;
             }
-            else
-            {
+            else {
                 var dateFormat = Moment(rowData.api.lastAccessTime).format('lll');
                 return <p> {dateFormat}</p>
             }
@@ -122,6 +119,8 @@ class SystemPermissionsTable extends React.Component {
         else {
             var model = rowValue;
             model.api.isActive = true;
+            var date = new Date();
+            model.activeDateTime = date;
             this.props.dispatch(permissionActions.savePermission(model));
             this.props.dispatch(permissionActions.fetchPermissionRecords("system"));
         }
@@ -136,7 +135,7 @@ class SystemPermissionsTable extends React.Component {
     ///</summary>
     actionFormat(val, rowData) {
         var onOffToolTip = "";
-        
+
         if (rowData.api.isActive) {
             onOffToolTip = "This system is active in ODT";
         }
@@ -181,7 +180,7 @@ class SystemPermissionsTable extends React.Component {
     }
 
     componentDidMount() {
-       
+
         let promise = permissionActions.getNewUserPermission("system");
         promise.then(response => {
             this.setState({
@@ -232,7 +231,7 @@ class SystemPermissionsTable extends React.Component {
                 >
                     {row}
                 </BootstrapTable>
-                <AddEditSystemPermissions data={this.state} portalUsers={this.props.portalUsers}  handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditSystemPermissions data={this.state} portalUsers={this.props.portalUsers} handleClose={this.closeAddEditModel.bind(this)} />
                 <UserInactivateModal data={this.state} handleClose={this.closeInactivateModal.bind(this)} />
             </div>)
     }
