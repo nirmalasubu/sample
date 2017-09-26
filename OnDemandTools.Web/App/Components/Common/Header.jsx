@@ -10,7 +10,7 @@ import SessionPage from 'Components/Common/SessionHandling/SessionPage';
 
 @connect((store) => {
     return {
-        user: store.user       
+        user: store.user
     };
 })
 class Header extends React.Component {
@@ -24,14 +24,20 @@ class Header extends React.Component {
     }
 
     render() {
-       
+
+        var userFullName = "";
+
+        if (this.props.user.firstName != undefined) {
+            userFullName = this.props.user.firstName + " " + this.props.user.lastName;
+        }
+
         return (
             <div >
                 <Image src="../images/ODTLogo.png" rounded />
                 <div style={alignLeft} >
-                    <h4> Welcome {this.props.user.firstName + " " + this.props.user.lastName}! <a href="/account/logoff" >Logout</a>&nbsp;&nbsp;&nbsp;</h4>
+                    <h4> Welcome {userFullName}! <a href="/account/logoff" >Logout</a>&nbsp;&nbsp;&nbsp;</h4>
                 </div>
-                 
+
                 <hr />
             </div>
         )

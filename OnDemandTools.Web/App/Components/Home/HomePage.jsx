@@ -18,10 +18,17 @@ class Home extends React.Component {
   }
 
   render() {
+
+    var userFullName = "";
+
+    if (this.props.user.firstName != undefined) {
+      userFullName = this.props.user.firstName + " " + this.props.user.lastName;
+    }
+
     return (
       <div>
-        <PageHeader pageName="Home"/>
-        <p>Welcome {this.props.user.firstName + " " + this.props.user.lastName}!</p>
+        <PageHeader pageName="Home" />
+        <p>Welcome {userFullName}!</p>
       </div>
     )
   }
