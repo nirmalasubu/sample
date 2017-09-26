@@ -121,6 +121,8 @@ class AddEditSystemBasicInformation extends React.Component {
         var model = this.state.userBasicInfoModel;
         var unmodifiedModel = this.state.userBasicInfounmodifiedModel;
 
+        console.log(unmodifiedModel);
+
         model.api.isActive = !this.state.userBasicInfoModel.api.isActive;
 
         if (model.api.isActive != this.state.userBasicInfounmodifiedModel.api.isActive) {
@@ -130,34 +132,25 @@ class AddEditSystemBasicInformation extends React.Component {
             model.activeDateTime = this.state.userBasicInfounmodifiedModel.activeDateTime;
 
         }
-                
-        if(!model.api.isActive)
-        {
-            model.api.claims = [];
-            model.api.destinations = [];
+
+        if (model.api.isActive) {
             model.api.brands = [];
-            model.api.brandPermitAll=false;
-            model.api.destinationPermitAll=false;
-        }
-        else{
-            model.api.brands = [];
-            for (var i = 0; i <  unmodifiedModel.api.brands.length; i++) {                
-                model.api.brands.push( unmodifiedModel.api.brands[i]);
+            for (var i = 0; i < unmodifiedModel.api.brands.length; i++) {
+                model.api.brands.push(unmodifiedModel.api.brands[i]);
             }
 
             model.api.claims = [];
-            for(var i=0; i < unmodifiedModel.api.claims.length; i++)
-            {
+            for (var i = 0; i < unmodifiedModel.api.claims.length; i++) {
                 model.api.claims.push(unmodifiedModel.api.claims[i]);
             }
 
-            model.api.destinations = [];               
-            for (var i = 0; i < unmodifiedModel.api.destinations.length; i++) {                
+            model.api.destinations = [];
+            for (var i = 0; i < unmodifiedModel.api.destinations.length; i++) {
                 model.api.destinations.push(unmodifiedModel.api.destinations[i]);
             }
 
-            model.api.brandPermitAll=unmodifiedModel.api.brandPermitAll;
-            model.api.destinationPermitAll=unmodifiedModel.api.brandPermitAll;
+            model.api.brandPermitAll = unmodifiedModel.api.brandPermitAll;
+            model.api.destinationPermitAll = unmodifiedModel.api.brandPermitAll;
         }
 
         this.setState({
@@ -284,7 +277,7 @@ class AddEditSystemBasicInformation extends React.Component {
                                 {this.activeDateDisplay()}
                             </Col>
                         </Form >
-                    </Row>                    
+                    </Row>
                 </Grid>
             </div>
         )

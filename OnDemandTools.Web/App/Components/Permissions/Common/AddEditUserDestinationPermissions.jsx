@@ -25,9 +25,9 @@ class AddEditUserDestinationPermissions extends React.Component {
             userPermissionModel: "",
             userPermissionunmodifiedModel: "",
             componentJustMounted: true,
-            filterValue : {
-                code : "",
-                description : ""
+            filterValue: {
+                code: "",
+                description: ""
             }
         });
 
@@ -49,8 +49,8 @@ class AddEditUserDestinationPermissions extends React.Component {
     }
 
     componentDidMount() {
-        var model = this.state.userPermissionModel;  
-        
+        var model = this.state.userPermissionModel;
+
         this.setState({
             userPermissionunmodifiedModel: jQuery.extend(true, {}, this.props.data)
         });
@@ -58,11 +58,10 @@ class AddEditUserDestinationPermissions extends React.Component {
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
-        
+
     }
 
-    isChecked(value)
-    {
+    isChecked(value) {
         var model = this.state.userPermissionModel;
         var isGet = ($.inArray(value, model.api.destinations) > -1);
         return isGet;
@@ -72,18 +71,16 @@ class AddEditUserDestinationPermissions extends React.Component {
         var model = this.state.userPermissionModel;
         var isGet = !($.inArray(value, model.api.destinations) > -1);
 
-        if(isGet)
-        {
-            if($.inArray(value, model.api.destinations) == -1)
+        if (isGet) {
+            if ($.inArray(value, model.api.destinations) == -1)
                 model.api.destinations.push(value);
         }
         else
-            model.api.destinations.splice($.inArray(value, model.api.destinations), 1);        
+            model.api.destinations.splice($.inArray(value, model.api.destinations), 1);
 
         this.setState({
             userPermissionModel: model
         });
-
         this.props.updatePermission(model);
     }
 
@@ -93,13 +90,13 @@ class AddEditUserDestinationPermissions extends React.Component {
     handleChange(chr, event) {
         var filterState = this.state.filterValue;
 
-        if(chr=="CD")
+        if (chr == "CD")
             filterState.code = event.target.value;
-        
-        if(chr=="DS")
+
+        if (chr == "DS")
             filterState.description = event.target.value;
 
-        this.setState({filterValue : filterState});
+        this.setState({ filterValue: filterState });
     }
 
     // The goal of this function is to filter 'destinations'
@@ -112,9 +109,9 @@ class AddEditUserDestinationPermissions extends React.Component {
             var code = filter.code.toLowerCase();
             var description = filter.description.toLowerCase();
 
-            var filteredDestination = (destinations.filter(obj=> (code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
-                  &&(description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
-                ));
+            var filteredDestination = (destinations.filter(obj => (code != "" ? obj.name.toLowerCase().indexOf(code) != -1 : true)
+                && (description != "" ? obj.description.toLowerCase().indexOf(description) != -1 : true)
+            ));
 
             return filteredDestination
         }
@@ -122,8 +119,7 @@ class AddEditUserDestinationPermissions extends React.Component {
         return destinations;
     }
 
-    clearFilter()
-    {
+    clearFilter() {
         this.inputCode.value = "";
         this.inputDes.value = "";
         var filterState = this.state.filterValue;
@@ -139,36 +135,32 @@ class AddEditUserDestinationPermissions extends React.Component {
         }
     }
 
-    permitChange()
-    {
+    permitChange() {
         var model = this.state.userPermissionModel;
         model.api.destinationPermitAll = !this.state.userPermissionModel.api.destinationPermitAll;
 
-        if(model.api.destinationPermitAll || model.portal.isAdmin)
-        {
+        if (model.api.destinationPermitAll || model.portal.isAdmin) {
             model.api.destinations = [];
-            for (var i = 0; i < this.props.destinations.length; i++) {                
+            for (var i = 0; i < this.props.destinations.length; i++) {
                 model.api.destinations.push(this.props.destinations[i].name);
             }
         }
-        else
-        {
+        else {
             model.api.destinations = [];
-            for (var i = 0; i < this.state.userPermissionunmodifiedModel.length; i++) {                
+            for (var i = 0; i < this.state.userPermissionunmodifiedModel.length; i++) {
                 model.api.destinations.push(this.state.userPermissionunmodifiedModel[i]);
-            }            
+            }
         }
-    
-        this.setState({userPermissionModel : model});
+
+        this.setState({ userPermissionModel: model });
     }
 
     render() {
         let row = null;
         let vals = null;
-        row = this.applyFilter(this.state.userPermissionModel, this.state.filterValue);        
+        row = this.applyFilter(this.state.userPermissionModel, this.state.filterValue);
 
-        if(row.length > 0)
-        {
+        if (row.length > 0) {
             vals = row.map(function (item, index) {
                 return (<Row componentClass="tr" key={index.toString()}>
                     <Col componentClass="td" class="user-permission-portal-module">{item.name}</Col>
@@ -179,26 +171,26 @@ class AddEditUserDestinationPermissions extends React.Component {
                 </Row>)
             }.bind(this));
         }
-        else{
+        else {
             vals = (
-                    <Row componentClass="tr">
-                        <Col componentClass="td" colSpan={3} >There is no data to display</Col>
-                    </Row>
-                );
+                <Row componentClass="tr">
+                    <Col componentClass="td" colSpan={3} >There is no data to display</Col>
+                </Row>
+            );
         }
 
         return (
             <div>
-                <br/>
+                <br />
                 <Form inline>
-                  <ControlLabel>Filter by: </ControlLabel>
+                    <ControlLabel>Filter by: </ControlLabel>
                     {' '}
                     <FormGroup controlId="name">
-                      <FormControl type="text" inputRef={(input) => this.inputCode = input} onChange={(event) => this.handleChange("CD", event)} placeholder="Code" />
+                        <FormControl type="text" inputRef={(input) => this.inputCode = input} onChange={(event) => this.handleChange("CD", event)} placeholder="Code" />
                     </FormGroup>
                     {' '}
                     <FormGroup controlId="description">
-                      <FormControl type="text" inputRef={(input) => this.inputDes = input} onChange={(event) => this.handleChange("DS", event)} placeholder="Description" />
+                        <FormControl type="text" inputRef={(input) => this.inputDes = input} onChange={(event) => this.handleChange("DS", event)} placeholder="Description" />
                     </FormGroup>
                     {' '}
                     <Button onClick={this.clearFilter.bind(this)} bsStyle="primary">
@@ -207,16 +199,16 @@ class AddEditUserDestinationPermissions extends React.Component {
                 </Form>
                 <Form inline>
                     <FormGroup controlId="permit" >
-                        <label for="permit" class="control-label" style={{float:"left", paddingRight:10}}>Permit All</label>                        
-                        <div style={{float:"left"}}>
+                        <label for="permit" class="control-label" style={{ float: "left", paddingRight: 10 }}>Permit All</label>
+                        <div style={{ float: "left" }}>
                             <label class="switch">
-                                <input type="checkbox" checked={this.state.userPermissionModel.api.destinationPermitAll} onChange={(event) => this.permitChange()}  disabled={this.state.userPermissionModel.portal.isAdmin }/>
+                                <input type="checkbox" checked={this.state.userPermissionModel.api.destinationPermitAll} onChange={(event) => this.permitChange()} disabled={this.state.userPermissionModel.portal.isAdmin} />
                                 <span class="slider round"></span>
                             </label>
                         </div>
                     </FormGroup>
                 </Form>
-                <div className="clearBoth modalTableContainer" ref="destContainer">                    
+                <div className="clearBoth modalTableContainer" ref="destContainer">
                     <Grid componentClass="table" class="user-permission-portal-table" >
                         <thead>
                             <Row componentClass="tr">

@@ -125,11 +125,11 @@ class AddEditUserPermissions extends React.Component {
         var isget = false;
         isget = ($.inArray('get', permission.api.claims) > -1);
 
-        if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4||selectedkey == 5)) {
+        if (!permission.api.isActive && (selectedkey == 3 || selectedkey == 4 || selectedkey == 5)) {
             activeKey = 1;
             selectedkey = 1;
         }
-        else if(!permission.portal.isAdmin && !isget && (selectedkey == 4||selectedkey == 5)){
+        else if (!permission.portal.isAdmin && !isget && (selectedkey == 4 || selectedkey == 5)) {
             activeKey = 3;
             selectedkey = 3;
         }
@@ -218,14 +218,57 @@ class AddEditUserPermissions extends React.Component {
     }
 
     render() {
-        var isget = false;
-        if(this.state.permission.api != undefined)
-        {
-            isget = ($.inArray('get', this.state.permission.api.claims) > -1);
+        var hasGet = false;
+        if (this.state.permission.api != undefined) {
+            hasGet = ($.inArray('get', this.state.permission.api.claims) > -1);
         }
 
-        return (            
+        var apiTab = null;
+        var destinationTab = null;
+        var brandsTab = null;
+        if (this.props.data.permission != undefined
+            && this.props.data.permission.api != undefined
+            && this.props.data.permission.api.isActive) {
+            apiTab = (<Tab eventKey={3} title="ODT API">
+                <AddEditUserApiPermissions data={this.state.permission}
+                    updatePermission={this.updatePermission.bind(this)} />
+            </Tab>);
 
+            destinationTab = (
+                <Tab disabled={!hasGet} eventKey={4} title="Destinations">
+                    <AddEditUserDestinationPermissions data={this.state.permission}
+                        updatePermission={this.updatePermission.bind(this)} />
+                </Tab>);
+
+            brandsTab = (
+                <Tab disabled={!hasGet} eventKey={5} title="Brands">
+                    <AddEditBrandPermissions data={this.state.permission}
+                        updatePermission={this.updatePermission.bind(this)} />
+                </Tab>);
+        }
+
+
+        var permissionPanel = null;
+        if (this.props.data.permission != undefined
+            && this.props.data.permission.portal != undefined
+            && this.props.data.permission.portal.isActive) {
+            permissionPanel = (<Panel header="Permissions" >
+                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
+                    <Tab eventKey={1} title="ODT portal">
+                        <AddEditUserPortalPermissions data={this.state.permission}
+                            updatePermission={this.updatePermission.bind(this)} />
+                    </Tab>
+                    <Tab eventKey={2} title="Delivery Queues">
+                        <AddEditUserDeliveryQueuePermissions data={this.state.permission}
+                            updatePermission={this.updatePermission.bind(this)} />
+                    </Tab>
+                    {apiTab}
+                    {destinationTab}
+                    {brandsTab}
+                </Tabs>
+            </Panel>);
+        }
+        return (
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
@@ -241,31 +284,8 @@ class AddEditUserPermissions extends React.Component {
                                 <AddEditUserPersonalInformation data={this.props.data.permission}
                                     updatePermission={this.updatePermission.bind(this)} validationStates={this.updatePersonalInfoValidateStates.bind(this)} />
                             </Panel>
-                            <Panel header="Permissions" >
-                                <Tabs id="addeditpermission" defaultActiveKey={1} activeKey={this.state.key} onSelect={this.handleSelect} >
-                                    <Tab eventKey={1} title="ODT portal">
-                                        <AddEditUserPortalPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab eventKey={2} title="Delivery Queues">
-                                        <AddEditUserDeliveryQueuePermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab disabled={!this.state.isApi} eventKey={3} title="ODT API">
-                                        <AddEditUserApiPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab disabled={!this.state.isApi || !isget} eventKey={4} title="Destinations">
-                                        <AddEditUserDestinationPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                    <Tab disabled={!this.state.isApi || !isget} eventKey={5} title="Brands">
-                                        <AddEditBrandPermissions data={this.state.permission}
-                                            updatePermission={this.updatePermission.bind(this)} />
-                                    </Tab>
-                                </Tabs>
-                            </Panel>
                         </div>
+                        {permissionPanel}
                     </div>
                     <NotificationContainer />
                     <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />

@@ -14,7 +14,7 @@ import { fetchContactForRecords } from 'Actions/Permissions/PermissionActions';
 @connect((store) => {
     return {
         destinations: store.destinations,
-        config:store.config
+        config: store.config
     };
 })
 /// <summary>
@@ -187,48 +187,40 @@ class AddEditUserPersonalInformation extends React.Component {
     /// <summary>
     /// updating active api on checkbox change
     /// </summary>
-    activeApiChange() {  
-       
+    activeApiChange() {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
-        if(!model.api.isActive)
-        {            
+        if (!model.api.isActive) {
             model.api.claims = [];
             model.api.permitAll = false;
             model.api.destinations = [];
             model.api.brands = [];
         }
-        else
-        {
+        else {            
             model.api.brands = [];
             model.api.claims = [];
             model.api.destinations = [];
             model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
-            if (model.portal.isAdmin) 
-            {
-                model.api.claims = ["get","post","delete"];
-                
-                for (var i = 0; i < this.props.destinations.length; i++) {                
+            if (model.portal.isAdmin) {
+                model.api.claims = ["get", "post", "delete"];
+
+                for (var i = 0; i < this.props.destinations.length; i++) {
                     model.api.destinations.push(this.props.destinations[i].name);
                 }
-                for (var i = 0; i < this.props.config.brands.length; i++) {                
+                for (var i = 0; i < this.props.config.brands.length; i++) {
                     model.api.brands.push(this.props.config.brands[i]);
                 }
             }
-            else
-            {
-                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++)
-                {
+            else {
+                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++) {
                     model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
                 }
 
-                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++)
-                {
-                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i].name);
+                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++) {
+                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
                 }
 
-                for(var i=0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++)
-                {
+                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++) {
                     model.api.brands.push(this.state.personalInfoUnModifiedModel.api.brands[i]);
                 }
             }
@@ -236,8 +228,9 @@ class AddEditUserPersonalInformation extends React.Component {
         this.setState({
             personalInfoModel: model
         });
+
         this.props.updatePermission(model);
-      
+
     }
 
     /// <summary>

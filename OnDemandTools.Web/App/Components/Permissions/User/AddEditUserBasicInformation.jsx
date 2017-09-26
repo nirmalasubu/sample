@@ -38,7 +38,7 @@ class AddEditUserBasicInformation extends React.Component {
         // Dispatch another action to asynchronously fetch full list of destination data
         // from server. Once it is fetched, the data will be stored
         // in redux store
-        this.props.dispatch(destinationActions.fetchDestinations());        
+        this.props.dispatch(destinationActions.fetchDestinations());
 
         this.setState({
             userBasicInfoModel: this.props.data
@@ -54,7 +54,7 @@ class AddEditUserBasicInformation extends React.Component {
             userBasicInfounmodifiedModel: jQuery.extend(true, {}, this.props.data)
         });
         this.validateForm();
-    }    
+    }
 
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
@@ -153,31 +153,31 @@ class AddEditUserBasicInformation extends React.Component {
                 model.portal.modulePermissions[key].canDelete = true;
             });
 
-            Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                model.portal.deliveryQueuePermissions[key].canRead=true;
-                model.portal.deliveryQueuePermissions[key].canAdd=true;
-                model.portal.deliveryQueuePermissions[key].canEdit=true;
-                model.portal.deliveryQueuePermissions[key].canDelete=true;
+            Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                model.portal.deliveryQueuePermissions[key].canRead = true;
+                model.portal.deliveryQueuePermissions[key].canAdd = true;
+                model.portal.deliveryQueuePermissions[key].canEdit = true;
+                model.portal.deliveryQueuePermissions[key].canDelete = true;
             });
 
             model.api.claims = [];
-            model.api.claims = ["get","post","delete"];
+            model.api.claims = ["get", "post", "delete"];
 
             model.api.destinations = [];
-            for (var i = 0; i < this.props.destinations.length; i++) {                
+            for (var i = 0; i < this.props.destinations.length; i++) {
                 model.api.destinations.push(this.props.destinations[i].name);
             }
             model.api.brands = [];
-            for (var i = 0; i < this.props.config.brands.length; i++) {                
+            for (var i = 0; i < this.props.config.brands.length; i++) {
                 model.api.brands.push(this.props.config.brands[i]);
             }
-            model.api.brandPermitAll=true;
-            model.api.destinationPermitAll=true;
-            
+            model.api.brandPermitAll = true;
+            model.api.destinationPermitAll = true;
+
         }
         else {
-            model.api.brandPermitAll=false;
-            model.api.destinationPermitAll=false;
+            model.api.brandPermitAll = false;
+            model.api.destinationPermitAll = false;
             if (unmodifiedModel.portal.isAdmin) {
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = false;
@@ -186,21 +186,21 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canDelete = false;
                 });
 
-                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                    model.portal.deliveryQueuePermissions[key].canRead=false;
-                    model.portal.deliveryQueuePermissions[key].canAdd=false;
-                    model.portal.deliveryQueuePermissions[key].canEdit=false;
-                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                    model.portal.deliveryQueuePermissions[key].canRead = false;
+                    model.portal.deliveryQueuePermissions[key].canAdd = false;
+                    model.portal.deliveryQueuePermissions[key].canEdit = false;
+                    model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
 
                 model.api.claims = [];
                 model.api.destinations = [];
                 model.api.brands = [];
-                
+
             } else {
                 model.api.brands = [];
-                for (var i = 0; i <  unmodifiedModel.api.brands.length; i++) {                
-                    model.api.brands.push( unmodifiedModel.api.brands[i]);
+                for (var i = 0; i < unmodifiedModel.api.brands.length; i++) {
+                    model.api.brands.push(unmodifiedModel.api.brands[i]);
                 }
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = unmodifiedModel.portal.modulePermissions[key].canRead;
@@ -209,24 +209,23 @@ class AddEditUserBasicInformation extends React.Component {
                     model.portal.modulePermissions[key].canDelete = unmodifiedModel.portal.modulePermissions[key].canDelete;
                 });
 
-                Object.keys(model.portal.deliveryQueuePermissions).map(function(key,index) {
-                    model.portal.deliveryQueuePermissions[key].canRead=unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
-                    model.portal.deliveryQueuePermissions[key].canAdd=false;
-                    model.portal.deliveryQueuePermissions[key].canEdit=false;
-                    model.portal.deliveryQueuePermissions[key].canDelete=false;
+                Object.keys(model.portal.deliveryQueuePermissions).map(function (key, index) {
+                    model.portal.deliveryQueuePermissions[key].canRead = unmodifiedModel.portal.deliveryQueuePermissions[key].canRead;
+                    model.portal.deliveryQueuePermissions[key].canAdd = false;
+                    model.portal.deliveryQueuePermissions[key].canEdit = false;
+                    model.portal.deliveryQueuePermissions[key].canDelete = false;
                 });
                 model.api.claims = [];
-                for(var i=0; i < unmodifiedModel.api.claims.length; i++)
-                {
+                for (var i = 0; i < unmodifiedModel.api.claims.length; i++) {
                     model.api.claims.push(unmodifiedModel.api.claims[i]);
                 }
 
-                model.api.destinations = [];               
-                for (var i = 0; i < unmodifiedModel.api.destinations.length; i++) {                
+                model.api.destinations = [];
+                for (var i = 0; i < unmodifiedModel.api.destinations.length; i++) {
                     model.api.destinations.push(unmodifiedModel.api.destinations[i]);
                 }
             }
-            
+
         }
         this.setState({
             userBasicInfoModel: model
