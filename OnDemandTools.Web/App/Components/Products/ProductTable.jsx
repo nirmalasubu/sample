@@ -173,12 +173,12 @@ class ProductTable extends React.Component {
     actionFormat(val, rowData) {
             var readOrEditButton = null;
             if (this.state.permissions.canEdit) {
-                readOrEditButton = <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                readOrEditButton = <button class="btn-link" title="Edit Product" onClick={(event) => this.openAddEditModel(rowData, event)} >
                                         <i class="fa fa-pencil-square-o"></i>
                                     </button>;
             }
             else if (this.state.permissions.canRead) {
-                readOrEditButton = <button class="btn-link" title="View Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                readOrEditButton = <button class="btn-link" title="View Product" onClick={(event) => this.openAddEditModel(rowData, event)} >
                                         <i class="fa fa-book"></i>
                                     </button>;
             }
@@ -186,7 +186,7 @@ class ProductTable extends React.Component {
             var deleteButton = null;
 
             if (this.state.permissions.canDelete) {
-                deleteButton = <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                deleteButton = <button class="btn-link" title="Delete Product" onClick={(event) => this.openDeleteModel(rowData, event)} >
                                     <i class="fa fa-trash"></i>
                                 </button>;
             }
