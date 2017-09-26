@@ -10,7 +10,14 @@ import DeliveryQueueAddEdit from 'Components/DeliveryQueues/DeliveryQueueAddEdit
 import RemoveQueueModal from 'Components/DeliveryQueues/RemoveQueueModal';
 import { getNewQueue } from 'Actions/DeliveryQueue/DeliveryQueueActions';
 require('react-bootstrap-table/css/react-bootstrap-table.css');
+import { connect } from 'react-redux';
 
+
+@connect((store) => {
+    return {
+        user: store.user
+    };
+})
 // Sub component used within Delivery queues page to display
 // detailed queue information 
 class DeliveryQueueTable extends React.Component {

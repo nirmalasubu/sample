@@ -127,9 +127,36 @@ class Queue extends React.Component {
             queues;
     };
 
-    render() {
+    getUserQueues(queues,user)
+    {
+        if(userQueues.portal.isAdmin)
+        {
+            return queues // Admin has permission to all queues
+        }
 
-        var filteredQueues = this.getFilterVal(this.props.queues, this.state.filterValue);
+        var deliveryQueues=user.portal.deliveryQueuePermissions;
+        var lstReadonlyQueues=[];
+        Object.keys(deliveryQueues).forEach(function(currentKey) {
+            if(deliveryQueues[currentKey]["canRead"])
+            {
+                lstReadonlyQueues.push(currentKey);
+            }
+        });
+        var userQueues = queues.filter(function(queue) {
+            return lstReadonlyQueues.indexOf(queue.name) != -1
+        });
+        return userQueues;
+    }
+
+    render() {
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.props.user.portal.modulePermissions.DeliveryQueues.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
+        var userQueues=this.getUserQueues(this.props.queues,this.props.user)
+        var filteredQueues = this.getFilterVal(userQueues, this.state.filterValue);
         return (
             <div>
                 <PageHeader pageName="Delivery Queues" />
@@ -144,9 +171,11 @@ class Queue extends React.Component {
 // directly or indirectly from state variables. Note that these states
 // are inherited from Redux store. 
 const mapStateToProps = (state, ownProps) => {
+   
     return {
         signalRQueueData: state.queueCountData,
-        queues: state.queues
+        queues: state.queues,
+        user:state.user
     }
 };
 
