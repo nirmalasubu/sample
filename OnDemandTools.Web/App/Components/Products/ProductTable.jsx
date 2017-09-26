@@ -10,6 +10,13 @@ import DestinationOverlay from 'Components/Common/DestinationOverlay';
 import TextOverlay from 'Components/Common/TextOverlay';
 import { getNewProduct } from 'Actions/Product/ProductActions';
 
+@connect((store) => {
+    return {
+        products: store.products,
+        user: store.user
+    };
+})
+
 
 class ProductTable extends React.Component {
     ///<summary>
@@ -19,6 +26,7 @@ class ProductTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             newProductModel: {},
             showModal: false,
             showAddEditModel: false,
@@ -56,6 +64,17 @@ class ProductTable extends React.Component {
                 newProductModel: {}
             });
         });
+
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.Products });
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.Products });
+        }
     }
 
     ///<summary>
@@ -152,20 +171,47 @@ class ProductTable extends React.Component {
     ///This method construct the edit and delete action buttons
     ///</summary>
     actionFormat(val, rowData) {
-        return (
-            <div>
-                <button class="btn-link" title="Edit Product" onClick={(event) => this.openAddEditModel(rowData, event)} >
-                    <i class="fa fa-pencil-square-o"></i>
-                </button>
+            var readOrEditButton = null;
+            if (this.state.permissions.canEdit) {
+                readOrEditButton = <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </button>;
+            }
+            else if (this.state.permissions.canRead) {
+                readOrEditButton = <button class="btn-link" title="View Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                                        <i class="fa fa-book"></i>
+                                    </button>;
+            }
 
-                <button class="btn-link" title="Delete Product" onClick={(event) => this.openDeleteModel(rowData, event)} >
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
-        );
+            var deleteButton = null;
+
+            if (this.state.permissions.canDelete) {
+                deleteButton = <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                                    <i class="fa fa-trash"></i>
+                                </button>;
+            }
+
+            return (
+                <div>
+                    {readOrEditButton}
+                    {deleteButton}
+                </div>
+            );
     }
 
     render() {
+
+        var permissions = this.state.permissions;
+        var addButton = null;
+
+        if (this.state.permissions.canAdd) {
+            addButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="New Product" onClick={(event) => this.openCreateNewDestinationModel(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Product</span>
+                </button>
+            </div>;
+        }
 
         var row;
         row = this.props.ColumnData.map(function (item, index) {
@@ -193,12 +239,7 @@ class ProductTable extends React.Component {
 
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Product" onClick={(event) => this.openCreateNewDestinationModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Product</span>
-                    </button>
-                </div>
+                {addButton}
                 <BootstrapTable ref="productTable"
                     data={this.props.RowData}
                     striped={true}
@@ -208,7 +249,7 @@ class ProductTable extends React.Component {
                     options={this.state.options}>
                     {row}
                 </BootstrapTable>
-                <AddEditProduct data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditProduct permissions={this.state.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveProductModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

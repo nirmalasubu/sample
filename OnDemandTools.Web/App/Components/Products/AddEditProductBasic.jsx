@@ -322,7 +322,43 @@ class AddEditProductBasic extends React.Component {
         this.validateForm(value);
     }
 
-    render() {        
+    render() {
+        var disable = true;
+        if (this.props.permissions) {
+            disable = this.props.permissions.disableControl;
+        }
+
+        var tags = null;
+        if(disable)
+        {
+            var tagsList = [];
+            for (var i = 0; i < this.state.productModel.tags.length; i++) {
+                tagsList.push(this.state.productModel.tags[i].name);
+            }
+
+            tags = <FormControl
+                    bsClass="form-control product-input-left"
+                    type="text"
+                    disabled={disable}
+                    value={tagsList}
+                />
+        }
+        else {
+            tags = <ReactTags tags={this.state.productModel.tags}
+            classNames = {this.state.validationStateTag==null?CLASS_NAMES:CLASS_NAMES_ERRORS}
+            id = "inputTags"
+            suggestions={this.state.suggestions}
+            delimiters = {this.state.delimit}
+            placeholder="Enter 3 or more letters"
+            autocomplete={true}
+            minQueryLength={3}
+            allowNew={true}
+            handleDelete={this.handleDelete.bind(this)}
+            handleAddition={this.handleAddition.bind(this)}
+            handleInputChange={this.handleInputChange.bind(this)}
+                />;
+        }
+
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Product already exists. Please use a unique product name and external id.</label>);
@@ -373,6 +409,7 @@ class AddEditProductBasic extends React.Component {
                                     controlId="productName" validationState={this.state.validationStateName}>
                                     <label class="control-label" style={{paddingRight:1, fontWeight:"bold"}}>Product Name</label>
                                     <FormControl
+                                        disabled={disable}
                                         maxLength="150"
                                         bsClass="form-control product-input-left"
                                         type="text"
@@ -388,7 +425,8 @@ class AddEditProductBasic extends React.Component {
                                     controlId="prdDescription" validationState={this.state.validationStateDescription}>
                                     <label class="control-label" style={{paddingRight:10, fontWeight:"bold"}}>Description</label>
                                     <FormControl
-                                    bsClass="form-control product-input"
+                                        disabled={disable}
+                                        bsClass="form-control product-input"
                                         maxLength="150"
                                         type="text"
                                         value={this.state.productModel.description}
@@ -404,25 +442,13 @@ class AddEditProductBasic extends React.Component {
                                 <FormGroup
                                         controlId="prdTags">
                                         <label class="control-label" style={{paddingRight:67, fontWeight:"bold", float:"left"}}>Tags</label>
-                                        <ReactTags tags={this.state.productModel.tags}
-                                        classNames = {this.state.validationStateTag==null?CLASS_NAMES:CLASS_NAMES_ERRORS}
-                                            id = "inputTags"
-                                            suggestions={this.state.suggestions}
-                                            delimiters = {this.state.delimit}
-                                            placeholder="Enter 3 or more letters"
-                                            autocomplete={true}
-                                            minQueryLength={3}
-                                            allowNew={true}
-                                            handleDelete={this.handleDelete.bind(this)}
-                                            handleAddition={this.handleAddition.bind(this)}
-                                            handleInputChange={this.handleInputChange.bind(this)}
-                                                />
+                                        {tags}
                                 </FormGroup>
                             </Col>
                             <Col md={4}>                                
                                 <FormGroup
                                             controlId="contents">
-                                            <Checkbox inline name="Ad" onChange={this.handleCheckboxChange.bind(this)}
+                                            <Checkbox disabled={disable} inline name="Ad" onChange={this.handleCheckboxChange.bind(this)}
                                             checked={this.state.productModel.dynamicAdTrigger}>Dynamic Ad Trigger</Checkbox>
                                     </FormGroup>
                                 </Col>

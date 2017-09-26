@@ -685,7 +685,11 @@ tr.strikeout td:before {
   padding: 8px 12px;
   width: 100%;
   font-size: 14px;
-  height: 200px !important
+  height: 200px !important;
+}
+
+select[multiple]:disabled {
+    cursor: not-allowed !important;
 }
 
 .btnList{

@@ -29,6 +29,7 @@ class DualListBox extends React.Component {
         selected: PropTypes.arrayOf(PropTypes.string),
         filterType: PropTypes.string,
         moduleName: PropTypes.string,
+        disableAll: PropTypes.bool,
     };
 
     /// <summary>
@@ -39,7 +40,8 @@ class DualListBox extends React.Component {
         selected: [],
         canFilter:false,
         filterType:"available",
-        moduleName:""
+        moduleName:"",
+        disableAll:false
     };
 
     ///<summary>
@@ -307,8 +309,9 @@ class DualListBox extends React.Component {
     renderFilter(controlKey, displayName) {
         const {
             canFilter,
-            filterType
-            } = this.props;
+            filterType,
+            disableAll
+        } = this.props;
         
         if(filterType!=controlKey)
         {                
@@ -318,6 +321,7 @@ class DualListBox extends React.Component {
         return (
             <div >
                 <input
+                    disabled={disableAll}
                     class="form-control"
                     data-key={controlKey}
                     id={'filter-'+{controlKey}}
@@ -335,11 +339,13 @@ class DualListBox extends React.Component {
     renderListBox(controlKey, displayName, options, actions) {
         const {
             canFilter,
-            filterType
+            filterType,
+            disableAll
             } = this.props;
 
             return (
                 <ListBox
+                    disableAll={disableAll}
                     controlKey={controlKey}
                     canFilter={canFilter}
                     displayName={displayName}
@@ -362,7 +368,8 @@ class DualListBox extends React.Component {
             const {
                 options,
                 selected,
-                moduleName
+                moduleName,
+                disableAll
                 } = this.props;
                 const availableOptions = this.renderOptions(this.filterAvailable(options));
                 const selectedOptions = this.renderOptions(this.filterSelected(options));
@@ -382,17 +389,17 @@ class DualListBox extends React.Component {
                             </Col>
                             <Col md={2} >
                                 <div class="listBoxButtons" >
-                                    <Button bsStyle="primary" className="listBoxButton btnList" disabled={!this.state.isAvailableSelected} onClick={this.onClick.bind(this,"Right")}>
+                                    <Button bsStyle="primary" className="listBoxButton btnList" disabled={!this.state.isAvailableSelected || disableAll} onClick={this.onClick.bind(this,"Right")}>
                                             Add >
                                     </Button>
                                         <br /><br />
-                                    <Button bsStyle="primary" className="listBoxButton btnList" disabled={!this.state.isCurrentSelected} onClick={this.onClick.bind(this,"Left")} >
+                                    <Button bsStyle="primary" className="listBoxButton btnList" disabled={!this.state.isCurrentSelected || disableAll} onClick={this.onClick.bind(this,"Left")} >
                                         {"< Remove"}
                                     </Button>
                                 </div>
                             </Col>
                             <Col md={3} >
-                                {this.renderListBox('selected', 'Current '+ moduleName, selectedOptions, "Left")}
+                                        {this.renderListBox('selected', 'Current '+ moduleName, selectedOptions, "Left")}
                             </Col>
                         </Row>
                     </Grid>

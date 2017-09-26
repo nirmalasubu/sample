@@ -8,7 +8,8 @@ import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
     return {
-        products: store.products
+        products: store.products,
+        user: store.user
     };
 })
 class ProductsPage extends React.Component {
@@ -108,6 +109,13 @@ class ProductsPage extends React.Component {
     }
 
     render() {
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.props.user.portal.modulePermissions.Products.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
+
         var filteredRows = this.applyFilter(this.props.products, this.state.filterValue);
 
         return (

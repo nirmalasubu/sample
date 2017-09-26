@@ -164,6 +164,14 @@ class AddEditProduct extends React.Component {
     }
 
     render() {
+        var saveButton = null;
+
+        if (this.props.permissions.canAddOrEdit) {
+            saveButton = <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                {this.state.isProcessing ? "Processing" : "Save"}
+            </Button>;
+        }
+
         return (
             <Modal bsSize="large" backdrop="static"
                 onEntering={this.onOpenModel.bind(this, this.props.data.productDetails)}
@@ -171,19 +179,22 @@ class AddEditProduct extends React.Component {
                 onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.productDetails.id == null ? "Add Product" : "Edit Product " + this.state.productUnModifiedData.name}</div>
+                        <div>{this.props.data.productDetails.id == null ? "Add Product" : (this.props.permissions.canAddOrEdit ? "Edit Product " : "View Product ") + this.state.productUnModifiedData.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <AddEditProductBasic
+                        permissions={this.props.permissions}
                         data={this.props.data.productDetails}
                         validationStates={this.updateBasicValidateStates.bind(this)} />
                     <Panel header="Destinations" >
                         <AddEditProductDestination
+                            permissions={this.props.permissions}
                             data={this.props.data.productDetails} />
                     </Panel>
                     <Panel header="Content-Tiers">
                         <AddEditProductContentTier
+                            permissions={this.props.permissions}
                             data={this.props.data.productDetails} />
                     </Panel>
                     <NotificationContainer />
@@ -194,9 +205,7 @@ class AddEditProduct extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
-                    <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                        {this.state.isProcessing ? "Processing" : "Save"}
-                    </Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
 

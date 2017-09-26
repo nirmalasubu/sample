@@ -87,7 +87,7 @@ class AddEditProductDestination extends React.Component {
 
         return (
             <div>
-                <DualListBox canFilter moduleName="Destinations" options={this.state.options} onChange={this.onChange.bind(this)} selected={this.state.selected} />
+                <DualListBox disableAll={!this.props.permissions.canAddOrEdit} canFilter moduleName="Destinations" options={this.state.options} onChange={this.onChange.bind(this)} selected={this.state.selected} />
             </div>
         )
     }

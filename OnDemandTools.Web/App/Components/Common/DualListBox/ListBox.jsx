@@ -15,7 +15,8 @@ class ListBox extends React.Component {
             onDoubleClick,
             onKeyUp,
             onSelectChange,
-            } = this.props;
+            disableAll
+        } = this.props;
 
         return (
             <div>
@@ -23,6 +24,7 @@ class ListBox extends React.Component {
                     {displayName}
                 </label><br/>
                 <select
+                    disabled={disableAll}
                     class="rdl-control"
                     id={controlKey}
                     multiple
