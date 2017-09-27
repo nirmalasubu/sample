@@ -98,7 +98,7 @@ class PathTranslationTable extends React.Component {
 
         // handle delete button click
         const onOpenDeleteModal = (record) => {
-            this.setState({ showDeleteModal: true, pathTranslationDetails: record });           
+            this.setState({ showDeleteModal: true, pathTranslationDetails: record });
         }
 
         // handle edit button click
@@ -112,19 +112,34 @@ class PathTranslationTable extends React.Component {
             pathTranModel.target.protectionType = pathTranModel.target.protectionType ? pathTranModel.target.protectionType : "";
             pathTranModel.target.urlType = pathTranModel.target.urlType ? pathTranModel.target.urlType : "";
 
-            this.setState({ showAddEditModal: true, pathTranslationDetails: pathTranModel });         
+            this.setState({ showAddEditModal: true, pathTranslationDetails: pathTranModel });
         }
 
+        var editOrReadButton = null;
+        var deleteButton = null;
+
+        if (this.props.permissions.canEdit) {
+            editOrReadButton = (<button class="btn-link" title="Edit Path Translation" onClick={() => { onOpenEditModal(row) }} >
+                <i class="fa fa-pencil-square-o"></i>
+            </button>);
+        }
+        else {
+
+            editOrReadButton = (<button class="btn-link" title="View Path Translation" onClick={() => { onOpenEditModal(row) }} >
+                <i class="fa fa-book"></i>
+            </button>);
+        }
+
+        if (this.props.permissions.canDelete) {
+            deleteButton = (<button class="btn-link" title="Delete Path Translation" onClick={() => { onOpenDeleteModal(row) }} >
+                <i class="fa fa-trash"></i>
+            </button>);
+        }
 
         return (
             <div>
-                <button class="btn-link" title="Edit Path Translation" onClick={() => { onOpenEditModal(row) }} >
-                    <i class="fa fa-pencil-square-o"></i>
-                </button>
-
-                <button class="btn-link" title="Delete Path Translation" onClick={() => { onOpenDeleteModal(row) }} >
-                    <i class="fa fa-trash"></i>
-                </button>
+                {editOrReadButton}
+                {deleteButton}
             </div>
         );
     }
@@ -133,16 +148,19 @@ class PathTranslationTable extends React.Component {
 
     render() {
 
-
+        var addButton = null;
+        if (this.props.permissions.canAdd) {
+            addButton = (<div>
+                <button class="btn-link pull-right addMarginRight" title="New Path Translation" onClick={(event) => this.openCreateNewPathTranslationModel(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Path Translation</span>
+                </button>
+            </div>);
+        }
 
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Path Translation" onClick={(event) => this.openCreateNewPathTranslationModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Path Translation</span>
-                    </button>
-                </div>
+                {addButton}
                 <BootstrapTable
                     data={this.props.pathTranslationRecords}
                     striped={true}
@@ -150,10 +168,10 @@ class PathTranslationTable extends React.Component {
                     pagination={true}>
                     <TableHeaderColumn dataField="source" width="45%" isKey={true} dataAlign="left" dataFormat={this.sourceFormatter}>Source Path</TableHeaderColumn>
                     <TableHeaderColumn dataField="target" width="45%" dataAlign="left" dataFormat={this.targetFormatter}>Target Path</TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.actionsFormatter}>Actions</TableHeaderColumn>
+                    <TableHeaderColumn dataFormat={this.actionsFormatter.bind(this)}>Actions</TableHeaderColumn>
                 </BootstrapTable >
                 <RemovePathTranslationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
-                <AddEditPathTranslationModal data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditPathTranslationModal permissions={this.props.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
             </div >
         )
     }

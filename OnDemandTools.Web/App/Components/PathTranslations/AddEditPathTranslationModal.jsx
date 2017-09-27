@@ -99,7 +99,7 @@ class AddEditPathTranslationModal extends React.Component {
         }
         else {
             this.setState({
-                modalTitle: "Edit Path Translation"
+                modalTitle: this.props.permissions.disableControl ? "Path Translation" : "Edit Path Translation"
             })
         }
 
@@ -185,7 +185,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// </summary>
     handletargetURLTypeChange = (event) => {
         var model = this.state.pathTranslationDetails;
-        model.target.urlType = $.trim(event.target.value);        
+        model.target.urlType = $.trim(event.target.value);
         this.setState({
             pathTranslationDetails: model
         });
@@ -254,7 +254,7 @@ class AddEditPathTranslationModal extends React.Component {
     /// <summary>
     /// Save path translation
     /// </summary>
-    handleSave = () => {        
+    handleSave = () => {
         this.setState({ isProcessing: true });
 
         this.props.dispatch(PathTranslationHelper.savePathTranslation(this.state.pathTranslationDetails))
@@ -291,6 +291,13 @@ class AddEditPathTranslationModal extends React.Component {
 
     render() {
 
+        var saveButton = null;
+        if (this.props.permissions.canAddOrEdit) {
+            saveButton = (<Button disabled={this.isSaveEnabled()} onClick={this.handleSave} bsStyle="primary">
+                {this.state.isProcessing ? "Processing" : "Save"}
+            </Button>);
+        }
+
 
 
         return (
@@ -310,6 +317,7 @@ class AddEditPathTranslationModal extends React.Component {
                             <ControlLabel bsClass="standout" htmlFor="sourceBaseURL">Source Base URL</ControlLabel>
                             <FormControl
                                 type="text"
+                                disabled={this.props.permissions.disableControl}
                                 placeholder="Source base URL"
                                 value={this.state.pathTranslationDetails.source.baseUrl}
                                 id="sourceBaseURL"
@@ -320,6 +328,7 @@ class AddEditPathTranslationModal extends React.Component {
                             <ControlLabel bsClass="standout" htmlFor="sourceBrand">Brand</ControlLabel>
                             <FormControl
                                 type="text"
+                                disabled={this.props.permissions.disableControl}
                                 id="sourceBrand"
                                 placeholder="Enter brand, if applicable"
                                 value={this.state.pathTranslationDetails.source.brand}
@@ -333,6 +342,7 @@ class AddEditPathTranslationModal extends React.Component {
                             <ControlLabel bsClass="standout" htmlFor="targetBaseURL">Target Base URL</ControlLabel>
                             <FormControl
                                 type="text"
+                                disabled={this.props.permissions.disableControl}
                                 id="targetBaseURL"
                                 placeholder="Target base URL"
                                 value={this.state.pathTranslationDetails.target.baseUrl}
@@ -344,6 +354,7 @@ class AddEditPathTranslationModal extends React.Component {
                             <FormControl
                                 type="text"
                                 id="targetprocType"
+                                disabled={this.props.permissions.disableControl}
                                 placeholder="Enter protection type"
                                 value={this.state.pathTranslationDetails.target.protectionType}
                                 onChange={this.handletargetprocTypeChange}
@@ -354,6 +365,7 @@ class AddEditPathTranslationModal extends React.Component {
                             <FormControl
                                 type="text"
                                 id="targetURLType"
+                                disabled={this.props.permissions.disableControl}
                                 placeholder="Enter URL type"
                                 value={this.state.pathTranslationDetails.target.urlType}
                                 onChange={this.handletargetURLTypeChange}
@@ -366,7 +378,7 @@ class AddEditPathTranslationModal extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.isCloseEnabled()} onClick={this.handleClose}>Close</Button>
-                    <Button disabled={this.isSaveEnabled()} onClick={this.handleSave} bsStyle="primary">{this.state.isProcessing ? "Processing" : "Save"}</Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
         )
