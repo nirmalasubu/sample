@@ -21,10 +21,11 @@ import AddEditUserDestinationPermissions from 'Components/Permissions/Common/Add
 import AddEditBrandPermissions from 'Components/Permissions/Common/AddEditBrandPermissions';
 import * as permissionActions from 'Actions/Permissions/PermissionActions';
 import validator from 'validator';
+import { fetchUser } from 'Actions/User/UserActions';
 
 @connect((store) => {
     return {
-
+        user: store.user
     };
 })
 
@@ -176,6 +177,10 @@ class AddEditUserPermissions extends React.Component {
 
             this.props.dispatch(permissionActions.savePermission(this.state.permission))
                 .then(() => {
+                    if (this.props.user.userName == this.state.permission.userName) {
+                        this.props.dispatch(fetchUser()); //This will reload all the components
+                    }
+
                     if (this.state.permission.id == null) {
                         NotificationManager.success(this.state.permission.userName + ' user ID successfully created.', '', 2000);
                     }
