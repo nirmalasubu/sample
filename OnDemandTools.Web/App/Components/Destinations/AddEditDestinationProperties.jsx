@@ -164,6 +164,11 @@ class AddEditDestinationProperties extends React.Component {
     //properties construct  of a destination
     render() {
         let row = null;
+
+        if (!this.hasProperties() && this.props.permissions.disableControl) {
+            return <div className="clearBoth">Properties not available</div>;
+        }
+
         if (this.hasProperties()) {
             row = this.state.destinationDetails.properties.map(function (item, index) {
                 var nameValidation = item.name ? null : "error"
@@ -174,10 +179,10 @@ class AddEditDestinationProperties extends React.Component {
 
                 let valueTextBox = null;
 
-                if (item.deleted) {
+                if (item.deleted || this.props.permissions.disableControl) {
                     valueTextBox =
                         <FormGroup controlId={index.toString()} >
-                            <FormControl type="text" disabled={item.deleted} value={item.value} title={item.value} ref="Value" placeholder="Value" />
+                            <FormControl type="text" disabled={true} value={item.value} title={item.value} ref="Value" placeholder="Value" />
                         </FormGroup>;
                 }
                 else {
@@ -190,32 +195,47 @@ class AddEditDestinationProperties extends React.Component {
 
                 }
 
+                var actionsCol = null;
+
+                if (this.props.permissions.canAddOrEdit) {
+                    actionsCol = <Col componentClass="td">
+                        <button type="button" disabled={item.deleted} class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
+                        <button type="button" disabled={item.deleted} class="btn-link" title="Delete Property" onClick={(event) => this.removeProperties(index, event)} ><i class="fa fa-trash"></i></button>
+                    </Col>;
+                }
+
                 return (<Row componentClass="tr" key={index.toString()} className={item.deleted ? "strikeout" : ""}>
                     <Col componentClass="td" sm={3} >
                         <FormGroup controlId={index.toString()} validationState={nameValidation}>
-                            <FormControl type="text" disabled={item.deleted} value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
+                            <FormControl type="text" disabled={this.props.permissions.disableControl || item.deleted} value={item.name} title={item.name} ref="Name" placeholder="Name" onChange={this.handlePropertyNameChange.bind(this)} />
                         </FormGroup></Col>
                     <Col componentClass="td" sm={3}>
                         {valueTextBox}
                     </Col>
                     <Col componentClass="td"  >{this.propertyBrandImageConstruct(item, index)}</Col>
                     <Col componentClass="td"  >{this.titledetailConstruct(item, index)}</Col>
-                    <Col componentClass="td">
-                        <button type="button" disabled={item.deleted} class="btn-link" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, event)} ><i class="fa fa-filter"></i></button>
-                        <button type="button" disabled={item.deleted} class="btn-link" title="Delete Property" onClick={(event) => this.removeProperties(index, event)} ><i class="fa fa-trash"></i></button>
-                    </Col>
+                    {actionsCol}
                 </Row>)
             }.bind(this));
         }
 
+        var actionHeader = null;
+        var addNewPropertyControl = null;
+        if (this.props.permissions.canAddOrEdit) {
+            actionHeader = <Col componentClass="th" rowSpan={2} className="actionsColumn"><label>Actions</label></Col>;
+
+            addNewPropertyControl = <div>
+                <button class="btn-link pull-right addMarginRight" title="Add New Property" onClick={(event) => this.addNewProperty(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Property</span>
+                </button>;
+        </div>
+        }
+
+
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="Add New Property" onClick={(event) => this.addNewProperty(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Property</span>
-                    </button>
-                </div>
+                {addNewPropertyControl}
                 <div className="clearBoth modalTableContainer" ref="destinationPropertiesContainer">
                     <Grid componentClass="table" bsClass={this.hasProperties() ? "modalTable" : "hideModalTable"}>
                         <thead>
@@ -223,7 +243,7 @@ class AddEditDestinationProperties extends React.Component {
                                 <Col componentClass="th" sm={3} rowSpan={2} ><label >Name</label></Col>
                                 <Col componentClass="th" sm={3} rowSpan={2} ><label >Value</label></Col>
                                 <Col componentClass="th" colSpan={2} className="filterColumn" ><label >Filters</label></Col>
-                                <Col componentClass="th" rowSpan={2} className="actionsColumn"><label>Actions</label></Col>
+                                {actionHeader}
                             </Row>
                             <Row componentClass="tr">
                                 <Col componentClass="th" className="brandsColumn"   ><label>Brands</label></Col>

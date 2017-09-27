@@ -93,7 +93,7 @@ class AddEditDestinationDeliverables extends React.Component {
   /// <summary>
   /// Generate tabular view to display deliverables associated with this destination  
   /// </summary>
-  generateDeliverableTable = () => {
+  generateDeliverableTable = (permissions) => {
 
     const removeDeliverable = (index) => {
 
@@ -177,7 +177,7 @@ class AddEditDestinationDeliverables extends React.Component {
 
         let deliverableTextBox = null;
 
-        if (item.deleted) {
+        if (item.deleted || permissions.disableControl) {
           deliverableTextBox =
             <FormGroup>
               <FormControl type="text" disabled={true} id={index.toString()} value={item.value} ref="input" placeholder="Value"
@@ -195,26 +195,40 @@ class AddEditDestinationDeliverables extends React.Component {
             </OverlayTrigger>;
         }
 
+        var actionCol = null;
+
+
+        if (permissions.canAddOrEdit) {
+          actionCol = <Col componentClass="td"  >
+            <button class="btn-link" disabled={item.deleted} title="Delete Deliverable" onClick={(event) => removeDeliverable(index, event)}>
+              <i class="fa fa-trash"></i></button>
+          </Col>;
+
+
+        }
+
         return (<Row componentClass="tr" className={item.deleted ? "strikeout" : ""} key={index.toString()}>
           <Col componentClass="td">
             <Form>
               {deliverableTextBox}
             </Form>
           </Col>
-          <Col componentClass="td"  >
-            <button class="btn-link" disabled={item.deleted} title="Delete Deliverable" onClick={(event) => removeDeliverable(index, event)}>
-              <i class="fa fa-trash"></i></button>
-          </Col>
+          {actionCol}
         </Row>)
       });
 
+      var actionHeader = null;
+
+      if (permissions.canAddOrEdit) {
+        actionHeader = <Col componentClass="th" className="actionsColumn" ><label>Action</label></Col>;
+      }
       return (
         // Construct the full tabuler view of deliverables for rendering
         <Grid componentClass="table" bsClass="modalTable" id="deliverable-grid">
           <thead>
             <Row componentClass="tr">
               <Col componentClass="th" ><label>Value</label></Col>
-              <Col componentClass="th" className="actionsColumn" ><label>Action</label></Col>
+              {actionHeader}
             </Row>
           </thead>
           <tbody>
@@ -228,16 +242,29 @@ class AddEditDestinationDeliverables extends React.Component {
 
 
   render() {
+
+    if (this.state.destinationDetails.deliverables != undefined
+      && this.state.destinationDetails.deliverables.length == 0
+      && this.props.permissions.disableControl) {
+      return <div className="clearBoth">Deliverables not available</div>;
+    }
+
+    var addNewDeliverableControl = null;
+
+    if (this.props.permissions.canAddOrEdit) {
+      addNewDeliverableControl = <div>
+        <button class="btn-link pull-right addMarginRight" title="Add New Deliverable" onClick={(event) => this.addNewDeliverable(event)}>
+          <i class="fa fa-plus-square fa-2x"></i>
+          <span class="addVertialAlign"> New Deliverable</span>
+        </button>
+      </div>;
+    }
+
     return (
       <div>
-        <div>
-          <button class="btn-link pull-right addMarginRight" title="Add New Deliverable" onClick={(event) => this.addNewDeliverable(event)}>
-            <i class="fa fa-plus-square fa-2x"></i>
-            <span class="addVertialAlign"> New Deliverable</span>
-          </button>
-        </div>
+        {addNewDeliverableControl}
         <div className="clearBoth modalTableContainer" ref="destinationDeliverablesContainer">
-          {this.generateDeliverableTable()}
+          {this.generateDeliverableTable(this.props.permissions)}
         </div>
       </div>
     )
