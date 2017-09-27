@@ -25,8 +25,6 @@ class DeliveryQueueTable extends React.Component {
         super(props);
 
         this.state = {
-            isAdmin: false,
-            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             showModal: false,
             newQueueModel: {},
             showDateRangeResetModel: false,
@@ -71,21 +69,6 @@ class DeliveryQueueTable extends React.Component {
                 newQueueModel: {}
             });
         });
-
-        if (this.props.user && this.props.user.portal) {
-            this.setState({ permissions: this.props.user.portal.modulePermissions.DeliveryQueues,
-                isAdmin:this.props.user.portal.isAdmin})
-        }
-       
-    }
-
-
-    componentWillReceiveProps(nextProps) {
-        
-        if (nextProps.user && nextProps.user.portal) {
-            this.setState({ permissions: nextProps.user.portal.modulePermissions.DeliveryQueues,
-                isAdmin:nextProps.user.portal.isAdmin});
-        }
     }
 
 
@@ -145,7 +128,7 @@ class DeliveryQueueTable extends React.Component {
     // Format for displaying the action column details within grid
     actionFormat(val, rowData) {
 
-        if(this.state.isAdmin)
+        if(this.props.isAdmin)
             {
         return (<div>
 
@@ -169,7 +152,7 @@ class DeliveryQueueTable extends React.Component {
                     
             return (<div>
 
-            <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
+            <button class="btn-link" title="View Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
                 <i class="fa fa-book"></i>
             </button>
 
@@ -245,7 +228,7 @@ class DeliveryQueueTable extends React.Component {
      
         var addButton = null;
 
-        if (this.state.permissions.canAdd) {
+        if (this.props.permissions.canAdd) {
             addButton =  <div>
                     <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
                         <i class="fa fa-plus-square fa-2x"></i>
@@ -282,7 +265,7 @@ class DeliveryQueueTable extends React.Component {
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />
                 <ResetByDateRange data={this.state} handleClose={this.closeDateRangeResetModel.bind(this)} />
                 <NotificationHistory data={this.state} handleClose={this.closeNotificationHistoryModel.bind(this)} />
-                <DeliveryQueueAddEdit data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <DeliveryQueueAddEdit data={this.state} permissions={this.props.permissions} isAdmin={this.props.isAdmin} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveQueueModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }
