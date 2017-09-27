@@ -267,8 +267,8 @@ class AddEditUserPermissions extends React.Component {
                         <AddEditUserPortalPermissions data={this.state.permission}
                             updatePermission={this.updatePermission.bind(this)} />
                     </Tab>
-                    <Tab eventKey={2} title="Delivery Queues">
-                        <AddEditUserDeliveryQueuePermissions data={this.state.permission}
+                    <Tab eventKey={2} title="Delivery Queues" disabled={!this.state.isDeliveryQueueEnabled}>
+                        <AddEditUserDeliveryQueuePermissions  data={this.state.permission}
                             updatePermission={this.updatePermission.bind(this)} />
                     </Tab>
                     {apiTab}
