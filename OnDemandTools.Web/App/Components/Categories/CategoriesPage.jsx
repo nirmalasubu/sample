@@ -9,7 +9,8 @@ import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
     return {
-        categories: store.categories
+        categories: store.categories,
+        user: store.user
     };
 })
 class CategoriesPage extends React.Component {
@@ -82,6 +83,13 @@ class CategoriesPage extends React.Component {
     };
 
     render() {
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.props.user.portal.modulePermissions.Categories.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
+
         var filteredCategories = this.getFilterVal(this.props.categories, this.state.filterValue);
 
         return (

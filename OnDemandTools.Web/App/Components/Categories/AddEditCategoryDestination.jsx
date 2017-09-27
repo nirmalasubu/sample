@@ -280,29 +280,50 @@ class AddEditCategoryDestination extends React.Component {
                                 </Col>
                             );
                         }
+
+                        var actionTh =null;
+                        if (this.props.permissions.canAddOrEdit) {
+                            actionTh = <Col componentClass="td">
+                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
+                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
+                            </Col>;
+                        }
+
                         return (<Row componentClass="tr" key={index} bsClass={item.categories[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
                             <Col componentClass="td">{this.categoryBrandImageConstruct(item, index)}</Col>
                             <Col componentClass="td">{this.titleDetailConstruct(item, index)}</Col>
-                            <Col componentClass="td">
-                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
-                                <button disabled={this.isActionbuttonEnabled(item, index)} type="button" class="btn-link img-height" title="Delete Destination" onClick={(event) => this.removeDestinationModel(index)} ><i class="fa fa-trash"></i></button>
-                            </Col>
+                            {actionTh}
 
                         </Row>)
                     }
                 }.bind(this));
             }
         }
+        
+        var addButton = null;
 
-        return (
+        if (this.props.permissions.canAddOrEdit) {
+            addButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDestination(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Destination</span>
+                </button>
+            </div>;
+        }
+
+        var actionCol = null;
+
+        if (this.props.permissions.canAddOrEdit) {
+            actionCol = <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>;
+        }
+
+        return (            
+
             <div>
                 <div>
-                    <button class="btn-link pull-right addMarginRight" title="Add New Destination" onClick={(event) => this.addNewDestination(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Destination</span>
-                    </button>
+                    {addButton}
                 </div>
                 
                 <div className="clearBoth modelTableContainerWithSelect" ref="categoryScroll">
@@ -314,7 +335,7 @@ class AddEditCategoryDestination extends React.Component {
                                 <Col componentClass="th" rowSpan={2} sm={3} ><label>Destination</label></Col>
                                 <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
                                 <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
-                                <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
+                                {actionCol}
                             </Row>
                             <Row componentClass="tr">
                                 <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>

@@ -235,6 +235,14 @@ class AddEditCategory extends React.Component {
     }
 
     render() {
+        var saveButton = null;
+
+        if (this.props.permissions.canAddOrEdit) {
+            saveButton = <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                {this.state.isProcessing ? "Processing" : "Save"}
+            </Button>;
+        }
+
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Category Name already exists. Please use a unique category name.</label>);
@@ -243,7 +251,7 @@ class AddEditCategory extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.categoryDetails.id != null ? "Edit Category -" + this.props.data.categoryDetails.name : "Add Category"}</div>
+                        <div>{this.props.data.categoryDetails.id != null ? (this.props.permissions.canAddOrEdit ? "Edit Category " : "View Category ") + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -262,16 +270,14 @@ class AddEditCategory extends React.Component {
                             />
                         </FormGroup>
 
-                        <AddEditCategoryDestination data={this.props.data.categoryDetails} />
+                        <AddEditCategoryDestination permissions={this.props.permissions} data={this.props.data.categoryDetails} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
-                    <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                        {this.state.isProcessing ? "Processing" : "Save"}
-                    </Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
         )
