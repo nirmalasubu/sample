@@ -72,15 +72,16 @@ class DeliveryQueueTable extends React.Component {
             });
         });
 
-        
         if (this.props.user && this.props.user.portal) {
             this.setState({ permissions: this.props.user.portal.modulePermissions.DeliveryQueues,
                 isAdmin:this.props.user.portal.isAdmin})
         }
+       
     }
 
 
     componentWillReceiveProps(nextProps) {
+        
         if (nextProps.user && nextProps.user.portal) {
             this.setState({ permissions: nextProps.user.portal.modulePermissions.DeliveryQueues,
                 isAdmin:nextProps.user.portal.isAdmin});
