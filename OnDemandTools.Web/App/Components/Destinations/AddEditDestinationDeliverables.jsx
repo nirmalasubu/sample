@@ -246,7 +246,7 @@ class AddEditDestinationDeliverables extends React.Component {
     if (this.state.destinationDetails.deliverables != undefined
       && this.state.destinationDetails.deliverables.length == 0
       && this.props.permissions.disableControl) {
-      return <div className="clearBoth">Deliverables not available</div>;
+      return <div className="clearBoth noRecordsText">Deliverables not available.</div>;
     }
 
     var addNewDeliverableControl = null;

@@ -166,7 +166,7 @@ class AddEditDestinationProperties extends React.Component {
         let row = null;
 
         if (!this.hasProperties() && this.props.permissions.disableControl) {
-            return <div className="clearBoth">Properties not available</div>;
+            return <div className="clearBoth noRecordsText">Properties not available.</div>;
         }
 
         if (this.hasProperties()) {
@@ -228,7 +228,7 @@ class AddEditDestinationProperties extends React.Component {
                 <button class="btn-link pull-right addMarginRight" title="Add New Property" onClick={(event) => this.addNewProperty(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
                     <span class="addVertialAlign"> New Property</span>
-                </button>;
+                </button>
         </div>
         }
 

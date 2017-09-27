@@ -11,16 +11,14 @@ import TextOverlay from 'Components/Common/TextOverlay';
 
 @connect((store) => {
     return {
-        destinations: store.destinations,
-        user: store.user
+        destinations: store.destinations
     };
 })
 
 class DestinationTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
+        this.state = {            
             showModal: false,
             newDestinationModel: {},
             showAddEditModel: false,
@@ -56,19 +54,8 @@ class DestinationTable extends React.Component {
             this.setState({
                 newDestinationModel: {}
             });
-        });
-
-        if (this.props.user && this.props.user.portal) {
-            this.setState({ permissions: this.props.user.portal.modulePermissions.Destinations })
-        }
-    }
-
-    //receives prop changes to update state
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.user && nextProps.user.portal) {
-            this.setState({ permissions: nextProps.user.portal.modulePermissions.Destinations });
-        }
-    }
+        });        
+    }   
 
     ///<summary>
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
@@ -144,12 +131,12 @@ class DestinationTable extends React.Component {
     actionFormat(val, rowData) {
 
         var readOrEditButton = null;
-        if (this.state.permissions.canEdit) {
+        if (this.props.permissions.canEdit) {
             readOrEditButton = <button class="btn-link" title="Edit Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
                 <i class="fa fa-pencil-square-o"></i>
             </button>;
         }
-        else if (this.state.permissions.canRead) {
+        else if (this.props.permissions.canRead) {
             readOrEditButton = <button class="btn-link" title="View Destination" onClick={(event) => this.openAddEditModel(rowData, event)} >
                 <i class="fa fa-book"></i>
             </button>;
@@ -157,7 +144,7 @@ class DestinationTable extends React.Component {
 
         var deleteButton = null;
 
-        if (this.state.permissions.canDelete) {
+        if (this.props.permissions.canDelete) {
             deleteButton = <button class="btn-link" title="Delete Destination" onClick={(event) => this.openDeleteModel(rowData, event)} >
                 <i class="fa fa-trash"></i>
             </button>;
@@ -173,10 +160,10 @@ class DestinationTable extends React.Component {
 
     render() {
 
-        var permissions = this.state.permissions;
+        var permissions = this.props.permissions;
         var addButton = null;
 
-        if (this.state.permissions.canAdd) {
+        if (this.props.permissions.canAdd) {
             addButton = <div>
                 <button class="btn-link pull-right addMarginRight" title="New Destination" onClick={(event) => this.openCreateNewDestinationModel(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
@@ -215,7 +202,7 @@ class DestinationTable extends React.Component {
                     {row}
                 </BootstrapTable>
 
-                <AddEditDestinationModel permissions={this.state.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditDestinationModel permissions={this.props.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveDestinationModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

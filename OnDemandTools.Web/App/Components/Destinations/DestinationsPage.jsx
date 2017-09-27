@@ -19,7 +19,7 @@ class DestinationPage extends React.Component {
 
         this.state = {
             stateQueue: [],
-
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             filterValue: {
                 code: "",
                 description: "",
@@ -63,6 +63,17 @@ class DestinationPage extends React.Component {
         this.props.dispatch(destinationActions.fetchDestinations());
 
         document.title = "ODT - Destinations";
+
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.Destinations })
+        }
+    }
+
+     //receives prop changes to update state
+     componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.Destinations });
+        }
     }
 
     //filter the states using filter values
@@ -138,7 +149,7 @@ class DestinationPage extends React.Component {
             <div>
                 <PageHeader pageName="Destinations" />
                 <DestinationFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DestinationTable RowData={filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <DestinationTable permissions={this.state.permissions} RowData={filteredDestinations} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }

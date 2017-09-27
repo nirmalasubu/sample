@@ -671,6 +671,12 @@ tr.strikeout td:before {
     max-width: 90%;
 }
 
+.noRecordsText
+{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
 /******** Modal Table styling  ends ******/
 /*****************************************************/
 

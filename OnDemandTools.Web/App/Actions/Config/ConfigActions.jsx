@@ -49,7 +49,6 @@ export const healthCheck = () => {
         return Axios.get('/api/config/check')
             .then(response => {
                 dispatch(timerSuccess())
-                //console.log(JSON.stringify(response))
             })
             .catch(error => {
                 throw (error);

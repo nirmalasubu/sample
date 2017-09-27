@@ -157,11 +157,8 @@ class AddEditDestinationBasic extends React.Component {
 
         var disable = true
         if (this.props.permissions) {
-            console.log(this.props.permissions);
             disable = this.props.permissions.disableControl;
-        }
-
-        console.log(this.props.permissions);
+        }        
 
         var msg = "";
         if (this.state.showError)

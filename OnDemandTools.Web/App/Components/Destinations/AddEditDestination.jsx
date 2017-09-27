@@ -171,11 +171,14 @@ class AddEditDestinationModel extends React.Component {
     render() {
 
         var saveButton = null;
+        var modelTitle = "Destination ";
 
         if (this.props.permissions.canAddOrEdit) {
-            saveButton = <Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+            saveButton = (<Button disabled={this.isSaveEnabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                 {this.state.isProcessing ? "Processing" : "Save"}
-            </Button>;
+            </Button>);
+
+            modelTitle = this.props.data.destinationDetails.id == null ? "Add Destination" : "Edit Destination ";
         }
 
         return (
@@ -185,7 +188,7 @@ class AddEditDestinationModel extends React.Component {
                 onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.destinationDetails.id == null ? "Add Destination" : "Edit Destination " + this.props.data.destinationDetails.name}</div>
+                        <div>{modelTitle + this.props.data.destinationDetails.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

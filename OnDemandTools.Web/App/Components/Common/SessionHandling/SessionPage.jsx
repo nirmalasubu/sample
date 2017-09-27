@@ -52,8 +52,6 @@ class SessionPage extends React.Component {
         }
 
         if (this.state.isSessiontimeSet) {
-
-            //console.log("nextProps.serverPollTime :"+nextProps.serverPollTime);
             this.APIError = nextProps.applicationError.toString();
             var slideexpirationSeconds = Math.round((nextProps.serverPollTime - this.SessionStartTime) / 1000);   // converting time into seconds
             if (slideexpirationSeconds > Math.round((this.SessionExpirationTimeMinutes / 2) * 60))   // calculation based on this  reference https://msdn.microsoft.com/en-us/library/system.web.configuration.formsauthenticationconfiguration.slidingexpiration(v=vs.110).aspx
