@@ -177,7 +177,7 @@ class AddEditUserBasicInformation extends React.Component {
         }
         else {
            
-            if (unmodifiedModel.portal.isAdmin) {
+            if (unmodifiedModel.portal.isAdmin) {   // when previous state isAdmin  clear the data
                 Object.keys(model.portal.modulePermissions).map(function (key, index) {
                     model.portal.modulePermissions[key].canRead = false;
                     model.portal.modulePermissions[key].canAdd = false;
@@ -193,8 +193,11 @@ class AddEditUserBasicInformation extends React.Component {
                 });
                 model.api.brandPermitAll = false;
                 model.api.destinationPermitAll = false;
+                model.api.claims = [];
+                model.api.destinations = [];
+                model.api.brands = [];
 
-            } else {
+            } else {  // restore to previous state if it is not Admin  
                 model.api.brandPermitAll = unmodifiedModel.api.brandPermitAll;
                 model.api.destinationPermitAll = unmodifiedModel.api.destinationPermitAll;;
                 model.api.brands = [];

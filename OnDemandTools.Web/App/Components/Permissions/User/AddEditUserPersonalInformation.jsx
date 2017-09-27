@@ -190,34 +190,24 @@ class AddEditUserPersonalInformation extends React.Component {
     activeApiChange() {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
-        if (model.api.isActive) {
-            model.api.brands = [];
-            model.api.claims = [];
-            model.api.destinations = [];
-            model.api.permitAll = this.state.personalInfoUnModifiedModel.api.permitAll;
-            if (model.portal.isAdmin) {
-                model.api.claims = ["get", "post", "delete"];
+        if (model.api.isActive && (!this.state.personalInfoUnModifiedModel.portal.isAdmin) ) // Retain original when previous state is not admin
+        {
+                    model.api.brands = [];
+                    model.api.claims = [];
+                    model.api.destinations = [];
+                    model.api.brandPermitAll = this.state.personalInfoUnModifiedModel.api.brandPermitAll;
+                    model.api.destinationPermitAll = this.state.personalInfoUnModifiedModel.api.destinationPermitAll;
+                    for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++) {
+                        model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
+                    }
 
-                for (var i = 0; i < this.props.destinations.length; i++) {
-                    model.api.destinations.push(this.props.destinations[i].name);
-                }
-                for (var i = 0; i < this.props.config.brands.length; i++) {
-                    model.api.brands.push(this.props.config.brands[i]);
-                }
-            }
-            else {
-                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.claims.length; i++) {
-                    model.api.claims.push(this.state.personalInfoUnModifiedModel.api.claims[i]);
-                }
+                    for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++) {
+                        model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
+                    }
 
-                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.destinations.length; i++) {
-                    model.api.destinations.push(this.state.personalInfoUnModifiedModel.api.destinations[i]);
-                }
-
-                for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++) {
-                    model.api.brands.push(this.state.personalInfoUnModifiedModel.api.brands[i]);
-                }
-            }
+                    for (var i = 0; i < this.state.personalInfoUnModifiedModel.api.brands.length; i++) {
+                        model.api.brands.push(this.state.personalInfoUnModifiedModel.api.brands[i]);
+                    }
         }
         this.setState({
             personalInfoModel: model
