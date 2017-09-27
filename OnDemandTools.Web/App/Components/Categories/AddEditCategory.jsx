@@ -276,7 +276,7 @@ class AddEditCategory extends React.Component {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
+                    <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>{this.props.permissions.canAddOrEdit ? "Cancel" : "Close"}</Button>
                     {saveButton}
                 </Modal.Footer>
             </Modal>
