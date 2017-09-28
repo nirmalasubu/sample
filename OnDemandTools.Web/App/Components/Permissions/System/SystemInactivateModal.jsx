@@ -38,7 +38,8 @@ class SystemInactivateModal extends React.Component {
 
         var model = this.props.data.inActiveModal;
         model.api.isActive = false;
-
+        var date = new Date();
+        model.activeDateTime = date;
         this.props.dispatch(permissionAction.savePermission(model))
             .then(() => {
                 this.props.dispatch(permissionAction.fetchPermissionRecords("system"));
