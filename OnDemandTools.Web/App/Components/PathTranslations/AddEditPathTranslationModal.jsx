@@ -377,7 +377,7 @@ class AddEditPathTranslationModal extends React.Component {
                     <CancelWarningModal data={this.state} handleClose={this.closeWarningModel} handleAddEditClose={this.handleAddEditClose} />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={this.isCloseEnabled()} onClick={this.handleClose}>Close</Button>
+                    <Button disabled={this.isCloseEnabled()} onClick={this.handleClose}>{this.props.permissions.canAddOrEdit ? "Cancel" : "Close"}</Button>
                     {saveButton}
                 </Modal.Footer>
             </Modal>
