@@ -319,7 +319,6 @@ class DeliveryQueueAddEdit extends React.Component {
             saveButton= <Button disabled={this.isSaveDisabled()}  onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
                          {this.state.isProcessing ? "Processing" : "Save"}
                      </Button>
-            modelTitle = this.props.data.queueDetails.id == null ? "New Queue" : "Edit Queue ";
             cancelTitle="Cancel";
         }
         var msg=""        
@@ -330,7 +329,7 @@ class DeliveryQueueAddEdit extends React.Component {
             <Modal bsSize="large" backdrop="static" className="addEditQueueModel" onEntering={this.resetForm.bind(this, this.props.data.queueDetails.name)} onEntered={this.validateForm.bind(this)} show={this.props.data.showAddEditModel} onHide={this.props.handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div> {modelTitle  + this.props.data.queueDetails.friendlyName}</div>
+                       <div>{this.props.data.queueDetails.id != null ? (this.props.permissions.canAddOrEdit ? "Edit Queue - " : "Queue " )+ this.props.data.queueDetails.friendlyName : "New Queue"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -350,7 +349,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                     ref="inputFriendlyName"
                                                     placeholder="Enter Queue Friendly Name"
                                                     onChange={this.handleFriendlyNameChange.bind(this)}
-                                                    disabled={this.props.isAdmin? false:true}
+                                                    disabled={this.props.permissions.canAddOrEdit? false:true}
                                                 />
                                             </FormGroup>
                                         </Col>
@@ -363,7 +362,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                     value={this.state.queueModel.contactEmailAddress}
                                                     placeholder="Enter Contact Email"
                                                     onChange={this.handleEmailAddressChange.bind(this)}
-                                                    disabled={this.props.isAdmin? false:true}
+                                                    disabled={this.props.permissions.canAddOrEdit? false:true}
                                                 />
                                             </FormGroup>
                                         </Col>
@@ -378,7 +377,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                     value={this.state.queueModel.hoursOut}
                                                     placeholder="Enter Hours Out"
                                                     onChange={this.handleHoursOutChange.bind(this)}
-                                                    disabled={this.props.isAdmin? false:true}
+                                                    disabled={this.props.permissions.canAddOrEdit? false:true}
                                                 />
                                             </FormGroup>
                                         </Col>
@@ -442,7 +441,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                         placeholder='{"Network" : "TBS"}'
                                                                         onChange={this.handleQueryChange.bind(this)}
                                                                         componentClass="textarea"
-                                                                        disabled={this.props.isAdmin? false:true}
+                                                                        disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                     />
                                                                 </FormGroup>
                                                             </Col>
@@ -462,17 +461,17 @@ class DeliveryQueueAddEdit extends React.Component {
                                                         <Grid>
                                                             <Row>
                                                                 <Col md={4}>
-                                                                    <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version &nbsp; <InfoOverlay data="This will send notifications even if an airing doesn't have a version number" /></Checkbox>
                                                                     <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.data.isAdmin? false:true}
                                                                         checked={this.state.queueModel.bimRequired}> BIM Required &nbsp; <InfoOverlay data="This will send notifications only if the airing is in BIM" /> </Checkbox>
-                                                                    <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.report}> Report Statuses &nbsp; <InfoOverlay data="If checked, a status will be sent to Digital Fulfillment before a notification is sent to the queue" /></Checkbox>
                                                                 </Col>
                                                                 <Col md={5}>
-                                                                    <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="isPriorityQueue" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.isPriorityQueue}> Priority Queue &nbsp; <InfoOverlay data="If checked, notifications for airings with the closest flight window to current timestamp will be listed first" /></Checkbox>
-                                                                    <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="isProhibitResendMediaId" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.isProhibitResendMediaId}>Prohibit Resending MediaId to the Queue &nbsp; <InfoOverlay data="This will prohibit sending notifications with the media ID if the media ID has already been posted in a previous notification" /></Checkbox>
                                                                 </Col>
                                                             </Row>
@@ -489,15 +488,15 @@ class DeliveryQueueAddEdit extends React.Component {
                                                             </Row>
                                                             <Row>
                                                                 <Col md={2}>
-                                                                    <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="detectTitleChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.detectTitleChanges}>Title Changes</Checkbox>
-                                                                    <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="detectImageChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.detectImageChanges}> Image Changes </Checkbox>
                                                                 </Col>
                                                                 <Col md={2}>
-                                                                    <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="detectVideoChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.detectVideoChanges}> Video Changes</Checkbox>
-                                                                    <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.isAdmin? false:true}
+                                                                    <Checkbox name="detectPackageChanges" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.detectPackageChanges}> Package Changes</Checkbox>
                                                                 </Col>
                                                                 <Col md={4}>

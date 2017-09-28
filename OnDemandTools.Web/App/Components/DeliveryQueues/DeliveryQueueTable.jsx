@@ -169,19 +169,27 @@ class DeliveryQueueTable extends React.Component {
         var queueItem = $.grep(this.props.RowData, function (v) {
             if (v.name == val) return v;
         });
-
+        var clearButton, purgeButton,resendButton=null
+       
+        if (this.props.permissions.canAdd) {
+            clearButton=  <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
+            purgeButton=  <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button>
+            resendButton= <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button>
+        }
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
                 <p>Queue ID: {val}</p>
                 <i>Delivery:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-                <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
-                <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                {clearButton}
+                {resendButton}
+               <br />
                 <i>Consumption:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-                <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+                {purgeButton}
+                <br />
             </div>)
-        } else {
+                    } else {
 
             var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
                 if (v.name == val) return v;
@@ -194,11 +202,12 @@ class DeliveryQueueTable extends React.Component {
                     <p>Queue ID: {val}</p>
                     <i>Delivery:</i>
                     <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
-                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue" onClick={(event) => this.open(queueItem[0], "clear", event)}>Clear</button>
-                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button><br />
+                    {clearButton}
+                    {resendButton}
+                    <br/>
                     <i>Consumption:</i>
                     <span class="badge">{ItemToRefresh[0].messageCount}</span>
-                    <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button><br />
+                    {purgeButton}<br />
                     {showdate ? (<span class="small">(updated: {datetoFormat})</span>) : (null)}
                 </div>
             )
