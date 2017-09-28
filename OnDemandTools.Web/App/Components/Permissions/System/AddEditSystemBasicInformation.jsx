@@ -131,7 +131,7 @@ class AddEditSystemBasicInformation extends React.Component {
 
         }
 
-        if (model.api.isActive) {
+        if (model.api.isActive &&  unmodifiedModel.id!=null )  {
             model.api.brands = [];
             for (var i = 0; i < unmodifiedModel.api.brands.length; i++) {
                 model.api.brands.push(unmodifiedModel.api.brands[i]);
