@@ -8,7 +8,8 @@ import WorkflowStatusesFilter from 'Components/WorkflowStatus/WorkflowStatusesFi
 
 @connect((store) => {
     return {
-        status: store.statuses
+        status: store.statuses,
+        user: store.user
     }
 })
 class WorkflowStatuses extends React.Component {
@@ -62,6 +63,17 @@ class WorkflowStatuses extends React.Component {
     componentDidMount() {
         this.props.dispatch(statusActions.fetchStatus());
         document.title = "ODT - Workflow Statuses";
+
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.WorkflowStatuses })
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.WorkflowStatuses });
+        }
     }
 
     // The goal of this function is to filter 'status' (which is stored in Redux store)
@@ -85,6 +97,13 @@ class WorkflowStatuses extends React.Component {
     };
 
     render() {
+
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.state.permissions.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
 
         var filteredStatus = this.getFilterVal(this.props.status, this.state.filterValue);
         return (
