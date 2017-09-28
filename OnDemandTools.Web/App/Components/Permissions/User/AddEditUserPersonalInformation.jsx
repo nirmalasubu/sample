@@ -190,7 +190,7 @@ class AddEditUserPersonalInformation extends React.Component {
     activeApiChange() {
         var model = this.state.personalInfoModel;
         model.api.isActive = !this.state.personalInfoModel.api.isActive;
-        if (model.api.isActive && (!this.state.personalInfoUnModifiedModel.portal.isAdmin) ) // Retain original when previous state is not admin
+        if (model.api.isActive && (!this.state.personalInfoUnModifiedModel.portal.isAdmin) && (this.state.personalInfoUnModifiedModel.id!=null) ) // Retain original when previous state is not admin and for edit user
         {
                     model.api.brands = [];
                     model.api.claims = [];
