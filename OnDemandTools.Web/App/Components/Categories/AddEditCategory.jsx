@@ -251,7 +251,7 @@ class AddEditCategory extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.categoryDetails.id != null ? (this.props.permissions.canAddOrEdit ? "Edit Category " : "View Category ") + this.props.data.categoryDetails.name : "Add Category"}</div>
+                        <div>{this.props.data.categoryDetails.id != null ? (this.props.permissions.canAddOrEdit ? "Edit Category " : "") + this.props.data.categoryDetails.name : "Add Category"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

@@ -179,7 +179,7 @@ class AddEditProduct extends React.Component {
                 onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.productDetails.id == null ? "Add Product" : (this.props.permissions.canAddOrEdit ? "Edit Product " : "View Product ") + this.state.productUnModifiedData.name}</div>
+                        <div>{this.props.data.productDetails.id == null ? "Add Product" : (this.props.permissions.canAddOrEdit ? "Edit Product " : "") + this.state.productUnModifiedData.name}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
