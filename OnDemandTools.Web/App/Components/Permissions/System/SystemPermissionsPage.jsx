@@ -8,7 +8,8 @@ import PermissionsFilter from 'Components/Permissions/System/SystemPermissionsFi
 
 @connect((store) => {
     return {
-        permissions: store.permissions
+        permissions: store.permissions,
+        user: store.user
     };
 })
 class SystemPermissionsPage extends React.Component {
@@ -19,6 +20,7 @@ class SystemPermissionsPage extends React.Component {
 
         this.state = {
             permission: [],
+            currentUserPermissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             filterValue: {
                 name: "",
                 systemId: "",
@@ -75,6 +77,16 @@ class SystemPermissionsPage extends React.Component {
         });
         document.title = "ODT - System Management";
 
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ currentUserPermissions: this.props.user.portal.modulePermissions.SystemManagement })
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ currentUserPermissions: nextProps.user.portal.modulePermissions.SystemManagement });
+        }
     }
 
     // The goal of this function is to filter 'permission' (which is stored in Redux store)
@@ -115,6 +127,14 @@ class SystemPermissionsPage extends React.Component {
     }
 
     render() {
+
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.state.currentUserPermissions.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
+
         var filteredRows = this.applyFilter(this.props.permissions, this.state.filterValue);
 
         return (

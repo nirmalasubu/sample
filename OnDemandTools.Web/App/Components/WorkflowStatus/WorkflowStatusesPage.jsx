@@ -20,6 +20,7 @@ class WorkflowStatuses extends React.Component {
 
         this.state = {
             status: [],
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             filterValue: {
                 name: "",
                 description: "",
