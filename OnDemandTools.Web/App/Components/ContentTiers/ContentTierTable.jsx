@@ -12,12 +12,12 @@ import TextButtons from 'Components/Common/TextButtons';
 import * as contentTierActions from 'Actions/ContentTier/ContentTierActions';
 
 @connect((store) => {
-return {}
+    return {}
 })
 class ContentTierTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {            
+        this.state = {
             newContentTierModel: {},
             showModal: false,
             showAddEditModel: false,
@@ -39,7 +39,7 @@ class ContentTierTable extends React.Component {
                 {
                     text: 'All ', value: 10000000
                 }],
-               onSortChange :this.onSortChange.bind(this)
+                onSortChange: this.onSortChange.bind(this)
             }
         }
     }
@@ -69,14 +69,14 @@ class ContentTierTable extends React.Component {
         this.refs.contentTierTable.handlePaginationData(1, sizePerPage);
     }
 
-     ///<summary>
+    ///<summary>
     // On row click
     ///</summary>
-    onRowClick(row) {        
-       this.props.dispatch(contentTierActions.contentTierClickSuccess(row.id));
+    onRowClick(row) {
+        this.props.dispatch(contentTierActions.contentTierClickSuccess(row.id));
     }
 
-    
+
     ///<summary>
     // when delete contentTier button event handled
     ///</summary>
@@ -135,20 +135,42 @@ class ContentTierTable extends React.Component {
     }
 
     actionFormat(val, rowData) {
+        var readOrEditButton = null;
+        if (this.props.permissions.canEdit) {
+            readOrEditButton = <button class="btn-link" title="Edit Content Tier" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-pencil-square-o"></i>
+            </button>
+        }
+        else if (this.props.permissions.canRead) {
+            readOrEditButton = <button class="btn-link" title="View Content Tier" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                <i class="fa fa-book"></i>
+            </button>;
+        }
+
+        var deleteButton = null;
+        if (this.props.permissions.canDelete) {
+            deleteButton = <button class="btn-link" title="Delete Content Tier" onClick={(event) => this.openDeleteModel(rowData, event)} >
+                <i class="fa fa-trash"></i>
+            </button>
+        }
         return (
             <div>
-                <button class="btn-link" title="Edit Content Tier" onClick={(event) => this.openAddEditModel(rowData, event)} >
-                    <i class="fa fa-pencil-square-o"></i>
-                </button>
-
-                <button class="btn-link" title="Delete Content Tier" onClick={(event) => this.openDeleteModel(rowData, event)} >
-                    <i class="fa fa-trash"></i>
-                </button>
+                {readOrEditButton}
+                {deleteButton}
             </div>
         );
     }
 
     render() {
+        var addButton = null;
+        if (this.props.permissions.canAdd) {
+            addButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="New Content Tier" onClick={(event) => this.openCreateNewProductModel(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Content Tier</span>
+                </button>
+            </div>
+        }
 
         var row;
         row = this.props.ColumnData.map(function (item, index) {
@@ -170,12 +192,7 @@ class ContentTierTable extends React.Component {
 
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Content Tier" onClick={(event) => this.openCreateNewProductModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Content Tier</span>
-                    </button>
-                </div>
+                {addButton}
                 <BootstrapTable ref="contentTierTable"
                     expandableRow={this.isExpandableRow}
                     expandComponent={this.expandComponent}
@@ -187,7 +204,7 @@ class ContentTierTable extends React.Component {
                     options={this.state.options}>
                     {row}
                 </BootstrapTable>
-                <AddEditContentTier data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
+                <AddEditContentTier permissions={this.props.permissions} data={this.state} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveContentTierModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

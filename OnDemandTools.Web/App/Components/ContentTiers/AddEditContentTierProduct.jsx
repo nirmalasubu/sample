@@ -64,7 +64,7 @@ class AddEditContentTierProduct extends React.Component {
 
             var detailIndex = -1;
 
-            if (contentTierDetails.products.length > 0){
+            if (contentTierDetails.products.length > 0) {
                 detailIndex = contentTierDetails.products.findIndex((obj => obj.name == this.props.products[x].name
                     && (obj.contentTiers[0].removed == undefined || obj.contentTiers[0].removed == false)));
             }
@@ -191,7 +191,7 @@ class AddEditContentTierProduct extends React.Component {
     titleDetailConstruct(item, index) {
 
         var ids = [];
-        if (item.contentTiers.length > 0) {           
+        if (item.contentTiers.length > 0) {
             for (var i = 0; i < item.contentTiers[0].titleIds.length; i++) {
                 ids.push(item.contentTiers[0].titleIds[i]);
             }
@@ -262,16 +262,19 @@ class AddEditContentTierProduct extends React.Component {
                                 </Col>
                             );
                         }
+                        var filterThrashButtons = null;
+                        if (this.props.permissions.canAddOrEdit) {
+                            filterThrashButtons = <Col componentClass="td">
+                                <button disabled={(item.contentTiers[0].removed || item.name == "")} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
+                                <button disabled={item.contentTiers[0].removed} type="button" class="btn-link img-height" title="Delete Product" onClick={(event) => this.removeProductModel(index)} ><i class="fa fa-trash"></i></button>
+                            </Col>
+                        }
                         return (<Row componentClass="tr" key={index} bsClass={item.contentTiers[0].removed == undefined ? "row row-margin" : "row row-margin strikeout"}>
                             {col}
                             {colDesc}
                             <Col componentClass="td">{this.contentTierBrandImageConstruct(item, index)}</Col>
                             <Col componentClass="td">{this.titleDetailConstruct(item, index)}</Col>
-                            <Col componentClass="td">
-                                <button disabled={(item.contentTiers[0].removed || item.name == "")} type="button" class="btn-link img-height" title="Add/Edit Filter" onClick={(event) => this.openPropertiesFilter(item, index, event)} ><i class="fa fa-filter"></i></button>
-                                <button disabled={item.contentTiers[0].removed} type="button" class="btn-link img-height" title="Delete Product" onClick={(event) => this.removeProductModel(index)} ><i class="fa fa-trash"></i></button>
-                            </Col>
-
+                            {filterThrashButtons}
                         </Row>)
                     }
                 }.bind(this));
@@ -281,14 +284,24 @@ class AddEditContentTierProduct extends React.Component {
             }
         }
 
+        var newProductButton = null;
+        if (this.props.permissions.canAdd) {
+            newProductButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="Add New Product" onClick={(event) => this.addNewProduct(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Product</span>
+                </button>
+            </div>
+        }
+
+        var actionCol = null;
+        if (this.props.permissions.canAddOrEdit) {
+            actionCol = <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>;
+        }
+
         return (
             <div>
-                <div>
-                    <button class="btn-link pull-right addMarginRight" title="Add New Product" onClick={(event) => this.addNewProduct(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Product</span>
-                    </button>
-                </div>
+                {newProductButton}
                 <div className="clearBoth modelTableContainerWithSelect" ref="contentTierScroll">
                     <Grid componentClass="table" bsClass="modalTable">
                         <thead>
@@ -296,7 +309,7 @@ class AddEditContentTierProduct extends React.Component {
                                 <Col componentClass="th" rowSpan={2} sm={3} ><label>Product</label></Col>
                                 <Col componentClass="th" rowSpan={2} sm={3} ><label>Description</label></Col>
                                 <Col componentClass="th" colSpan={2} className="filterColumn"  ><label>Filters</label></Col>
-                                <Col componentClass="th" rowSpan={2} className="actionsColumn" ><label>Actions</label></Col>
+                                {actionCol}
                             </Row>
                             <Row componentClass="tr">
                                 <Col componentClass="th" className="brandsColumn" ><label>Brands</label></Col>

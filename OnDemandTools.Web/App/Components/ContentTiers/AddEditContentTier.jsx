@@ -87,7 +87,7 @@ class AddEditContentTier extends React.Component {
                     }
                     else {
                         NotificationManager.success(this.state.contentTierDetails.name + ' content tier updated successfully.', '', 2000);
-                    }                    
+                    }
                     setTimeout(function () {
                         elem.props.handleClose();
                     }, 3000);
@@ -233,6 +233,12 @@ class AddEditContentTier extends React.Component {
     }
 
     render() {
+        var saveButton = null;
+        if (this.props.permissions.canAddOrEdit) {
+            saveButton = <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
+                {this.state.isProcessing ? "Processing" : "Save"}
+            </Button>
+        }
         var msg = "";
         if (this.state.showError)
             msg = (<label data-ng-show="showError" class="alert alert-danger"><strong>Error!</strong> Content Tier Name already exists. Please use a unique Content Tier name.</label>);
@@ -241,7 +247,7 @@ class AddEditContentTier extends React.Component {
             <Modal bsSize="large" backdrop="static" onEntering={this.onOpenModel.bind(this)} onEntered={this.onEnteredModel.bind(this)} show={this.props.data.showAddEditModel} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <div>{this.props.data.contentTierDetails.id != null ? "Edit Content Tier - " + this.props.data.contentTierDetails.name : "Add Content Tier"}</div>
+                        <div>{this.props.data.contentTierDetails.id != null ? (this.props.permissions.canAddOrEdit ? "Edit Content Tier - " : "") + this.props.data.contentTierDetails.name : "Add Content Tier"}</div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -257,19 +263,17 @@ class AddEditContentTier extends React.Component {
                                 ref="inputContentTierName"
                                 placeholder="Enter a Content Tier Name"
                                 onChange={this.handleTextChange.bind(this)}
-                            />
+                                />
                         </FormGroup>
 
-                        <AddEditContentTierProduct data={this.props.data.contentTierDetails} validationStates={this.updateProductNameValidation.bind(this)} />
+                        <AddEditContentTierProduct permissions={this.props.permissions} data={this.props.data.contentTierDetails} validationStates={this.updateProductNameValidation.bind(this)} />
                         <NotificationContainer />
                         <CancelWarningModal data={this.state} handleClose={this.closeWarningModel.bind(this)} handleAddEditClose={this.handleAddEditClose.bind(this)} />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>Cancel</Button>
-                    <Button disabled={this.isSaveDisabled()} onClick={this.handleSave.bind(this)} className="btn btn-primary btn-large">
-                        {this.state.isProcessing ? "Processing" : "Save"}
-                    </Button>
+                    <Button disabled={this.state.isProcessing} onClick={this.handleClose.bind(this)}>{this.props.permissions.canAddOrEdit ? "Cancel" : "Close"}</Button>
+                    {saveButton}
                 </Modal.Footer>
             </Modal>
         )

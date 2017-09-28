@@ -9,7 +9,8 @@ import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {   
     return {
-        contentTiers: store.contentTiers
+        contentTiers: store.contentTiers,
+        user: store.user
     };
 })
 class ContentTiersPage extends React.Component {
@@ -18,7 +19,7 @@ class ContentTiersPage extends React.Component {
         super(props);
 
         this.state = {
-            stateQueue: [],
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
 
             filterValue: {
                 contentTierName: "",
@@ -62,6 +63,16 @@ class ContentTiersPage extends React.Component {
         this.props.dispatch(contentTierActions.fetchContentTiers());
         this.props.dispatch(productActions.fetchProducts());
         document.title = "ODT - Content Tiers";
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.ContentTiers })
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.ContentTiers });
+        }
     }
 
     ///<summary>
@@ -82,12 +93,20 @@ class ContentTiersPage extends React.Component {
     };
 
     render() {
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+
+       if (!this.props.user.portal.modulePermissions.ContentTiers.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
+
         var filteredContentTiers = this.getFilterVal(this.props.contentTiers, this.state.filterValue);
         return (
             <div>
                 <PageHeader pageName="Content Tiers" />
                 <ContentTierFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <ContentTierTable RowData={filteredContentTiers} ColumnData={this.state.columns} KeyField={this.state.keyField} />
+                <ContentTierTable permissions={this.state.permissions} RowData={filteredContentTiers} ColumnData={this.state.columns} KeyField={this.state.keyField} />
             </div>
         )
     }
