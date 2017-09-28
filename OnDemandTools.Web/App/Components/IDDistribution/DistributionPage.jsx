@@ -8,7 +8,8 @@ import 'react-notifications/lib/notifications.css';
 
 @connect((store) => {
     return {
-        currentAiringIds: store.currentAiringIds
+        currentAiringIds: store.currentAiringIds,
+        user: store.user
     };
 })
 class DistributionPage extends React.Component {
@@ -21,7 +22,7 @@ class DistributionPage extends React.Component {
 
         this.state = {
             stateQueue: [],
-
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
             filterValue: {
                 code: "",
                 airingId: ""
@@ -63,6 +64,17 @@ class DistributionPage extends React.Component {
         this.props.dispatch(currentAiringIdActions.fetchCurrentAiringId());
 
         document.title = "ODT - ID Distribution";
+
+        if (this.props.user && this.props.user.portal) {
+            this.setState({ permissions: this.props.user.portal.modulePermissions.IdDistribution })
+        }
+    }
+
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.portal) {
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.IdDistribution });
+        }
     }
 
     //this is to refresh the current airing id
@@ -88,6 +100,12 @@ class DistributionPage extends React.Component {
     };
 
     render() {
+        if (this.props.user.portal == undefined) {
+            return <div>Loading...</div>;
+        }
+        else if (!this.state.permissions.canRead) {
+            return <h3>Unauthorized to view this page</h3>;
+        }
         var filteredDistributions = this.getFilterVal(this.props.currentAiringIds, this.state.filterValue);
         return (
             <div>
