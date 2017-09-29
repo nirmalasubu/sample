@@ -64,6 +64,10 @@ namespace OnDemandTools.API.Tests.AiringRoute
             Assert.True(isCategoryExists, string.Format("Category name 'UNITTESTCategory' does not exists"));
         }
 
+        /// <summary>
+        /// Unit test to verify properties in the destination UTEST and category UNITTESTCategory filteres by Related Title Ids
+        /// </summary>
+        [Fact, Order(2)]
         public void GetAiringHavingDestinationUTESTWithCategoryUNITTESTCategoryFilteredByRelatedTitleIDs()
         {
             string airingId = PostAiring("TBSAiring_UTEST_UNITTESTCategory");
