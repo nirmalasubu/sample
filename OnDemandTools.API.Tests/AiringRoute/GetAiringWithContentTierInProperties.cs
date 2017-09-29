@@ -74,6 +74,45 @@ namespace OnDemandTools.API.Tests.AiringRoute
 
             Assert.True(isContentTierExists, string.Format("Content Tier name 'UnitTest' does not exists for airing Id: {0}", _airingId));
         }
+
+        /// <summary>
+        /// Unit test to verify properties in the destination UTEST and Content Tier UNITTESTCategory filtered by RelatedTitleIds
+        /// </summary>
+        [Fact, Order(3)]
+        public void GetAiringHavingDestinationUTESTWithContentTierUNITTESTContentTierFilteredByRelatedTitleIds()
+        {
+            JObject response = new JObject();
+            var request = new RestRequest("/v1/airing/" + _airingId, Method.GET);
+            Task.Run(async () =>
+            {
+                response = await _client.RetrieveRecord(request);
+
+            }).Wait();
+
+            string value = response.Value<string>(@"StatusCode");
+            if (value != null)
+            {
+                Assert.True(false, "Error in getting airing :" + _airingId);
+            }
+
+            JArray flights = response.Value<JArray>(@"flights");
+            JArray destinations = flights.First.Value<JArray>(@"destinations");
+            JArray properties = destinations.First.Value<JArray>(@"properties");
+            bool isContentTierExists = false;
+            foreach (var item in properties.Children())
+            {
+                var itemProperties = item.Children<JProperty>();
+                var nameProperty = itemProperties.FirstOrDefault(x => x.Name == "name");
+                var valueProperty = itemProperties.FirstOrDefault(x => x.Name == "value");
+                if (nameProperty.Value.ToString().Equals("ContentTier") && valueProperty.Value.ToString().Equals("UnitTest"))
+                {
+                    isContentTierExists = true;
+                }
+
+            }
+
+            Assert.True(isContentTierExists, string.Format("Content Tier name 'UnitTest' does not exists for airing Id: {0}", _airingId));
+        }
     }
 }
 
