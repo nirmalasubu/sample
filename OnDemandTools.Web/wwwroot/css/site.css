@@ -18,8 +18,10 @@ body {
 }
 
 .header{
-    float: right ;
-    margin-right:120px 
+        float: right;
+        margin-right: 25px;
+        margin-top: 48px;
+        font-size: 20px;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     color: #555555;

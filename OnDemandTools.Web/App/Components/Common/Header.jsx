@@ -12,7 +12,8 @@ import SessionPage from 'Components/Common/SessionHandling/SessionPage';
 
 @connect((store) => {
     return {
-        user: store.user
+        user: store.user,
+        config:store.config
     };
 })
 class Header extends React.Component {
@@ -34,6 +35,25 @@ class Header extends React.Component {
     //  </DropdownButton>
     //</ButtonToolbar>
 
+    formatDate(val) {
+        if (val == null) {
+            return "never"
+        }
+        else {
+
+            var d = new Date(val);
+            var year = d.getFullYear();
+            if (year < 2000) {
+                return "never";
+            }
+            else {
+
+                var dateFormat = Moment(val).format('lll');
+                return Moment(val).format('lll');
+            }
+        }
+    }
+
     render() {
 
         var userFullName = "";
@@ -43,15 +63,14 @@ class Header extends React.Component {
         if (this.props.user.firstName != undefined) {
             userFullName = "  " + this.props.user.firstName + " " + this.props.user.lastName;
             apiKey = this.props.user.api.apiKey;
-            lastLogin = this.props.user.portal.lastLoginTime;
-
+            lastLogin = this.formatDate(this.props.user.portal.lastLoginTime);
         }
         const popoverClickRootClose = (
             <Popover id="popover-trigger-click-root-close" >
                 <label>UserName:</label>{this.props.user.userName} <br />
                 <label>ApiKey: </label> {apiKey} <br />
                 <label>LastLogin: </label>{lastLogin} <br />
-                <label>Version: </label>1.0 <br />
+                <label>Version: </label>{this.props.config.version} <br />
                 <hr />
                 <a href="/account/logoff">Logout </a>
             </Popover>
@@ -74,8 +93,8 @@ class Header extends React.Component {
 
 
         )
-    }
-}
+                        }
+                }
 
 
 
