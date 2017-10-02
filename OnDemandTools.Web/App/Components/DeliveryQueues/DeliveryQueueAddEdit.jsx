@@ -400,7 +400,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                             <FormGroup
                                                 controlId="isActive">
                                                 <Checkbox name="active" onChange={this.handleCheckboxChange.bind(this)}
-                                                checked={this.state.queueModel.active}  disabled={this.props.data.isAdmin? false:true}> Activate Queue to receive notifications. &nbsp;<InfoOverlay data="Queue will receive notifications only if this is checked." /></Checkbox>
+                                                checked={this.state.queueModel.active}  disabled={this.props.permissions.canAddOrEdit? false:true}> Activate Queue to receive notifications. &nbsp;<InfoOverlay data="Queue will receive notifications only if this is checked." /></Checkbox>
                                             </FormGroup>
                                         </Col>
                                         <Col md={4}>
@@ -463,7 +463,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                 <Col md={4}>
                                                                     <Checkbox name="allowAiringsWithNoVersion" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.allowAiringsWithNoVersion}>Allow Airings/Assets with no version &nbsp; <InfoOverlay data="This will send notifications even if an airing doesn't have a version number" /></Checkbox>
-                                                                    <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.data.isAdmin? false:true}
+                                                                    <Checkbox name="bimRequired" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.bimRequired}> BIM Required &nbsp; <InfoOverlay data="This will send notifications only if the airing is in BIM" /> </Checkbox>
                                                                     <Checkbox name="report" onChange={this.handleCheckboxChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true}
                                                                         checked={this.state.queueModel.report}> Report Statuses &nbsp; <InfoOverlay data="If checked, a status will be sent to Digital Fulfillment before a notification is sent to the queue" /></Checkbox>
@@ -501,7 +501,7 @@ class DeliveryQueueAddEdit extends React.Component {
                                                                 </Col>
                                                                 <Col md={4}>
                                                                     <ControlLabel>Status Changes</ControlLabel>
-                                                                    <Select multi simpleValue className="select-control-width" options={this.state.options} onChange={this.handleMultiChange.bind(this)} disabled={this.props.data.isAdmin? false:true} value={this.state.queueModel.statusNames} />
+                                                                    <Select multi simpleValue className="select-control-width" options={this.state.options} onChange={this.handleMultiChange.bind(this)} disabled={this.props.permissions.canAddOrEdit? false:true} value={this.state.queueModel.statusNames} />
                                                                 </Col>
                                                             </Row>
                                                         </Grid>
