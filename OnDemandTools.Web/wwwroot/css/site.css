@@ -910,3 +910,47 @@ select[multiple]:disabled {
 .avoid-clicks {
    cursor: not-allowed;
 }
+
+
+/***header css starts*/
+.header{
+        float: right;
+        margin-right: 25px;
+        margin-top: 48px;
+        font-size: 20px;
+}
+
+.headerdropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.headerdropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+   font-size: 14px;
+}
+
+.headerdropdown:hover .headerdropdown-content {
+    display: block;
+    
+}
+
+.headerdropdown-content p:hover {background-color: #f1f1f1}
+
+.header-inactiveApi{
+    color:orangered;
+}
+
+.header-version{
+   float: right;
+    margin-bottom: -30px;
+    margin-right: -27px;
+}
+
+/***header css Ends*/

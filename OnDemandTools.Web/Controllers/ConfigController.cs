@@ -9,6 +9,7 @@ using OnDemandTools.Common.Model;
 using OnDemandTools.Web.Models.UserPermissions;
 using OnDemandTools.Business.Modules.UserPermissions;
 using System;
+using System.Reflection;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,6 +36,8 @@ namespace OnDemandTools.Web.Controllers
         {
             return new ConfigModel
             {
+
+                Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
                 PortalSettings = _appSettings.PortalSettings,
                 PortalModules = _userPermissions.GetAllPortalModules().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>(),
                 Brands = _brandService.GetAllBrands(),
