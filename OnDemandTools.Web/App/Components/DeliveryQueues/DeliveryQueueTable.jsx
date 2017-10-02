@@ -49,15 +49,15 @@ class DeliveryQueueTable extends React.Component {
                 {
                     text: 'All ', value: 10000000
                 }],
-                onSortChange :this.onSortChange.bind(this)
+                onSortChange: this.onSortChange.bind(this)
             },
-           
+
         }
     }
 
     // Invoked immediately after queue component is mounted.
     componentDidMount() {
-      
+
         // Asychrnously retrieve an empty queue model
         let promise = getNewQueue();
         promise.then(message => {
@@ -75,8 +75,8 @@ class DeliveryQueueTable extends React.Component {
     ///<summary>
     /// on clicking sort arrow in any page of the table should take to the First page in the pagination.
     ///</summary>
-    onSortChange(){
-       
+    onSortChange() {
+
         const sizePerPage = this.refs.deliveryQueueTable.state.sizePerPage;
         this.refs.deliveryQueueTable.handlePaginationData(1, sizePerPage);
     }
@@ -127,30 +127,33 @@ class DeliveryQueueTable extends React.Component {
 
     // Format for displaying the action column details within grid
     actionFormat(val, rowData) {
+        var deleteQueueButton = null;
 
-        if(this.props.isAdmin)
-            {
-        return (<div>
-
-            <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
-                <i class="fa fa-pencil-square-o"></i>
-            </button>
-
-            <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(rowData, event)}>
-                <i class="fa fa-history" aria-hidden="true"></i>
-            </button>
-
-            <button class="btn-link" disabled={!rowData.active} title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(rowData, event)}>
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-            </button>
-
-            <button class="btn-link" title="Delete Delivery Queue" onClick={(event) => this.openDeleteModel(rowData, event)}>
+        if (this.props.permissions.canDelete) {
+            deleteQueueButton = <button class="btn-link" title="Delete Delivery Queue" onClick={(event) => this.openDeleteModel(rowData, event)}>
                 <i class="fa fa-trash"></i>
             </button>
-        </div>)
-                }
-                    
+        }
+
+        if (this.props.permissions.canAddOrEdit) {
             return (<div>
+
+                <button class="btn-link" title="Edit Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
+                    <i class="fa fa-pencil-square-o"></i>
+                </button>
+
+                <button class="btn-link" title="Notification History" onClick={(event) => this.openNotificationHistoryModel(rowData, event)}>
+                    <i class="fa fa-history" aria-hidden="true"></i>
+                </button>
+
+                <button class="btn-link" disabled={!rowData.active} title="Query by Date Range" onClick={(event) => this.openDateRangeResetModel(rowData, event)}>
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </button>
+                {deleteQueueButton}
+            </div>)
+        }
+
+        return (<div>
 
             <button class="btn-link" title="View Delivery Queue" onClick={(event) => this.openAddEditModel(rowData, event)} >
                 <i class="fa fa-book"></i>
@@ -160,8 +163,8 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-history" aria-hidden="true"></i>
             </button>
 
-            </div>)
-                   
+        </div>)
+
     }
 
     // Format for displaying remote queue column details
@@ -169,12 +172,12 @@ class DeliveryQueueTable extends React.Component {
         var queueItem = $.grep(this.props.RowData, function (v) {
             if (v.name == val) return v;
         });
-        var clearButton, purgeButton,resendButton=null
-       
-        if (this.props.permissions.canAdd) {
-            clearButton=  <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
-            purgeButton=  <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button>
-            resendButton= <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button>
+        var clearButton, purgeButton, resendButton = null
+
+        if (this.props.permissions.canAddOrEdit) {
+            clearButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
+            purgeButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button>
+            resendButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button>
         }
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
@@ -183,13 +186,13 @@ class DeliveryQueueTable extends React.Component {
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
                 {clearButton}
                 {resendButton}
-               <br />
+                <br />
                 <i>Consumption:</i>
                 <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
                 {purgeButton}
                 <br />
             </div>)
-                    } else {
+        } else {
 
             var ItemToRefresh = $.grep(this.props.signalrData.queues, function (v) {
                 if (v.name == val) return v;
@@ -204,7 +207,7 @@ class DeliveryQueueTable extends React.Component {
                     <span class="badge">{ItemToRefresh[0].pendingDeliveryCount}</span>
                     {clearButton}
                     {resendButton}
-                    <br/>
+                    <br />
                     <i>Consumption:</i>
                     <span class="badge">{ItemToRefresh[0].messageCount}</span>
                     {purgeButton}<br />
@@ -234,16 +237,16 @@ class DeliveryQueueTable extends React.Component {
 
 
     render() {
-     
+
         var addButton = null;
 
         if (this.props.permissions.canAdd) {
-            addButton =  <div>
-                    <button class="btn-link pull-right addMarginRight" title="New Queue"  onClick={(event) => this.openCreateNewQueueModel(event)}>
-                        <i class="fa fa-plus-square fa-2x"></i>
-                        <span class="addVertialAlign"> New Queue</span>
-                    </button>
-                </div>;
+            addButton = <div>
+                <button class="btn-link pull-right addMarginRight" title="New Queue" onClick={(event) => this.openCreateNewQueueModel(event)}>
+                    <i class="fa fa-plus-square fa-2x"></i>
+                    <span class="addVertialAlign"> New Queue</span>
+                </button>
+            </div>;
         }
         var row;
         row = this.props.ColumnData.map(function (item, index) {
@@ -264,17 +267,17 @@ class DeliveryQueueTable extends React.Component {
             }
         }.bind(this));
 
-        
+
         return (
             <div>
-               {addButton}
-                <BootstrapTable  ref="deliveryQueueTable"  data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
+                {addButton}
+                <BootstrapTable ref="deliveryQueueTable" data={this.props.RowData} striped={true} hover={true} keyField={this.props.KeyField} pagination={true} options={this.state.options}>
                     {row}
                 </BootstrapTable>
                 <ResendPurgeModal data={this.state} handleClose={this.close.bind(this)} />
                 <ResetByDateRange data={this.state} handleClose={this.closeDateRangeResetModel.bind(this)} />
                 <NotificationHistory data={this.state} handleClose={this.closeNotificationHistoryModel.bind(this)} />
-                <DeliveryQueueAddEdit data={this.state} permissions={this.props.permissions} isAdmin={this.props.isAdmin} handleClose={this.closeAddEditModel.bind(this)} />
+                <DeliveryQueueAddEdit data={this.state} permissions={this.props.permissions} handleClose={this.closeAddEditModel.bind(this)} />
                 <RemoveQueueModal data={this.state} handleClose={this.closeDeleteModel.bind(this)} />
             </div>)
     }

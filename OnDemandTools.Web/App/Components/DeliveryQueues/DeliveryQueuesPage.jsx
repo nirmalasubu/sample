@@ -20,8 +20,7 @@ class Queue extends React.Component {
 
         this.state = {
             stateQueue: [],
-            isAdmin: false,
-            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, disableControl: true },
+            permissions: { canAdd: false, canRead: false, canEdit: false, canAddOrEdit: false, canDelete:false, disableControl: true },
             filterValue: {
                 queueName: "",
                 contactName: "",
@@ -103,8 +102,7 @@ class Queue extends React.Component {
         document.title = "ODT - Delivery Queues";
 
         if (this.props.user && this.props.user.portal) {
-            this.setState({ permissions: this.props.user.portal.modulePermissions.DeliveryQueues,
-                isAdmin:this.props.user.portal.isAdmin})
+            this.setState({ permissions: this.props.user.portal.modulePermissions.DeliveryQueues})
         }
     }
 
@@ -112,8 +110,8 @@ class Queue extends React.Component {
     //receives prop changes to update state
     componentWillReceiveProps(nextProps) {
         if (nextProps.user && nextProps.user.portal) {
-            this.setState({ permissions: nextProps.user.portal.modulePermissions.DeliveryQueues,
-                isAdmin:nextProps.user.portal.isAdmin});
+            this.setState({ permissions: nextProps.user.portal.modulePermissions.DeliveryQueues
+                });
         }
     }
 
@@ -178,7 +176,7 @@ class Queue extends React.Component {
             <div>
                 <PageHeader pageName="Delivery Queues" />
                 <DeliveryQueueFilter updateFilter={this.handleFilterUpdate.bind(this)} />
-                <DeliveryQueueTable permissions={this.state.permissions} isAdmin={this.state.isAdmin} RowData={filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
+                <DeliveryQueueTable permissions={this.state.permissions} RowData={filteredQueues} ColumnData={this.state.columns} KeyField={this.state.keyField} signalrData={this.props.signalRQueueData} />
             </div>
         )
     }
