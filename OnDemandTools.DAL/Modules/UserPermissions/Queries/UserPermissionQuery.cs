@@ -6,6 +6,7 @@ using System.Linq;
 using OnDemandTools.DAL.Modules.UserPermissions.Model;
 using System;
 using MongoDB.Driver.Builders;
+using System.Text.RegularExpressions;
 
 namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
 {
@@ -43,6 +44,22 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
              .FirstOrDefault(e => e.Api.ApiKey == apiKey);
         }
 
+        public UserPermission GetByApiKeyAndUpdateLastAccessedTime(Guid apiKey)
+        {
+            var userPermissions = _database.GetCollection<UserPermission>("UserPermission");
+
+            var query = Query.And(Query.EQ("Api.ApiKey", apiKey), Query.EQ("Api.ApiKey", true));
+
+            var findAndModifyResult = userPermissions.FindAndModify(new FindAndModifyArgs()
+            {
+                Query = query,
+                Update = Update.Set("Api.LastAccessTime", DateTime.UtcNow),
+                VersionReturned = FindAndModifyDocumentVersion.Modified
+            });
+
+            return findAndModifyResult.GetModifiedDocumentAs<UserPermission>();
+        }
+
         public Model.UserPermission GetById(string objectId)
         {
             return _database
@@ -55,6 +72,23 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
             return _database
              .GetCollection<Model.UserPermission>("UserPermission").AsQueryable()
              .FirstOrDefault(e => e.UserName.ToLower() == emailAddress.ToLower());
+        }
+
+        public UserPermission GetByUserNameAndUpdateLastLoginTime(string emailAddress)
+        {
+            var userPermissions = _database.GetCollection<UserPermission>("UserPermission");
+
+            var query = Query.And(Query.Matches("UserName", BsonRegularExpression.Create(new Regex(emailAddress, RegexOptions.IgnoreCase)))
+                , Query.EQ("Portal.IsActive", true));
+
+            var findAndModifyResult = userPermissions.FindAndModify(new FindAndModifyArgs()
+            {
+                Query = query,
+                Update = Update.Set("Portal.LastLoginTime", DateTime.UtcNow),
+                VersionReturned = FindAndModifyDocumentVersion.Modified
+            });
+
+            return findAndModifyResult.GetModifiedDocumentAs<UserPermission>();
         }
 
         public IQueryable<UserPermission> GetContactForByUserId(string id)

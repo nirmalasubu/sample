@@ -1,12 +1,11 @@
-﻿using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
-using DLModel = OnDemandTools.DAL.Modules.UserPermissions.Model;
+﻿using OnDemandTools.Common.Model;
+using OnDemandTools.DAL.Modules.UserPermissions.Command;
 using OnDemandTools.DAL.Modules.UserPermissions.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OnDemandTools.Common.Model;
-using OnDemandTools.DAL.Modules.UserPermissions.Command;
-using OnDemandTools.DAL.Modules.UserPermissions.Queries;
+using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
+using DLModel = OnDemandTools.DAL.Modules.UserPermissions.Model;
 
 namespace OnDemandTools.Business.Modules.UserPermissions
 {
@@ -56,6 +55,16 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         public BLModel.UserPermission GetByApiKey(Guid apiKey)
         {
            return _query.GetByApiKey(apiKey).ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
+        }
+
+        public BLModel.UserPermission GetByApiKeyAndUpdateLastAccessedTime(Guid apiKey)
+        {
+            return _query.GetByApiKeyAndUpdateLastAccessedTime(apiKey).ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
+        }
+
+        public BLModel.UserPermission GetByUserNameAndUpdateLastLoginTime(string emailAddress)
+        {
+            return _query.GetByUserNameAndUpdateLastLoginTime(emailAddress).ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
         }
     }
 }

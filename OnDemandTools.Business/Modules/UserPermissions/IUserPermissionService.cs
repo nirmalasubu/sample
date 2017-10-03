@@ -47,6 +47,26 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         /// <returns></returns>
         Model.UserPermission GetByUserName(string emailAddress);
 
+
+        /// <summary>
+        /// Gets the System permission by API key and updates the last access time
+        /// </summary>
+        /// <param name="apiKey">the Api key</param>
+        /// <returns></returns>
+        Model.UserPermission GetByApiKeyAndUpdateLastAccessedTime(Guid apiKey);
+
+        /// <summary>
+        /// Gets the user permission by Email address and updates Last login time.
+        /// </summary>
+        /// <param name="emailAddress"></param>
+        /// <returns></returns>
+        Model.UserPermission GetByUserNameAndUpdateLastLoginTime(string emailAddress);
+
+        /// <summary>
+        /// Gets the technical or functional contact
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         IList<Model.UserPermission> GetContactForByUserId(string id);
     }
 }

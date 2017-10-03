@@ -25,9 +25,14 @@ namespace OnDemandTools.Business.Modules.User
             return users.ToBusinessModel<List<UserPermission>, List<BLModel.UserIdentity>>();
         }
 
+        /// <summary>
+        /// Gets by Cliam Principal and updates last login time
+        /// </summary>
+        /// <param name="apiKey">the </param>
+        /// <returns></returns>
         public ClaimsPrincipal GetBy(Guid apiKey)
         {
-            BLModel.UserIdentity user = _userSvc.GetByApiKey(apiKey).ToBusinessModel<UserPermission, BLModel.UserIdentity>();
+            BLModel.UserIdentity user = _userSvc.GetByApiKeyAndUpdateLastAccessedTime(apiKey).ToBusinessModel<UserPermission, BLModel.UserIdentity>();
             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
             return (userClaim);
         }
@@ -37,9 +42,15 @@ namespace OnDemandTools.Business.Modules.User
             return _userSvc.GetById(id).ToBusinessModel<UserPermission, BLModel.UserIdentity>();
         }
 
+        /// <summary>
+        /// Get the Claim principal by user name and updates Last login time
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public ClaimsPrincipal GetByUserName(string userName)
         {
-            BLModel.UserIdentity user = _userSvc.GetByUserName(userName).ToBusinessModel<UserPermission, BLModel.UserIdentity>();
+            BLModel.UserIdentity user = _userSvc.GetByUserNameAndUpdateLastLoginTime(userName)
+                                            .ToBusinessModel<UserPermission, BLModel.UserIdentity>();
             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
             return (userClaim);
         }
