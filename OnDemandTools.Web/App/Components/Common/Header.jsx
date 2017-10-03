@@ -71,9 +71,9 @@ class Header extends React.Component {
                         <div class="header headerdropdown">
                             <span>{headerLogo}</span>
                             <div class="headerdropdown-content">
-                                <p><strong>UserName:</strong> {userName}</p>
-                                <p><strong>ApiKey: </strong>{apiKey}{isAPIActive}</p>
-                                <p><strong>LastLogin:</strong> {lastLogin}</p>
+                                <p><strong>User Name:</strong> {userName}</p>
+                                <p><strong>Api Key: </strong><br/>{apiKey}{isAPIActive}</p>
+                                <p><strong>Last Login:</strong> {lastLogin}</p>
                                 <hr />
                                 <a href="/account/logoff">Logout </a>
                             </div>
