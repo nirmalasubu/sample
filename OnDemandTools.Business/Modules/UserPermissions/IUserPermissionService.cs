@@ -34,6 +34,13 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         Model.UserPermission GetById(string id);
 
         /// <summary>
+        /// Get User Permission by Object Id
+        /// </summary>
+        /// <param name="id">object id</param>
+        /// <returns></returns>
+        Model.UserPermission GetByApiKey(Guid apiKey);
+
+        /// <summary>
         /// Get the user permissions based on Email address
         /// </summary>
         /// <param name="emailAddress"></param>

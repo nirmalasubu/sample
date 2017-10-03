@@ -52,5 +52,10 @@ namespace OnDemandTools.Business.Modules.UserPermissions
         {
             return _query.GetContactForByUserId(id).ToList<DLModel.UserPermission>().ToBusinessModel<List<DLModel.UserPermission>, List<BLModel.UserPermission>>();
         }
+
+        public BLModel.UserPermission GetByApiKey(Guid apiKey)
+        {
+           return _query.GetByApiKey(apiKey).ToBusinessModel<DLModel.UserPermission, BLModel.UserPermission>();
+        }
     }
 }
