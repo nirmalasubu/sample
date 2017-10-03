@@ -28,7 +28,7 @@ class SessionPage extends React.Component {
 
         });
         this.SessionStartTime = "";
-        this.SessionEndTime = new Date();
+        this.SessionEndTime = "";
         this.SessionExpirationTimeMinutes = "";
         this.APIError = "";
     }
@@ -72,10 +72,13 @@ class SessionPage extends React.Component {
             this.setState({ showServerUnavailableModal: true });
         }
 
-        var datetimeNow = new Date();
-        this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime - datetimeNow) / 1000) }); // converting time into seconds
-        if (this.state.activeSessionRemainingSeconds == this.state.secondsBeforeSessionEnd && !this.state.showServerUnavailableModal) {
-            this.setState({ showSessionModel: true });
+        if(this.SessionEndTime!="") //set activeSessionRemainingSeconds after sessionExpirationTimeMinutes props is not undefined
+        {
+            var datetimeNow = new Date();
+            this.setState({ activeSessionRemainingSeconds: Math.round((this.SessionEndTime - datetimeNow) / 1000) }); // converting time into seconds
+            if (this.state.activeSessionRemainingSeconds == this.state.secondsBeforeSessionEnd && !this.state.showServerUnavailableModal) {
+                this.setState({ showSessionModel: true });
+            }
         }
 
         if (this.state.activeSessionRemainingSeconds < 0) {
