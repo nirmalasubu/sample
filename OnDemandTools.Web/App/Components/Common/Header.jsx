@@ -71,7 +71,6 @@ class Header extends React.Component {
             <Popover id="popover-trigger-click-root-close" class="headerpopover-content">
                 <label>User Name: </label> <p>{this.props.user.userName} </p>
                 <label>Api Key: </label><p>{apiKey} {isAPIActive}  </p>
-                <label>Last Login: </label>{lastLogin}
                 <hr />
                 <a href="/account/logoff">Logout </a>
             </Popover>
