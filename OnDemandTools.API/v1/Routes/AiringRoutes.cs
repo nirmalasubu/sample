@@ -66,8 +66,14 @@ namespace OnDemandTools.API.v1.Routes
                 routeStats.Add("rtAiring_ElapsedMS", GetElapsedMilliseconds(start, Stopwatch.GetTimestamp()));
 
                 var user = Context.User();
-                FilterDestinations(airing, user.Destinations.ToList());
-                ValidateRequest(airing, user.Brands);
+
+                //Filter only when user does not have permit all Destination
+                if (!user.DestinationPermitAll)
+                    FilterDestinations(airing, user.Destinations.ToList());
+
+                //Fitler only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    ValidateRequest(airing, user.Brands);
 
                 var airingLong = airing.ToBusinessModel<BLAiringModel.Airing, BLAiringLongModel.Airing>();
 
@@ -147,8 +153,14 @@ namespace OnDemandTools.API.v1.Routes
                     .ToList();
 
                 var user = Context.User();
-                airings = FilterDestinations(airings, user.Destinations.ToList());
-                airings = FilterBrands(airings, user.Brands.ToList());
+
+                //Filter only when user does not have permit all Destinations
+                if (!user.DestinationPermitAll)
+                    airings = FilterDestinations(airings, user.Destinations.ToList());
+
+                //Filter only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    airings = FilterBrands(airings, user.Brands.ToList());
 
                 var viewModels = airings.Select(a => a.ToViewModel<BLAiringModel.Airing, VMAiringShortModel.Airing>()).ToList();
                 return viewModels;
@@ -162,8 +174,13 @@ namespace OnDemandTools.API.v1.Routes
                     .ToList();
 
                 var user = Context.User();
-                airings = FilterDestinations(airings, user.Destinations.ToList());
-                airings = FilterBrands(airings, user.Brands.ToList());
+                //Filter only when user does not have permit all Destinations
+                if (!user.DestinationPermitAll)
+                    airings = FilterDestinations(airings, user.Destinations.ToList());
+
+                //Filter only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    airings = FilterBrands(airings, user.Brands.ToList());
                 var viewModels = airings.Select(a => a.ToViewModel<BLAiringModel.Airing, VMAiringShortModel.Airing>()).ToList();
                 return viewModels;
             });
@@ -201,8 +218,13 @@ namespace OnDemandTools.API.v1.Routes
                 }
 
                 var user = Context.User();
-                airings = FilterDestinations(airings, user.Destinations.ToList());
-                airings = FilterBrands(airings, user.Brands.ToList());
+                //Filter only when user does not have permit all Destinations
+                if (!user.DestinationPermitAll)
+                    airings = FilterDestinations(airings, user.Destinations.ToList());
+
+                //Filter only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    airings = FilterBrands(airings, user.Brands.ToList());
                 var viewModels = airings.Select(a => a.ToViewModel<BLAiringModel.Airing, VMAiringShortModel.Airing>()).ToList();
                 return viewModels;
             });
@@ -215,8 +237,13 @@ namespace OnDemandTools.API.v1.Routes
                     .ToList();
 
                 var user = Context.User();
-                airings = FilterDestinations(airings, user.Destinations.ToList());
-                airings = FilterBrands(airings, user.Brands.ToList());
+                //Filter only when user does not have permit all Destinations
+                if (!user.DestinationPermitAll)
+                    airings = FilterDestinations(airings, user.Destinations.ToList());
+
+                //Filter only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    airings = FilterBrands(airings, user.Brands.ToList());
                 var viewModels = airings.Select(a => a.ToViewModel<BLAiringModel.Airing, VMAiringShortModel.Airing>()).ToList();
                 return viewModels;
             });
@@ -229,8 +256,13 @@ namespace OnDemandTools.API.v1.Routes
                            (DateTime)Request.Query["endDate"], Request.Query["airingStatus"]);
 
                 var user = Context.User();
-                airings = FilterDestinations(airings, user.Destinations.ToList());
-                airings = FilterBrands(airings, user.Brands.ToList());
+                //Filter only when user does not have permit all Destinations
+                if (!user.DestinationPermitAll)
+                    airings = FilterDestinations(airings, user.Destinations.ToList());
+
+                //Filter only when user does not have permit all Brands
+                if (!user.BrandPermitAll)
+                    airings = FilterBrands(airings, user.Brands.ToList());
                 var viewModels = airings.Select(a => a.ToViewModel<BLAiringModel.Airing, VMAiringShortModel.Airing>()).ToList();
                 return viewModels;
             });
@@ -423,7 +455,7 @@ namespace OnDemandTools.API.v1.Routes
                                 };
                             }
                         }
-                        catch(AiringNotFoundException e)
+                        catch (AiringNotFoundException e)
                         {
                             logger.Information("Airing released from other systems like turniverse");
                         }
@@ -488,7 +520,7 @@ namespace OnDemandTools.API.v1.Routes
                     // asset/airing belongs
                     if (airing.Versions.Any())
                         airingSvc.AugmentMediaId(ref airing);
-                    
+
 
                     // Finally, persist the airing data
                     var savedAiring = airingSvc.Save(airing, request.Instructions.DeliverImmediately, true);

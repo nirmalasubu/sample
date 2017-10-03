@@ -28,7 +28,7 @@ namespace OnDemandTools.Business.Modules.User
         /// <summary>
         /// Gets by Cliam Principal and updates last login time
         /// </summary>
-        /// <param name="apiKey">the </param>
+        /// <param name="apiKey">the api key</param>
         /// <returns></returns>
         public ClaimsPrincipal GetBy(Guid apiKey)
         {
@@ -45,7 +45,7 @@ namespace OnDemandTools.Business.Modules.User
         /// <summary>
         /// Get the Claim principal by user name and updates Last login time
         /// </summary>
-        /// <param name="userName"></param>
+        /// <param name="userName">the user name</param>
         /// <returns></returns>
         public ClaimsPrincipal GetByUserName(string userName)
         {
