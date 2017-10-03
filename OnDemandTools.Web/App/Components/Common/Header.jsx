@@ -62,7 +62,7 @@ class Header extends React.Component {
                 }
         return (
             <div >
-                <Grid >
+                <Grid fluid>
                     <Row>
                          <Col md={2} lg={2} >
                         <Image src="../images/ODTLogo.png" rounded />

@@ -923,7 +923,7 @@ select[multiple]:disabled {
 
 .header{
         float: right;
-        margin-right: -35px;
+        margin-right: 40px;
         margin-top: 48px;
         font-size: 20px;
 }
@@ -958,7 +958,7 @@ select[multiple]:disabled {
 .header-version{
      float: right;
     margin-bottom: -30px;
-    margin-right: -35px;
+    margin-right: 3px;
 }
 
 /***header css Ends*/
