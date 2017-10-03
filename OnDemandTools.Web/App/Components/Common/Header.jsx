@@ -44,37 +44,47 @@ class Header extends React.Component {
     }
 
     render() {
-        var userFullName = "";
-        var apiKey = "";
-        var lastLogin = "";
-        var isAPIActive = null;
+        var userFullName,apiKey,lastLogin,userName = "";
+        var isAPIActive,headerLogo,version = null;
+       
         if (this.props.user.firstName != undefined) {
-            userFullName = "  " + this.props.user.firstName + " " + this.props.user.lastName;
+            userFullName=  "  " + this.props.user.firstName + " " + this.props.user.lastName;
+            headerLogo = <label class="headerLogo" >
+                                <i class="fa fa-user"></i>{userFullName}
+                            </label> 
+            userName= this.props.user.userName;            
             apiKey = this.props.user.api.apiKey;
             lastLogin = this.formatDate(this.props.user.portal.lastLoginTime);
             isAPIActive = this.props.user.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
         }
-
+                if (this.props.config.version != undefined) {
+                    version=<p class="header-version">Version:{this.props.config.version}</p>
+                }
         return (
             <div >
                 <Grid >
                     <Row>
+                         <Col md={2} lg={2} >
                         <Image src="../images/ODTLogo.png" rounded />
+                        </Col>
+                         <Col md={10} >
                         <div class="header headerdropdown">
-                            <span><button class="btn-link" >
-                                <i class="fa fa-user"></i>{userFullName}
-                            </button></span>
+                            <span>{headerLogo}</span>
                             <div class="headerdropdown-content">
-                                <p><strong>UserName:</strong> {this.props.user.userName}</p>
+                                <p><strong>UserName:</strong> {userName}</p>
                                 <p><strong>ApiKey: </strong>{apiKey}{isAPIActive}</p>
                                 <p><strong>LastLogin:</strong> {lastLogin}</p>
                                 <hr />
                                 <a href="/account/logoff">Logout </a>
                             </div>
                         </div>
+                         </Col>
                     </Row>
                     <Row>
-                        <p class="header-version">Version:{this.props.config.version}</p>
+                         <Col md={2} lg={2} />
+                         <Col md={10} >
+                            {version}
+                        </Col>
                     </Row>
                 </Grid >
                 <hr />

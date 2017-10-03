@@ -913,9 +913,17 @@ select[multiple]:disabled {
 
 
 /***header css starts*/
+
+.headerLogo{
+    border-color: transparent;
+    font-weight: 400;
+    color: #337ab7;
+    border-radius: 0;
+}
+
 .header{
         float: right;
-        margin-right: 25px;
+        margin-right: -35px;
         margin-top: 48px;
         font-size: 20px;
 }
@@ -948,9 +956,9 @@ select[multiple]:disabled {
 }
 
 .header-version{
-   float: right;
+     float: right;
     margin-bottom: -30px;
-    margin-right: -27px;
+    margin-right: -35px;
 }
 
 /***header css Ends*/
