@@ -176,8 +176,8 @@ class DeliveryQueueTable extends React.Component {
 
         if (this.props.permissions.canAddOrEdit) {
             clearButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="clear pending deliveries to queue">Clear</button>
-            purgeButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button>
-            resendButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button>
+            resendButton = <button class="btn-xs btn-link" disabled={!queueItem[0].active} title="Queue will be reset and any notifications matching your criteria will be delivered again" onClick={(event) => this.open(queueItem[0], "resend", event)}>Resend</button>
+            purgeButton= <button class="btn-xs btn-link" disabled={!queueItem[0].active} onClick={(event) => this.open(queueItem[0], "purge", event)}>Purge</button>
         }
         if (Object.keys(this.props.signalrData).length === 0 && this.props.signalrData.constructor === Object) {
             return (<div>
