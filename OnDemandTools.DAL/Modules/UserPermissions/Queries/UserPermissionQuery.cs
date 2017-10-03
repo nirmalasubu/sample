@@ -36,7 +36,12 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
             return modules.AsQueryable();
         }
 
-        
+        public UserPermission GetByApiKey(Guid apiKey)
+        {
+            return _database
+             .GetCollection<Model.UserPermission>("UserPermission").AsQueryable()
+             .FirstOrDefault(e => e.Api.ApiKey == apiKey);
+        }
 
         public Model.UserPermission GetById(string objectId)
         {

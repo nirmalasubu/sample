@@ -42,6 +42,8 @@ namespace OnDemandTools.Common.Configuration
             }
         }
 
+        public bool DestinationPermitAll { get; set; }
+        public bool BrandPermitAll { get; set; }
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public string Description { get; set; }

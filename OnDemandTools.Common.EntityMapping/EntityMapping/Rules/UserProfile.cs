@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MongoDB.Bson;
+using OnDemandTools.Business.Modules.UserPermissions.Model;
 using System.Collections.Generic;
 using System.Security.Claims;
 using BLModel = OnDemandTools.Common.Configuration;
-using DLModel = OnDemandTools.DAL.Modules.User.Model;
 
 namespace OnDemandTools.Common.EntityMapping
 {
@@ -11,22 +11,18 @@ namespace OnDemandTools.Common.EntityMapping
     {
         public UserProfile()
         {
+            CreateMap<UserPermission, BLModel.UserIdentity>();
 
-            CreateMap<DLModel.UserIdentity, BLModel.UserIdentity>()
-                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id.ToString()))
-                 .ForMember(d => d.Claims, opt => opt.ResolveUsing<ClaimsResolver>());
-
-
-            CreateMap<BLModel.UserIdentity, DLModel.UserIdentity>()
+            CreateMap<BLModel.UserIdentity, UserPermission>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
         }
     }
 
-    public class ClaimsResolver : IValueResolver<DLModel.UserIdentity, BLModel.UserIdentity, IEnumerable<Claim>>
+    public class ClaimsResolver : IValueResolver<UserPermission, BLModel.UserIdentity, IEnumerable<Claim>>
     {
-        public IEnumerable<Claim> Resolve(DLModel.UserIdentity src, BLModel.UserIdentity des, IEnumerable<Claim> d, ResolutionContext context)
+        public IEnumerable<Claim> Resolve(UserPermission src, BLModel.UserIdentity des, IEnumerable<Claim> d, ResolutionContext context)
         {
-            foreach (string c in src.Claims)
+            foreach (string c in src.Api.Claims)
             {
                 des.AddClaim(new Claim(c, c));
             }
