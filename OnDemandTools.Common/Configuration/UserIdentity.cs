@@ -47,6 +47,7 @@ namespace OnDemandTools.Common.Configuration
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public string Description { get; set; }
+        public UserType  UserType { get; set; }
         public Guid ApiKey { get; set; }
 
         public IEnumerable<string> Destinations { get; set; }

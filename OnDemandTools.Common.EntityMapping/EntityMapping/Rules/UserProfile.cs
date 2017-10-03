@@ -7,11 +7,18 @@ using BLModel = OnDemandTools.Common.Configuration;
 
 namespace OnDemandTools.Common.EntityMapping
 {
-    public class UserProfile: Profile
+    public class UserProfile : Profile
     {
         public UserProfile()
         {
-            CreateMap<UserPermission, BLModel.UserIdentity>();
+            CreateMap<UserPermission, BLModel.UserIdentity>()
+                  .ForMember(d => d.ApiKey, opt => opt.MapFrom(s => s.Api.ApiKey))
+                .ForMember(d => d.BrandPermitAll, opt => opt.MapFrom(s => s.Api.BrandPermitAll))
+                .ForMember(d => d.DestinationPermitAll, opt => opt.MapFrom(s => s.Api.DestinationPermitAll))
+                .ForMember(d => d.Destinations, opt => opt.MapFrom(s => s.Api.Destinations))
+                .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.UserName))
+                .ForMember(d => d.UserType, opt => opt.MapFrom(s => s.UserType))
+                .ForMember(d => d.Claims, opt => opt.ResolveUsing<ClaimsResolver>());
 
             CreateMap<BLModel.UserIdentity, UserPermission>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
@@ -22,12 +29,20 @@ namespace OnDemandTools.Common.EntityMapping
     {
         public IEnumerable<Claim> Resolve(UserPermission src, BLModel.UserIdentity des, IEnumerable<Claim> d, ResolutionContext context)
         {
-            foreach (string c in src.Api.Claims)
+            if (src.Api.IsActive)
             {
-                des.AddClaim(new Claim(c, c));
+                foreach (string c in src.Api.Claims)
+                {
+                    des.AddClaim(new Claim(c, c));
+                }
             }
 
-            return des.Claims;            
+            if (src.Portal.IsActive)
+            {
+                des.AddClaim(new Claim("read", "read"));
+            }
+
+            return des.Claims;
         }
     }
 }
