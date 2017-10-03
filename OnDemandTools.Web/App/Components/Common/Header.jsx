@@ -21,7 +21,12 @@ class Header extends React.Component {
 
     //called on the page load
     componentDidMount() {
+        this.props.dispatch(fetchConfig());
         this.props.dispatch(fetchUser());
+    }
+
+    componentWillMount() {
+        this.props.dispatch(fetchConfig());
     }
 
     formatDate(val) {
