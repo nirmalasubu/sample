@@ -29,43 +29,22 @@ class Header extends React.Component {
         this.props.dispatch(fetchConfig());
     }
 
-    formatDate(val) {
-        if (val == null) {
-            return "never"
-        }
-        else {
-
-            var d = new Date(val);
-            var year = d.getFullYear();
-            if (year < 2000) {
-                return "never";
-            }
-            else {
-
-                var dateFormat = Moment(val).format('lll');
-                return Moment(val).format('lll');
-            }
-        }
-    }
-
-
     render() {
 
-        var userFullName, apiKey, lastLogin, userName = "";
-        var isAPIActive,userlogo,  version = null;
+        var userFullName, apiKey, userName = "";
+        var isAPIActive, userlogo, version = null;
 
         if (this.props.user.firstName != undefined) {
-            userFullName="  " + this.props.user.firstName + " " + this.props.user.lastName;
+            userFullName = "  " + this.props.user.firstName + " " + this.props.user.lastName;
             userlogo = <i class="fa fa-user"></i>;
             userName = this.props.user.userName;
             apiKey = this.props.user.api.apiKey;
-            lastLogin = this.formatDate(this.props.user.portal.lastLoginTime);
             isAPIActive = this.props.user.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
-            }
+        }
 
         if (this.props.config.version != undefined) {
-            version = <p class="header-version">Version:{this.props.config.version}</p>
-            }
+            version = <p class="header-version">Version: {this.props.config.version}</p>
+        }
 
         const popoverClickRootClose = (
             <Popover id="popover-trigger-click-root-close" class="headerpopover-content">
@@ -87,7 +66,7 @@ class Header extends React.Component {
                             <div class="header">
                                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
                                     <button class="btn-link" >
-                                    {userlogo}{userFullName}
+                                        {userlogo}{userFullName}
                                     </button>
                                 </OverlayTrigger>
                             </div>
@@ -96,14 +75,14 @@ class Header extends React.Component {
                     <Row>
                         <Col md={2} lg={2} />
                         <Col md={10} >
-            {version}
+                            {version}
                         </Col>
                     </Row>
                 </Grid >
                 <hr />
             </div>
         )
-            }
-            }
+    }
+}
 
 export default Header;
