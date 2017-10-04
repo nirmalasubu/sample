@@ -11,7 +11,7 @@ namespace OnDemandTools.Common.Configuration
     {
         public UserIdentity() : base("", "stateless")
         {
-            UserName = "guest";
+            UserName = "";
             Destinations = new List<string>();
             Brands = new List<string>();
         }

@@ -33,6 +33,10 @@ namespace OnDemandTools.Business.Modules.User
         public ClaimsPrincipal GetBy(Guid apiKey)
         {
             BLModel.UserIdentity user = _userSvc.GetByApiKeyAndUpdateLastAccessedTime(apiKey).ToBusinessModel<UserPermission, BLModel.UserIdentity>();
+            if (user == null)
+            {
+                user = new Common.Configuration.UserIdentity();
+            }
             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
             return (userClaim);
         }
@@ -51,6 +55,11 @@ namespace OnDemandTools.Business.Modules.User
         {
             BLModel.UserIdentity user = _userSvc.GetByUserNameAndUpdateLastLoginTime(userName)
                                             .ToBusinessModel<UserPermission, BLModel.UserIdentity>();
+
+            if (user == null)
+            {
+                user = new Common.Configuration.UserIdentity();
+            }
             ClaimsPrincipal userClaim = new ClaimsPrincipal(user);
             return (userClaim);
         }
