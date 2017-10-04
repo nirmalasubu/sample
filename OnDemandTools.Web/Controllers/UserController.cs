@@ -30,6 +30,12 @@ namespace OnDemandTools.Web.Controllers
             UserPermission userPermission = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
                 .ToViewModel<Business.Modules.UserPermissions.Model.UserPermission, UserPermission>();
            
+            if (!user.Portal.IsActive)
+            {
+                user.Portal.ModulePermissions = new Dictionary<string, Permission>();
+                user.Portal.DeliveryQueuePermissions = new Dictionary<string, Permission>();
+            }
+
             return userPermission;
         }
 

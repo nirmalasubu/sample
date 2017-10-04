@@ -48,7 +48,9 @@ namespace OnDemandTools.DAL.Modules.UserPermissions.Queries
         {
             var userPermissions = _database.GetCollection<UserPermission>("UserPermission");
 
-            var query = Query.And(Query.EQ("Api.ApiKey", apiKey), Query.EQ("Api.ApiKey", true));
+            var portalUserCheck = Query.Or(Query.NE("UserType", UserType.Api), Query.EQ("Portal.IsActive", true));
+
+            var query = Query.And(Query.EQ("Api.ApiKey", apiKey), Query.EQ("Api.IsActive", true), portalUserCheck);
 
             var findAndModifyResult = userPermissions.FindAndModify(new FindAndModifyArgs()
             {

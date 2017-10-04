@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace OnDemandTools.Common.Configuration
 {
 
-    public class UserIdentity : GenericIdentity, IModel
+    public class UserIdentity : GenericIdentity
     {
         public UserIdentity() : base("", "stateless")
         {
@@ -45,19 +45,10 @@ namespace OnDemandTools.Common.Configuration
         public bool DestinationPermitAll { get; set; }
         public bool BrandPermitAll { get; set; }
         public string UserName { get; set; }
-        public string EmailAddress { get; set; }
-        public string Description { get; set; }
-        public UserType  UserType { get; set; }
+        public UserType UserType { get; set; }
         public Guid ApiKey { get; set; }
-
         public IEnumerable<string> Destinations { get; set; }
         public IEnumerable<string> Brands { get; set; }
-
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDateTime { get; set; }
-        public string ModifiedBy { get; set; }
-        public DateTime ModifiedDateTime { get; set; }
-
     }
 
 }
