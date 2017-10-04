@@ -85,7 +85,7 @@ namespace OnDemandTools.API.v1.Routes
                     airingSvc.Save(airing, false, true);
 
                     //update the status notification
-                    airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing));
+                    airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing, request));
 
                     return new { Result = "Successfully updated the airing status." };
                 }
@@ -147,7 +147,7 @@ namespace OnDemandTools.API.v1.Routes
                          airingSvc.Save(airing, false, true);
 
                          //update the status notification
-                         airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing));
+                         airingSvc.CreateNotificationForStatusChange(airing.AssetId, ResetDeliveryQueue(statusQueues, airing, request));
 
                          logger.Information("Successfully updated the airing status. AiringId : {AiringId}", airing.AssetId);
                      }
@@ -176,10 +176,10 @@ namespace OnDemandTools.API.v1.Routes
         /// <param name="statusQueues"></param>
         /// <param name="airing"></param>
         /// <returns>list of status change notifications</returns>
-        private List<ChangeNotification> ResetDeliveryQueue(List<Queue> statusQueues, Airing airing)
+        private List<ChangeNotification> ResetDeliveryQueue(List<Queue> statusQueues, Airing airing, VMAiringRequestModel.AiringStatusRequest request = null)
         {
             IList<string> queuesTobeNotified = new List<string>();
-            List<string> airingStatusNames = airing.Status.Keys.ToList();
+            List<string> airingStatusNames = request.Status.Keys.ToList();
 
             List<ChangeNotification> changeNotifications = new List<ChangeNotification>();
             foreach (string statusname in airingStatusNames)
