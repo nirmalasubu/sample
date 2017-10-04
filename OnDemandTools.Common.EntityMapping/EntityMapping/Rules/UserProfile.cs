@@ -19,9 +19,6 @@ namespace OnDemandTools.Common.EntityMapping
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.UserName))
                 .ForMember(d => d.UserType, opt => opt.MapFrom(s => s.UserType))
                 .ForMember(d => d.Claims, opt => opt.ResolveUsing<ClaimsResolver>());
-
-            CreateMap<BLModel.UserIdentity, UserPermission>()
-                .ForMember(d => d.Id, opt => opt.MapFrom(s => string.IsNullOrEmpty(s.Id) ? new ObjectId() : new ObjectId(s.Id)));
         }
     }
 
