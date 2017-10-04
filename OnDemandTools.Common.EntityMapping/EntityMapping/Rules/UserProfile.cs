@@ -29,20 +29,32 @@ namespace OnDemandTools.Common.EntityMapping
     {
         public IEnumerable<Claim> Resolve(UserPermission src, BLModel.UserIdentity des, IEnumerable<Claim> d, ResolutionContext context)
         {
-            if (src.Api.IsActive)
+            AddApiClaims(src, des);
+
+            AddPortalClaims(src, des);
+
+            return des.Claims;
+        }
+
+        private static void AddPortalClaims(UserPermission src, BLModel.UserIdentity des)
+        {
+            if (src.Portal.IsActive)
+            {
+                des.AddClaim(new Claim("read", "read"));
+            }
+        }
+
+        private static void AddApiClaims(UserPermission src, BLModel.UserIdentity des)
+        {
+            if (src.UserType == UserType.Api && src.Api.IsActive  //API should be active to get the claims
+                || (src.UserType == UserType.Portal && src.Portal.IsActive && src.Api.IsActive) // For portal user both System and API should be active
+               )
             {
                 foreach (string c in src.Api.Claims)
                 {
                     des.AddClaim(new Claim(c, c));
                 }
             }
-
-            if (src.Portal.IsActive)
-            {
-                des.AddClaim(new Claim("read", "read"));
-            }
-
-            return des.Claims;
         }
     }
 }
