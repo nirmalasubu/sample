@@ -29,17 +29,53 @@ class Header extends React.Component {
         this.props.dispatch(fetchConfig());
     }
 
+    ConstructContactForAPI() {
+        var users = [];
+         if (this.props.user.userContactForAPI != undefined) {
+            var userContactForAPI = this.props.user.userContactForAPI;
+            if (userContactForAPI.technicalContactFor.length != 0 && userContactForAPI.functionalContactFor != 0) {
+                userContactForAPI.technicalContactFor.map(function (x) {
+                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                })
+                userContactForAPI.functionalContactFor.map(function (x) {
+                            var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                            users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                })
+                return users;
+
+            }
+
+            if (userContactForAPI.technicalContactFor.length != 0) {
+                userContactForAPI.technicalContactFor.map(function (x) {
+                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                })
+                return users;
+            }
+
+            if (userContactForAPI.functionalContactFor != 0) {
+                userContactForAPI.functionalContactFor.map(function (x) {
+                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                })
+
+                return users;
+            }
+        }
+    }
+
+ 
     render() {
 
         var userFullName, apiKey, userName = "";
         var isAPIActive, userlogo, version = null;
-
-        if (this.props.user.firstName != undefined) {
-            userFullName = "  " + this.props.user.firstName + " " + this.props.user.lastName;
+        if (this.props.user.userPermission != undefined) {
+            userFullName = "  " + this.props.user.userPermission.firstName + " " + this.props.user.userPermission.lastName;
             userlogo = <i class="fa fa-user"></i>;
-            userName = this.props.user.userName;
-            apiKey = this.props.user.api.apiKey;
-            isAPIActive = this.props.user.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
+            userName = this.props.user.userPermission.userName;
+            apiKey = this.props.user.userPermission.api.apiKey;
+            isAPIActive = this.props.user.userPermission.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
         }
 
         if (this.props.config.version != undefined) {
@@ -48,8 +84,9 @@ class Header extends React.Component {
 
         const popoverClickRootClose = (
             <Popover id="popover-trigger-click-root-close" class="headerpopover-content">
-                <label>User Name: </label> <p>{this.props.user.userName} </p>
-                <label>Api Key: </label><p>{apiKey} {isAPIActive}  </p>
+                <label>User Name: </label> <p>{userName} </p>
+                <label>API Key: </label><p>{apiKey} {isAPIActive}  </p>
+                {this.ConstructContactForAPI()}
                 <hr />
                 <a href="/account/logoff">Logout </a>
             </Popover>
@@ -62,7 +99,7 @@ class Header extends React.Component {
                         <Col md={2} lg={2} >
                             <Image src="../images/ODTLogo.png" rounded />
                         </Col>
-                        <Col md={10} >
+                        <Col md={10} lg={10}>
                             <div class="header">
                                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverClickRootClose}>
                                     <button class="btn-link" >
@@ -74,7 +111,7 @@ class Header extends React.Component {
                     </Row>
                     <Row>
                         <Col md={2} lg={2} />
-                        <Col md={10} >
+                        <Col md={10} lg={10}>
                             {version}
                         </Col>
                     </Row>

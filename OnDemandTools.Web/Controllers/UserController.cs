@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using OnDemandTools.Business.Modules.Queue;
 using OnDemandTools.Business.Modules.Queue.Model;
 using System.Text;
+using OnDemandTools.Web.Models.User;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,11 +38,21 @@ namespace OnDemandTools.Web.Controllers
         // GET: api/values
         [Authorize]
         [HttpGet]
-        public UserPermission Get()
+        public UserDetail Get()
         {
-            UserPermission user = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
+            UserPermission userPermission = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
                 .ToViewModel<Business.Modules.UserPermissions.Model.UserPermission, UserPermission>();
 
+            IList<BLModel.UserPermission> lstUser = _userSvc.GetContactForByUserId(userPermission.Id);
+            UserContactForAPI contactfor = new UserContactForAPI();
+            contactfor.TechnicalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.TechnicalContactId == userPermission.Id).ToList());
+            contactfor.FunctionalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.FunctionalContactId == userPermission.Id).ToList());
+            UserDetail user = new UserDetail()
+            {
+                UserPermission = userPermission,
+                UserContactForAPI = contactfor
+            };
+           
             return user;
         }
 
@@ -114,7 +125,27 @@ namespace OnDemandTools.Web.Controllers
             return response;
         }
 
-        private void FillDeliveryQueue(UserIdentity user, BLModel.UserPermission newPermission, List<Queue> queues)
+
+ 
+
+
+        private List<UserContactForAPIDetail> AddContactForDetails(IList<BLModel.UserPermission> lstUser)
+        {
+            List<UserContactForAPIDetail> lstUserContactForDetail = new List<UserContactForAPIDetail>();
+
+            foreach (BLModel.UserPermission user in lstUser)
+            {
+                UserContactForAPIDetail userContactForDetail = new UserContactForAPIDetail();
+                userContactForDetail.ApiKey = user.Api.ApiKey.ToString();
+                userContactForDetail.IsActive = user.Api.IsActive;
+                userContactForDetail.UserName = user.UserName;
+                lstUserContactForDetail.Add(userContactForDetail);
+            }
+
+            return lstUserContactForDetail;
+        }
+
+        private void FillDeliveryQueue(Common.Configuration.UserIdentity user, BLModel.UserPermission newPermission, List<Queue> queues)
         {
 
             if (newPermission.Portal.IsAdmin)
@@ -144,7 +175,7 @@ namespace OnDemandTools.Web.Controllers
             }
         }
 
-        private void FillPortalUser(UserIdentity user, AzureAdUser adUser, BLModel.UserPermission newPermission, List<BLModel.PortalModule> modules)
+        private void FillPortalUser(Common.Configuration.UserIdentity user, AzureAdUser adUser, BLModel.UserPermission newPermission, List<BLModel.PortalModule> modules)
         {
             newPermission.UserType = UserType.Portal;
             newPermission.FirstName = adUser.givenName;
@@ -190,7 +221,7 @@ namespace OnDemandTools.Web.Controllers
 
         }
 
-        private void FillApiUser(UserIdentity user, BLModel.UserPermission newPermission)
+        private void FillApiUser(Common.Configuration.UserIdentity user, BLModel.UserPermission newPermission)
         {
             newPermission.Api = new BLModel.Api();
 
