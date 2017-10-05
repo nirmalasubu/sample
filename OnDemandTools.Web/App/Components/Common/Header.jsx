@@ -34,31 +34,31 @@ class Header extends React.Component {
          if (this.props.user.userContactForAPI != undefined) {
             var userContactForAPI = this.props.user.userContactForAPI;
             if (userContactForAPI.technicalContactFor.length != 0 && userContactForAPI.functionalContactFor != 0) {
-                userContactForAPI.technicalContactFor.map(function (x) {
-                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                userContactForAPI.technicalContactFor.map(function (item,index) {
+                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                        users.push(<div key={"technical "+ index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
                 })
-                userContactForAPI.functionalContactFor.map(function (x) {
-                            var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                            users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
+                userContactForAPI.functionalContactFor.map(function (item,index) {
+                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                        users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
                 })
                 return users;
 
             }
 
             if (userContactForAPI.technicalContactFor.length != 0) {
-                userContactForAPI.technicalContactFor.map(function (x) {
-                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
-                })
+                userContactForAPI.technicalContactFor.map(function (item,index) {
+                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                        users.push(<div key={"technical "+ index.toString()} ><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
+                        })
                 return users;
             }
 
             if (userContactForAPI.functionalContactFor != 0) {
-                userContactForAPI.functionalContactFor.map(function (x) {
-                    var isAPIActive=  x.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                    users.push(<div><label>{x.userName} API Key:</label> <p>{x.apiKey} {isAPIActive}</p></div>)
-                })
+                userContactForAPI.functionalContactFor.map(function (item,index) {
+                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                        users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
+                    })
 
                 return users;
             }
