@@ -16,6 +16,7 @@ namespace OnDemandTools.Common.EntityMapping
                 .ForMember(d => d.BrandPermitAll, opt => opt.MapFrom(s => s.Api.BrandPermitAll))
                 .ForMember(d => d.DestinationPermitAll, opt => opt.MapFrom(s => s.Api.DestinationPermitAll))
                 .ForMember(d => d.Destinations, opt => opt.MapFrom(s => s.Api.Destinations))
+                .ForMember(d => d.Brands, opt => opt.MapFrom(s => s.Api.Brands))
                 .ForMember(d => d.UserName, opt => opt.MapFrom(s => s.UserName))
                 .ForMember(d => d.UserType, opt => opt.MapFrom(s => s.UserType))
                 .ForMember(d => d.Claims, opt => opt.ResolveUsing<ClaimsResolver>());

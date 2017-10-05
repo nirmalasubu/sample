@@ -224,7 +224,6 @@ namespace OnDemandTools.API.Tests.AiringRoute
             Assert.Null(deliverablesToken.First);
         }
 
-        [Fact]
         public void GetAiringById_PassingValidId_With_Version()
         {
             JObject response = new JObject();
