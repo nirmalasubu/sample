@@ -35,9 +35,7 @@ namespace OnDemandTools.Web.Controllers
         public ConfigModel Get()
         {
             return new ConfigModel
-            {
-
-                Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
+            {               
                 PortalSettings = _appSettings.PortalSettings,
                 PortalModules = _userPermissions.GetAllPortalModules().ToViewModel<List<BLModel.PortalModule>, List<PortalModule>>(),
                 Brands = _brandService.GetAllBrands(),

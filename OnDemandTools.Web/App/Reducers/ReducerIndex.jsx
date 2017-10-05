@@ -12,6 +12,7 @@ import { ContentTierReducer } from 'Reducers/ContentTier/ContentTierReducer';
 import { CurrentAiringIdReducer } from 'Reducers/CurrentAiringId/CurrentAiringIdReducer';
 import { PathTranslationReducer } from 'Reducers/PathTranslation/PathTranslationReducer';
 import { PermissionReducer } from 'Reducers/Permission/PermissionReducer';
+import { WhoAmIReducer } from 'Reducers/WhoAmI/WhoAmIReducer';
 
 export default combineReducers({
     queues: DeliveryQueueReducer,
@@ -31,7 +32,8 @@ export default combineReducers({
     pathTranslationRecords: PathTranslationReducer,
     permissions: PermissionReducer,
     applicationError: ApplicationErrorReducer,
-    serverPollTime:TimerReducer
+    serverPollTime:TimerReducer,
+    whoami:WhoAmIReducer
     // More reducers if there are
     // can go here
 });

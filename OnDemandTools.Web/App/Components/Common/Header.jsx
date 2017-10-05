@@ -3,7 +3,7 @@ import { PageHeader } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { fetchUser } from 'Actions/User/UserActions';
-import { fetchConfig } from 'Actions/Config/ConfigActions';
+import { fetchWhoAmI } from 'Actions/WhoAmI/WhoAmIActions';
 import { ButtonToolbar, DropdownButton, MenuItem, Tabs, Tab, Grid, Row, Col, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import $ from 'jquery';
 import SessionPage from 'Components/Common/SessionHandling/SessionPage';
@@ -11,7 +11,7 @@ import SessionPage from 'Components/Common/SessionHandling/SessionPage';
 @connect((store) => {
     return {
         user: store.user,
-        config: store.config
+        whoami:store.whoami
     };
 })
 class Header extends React.Component {
@@ -21,12 +21,12 @@ class Header extends React.Component {
 
     //called on the page load
     componentDidMount() {
-        this.props.dispatch(fetchConfig());
+        this.props.dispatch(fetchWhoAmI());
         this.props.dispatch(fetchUser());
     }
 
     componentWillMount() {
-        this.props.dispatch(fetchConfig());
+        
     }
 
     ConstructContactForAPI() {
@@ -78,8 +78,8 @@ class Header extends React.Component {
             isAPIActive = this.props.user.userPermission.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
         }
 
-        if (this.props.config.version != undefined) {
-            version = <p class="header-version">Version: {this.props.config.version}</p>
+        if (this.props.whoami.HostingDetails != undefined) {
+          version = <p class="header-version">Version: {this.props.whoami.HostingDetails.DeployedVersion}</p>
         }
 
         const popoverClickRootClose = (

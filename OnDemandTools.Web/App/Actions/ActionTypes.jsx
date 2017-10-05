@@ -63,3 +63,8 @@ export const APPLICATION_API_ERROR = 'APPLICATION_API_ERROR';
 
 /// Action types specifically used for session handling
 export const TIMER_SUCCESS = 'TIMER_SUCCESS';
+
+/// Action types specifically used for whoami
+export const FETCH_WHOAMI_SUCCESS = 'FETCH_WHOAMI_SUCCESS';
+
+
