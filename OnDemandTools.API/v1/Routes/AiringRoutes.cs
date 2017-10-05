@@ -572,7 +572,10 @@ namespace OnDemandTools.API.v1.Routes
 
 
                 var existingAiring = airingSvc.GetBy(airing.AssetId);
-                ValidateRequest(existingAiring, Context.User().Brands);
+
+                var user = Context.User();
+                if (!user.BrandPermitAll)
+                    ValidateRequest(existingAiring, Context.User().Brands);
 
                 existingAiring.ReleaseBy = airing.ReleaseBy;
                 existingAiring.ReleaseOn = DateTime.UtcNow;

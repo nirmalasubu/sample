@@ -24,18 +24,24 @@ namespace OnDemandTools.API.v1.Routes
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
                 var name = (string)_.name;
-                ValidateRequest(name, Context.User().Destinations);
+                var user = Context.User();
+                if (!user.DestinationPermitAll)
+                    ValidateRequest(name, user.Destinations);
                 Destination destination = desService.GetByName(name);
                 return AddDestinationCategoriesToProperties(destination).ToViewModel<Destination, ADModel.Destination>();
             });
 
-           Get("/destinations",  _ =>
+            Get("/destinations", _ =>
             {
                 this.RequiresClaims(c => c.Type == HttpMethod.Get.Verb());
-                var destinations = desService.GetAll();
+                var permittedDestinations = desService.GetAll();
+                var user = Context.User();
 
-                // retrieve permitted destinations
-                var permittedDestinations = FilterDestinations(destinations, Context.User().Destinations);
+                if (!user.DestinationPermitAll)
+                {
+                    // retrieve permitted destinations
+                    permittedDestinations = FilterDestinations(permittedDestinations, user.Destinations);
+                }
 
                 return AddListDestinationsCategoriesToProperties(permittedDestinations).ToViewModel<List<Destination>, List<ADModel.Destination>>();
             });
@@ -56,7 +62,7 @@ namespace OnDemandTools.API.v1.Routes
                 if (des.Categories.Any())
                 {
                     foreach (Category cat in des.Categories)
-                    {                        
+                    {
                         des.Properties.Add(cat.ToBusinessModel<Category, Property>());
                     }
                 }
@@ -75,7 +81,7 @@ namespace OnDemandTools.API.v1.Routes
             {
                 foreach (Category cat in destination.Categories)
                 {
-                     destination.Properties.Add(cat.ToBusinessModel<Category, Property>());
+                    destination.Properties.Add(cat.ToBusinessModel<Category, Property>());
                 }
             }
             return destination;
