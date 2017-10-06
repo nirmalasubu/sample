@@ -38,22 +38,23 @@ namespace OnDemandTools.Web.Controllers
         // GET: api/values
         [Authorize]
         [HttpGet]
-        public UserDetail Get()
+        public UserPermission Get()
         {
             UserPermission userPermission = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
                 .ToViewModel<Business.Modules.UserPermissions.Model.UserPermission, UserPermission>();
-
-            IList<BLModel.UserPermission> lstUser = _userSvc.GetContactForByUserId(userPermission.Id);
-            UserContactForAPI contactfor = new UserContactForAPI();
-            contactfor.TechnicalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.TechnicalContactId == userPermission.Id).ToList());
-            contactfor.FunctionalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.FunctionalContactId == userPermission.Id).ToList());
-            UserDetail user = new UserDetail()
-            {
-                UserPermission = userPermission,
-                UserContactForAPI = contactfor
-            };
            
-            return user;
+            return userPermission;
+        }
+
+        [Authorize]
+        [HttpGet("getcontactforapidetailsbyuserid/{id}")]
+        public UserContactForAPI GetContactForApiByUserId(string id)
+        {
+            IList<BLModel.UserPermission> lstUser = _userSvc.GetContactForByUserId(id);
+            UserContactForAPI contactfor = new UserContactForAPI();
+            contactfor.TechnicalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.TechnicalContactId == id).ToList());
+            contactfor.FunctionalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.FunctionalContactId == id).ToList());
+            return contactfor;
         }
 
         [HttpGet("migrate")]

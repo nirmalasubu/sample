@@ -24,3 +24,20 @@ export const fetchUser = () => {
           });
     };
 };
+
+
+/// <summary>
+/// Asynchronously retrieve user contact from API. If successful
+/// dispatch the appropriate action for further processing
+/// </summary>
+export const fetchContactForApiRecords = (id) => {
+    return Axios.get('/api/user/getcontactforapidetailsbyuserid/' + id)
+        .then(response => {
+            return (response.data);
+        })
+        .catch(error => {
+            configActions.handleApplicationAPIError(error);
+        });
+
+
+};

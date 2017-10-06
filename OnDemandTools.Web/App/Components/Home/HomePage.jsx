@@ -21,8 +21,8 @@ class Home extends React.Component {
 
     var userFullName = "";
 
-    if (this.props.user.userPermission != undefined) {
-        userFullName = this.props.user.userPermission .firstName + " " + this.props.user.userPermission.lastName;
+    if (this.props.user.firstName != undefined) {
+        userFullName = this.props.user.firstName + " " + this.props.user.lastName;
     }
 
     return (

@@ -2,7 +2,7 @@
 import { PageHeader } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { fetchUser } from 'Actions/User/UserActions';
+import { fetchUser,fetchContactForApiRecords } from 'Actions/User/UserActions';
 import { fetchWhoAmI } from 'Actions/WhoAmI/WhoAmIActions';
 import { ButtonToolbar, DropdownButton, MenuItem, Tabs, Tab, Grid, Row, Col, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import $ from 'jquery';
@@ -17,6 +17,8 @@ import SessionPage from 'Components/Common/SessionHandling/SessionPage';
 class Header extends React.Component {
     constructor(props) {
         super(props);
+        this.state = ({contactFor:""});
+        
     }
 
     //called on the page load
@@ -25,58 +27,69 @@ class Header extends React.Component {
         this.props.dispatch(fetchUser());
     }
 
-    componentWillMount() {
-        
+    //receives prop changes to update state
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user.firstName != undefined) {
+            let promise = fetchContactForApiRecords(nextProps.user.id);
+            promise.then(response => {
+                this.setState({
+                    contactFor: response
+                });
+            }).catch(error => {
+                throw error
+            })
+        }
+       
     }
 
+ 
     ConstructContactForAPI() {
         var users = [];
-         if (this.props.user.userContactForAPI != undefined) {
-            var userContactForAPI = this.props.user.userContactForAPI;
+        if (this.state.contactFor != "") {
+            var userContactForAPI = this.state.contactFor;
             if (userContactForAPI.technicalContactFor.length != 0 && userContactForAPI.functionalContactFor != 0) {
                 userContactForAPI.technicalContactFor.map(function (item,index) {
                     var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
                         users.push(<div key={"technical "+ index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
-                })
-                userContactForAPI.functionalContactFor.map(function (item,index) {
-                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                        users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
-                })
-                return users;
-
-            }
-
-            if (userContactForAPI.technicalContactFor.length != 0) {
-                userContactForAPI.technicalContactFor.map(function (item,index) {
-                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                        users.push(<div key={"technical "+ index.toString()} ><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
                         })
-                return users;
-            }
+                        userContactForAPI.functionalContactFor.map(function (item,index) {
+                            var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                                users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
+                                })
+                        return users;
 
-            if (userContactForAPI.functionalContactFor != 0) {
-                userContactForAPI.functionalContactFor.map(function (item,index) {
-                    var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
-                        users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
-                    })
+                        }
 
-                return users;
-            }
+                    if (userContactForAPI.technicalContactFor.length != 0) {
+                        userContactForAPI.technicalContactFor.map(function (item,index) {
+                            var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                                users.push(<div key={"technical "+ index.toString()} ><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
+                                })
+                        return users;
+                        }
+
+                    if (userContactForAPI.functionalContactFor != 0) {
+                        userContactForAPI.functionalContactFor.map(function (item,index) {
+                            var isAPIActive=  item.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>
+                                users.push(<div key={"functional "+index.toString()}><label>{item.userName} API Key:</label> <p>{item.apiKey} {isAPIActive}</p></div>)
+                                })
+
+                        return users;
+                        }
         }
     }
-
  
     render() {
 
         var userFullName, apiKey, userName = "";
         var isAPIActive, userlogo, version = null;
-        if (this.props.user.userPermission != undefined) {
-            userFullName = "  " + this.props.user.userPermission.firstName + " " + this.props.user.userPermission.lastName;
+        if (this.props.user.firstName != undefined) {
+            userFullName = "  " + this.props.user.firstName + " " + this.props.user.lastName;
             userlogo = <i class="fa fa-user"></i>;
-            userName = this.props.user.userPermission.userName;
-            apiKey = this.props.user.userPermission.api.apiKey;
-            isAPIActive = this.props.user.userPermission.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
-        }
+            userName = this.props.user.userName;
+            apiKey = this.props.user.api.apiKey;
+            isAPIActive = this.props.user.api.isActive ? "" : <span class="header-inactiveApi"> (Inactive)</span>;
+            }
 
         if (this.props.whoami.HostingDetails != undefined) {
           version = <p class="header-version">Version: {this.props.whoami.HostingDetails.DeployedVersion}</p>
