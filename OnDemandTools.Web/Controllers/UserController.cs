@@ -5,6 +5,8 @@ using OnDemandTools.Common.Model;
 using OnDemandTools.Web.Models.UserPermissions;
 using System.Collections.Generic;
 using OnDemandTools.Web.Models.User;
+using BLModel = OnDemandTools.Business.Modules.UserPermissions.Model;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,8 +29,8 @@ namespace OnDemandTools.Web.Controllers
         [HttpGet]
         public UserPermission Get()
         {
-            UserPermission userPermission = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
-                .ToViewModel<Business.Modules.UserPermissions.Model.UserPermission, UserPermission>();
+            UserPermission user = _userSvc.GetByUserName(HttpContext.User.Identity.Name)
+                .ToViewModel<BLModel.UserPermission, UserPermission>();
            
             if (!user.Portal.IsActive)
             {
@@ -36,7 +38,7 @@ namespace OnDemandTools.Web.Controllers
                 user.Portal.DeliveryQueuePermissions = new Dictionary<string, Permission>();
             }
 
-            return userPermission;
+            return user;
         }
 
         [Authorize]
@@ -49,15 +51,6 @@ namespace OnDemandTools.Web.Controllers
             contactfor.FunctionalContactFor = AddContactForDetails(lstUser.Where(s => s.Api.FunctionalContactId == id).ToList());
             return contactfor;
         }
-
-        [HttpGet("migrate")]
-        public List<string> Migrate()
-        {
-            return _migrateUserAndSystem.Migrate();
-        }
-
- 
-
 
         private List<UserContactForAPIDetail> AddContactForDetails(IList<BLModel.UserPermission> lstUser)
         {
@@ -73,6 +66,12 @@ namespace OnDemandTools.Web.Controllers
             }
 
             return lstUserContactForDetail;
+        }
+
+        [HttpGet("migrate")]
+        public List<string> Migrate()
+        {
+            return _migrateUserAndSystem.Migrate();
         }
     }
 }
