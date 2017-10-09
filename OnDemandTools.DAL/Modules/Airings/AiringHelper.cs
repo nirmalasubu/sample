@@ -55,6 +55,8 @@ namespace OnDemandTools.DAL.Modules.Airings
         IList<Airing> GetAiringsByMediaId(string mediaId, DateTime startDate, DateTime endDate);
 
         long GetPendingDeliveryCountBy(string queueName);
+
+        IEnumerable<Airing> GetAllActiveAirings();
     }
 
     public interface ITaskUpdater

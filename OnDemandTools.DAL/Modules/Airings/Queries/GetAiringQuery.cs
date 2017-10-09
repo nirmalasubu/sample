@@ -25,6 +25,17 @@ namespace OnDemandTools.DAL.Modules.Airings.Queries
             _expiredCollection = database.GetCollection<Airing>(DataStoreConfiguration.ExpiredAssetsCollection);
         }
 
+        public IEnumerable<Airing> GetAllActiveAirings()
+        {
+            var targetDate = DateTime.UtcNow.AddMonths(6);
+
+            var query = Query.LTE("Flights.End", targetDate);
+
+            var airings = _currentCollection.FindAs<Airing>(query);
+
+            return airings.AsEnumerable();
+        }
+
         public Airing GetBy(string assetId, AiringCollection getFrom = AiringCollection.CurrentOrExpiredCollection)
         {
             var query = Query.EQ("AssetId", assetId);

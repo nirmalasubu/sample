@@ -141,6 +141,13 @@ namespace OnDemandTools.Business.Modules.Airing
             airingQueryHelper.GetBy(assetId, getFrom)
                 .ToBusinessModel<DLModel.Airing, BLModel.Airing>();
         }
+        
+        public List<BLModel.Airing> GetAllActiveAirings()
+        {
+            return
+            airingQueryHelper.GetAllActiveAirings().ToList()
+                .ToBusinessModel<List<DLModel.Airing>, List<BLModel.Airing>>();
+        }
 
         public BLModel.Airing GetExampleBy(string mongoQuery)
         {
@@ -328,6 +335,25 @@ namespace OnDemandTools.Business.Modules.Airing
 
             airing.Options.Files.AddRange(Mapper.Map<List<DLFileModel.File>, List<BLModel.Alternate.Long.File>>(files)
                                             .ToList());
+        }
+
+        public List<BLModel.Alternate.Title.Title> GetTitlesInfo()
+        {
+            var activeAirings = GetAllActiveAirings();
+
+            List<int> titleIds = null;
+            foreach (var airing in activeAirings)
+            {
+                titleIds = airing.Title.TitleIds
+                    .Where(t => t.Authority == "Turner" && t.Value != null)
+                    .Select(t => int.Parse(t.Value)).ToList();
+                titleIds.AddRange(airing.Title.RelatedTitleIds.Where(t => t.Authority == "Turner").Select(t => int.Parse(t.Value)).ToList());
+            }
+
+            // Find all title ids within the airing listed as Authority=Turner that exists in Flow
+            var titles = GetFlowTitlesFor(titleIds);
+
+            return titles;
         }
 
         public void AppendTitle(ref BLModel.Alternate.Long.Airing airing)

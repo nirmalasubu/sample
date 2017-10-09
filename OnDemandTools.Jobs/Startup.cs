@@ -22,6 +22,9 @@ using Serilog;
 using StructureMap;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using OnDemandTools.Jobs.Utilities.Redis;
 
 namespace OnDemandTools.Jobs
 {
@@ -51,6 +54,14 @@ namespace OnDemandTools.Jobs
             services.AddMvc();
             services.AddHangfire(x => x.UseMongoStorage(appSettings.MongoDB.HangfireConnectionString + appSettings.MongoDB.HangfireConnectionOptions,
                 appSettings.MongoDB.HangFireDatabaseName));
+
+            // Using Redis as Memory cache
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = appSettings.Redis.Url;
+                options.InstanceName = appSettings.Redis.InstanceName;
+                options.ResolveDns();
+            });
 
             // Initialize container
             var container = new Container();

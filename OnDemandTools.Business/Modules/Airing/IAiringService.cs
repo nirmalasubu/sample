@@ -267,5 +267,15 @@ namespace OnDemandTools.Business.Modules.Airing
         /// <param name="assetId">the airingId</param>
         /// <param name="changeNotifications">the changeNotifications</param>
         void CreateNotificationForStatusChange(string assetId, List<BLModel.ChangeNotification> changeNotifications);
+
+        /// <summary>
+        /// Gets all active and future airings
+        /// </summary>
+        List<BLModel.Airing> GetAllActiveAirings();
+
+        /// <summary>
+        /// Gets all active and future airings title information
+        /// </summary>
+        List<BLModel.Alternate.Title.Title> GetTitlesInfo()
     }
 }

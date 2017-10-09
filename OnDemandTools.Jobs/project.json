@@ -57,7 +57,8 @@
     "RestSharp.NetCore": "105.2.3",
     "EasyNetQ-dotnet-core": "2.0.2-radicalgeek-netc0001",
     "Microsoft.EntityFrameworkCore": "1.1.1",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1"
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1",
+    "Microsoft.Extensions.Caching.Redis": "1.1.1"
   },
   "runtimeOptions": {
     "configProperties": {
