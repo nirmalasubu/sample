@@ -147,6 +147,8 @@ namespace OnDemandTools.Web
                 app.UseExceptionHandler("/Home/Error");                 
             }
 
+            app.UseErrorLogging();  //global error handling
+
             // server static files
             app.UseStaticFiles();
 
