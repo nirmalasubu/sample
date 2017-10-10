@@ -285,7 +285,7 @@ class AddEditContentTierProduct extends React.Component {
         }
 
         var newProductButton = null;
-        if (this.props.permissions.canAdd) {
+        if (this.props.permissions.canAddOrEdit) {
             newProductButton = <div>
                 <button class="btn-link pull-right addMarginRight" title="Add New Product" onClick={(event) => this.addNewProduct(event)}>
                     <i class="fa fa-plus-square fa-2x"></i>
